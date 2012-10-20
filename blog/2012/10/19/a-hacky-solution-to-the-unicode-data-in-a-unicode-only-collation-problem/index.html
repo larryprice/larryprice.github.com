@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Larry Price</title>
+  <title>A Hacky Solution to the Unicode data in a Unicode-only collation problem - Larry Price</title>
   <meta name="author" content="Larry Price">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://larryprice.github.com/">
+  <link rel="canonical" href="http://larryprice.github.com/blog/2012/10/19/a-hacky-solution-to-the-unicode-data-in-a-unicode-only-collation-problem/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -63,15 +63,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2012/10/19/a-hacky-solution-to-the-unicode-data-in-a-unicode-only-collation-problem/">A Hacky Solution to the Unicode Data in a Unicode-only Collation Problem</a></h1>
+      <h1 class="entry-title">A Hacky Solution to the Unicode Data in a Unicode-only Collation Problem</h1>
     
     
       <p class="meta">
@@ -94,7 +91,7 @@
   </header>
 
 
-  <div class="entry-content"><h2>The Issue Rises <a id="problem"></a></h2>
+<div class="entry-content"><h2>The Issue Rises <a id="problem"></a></h2>
 
 <p>Earlier this week a defect was found in my application. A defect that I could have sworn I fixed several weeks ago and written about in a <a href="http://nullablevoid.blogspot.com/2012/10/unicode-data-in-unicode-only-collation.html">previous blog post</a>. Let me start from the beginning:</p>
 
@@ -153,18 +150,67 @@
 
 <p>There&#8217;s a part of me that likes sensible, clean code. This code did not come from that part of me. If you really want, you can do a select and get all the columns of your model, and then case the field in question, but what if your columns change? I didn&#8217;t want to be responsible for that, especially after I hand this code off to someone else in the coming weeks.</p>
 </div>
+
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Larry Price</span></span>
+
+      
+
+
+
+
+
+
+
+
   
 
 
-    </article>
+<time datetime="2012-10-19T17:23:00-04:00" pubdate data-updated="true">Oct 19<span>th</span>, 2012</time>
+      
+
+<span class="categories">
   
-  <div class="pagination">
+    <a class='category' href='/blog/categories/database/'>database</a>, <a class='category' href='/blog/categories/hacks/'>hacks</a>, <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>, <a class='category' href='/blog/categories/web/'>web</a>
+  
+</span>
+
+
+    </p>
     
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://larryprice.github.com/blog/2012/10/19/a-hacky-solution-to-the-unicode-data-in-a-unicode-only-collation-problem/" data-via="larryrprice" data-counturl="http://larryprice.github.com/blog/2012/10/19/a-hacky-solution-to-the-unicode-data-in-a-unicode-only-collation-problem/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="small"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
 </div>
+
+    
+    <p class="meta">
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
 <aside class="sidebar">
   
     <section>
@@ -181,7 +227,7 @@
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/larryprice">@larryprice</a> on GitHub
@@ -211,7 +257,7 @@
 <section>
   <h1>Latest Tweets</h1>
   <ul id="tweets">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   <script type="text/javascript">
     $.domReady(function(){
@@ -231,6 +277,7 @@
   
 </aside>
 
+
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -245,7 +292,10 @@
       var disqus_shortname = 'larryprice';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://larryprice.github.com/blog/2012/10/19/a-hacky-solution-to-the-unicode-data-in-a-unicode-only-collation-problem/';
+        var disqus_url = 'http://larryprice.github.com/blog/2012/10/19/a-hacky-solution-to-the-unicode-data-in-a-unicode-only-collation-problem/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
