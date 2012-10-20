@@ -1,0 +1,6 @@
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">ChangeNarrativeColumnToVarChar</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span>
+  <span class="k">def</span> <span class="nf">change</span>
+    <span class="n">change_column</span> <span class="ss">:evaluation</span><span class="p">,</span> <span class="ss">:narrative</span><span class="p">,</span> <span class="ss">:string</span><span class="p">,</span> <span class="ss">:limit</span> <span class="o">=&gt;</span> <span class="mi">8000</span>
+  <span class="k">end</span>
+</pre>
+</div>

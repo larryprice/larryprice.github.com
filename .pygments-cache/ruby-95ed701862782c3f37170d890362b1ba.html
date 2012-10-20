@@ -1,0 +1,4 @@
+<div class="highlight"><pre><span class="vi">@eval</span> <span class="o">=</span> <span class="no">Evaluation</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="ss">:id</span> <span class="o">=&gt;</span> <span class="nb">id</span><span class="p">)</span>
+<span class="vi">@eval</span><span class="o">.</span><span class="n">narrative</span> <span class="o">=</span> <span class="no">Evaluation</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;id as id, CAST(narrative as text) as narrative&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="ss">:id</span> <span class="o">=&gt;</span> <span class="nb">id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">narrative</span>
+</pre>
+</div>
