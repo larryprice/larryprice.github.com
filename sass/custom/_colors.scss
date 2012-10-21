@@ -1,53 +1,40 @@
-// Here you can easily change your sites's color scheme.
-// To give it a try, uncomment some of the lines below rebuild your blog, and see how it works.
-// If you need a handy color picker try http://hslpicker.com
-
-// ////////////////////////////////////////
-// change the background colors
-//
+// background
 html {
-  background: #fff !important;
+  background: #ECE3D9 !important;
 }
 body {
   > div {
-    background: #fff !important;
+    background: #ECE3D9 !important;
     > div {
-      background: #fff !important;
+      background: #ECE3D9 !important;
       }
   }
 }
-$main-bg: #ffffff !default;
-$page-bg: #ffffff !default;
+$main-bg: #ECE3D9 !default;
+$page-bg: $main-bg !default;
 
-// ////////////////////////////////////////
-// change the header colors
-//
-$header-bg: #fff;
-$title-color: #000000 !default;
+// header
+$header-bg: $main-bg;
+$subtitle-color: #4B3621;
+$title-color: lighten($subtitle-color, 7) !default;
 $text-color: #333 !default;
 $text-color-light: #777 !default;
-$subtitle-color: darken($header-bg, 58);
 
-// ////////////////////////////////////////
-// change the nav bar
-//
-$nav-bg: #fff;
+// nav bar
+$nav-bg: $main-bg;
 $nav-bg-front: #fff;
 $nav-bg-back: #fff;
-$nav-color: darken($nav-bg, 78) !default;
-$nav-color-hover: darken($nav-color, 25) !default;
+$nav-color: #A67B5B !default;
+$nav-color-hover: #4B3621 !default;
 $nav-border: darken($nav-bg, 50) !default;
-$nav-border-top: darken($nav-bg, 33) !default;
-$nav-border-bottom: darken($nav-bg, 33) !default;
-$nav-border-left: darken($nav-bg, 11) !default;
+$nav-border-top: $nav-color !default;
+$nav-border-bottom: $nav-color !default;
+$nav-border-left: $nav-color !default;
 $nav-border-right: lighten($nav-bg, 7) !default;
 
-
-// ////////////////////////////////////////
-// change the footer
-//
+// footer
 $footer-color: #888 !default;
-$footer-bg: #fff !default;
+$footer-bg: $main-bg !default;
 $footer-bg-front: #fff !default;
 $footer-bg-back: #fff !default;
 $footer-color: darken($footer-bg, 38) !default;
@@ -57,6 +44,9 @@ $footer-border-bottom: darken($footer-bg, 15) !default;
 $footer-link-color: darken($footer-bg, 38) !default;
 $footer-link-color-hover: darken($footer-color, 25) !default;
 $page-border-bottom: darken($footer-bg, 5) !default;
+
+// sidebar
+$sidebar-border: lighten($nav-color, 23);
 
 //$header-bg: #263347;
 //$subtitle-color: lighten($header-bg, 58);
@@ -69,31 +59,3 @@ $page-border-bottom: darken($footer-bg, 5) !default;
 //$footer-bg: #ccc !default;
 //$footer-bg-front: image-url('noise.png');
 //$footer-bg-back: linear-gradient(lighten($footer-bg, 8), $footer-bg, darken($footer-bg, 11));
-
-
-/* To use the light Solarized highlighting theme uncomment the following line */
-//$solarized: light;
-
-/* If you want to tweak the Solarized colors you can do that here */
-//$base03:          #002b36; //darkest blue
-//$base02:          #073642; //dark blue
-//$base01:          #586e75; //darkest gray
-//$base00:          #657b83; //dark gray
-//$base0:           #839496; //medium gray
-//$base1:           #93a1a1; //medium light gray
-//$base2:           #eee8d5; //cream
-//$base3:           #fdf6e3; //white
-//$solar-yellow:    #b58900;
-//$solar-orange:    #cb4b16;
-//$solar-red:       #dc322f;
-//$solar-magenta:   #d33682;
-//$solar-violet:    #6c71c4;
-//$solar-blue:      #268bd2;
-//$solar-cyan:      #2aa198;
-//$solar-green:     #859900;
-
-
-/* Non highlighted code colors */
-//$pre-bg: $base03;
-//$pre-border: darken($base02, 5);
-//$pre-color: $base1;
