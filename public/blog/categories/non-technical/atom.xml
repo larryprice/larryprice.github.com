@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: non-technical | Larry Price]]></title>
+  <link href="http://larryprice.github.com/blog/categories/non-technical/atom.xml" rel="self"/>
+  <link href="http://larryprice.github.com/"/>
+  <updated>2012-10-30T21:38:16-04:00</updated>
+  <id>http://larryprice.github.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Good Idea, Bad Idea]]></title>
+    <link href="http://larryprice.github.com/blog/2012/10/30/good-idea-bad-idea/"/>
+    <updated>2012-10-30T21:37:00-04:00</updated>
+    <id>http://larryprice.github.com/blog/2012/10/30/good-idea-bad-idea</id>
+    <content type="html"><![CDATA[<p>There is a general, unnamed rule when coming up with ideas:</p>
+
+<p><strong><em>A person is required to have one or more bad ideas before having a single good idea</em></strong>.</p>
+
+<p>Since this rule is unnamed, it shall henceforth be referred to as Larry's Law.</p>
+
+<p>Note that the thinker in question is not limited to just one bad idea under Larry's Law, but as many as he so desires. Also note that Larry's Law does not imply that the thinker will necessarily ever have any good ideas.</p>
+
+<p>Having bad ideas is necessary. Bad ideas let the brain see what it shouldn't be thinking about, which has the potential to lead to good ideas. Then again, many bad ideas may just spawn more bad ideas. That's just Larry's Law.</p>
+
+<h3>Examples</h3>
+
+<p>You sit down at your desk and pick up a bug. Your first idea doesn't fix the code. Your second idea doesn't compile. Your third idea breaks all 3400 unit tests in the test suite. Your fourth idea is a complete hack. Your fifth idea breaks some other component of the application. Your sixth idea seems genius to you but doesn't survive the code review. Your seventh idea is a winner.</p>
+
+<p>Before Edison could invent the <a href="http://edison.rutgers.edu/ticker.htm">Universal Stock Ticker</a>, he had to invent a <a href="http://edison.rutgers.edu/vote.htm">crummy vote recorder</a>.</p>
+
+<p>Do you have any idea the number of albums Pink Floyd released before <a href="http://en.wikipedia.org/wiki/The_Dark_Side_of_the_Moon"><em>The Dark Side of the Moon</em></a>? <a href="http://en.wikipedia.org/wiki/Pink_Floyd_discography">Seven</a>. Don't kid yourself: these seven albums were not gems. But don't fret! Larry's Law states that these albums had to be low quality to allow <em>The Dark Side of the Moon</em> to be a monumental album.</p>
+
+<p>Someone invented <a href="http://en.wikipedia.org/wiki/New_coke">New Coke</a>. This is an instance of someone making a bad decision without any corresponding good decisions.</p>
+
+<p>Domino's pizza was <a href="http://www.nowpublic.com/culture/pizza-turnaround-dominos-pizza-knows-they-suck-2555951.html">terrible</a> until very recently. Now it's delicious, at least according to <a href="http://answers.yahoo.com/question/index?qid=20110609112806AABnOTo">this man on Yahoo! Answers</a>.</p>
+
+<p>A group of people wants to go out to eat. Jon Doe will suggest Jimmy John's, then Penn Station, McDonald's, Five Guys, Taco Bell, and Denny's. Finally Jon Doe offers a reasonable idea, like YATS. This process will now be repeated by every person in the group, and the best decision will never become visible. And Larry's Law specifies that the group may never come to a good decision, and will probably end up eating at Five Guys.</p>
+
+<h3>Conclusion</h3>
+
+<p>The next time you have a bad idea, embrace it. Realize that having that bad idea might clear space in your head for a good idea. Or possibly an infinite number of bad ideas. Either way, that's just Larry's Law.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[I Don't Have Time]]></title>
+    <link href="http://larryprice.github.com/blog/2012/10/24/i-dont-have-time/"/>
+    <updated>2012-10-24T22:35:00-04:00</updated>
+    <id>http://larryprice.github.com/blog/2012/10/24/i-dont-have-time</id>
+    <content type="html"><![CDATA[<p>"Wanna go for a walk?" my wife asks over my shoulder.</p>
+
+<p>"I don't have time for your walks, woman! I've got a city to run!" I exclaim as I frantically move the mouse around the screen to raise taxes on the rich so I can afford to build another statue of myself in the blossoming city of Velcro. I'd been absolutely engulfed in the popular city simulator <a href="http://en.wikipedia.org/wiki/Simcity_4"><em>SimCity 4</em></a> for about five hours already that day. Needless to say, my wife "convinced" me to hit the pause button on the game and join her back in reality, where I'm a software developer who has to go on walks to counter his poor eating habits.</p>
+
+<p>We take time too seriously.</p>
+
+<p>When we feel like we don't have enough time, we complain. When we feel like we have too much time, we think we're bored, and so we complain about that.</p>
+
+<p>Maybe if we spent less time complaining, we'd have time to see how ridiculous we are.</p>
+
+<p>Time is time. What's there is there, and we're not getting any more or less of it based on what we get accomplished in a given day.</p>
+
+<p>...Unless of course what you accomplish is manipulating time in some manner. Or you create a serum to slow/expediate/stop the aging process. But those are side projects to talk about in another blog post on another day.</p>
+
+<p>Back to <em>SimCity 4</em>. After I rediscovered the dusty game disc at my parents' house, the game completely absorbed me, even 10 years after it was originally released (my computer is finally powerful enough to play it). I didn't mind that it was taking up so much of my time. I had a myriad of more conventional things I wanted to do that weekend: side projects to work on, books to read, TV shows to watch, internets to check, housework to do, groceries to buy, and meals to cook; but none of that mattered.</p>
+
+<p>I repeat: none of that important-sounding stuff mattered. I had stumbled upon this completely arbitrary childhood memory to relive, so everything else took a back seat. I don't regret all the hours I ended up spending on that game, as a kid or as an adult. A compulsive opportunity arose to have some fun and I snatched it up. I stopped worrying about time and decided to just enjoy myself. You should try it sometime. We spend way too much of our time trying to abide by our schedules and to-do lists. The best parts of life are when you stumble upon something that makes you completely forget what you were doing before you found it, and then continues to obliterate any plans you might have had for the rest of the day.</p>
+
+<p>Now if you'll excuse me, I have a city to run.</p>
+]]></content>
+  </entry>
+  
+</feed>
