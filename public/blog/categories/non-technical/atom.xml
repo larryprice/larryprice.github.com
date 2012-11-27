@@ -4,7 +4,7 @@
   <title><![CDATA[Category: non-technical | Larry Price]]></title>
   <link href="http://larryprice.github.com/blog/categories/non-technical/atom.xml" rel="self"/>
   <link href="http://larryprice.github.com/"/>
-  <updated>2012-11-08T18:59:09-05:00</updated>
+  <updated>2012-11-26T22:20:40-05:00</updated>
   <id>http://larryprice.github.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -14,23 +14,58 @@
 
   
   <entry>
+    <title type="html"><![CDATA[The Passionate Programmer: Creating a Remarkable Career in Software Development]]></title>
+    <link href="http://larryprice.github.com/blog/2012/11/26/the-passionate-programmer-creating-a-remarkable-career-in-software-development/"/>
+    <updated>2012-11-26T22:20:00-05:00</updated>
+    <id>http://larryprice.github.com/blog/2012/11/26/the-passionate-programmer-creating-a-remarkable-career-in-software-development</id>
+    <content type="html"><![CDATA[<p><img src="http://www.inquisitivechap.com/wp-content/uploads/2010/11/ThePassionateProgrammerCover.png" style="border: 0" width="130px" title="The Passionate Programmer: Creating a Remarkable Career in Software Development" alt="Cover for The Passionate Programmer" /><br/>
+<a href="http://www.amazon.com/How-Linux-Works-Superuser-Should/dp/1593270356/"><strong>The Passionate Programmer: Creating a Remarkable Career in Software Development</strong></a><br/>
+<strong>Chad Fowler</strong></p>
+
+<hr />
+
+<h3>The Gist</h3>
+
+<p>This book tells the story of Chad Fowler (no relation to <a href="http://martinfowler.com/">Martin Fowler</a>). Fowler got himself into a software development slump and was able to turn it around and rejuvinate his passion for his career. Much of the book revolves around how to keep oneself engaged with one's work and how to determine when it's time to shake things up.</p>
+
+<h3>My Feelings</h3>
+
+<p>I read this book in Summer 2012 and did a mediocre write-up on my old blog, so I've decided to quickly redo the write-up from scratch using my new format.</p>
+
+<p>What Fowler talks about in his book is exactly what I was afraid of when looking for a job last fall: getting stuck. It's easy to do: many employers are looking for employees who are willing to work on projects throughout their entire lifespan, which may be 12 months, 5 years or in some cases the lifespan of the company.</p>
+
+<p>Personal story time. I was offered a job at an Indianapolis company with many long-term projects. One of my interviewers had been working on his current project for 5 years, and was trying desparately to get out of it. However, based on his seniority and domain knowledge of the project, he was told it would be at least another 6 months before he could move on. The developer was miserable working his current job and had no exit routes available to him, which scared me quite a bit.</p>
+
+<p>Fowler's methods don't describe how to avoid this situation. They describe how to keep yourself happy by learning new technology and branching away from your "domain knowledge" while still remaining the go-to guy on your current project. Showing an interest in doing things outside of your current project should show an employer that you're capable of more, and that you're more than willing to do something new.</p>
+
+<p>Fowler also talks about moving jobs if you're unhappy, noting that the new world of software development doesn't offer all the bells and whistles that it used to. Although I agree that you should try to find a new job if you're unhappy, it's not always as easy to pack up your things and move as the author makes it seem.</p>
+
+<p>The coolest parts of the book were the personal stories of several high-tech big-wigs. The silliest parts were the 'Act On It' sections. The 'Act On It' sections described how to implement some of the methods detailed in the book, but they often seemed obvious and unnecessary to me.</p>
+
+<h3>Who Would Like This</h3>
+
+<p>This book can offer a lot to someone who wants to revitalize their career after getting in a rut. It may also be able to serve as a guide to preventing yourself from getting in a rut. As a recent college grad with many of my dreams still alive, I only found a moderate amount of honey in this beehive. An interesting read, but maybe not entirely relevant to fresh faces.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[The Optimistic Programmer]]></title>
     <link href="http://larryprice.github.com/blog/2012/11/08/the-optimistic-programmer/"/>
-    <updated>2012-11-08T18:59:00-05:00</updated>
+    <updated>2012-11-08T19:06:00-05:00</updated>
     <id>http://larryprice.github.com/blog/2012/11/08/the-optimistic-programmer</id>
-    <content type="html"><![CDATA[<p>This is Anne. Anne's a programmer in a thriving tech company. Anne's working on a project which she loves. Anne goes into work every day to work on a shiny new product for her company.</p>
+    <content type="html"><![CDATA[<p>Meet Anne. Anne's a programmer in a thriving tech company. Anne goes into work every day to work on a shiny new product for her company.</p>
 
-<p>The client knows exactly what they want. Anne writes all of her tests using pure TDD. Anne updates her tasks on the company's ALM software, which was defined with programmers in mind and not just managers. She knows everything about her domain, and every UI element she touches is the epitome of good user experience. She works with 100 other programmers, each of which is equally as skilled as she is. Every time she pushes her most recent file changes, there are no merge conflicts and the build server works without a hitch. The deadline for the project is defined as whenever the last feature is finished. The best part: Anne spends fewer than two hours a week in meetings, none of which are a complete waste of time.</p>
+<p>Anne's customer knows exactly what they want. Anne writes all of her tests using pure TDD. Anne updates her tasks on the company's ALM software, which was defined with programmers in mind and not just managers. She knows everything about her domain, and every UI element she touches is the epitome of good user experience. She works with 100 other programmers, each of which is equally as skilled as she is. Every time she pushes her most recent file changes, there are no merge conflicts and the build server works without a hitch. The deadline for the project is defined as whenever the last feature is finished. The best part: Anne spends fewer than an hour a week in meetings, none of which is a complete waste of time.</p>
 
 <p>You've got to be kidding me.</p>
 
-<p>If I experienced a day like I just described for Anne, I would assume that I had been killed in a tragic car accident on my way into work.</p>
+<p>If I experienced a day like I just described for Anne, I would have to assume I had been killed in a tragic car accident on my way into work.</p>
 
-<p>How can a programmer possibly be optimistic? Let me say: The client never knows what they want, the programmer couldn't possibly write all of their tests TDD style unless they are a saint, ALM software has a tendency to suck, programmers don't have the inherent ability to know precisely how a user will try to use the product, sometimes teammates are useless, there are always merge conflicts and build server anomalies, 'random' is generally an apt description of project deadlines, and we spend lots of times in meetings which often don't appear to provide much face value. Those are the facts of life.</p>
+<p>How can a programmer possibly be optimistic? Let me say: The client never knows what they want. The programmer couldn't possibly write all of their tests TDD style unless they're a saint. ALM software has a tendency to suck. Programmers don't have the inherent ability to know precisely how a user will try to use the product. Oftentimes your teammates may not be on the same level as you are, or you may not be on as high a level as they are. There are always merge conflicts and build server anomalies. 'Random' is generally an apt description of project deadlines. Lastly, we spend lots of times in meetings which often don't appear to provide much face value. Those are the facts of life.</p>
 
-<p>If we're optimists, why would we bother writing tests for anything beyond happy-path? How could we ever justify refactoring if we're optimistic that we did it right the first time? Why bother putting in security if no one will ever try to use their 1337 hax to get to the client's data? It's important that we stay planted firmly in reality to make sure we think of most of the things that can go wrong when using a product.</p>
+<p>If we're optimists, why would we bother writing tests for anything beyond happy-path? How could we ever justify refactoring if we're optimistic that we did it right the first time? Why bother putting in security if no one will ever try to use their 1337 hax to get to the client's data? It's important that we stay planted firmly in reality to ensure we think of most everything that can go wrong when a customer uses a product.</p>
 
-<p>I'm not saying there aren't optimistic moments in a programmer's life. Phrases like "I'm optimistic the project will end some day" and "I'm pretty sure the customer will like this" and "I highly doubt we'll get sued for that" are phrases that I'd feel inclined to throw around most any time to raise morale.</p>
+<p>I'm not saying there aren't optimistic moments in a programmer's life. Phrases like "I'm optimistic the project will end some day" and "I'm pretty sure the customer will like this" and "I highly doubt we'll get sued for that" are phrases that I'd feel inclined to throw around most any time to raise the morale of my companions.</p>
 ]]></content>
   </entry>
   
