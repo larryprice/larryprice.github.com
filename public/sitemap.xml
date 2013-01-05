@@ -37,15 +37,21 @@
         <lastmod>2012-11-27T20:50:05-05:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://larryprice.github.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/
+        </loc>
+        <lastmod>2013-01-05T16:53:26-05:00</lastmod>
+    </url>
+    <url>
         <loc>http://larryprice.github.com/</loc>
-        <lastmod>2012-11-27T20:50:05-05:00</lastmod>
+        <lastmod>2013-01-05T16:53:26-05:00</lastmod>
     </url>
     <url>
         <loc>http://larryprice.github.com/blog/archives/</loc>
-        <lastmod>2012-11-27T20:50:05-05:00</lastmod>
+        <lastmod>2013-01-05T16:53:26-05:00</lastmod>
     </url>
     <url>
         <loc>http://larryprice.github.com/blog/projects/</loc>
-        <lastmod>2012-11-27T20:50:05-05:00</lastmod>
+        <lastmod>2013-01-05T16:53:26-05:00</lastmod>
     </url>
 </urlset>
