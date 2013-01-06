@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="http://larryprice.github.com/atom.xml" rel="self"/>
   <link href="http://larryprice.github.com/"/>
-  <updated>2013-01-05T16:53:30-05:00</updated>
+  <updated>2013-01-05T20:03:24-05:00</updated>
   <id>http://larryprice.github.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -14,11 +14,341 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Moving from the MongoDB Ruby Driver to Mongoid]]></title>
+    <link href="http://larryprice.github.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/"/>
+    <updated>2013-01-05T20:04:00-05:00</updated>
+    <id>http://larryprice.github.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid</id>
+    <content type="html"><![CDATA[<p>This is Part 2 in a multi-part series to detail the creation of a &#8220;simple&#8221; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="http://larryprice.github.com/blog/categories/pokephile">Pokephile category</a>. Part 2 details refactoring code using the MongoDB Ruby driver to use Mongoid. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>.</p>
+
+<h3>What I&#8217;ve Done</h3>
+
+<p>In a <a href="http://larryprice.github.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/">previous post</a>, I described creating a class that would populate a database with data scraped from the internet. I used the MongoDB Ruby driver to accomplish this. However, using the driver can be laborious and there are simpler ways. In this post, I&#8217;m going to refactor the Populater class to use Mongoid.</p>
+
+<h3>Mongoid</h3>
+
+<p><a href="http://http://mongoid.org/en/mongoid/index.html">Mongoid</a> (pronounced mann-goyd) is an Object-Document Wrapper for Ruby. Using mongoid abstracts some of the database operations that must be performed when using the MongoDB Ruby driver. It comes in handy when using models in an MVC application. To install the Mongoid gem:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo gem install mongoid</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Refactoring</h3>
+
+<p>In populater.rb, we only inserted one structure of document into our &#8220;pokemons&#8221; collection. That makes this a great opportunity to use Mongoid. We remember that there were four fields in our document: number (string), name (string), image link (string), and types (array). Knowing this, we can create a model for this data:</p>
+
+<figure class='code'><figcaption><span>project/pokemon.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;mongoid&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Pokemon</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">Mongoid</span><span class="o">::</span><span class="no">Document</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:number</span><span class="p">,</span> <span class="n">type</span><span class="p">:</span> <span class="nb">String</span>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:name</span><span class="p">,</span> <span class="n">type</span><span class="p">:</span> <span class="nb">String</span>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:types</span><span class="p">,</span> <span class="n">type</span><span class="p">:</span> <span class="nb">Array</span>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:image</span><span class="p">,</span> <span class="n">type</span><span class="p">:</span> <span class="nb">String</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And that&#8217;s it for our model. Although we specified the types in this case, it&#8217;s not necessary if we want a looser definition of our model. Here&#8217;s how we change our implementation file:</p>
+
+<figure class='code'><figcaption><span>project/tools/populate/populater.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1">#require &#39;mongo&#39; #deleted</span>
+</span><span class='line'><span class="n">require_relative</span> <span class="s1">&#39;../../pokemon&#39;</span> <span class="c1">#added</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;nokogiri&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;open-uri&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Populater</span>
+</span><span class='line'>  <span class="c1">#def initialize(db_name) #removed</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span> <span class="c1">#added</span>
+</span><span class='line'>      <span class="c1">#@col = Mongo::Connection.new.db(db_name)[&quot;pokemons&quot;] #deleted</span>
+</span><span class='line'>      <span class="c1">#@col.remove #deleted</span>
+</span><span class='line'>      <span class="no">Pokemon</span><span class="o">.</span><span class="n">delete_all</span> <span class="c1">#added</span>
+</span><span class='line'>      <span class="vi">@data</span> <span class="o">=</span> <span class="no">Nokogiri</span><span class="o">::</span><span class="no">HTML</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;http://pokemon.wikia.com/wiki/List_of_Pok%C3%A9mon&quot;</span><span class="p">))</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">add_pokemon</span><span class="p">(</span><span class="n">num_to_add</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@data</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s2">&quot;//table[@class=&#39;wikitable sortable&#39;]/tr&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">row</span><span class="o">|</span>
+</span><span class='line'>        <span class="k">break</span> <span class="k">if</span> <span class="n">num_to_add</span> <span class="o">&lt;=</span> <span class="mi">0</span>
+</span><span class='line'>        <span class="n">dex_num</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">at_xpath</span><span class="p">(</span><span class="s1">&#39;td/text()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">strip</span>
+</span><span class='line'>        <span class="k">next</span> <span class="k">if</span> <span class="n">dex_num</span><span class="o">.</span><span class="n">nil?</span> <span class="o">||</span> <span class="n">dex_num</span><span class="o">.</span><span class="n">empty?</span>
+</span><span class='line'>        <span class="n">dex_name</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">at_xpath</span><span class="p">(</span><span class="s1">&#39;td[2]/a/text()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">strip</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">unless</span> <span class="n">dex_num</span> <span class="o">==</span> <span class="s2">&quot;000&quot;</span>
+</span><span class='line'>            <span class="n">type_1</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">at_xpath</span><span class="p">(</span><span class="s1">&#39;td[4]/a/span/text()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">strip</span>
+</span><span class='line'>            <span class="n">type_2</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">at_xpath</span><span class="p">(</span><span class="s1">&#39;td[5]/a/span/text()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">strip</span> <span class="o">||</span> <span class="n">row</span><span class="o">.</span><span class="n">at_xpath</span><span class="p">(</span><span class="s1">&#39;td[5]/text()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">strip</span>
+</span><span class='line'>            <span class="n">image_link</span> <span class="o">=</span> <span class="s2">&quot;http://img.pokemondb.net/artwork/</span><span class="si">#{</span><span class="n">dex_name</span><span class="o">.</span><span class="n">downcase</span><span class="si">}</span><span class="s2">.jpg&quot;</span>
+</span><span class='line'>        <span class="k">else</span>
+</span><span class='line'>            <span class="n">type_1</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">at_xpath</span><span class="p">(</span><span class="s1">&#39;td[4]/text()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">strip</span>
+</span><span class='line'>            <span class="n">type_2</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">at_xpath</span><span class="p">(</span><span class="s1">&#39;td[5]/text()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">strip</span>
+</span><span class='line'>            <span class="n">image_link</span> <span class="o">=</span> <span class="s2">&quot;images/missingo.png&quot;</span>
+</span><span class='line'>        <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">types</span> <span class="o">=</span> <span class="nb">Array</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>        <span class="n">types</span> <span class="o">&lt;&lt;</span> <span class="n">type_1</span> <span class="k">unless</span> <span class="n">type_1</span><span class="o">.</span><span class="n">nil?</span> <span class="o">||</span> <span class="n">type_1</span><span class="o">.</span><span class="n">empty?</span>
+</span><span class='line'>        <span class="n">types</span> <span class="o">&lt;&lt;</span> <span class="n">type_2</span> <span class="k">unless</span> <span class="n">type_2</span><span class="o">.</span><span class="n">nil?</span> <span class="o">||</span> <span class="n">type_2</span><span class="o">.</span><span class="n">empty?</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">#@col.insert({:number =&gt; dex_num, :name =&gt; dex_name, :types =&gt; types, :image =&gt; image_link}) #deleted</span>
+</span><span class='line'>        <span class="no">Pokemon</span><span class="o">.</span><span class="n">create</span> <span class="p">{</span><span class="ss">:number</span> <span class="o">=&gt;</span> <span class="n">dex_num</span><span class="p">,</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="n">dex_name</span><span class="p">,</span> <span class="ss">:types</span> <span class="o">=&gt;</span> <span class="n">types</span><span class="p">,</span> <span class="ss">:image</span> <span class="o">=&gt;</span> <span class="n">image_link</span><span class="p">}</span> <span class="c1">#added</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">num_to_add</span> <span class="o">-=</span> <span class="mi">1</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That one&#8217;s easy. We deleted four lines and added 3. However, now you can see that the Populater does not have to deal with connecting to the database, it only has to know what model it wants to modify. So we&#8217;ve removed some complexity from this file by no longer requiring the database name on initialization. However, that means that someone else has to be in charge of setting up the initial connection. In the overlying project, we want that someone else to be a controller. In our tests, we want that someone else to be our test file. So let&#8217;s do it. We&#8217;re going to start by adding a config section in our before:all block.</p>
+
+<figure class='code'><figcaption><span>project/tools/test/spec/populater_spec.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">require_relative</span> <span class="s1">&#39;../../populate/populater&#39;</span>
+</span><span class='line'><span class="c1">#require &#39;mongo&#39; #removed</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;mongoid&#39;</span> <span class="c1">#added</span>
+</span><span class='line'><span class="n">require_relative</span> <span class="s1">&#39;../../../pokemon&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">describe</span> <span class="no">Populater</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">before</span><span class="ss">:all</span> <span class="k">do</span>
+</span><span class='line'>      <span class="no">Mongoid</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span> <span class="c1">#added</span>
+</span><span class='line'>          <span class="n">config</span><span class="o">.</span><span class="n">connect_to</span> <span class="s1">&#39;test&#39;</span> <span class="c1">#added</span>
+</span><span class='line'>      <span class="k">end</span> <span class="c1"># added</span>
+</span><span class='line'>      <span class="c1">#@col = Mongo::Connection.new.db(&#39;test&#39;)[&quot;pokemons&quot;] # removed</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In doing this, we&#8217;ve set up any of our document models to use the &#8216;test&#8217; database. Now we go through each test and replace the Mongo Ruby Driver syntax with Mongoid syntax, which is similar to Ruby&#8217;s Array syntax.</p>
+
+<figure class='code'><figcaption><span>project/tools/test/spec/populater_spec.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">describe</span> <span class="no">Populater</span> <span class="k">do</span>
+</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>  <span class="n">before</span><span class="ss">:each</span> <span class="k">do</span>
+</span><span class='line'>      <span class="c1">#@populater = Populater.new(&#39;test&#39;) #removed</span>
+</span><span class='line'>      <span class="vi">@populater</span> <span class="o">=</span> <span class="no">Populater</span><span class="o">.</span><span class="n">new</span> <span class="c1">#added</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s2">&quot;#new&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">it</span> <span class="s2">&quot;does not throw when creating instance&quot;</span> <span class="k">do</span>
+</span><span class='line'>          <span class="c1">#expect {Populater.new(&#39;test&#39;)}.to_not raise_error #removed</span>
+</span><span class='line'>          <span class="n">expect</span> <span class="p">{</span><span class="no">Populater</span><span class="o">.</span><span class="n">new</span><span class="p">}</span><span class="o">.</span><span class="n">to_not</span> <span class="n">raise_error</span> <span class="c1">#added</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">it</span> <span class="s2">&quot;takes one param and returns a Populater instance&quot;</span> <span class="k">do</span>
+</span><span class='line'>          <span class="vi">@populater</span><span class="o">.</span><span class="n">should</span> <span class="n">be_an_instance_of</span> <span class="no">Populater</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">it</span> <span class="s2">&quot;empties pokemon collection&quot;</span> <span class="k">do</span>
+</span><span class='line'>          <span class="c1">#@col.insert({:test =&gt; &quot;hi there&quot;}) #removed</span>
+</span><span class='line'>          <span class="c1">#@col.find.count.should_not eql 0 #removed</span>
+</span><span class='line'>          <span class="c1">#Populater.new(&#39;test&#39;) #removed</span>
+</span><span class='line'>          <span class="c1">#@col.find.count.should eql 0 #removed</span>
+</span><span class='line'>          <span class="no">Pokemon</span><span class="o">.</span><span class="n">create</span> <span class="c1">#added</span>
+</span><span class='line'>          <span class="no">Pokemon</span><span class="o">.</span><span class="n">count</span><span class="o">.</span><span class="n">should</span> <span class="n">eql</span> <span class="mi">1</span> <span class="c1">#added</span>
+</span><span class='line'>          <span class="no">Populater</span><span class="o">.</span><span class="n">new</span> <span class="c1">#added</span>
+</span><span class='line'>          <span class="no">Pokemon</span><span class="o">.</span><span class="n">count</span><span class="o">.</span><span class="n">should</span> <span class="n">eql</span> <span class="mi">0</span> <span class="c1">#added</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The &#8216;new&#8217; tests are straightforward. We remove the usage of an input parameter to the Populater initializer. The only significant change we make is to the &#8220;empties pokemon collection&#8221; test. Here we replace the Mongo Ruby Driver syntax of inserting into a collection with Mongoid syntax of creating a Pokemon document. The &#8216;create&#8217; method inserts a document into the collection with the given values, or defaults if none are given. We also see that we can remove the &#8220;find&#8221; syntax completely and just use a &#8220;count&#8221; method on the document type.</p>
+
+<figure class='code'><figcaption><span>project/tools/test/spec/populater_spec.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'><span class="n">describe</span> <span class="no">Populater</span> <span class="k">do</span>
+</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>  <span class="n">describe</span> <span class="s2">&quot;#add_pokemon&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">it</span> <span class="s2">&quot;adds 0 pokemon given 0&quot;</span> <span class="k">do</span>
+</span><span class='line'>          <span class="vi">@populater</span><span class="o">.</span><span class="n">add_pokemon</span> <span class="mi">0</span>
+</span><span class='line'>          <span class="c1">#@col.find.count.should eql 0 #removed</span>
+</span><span class='line'>          <span class="no">Pokemon</span><span class="o">.</span><span class="n">count</span><span class="o">.</span><span class="n">should</span> <span class="n">eql</span> <span class="mi">0</span> <span class="c1">#added</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>      <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>      <span class="n">it</span> <span class="s2">&quot;adds pokemon with a number&quot;</span> <span class="k">do</span>
+</span><span class='line'>          <span class="vi">@populater</span><span class="o">.</span><span class="n">add_pokemon</span> <span class="mi">1</span>
+</span><span class='line'>          <span class="c1">#@col.find.count.should eql 1 #removed</span>
+</span><span class='line'>          <span class="c1">#@col.find.first[&#39;number&#39;].should_not be_nil #removed</span>
+</span><span class='line'>          <span class="no">Pokemon</span><span class="o">.</span><span class="n">count</span><span class="o">.</span><span class="n">should</span> <span class="n">eql</span> <span class="mi">1</span> <span class="c1">#added</span>
+</span><span class='line'>          <span class="no">Pokemon</span><span class="o">.</span><span class="n">first</span><span class="o">[</span><span class="s1">&#39;number&#39;</span><span class="o">].</span><span class="n">should_not</span> <span class="n">be_nil</span> <span class="c1">#added</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The tests for adding 0, 1, and 2 documents to the collection are all very similar. The only change is to replace the Mongo Ruby Driver &#8220;find.count&#8221; syntax with the Mongoid &#8220;count.&#8221; The &#8220;adds pokemon with a ____&#8221; tests all undergo the same changes. I replace the &#8220;.find.first&#8221; statement with a simple &#8220;.first&#8221; to get the same meaning. So our Populater has been converted to use Mongoid instead of the Mongo Ruby Driver. Bully for us.</p>
+
+<p>There&#8217;s one more change that would be nice to make before we hang up our hats. Configuring Mongoid using the .config syntax is okay, but it would be a lot nicer to keep all of our configuration in a file. We can create such a file called &#8220;mongoid.yml&#8221; and put some configuration information in it:</p>
+
+<figure class='code'><figcaption><span>project/mongoid.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">test</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">sessions</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">default</span><span class="p-Indicator">:</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">test</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">hosts</span><span class="p-Indicator">:</span>
+</span><span class='line'>        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">localhost</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This syntax is valid in Mongoid 3.x. This is a very simply configuration for our test environment. Now we can go back into our test file and change the &#8216;before:all&#8217; block:</p>
+
+<figure class='code'><figcaption><span>project/tools/test/spec/populater_spec.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'><span class="n">describe</span> <span class="no">Populater</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">before</span><span class="ss">:all</span> <span class="k">do</span>
+</span><span class='line'>      <span class="c1">#Mongoid.configure do |config| #removed</span>
+</span><span class='line'>      <span class="c1">#  config.connect_to &#39;test&#39; #removed</span>
+</span><span class='line'>      <span class="c1">#end # removed</span>
+</span><span class='line'>      <span class="no">Mongoid</span><span class="o">.</span><span class="n">load!</span> <span class="s1">&#39;../../../mongoid.yml&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span> <span class="c1">#added</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The second parameter can be a string or a symbol. Now there&#8217;s only one file to modify the environment configurations, and we&#8217;re better off for it.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Schemaless databases with Ruby and MongoDB]]></title>
     <link href="http://larryprice.github.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/"/>
     <updated>2013-01-05T16:54:00-05:00</updated>
     <id>http://larryprice.github.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb</id>
-    <content type="html"><![CDATA[<p>This is Part 1 in a multi-part series to detail the creation of a &#8220;simple&#8221; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="http://larryprice.github.com/blog/categories/pokephile">Pokephile category</a>. Part 1 details getting started with MongoDB and creating a collection using data scraped off the web using <a href="http://nokogiri.org/">Nokogiri</a>. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a></p>
+    <content type="html"><![CDATA[<p>This is Part 1 in a multi-part series to detail the creation of a &#8220;simple&#8221; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="http://larryprice.github.com/blog/categories/pokephile">Pokephile category</a>. Part 1 details getting started with MongoDB and creating a collection using data scraped off the web using <a href="http://nokogiri.org/">Nokogiri</a>. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>.</p>
 
 <h3>A little background</h3>
 
