@@ -1,0 +1,13 @@
+<div class="highlight"><pre><span class="nv">$ </span>irb
+&gt;&gt; Dir.pwd
+<span class="o">=</span>&gt; <span class="s2">&quot;project/tools/populate&quot;</span>
+&gt;&gt; require <span class="s1">&#39;mongoid&#39;</span>
+<span class="o">=</span>&gt; <span class="nb">true</span>
+&gt;&gt; Mongoid.load! <span class="s1">&#39;../../mongoid.yml&#39;</span>
+<span class="o">=</span>&gt; ...
+&gt;&gt; require <span class="s1">&#39;./populater&#39;</span>
+<span class="o">=</span>&gt; <span class="nb">true</span>
+&gt;&gt; Populater.new<span class="o">(</span><span class="s1">&#39;dev&#39;</span><span class="o">)</span>.add_pokemon <span class="nv">152</span>
+<span class="o">=</span>&gt; nil
+&gt;&gt;
+</pre></div>

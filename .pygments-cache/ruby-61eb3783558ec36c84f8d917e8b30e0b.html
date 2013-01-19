@@ -1,0 +1,8 @@
+<div class="highlight"><pre><span class="no">When</span> <span class="sr">/^I type &quot;(.*?)&quot; in the search bar$/</span> <span class="k">do</span> <span class="o">|</span><span class="n">arg1</span><span class="o">|</span>
+  <span class="n">fill_in</span> <span class="s2">&quot;pokemon-input&quot;</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="n">arg2</span>
+<span class="k">end</span>
+
+<span class="no">When</span> <span class="sr">/^I click &quot;(.*?)&quot;$/</span> <span class="k">do</span> <span class="o">|</span><span class="n">arg1</span><span class="o">|</span>
+  <span class="n">click_button</span> <span class="n">arg1</span>
+<span class="k">end</span>
+</pre></div>

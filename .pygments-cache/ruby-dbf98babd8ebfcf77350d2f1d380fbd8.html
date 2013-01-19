@@ -1,0 +1,18 @@
+<div class="highlight"><pre><span class="err">$</span> <span class="n">irb</span>
+<span class="o">&gt;&gt;</span> <span class="no">Dir</span><span class="o">.</span><span class="n">pwd</span>
+<span class="o">=&gt;</span> <span class="s2">&quot;project/tools/populate&quot;</span>
+<span class="o">&gt;&gt;</span> <span class="nb">require</span> <span class="s1">&#39;mongo&#39;</span>
+<span class="o">=&gt;</span> <span class="kp">true</span>
+<span class="o">&gt;&gt;</span> <span class="n">col</span> <span class="o">=</span> <span class="no">Mongo</span><span class="o">::</span><span class="no">Connection</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">db</span><span class="p">(</span><span class="s1">&#39;dev&#39;</span><span class="p">)</span><span class="o">[</span><span class="s2">&quot;pokemons&quot;</span><span class="o">]</span>
+<span class="o">=&gt;</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+<span class="o">&gt;&gt;</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="o">.</span><span class="n">count</span>
+<span class="o">=&gt;</span> <span class="mi">0</span>
+<span class="o">&gt;&gt;</span> <span class="nb">require</span> <span class="s1">&#39;./populater&#39;</span>
+<span class="o">=&gt;</span> <span class="kp">true</span>
+<span class="o">&gt;&gt;</span> <span class="no">Populater</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;dev&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">add_pokemon</span> <span class="mi">152</span>
+<span class="o">=&gt;</span> <span class="kp">nil</span>
+<span class="o">&gt;&gt;</span> <span class="n">col</span><span class="o">.</span><span class="n">find</span><span class="o">.</span><span class="n">count</span>
+<span class="mi">152</span>
+<span class="o">&gt;&gt;</span>
+</pre>
+</div>

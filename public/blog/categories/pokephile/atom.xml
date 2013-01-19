@@ -1,0 +1,1104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: pokephile | Larry Price]]></title>
+  <link href="http://larryprice.github.com/blog/categories/pokephile/atom.xml" rel="self"/>
+  <link href="http://larryprice.github.com/"/>
+  <updated>2013-01-19T12:20:10-05:00</updated>
+  <id>http://larryprice.github.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Testing a Sinatra App with Capybara]]></title>
+    <link href="http://larryprice.github.com/blog/2013/01/19/testing-a-sinatra-app-with-capybara/"/>
+    <updated>2013-01-19T12:20:00-05:00</updated>
+    <id>http://larryprice.github.com/blog/2013/01/19/testing-a-sinatra-app-with-capybara</id>
+    <content type="html"><![CDATA[<p><em>This is Part 3 in a multi-part series to detail the creation of a "simple" project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="/blog/categories/pokephile">Pokephile category</a>. Part 3 of this series describes using Capybara to test a Sinatra application. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>, and the final product can be found <a href="http://pokephile.herokuapp.com">here</a>.</em></p>
+
+<p>Now that <a href="/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/">the database is populated</a> with data and I've switched over to <a href="/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/">a simpler interface with Mongo</a>, I can actually start creating a UI. For simplicity's sake, I like to use Sinatra on small projects. Sinatra makes it easy to create a web application with minimal effort. With an emphasis on testing this <a href="/blog/categories/pokephile">series</a>, I want to be sure to throughly test my UI and any application integration. <a href="http://cukes.info/">Cucumber</a> is a brilliant DSL which allows a programmer to describe in plain English how an application should be behaving. The <a href="https://github.com/jnicklas/capybara">Capybara gem</a> is a Rack app that simulates running your application and performing basic user tasks, such as clicking a button, following a link, or, on a lower level, looking at your HTML source. Install Capybara like so:</p>
+
+<p><code>bash
+sudo gem install capybara
+</code></p>
+
+<p>Here's what I want my application to do:</p>
+
+<ul>
+<li>User is on home page.</li>
+<li>User enters name of Pokemon and presses 'Search'.</li>
+<li>User is redirected to search page.</li>
+<li>User can see some information about Pokemon.</li>
+<li>User can repeat the search process.</li>
+</ul>
+
+
+<p>Error scenario:</p>
+
+<ul>
+<li>User enters garbage data.</li>
+<li>User is redirected to search page.</li>
+<li>User sees error message.</li>
+<li>User can repeat search process.</li>
+</ul>
+
+
+<p>So I'll begin by writing my features. Cucumber syntax is meant to be readable by non-technical persons, so the "code" may look a bit odd. All Cucumber feature files are written something like this:</p>
+
+<p>``` Cucumber
+Feature: Viewer visits the Home Page
+  In order to read the page
+  As a viewer
+  I want to see the home page of my app</p>
+
+<p>Scenario: View the home page</p>
+
+<pre><code>Given I am on the home page
+Then I should see "Zowee, mama!" on the page
+</code></pre>
+
+<p>```</p>
+
+<p>The "Feature" lines are not used in testing; they are simply to give some relevance to the file's feature and to attempt to prevent scope creep in the file. The "Scenario" lines are what's important. The first line is the test name, the "Given" line is the pre-condition, and the final line is what should be observed.</p>
+
+<p>In reality, I have only one main feature: "Search." One can argue that I also have a feature of "seeing" my home page and my search page, but those are both trivial cases, so for the purpose of this blog post, I'll skip such tests. Both my success and error case revolves around searching, and there's not really much else to do in the app. I have to create a directory for the cukes, and that directory is called "features." I create such a directory in my "project/tools/test" directory and create a new file called "search.feature." Now I'll write the feature:</p>
+
+<p>``` Cucumber project/tools/test/features/search.feature
+Feature: Viewer vists the page</p>
+
+<pre><code>In order to search the page
+As a visitor
+I want to search for Pokemon.
+</code></pre>
+
+<p>Scenario: Find correct Pokemon from home page</p>
+
+<pre><code>Given I am on the home page
+When I type "Bulbasaur" in the search bar
+And I click "Search"
+Then I should be on the "search" page
+And I should see "#001 - Bulbasaur"
+And I should see an image with url "http://img.pokemondb.net/artwork/bulbasaur.jpg"
+And I should see "Types: Grass, Poison"
+</code></pre>
+
+<p>Scenario: Show error text from home page</p>
+
+<pre><code>Given I am on the home page
+When I type "Johnny Bravo" in the search bar
+And I click "Search"
+Then I should be on the "search" page
+And I should see "Lol! Could not find a Pokemon named 'Johnny Bravo.' Try something else!"
+</code></pre>
+
+<p>Scenario: Find correct Pokemon from search page</p>
+
+<pre><code>Given I am on the search page
+When I type "Bulbasaur" in the search bar
+And I click "Search"
+Then I should see "#001 - Bulbasaur"
+And I should see an image with url "http://img.pokemondb.net/artwork/bulbasaur.jpg"
+And I should see "Types: Grass, Poison"
+</code></pre>
+
+<p>Scenario: Show error text from search page</p>
+
+<pre><code>Given I am on the search page
+When I type "Johnny Bravo" in the search bar
+And I click "Search"
+Then I should be on the "search" page
+And I should see "Lol! Could not find a Pokemon named 'Johnny Bravo.' Try something else!"
+</code></pre>
+
+<p>```</p>
+
+<p>Now I've overlooked a lot of tests that one would normally write while doing this, such as verifying that the search bar and search buttons exist and are enabled, but I'd like to keep it simple for now and just stick to testing my search feature. What do these tests do? The first scenario starts on the home page, enters data in the search box, presses the search button, and then verifies that all expected Pokemon data is visible. When writing cukes, I can append statements with an "And" statement as seen above. Run Cucumber:</p>
+
+<p><code>sh project/tools/test
+$ cucumber
+</code></p>
+
+<p>Cucumber doesn't exactly give us errors, but it also doesn't give us success. Fortunately, what it did give us was sample code for all of the steps we need to write. So, let's perform some copy/paste magic and create a steps file:</p>
+
+<p><code>sh project/tools/test
+$ mkdir -p features/step_definitions
+$ touch features/step_definitions/search_steps.rb
+</code></p>
+
+<p>``` ruby project/tools/test/features/step_definitions/search_steps.rb
+Given /<sup>I</sup> am on the home page$/ do
+  pending # express the regexp above with the code you wish you had
+end</p>
+
+<p>When /<sup>I</sup> type "(.*?)" in the search bar$/ do |arg1|
+  pending # express the regexp above with the code you wish you had
+end</p>
+
+<p>When /<sup>I</sup> click "(.*?)"$/ do |arg1|
+  pending # express the regexp above with the code you wish you had
+end</p>
+
+<p>Then /<sup>I</sup> should be on the "(.*?)" page$/ do |arg1|
+  pending # express the regexp above with the code you wish you had
+end</p>
+
+<p>Then /<sup>I</sup> should see "(.*?)"$/ do |arg1|
+  pending # express the regexp above with the code you wish you had
+end</p>
+
+<p>Then /<sup>I</sup> should see an image with url "(.*?)"$/ do |arg1|
+  pending # express the regexp above with the code you wish you had
+end</p>
+
+<p>Given /<sup>I</sup> am on the search page$/ do
+  pending # express the regexp above with the code you wish you had
+end
+```</p>
+
+<p>If I futilely run "cucumber" again now, my tests still don't pass because I haven't actually implemented my steps. This is where Capybara comes in. I found that a <a href="https://gist.github.com/428105">Capybara cheat sheet</a> is quite helpful while writing out my steps. The syntax I'm going to use is similar to RSpec, except that it includes some Capybara methods. The first two test steps I want to deal with are the "Given" steps.</p>
+
+<p>``` ruby project/tools/test/features/step_definitions/search_steps.rb
+Given /<sup>I</sup> am on the home page$/ do
+  visit '/'
+end</p>
+
+<p>Given /<sup>I</sup> am on the search page$/ do
+  visit '/'
+  click_button "Search"
+end
+```</p>
+
+<p>All these statements are just Regular Expressions, as indicated by the /<sup>$/.</sup> The regex acts as a sort of method name that Cucumber finds to run the steps. Given I am on the home page is trivial: just 'visit' the index. Given I am on the search page will first require me to click the "search" button. This is valid because my spec above says this is how to get to the search page. Now can do the 'When' statements.</p>
+
+<p>``` ruby project/tools/test/features/step_definitions/search_steps.rb
+When /<sup>I</sup> type "(.*?)" in the search bar$/ do |arg1|
+  fill_in "pokemon-input", :with => arg1
+end</p>
+
+<p>When /<sup>I</sup> click "(.*?)"$/ do |arg1|
+  click_button arg1
+end
+```</p>
+
+<p>When I click just needs to click a button/link/whatever on the screen. The "(.*?)" is a regular expression that will match anything in quotes and assign it to the variable 'arg1.' So I can give any button description and Capybara will try to click a button with the given content. When I type in the search bar takes the regex arg1 and uses the "fill_in" method to fill in a text input with id "pokemon-input." The rest of the steps are all about what should be observed after performing the Given/When steps.</p>
+
+<p>``` ruby project/tools/test/features/step_definitions/search_steps.rb
+Then /<sup>I</sup> should be on the "(.*?)" page$/ do |arg1|
+  current_path.should == "/#{arg1}"
+end</p>
+
+<p>Then /<sup>I</sup> should see "(.*?)"$/ do |arg1|
+  page.should have_content(arg1)
+end</p>
+
+<p>Then /<sup>I</sup> should see an image with url "(.*?)"$/ do |arg1|
+  find(:xpath, "//img[@src='#{arg1}']").should_not be_nil
+end
+```</p>
+
+<p>Now I have all of the necessary steps defined! So, I'll run Cucumber and... Actual errors! None of my four tests made it past the Given step, so I see the output '(4 failed, 19 skipped).' The only way to fix these errors is to finally start writing a web application. So I'll move back out to the root of my project directory and create a file for my application called 'app.rb' and give it the most basic information to run. And, if you haven't already, install Sinatra.</p>
+
+<p><code>bash
+$ sudo gem install sinatra
+</code></p>
+
+<p>``` ruby project/app.rb
+require 'sinatra'
+require 'haml'</p>
+
+<p>class Application &lt; Sinatra::Base</p>
+
+<pre><code>get '/' do
+    haml :index
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>The Application class inherits from the Sinatra::Base class. This allows me to define a 'get' operation to perform actions and load a web page. 'get \'\' do' signifies the first page a user sees when they go to my web application, commonly known as a home or index page. I plan to use <a href="http://haml.info">HAML</a> to create my page, so I make a call to haml followed by the name of my HAML document as a symbol. We need to define an 'index.haml' page and stick it in a directory called 'views' for Sinatra to find it.</p>
+
+<p><code>bash
+$ sudo gem install haml
+</code></p>
+
+<p>``` haml project/views/index.haml
+!!!
+%html</p>
+
+<pre><code>%head
+    %title Pokemon App
+%body
+    LOL HAI.
+</code></pre>
+
+<p>```</p>
+
+<p>Tough work. If you're not familiar with HAML, it's a markup language that is "compiled" into an HTML page. The main difference between HAML and HTML is that HAML parses white space to figure out where closing tags should be placed. So now I want to run my application. I want to run it using 'rackup,' so I'd like to define a 'config.ru' file in the root of my project directory to do all the work for me.</p>
+
+<p>``` ruby project/config.ru
+require './app'</p>
+
+<p>run Application.new
+```</p>
+
+<p>Now we run 'rackup' from the root of my project directory and see the fruits of my labor. Open up a web browser and enter 'localhost:9292' in the address bar. You should see a very simple web page with the content of "LOL HAI" and a title of "Pokemon App." If you view the source, you'll see the HTML the HAML was compiled into. Just beautiful, isn't it? Now if I switch back to my test directory and run Cucumber, what happens? The same result. That's because I need to tell Capybara what to load before trying to run the tests. I do this by defining an "env.rb" file in a "support" directory of the features directory.</p>
+
+<p>``` ruby project/tools/test/features/support/env.rb
+require 'capybara'
+require 'capybara/cucumber'</p>
+
+<p>require_relative "../../../../app"</p>
+
+<p>Capybara.app = Application
+```</p>
+
+<p>All I do is require my "app.rb" file which is seemingly <em>forever</em> away and then set the Capybara.app variable to my Application class. Now I run Cucumber and... '(4 failed, 17 skipped, 2 passed)' Two steps passed! Yippee! Now if only the rest passed as well. Looking at my 'search.feature' file, I can see that the first 'When' step is about typing into the search bar. So my first design decision is what kind of search bar I want. I've opted for the fun way out: using the <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap's</a> <a href="http://twitter.github.com/bootstrap/javascript.html#typeahead">typeahead</a>. The typeahead has functionality to give suggestions while the user types, and the best news is this is already coded for us. Adding the code for my search bar and a search button:</p>
+
+<p>``` haml project/views/index.haml
+!!!
+%html</p>
+
+<pre><code>%head
+    %title Pokemon App
+    %link(rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css")
+%body
+    %script{:type =&gt; "text/javascript", :src  =&gt; "http://code.jquery.com/jquery.min.js"}
+    %script{:type =&gt; "text/javascript", :src  =&gt; "http://twitter.github.com/bootstrap/assets/js/bootstrap-typeahead.js"}
+    #search{:style =&gt; "position: absolute; width: 100%; text-align: center; top: 10%;"}
+        %form{:action =&gt; "search", :method =&gt; "POST", :id =&gt; "pokemon-search"}
+            %input{:type =&gt; "text", :class =&gt; "input-large", :id =&gt; "pokemon-input", :name =&gt; "pokemon", "data-provide"=&gt;"typeahead", "data-items"=&gt;"10", "autocomplete"=&gt;"off", :autofocus =&gt; "", :placeholder =&gt; "Find a Pokémon...", "data-source" =&gt; Pokemon.only(:name).map {|x| x.name}}
+            %button{:type=&gt;"submit", :class =&gt; "btn btn-small", :style =&gt; "margin-bottom: 10px; font-weight: bold;"}
+                Search
+</code></pre>
+
+<p>```</p>
+
+<p>In the &lt;head> tag, I include a link to the Bootstrap stylesheet. In the &lt;body> tag, I include a link to the JQuery and Bootstrap Typeahead JavaScript files remotely so I don't have to keep track of them. I then add a &lt;div> tag called "search" and center it on the page. Inside the div tag I create a form whose action sends a POST signal to the "search" action. Inside the form is first the typeahead, then a small submit button. The important parameters in the typeahead are "data-items" and "data-source;" "data-items" tells the JavaScript function how many items to suggest at a time, and "data-source" is an array of data for the JavaScript to search. Notice that my "data-source" uses the Pokemon class <a href="/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/">created previously</a>, so I need to be able to set up a <a href="/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/">Mongoid connection</a> to access that data. I'll make this connection in my "config.ru" file:</p>
+
+<p>``` ruby project/config.ru
+require './app'
+require 'mongoid'</p>
+
+<p>class Application</p>
+
+<pre><code>configure do
+    Mongoid.load! 'mongoid.yml'
+end
+</code></pre>
+
+<p>end</p>
+
+<p>run Application.new
+```</p>
+
+<p>I have chosen to extend the Application class in my "config.ru" file to prevent interference with my test setups later. Taking a look at the application would be a good idea, but if I run "rackup" now Mongoid will complain about environment setup. By default, "Mongoid.load!" will try to load the "development" settings, so I need to include a "development" setup in my "mongoid.yml." For now, it's going to be identical to my "test" environment setup except for the database name:</p>
+
+<p>``` yml project/mongoid.yml
+test:
+  sessions:</p>
+
+<pre><code>default:
+  database: test
+  hosts:
+    - localhost
+</code></pre>
+
+<p>development:
+  sessions:</p>
+
+<pre><code>default:
+  database: dev
+  hosts:
+    - localhost
+</code></pre>
+
+<p>```</p>
+
+<p>And ensuring some Pokemon are in the "dev" database:</p>
+
+<p>``` bash Populating the dev database
+$ irb</p>
+
+<blockquote><blockquote><p>Dir.pwd
+=> "project/tools/populate"
+require 'mongoid'
+=> true
+Mongoid.load! '../../mongoid.yml'
+=> {"sessions"=>{"default"=>{"database"=>"dev", "hosts"=>["localhost"]}}}
+require './populater'
+=> true
+Populater.new.add_pokemon 152
+=> nil</p>
+
+<p>```</p></blockquote></blockquote>
+
+<p>And requiring the Pokemon model in app.rb:</p>
+
+<p>``` ruby project/app.rb
+require 'sinatra'
+require 'haml'</p>
+
+<p>require_relative 'pokemon'</p>
+
+<p>class Application &lt; Sinatra::Base</p>
+
+<pre><code>get '/' do
+    haml :index
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>Finally, run 'rackup' from the root of the 'project' directory and load up the web application at 'localhost:9292.' There's now a typeahead and a search button in the top center of the page, and typing in the 'Search' bar shows up to 10 suggestion Pokemon. Now I'll return to my Cucumber tests. I need to add a line in the 'env.rb' file to set up the Mongoid environment and ensure there are Pokemon in the collection.</p>
+
+<p>``` ruby project/tools/test/features/support/env.rb
+require 'capybara'
+require 'capybara/cucumber'
+require 'mongoid'</p>
+
+<p>require_relative '../../../populate/populater'
+require_relative "../../../../app"</p>
+
+<p>Mongoid.load! '../../mongoid.yml', :test</p>
+
+<p>Populater.new.add_pokemon(10)</p>
+
+<p>Capybara.app = Application
+```</p>
+
+<p>Now I can run Cucumber and see some jovial results: '(4 failed, 9 skipped, 10 passed).' I now have more steps passing than failing! The root cause of the failures is that there currently is no "search" page; let's fix that:</p>
+
+<p>``` ruby project/app.rb
+...
+class Application &lt; Sinatra::Base</p>
+
+<pre><code>...
+post '/search' do
+    haml :search
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>I want my search page to have a search bar just like my index page. If I want them to be identical, I want to only have to change that code once. When writing HAML, I can create a 'layout.haml' file to act as a base page for my application and move all the text from 'index.haml.' I'll add a '=yield' statement where I want the information from 'index.haml' and 'search.haml' to be placed.</p>
+
+<p>``` haml project/views/layout.haml
+!!!
+%html</p>
+
+<pre><code>%head
+    %title Pokemon App
+    %link(rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css")
+%body
+    %script{:type =&gt; "text/javascript", :src  =&gt; "http://code.jquery.com/jquery.min.js"}
+    %script{:type =&gt; "text/javascript", :src  =&gt; "http://twitter.github.com/bootstrap/assets/js/bootstrap-typeahead.js"}
+    #search{:style =&gt; "position: absolute; width: 100%; text-align: center; top: 10%;"}
+        %form{:action =&gt; "search", :method =&gt; "POST", :id =&gt; "pokemon-search"}
+            %input{:type =&gt; "text", :class =&gt; "input-large", :id =&gt; "pokemon-input", :name =&gt; "pokemon", "data-provide"=&gt;"typeahead", "data-items"=&gt;"10", "autocomplete"=&gt;"off", :autofocus =&gt; "", :placeholder =&gt; "Find a Pokémon...", "data-source" =&gt; Pokemon.only(:name).map {|x| x.name}}
+            %button{:type=&gt;"submit", :class =&gt; "btn btn-small", :style =&gt; "margin-bottom: 10px; font-weight: bold;"}
+                Search
+    =yield
+</code></pre>
+
+<p>```</p>
+
+<p>``` haml project/views/index.haml</p>
+
+<h1>search-text{:style => "position: absolute; width: 100%; text-align: center; top: 2%; font-weight: bold;"}</h1>
+
+<pre><code>Begin typing to search for your Pokemon!
+</code></pre>
+
+<p>```</p>
+
+<p>At this point, I'll create a 'search.haml' file in the 'views' directory, but leave it empty. Running Cucumber now, I get '(4 failed, 4 skipped, 15 passed).' Pretty close! All I fail now is actually seeing the desired information on the page. First I want to get access to the Pokemon searched for: I can do that by parsing the params passed to us in app.rb:</p>
+
+<p>``` ruby project/app.rb
+...</p>
+
+<p>class Application &lt; Sinatra::Base</p>
+
+<pre><code>...
+post '/search' do
+    @pokemon = Pokemon.where(name: params[:pokemon]).first
+    haml :search
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>So now on my search page:</p>
+
+<p>``` haml project/views/search.haml</p>
+
+<h1>search-text{:style => "position: absolute; width: 100%; text-align: center; top: 2%; font-weight: bold;"}</h1>
+
+<pre><code>Search for another Pokemon.
+</code></pre>
+
+<h1>search-results{:style => "position: absolute; width: 100%; text-align: center; top: 20%; font-weight: bold;"}</h1>
+
+<pre><code>%img{:src =&gt; @pokemon.image, :height =&gt; "250px"}
+%br
+= "##{@pokemon.number} - #{@pokemon.name}"
+%br
+= "Types: #{@pokemon.types.first}#{@pokemon.types.count &lt; 2 ? ' ' : ', ' + @pokemon.types.last}"
+</code></pre>
+
+<p>```</p>
+
+<p>I reference the class variable "@pokemon" and access its data. To output Ruby-formatted strings, I use an "=" sign. Running Cucumber, I now see '(2 failed, 21 passed).' 2 of my 4 tests are passing! A trivial amount of investigation reveals that I didn't deal with the situation where the user types in garbage data. That can mostly be done in the HAML file, but I also want a way to get the bad text the user gave me so they can see what was wrong.</p>
+
+<p>``` haml project/views/search.haml</p>
+
+<h1>search-text{:style => "position: absolute; width: 100%; text-align: center; top: 2%; font-weight: bold;"}</h1>
+
+<pre><code>Search for another Pokemon.
+</code></pre>
+
+<h1>search-results{:style => "position: absolute; width: 100%; text-align: center; top: 20%; font-weight: bold;"}</h1>
+
+<pre><code>- unless @pokemon.nil?
+    %img{:src =&gt; @pokemon.image, :height =&gt; "250px"}
+    %br
+    = "##{@pokemon.number} - #{@pokemon.name}"
+    %br
+    = "Types: #{@pokemon.types.first}#{@pokemon.types.count &lt; 2 ? ' ' : ', ' + @pokemon.types.last}"
+- else
+    = "Lol! Could not find a Pokemon named '#{@name}.' Try something else!"
+</code></pre>
+
+<p>```</p>
+
+<p>``` ruby project/app.rb
+...
+class Application &lt; Sinatra::Base</p>
+
+<pre><code>...
+post '/search' do
+    @name = params[:pokemon]
+    @pokemon = Pokemon.where(name: @name).first
+    haml :search
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>Ruby code with no output is preceded with a '-' and because HAML is space-sensitive, there's no need to include 'end' statements. Now I run Cucumber and... 4 scenarios/23 steps passed! I have a functional web application! Of course, the page itself is somewhat bland, some of the styles could be put in a stylesheet and reused, and the only tests I've written are for super-high-level functionality. Those are all problems someone with infinite time would deal with, so I'll just leave the page is is for now.</p>
+
+<p>The next blog post <a href="/blog/categories/pokephile">in this series</a> will be about deploying this application to the web using Heroku.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Moving from the MongoDB Ruby Driver to Mongoid]]></title>
+    <link href="http://larryprice.github.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/"/>
+    <updated>2013-01-05T20:04:00-05:00</updated>
+    <id>http://larryprice.github.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid</id>
+    <content type="html"><![CDATA[<p>This is Part 2 in a multi-part series to detail the creation of a "simple" project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="/blog/categories/pokephile">Pokephile category</a>. Part 2 details refactoring code using the MongoDB Ruby driver to use Mongoid. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>.</p>
+
+<h3>What I've Done</h3>
+
+<p>In a <a href="/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/">previous post</a>, I described creating a class that would populate a database with data scraped from the internet. I used the MongoDB Ruby driver to accomplish this. However, using the driver can be laborious and there are simpler ways. In this post, I'm going to refactor the Populater class to use Mongoid.</p>
+
+<h3>Mongoid</h3>
+
+<p><a href="http://http://mongoid.org/en/mongoid/index.html">Mongoid</a> (pronounced mann-goyd) is an Object-Document Wrapper for Ruby. Using mongoid abstracts some of the database operations that must be performed when using the MongoDB Ruby driver. It comes in handy when using models in an MVC application. To install the Mongoid gem:</p>
+
+<p><code>
+sudo gem install mongoid
+</code></p>
+
+<h3>Refactoring</h3>
+
+<p>In populater.rb, we only inserted one structure of document into our "pokemons" collection. That makes this a great opportunity to use Mongoid. We remember that there were four fields in our document: number (string), name (string), image link (string), and types (array). Knowing this, we can create a model for this data:</p>
+
+<p>``` ruby project/pokemon.rb
+require 'mongoid'</p>
+
+<p>class Pokemon</p>
+
+<pre><code>include Mongoid::Document
+
+field :number, type: String
+field :name, type: String
+field :types, type: Array
+field :image, type: String
+</code></pre>
+
+<p>end
+```</p>
+
+<p>And that's it for our model. Although we specified the types in this case, it's not necessary if we want a looser definition of our model. Here's how we change our implementation file:</p>
+
+<p>``` ruby project/tools/populate/populater.rb</p>
+
+<h1>require 'mongo' #deleted</h1>
+
+<p>require_relative '../../pokemon' #added
+require 'nokogiri'
+require 'open-uri'</p>
+
+<p>class Populater</p>
+
+<pre><code>#def initialize(db_name) #removed
+</code></pre>
+
+<p>  def initialize #added</p>
+
+<pre><code>  #@col = Mongo::Connection.new.db(db_name)["pokemons"] #deleted
+  #@col.remove #deleted
+  Pokemon.delete_all #added
+  @data = Nokogiri::HTML(open("http://pokemon.wikia.com/wiki/List_of_Pok%C3%A9mon"))
+</code></pre>
+
+<p>  end</p>
+
+<p>  def add_pokemon(num_to_add)</p>
+
+<pre><code>@data.xpath("//table[@class='wikitable sortable']/tr").each do |row|
+    break if num_to_add &lt;= 0
+    dex_num = row.at_xpath('td/text()').to_s.strip
+    next if dex_num.nil? || dex_num.empty?
+    dex_name = row.at_xpath('td[2]/a/text()').to_s.strip
+
+    unless dex_num == "000"
+        type_1 = row.at_xpath('td[4]/a/span/text()').to_s.strip
+        type_2 = row.at_xpath('td[5]/a/span/text()').to_s.strip || row.at_xpath('td[5]/text()').to_s.strip
+        image_link = "http://img.pokemondb.net/artwork/#{dex_name.downcase}.jpg"
+    else
+        type_1 = row.at_xpath('td[4]/text()').to_s.strip
+        type_2 = row.at_xpath('td[5]/text()').to_s.strip
+        image_link = "images/missingo.png"
+    end
+
+    types = Array.new
+    types &lt;&lt; type_1 unless type_1.nil? || type_1.empty?
+    types &lt;&lt; type_2 unless type_2.nil? || type_2.empty?
+
+    #@col.insert({:number =&gt; dex_num, :name =&gt; dex_name, :types =&gt; types, :image =&gt; image_link}) #deleted
+    Pokemon.create {:number =&gt; dex_num, :name =&gt; dex_name, :types =&gt; types, :image =&gt; image_link} #added
+
+    num_to_add -= 1
+end
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>That one's easy. We deleted four lines and added 3. However, now you can see that the Populater does not have to deal with connecting to the database, it only has to know what model it wants to modify. So we've removed some complexity from this file by no longer requiring the database name on initialization. However, that means that someone else has to be in charge of setting up the initial connection. In the overlying project, we want that someone else to be a controller. In our tests, we want that someone else to be our test file. So let's do it. We're going to start by adding a config section in our before:all block.</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+require_relative '../../populate/populater'</p>
+
+<h1>require 'mongo' #removed</h1>
+
+<p>require 'mongoid' #added
+require_relative '../../../pokemon'</p>
+
+<p>describe Populater do</p>
+
+<pre><code>before:all do
+    Mongoid.configure do |config| #added
+        config.connect_to 'test' #added
+    end # added
+    #@col = Mongo::Connection.new.db('test')["pokemons"] # removed
+end
+...
+</code></pre>
+
+<p>end
+```</p>
+
+<p>In doing this, we've set up any of our document models to use the 'test' database. Now we go through each test and replace the Mongo Ruby Driver syntax with Mongoid syntax, which is similar to Ruby's Array syntax.</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+...</p>
+
+<p>describe Populater do</p>
+
+<pre><code>...
+before:each do
+    #@populater = Populater.new('test') #removed
+    @populater = Populater.new #added
+end
+
+describe "#new" do
+    it "does not throw when creating instance" do
+        #expect {Populater.new('test')}.to_not raise_error #removed
+        expect {Populater.new}.to_not raise_error #added
+    end
+
+    it "takes one param and returns a Populater instance" do
+        @populater.should be_an_instance_of Populater
+    end
+
+    it "empties pokemon collection" do
+        #@col.insert({:test =&gt; "hi there"}) #removed
+        #@col.find.count.should_not eql 0 #removed
+        #Populater.new('test') #removed
+        #@col.find.count.should eql 0 #removed
+        Pokemon.create #added
+        Pokemon.count.should eql 1 #added
+        Populater.new #added
+        Pokemon.count.should eql 0 #added
+    end
+end
+...
+</code></pre>
+
+<p>end
+```</p>
+
+<p>The 'new' tests are straightforward. We remove the usage of an input parameter to the Populater initializer. The only significant change we make is to the "empties pokemon collection" test. Here we replace the Mongo Ruby Driver syntax of inserting into a collection with Mongoid syntax of creating a Pokemon document. The 'create' method inserts a document into the collection with the given values, or defaults if none are given. We also see that we can remove the "find" syntax completely and just use a "count" method on the document type.</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+...
+describe Populater do</p>
+
+<pre><code>...
+describe "#add_pokemon" do
+    it "adds 0 pokemon given 0" do
+        @populater.add_pokemon 0
+        #@col.find.count.should eql 0 #removed
+        Pokemon.count.should eql 0 #added
+    end
+    ...
+    it "adds pokemon with a number" do
+        @populater.add_pokemon 1
+        #@col.find.count.should eql 1 #removed
+        #@col.find.first['number'].should_not be_nil #removed
+        Pokemon.count.should eql 1 #added
+        Pokemon.first['number'].should_not be_nil #added
+end
+  ...
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>The tests for adding 0, 1, and 2 documents to the collection are all very similar. The only change is to replace the Mongo Ruby Driver "find.count" syntax with the Mongoid "count." The "adds pokemon with a ____" tests all undergo the same changes. I replace the ".find.first" statement with a simple ".first" to get the same meaning. So our Populater has been converted to use Mongoid instead of the Mongo Ruby Driver. Bully for us.</p>
+
+<p>There's one more change that would be nice to make before we hang up our hats. Configuring Mongoid using the .config syntax is okay, but it would be a lot nicer to keep all of our configuration in a file. We can create such a file called "mongoid.yml" and put some configuration information in it:</p>
+
+<p>``` yml project/mongoid.yml
+test:
+  sessions:</p>
+
+<pre><code>default:
+  database: test
+  hosts:
+    - localhost
+</code></pre>
+
+<p>```</p>
+
+<p>This syntax is valid in Mongoid 3.x. This is a very simply configuration for our test environment. Now we can go back into our test file and change the 'before:all' block:</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+...
+describe Populater do</p>
+
+<pre><code>before:all do
+    #Mongoid.configure do |config| #removed
+    #   config.connect_to 'test' #removed
+    #end # removed
+    Mongoid.load! '../../../mongoid.yml', 'test' #added
+end
+...
+</code></pre>
+
+<p>end
+```</p>
+
+<p>The second parameter can be a string or a symbol. Now there's only one file to modify the environment configurations, and we're better off for it.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Schemaless databases with Ruby and MongoDB]]></title>
+    <link href="http://larryprice.github.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/"/>
+    <updated>2013-01-05T16:54:00-05:00</updated>
+    <id>http://larryprice.github.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb</id>
+    <content type="html"><![CDATA[<p>This is Part 1 in a multi-part series to detail the creation of a "simple" project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="/blog/categories/pokephile">Pokephile category</a>. Part 1 details getting started with MongoDB and creating a collection using data scraped off the web using <a href="http://nokogiri.org/">Nokogiri</a>. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>.</p>
+
+<h3>A little background</h3>
+
+<p>NoSQL is a database service used when working with a large amount of data that doesn't fit a relational model (read: <a href="http://en.wikipedia.org/wiki/Nosql">wikipedia</a>). It allows for mass storage without the overhead of SQL relations. There are many types of schemaless database services (<a href="http://en.wikipedia.org/wiki/Nosql#Taxonomy">here's a list</a>), but in particular I've been looking into what's called "Document Store."</p>
+
+<p>Documents can be any number of key-value fields with a unique id. Document Store services usually encode data in a simple format such as XML, YAML, JSON, or BSON for storage purposes. MongoDB is a document store service which uses BSON to store documents. In Mongo, we connect to a specific database and then we can look through "collections," which are more-or-less equivalent to "tables" in relational databases.</p>
+
+<h3>What about MongoDB and the Ruby driver?</h3>
+
+<p>The first step is to get MongoDB working on your machine. Install MongoDB for your system -- on Ubuntu 12.10 I do this:</p>
+
+<p><code>
+sudo apt-get install mongodb mongodb-dev mongodb-clients mongodb-server
+</code></p>
+
+<p>Then we start up the daemon:</p>
+
+<p><code>
+sudo service mongodb start
+</code></p>
+
+<h3>What's the concept?</h3>
+
+<p>The concept here is that we are going to have a database populated with <a href="http://www.pokemon.com/">Pokemon</a>. The user types a Pokemon's name into a search field and submits the form, which brings up an image of the Pokemon and some useful information.</p>
+
+<h3>Getting started</h3>
+
+<p>Since I would like to focus on MongoDB, we can start by populating our database with Pokemon. If you're not familiar with Pokemon, there are lots of them (~650 at the date of this blog post). For my purposes, I may want to only add the first ~150 Pokemon, or I may want to add every Pokemon imaginable. I want it to be easy to add more if any new ones are added. So I'm going to start this project by creating a Populater, and we're going to use TDD to help us create it.</p>
+
+<p>If you don't have RSpec installed, it's as easy as opening up a shell and:</p>
+
+<p><code>
+$ sudo gem install rspec mongo
+</code></p>
+
+<p>I'm going to put the Populater in a tools directory, and I'm going to put my spec files in a test/spec directory. The directory structure I want to use is as follows:</p>
+
+<p><code>
+project
+--tools
+----populate
+----test
+------spec
+</code></p>
+
+<p>In the 'tools/test/spec' directory, I create 'populater_spec.rb.' We'll write our first test:</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+describe Populater do</p>
+
+<pre><code>describe "#new" do
+    it "does not throw when creating instance" do
+        expect {Populater.new}.to_not raise_error
+    end
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>The syntax for RSpec is mostly pseudo-English, so it's fairly straightforward to follow. The first 'describe' block says that we are describing the Populater class. The second 'describe' block says that we are describing the 'new' method of the 'Populater' class. The inner-most block is our test. We want to make sure that no exception is thrown when we create a new Populater. To run this test, open a terminal and type:</p>
+
+<p><code>bash Running Rspec
+$ pwd
+~/project/tools/test
+$ rspec populater_spec.rb
+</code></p>
+
+<p>We get a big fat compile error, obviously due to the fact that there's no such thing as a 'Populater' class. So create the file 'populater.rb' in 'project/tools/populate' and create the class:</p>
+
+<p><code>ruby project/tools/populate/populater.rb
+class Populater
+end
+</code></p>
+
+<p>And include the 'Populater' class in our spec file:</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+require_relative '../../populate/populater'</p>
+
+<p>describe Populater do</p>
+
+<pre><code>describe "#new" do
+    it "does not throw when creating instance" do
+        expect {Populater.new}.to_not raise_error
+    end
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>Now run rspec. Hooray, we're passing all our tests! Let's add another test and some let's have RSpec do a little work before each test.</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+require_relative '../../populate/populater'</p>
+
+<p>describe Populater do</p>
+
+<pre><code>before:each do
+    @populater = Populater.new
+end
+
+describe "#new" do
+    it "does not throw when creating instance" do
+        expect {Populater.new}.to_not raise_error
+    end
+
+    it "takes no params and returns a Populater instance" do
+        @populater.should be_an_instance_of Populater
+    end
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>The 'before:each' syntax tells RSpec to perform this action before running each test. This way, we don't have to type out 'Populater.new' in each test. When we run RSpec, this test passes. Now let's actually do something meaningful in our new call. We want the Populater to empty all Pokemon from our database as it begins. In order to do this, we need to also tell the Populater what database to use, so we'll refactor slightly to pass in the name of our database to the Populater.</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+require_relative '../../populate/populater'
+require 'mongo'</p>
+
+<p>describe Populater do</p>
+
+<pre><code>before:all do
+    @col = Mongo::Connection.new.db('test')["pokemons"]
+end
+before:each do
+    @populater = Populater.new('test')
+end
+
+describe "#new" do
+    it "does not throw when creating instance" do
+        expect {Populater.new('test')}.to_not raise_error
+    end
+
+    it "takes one param and returns a Populater instance" do
+        @populater.should be_an_instance_of Populater
+    end
+
+    it "empties pokemon collection" do
+        @col.insert({:test =&gt; "hi there"})
+        @col.find.count.should_not eql 0
+        Populater.new('test')
+        @col.find.count.should eql 0
+    end
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>Similar to the 'before:each' syntax, the 'before:all' syntax runs the statement once. Here we want to get a handle to the 'pokemons' collection from our 'test' database. In our test, we run a 'find' with no arguments on the 'pokemons' collection to query everything in that collection. We also have an 'insert' statement where we insert an arbitrary document into our collection. You'll note later that this garbage document looks nothing like the Pokemon documents we insert, which is just another reason to love document-store databases. We run RSpec and we fail the test. Let's open up 'populater.rb' and fix this.</p>
+
+<p>``` ruby project/tools/populate/populater.rb
+require 'mongo'</p>
+
+<p>class Populater</p>
+
+<pre><code>def initialize(db_name)
+    @col = Mongo::Connection.new.db(db_name)["pokemons"]
+    @col.remove
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>Test fixed. We connect to the same database and access the same collection and remove all the old data on intialize. So now we actually want to add Pokemon to the collection. We'll pick up a new 'describe' block for an 'add_pokemon' method. We'll then test that calling it with 0 adds no Pokemon to the collection.</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+...
+describe "#add_pokemon" do</p>
+
+<pre><code>it "adds 0 pokemon given 0" do
+    @populater.add_pokemon 0
+    @col.find.count.should eql 0
+end
+</code></pre>
+
+<p>end
+...
+```</p>
+
+<p>When we run our tests, we get a NoMethodError and fail. We create a trivial fix in populater.rb</p>
+
+<p>``` ruby project/tools/populate/populater.rb
+class Populater</p>
+
+<pre><code>...
+
+def add_pokemon(num)
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>And we pass the test, having added 0 Pokemon to our database. Let's do it with 1 now.</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+...
+describe "#add_pokemon" do</p>
+
+<pre><code>...
+it "adds 1 pokemon given 1" do
+    @populater.add_pokemon 1
+    @col.find.count.should eql 1
+end
+</code></pre>
+
+<p>end
+...
+```</p>
+
+<p>We fail. Another trivial fix:</p>
+
+<p>``` ruby project/tools/populate/populater.rb
+class Populater</p>
+
+<pre><code>...
+
+def add_pokemon(num)
+    (0...num).each do |x|
+        @col.insert({number: x})
+    end
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>We pass again. We'll also pass when checking for multiple Pokemon:</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+...
+describe "#add_pokemon" do</p>
+
+<pre><code>...
+it "adds 2 pokemon given 2" do
+    @populater.add_pokemon 2
+    @col.find.count.should eql 2
+end
+</code></pre>
+
+<p>end
+...
+```</p>
+
+<p>But we're missing substance. There's only garbage being shoved in our database. Our TDD methodology breaks down slightly here because we want our database to have dynamic information scraped from a website, and I don't want to hard code any data nor do I want to scrape the same website in my tests and my implementation. So we're going to do a little bit of behind-the-scenes stuff and test that the fields we want are simply not nil. I want each Pokemon to have a number, name, an array of types, and a link to an image:</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+...
+describe "#add_pokemon" do</p>
+
+<pre><code>...
+it "adds pokemon with a number" do
+    @populater.add_pokemon 1
+    @col.find.count.should eql 1
+    @col.find.first['number'].should_not be_nil
+end
+it "adds pokemon with a name" do
+    @populater.add_pokemon 1
+    @col.find.count.should eql 1
+    @col.find.first['name'].should_not be_nil
+end
+it "adds pokemon with array of types" do
+    @populater.add_pokemon 1
+    @col.find.count.should eql 1
+    types = @col.find.first['types']
+    types.should_not be_nil
+    types.should be_an_instance_of Array
+    types.should have_at_least(1).items
+    types.should have_at_most(2).items
+end
+it "adds pokemon with image link" do
+    @populater.add_pokemon 1
+    @col.find.count.should eql 1
+    image = @col.find.first['image']
+    image.should_not be_nil
+    image.should_not be_empty
+end
+</code></pre>
+
+<p>end
+...
+```</p>
+
+<p>There are many websites where you can get this kind of data for each Pokemon, but I chose <a href="http://pokemon.wikia.com/wiki/List_of_Pok%C3%A9mon">the Pokemon Wiki</a> for its consistency. In the initializer of the Populater, I open up the URL using Nokogiri so I can access the sweet, creamy data contained within. In my add_pokemon method, I extract this data I want based on the way the table is set up on the website. To continue, we need to install the Nokogiri gem:</p>
+
+<p><code>
+sudo gem install nokogiri
+</code></p>
+
+<p>And now we add the logic to add_pokemon:</p>
+
+<p>``` ruby project/tools/populate/populater.rb
+require 'mongo'
+require 'nokogiri'
+require 'open-uri'</p>
+
+<p>class Populater</p>
+
+<pre><code>def initialize(db_name)
+    @col = Mongo::Connection.new.db(db_name)["pokemons"]
+    @col.remove
+    @data = Nokogiri::HTML(open("http://pokemon.wikia.com/wiki/List_of_Pok%C3%A9mon"))
+end
+
+def add_pokemon(num_to_add)
+    @data.xpath("//table[@class='wikitable sortable']/tr").each do |row|
+        break if num_to_add &lt;= 0
+        dex_num = row.at_xpath('td/text()').to_s.strip
+        next if dex_num.nil? || dex_num.empty?
+        dex_name = row.at_xpath('td[2]/a/text()').to_s.strip
+
+        unless dex_num == "000"
+            type_1 = row.at_xpath('td[4]/a/span/text()').to_s.strip
+            type_2 = row.at_xpath('td[5]/a/span/text()').to_s.strip || row.at_xpath('td[5]/text()').to_s.strip
+            image_link = "http://img.pokemondb.net/artwork/#{dex_name.downcase}.jpg"
+        else
+            type_1 = row.at_xpath('td[4]/text()').to_s.strip
+            type_2 = row.at_xpath('td[5]/text()').to_s.strip
+            image_link = "images/missingo.png"
+        end
+
+        types = Array.new
+        types &lt;&lt; type_1 unless type_1.nil? || type_1.empty?
+        types &lt;&lt; type_2 unless type_2.nil? || type_2.empty?
+
+        @col.insert({:number =&gt; dex_num, :name =&gt; dex_name, :types =&gt; types, :image =&gt; image_link})
+
+        num_to_add -= 1
+    end
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>I'll admit The add_pokemon method is now quite a bit more daunting to interpret. Here's the breakdown of what's going on: Nokogiri finds us the table tag with class of 'wikitable sortable' and we iterate over that. There are two breaking conditions of our loop: we hit the max number of Pokemon as given, or we can't find anymore Pokemon in the table. So we check that we haven't hit our max. Then we find the Pokemon's number in the table after we manually parse the HTML. In the case of this table, the first row is all garbage, so we continue to the next row if we are on the first row.  We then grab the name from the table, which is luckily always in the same place. The branch is for the special case of Pokemon #000 (Missingo), which is set up slightly differently in the table for some reason. We create an empty array and shove our types in it, but we have to be careful because not all Pokemon have two types. We then create a document in the braces and insert it into the collection. The final step is to decrement the loop counter.</p>
+
+<p>Tests pass. We now have a working Populater! Now we can either write a script or open up the irb and populate as necessary and we know that the Populater is functional:</p>
+
+<p>``` ruby Populating Databases
+$ irb</p>
+
+<blockquote><blockquote><p>Dir.pwd
+=> "project/tools/populate"
+require 'mongo'
+=> true
+col = Mongo::Connection.new.db('dev')["pokemons"]
+=> ...
+col.find.count
+=> 0
+require './populater'
+=> true
+Populater.new('dev').add_pokemon 152
+=> nil
+col.find.count
+152</p>
+
+<p>```</p></blockquote></blockquote>
+
+<p>If you want to further familiarize yourself with the MongoDB Ruby driver, you should check out the MongoDB Koans. Unfortunately, the original <a href="https://github.com/tredfern/MongoDB_Koans">MongoDB Koans</a> have not been updated in a while, and so my more recent installations of Ruby and the MongoDB driver didn't work. I found a set of <a href="https://github.com/edgecase/ruby_koans">updated koans</a> which worked with my install of Ruby 1.9.3. However, the updated version also had a couple of annoying issues with deprecations, so I created <a href="https://github.com/larryprice/MongoDB_Koans">my own fork</a> on GitHub with the fixes.</p>
+]]></content>
+  </entry>
+  
+</feed>

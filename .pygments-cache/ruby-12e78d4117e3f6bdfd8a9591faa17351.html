@@ -1,0 +1,44 @@
+<div class="highlight"><pre><span class="c1">#require &#39;mongo&#39; #deleted</span>
+<span class="n">require_relative</span> <span class="s1">&#39;../../pokemon&#39;</span> <span class="c1">#added</span>
+<span class="nb">require</span> <span class="s1">&#39;nokogiri&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;open-uri&#39;</span>
+
+<span class="k">class</span> <span class="nc">Populater</span>
+	<span class="c1">#def initialize(db_name) #removed</span>
+  <span class="k">def</span> <span class="nf">initialize</span> <span class="c1">#added</span>
+      <span class="c1">#@col = Mongo::Connection.new.db(db_name)[&quot;pokemons&quot;] #deleted</span>
+      <span class="c1">#@col.remove #deleted</span>
+      <span class="no">Pokemon</span><span class="o">.</span><span class="n">delete_all</span> <span class="c1">#added</span>
+      <span class="vi">@data</span> <span class="o">=</span> <span class="no">Nokogiri</span><span class="o">::</span><span class="no">HTML</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;http://pokemon.wikia.com/wiki/List_of_Pok%C3%A9mon&quot;</span><span class="p">))</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">add_pokemon</span><span class="p">(</span><span class="n">num_to_add</span><span class="p">)</span>
+    <span class="vi">@data</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s2">&quot;//table[@class=&#39;wikitable sortable&#39;]/tr&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">row</span><span class="o">|</span>
+        <span class="k">break</span> <span class="k">if</span> <span class="n">num_to_add</span> <span class="o">&lt;=</span> <span class="mi">0</span>
+        <span class="n">dex_num</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">at_xpath</span><span class="p">(</span><span class="s1">&#39;td/text()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">strip</span>
+        <span class="k">next</span> <span class="k">if</span> <span class="n">dex_num</span><span class="o">.</span><span class="n">nil?</span> <span class="o">||</span> <span class="n">dex_num</span><span class="o">.</span><span class="n">empty?</span>
+        <span class="n">dex_name</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">at_xpath</span><span class="p">(</span><span class="s1">&#39;td[2]/a/text()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">strip</span>
+
+        <span class="k">unless</span> <span class="n">dex_num</span> <span class="o">==</span> <span class="s2">&quot;000&quot;</span>
+            <span class="n">type_1</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">at_xpath</span><span class="p">(</span><span class="s1">&#39;td[4]/a/span/text()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">strip</span>
+            <span class="n">type_2</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">at_xpath</span><span class="p">(</span><span class="s1">&#39;td[5]/a/span/text()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">strip</span> <span class="o">||</span> <span class="n">row</span><span class="o">.</span><span class="n">at_xpath</span><span class="p">(</span><span class="s1">&#39;td[5]/text()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">strip</span>
+            <span class="n">image_link</span> <span class="o">=</span> <span class="s2">&quot;http://img.pokemondb.net/artwork/</span><span class="si">#{</span><span class="n">dex_name</span><span class="o">.</span><span class="n">downcase</span><span class="si">}</span><span class="s2">.jpg&quot;</span>
+        <span class="k">else</span>
+            <span class="n">type_1</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">at_xpath</span><span class="p">(</span><span class="s1">&#39;td[4]/text()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">strip</span>
+            <span class="n">type_2</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">at_xpath</span><span class="p">(</span><span class="s1">&#39;td[5]/text()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">strip</span>
+            <span class="n">image_link</span> <span class="o">=</span> <span class="s2">&quot;images/missingo.png&quot;</span>
+        <span class="k">end</span>
+
+        <span class="n">types</span> <span class="o">=</span> <span class="nb">Array</span><span class="o">.</span><span class="n">new</span>
+        <span class="n">types</span> <span class="o">&lt;&lt;</span> <span class="n">type_1</span> <span class="k">unless</span> <span class="n">type_1</span><span class="o">.</span><span class="n">nil?</span> <span class="o">||</span> <span class="n">type_1</span><span class="o">.</span><span class="n">empty?</span>
+        <span class="n">types</span> <span class="o">&lt;&lt;</span> <span class="n">type_2</span> <span class="k">unless</span> <span class="n">type_2</span><span class="o">.</span><span class="n">nil?</span> <span class="o">||</span> <span class="n">type_2</span><span class="o">.</span><span class="n">empty?</span>
+
+        <span class="c1">#@col.insert({:number =&gt; dex_num, :name =&gt; dex_name, :types =&gt; types, :image =&gt; image_link}) #deleted</span>
+        <span class="no">Pokemon</span><span class="o">.</span><span class="n">create</span> <span class="p">{</span><span class="ss">:number</span> <span class="o">=&gt;</span> <span class="n">dex_num</span><span class="p">,</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="n">dex_name</span><span class="p">,</span> <span class="ss">:types</span> <span class="o">=&gt;</span> <span class="n">types</span><span class="p">,</span> <span class="ss">:image</span> <span class="o">=&gt;</span> <span class="n">image_link</span><span class="p">}</span> <span class="c1">#added</span>
+
+        <span class="n">num_to_add</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
+</div>
