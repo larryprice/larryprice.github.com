@@ -1,0 +1,14 @@
+<div class="highlight"><pre><span class="nv">$ </span><span class="nb">export </span><span class="nv">MONGOLAB_URI</span><span class="o">=</span><span class="sb">`</span>heroku config | grep MONGOLAB_URI | cut -c 15-<span class="sb">`</span>
+<span class="nv">$ </span><span class="nb">pwd</span>
+project/
+<span class="nv">$ </span><span class="nb">cd </span>tools/populate
+<span class="nv">$ </span>irb
+&gt;&gt; require <span class="s1">&#39;./populater&#39;</span>
+<span class="nb">true</span>
+&gt;&gt; require <span class="s1">&#39;mongoid&#39;</span>
+<span class="nb">true</span>
+&gt;&gt; Mongoid.load! <span class="s1">&#39;../../mongoid.yml&#39;</span>, :production
+<span class="o">{</span><span class="s2">&quot;sessions&quot;</span><span class="o">=</span>&gt;<span class="o">{</span><span class="s2">&quot;default&quot;</span><span class="o">=</span>&gt;<span class="o">{</span><span class="s2">&quot;uri&quot;</span><span class="o">=</span>&gt;nil, <span class="s2">&quot;options&quot;</span><span class="o">=</span>&gt;<span class="o">{</span><span class="s2">&quot;skip_version_check&quot;</span><span class="o">=</span>&gt;true, <span class="s2">&quot;safe&quot;</span><span class="o">=</span>&gt;true<span class="o">}}}}</span>
+&gt;&gt; Populater.new.add_pokemon 1000
+nil
+</pre></div>

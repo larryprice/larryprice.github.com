@@ -55,15 +55,21 @@
         <lastmod>2013-01-19T12:19:54-05:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://larryprice.github.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo/
+        </loc>
+        <lastmod>2013-01-20T11:55:50-05:00</lastmod>
+    </url>
+    <url>
         <loc>http://larryprice.github.com/</loc>
-        <lastmod>2013-01-19T12:19:54-05:00</lastmod>
+        <lastmod>2013-01-20T11:55:50-05:00</lastmod>
     </url>
     <url>
         <loc>http://larryprice.github.com/blog/archives/</loc>
-        <lastmod>2013-01-19T12:19:54-05:00</lastmod>
+        <lastmod>2013-01-20T11:55:50-05:00</lastmod>
     </url>
     <url>
         <loc>http://larryprice.github.com/blog/projects/</loc>
-        <lastmod>2013-01-19T12:43:15-05:00</lastmod>
+        <lastmod>2013-01-20T11:55:50-05:00</lastmod>
     </url>
 </urlset>

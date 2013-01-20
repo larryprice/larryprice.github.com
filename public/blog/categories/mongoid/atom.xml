@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mongoid | Larry Price]]></title>
   <link href="http://larryprice.github.com/blog/categories/mongoid/atom.xml" rel="self"/>
   <link href="http://larryprice.github.com/"/>
-  <updated>2013-01-19T12:48:49-05:00</updated>
+  <updated>2013-01-20T11:55:55-05:00</updated>
   <id>http://larryprice.github.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,188 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Pushing an Application to Heroku that Uses Ruby and Mongo]]></title>
+    <link href="http://larryprice.github.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo/"/>
+    <updated>2013-01-20T11:55:00-05:00</updated>
+    <id>http://larryprice.github.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo</id>
+    <content type="html"><![CDATA[<p><em>This is Part 3 in a multi-part series to detail the creation of a "simple" project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="/blog/categories/pokephile">Pokephile category</a>. Part 4 of this series details moving from a development environment to a production environment using <a href="http://heroku.com/">Heroku</a>. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>, and the final product can be found <a href="http://pokephile.herokuapp.com">here</a>.</em></p>
+
+<p><a href="http://heroku.com/">Heroku</a> is a hosting service for different types of web applications. The best thing about Heroku is it's free, you get a decent subdomain for your application, and there's no spam email. Go ahead and <a href="http://api.heroku.com/signup">sign up</a> if you don't already have an account.</p>
+
+<p>Now we need the Heroku Toolbelt. I'll illustrate for Ubuntu 12.10, but there's also <a href="https://toolbelt.heroku.com/">documentation for installing on any OS</a>.</p>
+
+<p><code>bash
+$ wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+</code></p>
+
+<p>The toolbelt installs some Heroku-specific applications in addition to ensuring you have Foreman and <a href="http://git-scm.com/">Git</a> on your system. Now it's time to tell the Heroku Toolbelt who we are.</p>
+
+<p><code>bash Step 3 - Modified Excerpt from the Heroku Getting Started guide
+$ heroku login
+Enter your Heroku credentials.
+Email: larry@example.com
+Password:
+Could not find an existing public key.
+Would you like to generate one? [Yn]
+Generating new SSH public key.
+Uploading ssh public key /home/larry/.ssh/id_rsa.pub
+</code></p>
+
+<p>In order for Heroku to figure out what ruby gems are needed to run your application, you need to specify a Gemfile. It's wise to specify a specific version of Ruby, and it's also a good idea to keep the gems' versions close to the state you developed with. For the <a href="/blog/categories/pokephile">Pokephile</a> application created in this series, this is my Gemfile:</p>
+
+<p>``` ruby project/Gemfile
+source :rubygems</p>
+
+<p>ruby '1.9.3'</p>
+
+<p>gem 'sinatra', '~>1.3.2'
+gem 'haml', '~>3.1.6'
+gem 'mongoid', '~>3.0.14'</p>
+
+<p>group :development, :test do</p>
+
+<pre><code>gem 'capybara', '~&gt;2.0.1'
+gem 'rspec', '~&gt;2.11.0'
+gem 'nokogiri', '~&gt;1.5.5'
+</code></pre>
+
+<p>end
+```</p>
+
+<p>First I specify a source for my gems: 'rubygems' defaults to "http://rubygems.org" and hasn't failed me yet. Next I specify that I want to use Ruby 1.9.3, a necessity because Mongoid 3.x doesn't work correctly with 1.9.2. The versions of the first three gems were chosen by typing the following in the command line to determine which version I had installed on my machine:</p>
+
+<p><code>bash
+$ gem query | grep 'sinatra\|haml\|mongoid'
+haml (3.1.7, 3.1.6)
+mongoid (3.0.17, 3.0.15, 3.0.14)
+sinatra (1.3.3, 1.3.2)
+sinatra-contrib (1.3.2)
+sinatra-reloader (1.0)
+</code></p>
+
+<p>The '~>' operator tells Bundler to use greater-than-equal but stop before next highest version. So, for Sinatra '~>1.3.2' means that Bundler will accept anything greater-than-or-equal-to '1.3.2' and less than '1.4.0.' I tend to rely on the '~>' operator so I can be sure no APIs are changed in my gems.</p>
+
+<p>The next block is a conditional checking in which environment the gems are being installed. This defaults to :development if none is specified. I put the gems used for testing in this block since they're not needed to run the application, but a developer/tester would need these to run the tests.</p>
+
+<p>For this Gemfile to be meaningful, we need to use a program called <a href="http://gembundler.com/">Bundler</a> to "bundle" the gems and their dependencies in a Gemfile.lock file.</p>
+
+<p><code>bash
+$ pwd
+project/
+$ sudo apt-get install bundler
+...
+$ bundle install
+...
+Your bundle is complete! Use `bundle show [gemname]` to see where a bundled gem is installed.
+</code></p>
+
+<p>Running bundler will create a Gemfile.lock file and make sure your system has the specified gems. If some gems are missing or need new versions to be installed, bundler will ask the user for their password to get the required gems.</p>
+
+<p>The next step for setting things up is to set up Git. If your application is already using Git, you only need to commit all files to verify that the Gemfile and Gemfile.lock make it into the repository.</p>
+
+<p><code>bash
+$ cd project/
+$ git init
+$ git add .
+$ git commit -m "Initial commit."
+</code></p>
+
+<p>Now we create a Heroku project and give it a meaningful name. If you can't think of a meaningful name, use 'heroku create' and Heroku will come up with something for you.</p>
+
+<p><code>bash
+$ heroku create meaningful-name
+Creating meaningful-name... done, stack is cedar
+http://meaningful-name.herokuapp.com/ | git@heroku.com:meaningful-name.git
+Git remote heroku added
+</code></p>
+
+<p>We're almost there. Because we included accessing Mongo databases in our application, we have to take care of that on the web. The easiest way to do that is using a Heroku Add-on. At this time, there are two major Heroku Add-ons for Mongo databases: <a href="https://addons.heroku.com/mongolab">MongoLab</a> and <a href="https://addons.heroku.com/mongohq">MongoHQ</a>. Both services have a starter service for $0/month, which is pretty awesome in my opinion. I flipped a coin and picked MongoLab for this application. Adding the add-on to our project:</p>
+
+<p><code>bash
+$ heroku addons:add mongolab:starter
+</code></p>
+
+<p>If you haven't already, Heroku will ask you to "verify your account" before continuing. This means that you have to put in some credit card information. Note that you will not be charged, I guess Heroku just wants some indication that you might eventually pay for something. After you put in your credit card information, you may need to run the above command again.</p>
+
+<p>Now that MongoLab is set up on the server-side, we need to tell Mongoid how to connect to that server. The following command will give you the environment variable needed to connect to the server:</p>
+
+<p><code>bash
+$ heroku config | grep MONGOLAB_URI
+</code></p>
+
+<p>Now we update our mongoid.yml file to use that string:</p>
+
+<p>``` yml project/mongoid.yml
+development:
+  sessions:</p>
+
+<pre><code>default:
+  database: dev
+  hosts:
+    - localhost
+</code></pre>
+
+<p>  options:</p>
+
+<p>test:
+  sessions:</p>
+
+<pre><code>default:
+  database: test
+  hosts:
+    - localhost
+</code></pre>
+
+<p>production:
+  sessions:</p>
+
+<pre><code>default:
+  uri: &lt;%= ENV['MONGOLAB_URI'] %&gt;
+  options:
+    skip_version_check: true
+    safe: true
+</code></pre>
+
+<p>```</p>
+
+<p>Because of the way my application works, I want to prepopulate the database with some Pokemon.</p>
+
+<p><code>`` bash
+$ export MONGOLAB_URI=</code>heroku config | grep MONGOLAB_URI | cut -c 15-`
+$ pwd
+project/
+$ cd tools/populate
+$ irb</p>
+
+<blockquote><blockquote><p>require './populater'
+true
+require 'mongoid'
+true
+Mongoid.load! '../../mongoid.yml', :production
+{"sessions"=>{"default"=>{"uri"=>nil, "options"=>{"skip_version_check"=>true, "safe"=>true}}}}
+Populater.new.add_pokemon 1000
+nil
+```</p></blockquote></blockquote>
+
+<p>With the production database populated, we need to set an environment variable in our production application defining the environment.</p>
+
+<p><code>bash
+$ heroku config:add MONGOID_ENV=production
+</code></p>
+
+<p>Now that we've made changes to the mongoid.yml file, we should commit again and push to Heroku.</p>
+
+<p><code>bash
+$ git commit -a -m "Updating mongoid.yml file for production"
+...
+$ git push heroku master
+</code></p>
+
+<p>And that's it! Check your Heroku URL to make sure everything looks okay and call it a day, or make some upgrades as I did for my <a href="http://pokephile.herokuapp.com">personal version of this project</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Testing a Sinatra App with Capybara]]></title>
