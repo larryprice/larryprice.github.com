@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="http://larryprice.github.com/atom.xml" rel="self"/>
   <link href="http://larryprice.github.com/"/>
-  <updated>2013-01-20T11:55:55-05:00</updated>
+  <updated>2013-02-19T22:37:49-05:00</updated>
   <id>http://larryprice.github.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,41 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Code Complete Second Edition]]></title>
+    <link href="http://larryprice.github.com/blog/2013/02/19/code-complete-second-edition/"/>
+    <updated>2013-02-19T22:38:00-05:00</updated>
+    <id>http://larryprice.github.com/blog/2013/02/19/code-complete-second-edition</id>
+    <content type="html"><![CDATA[<blockquote><p>Design is a process of carefully planning small mistakes in order to avoid making big ones.
+&#8211; Steve McConnell</p></blockquote>
+
+<h3>The Gist</h3>
+
+<p><em><a href="http://www.cc2e.com/Default.aspx">Code Complete Second Edition</a></em> by Steve McConnell is the ultimate programmer&#8217;s handbook, though certainly not a pocket guide considering its massive 850+ page size. This book contains a seemingly endless amount of information regarding the state of programming circa 2004. Topics range from extremely technical, such as making code readable above making it clever, to office politics, such as dealing with non-technical managers.</p>
+
+<h3>My Opinion</h3>
+
+<p>McConnell has written an encyclopedia for software development. In doing so, the book sometimes suffers from the &#8220;wide as an ocean, shallow as a puddle&#8221; complex. Nonetheless, the book holds an incredible amount of information that I found refreshing to see in print.</p>
+
+<p>The use of the term &#8220;construction&#8221; to refer to coding throughout the book is an apt analogy for McConnell&#8217;s views on the world of software development. Before beginning construction, a team should have a plan. Construction requires a solid base. While constructing a project, individuals should ensure that anyone else could look at their part of the project and figure out what&#8217;s happening. Working with a partner often improves quality. People doing construction should test their work to ensure the integrity of their product. Redoing lower levels causes a lot of pain. The team is unlikely to hit the original due date. Etc, etc.</p>
+
+<p>Many things in this book go directly against what I was taught in at university. McConnell recites a quote several times in the book:</p>
+
+<blockquote><p>Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.
+&#8211; Brian Kernighan</p></blockquote>
+
+<p>At university, we&#8217;re taught all the secrets of writing clever code: pointer manipulation, recursion, inappropriate variable reuse, and others. We were also never taught to plan ahead (&#8230;besides flowcharts, which were never required) or test, both of which McConnell highly recommends as necessary steps in software development. It&#8217;s no wonder my programs took so long to debug! Of course, I&#8217;ve learned to perform these tasks naturally while working as a Real Life Programmer. Reading this book is likely more helpful than taking the first few semesters of programming at university.</p>
+
+<p>A small issue I had was a wishy-washy attitude towards comments. In one chapter, McConnell describes having minimal comments in a code and keeping it mostly self-documenting. He then goes on to show all kinds of different, horrifying comments and justifies why they are sometimes okay.</p>
+
+<p>This is where I will note that <em>Code Complete Second Edition</em> is a book published by <a href="http://en.wikipedia.org/wiki/Microsoft_Press">Microsoft Press</a>. I was often surprised by McConnell&#8217;s adamance that Visual Basic is the most popular programming language at the time of publishing. Even circa 2004 (the year this book was published), the <a href="http://www.tiobe.com/index.php/content/paperinfo/tpci/index.html">Tiobe index</a> shows VB behind Java, C, and C++. The <a href="https://sites.google.com/site/pydatalog/pypl/PyPL-PopularitY-of-Programming-Language">PyPl index</a> also shows VB behind Java, PHP, C, and C++ in 2004. For the record, VB is a silly language.</p>
+
+<h3>Who Would Like This</h3>
+
+<p>This book would be nice required reading for students. Given the length and technical depth, it&#8217;s practically a textbook. Developers a few years out of university would still enjoy this text, but some topics are so obvious or overdone that many readers may start skipping chapters. If a developer knew of precisely the area he or she wanted to improve, then said developer could likely benefit from perusing a chapter of this book covering that topic.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Pushing an Application to Heroku that Uses Ruby and Mongo]]></title>
