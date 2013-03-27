@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pokephile | Larry Price]]></title>
   <link href="http://larryprice.github.com/blog/categories/pokephile/atom.xml" rel="self"/>
   <link href="http://larryprice.github.com/"/>
-  <updated>2013-03-26T20:27:22-04:00</updated>
+  <updated>2013-03-26T20:45:15-04:00</updated>
   <id>http://larryprice.github.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -312,31 +312,31 @@ $ touch features/step_definitions/search_steps.rb
 </code></p>
 
 <p>``` ruby project/tools/test/features/step_definitions/search_steps.rb
-Given /^I am on the home page$/ do
+Given /<sup>I</sup> am on the home page$/ do
   pending # express the regexp above with the code you wish you had
 end</p>
 
-<p>When /^I type "(.*?)" in the search bar$/ do |arg1|
+<p>When /<sup>I</sup> type "(.*?)" in the search bar$/ do |arg1|
   pending # express the regexp above with the code you wish you had
 end</p>
 
-<p>When /^I click "(.*?)"$/ do |arg1|
+<p>When /<sup>I</sup> click "(.*?)"$/ do |arg1|
   pending # express the regexp above with the code you wish you had
 end</p>
 
-<p>Then /^I should be on the "(.*?)" page$/ do |arg1|
+<p>Then /<sup>I</sup> should be on the "(.*?)" page$/ do |arg1|
   pending # express the regexp above with the code you wish you had
 end</p>
 
-<p>Then /^I should see "(.*?)"$/ do |arg1|
+<p>Then /<sup>I</sup> should see "(.*?)"$/ do |arg1|
   pending # express the regexp above with the code you wish you had
 end</p>
 
-<p>Then /^I should see an image with url "(.*?)"$/ do |arg1|
+<p>Then /<sup>I</sup> should see an image with url "(.*?)"$/ do |arg1|
   pending # express the regexp above with the code you wish you had
 end</p>
 
-<p>Given /^I am on the search page$/ do
+<p>Given /<sup>I</sup> am on the search page$/ do
   pending # express the regexp above with the code you wish you had
 end
 ```</p>
@@ -344,24 +344,24 @@ end
 <p>If I futilely run "cucumber" again now, my tests still don't pass because I haven't actually implemented my steps. This is where Capybara comes in. I found that a <a href="https://gist.github.com/428105">Capybara cheat sheet</a> is quite helpful while writing out my steps. The syntax I'm going to use is similar to RSpec, except that it includes some Capybara methods. The first two test steps I want to deal with are the "Given" steps.</p>
 
 <p>``` ruby project/tools/test/features/step_definitions/search_steps.rb
-Given /^I am on the home page$/ do
+Given /<sup>I</sup> am on the home page$/ do
   visit '/'
 end</p>
 
-<p>Given /^I am on the search page$/ do
+<p>Given /<sup>I</sup> am on the search page$/ do
   visit '/'
   click_button "Search"
 end
 ```</p>
 
-<p>All these statements are just Regular Expressions, as indicated by the /^$/. The regex acts as a sort of method name that Cucumber finds to run the steps. Given I am on the home page is trivial: just 'visit' the index. Given I am on the search page will first require me to click the "search" button. This is valid because my spec above says this is how to get to the search page. Now can do the 'When' statements.</p>
+<p>All these statements are just Regular Expressions, as indicated by the /<sup>$/.</sup> The regex acts as a sort of method name that Cucumber finds to run the steps. Given I am on the home page is trivial: just 'visit' the index. Given I am on the search page will first require me to click the "search" button. This is valid because my spec above says this is how to get to the search page. Now can do the 'When' statements.</p>
 
 <p>``` ruby project/tools/test/features/step_definitions/search_steps.rb
-When /^I type "(.*?)" in the search bar$/ do |arg1|
+When /<sup>I</sup> type "(.*?)" in the search bar$/ do |arg1|
   fill_in "pokemon-input", :with => arg1
 end</p>
 
-<p>When /^I click "(.*?)"$/ do |arg1|
+<p>When /<sup>I</sup> click "(.*?)"$/ do |arg1|
   click_button arg1
 end
 ```</p>
@@ -369,15 +369,15 @@ end
 <p>When I click just needs to click a button/link/whatever on the screen. The "(.*?)" is a regular expression that will match anything in quotes and assign it to the variable 'arg1.' So I can give any button description and Capybara will try to click a button with the given content. When I type in the search bar takes the regex arg1 and uses the "fill_in" method to fill in a text input with id "pokemon-input." The rest of the steps are all about what should be observed after performing the Given/When steps.</p>
 
 <p>``` ruby project/tools/test/features/step_definitions/search_steps.rb
-Then /^I should be on the "(.*?)" page$/ do |arg1|
+Then /<sup>I</sup> should be on the "(.*?)" page$/ do |arg1|
   current_path.should == "/#{arg1}"
 end</p>
 
-<p>Then /^I should see "(.*?)"$/ do |arg1|
+<p>Then /<sup>I</sup> should see "(.*?)"$/ do |arg1|
   page.should have_content(arg1)
 end</p>
 
-<p>Then /^I should see an image with url "(.*?)"$/ do |arg1|
+<p>Then /<sup>I</sup> should see an image with url "(.*?)"$/ do |arg1|
   find(:xpath, "//img[@src='#{arg1}']").should_not be_nil
 end
 ```</p>

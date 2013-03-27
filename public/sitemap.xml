@@ -4,80 +4,84 @@
         <loc>
             http://larryprice.github.com/blog/2012/10/19/a-hacky-solution-to-the-unicode-data-in-a-unicode-only-collation-problem/
         </loc>
-        <lastmod>2012-10-19T20:30:59-04:00</lastmod>
+        <lastmod>2013-03-26T20:44:12-04:00</lastmod>
     </url>
     <url>
         <loc>http://larryprice.github.com/blog/2012/10/24/i-dont-have-time/</loc>
-        <lastmod>2012-10-24T22:35:49-04:00</lastmod>
+        <lastmod>2013-03-26T20:44:12-04:00</lastmod>
     </url>
     <url>
         <loc>http://larryprice.github.com/blog/2012/10/30/good-idea-bad-idea/</loc>
-        <lastmod>2012-10-30T21:37:42-04:00</lastmod>
+        <lastmod>2013-03-26T20:44:12-04:00</lastmod>
     </url>
     <url>
         <loc>http://larryprice.github.com/blog/2012/11/08/the-optimistic-programmer/</loc>
-        <lastmod>2012-11-08T19:05:40-05:00</lastmod>
+        <lastmod>2013-03-26T20:44:12-04:00</lastmod>
     </url>
     <url>
         <loc>
             http://larryprice.github.com/blog/2012/11/26/how-linux-works-what-every-superuser-should-know/
         </loc>
-        <lastmod>2012-11-27T20:05:52-05:00</lastmod>
+        <lastmod>2013-03-26T20:44:12-04:00</lastmod>
     </url>
     <url>
         <loc>
             http://larryprice.github.com/blog/2012/11/26/the-passionate-programmer-creating-a-remarkable-career-in-software-development/
         </loc>
-        <lastmod>2012-11-27T20:09:15-05:00</lastmod>
+        <lastmod>2013-03-26T20:44:12-04:00</lastmod>
     </url>
     <url>
         <loc>
             http://larryprice.github.com/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life/
         </loc>
-        <lastmod>2012-11-27T20:50:05-05:00</lastmod>
+        <lastmod>2013-03-26T20:44:12-04:00</lastmod>
     </url>
     <url>
         <loc>
             http://larryprice.github.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/
         </loc>
-        <lastmod>2013-01-05T16:57:40-05:00</lastmod>
+        <lastmod>2013-03-26T20:44:12-04:00</lastmod>
     </url>
     <url>
         <loc>
             http://larryprice.github.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/
         </loc>
-        <lastmod>2013-01-05T20:03:14-05:00</lastmod>
+        <lastmod>2013-03-26T20:44:12-04:00</lastmod>
     </url>
     <url>
         <loc>
             http://larryprice.github.com/blog/2013/01/19/testing-a-sinatra-app-with-capybara/
         </loc>
-        <lastmod>2013-01-19T12:19:54-05:00</lastmod>
+        <lastmod>2013-03-26T20:44:12-04:00</lastmod>
     </url>
     <url>
         <loc>
             http://larryprice.github.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo/
         </loc>
-        <lastmod>2013-01-20T11:55:50-05:00</lastmod>
+        <lastmod>2013-03-26T20:44:12-04:00</lastmod>
     </url>
     <url>
         <loc>http://larryprice.github.com/blog/2013/02/19/code-complete-second-edition/</loc>
-        <lastmod>2013-02-19T22:37:37-05:00</lastmod>
+        <lastmod>2013-03-26T20:44:12-04:00</lastmod>
     </url>
     <url>
         <loc>http://larryprice.github.com/blog/2013/03/25/pvreryvre-of-fyne-coddes/</loc>
-        <lastmod>2013-03-26T20:26:59-04:00</lastmod>
+        <lastmod>2013-03-26T20:44:12-04:00</lastmod>
     </url>
     <url>
         <loc>http://larryprice.github.com/</loc>
-        <lastmod>2013-03-26T20:26:59-04:00</lastmod>
+        <lastmod>2013-03-26T20:44:12-04:00</lastmod>
     </url>
     <url>
         <loc>http://larryprice.github.com/blog/archives/</loc>
-        <lastmod>2013-03-26T20:26:59-04:00</lastmod>
+        <lastmod>2013-03-26T20:44:12-04:00</lastmod>
     </url>
     <url>
         <loc>http://larryprice.github.com/blog/projects/</loc>
-        <lastmod>2013-03-26T20:26:59-04:00</lastmod>
+        <lastmod>2013-03-26T20:44:12-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://larryprice.github.com/robots.txt</loc>
+        <lastmod>2013-03-26T20:44:12-04:00</lastmod>
     </url>
 </urlset>

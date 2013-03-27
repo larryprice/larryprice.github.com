@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="http://larryprice.github.com/atom.xml" rel="self"/>
   <link href="http://larryprice.github.com/"/>
-  <updated>2013-03-26T20:27:22-04:00</updated>
+  <updated>2013-03-26T20:45:12-04:00</updated>
   <id>http://larryprice.github.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -552,7 +552,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>All these statements are just Regular Expressions, as indicated by the /^$/. The regex acts as a sort of method name that Cucumber finds to run the steps. Given I am on the home page is trivial: just &#8216;visit&#8217; the index. Given I am on the search page will first require me to click the &#8220;search&#8221; button. This is valid because my spec above says this is how to get to the search page. Now can do the &#8216;When&#8217; statements.</p>
+<p>All these statements are just Regular Expressions, as indicated by the /<sup>$/.</sup> The regex acts as a sort of method name that Cucumber finds to run the steps. Given I am on the home page is trivial: just &#8216;visit&#8217; the index. Given I am on the search page will first require me to click the &#8220;search&#8221; button. This is valid because my spec above says this is how to get to the search page. Now can do the &#8216;When&#8217; statements.</p>
 
 <figure class='code'><figcaption><span>project/tools/test/features/step_definitions/search_steps.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
