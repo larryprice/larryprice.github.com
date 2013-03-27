@@ -333,7 +333,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>All these statements are just Regular Expressions, as indicated by the /<sup>$/.</sup> The regex acts as a sort of method name that Cucumber finds to run the steps. Given I am on the home page is trivial: just &#8216;visit&#8217; the index. Given I am on the search page will first require me to click the &#8220;search&#8221; button. This is valid because my spec above says this is how to get to the search page. Now can do the &#8216;When&#8217; statements.</p>
+<p>All these statements are just Regular Expressions, as indicated by the /^$/. The regex acts as a sort of method name that Cucumber finds to run the steps. Given I am on the home page is trivial: just &#8216;visit&#8217; the index. Given I am on the search page will first require me to click the &#8220;search&#8221; button. This is valid because my spec above says this is how to get to the search page. Now can do the &#8216;When&#8217; statements.</p>
 
 <figure class='code'><figcaption><span>project/tools/test/features/step_definitions/search_steps.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -864,6 +864,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/25/pvreryvre-of-fyne-coddes/">Blog Battle: Pvreryvre of fyne coddes</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/19/code-complete-second-edition/">Code Complete Second Edition</a>
       </li>
     
@@ -879,15 +883,11 @@
         <a href="/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/">Moving from the MongoDB Ruby Driver to Mongoid</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/">Schemaless databases with Ruby and MongoDB</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/capybara' style='font-size: 108.57142857142857%'>capybara</a> <a href='/blog/categories/cucumber' style='font-size: 108.57142857142857%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 142.85714285714286%'>database</a> <a href='/blog/categories/hacks' style='font-size: 108.57142857142857%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 108.57142857142857%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 108.57142857142857%'>heroku</a> <a href='/blog/categories/linux' style='font-size: 108.57142857142857%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 117.14285714285714%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 125.71428571428572%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 108.57142857142857%'>mongolab</a> <a href='/blog/categories/nokogiri' style='font-size: 108.57142857142857%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 117.14285714285714%'>nosql</a> <a href='/blog/categories/pokephile' style='font-size: 134.28571428571428%'>pokephile</a> <a href='/blog/categories/rails' style='font-size: 108.57142857142857%'>rails</a> <a href='/blog/categories/rspec' style='font-size: 117.14285714285714%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 142.85714285714286%'>ruby</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 125.71428571428572%'>sep-blog-battle</a> <a href='/blog/categories/sinatra' style='font-size: 117.14285714285714%'>sinatra</a> <a href='/blog/categories/tdd' style='font-size: 108.57142857142857%'>tdd</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 108.57142857142857%'>twitter-bootstrap</a> <a href='/blog/categories/web' style='font-size: 108.57142857142857%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 134.28571428571428%'>write-ups</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/capybara' style='font-size: 107.5%'>capybara</a> <a href='/blog/categories/cucumber' style='font-size: 107.5%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 137.5%'>database</a> <a href='/blog/categories/hacks' style='font-size: 107.5%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 107.5%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 107.5%'>heroku</a> <a href='/blog/categories/linux' style='font-size: 107.5%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 115.0%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 122.5%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 107.5%'>mongolab</a> <a href='/blog/categories/nokogiri' style='font-size: 107.5%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 115.0%'>nosql</a> <a href='/blog/categories/pokephile' style='font-size: 130.0%'>pokephile</a> <a href='/blog/categories/rails' style='font-size: 107.5%'>rails</a> <a href='/blog/categories/rspec' style='font-size: 115.0%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 137.5%'>ruby</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 130.0%'>sep-blog-battle</a> <a href='/blog/categories/sinatra' style='font-size: 115.0%'>sinatra</a> <a href='/blog/categories/tdd' style='font-size: 107.5%'>tdd</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.5%'>twitter-bootstrap</a> <a href='/blog/categories/web' style='font-size: 107.5%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 130.0%'>write-ups</a> </span>
 </section>
 
 <section>

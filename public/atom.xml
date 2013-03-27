@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="http://larryprice.github.com/atom.xml" rel="self"/>
   <link href="http://larryprice.github.com/"/>
-  <updated>2013-02-24T20:41:00-05:00</updated>
+  <updated>2013-03-26T20:27:22-04:00</updated>
   <id>http://larryprice.github.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Blog Battle: Pvreryvre of fyne coddes]]></title>
+    <link href="http://larryprice.github.com/blog/2013/03/25/pvreryvre-of-fyne-coddes/"/>
+    <updated>2013-03-25T22:09:00-04:00</updated>
+    <id>http://larryprice.github.com/blog/2013/03/25/pvreryvre-of-fyne-coddes</id>
+    <content type="html"><![CDATA[<p>Ice pellets bounced off my head as I walked myself home late one night. The air was dreadfully cold, so I swooped into one of Carmel&#8217;s seedy side alleys to take a shotcut. Out of the shadows crept a man wearing a long trenchcoat and thick-rimmed glasses. Hunched over, he brushed his unkempt hair out of his eyes. His coffee-stained breath rushed from beneath his pencil moustache as he asked, &#8220;Can I interest you in any of these fine iPhone apps?&#8221; I tried to cautiously back away. &#8220;How would you like a real BaZynga game, only ninety-nine cents, it&#8217;s called Perturbed Birds with Pals?&#8221; I was briefly distracted by sirens in the distance; by the time I returned my glance to the man&#8217;s last position he had disappeared, my virtual wallet was empty, and my phone was filled with bloatware and repetitive &#8216;Ville-style games.</p>
+
+<p>There are more KLOCs in this world than there have been McDonald&#8217;s hamburgers sold. How do the good programmers differentiate themselves from the common street peddlers? How do companies convince you to pay $2.99 for their app when a clone is released less than a week later for free?</p>
+
+<p>The answer? Maybe they don&#8217;t. Maybe a comparison can be made between software companies and pharamceutical companies.</p>
+
+<p>Big Pharmaceutical companies spend many years researching, developing, and testing drugs to treat the common cold, arthritis, bad cholesterol, or even to sedate your energetic children. These drugs spend several years on the market where patents on the drug are valid, meaning that only the company that invented the drug can legally sell it. After the patent protections expire (approx 7-12 years), any big, small, or mom &amp; pop drug manufacturer is legally allowed to &#8220;clone&#8221; this drug and make what&#8217;s called a &#8220;generic.&#8221; Generics are sold at a fraction of the cost of the original drug. At this point, no one wants to give Big Pharma $20 for 6 tablets to cure their heartburn when they could pay $5 for a year&#8217;s supply of generics.</p>
+
+<p>Software companies tend to spend somewhere between 12 weeks and 12 months developing apps that will be consumed by the general population. If the company just released an Android or iOS app, then the product will stay relevant somewhere between 2 weeks and 2 years. After that time, the app will either no longer have market value or will need to be revamped to please the modern consumer. Within a short number of days or weeks, there is a high probability that surly software pirates will begin to copy your app and put it on the market for free. At this point, no one wants to give your company $4.99 for an endless runner when they could just as easily find a copy for free. Of course, app developers can submit complaints and get the pirated app taken down, but more and more will crop up as time goes on, and eventually it won&#8217;t be worth the trouble to get the doppelgangers removed.</p>
+
+<p>For both industries, a company comes up with a novel idea and presents it to the world. People who like that product can start associating the brand name with other products. After recognizing the brand, a person may start to trust that company and look for other products associated with the brand. That company will become known as a purveyor of fine wares.</p>
+
+<p>So here we stand, reader. Make code that you can be proud of; not for getting tens of thousands of downloads, but for scrawling your good name on the white boards of the world in Sharpie. The customers will keep coming back as long as you&#8217;ve got the cure for what ails them.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Code Complete Second Edition]]></title>
@@ -531,7 +552,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>All these statements are just Regular Expressions, as indicated by the /<sup>$/.</sup> The regex acts as a sort of method name that Cucumber finds to run the steps. Given I am on the home page is trivial: just &#8216;visit&#8217; the index. Given I am on the search page will first require me to click the &#8220;search&#8221; button. This is valid because my spec above says this is how to get to the search page. Now can do the &#8216;When&#8217; statements.</p>
+<p>All these statements are just Regular Expressions, as indicated by the /^$/. The regex acts as a sort of method name that Cucumber finds to run the steps. Given I am on the home page is trivial: just &#8216;visit&#8217; the index. Given I am on the search page will first require me to click the &#8220;search&#8221; button. This is valid because my spec above says this is how to get to the search page. Now can do the &#8216;When&#8217; statements.</p>
 
 <figure class='code'><figcaption><span>project/tools/test/features/step_definitions/search_steps.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>

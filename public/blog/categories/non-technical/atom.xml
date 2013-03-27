@@ -4,7 +4,7 @@
   <title><![CDATA[Category: non-technical | Larry Price]]></title>
   <link href="http://larryprice.github.com/blog/categories/non-technical/atom.xml" rel="self"/>
   <link href="http://larryprice.github.com/"/>
-  <updated>2013-02-24T20:41:00-05:00</updated>
+  <updated>2013-03-26T20:27:22-04:00</updated>
   <id>http://larryprice.github.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Blog Battle: Pvreryvre of fyne coddes]]></title>
+    <link href="http://larryprice.github.com/blog/2013/03/25/pvreryvre-of-fyne-coddes/"/>
+    <updated>2013-03-25T22:09:00-04:00</updated>
+    <id>http://larryprice.github.com/blog/2013/03/25/pvreryvre-of-fyne-coddes</id>
+    <content type="html"><![CDATA[<p>Ice pellets bounced off my head as I walked myself home late one night. The air was dreadfully cold, so I swooped into one of Carmel's seedy side alleys to take a shotcut. Out of the shadows crept a man wearing a long trenchcoat and thick-rimmed glasses. Hunched over, he brushed his unkempt hair out of his eyes. His coffee-stained breath rushed from beneath his pencil moustache as he asked, "Can I interest you in any of these fine iPhone apps?" I tried to cautiously back away. "How would you like a real BaZynga game, only ninety-nine cents, it's called Perturbed Birds with Pals?" I was briefly distracted by sirens in the distance; by the time I returned my glance to the man's last position he had disappeared, my virtual wallet was empty, and my phone was filled with bloatware and repetitive 'Ville-style games.</p>
+
+<p>There are more KLOCs in this world than there have been McDonald's hamburgers sold. How do the good programmers differentiate themselves from the common street peddlers? How do companies convince you to pay $2.99 for their app when a clone is released less than a week later for free?</p>
+
+<p>The answer? Maybe they don't. Maybe a comparison can be made between software companies and pharamceutical companies.</p>
+
+<p>Big Pharmaceutical companies spend many years researching, developing, and testing drugs to treat the common cold, arthritis, bad cholesterol, or even to sedate your energetic children. These drugs spend several years on the market where patents on the drug are valid, meaning that only the company that invented the drug can legally sell it. After the patent protections expire (approx 7-12 years), any big, small, or mom &amp; pop drug manufacturer is legally allowed to "clone" this drug and make what's called a "generic." Generics are sold at a fraction of the cost of the original drug. At this point, no one wants to give Big Pharma $20 for 6 tablets to cure their heartburn when they could pay $5 for a year's supply of generics.</p>
+
+<p>Software companies tend to spend somewhere between 12 weeks and 12 months developing apps that will be consumed by the general population. If the company just released an Android or iOS app, then the product will stay relevant somewhere between 2 weeks and 2 years. After that time, the app will either no longer have market value or will need to be revamped to please the modern consumer. Within a short number of days or weeks, there is a high probability that surly software pirates will begin to copy your app and put it on the market for free. At this point, no one wants to give your company $4.99 for an endless runner when they could just as easily find a copy for free. Of course, app developers can submit complaints and get the pirated app taken down, but more and more will crop up as time goes on, and eventually it won't be worth the trouble to get the doppelgangers removed.</p>
+
+<p>For both industries, a company comes up with a novel idea and presents it to the world. People who like that product can start associating the brand name with other products. After recognizing the brand, a person may start to trust that company and look for other products associated with the brand. That company will become known as a purveyor of fine wares.</p>
+
+<p>So here we stand, reader. Make code that you can be proud of; not for getting tens of thousands of downloads, but for scrawling your good name on the white boards of the world in Sharpie. The customers will keep coming back as long as you've got the cure for what ails them.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Code Complete Second Edition]]></title>
@@ -142,27 +163,6 @@
 <h3>Who Would Like This</h3>
 
 <p>Those new to Linux or those needing a refresher would benefit from scanning this book, at least the interesting sections. This book is not for people looking for bleeding-edge information on their new hardware or software. The reader can get a large amount of information that has aged well and will continue to be relevant for Linux users for years to come.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The Optimistic Programmer]]></title>
-    <link href="http://larryprice.github.com/blog/2012/11/08/the-optimistic-programmer/"/>
-    <updated>2012-11-08T19:06:00-05:00</updated>
-    <id>http://larryprice.github.com/blog/2012/11/08/the-optimistic-programmer</id>
-    <content type="html"><![CDATA[<p>Meet Anne. Anne's a programmer in a thriving tech company. Anne goes into work every day to work on a shiny new product for her company.</p>
-
-<p>Anne's customer knows exactly what they want. Anne writes all of her tests using pure TDD. Anne updates her tasks on the company's ALM software, which was defined with programmers in mind and not just managers. She knows everything about her domain, and every UI element she touches is the epitome of good user experience. She works with 100 other programmers, each of which is equally as skilled as she is. Every time she pushes her most recent file changes, there are no merge conflicts and the build server works without a hitch. The deadline for the project is defined as whenever the last feature is finished. The best part: Anne spends fewer than an hour a week in meetings, none of which is a complete waste of time.</p>
-
-<p>You've got to be kidding me.</p>
-
-<p>If I experienced a day like I just described for Anne, I would have to assume I had been killed in a tragic car accident on my way into work.</p>
-
-<p>How can a programmer possibly be optimistic? Let me say: The client never knows what they want. The programmer couldn't possibly write all of their tests TDD style unless they're a saint. ALM software has a tendency to suck. Programmers don't have the inherent ability to know precisely how a user will try to use the product. Oftentimes your teammates may not be on the same level as you are, or you may not be on as high a level as they are. There are always merge conflicts and build server anomalies. 'Random' is generally an apt description of project deadlines. Lastly, we spend lots of times in meetings which often don't appear to provide much face value. Those are the facts of life.</p>
-
-<p>If we're optimists, why would we bother writing tests for anything beyond happy-path? How could we ever justify refactoring if we're optimistic that we did it right the first time? Why bother putting in security if no one will ever try to use their 1337 hax to get to the client's data? It's important that we stay planted firmly in reality to ensure we think of most everything that can go wrong when a customer uses a product.</p>
-
-<p>I'm not saying there aren't optimistic moments in a programmer's life. Phrases like "I'm optimistic the project will end some day" and "I'm pretty sure the customer will like this" and "I highly doubt we'll get sued for that" are phrases that I'd feel inclined to throw around most any time to raise the morale of my companions.</p>
 ]]></content>
   </entry>
   
