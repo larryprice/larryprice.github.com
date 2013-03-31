@@ -68,6 +68,7 @@ function showTwitterFeed(tweets, twitter_user) {
 }
 
 function getTwitterFeed(user, count, replies) {
+  alert("GETTING");
   count = parseInt(count, 10);
   $.ajax({
       url: "https://api.twitter.com/1/statuses/user_timeline/" + user + ".json?trim_user=true&count=" + (count + 20) + "&include_entities=1&exclude_replies=" + (replies ? "0" : "1") + "&callback=?"
