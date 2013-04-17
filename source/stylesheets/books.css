@@ -1,0 +1,31 @@
+.books-title {
+  font-style: italic;
+}
+
+.books-cell {
+  padding-bottom: 10px;
+}
+
+.books-header {
+  font-weight: bold;
+}
+
+.books-table {
+  font-size: larger;
+}
+
+.books-col {
+  margin: 5px;
+}
+
+.books-title-col {
+  width:50%;
+}
+
+.books-author-col {
+  width: 30%;
+}
+
+.books-review-col {
+  width: 20%;
+}

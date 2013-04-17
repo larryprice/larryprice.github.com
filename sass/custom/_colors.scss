@@ -47,6 +47,7 @@ $page-border-bottom: darken($footer-bg, 5) !default;
 
 // sidebar
 $sidebar-border: lighten($nav-color, 23);
+$sidebar-bg: $main-bg !default;
 
 //$header-bg: #263347;
 //$subtitle-color: lighten($header-bg, 58);
