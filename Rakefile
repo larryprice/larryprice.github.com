@@ -27,6 +27,8 @@ new_post_ext    = "markdown"  # default new post file extension when using the n
 new_page_ext    = "markdown"  # default new page file extension when using the new_page task
 server_port     = "4000"      # port for preview server eg. localhost:4000
 
+dot_books_file  = ".books"    # file where books are stored
+books_file = "source/blog/books/index.html"
 
 desc "Initial setup for Octopress: copies the default theme into the path of Jekyll's generator. Rake install defaults to rake install[classic] to install a different theme run rake install[some_theme_name]"
 task :install, :theme do |t, args|
@@ -42,6 +44,80 @@ task :install, :theme do |t, args|
   cp_r "#{themes_dir}/#{theme}/sass/.", "sass"
   mkdir_p "#{source_dir}/#{posts_dir}"
   mkdir_p public_dir
+end
+
+desc "Add book to .books file"
+task :add_book, :title, :author, :review, :link_to_write_up do |t, args|
+  args.with_defaults(:link_to_write_up => '')
+  open(dot_books_file, 'a') { |f|
+    f.puts "#{args.title},#{args.author},#{args.review}#{',' + args.link_to_write_up unless args.link_to_write_up.empty?}"
+  }
+
+  Rake::Task[:generate_books].execute
+end
+
+desc "Generate books page using .books file"
+task :generate_books do
+  open(books_file, 'w') {|f|
+    books_head = <<EOS
+---
+layout: page
+title: Books
+footer: false
+---
+
+<link href="{{ root_url }}/stylesheets/books.css" rel="stylesheet" type="text/css"/>
+
+<div id="books">
+  <table class="books-table" border="1" bordercolor="#FFFFFF" width="100%">
+    <col class="books-col books-title-col">
+    <col class="books-col books-author-col">
+    <col class="books-col books-review-col">
+    <thead>
+      <tr>
+        <th class="books-header"><u>Title</u></th>
+        <th class="books-header"><u>Author</u></th>
+        <th class="books-header"><u>Should you read this?</u></th>
+      </tr>
+    </thead>
+    <tbody>
+EOS
+    f.puts books_head
+
+    books = []
+    open(dot_books_file, 'r').each do |line|
+      data = line.strip.split(',')
+      books << data unless data.count < 3
+    end
+
+    books.sort_by! {|x| x[2] }
+    books.reverse!
+
+    books.each do |book_data|
+      if book_data.count > 3
+        inner_title_tag = <<EOS
+<a href="#{book_data[3]}" title="Write-up for #{book_data[0]}" alt="Link to write-up">#{book_data[0]}</a>
+EOS
+      else
+        inner_title_tag = book_data[0]
+      end
+      row = <<EOS
+      <tr>
+        <td class="books-title books-cell">#{inner_title_tag.strip}</td>
+        <td class="books-cell">#{book_data[1]}</td>
+        <td class="books-cell">#{book_data[2].upcase}</td>
+      </tr>
+EOS
+      f.puts row
+    end
+
+    books_tail = <<EOS
+    </tbody>
+  </table>
+</div>
+EOS
+    f.puts books_tail
+  }
 end
 
 #######################
