@@ -90,7 +90,7 @@ EOS
       books << data unless data.count < 3
     end
 
-    books.sort_by! {|x| x[2] }
+    books.sort_by! {|x| x[2].upcase }
     books.reverse!
 
     books.each do |book_data|
