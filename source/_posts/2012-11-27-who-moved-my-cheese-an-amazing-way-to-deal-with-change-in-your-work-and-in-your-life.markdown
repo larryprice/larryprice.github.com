@@ -10,7 +10,7 @@ categories: write-ups non-technical
 [__Who Moved My Cheese?: An Amazing Way to Deal with Change in Your Work and in Your Life__][mmc]  
 __Spencer Johnson__
 
-[mmc]: http://www.amazon.com/Who-Moved-My-Cheese-Amazing/dp/0399144463/
+[mmc]: http://www.amazon.com/gp/product/0399144463/ref=as_li_ss_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=0399144463&linkCode=as2&tag=larpriandthee-20
 
 ------
 

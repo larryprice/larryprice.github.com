@@ -13,7 +13,7 @@ categories: write-ups non-technical
 
 _[Code Complete Second Edition][cc]_ by Steve McConnell is the ultimate programmer's handbook, though certainly not a pocket guide considering its massive 850+ page size. This book contains a seemingly endless amount of information regarding the state of programming circa 2004. Topics range from extremely technical, such as making code readable above making it clever, to office politics, such as dealing with non-technical managers.
 
-[cc]: http://www.cc2e.com/Default.aspx
+[cc]: http://www.amazon.com/gp/product/0735619670/ref=as_li_tf_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0735619670&linkCode=as2&tag=larpriandthee-20
 
 ###My Opinion
 

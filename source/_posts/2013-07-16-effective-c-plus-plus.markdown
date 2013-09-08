@@ -8,7 +8,7 @@ categories: write-ups
 
 ###The Gist
 
-_Effective C++_ is a list of ways to write not-your-average-bear C++ code. The author, [Scott Meyers](http://www.aristeia.com/), outlines 8 specific topics for improving code, and a few more miscellaneous tips.
+[_Effective C++_](http://www.amazon.com/gp/product/0321334876/ref=as_li_ss_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=0321334876&linkCode=as2&tag=larpriandthee-20) is a list of ways to write not-your-average-bear C++ code. The author, [Scott Meyers](http://www.aristeia.com/), outlines 8 specific topics for improving code, and a few more miscellaneous tips.
 
 ###My Opinion
 

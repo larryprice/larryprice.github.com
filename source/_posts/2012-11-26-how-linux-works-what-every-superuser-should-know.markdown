@@ -10,7 +10,7 @@ categories: write-ups linux non-technical
 [__How Linux Works: Things Every Superuser Should Know__][hlw]  
 __Brian Ward__
 
-[hlw]: http://www.amazon.com/How-Linux-Works-Superuser-Should/dp/1593270356/
+[hlw]: http://www.amazon.com/gp/product/1593270356/ref=as_li_ss_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=1593270356&linkCode=as2&tag=larpriandthee-20
 
 ------
 

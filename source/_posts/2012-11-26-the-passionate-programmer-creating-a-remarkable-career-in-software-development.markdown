@@ -10,7 +10,7 @@ categories: write-ups non-technical
 [__The Passionate Programmer: Creating a Remarkable Career in Software Development__][tpp]  
 __Chad Fowler__
 
-[tpp]: http://www.amazon.com/Passionate-Programmer-Remarkable-Development-Pragmatic/dp/1934356344/
+[tpp]: http://www.amazon.com/gp/product/1934356344/ref=as_li_ss_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=1934356344&linkCode=as2&tag=larpriandthee-20
 
 ------
 
