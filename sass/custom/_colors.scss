@@ -1,17 +1,18 @@
 // background
+$main-bg: #F5DEB3 !default;
+$page-bg: $main-bg !default;
+
 html {
-  background: #ECE3D9 !important;
+  background: $main-bg !important;
 }
 body {
   > div {
-    background: #ECE3D9 !important;
+    background: $main-bg !important;
     > div {
-      background: #ECE3D9 !important;
+      background: $main-bg !important;
       }
   }
 }
-$main-bg: #ECE3D9 !default;
-$page-bg: $main-bg !default;
 
 // header
 $header-bg: $main-bg;
