@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: retro | Larry Price]]></title>
-  <link href="http://larryprice.github.com/blog/categories/retro/atom.xml" rel="self"/>
-  <link href="http://larryprice.github.com/"/>
-  <updated>2013-11-14T22:01:21-05:00</updated>
-  <id>http://larryprice.github.com/</id>
+  <link href="http://larryprice.github.io/blog/categories/retro/atom.xml" rel="self"/>
+  <link href="http://larryprice.github.io/"/>
+  <updated>2013-11-14T22:05:52-05:00</updated>
+  <id>http://larryprice.github.io/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[On the Futility of Man and Trying to Divide a Sinatra App into Separate Controllers]]></title>
-    <link href="http://larryprice.github.com/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/"/>
+    <link href="http://larryprice.github.io/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/"/>
     <updated>2013-08-26T22:35:00-04:00</updated>
-    <id>http://larryprice.github.com/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers</id>
+    <id>http://larryprice.github.io/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers</id>
     <content type="html"><![CDATA[<p>Oh, <a href="http://www.sinatrarb.com/">Sinatra</a>. You&rsquo;re oh-so-very dear to me. You made it so easy for me to write my <a href="http://capitalpunishment.herokuapp.com">first</a> <a href="http://pokephile.herokuapp.com">web</a> apps. All I had to do was write a couple routes and throw together a few HTML-like files and I had a web app. I used pattern matching to reduce the web-facing code for <a href="https://github.com/larryprice/CapitalPunishment">Capital Punishment</a> from ~500 lines of code to &lt;100 lines of code. You are perfect for writing small-time web applications.</p>
 
 <p>But what about large web applications? What about a web app that has normal users and admin users, makes lots of database reads and writes (my previous apps only did reads from a user-facing perspective), and has to be able to show the history of everything, forever, to the authorized users who request it?</p>
@@ -70,9 +70,9 @@ end
   
   <entry>
     <title type="html"><![CDATA[The Trouble with Time Zones (aka Learn From My Mistakes Part 1)]]></title>
-    <link href="http://larryprice.github.com/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1/"/>
+    <link href="http://larryprice.github.io/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1/"/>
     <updated>2013-08-07T22:00:00-04:00</updated>
-    <id>http://larryprice.github.com/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1</id>
+    <id>http://larryprice.github.io/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1</id>
     <content type="html"><![CDATA[<blockquote><p>As a user, my data&rsquo;s LastModifiedDate should not be updated when I Export it, and it should be in UTC.</p></blockquote>
 
 <p>That&rsquo;s the gist of the story I was tasked with a few weeks ago. Seemed easy enough: just set the &ldquo;LastModifiedDate&rdquo; field of each XML node to the LastModifiedDate pulled from the database converted to UTC. I can do the development and write up some Cucumber tests in an hour, two hours tops. Find a few small caveats along the way, get it out of development and through code review by the next morning. Push it to the mainline and watch the build go green. All done, dust off my hands and move on to something else.</p>

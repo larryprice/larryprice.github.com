@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: gmock | Larry Price]]></title>
-  <link href="http://larryprice.github.com/blog/categories/gmock/atom.xml" rel="self"/>
-  <link href="http://larryprice.github.com/"/>
-  <updated>2013-11-14T22:01:21-05:00</updated>
-  <id>http://larryprice.github.com/</id>
+  <link href="http://larryprice.github.io/blog/categories/gmock/atom.xml" rel="self"/>
+  <link href="http://larryprice.github.io/"/>
+  <updated>2013-11-14T22:05:52-05:00</updated>
+  <id>http://larryprice.github.io/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Installing GTest and GMock Libs in Ubuntu 13.04]]></title>
-    <link href="http://larryprice.github.com/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/"/>
+    <link href="http://larryprice.github.io/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/"/>
     <updated>2013-10-13T11:02:00-04:00</updated>
-    <id>http://larryprice.github.com/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04</id>
+    <id>http://larryprice.github.io/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04</id>
     <content type="html"><![CDATA[<p>I started trying to work on an open-source project and found that I needed to install <a href="https://code.google.com/p/googletest/">googletest</a> and <a href="https://code.google.com/p/googlemock/">googlemock</a> on my home machine. Seemed easy enough, I found a package called <code>google-mock</code> in the <a href="http://packages.ubuntu.com/raring/google-mock">Raring</a> repositories which depends on a package called <code>libgtest-dev</code>. So I install it:</p>
 
 <p><code>bash

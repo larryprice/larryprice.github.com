@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: write-ups | Larry Price]]></title>
-  <link href="http://larryprice.github.com/blog/categories/write-ups/atom.xml" rel="self"/>
-  <link href="http://larryprice.github.com/"/>
-  <updated>2013-11-14T22:01:21-05:00</updated>
-  <id>http://larryprice.github.com/</id>
+  <link href="http://larryprice.github.io/blog/categories/write-ups/atom.xml" rel="self"/>
+  <link href="http://larryprice.github.io/"/>
+  <updated>2013-11-14T22:05:52-05:00</updated>
+  <id>http://larryprice.github.io/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[The Pragmatic Programmer]]></title>
-    <link href="http://larryprice.github.com/blog/2013/09/08/the-pragmatic-programmer/"/>
+    <link href="http://larryprice.github.io/blog/2013/09/08/the-pragmatic-programmer/"/>
     <updated>2013-09-08T12:00:00-04:00</updated>
-    <id>http://larryprice.github.com/blog/2013/09/08/the-pragmatic-programmer</id>
+    <id>http://larryprice.github.io/blog/2013/09/08/the-pragmatic-programmer</id>
     <content type="html"><![CDATA[<blockquote><p>Don&rsquo;t be a slave to history. Don&rsquo;t let existing code dictate future code. All code can be replaced if it is no longer appropriate</p></blockquote>
 
 <h3>The Gist</h3>
@@ -44,9 +44,9 @@
   
   <entry>
     <title type="html"><![CDATA[Effective C++]]></title>
-    <link href="http://larryprice.github.com/blog/2013/07/16/effective-c-plus-plus/"/>
+    <link href="http://larryprice.github.io/blog/2013/07/16/effective-c-plus-plus/"/>
     <updated>2013-07-16T22:11:00-04:00</updated>
-    <id>http://larryprice.github.com/blog/2013/07/16/effective-c-plus-plus</id>
+    <id>http://larryprice.github.io/blog/2013/07/16/effective-c-plus-plus</id>
     <content type="html"><![CDATA[<h3>The Gist</h3>
 
 <p><a href="http://www.amazon.com/gp/product/0321334876/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0321334876&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Effective C++</em></a> is a list of ways to write not-your-average-bear C++ code. The author, <a href="http://www.aristeia.com/">Scott Meyers</a>, outlines 8 specific topics for improving code, and a few more miscellaneous tips.</p>
@@ -69,9 +69,9 @@
   
   <entry>
     <title type="html"><![CDATA[Joel On Software]]></title>
-    <link href="http://larryprice.github.com/blog/2013/04/28/joel-on-software/"/>
+    <link href="http://larryprice.github.io/blog/2013/04/28/joel-on-software/"/>
     <updated>2013-04-28T11:38:00-04:00</updated>
-    <id>http://larryprice.github.com/blog/2013/04/28/joel-on-software</id>
+    <id>http://larryprice.github.io/blog/2013/04/28/joel-on-software</id>
     <content type="html"><![CDATA[<blockquote><p>We&rsquo;re programmers. Programmers are, in their hearts, architects, and the
 first thing they want to do when they get to a site is to bulldoze the place
 flat and build something grand. We&rsquo;re not excited by incremental renovation:
@@ -105,9 +105,9 @@ tinkering, improving, planting flower beds.</p>
   
   <entry>
     <title type="html"><![CDATA[Code Complete Second Edition]]></title>
-    <link href="http://larryprice.github.com/blog/2013/02/19/code-complete-second-edition/"/>
+    <link href="http://larryprice.github.io/blog/2013/02/19/code-complete-second-edition/"/>
     <updated>2013-02-19T22:38:00-05:00</updated>
-    <id>http://larryprice.github.com/blog/2013/02/19/code-complete-second-edition</id>
+    <id>http://larryprice.github.io/blog/2013/02/19/code-complete-second-edition</id>
     <content type="html"><![CDATA[<blockquote><p>Design is a process of carefully planning small mistakes in order to avoid making big ones.
 &mdash; Steve McConnell</p></blockquote>
 
@@ -140,9 +140,9 @@ tinkering, improving, planting flower beds.</p>
   
   <entry>
     <title type="html"><![CDATA[Who Moved My Cheese?: An Amazing Way to Deal with Change in Your Work and in Your Life]]></title>
-    <link href="http://larryprice.github.com/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life/"/>
+    <link href="http://larryprice.github.io/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life/"/>
     <updated>2012-11-27T20:47:00-05:00</updated>
-    <id>http://larryprice.github.com/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life</id>
+    <id>http://larryprice.github.io/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life</id>
     <content type="html"><![CDATA[<p><img src="http://dontstepinthepoop.com/wp-content/uploads/2010/01/cheese.jpg" style="border: 0" width="130px" title="Who Moved My Cheese?" alt="Cover for Who Moved My Cheese?" /><br/>
 <a href="http://www.amazon.com/gp/product/0399144463/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0399144463&amp;linkCode=as2&amp;tag=larpriandthee-20"><strong>Who Moved My Cheese?: An Amazing Way to Deal with Change in Your Work and in Your Life</strong></a><br/>
 <strong>Spencer Johnson</strong></p>

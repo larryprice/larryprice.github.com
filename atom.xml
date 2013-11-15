@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Larry Price]]></title>
-  <link href="http://larryprice.github.com/atom.xml" rel="self"/>
-  <link href="http://larryprice.github.com/"/>
-  <updated>2013-11-14T22:01:21-05:00</updated>
-  <id>http://larryprice.github.com/</id>
+  <link href="http://larryprice.github.io/atom.xml" rel="self"/>
+  <link href="http://larryprice.github.io/"/>
+  <updated>2013-11-14T22:05:52-05:00</updated>
+  <id>http://larryprice.github.io/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Copy Data Using qmake]]></title>
-    <link href="http://larryprice.github.com/blog/2013/11/14/copy-data-using-qmake/"/>
+    <link href="http://larryprice.github.io/blog/2013/11/14/copy-data-using-qmake/"/>
     <updated>2013-11-14T21:24:00-05:00</updated>
-    <id>http://larryprice.github.com/blog/2013/11/14/copy-data-using-qmake</id>
+    <id>http://larryprice.github.io/blog/2013/11/14/copy-data-using-qmake</id>
     <content type="html"><![CDATA[<p>I&rsquo;ll take things that should be really easy but are in fact impossible for $1000, Mr Trebek.</p>
 
 <p>I have a <a href="https://qt-project.org/wiki/Qt_5.0">Qt</a> desktop app that uses <a href="https://qt-project.org/doc/qt-4.8/qmake-manual.html">qmake</a>. I have tests. I have test data that I need to copy to my build directory. Not only that, but I want to copy a whole directory recursively. In Linux <em>and</em> Windows. You must be thinking to yourself, &lsquo;There&rsquo;s no way that&rsquo;s possible, leave me out of your crazy plans!&rsquo; Well to that I say nay. Nay indeed.</p>
@@ -102,9 +102,9 @@
   
   <entry>
     <title type="html"><![CDATA[Installing GTest and GMock Libs in Ubuntu 13.04]]></title>
-    <link href="http://larryprice.github.com/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/"/>
+    <link href="http://larryprice.github.io/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/"/>
     <updated>2013-10-13T11:02:00-04:00</updated>
-    <id>http://larryprice.github.com/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04</id>
+    <id>http://larryprice.github.io/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04</id>
     <content type="html"><![CDATA[<p>I started trying to work on an open-source project and found that I needed to install <a href="https://code.google.com/p/googletest/">googletest</a> and <a href="https://code.google.com/p/googlemock/">googlemock</a> on my home machine. Seemed easy enough, I found a package called <code>google-mock</code> in the <a href="http://packages.ubuntu.com/raring/google-mock">Raring</a> repositories which depends on a package called <code>libgtest-dev</code>. So I install it:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -153,9 +153,9 @@
   
   <entry>
     <title type="html"><![CDATA[RVM Quick Start]]></title>
-    <link href="http://larryprice.github.com/blog/2013/10/08/rvm-quick-start/"/>
+    <link href="http://larryprice.github.io/blog/2013/10/08/rvm-quick-start/"/>
     <updated>2013-10-08T22:10:00-04:00</updated>
-    <id>http://larryprice.github.com/blog/2013/10/08/rvm-quick-start</id>
+    <id>http://larryprice.github.io/blog/2013/10/08/rvm-quick-start</id>
     <content type="html"><![CDATA[<p>When I was working on a few different projects at once, I started running into issues where my Ruby gem versions would start to mismatch. How did I fix that issue? Naively. I adjusted the versions as necessary so my gems were always the same version. That was&hellip; pretty dumb. To make up for my past ignorance, I&rsquo;ve been exploring ways to manage my Ruby versions and my gems intelligently. Enter <a href="https://rvm.io/">RVM</a>.</p>
 
 <p>RVM is a simple tool to solve just problems. And it works pretty well. I hit some kinks along the way, but my installation pleases me well enough. Getting RVM is not for the faint of heart. Maybe there are better ways to do it, but the website says to execute the following:</p>
@@ -229,9 +229,9 @@
   
   <entry>
     <title type="html"><![CDATA[The Pragmatic Programmer]]></title>
-    <link href="http://larryprice.github.com/blog/2013/09/08/the-pragmatic-programmer/"/>
+    <link href="http://larryprice.github.io/blog/2013/09/08/the-pragmatic-programmer/"/>
     <updated>2013-09-08T12:00:00-04:00</updated>
-    <id>http://larryprice.github.com/blog/2013/09/08/the-pragmatic-programmer</id>
+    <id>http://larryprice.github.io/blog/2013/09/08/the-pragmatic-programmer</id>
     <content type="html"><![CDATA[<blockquote><p>Don&rsquo;t be a slave to history. Don&rsquo;t let existing code dictate future code. All code can be replaced if it is no longer appropriate</p></blockquote>
 
 <h3>The Gist</h3>
@@ -252,15 +252,15 @@
 
 <p>Fresh-outs should read this book. It&rsquo;s not too long and it&rsquo;s split into manageable chapters. Great for fresh-out book clubs, in which I probably should have participated.</p>
 
-<p>Who would not like this? People who have read books with similar premeses, such as <a href="http://larryprice.github.com/blog/2013/02/19/code-complete-second-edition/"><em>Code Complete</em></a>, within recent memory.</p>
+<p>Who would not like this? People who have read books with similar premeses, such as <a href="http://larryprice.github.io/blog/2013/02/19/code-complete-second-edition/"><em>Code Complete</em></a>, within recent memory.</p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Using Foreman to Create an Upstart Service]]></title>
-    <link href="http://larryprice.github.com/blog/2013/08/31/using-foreman-to-create-an-upstart-service/"/>
+    <link href="http://larryprice.github.io/blog/2013/08/31/using-foreman-to-create-an-upstart-service/"/>
     <updated>2013-08-31T17:05:00-04:00</updated>
-    <id>http://larryprice.github.com/blog/2013/08/31/using-foreman-to-create-an-upstart-service</id>
+    <id>http://larryprice.github.io/blog/2013/08/31/using-foreman-to-create-an-upstart-service</id>
     <content type="html"><![CDATA[<p>I just finished my first attempt at deploying a web app to run automatically in the background on a friend&rsquo;s server. Pretty easy, really. The first thing I did was install <a href="https://github.com/ddollar/foreman">foreman</a>. Assuming you have ruby and rubygems installed:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -328,9 +328,9 @@
   
   <entry>
     <title type="html"><![CDATA[On the Futility of Man and Trying to Divide a Sinatra App into Separate Controllers]]></title>
-    <link href="http://larryprice.github.com/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/"/>
+    <link href="http://larryprice.github.io/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/"/>
     <updated>2013-08-26T22:35:00-04:00</updated>
-    <id>http://larryprice.github.com/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers</id>
+    <id>http://larryprice.github.io/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers</id>
     <content type="html"><![CDATA[<p>Oh, <a href="http://www.sinatrarb.com/">Sinatra</a>. You&rsquo;re oh-so-very dear to me. You made it so easy for me to write my <a href="http://capitalpunishment.herokuapp.com">first</a> <a href="http://pokephile.herokuapp.com">web</a> apps. All I had to do was write a couple routes and throw together a few HTML-like files and I had a web app. I used pattern matching to reduce the web-facing code for <a href="https://github.com/larryprice/CapitalPunishment">Capital Punishment</a> from ~500 lines of code to &lt;100 lines of code. You are perfect for writing small-time web applications.</p>
 
 <p>But what about large web applications? What about a web app that has normal users and admin users, makes lots of database reads and writes (my previous apps only did reads from a user-facing perspective), and has to be able to show the history of everything, forever, to the authorized users who request it?</p>
@@ -399,9 +399,9 @@
   
   <entry>
     <title type="html"><![CDATA[Beware of Group Projects]]></title>
-    <link href="http://larryprice.github.com/blog/2013/08/22/beware-of-group-projects/"/>
+    <link href="http://larryprice.github.io/blog/2013/08/22/beware-of-group-projects/"/>
     <updated>2013-08-22T21:22:00-04:00</updated>
-    <id>http://larryprice.github.com/blog/2013/08/22/beware-of-group-projects</id>
+    <id>http://larryprice.github.io/blog/2013/08/22/beware-of-group-projects</id>
     <content type="html"><![CDATA[<p>Relying on other people is hard. I&rsquo;ve always found it difficult to understand that other people aren&rsquo;t me. Don&rsquo;t get me wrong, working with others can be really rewarding. Maybe &ldquo;Beware of Group Projects&rdquo; is not the best title. More like &ldquo;Be Wary that Working with Others is Not the Same as Working with Yourself.&rdquo; But that&rsquo;s a pretty long title, and reading (like working with others) is hard.</p>
 
 <p>I&rsquo;ve been spending a lot of my spare time collaborating on a project with a small group of other developers. I normally do this kind of thing on my own. I started thinking about the differences in working by myself and collaborating with other devs. Then I decided that it would look good in a list format comparing each circumstance from both sides. I was wrong, but couldn&rsquo;t think of a better way to present it.</p>
@@ -454,9 +454,9 @@
   
   <entry>
     <title type="html"><![CDATA[The Trouble with Time Zones (aka Learn From My Mistakes Part 1)]]></title>
-    <link href="http://larryprice.github.com/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1/"/>
+    <link href="http://larryprice.github.io/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1/"/>
     <updated>2013-08-07T22:00:00-04:00</updated>
-    <id>http://larryprice.github.com/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1</id>
+    <id>http://larryprice.github.io/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1</id>
     <content type="html"><![CDATA[<blockquote><p>As a user, my data&rsquo;s LastModifiedDate should not be updated when I Export it, and it should be in UTC.</p></blockquote>
 
 <p>That&rsquo;s the gist of the story I was tasked with a few weeks ago. Seemed easy enough: just set the &ldquo;LastModifiedDate&rdquo; field of each XML node to the LastModifiedDate pulled from the database converted to UTC. I can do the development and write up some Cucumber tests in an hour, two hours tops. Find a few small caveats along the way, get it out of development and through code review by the next morning. Push it to the mainline and watch the build go green. All done, dust off my hands and move on to something else.</p>
@@ -473,9 +473,9 @@
   
   <entry>
     <title type="html"><![CDATA[Effective C++]]></title>
-    <link href="http://larryprice.github.com/blog/2013/07/16/effective-c-plus-plus/"/>
+    <link href="http://larryprice.github.io/blog/2013/07/16/effective-c-plus-plus/"/>
     <updated>2013-07-16T22:11:00-04:00</updated>
-    <id>http://larryprice.github.com/blog/2013/07/16/effective-c-plus-plus</id>
+    <id>http://larryprice.github.io/blog/2013/07/16/effective-c-plus-plus</id>
     <content type="html"><![CDATA[<h3>The Gist</h3>
 
 <p><a href="http://www.amazon.com/gp/product/0321334876/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0321334876&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Effective C++</em></a> is a list of ways to write not-your-average-bear C++ code. The author, <a href="http://www.aristeia.com/">Scott Meyers</a>, outlines 8 specific topics for improving code, and a few more miscellaneous tips.</p>
@@ -498,9 +498,9 @@
   
   <entry>
     <title type="html"><![CDATA[Joel On Software]]></title>
-    <link href="http://larryprice.github.com/blog/2013/04/28/joel-on-software/"/>
+    <link href="http://larryprice.github.io/blog/2013/04/28/joel-on-software/"/>
     <updated>2013-04-28T11:38:00-04:00</updated>
-    <id>http://larryprice.github.com/blog/2013/04/28/joel-on-software</id>
+    <id>http://larryprice.github.io/blog/2013/04/28/joel-on-software</id>
     <content type="html"><![CDATA[<blockquote><p>We&rsquo;re programmers. Programmers are, in their hearts, architects, and the
 first thing they want to do when they get to a site is to bulldoze the place
 flat and build something grand. We&rsquo;re not excited by incremental renovation:
@@ -534,9 +534,9 @@ tinkering, improving, planting flower beds.</p>
   
   <entry>
     <title type="html"><![CDATA[Tags in C++ Cucumber tests]]></title>
-    <link href="http://larryprice.github.com/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/"/>
+    <link href="http://larryprice.github.io/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/"/>
     <updated>2013-04-15T22:10:00-04:00</updated>
-    <id>http://larryprice.github.com/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests</id>
+    <id>http://larryprice.github.io/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests</id>
     <content type="html"><![CDATA[<p>The project I&rsquo;m working on is slowly adding <a href="https://github.com/cucumber/cucumber-cpp">Cucumber</a> acceptance tests to our massive code base in order to replace aging <a href="https://code.google.com/p/robotframework/">Robot tests</a>. One would think that getting developers on our team to use Cucumber would be east, since it uses <a href="https://code.google.com/p/googletest/">googletest</a> and <a href="https://code.google.com/p/googlemock/">googlemock</a> which we use for our unit tests. Unfortunately, very few people on the team have been motivated to write integration tests using the new framework, so I have very few people to go to when I have problems writing my own integration tests.</p>
 
 <p>The area of the code I deal with uses <a href="http://www.mono-project.com/Embedding_Mono">embedded mono</a> to communicate with some C# libraries that we share with other applications. This means we have unmanaged memory which talks with managed memory. This has caused us more headaches than I care to remember. One such problem is that we have a static object that we only want to create and destroy once. So I write my first Cucumber test:</p>
@@ -700,9 +700,9 @@ tinkering, improving, planting flower beds.</p>
   
   <entry>
     <title type="html"><![CDATA[Changing Plans]]></title>
-    <link href="http://larryprice.github.com/blog/2013/04/09/changing-plans/"/>
+    <link href="http://larryprice.github.io/blog/2013/04/09/changing-plans/"/>
     <updated>2013-04-09T21:45:00-04:00</updated>
-    <id>http://larryprice.github.com/blog/2013/04/09/changing-plans</id>
+    <id>http://larryprice.github.io/blog/2013/04/09/changing-plans</id>
     <content type="html"><![CDATA[<p>Your code is being sent to the dump.</p>
 
 <p>Don&rsquo;t take it personally. Your code isn&rsquo;t <em>bad</em>. It&rsquo;s just <em>garbage</em>.</p>
@@ -725,9 +725,9 @@ tinkering, improving, planting flower beds.</p>
   
   <entry>
     <title type="html"><![CDATA[What's Still Possible]]></title>
-    <link href="http://larryprice.github.com/blog/2013/04/01/whats-still-possible/"/>
+    <link href="http://larryprice.github.io/blog/2013/04/01/whats-still-possible/"/>
     <updated>2013-04-01T22:35:00-04:00</updated>
-    <id>http://larryprice.github.com/blog/2013/04/01/whats-still-possible</id>
+    <id>http://larryprice.github.io/blog/2013/04/01/whats-still-possible</id>
     <content type="html"><![CDATA[<p>If every Miss America candidate had her way, there would be peace on Earth and all the hungry mouths would be fed. While Earthlings enjoy violence and controlling others too much to achieve world peace, I have a proposal to help feed those around the world who don&rsquo;t have enough to eat.</p>
 
 <p>It&rsquo;s not an ad campaign. I&rsquo;m not going to send random people a nickle in the mail and then tell them that they could use that nickle to feed a starving child. I&rsquo;m certainly not going to change any of my eating habits. I happen to know a huge source of food that we underutilize. My plan is to kill two birds with one stone. Well, preferably something like 3 million birds with however many stones it takes.</p>
@@ -750,9 +750,9 @@ tinkering, improving, planting flower beds.</p>
   
   <entry>
     <title type="html"><![CDATA[Blog Battle: Pvreryvre of fyne coddes]]></title>
-    <link href="http://larryprice.github.com/blog/2013/03/25/pvreryvre-of-fyne-coddes/"/>
+    <link href="http://larryprice.github.io/blog/2013/03/25/pvreryvre-of-fyne-coddes/"/>
     <updated>2013-03-25T22:09:00-04:00</updated>
-    <id>http://larryprice.github.com/blog/2013/03/25/pvreryvre-of-fyne-coddes</id>
+    <id>http://larryprice.github.io/blog/2013/03/25/pvreryvre-of-fyne-coddes</id>
     <content type="html"><![CDATA[<p>Ice pellets bounced off my head as I walked myself home late one night. The air was dreadfully cold, so I swooped into one of Carmel&rsquo;s seedy side alleys to take a shotcut. Out of the shadows crept a man wearing a long trenchcoat and thick-rimmed glasses. Hunched over, he brushed his unkempt hair out of his eyes. His coffee-stained breath rushed from beneath his pencil moustache as he asked, &ldquo;Can I interest you in any of these fine iPhone apps?&rdquo; I tried to cautiously back away. &ldquo;How would you like a real BaZynga game, only ninety-nine cents, it&rsquo;s called Perturbed Birds with Pals?&rdquo; I was briefly distracted by sirens in the distance; by the time I returned my glance to the man&rsquo;s last position he had disappeared, my virtual wallet was empty, and my phone was filled with bloatware and repetitive &lsquo;Ville-style games.</p>
 
 <p>There are more KLOCs in this world than there have been McDonald&rsquo;s hamburgers sold. How do the good programmers differentiate themselves from the common street peddlers? How do companies convince you to pay $2.99 for their app when a clone is released less than a week later for free?</p>
@@ -771,9 +771,9 @@ tinkering, improving, planting flower beds.</p>
   
   <entry>
     <title type="html"><![CDATA[Code Complete Second Edition]]></title>
-    <link href="http://larryprice.github.com/blog/2013/02/19/code-complete-second-edition/"/>
+    <link href="http://larryprice.github.io/blog/2013/02/19/code-complete-second-edition/"/>
     <updated>2013-02-19T22:38:00-05:00</updated>
-    <id>http://larryprice.github.com/blog/2013/02/19/code-complete-second-edition</id>
+    <id>http://larryprice.github.io/blog/2013/02/19/code-complete-second-edition</id>
     <content type="html"><![CDATA[<blockquote><p>Design is a process of carefully planning small mistakes in order to avoid making big ones.
 &mdash; Steve McConnell</p></blockquote>
 
@@ -806,10 +806,10 @@ tinkering, improving, planting flower beds.</p>
   
   <entry>
     <title type="html"><![CDATA[Pushing an Application to Heroku that Uses Ruby and Mongo]]></title>
-    <link href="http://larryprice.github.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo/"/>
+    <link href="http://larryprice.github.io/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo/"/>
     <updated>2013-01-20T11:55:00-05:00</updated>
-    <id>http://larryprice.github.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo</id>
-    <content type="html"><![CDATA[<p><em>This is Part 3 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="http://larryprice.github.com/blog/categories/pokephile">Pokephile category</a>. Part 4 of this series details moving from a development environment to a production environment using <a href="http://heroku.com/">Heroku</a>. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>, and the final product can be found <a href="http://pokephile.herokuapp.com">here</a>.</em></p>
+    <id>http://larryprice.github.io/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo</id>
+    <content type="html"><![CDATA[<p><em>This is Part 3 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="http://larryprice.github.io/blog/categories/pokephile">Pokephile category</a>. Part 4 of this series details moving from a development environment to a production environment using <a href="http://heroku.com/">Heroku</a>. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>, and the final product can be found <a href="http://pokephile.herokuapp.com">here</a>.</em></p>
 
 <p><a href="http://heroku.com/">Heroku</a> is a hosting service for different types of web applications. The best thing about Heroku is it&rsquo;s free, you get a decent subdomain for your application, and there&rsquo;s no spam email. Go ahead and <a href="http://api.heroku.com/signup">sign up</a> if you don&rsquo;t already have an account.</p>
 
@@ -841,7 +841,7 @@ tinkering, improving, planting flower beds.</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>In order for Heroku to figure out what ruby gems are needed to run your application, you need to specify a Gemfile. It&rsquo;s wise to specify a specific version of Ruby, and it&rsquo;s also a good idea to keep the gems&#8217; versions close to the state you developed with. For the <a href="http://larryprice.github.com/blog/categories/pokephile">Pokephile</a> application created in this series, this is my Gemfile:</p>
+<p>In order for Heroku to figure out what ruby gems are needed to run your application, you need to specify a Gemfile. It&rsquo;s wise to specify a specific version of Ruby, and it&rsquo;s also a good idea to keep the gems&#8217; versions close to the state you developed with. For the <a href="http://larryprice.github.io/blog/categories/pokephile">Pokephile</a> application created in this series, this is my Gemfile:</p>
 
 <figure class='code'><figcaption><span>project/Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -1060,12 +1060,12 @@ tinkering, improving, planting flower beds.</p>
   
   <entry>
     <title type="html"><![CDATA[Testing a Sinatra App with Capybara]]></title>
-    <link href="http://larryprice.github.com/blog/2013/01/19/testing-a-sinatra-app-with-capybara/"/>
+    <link href="http://larryprice.github.io/blog/2013/01/19/testing-a-sinatra-app-with-capybara/"/>
     <updated>2013-01-19T12:20:00-05:00</updated>
-    <id>http://larryprice.github.com/blog/2013/01/19/testing-a-sinatra-app-with-capybara</id>
-    <content type="html"><![CDATA[<p><em>This is Part 3 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="http://larryprice.github.com/blog/categories/pokephile">Pokephile category</a>. Part 3 of this series describes using Capybara to test a Sinatra application. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>, and the final product can be found <a href="http://pokephile.herokuapp.com">here</a>.</em></p>
+    <id>http://larryprice.github.io/blog/2013/01/19/testing-a-sinatra-app-with-capybara</id>
+    <content type="html"><![CDATA[<p><em>This is Part 3 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="http://larryprice.github.io/blog/categories/pokephile">Pokephile category</a>. Part 3 of this series describes using Capybara to test a Sinatra application. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>, and the final product can be found <a href="http://pokephile.herokuapp.com">here</a>.</em></p>
 
-<p>Now that <a href="http://larryprice.github.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/">the database is populated</a> with data and I&rsquo;ve switched over to <a href="http://larryprice.github.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/">a simpler interface with Mongo</a>, I can actually start creating a UI. For simplicity&rsquo;s sake, I like to use Sinatra on small projects. Sinatra makes it easy to create a web application with minimal effort. With an emphasis on testing this <a href="http://larryprice.github.com/blog/categories/pokephile">series</a>, I want to be sure to throughly test my UI and any application integration. <a href="http://cukes.info/">Cucumber</a> is a brilliant DSL which allows a programmer to describe in plain English how an application should be behaving. The <a href="https://github.com/jnicklas/capybara">Capybara gem</a> is a Rack app that simulates running your application and performing basic user tasks, such as clicking a button, following a link, or, on a lower level, looking at your HTML source. Install Capybara like so:</p>
+<p>Now that <a href="http://larryprice.github.io/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/">the database is populated</a> with data and I&rsquo;ve switched over to <a href="http://larryprice.github.io/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/">a simpler interface with Mongo</a>, I can actually start creating a UI. For simplicity&rsquo;s sake, I like to use Sinatra on small projects. Sinatra makes it easy to create a web application with minimal effort. With an emphasis on testing this <a href="http://larryprice.github.io/blog/categories/pokephile">series</a>, I want to be sure to throughly test my UI and any application integration. <a href="http://cukes.info/">Cucumber</a> is a brilliant DSL which allows a programmer to describe in plain English how an application should be behaving. The <a href="https://github.com/jnicklas/capybara">Capybara gem</a> is a Rack app that simulates running your application and performing basic user tasks, such as clicking a button, following a link, or, on a lower level, looking at your HTML source. Install Capybara like so:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo gem install capybara
@@ -1444,7 +1444,7 @@ tinkering, improving, planting flower beds.</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>In the &lt;head> tag, I include a link to the Bootstrap stylesheet. In the &lt;body> tag, I include a link to the JQuery and Bootstrap Typeahead JavaScript files remotely so I don&rsquo;t have to keep track of them. I then add a &lt;div> tag called &ldquo;search&rdquo; and center it on the page. Inside the div tag I create a form whose action sends a POST signal to the &ldquo;search&rdquo; action. Inside the form is first the typeahead, then a small submit button. The important parameters in the typeahead are &ldquo;data-items&rdquo; and &ldquo;data-source;&rdquo; &ldquo;data-items&rdquo; tells the JavaScript function how many items to suggest at a time, and &ldquo;data-source&rdquo; is an array of data for the JavaScript to search. Notice that my &ldquo;data-source&rdquo; uses the Pokemon class <a href="http://larryprice.github.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/">created previously</a>, so I need to be able to set up a <a href="http://larryprice.github.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/">Mongoid connection</a> to access that data. I&rsquo;ll make this connection in my &ldquo;config.ru&rdquo; file:</p>
+<p>In the &lt;head> tag, I include a link to the Bootstrap stylesheet. In the &lt;body> tag, I include a link to the JQuery and Bootstrap Typeahead JavaScript files remotely so I don&rsquo;t have to keep track of them. I then add a &lt;div> tag called &ldquo;search&rdquo; and center it on the page. Inside the div tag I create a form whose action sends a POST signal to the &ldquo;search&rdquo; action. Inside the form is first the typeahead, then a small submit button. The important parameters in the typeahead are &ldquo;data-items&rdquo; and &ldquo;data-source;&rdquo; &ldquo;data-items&rdquo; tells the JavaScript function how many items to suggest at a time, and &ldquo;data-source&rdquo; is an array of data for the JavaScript to search. Notice that my &ldquo;data-source&rdquo; uses the Pokemon class <a href="http://larryprice.github.io/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/">created previously</a>, so I need to be able to set up a <a href="http://larryprice.github.io/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/">Mongoid connection</a> to access that data. I&rsquo;ll make this connection in my &ldquo;config.ru&rdquo; file:</p>
 
 <figure class='code'><figcaption><span>project/config.ru</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -1740,20 +1740,20 @@ tinkering, improving, planting flower beds.</p>
 
 <p>Ruby code with no output is preceded with a &lsquo;&ndash;&rsquo; and because HAML is space-sensitive, there&rsquo;s no need to include &lsquo;end&rsquo; statements. Now I run Cucumber and&hellip; 4 scenarios/23 steps passed! I have a functional web application! Of course, the page itself is somewhat bland, some of the styles could be put in a stylesheet and reused, and the only tests I&rsquo;ve written are for super-high-level functionality. Those are all problems someone with infinite time would deal with, so I&rsquo;ll just leave the page is is for now.</p>
 
-<p>The next blog post <a href="http://larryprice.github.com/blog/categories/pokephile">in this series</a> will be about deploying this application to the web using Heroku.</p>
+<p>The next blog post <a href="http://larryprice.github.io/blog/categories/pokephile">in this series</a> will be about deploying this application to the web using Heroku.</p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Moving from the MongoDB Ruby Driver to Mongoid]]></title>
-    <link href="http://larryprice.github.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/"/>
+    <link href="http://larryprice.github.io/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/"/>
     <updated>2013-01-05T20:04:00-05:00</updated>
-    <id>http://larryprice.github.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid</id>
-    <content type="html"><![CDATA[<p>This is Part 2 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="http://larryprice.github.com/blog/categories/pokephile">Pokephile category</a>. Part 2 details refactoring code using the MongoDB Ruby driver to use Mongoid. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>.</p>
+    <id>http://larryprice.github.io/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid</id>
+    <content type="html"><![CDATA[<p>This is Part 2 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="http://larryprice.github.io/blog/categories/pokephile">Pokephile category</a>. Part 2 details refactoring code using the MongoDB Ruby driver to use Mongoid. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>.</p>
 
 <h3>What I&rsquo;ve Done</h3>
 
-<p>In a <a href="http://larryprice.github.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/">previous post</a>, I described creating a class that would populate a database with data scraped from the internet. I used the MongoDB Ruby driver to accomplish this. However, using the driver can be laborious and there are simpler ways. In this post, I&rsquo;m going to refactor the Populater class to use Mongoid.</p>
+<p>In a <a href="http://larryprice.github.io/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/">previous post</a>, I described creating a class that would populate a database with data scraped from the internet. I used the MongoDB Ruby driver to accomplish this. However, using the driver can be laborious and there are simpler ways. In this post, I&rsquo;m going to refactor the Populater class to use Mongoid.</p>
 
 <h3>Mongoid</h3>
 
@@ -2076,10 +2076,10 @@ tinkering, improving, planting flower beds.</p>
   
   <entry>
     <title type="html"><![CDATA[Schemaless databases with Ruby and MongoDB]]></title>
-    <link href="http://larryprice.github.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/"/>
+    <link href="http://larryprice.github.io/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/"/>
     <updated>2013-01-05T16:54:00-05:00</updated>
-    <id>http://larryprice.github.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb</id>
-    <content type="html"><![CDATA[<p>This is Part 1 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="http://larryprice.github.com/blog/categories/pokephile">Pokephile category</a>. Part 1 details getting started with MongoDB and creating a collection using data scraped off the web using <a href="http://nokogiri.org/">Nokogiri</a>. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>.</p>
+    <id>http://larryprice.github.io/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb</id>
+    <content type="html"><![CDATA[<p>This is Part 1 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="http://larryprice.github.io/blog/categories/pokephile">Pokephile category</a>. Part 1 details getting started with MongoDB and creating a collection using data scraped off the web using <a href="http://nokogiri.org/">Nokogiri</a>. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>.</p>
 
 <h3>A little background</h3>
 
@@ -2619,9 +2619,9 @@ tinkering, improving, planting flower beds.</p>
   
   <entry>
     <title type="html"><![CDATA[Who Moved My Cheese?: An Amazing Way to Deal with Change in Your Work and in Your Life]]></title>
-    <link href="http://larryprice.github.com/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life/"/>
+    <link href="http://larryprice.github.io/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life/"/>
     <updated>2012-11-27T20:47:00-05:00</updated>
-    <id>http://larryprice.github.com/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life</id>
+    <id>http://larryprice.github.io/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life</id>
     <content type="html"><![CDATA[<p><img src="http://dontstepinthepoop.com/wp-content/uploads/2010/01/cheese.jpg" style="border: 0" width="130px" title="Who Moved My Cheese?" alt="Cover for Who Moved My Cheese?" /><br/>
 <a href="http://www.amazon.com/gp/product/0399144463/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0399144463&amp;linkCode=as2&amp;tag=larpriandthee-20"><strong>Who Moved My Cheese?: An Amazing Way to Deal with Change in Your Work and in Your Life</strong></a><br/>
 <strong>Spencer Johnson</strong></p>

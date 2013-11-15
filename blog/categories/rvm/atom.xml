@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: rvm | Larry Price]]></title>
-  <link href="http://larryprice.github.com/blog/categories/rvm/atom.xml" rel="self"/>
-  <link href="http://larryprice.github.com/"/>
-  <updated>2013-11-14T22:01:21-05:00</updated>
-  <id>http://larryprice.github.com/</id>
+  <link href="http://larryprice.github.io/blog/categories/rvm/atom.xml" rel="self"/>
+  <link href="http://larryprice.github.io/"/>
+  <updated>2013-11-14T22:05:52-05:00</updated>
+  <id>http://larryprice.github.io/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[RVM Quick Start]]></title>
-    <link href="http://larryprice.github.com/blog/2013/10/08/rvm-quick-start/"/>
+    <link href="http://larryprice.github.io/blog/2013/10/08/rvm-quick-start/"/>
     <updated>2013-10-08T22:10:00-04:00</updated>
-    <id>http://larryprice.github.com/blog/2013/10/08/rvm-quick-start</id>
+    <id>http://larryprice.github.io/blog/2013/10/08/rvm-quick-start</id>
     <content type="html"><![CDATA[<p>When I was working on a few different projects at once, I started running into issues where my Ruby gem versions would start to mismatch. How did I fix that issue? Naively. I adjusted the versions as necessary so my gems were always the same version. That was&hellip; pretty dumb. To make up for my past ignorance, I&rsquo;ve been exploring ways to manage my Ruby versions and my gems intelligently. Enter <a href="https://rvm.io/">RVM</a>.</p>
 
 <p>RVM is a simple tool to solve just problems. And it works pretty well. I hit some kinks along the way, but my installation pleases me well enough. Getting RVM is not for the faint of heart. Maybe there are better ways to do it, but the website says to execute the following:</p>

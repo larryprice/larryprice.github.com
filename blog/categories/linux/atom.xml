@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: linux | Larry Price]]></title>
-  <link href="http://larryprice.github.com/blog/categories/linux/atom.xml" rel="self"/>
-  <link href="http://larryprice.github.com/"/>
-  <updated>2013-11-14T22:01:21-05:00</updated>
-  <id>http://larryprice.github.com/</id>
+  <link href="http://larryprice.github.io/blog/categories/linux/atom.xml" rel="self"/>
+  <link href="http://larryprice.github.io/"/>
+  <updated>2013-11-14T22:05:52-05:00</updated>
+  <id>http://larryprice.github.io/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[How Linux Works: What Every Superuser Should Know]]></title>
-    <link href="http://larryprice.github.com/blog/2012/11/26/how-linux-works-what-every-superuser-should-know/"/>
+    <link href="http://larryprice.github.io/blog/2012/11/26/how-linux-works-what-every-superuser-should-know/"/>
     <updated>2012-11-26T21:27:00-05:00</updated>
-    <id>http://larryprice.github.com/blog/2012/11/26/how-linux-works-what-every-superuser-should-know</id>
+    <id>http://larryprice.github.io/blog/2012/11/26/how-linux-works-what-every-superuser-should-know</id>
     <content type="html"><![CDATA[<p><img src="http://books.gigaimg.com/avaxhome/77/6b/000c6b77_medium.jpeg" style="border: 0" width="130px" title="How Linux Works" alt="Cover for How Linux Works" /><br/>
 <a href="http://www.amazon.com/gp/product/1593270356/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1593270356&amp;linkCode=as2&amp;tag=larpriandthee-20"><strong>How Linux Works: Things Every Superuser Should Know</strong></a><br/>
 <strong>Brian Ward</strong></p>
