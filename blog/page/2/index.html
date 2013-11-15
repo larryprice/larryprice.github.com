@@ -1,0 +1,579 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Larry Price</title>
+  <meta name="author" content="Larry Price">
+
+  
+  <meta name="description" content="Oh, Sinatra. You&rsquo;re oh-so-very dear to me. You made it so easy for me to write my first web apps. All I had to do was write a couple routes and &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://larryprice.github.com/blog/page/2">
+  <link href="/cupicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Larry Price" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Montserrat+Alternates|Marcellus' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35669093-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner" style="background:url(/images/coffee-stain.png) top right no-repeat; background-size: auto 100%;"><hgroup>
+  <h1><a href="/">Larry Price</a></h1>
+  
+    <h2>And The Endless Cup Of Coffee</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:larryprice.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/books">Books</a></li>
+  <li><a href="/blog/projects">Projects</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/">On the Futility of Man and Trying to Divide a Sinatra App Into Separate Controllers</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-26T22:35:00-04:00" pubdate data-updated="true">Aug 26<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Oh, <a href="http://www.sinatrarb.com/">Sinatra</a>. You&rsquo;re oh-so-very dear to me. You made it so easy for me to write my <a href="http://capitalpunishment.herokuapp.com">first</a> <a href="http://pokephile.herokuapp.com">web</a> apps. All I had to do was write a couple routes and throw together a few HTML-like files and I had a web app. I used pattern matching to reduce the web-facing code for <a href="https://github.com/larryprice/CapitalPunishment">Capital Punishment</a> from ~500 lines of code to &lt;100 lines of code. You are perfect for writing small-time web applications.</p>
+
+<p>But what about large web applications? What about a web app that has normal users and admin users, makes lots of database reads and writes (my previous apps only did reads from a user-facing perspective), and has to be able to show the history of everything, forever, to the authorized users who request it?</p>
+
+<p>You see, Sinatra is kind of an <a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">MVC framework</a>, but not exactly. In Sinatra, you have Views (your HTML inter-mixed with Ruby code in your desired DSL) and you have Controllers (each of your routes). When a database is involved, you can use something like <a href="https://github.com/bmizerany/sinatra-activerecord">ActiveRecord</a> or <a href="http://mongoid.org/en/mongoid/index.html">Mongoid</a> or <a href="http://datamapper.org/">DataMapper</a> and you have yourself Models.</p>
+
+<p>So every route is kind of a Controller. Every. Route. In Capital Punishment, there were once 8 routes (there are now 7). In the project I&rsquo;ve been working on recently, there are currently 56 routes. 56 routes in the language described above means I kind of have 56 controllers.</p>
+
+<p>That&rsquo;s been pretty overwhelming, especially since the traditional way of creating routes in Sinatra is to shove them all in the same file. There are a few ways I could think of to address this. The way we chose six months ago (for better or worse) was found <a href="http://stackoverflow.com/questions/5877000/what-is-a-controller-in-sinatra">on StackOverflow</a>, and involves creating a bunch of different files where you shove all related routes. So you get this situation:</p>
+
+<figure class='code'><figcaption><span>app.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">App</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">require_relative</span> <span class="s1">&#39;controllers/helpers&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">__FILE__</span><span class="p">)</span><span class="si">}</span><span class="s2">/controllers/*.rb&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">file</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">require</span> <span class="n">file</span><span class="o">.</span><span class="n">chomp</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">extname</span><span class="p">(</span><span class="n">file</span><span class="p">))</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">App</span>
+</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">erb</span> <span class="ss">:home</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>controllers/reports_controller.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">App</span>
+</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/reports/user_bills&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">erb</span> <span class="ss">:user_bills_report</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And so on and so forth. This works fine for a while, but we&rsquo;ve ended up with 13 &ldquo;controller&rdquo; files, many of which are not trivial. This also makes the App class quite large since its controllers handle most of the logic for the app. This also doesn&rsquo;t enforce any kind of URL-naming logic, so if a developer is working hard (s)he may create both <code>/reports/user_bills</code> and <code>user_info_reports</code> without realizing the inconsistency (s)he just injected into the system.</p>
+
+<p>In hindsight, this method is not perfect. I think that the Rails method of individual controllers is significantly better for large apps. Some people have been using other methods for trying to make Sinatra more MVC, such as <a href="https://github.com/jorrizza/sinatra-mvc">sinatra-mvc</a>. To be frank, sinatra-mvc pretty much does the same thing we&rsquo;ve done, but with more structure.</p>
+
+<p>I think what I&rsquo;ve learned is that you should use a tool for its intended purpose. Sinatra was written to quickly create web apps in Ruby with minimal effort. Once you have more than 10-15 routes, you should reconsider whether your app can still be called &ldquo;minimal effort.&rdquo; Sinatra may fly you to the moon, but you&rsquo;re unlikely to see what spring is like on Jupiter or Mars.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/08/22/beware-of-group-projects/">Beware of Group Projects</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-22T21:22:00-04:00" pubdate data-updated="true">Aug 22<span>nd</span>, 2013</time>
+        
+         | <a href="/blog/2013/08/22/beware-of-group-projects/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Relying on other people is hard. I&rsquo;ve always found it difficult to understand that other people aren&rsquo;t me. Don&rsquo;t get me wrong, working with others can be really rewarding. Maybe &ldquo;Beware of Group Projects&rdquo; is not the best title. More like &ldquo;Be Wary that Working with Others is Not the Same as Working with Yourself.&rdquo; But that&rsquo;s a pretty long title, and reading (like working with others) is hard.</p>
+
+<p>I&rsquo;ve been spending a lot of my spare time collaborating on a project with a small group of other developers. I normally do this kind of thing on my own. I started thinking about the differences in working by myself and collaborating with other devs. Then I decided that it would look good in a list format comparing each circumstance from both sides. I was wrong, but couldn&rsquo;t think of a better way to present it.</p>
+
+<h2>Let&rsquo;s Start a New Project!</h2>
+
+<p><strong>As an Individual</strong>: This project is going to help me! I can use this new technology and I&rsquo;ll learn so much!<br/>
+<strong>As a Group</strong>: This project is going to help our customer! We can use this new technology and everyone will learn so much!</p>
+
+<h2>Let&rsquo;s Work!</h2>
+
+<p><strong>As an Individual</strong>: I&rsquo;ve got 5 minutes, that&rsquo;s enough time to make those adjustments I&rsquo;ve been thinking about&hellip;<br/>
+<strong>As a Group</strong>: We&rsquo;ve got 5 minutes, but once we find a conference room, set up the projector, and update our branch I&rsquo;ll have to go pick up my wife. Pass.</p>
+
+<h2>Let&rsquo;s Not Work</h2>
+
+<p><strong>As an Individual</strong>: I could work, or I could just play Prison Architect all weekend. &hellip;I&rsquo;ll have the happiest inmates this side of Alcatraz by Monday morning!<br/>
+<strong>As a Group</strong>: We&rsquo;ve set aside these times to meet, you should come help! There might be pizza if you stay long enough.</p>
+
+<h2>Knowledge</h2>
+
+<p><strong>As an Individual</strong>: Now I know how to do X.<br/>
+<strong>As a Group</strong>: Now I know how to do X. Now you know how to do X, and you know how to do X, and you know how to do X! I&rsquo;m the Oprah of Knowing X!</p>
+
+<h2>Coding Standards</h2>
+
+<p><strong>As an Individual</strong>: Whoops, I mixed camelCase and under_scores when naming my classes. Oh well.<br/>
+<strong>As a Group</strong>: For the love of Linux Torvalds, how do you not remember to prefix your public member variables with &lsquo;pub_&rsquo; and postfix your private member variables with &lsquo;_private&rsquo;?</p>
+
+<h2>Testing</h2>
+
+<p><strong>As an Individual</strong>: Pfft.<br/>
+<strong>As a Group</strong>: TEST ALL THE THINGS! It&rsquo;s the best way we can guarantee that our code changes don&rsquo;t break existing functionality.</p>
+
+<h2>I&rsquo;m Bored</h2>
+
+<p><strong>As an Individual</strong>: Forget the months of work spent on X, I think I&rsquo;ll work on Y now.<br/>
+<strong>As a Group</strong>: If we finish, we&rsquo;ll have made something useful. Someone needs us this! You&rsquo;ll be happy you kept working on it in a few weeks.</p>
+
+<h2>We&rsquo;re Done!</h2>
+
+<p><strong>As an Individual</strong>: I made an app that let&rsquo;s you draw circles. A job well done, if I do say so myself. I believe I&rsquo;ll have a beer.<br/>
+<strong>As a Group</strong>: We invented the warp drive, but it hits a theoretical limit at approximately 9.5 warp. Beer all around! We start work on version 2.0 next week!</p>
+
+<p>The point is that working with others is not bad. In fact, working with others helps give me a sense of responsibility in what I&rsquo;m working on, and motivates me to continue even when I&rsquo;m in a lull. I&rsquo;ve thrown out so many individual side-projects because I just wasn&rsquo;t motivated, or was no longer convinced of its usefulness. It&rsquo;s also (theoretically) easier to build bigger projects with groups because there are more arms to swing more hammers.</p>
+
+<p>&ldquo;Beware of Group Projects&rdquo; if you don&rsquo;t have time, or if you can&rsquo;t compromise, or if you don&rsquo;t care. Otherwise, just be wary that working with others is not the same as working with yourself.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1/">The Trouble With Time Zones (Aka Learn From My Mistakes Part 1)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-07T22:00:00-04:00" pubdate data-updated="true">Aug 7<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p>As a user, my data&rsquo;s LastModifiedDate should not be updated when I Export it, and it should be in UTC.</p></blockquote>
+
+<p>That&rsquo;s the gist of the story I was tasked with a few weeks ago. Seemed easy enough: just set the &ldquo;LastModifiedDate&rdquo; field of each XML node to the LastModifiedDate pulled from the database converted to UTC. I can do the development and write up some Cucumber tests in an hour, two hours tops. Find a few small caveats along the way, get it out of development and through code review by the next morning. Push it to the mainline and watch the build go green. All done, dust off my hands and move on to something else.</p>
+
+<p>When has anything ever been that simple? Certainly not in the fantastical world of software development! About ten minutes after the build server confirmed a successful build of my code on the tip of our main branch, a face popped up over the cube wall. &ldquo;Hey, why&rsquo;d you break the build?&rdquo; My teammate was having trouble running my LastModifiedDate tests. All of his time comparisons were off by an hour. My computer (and the build server) were in one time zone; his was in another. I immediately realized the exact lines of the code that weren&rsquo;t dealing with time zones. We agreed to let the code remain on the build server instead of backing it out since the build server was green, and I created/tested/pushed a couple of patches to fix the problem. Green build on the build server. Green build amongst all my time-disabled peers. The next morning I had a panic attack in the shower thinking about how some of my test data could be affected by the switch to UTC. I rushed into work early and put in another patch, this one slightly changing the format of some of my test data. After doing this, I realized that what I had done was completely unnecessary and decided I should probably get my blood pressure checked.</p>
+
+<p>Then: silence. I was satisfied I&rsquo;d seen the end of my time zone issues which I&rsquo;d spent nearly as much time patching as I had developing the initial solution. Two weeks pass. Monday morning there&rsquo;s an email from another country in my inbox, &ldquo;This test was written that only works in American time zones! Who is fixing this?&rdquo; After quite a few emails and chats I found that their main branch had merged in a version of our main branch between my original solution and my patch. The developer agreed to be patient until his team could start using the newer version of our branch. Four hours later I get another email from developers on another continent. I sent them the patches I made previously compressed into one to keep them working.</p>
+
+<p>Was this a small mistake? On a project with a small, local team the answer is definitely yes. This project in particular involves a large number of developers who don&rsquo;t all test in the same time zone and who work on a number of different branches that feed into each other in weekly chunks. Despite that, I think this error could have gone greatly unnoticed had I simply backed out the original changes and pushed the patches and original solution together. My confidence (hubris?) really bit me on this one. Initially only a single developer seemed to be affected by my oversight; fate selected a build between my original solution and my patches to push to the other branches to make sure more people noticed my mistake.</p>
+
+<p><strong>In hindsight</strong>, The Right Thing to Do was to assume fault and back out immediately. One developer having build issues is still one more than should have been affected. Here&rsquo;s hoping this bit o&#8217; hindsight today leads to better foresight tomorrow.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/16/effective-c-plus-plus/">Effective C++</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-16T22:11:00-04:00" pubdate data-updated="true">Jul 16<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/07/16/effective-c-plus-plus/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>The Gist</h3>
+
+<p><a href="http://www.amazon.com/gp/product/0321334876/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0321334876&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Effective C++</em></a> is a list of ways to write not-your-average-bear C++ code. The author, <a href="http://www.aristeia.com/">Scott Meyers</a>, outlines 8 specific topics for improving code, and a few more miscellaneous tips.</p>
+
+<h3>My Opinion</h3>
+
+<p>Lots of good can come from reading this book. I borrowed it from a more-experienced co-worker and noticed many of the interesting coding standards this co-worker used came directly from this book. And I agree with it. I&rsquo;ve been actively trying to follow the lessons learned in this book from the moment I picked it up.</p>
+
+<p>I learned C++ the hard way: I was thrown into an internship where I didn&rsquo;t really have enough skills to contribute to the project, and my &ldquo;boss&rdquo; didn&rsquo;t really have anywhere to put me. So I was handed a book, pointed to <a href="http://www.cplusplus.com/">this wonderous website</a>, and I wrote some little helper apps for the project. I wasn&rsquo;t taught anything about form or any of that formal business. Then I took a C++ class in college, and never bothered to learn any of the coding standards because I had enough previous knowledge to get by my own way (and appear to be really good while doing it).</p>
+
+<p>So this book showed me a lot of the why certain things in C++ are the way they are. It explained to me that a copy constructor is called every time you pass an object directly through a function, and how assignment operators are used whenever an equals sign appears. It told me why my destructors need to be virtual. It explained a lot about smart_ptr and auto_ptr that I never thought to think about.</p>
+
+<p>Admittedly, there are parts of the book that are hard to follow. I consider Chapter 7 (Templates and Generic Programming) and Chapter 8 (Customizing new and delete) to be extremely technical chapters not meant for the faint of heart, and the lessons learned in these chapters are not necessarily useful in day-to-day programming. Chapter 9 is simply called Miscellany, and it delivers no new information for improving one&rsquo;s C++ skills.</p>
+
+<h3>Who Would Like This</h3>
+
+<p>C++ Programmers should have this book (at least the first 6 chapters) crammed down their throats and into their squishy pink brains. After learning all the &ldquo;basic&rdquo; concepts of C++, the lessons this book teaches in design and the nature of C++ should be taken into consideration.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/04/28/joel-on-software/">Joel on Software</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-28T11:38:00-04:00" pubdate data-updated="true">Apr 28<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/04/28/joel-on-software/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p>We&rsquo;re programmers. Programmers are, in their hearts, architects, and the
+first thing they want to do when they get to a site is to bulldoze the place
+flat and build something grand. We&rsquo;re not excited by incremental renovation:
+tinkering, improving, planting flower beds.</p>
+
+<p>&mdash; Joel Spolsky, &ldquo;Things you Should Never Do, Part I&rdquo;</p></blockquote>
+
+<h3>The Gist</h3>
+
+<p><a href="http://www.amazon.com/gp/product/1590593898/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1590593898&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Joel On Software</em></a> is a collection of blog posts by the great <a href="http://www.joelonsoftware.com/">Joel Spolsky</a>. He has risen to Internet Fame after his experience working for Microsoft and eventually starting his own company. The &ldquo;chapters&rdquo; (blog posts) provide insight into picking a language for your codebase, recruiting engineers, managing programmers, fixing bugs, paper prototyping, and how Microsoft works.</p>
+
+<h3>My Opinion</h3>
+
+<p>Joel Spolsky is a god sent down from Mount Olympus to calmly explain to us why we are sometimes terrible people and then goes on to tell us it&rsquo;s okay and we should learn from our past. I loved this book, especially since I read it at the same time as some really terrible books (namely <a href="http://www.amazon.com/gp/product/0672326140/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0672326140&amp;linkCode=as2&amp;tag=larpriandthee-20">The Inmates are Running the Asylum</a> and <a href="http://www.amazon.com/gp/product/1491017082/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1491017082&amp;linkCode=as2&amp;tag=larpriandthee-20">Enterprise Games</a>; I do not recommend these books).</p>
+
+<p>Spolsky talks a lot about specs in the first part of the book, and at first I thought that he was stating too much of the obvious; but then why don&rsquo;t we do specs in this obvious way? Instead, we resign ourselves to write a tiny portion of the spec, start programming, and then implicitly change the spec while only haphazardly updating our documentation. I&rsquo;ve been on projects before where we would have greatly benefitted from having a solid spec; we knew exactly what needed to be done, because we were rewriting a successful product the company had released several years ago. With an ever-changing spec, we programmed ourselves into a hole, and struggled for at least half a year to claw our way back out. I have to wonder if more pre-planning would have saved us from ourselves.</p>
+
+<p>Spolsky&rsquo;s advice on hiring people is invaluable (<a href="http://www.joelonsoftware.com/articles/GuerrillaInterviewing3.html">The Guerrilla Guide to Interviewing</a>). In fact, I wish that I had read some of these blog posts while I was interviewing. Spolsky says that recruiters should ask &ldquo;impossible questions&rdquo; and not worry about what the answers given are, just that the recruit comes up with something. He says to stop asking trivia questions. He talks about relying on all interviewers equally: if any two interviewers say &ldquo;No&rdquo; to a candidate, the candidate is toast. He talks about asking candidates about projects and looking for passion, which is almost always the sign of a good programmer.</p>
+
+<p>Spolsky talks about the commodity market of software/hardware. To sum it up, the supply of one drives the demand of the other. This section made me think about the current PC market: hardware is cheap <em>and</em> software is cheap. Not only is software cheap, but it&rsquo;s often <em>free</em>. Prices for hardware haven&rsquo;t been going down at nearly the rate it used to, but that seems natural as the price approaches the cost of labor and parts. Most of the hardware innovation right now seems to be aimed at the tiny computers in our pockets (or <a href="http://www.google.com/glass/start/">on our face</a>, soon enough). Google&rsquo;s software makes money by displaying ads using its search engine, so Google has entered the market of making software that is compatible with all kinds of different hardware. Google has played the commodities game like a champ, getting hardware running their software into hundreds of millions of pockets.</p>
+
+<p>Some of the weaker parts of the book are when Spolsky talks about .NET. I&rsquo;m not going to go into detail, but when he wrote these posts, .NET was just entering the market. Spolsky starts by bashing .NET for making all the old Windows API code unusable, but in later blog posts falls hard for .NET and starts thinking about ways to rewrite his entire life in .NET.</p>
+
+<h3>Who Would Like This</h3>
+
+<p>I believe that programmers are the main audience for this book, and I am a programmer who loved reading it. Spolsky does not talk down to the reader, nor does he dumb down the nitty-gritty technical blog posts.</p>
+
+<p>Programmers who intend to become managers may get added benefit from this book, as Spolsky discusses some interesting recruiting techniques and ways to deal with programmers. My company uses some of Spolsky&rsquo;s advice when hiring engineers (quite a bit of it, thinking back to my interview), and we&rsquo;ve been hiring only the best and brightest cowboys in the Midwest for years.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/3/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>void? Larry</h1>
+  <p>I&#8217;m a codeslinger debugging from the mean streets of Indiana. Welcome to my blog, where I&#8217;ll tell the tales of wondrous things I discover in the digital jungle. Leave a comment, tweet me <a href="https://twitter.com/larryrprice">@larryrprice</a>, or find me on <a href="http://www.linkedin.com/pub/larry-price/3a/630/47b">LinkedIn</a>.</p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/11/14/copy-data-using-qmake/">Copy Data Using qmake</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/">Installing GTest and GMock Libs in Ubuntu 13.04</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/08/rvm-quick-start/">RVM Quick Start</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/08/the-pragmatic-programmer/">The Pragmatic Programmer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/31/using-foreman-to-create-an-upstart-service/">Using Foreman to Create an Upstart Service</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Tag Cloud</h1>
+    <span id="tag-cloud"><a href='/blog/categories/c-' style='font-size: 112.0%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 106.0%'>capybara</a> <a href='/blog/categories/cucumber' style='font-size: 112.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 130.0%'>database</a> <a href='/blog/categories/foreman' style='font-size: 106.0%'>foreman</a> <a href='/blog/categories/gmock' style='font-size: 106.0%'>gmock</a> <a href='/blog/categories/gtest' style='font-size: 106.0%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 106.0%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 106.0%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 106.0%'>heroku</a> <a href='/blog/categories/linux' style='font-size: 106.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 112.0%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 118.0%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 106.0%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 106.0%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 106.0%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 112.0%'>nosql</a> <a href='/blog/categories/pokephile' style='font-size: 124.0%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 106.0%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 106.0%'>qt</a> <a href='/blog/categories/rails' style='font-size: 106.0%'>rails</a> <a href='/blog/categories/retro' style='font-size: 112.0%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 112.0%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 148.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 106.0%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 106.0%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 142.0%'>sep-blog-battle</a> <a href='/blog/categories/sinatra' style='font-size: 124.0%'>sinatra</a> <a href='/blog/categories/tdd' style='font-size: 106.0%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 106.0%'>testing</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 106.0%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 106.0%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 106.0%'>upstart</a> <a href='/blog/categories/web' style='font-size: 118.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 142.0%'>write-ups</a> </span>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/larryprice">@larryprice</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'larryprice',
+            count: 5,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  <center>
+	  Copyright &copy; 2013 - Larry Price -
+	  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span><br/>
+	  Note: Views and opinions expressed belong solely to the author and do not represent the views of the any other person or company.
+	</center>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'larryprice';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

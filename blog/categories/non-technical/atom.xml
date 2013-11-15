@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: non-technical | Larry Price]]></title>
+  <link href="http://larryprice.github.com/blog/categories/non-technical/atom.xml" rel="self"/>
+  <link href="http://larryprice.github.com/"/>
+  <updated>2013-11-14T22:01:21-05:00</updated>
+  <id>http://larryprice.github.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Changing Plans]]></title>
+    <link href="http://larryprice.github.com/blog/2013/04/09/changing-plans/"/>
+    <updated>2013-04-09T21:45:00-04:00</updated>
+    <id>http://larryprice.github.com/blog/2013/04/09/changing-plans</id>
+    <content type="html"><![CDATA[<p>Your code is being sent to the dump.</p>
+
+<p>Don&rsquo;t take it personally. Your code isn&rsquo;t <em>bad</em>. It&rsquo;s just <em>garbage</em>.</p>
+
+<p>Maybe your code wasn&rsquo;t written the way they wanted you to write it. Or maybe they realized that they had already written this code three months ago. Or maybe the customer suddenly decided that they don&rsquo;t need their smartphone to emit fragrances based on the text message they just received.</p>
+
+<p>The &ldquo;why&rdquo; doesn&rsquo;t matter. Plans changed. Your unused code isn&rsquo;t aging well and it&rsquo;s starting to stink up the place, so just do us all a favor and get it outta here!</p>
+
+<p>As developers, we <em>always</em> take this kind of thing personally. Our code is an extension of ourselves. When we feel good, we write code that&rsquo;s clean and concise. When we feel meh, our code is unimaginative and takes longer to write. When we feel bad, we litter the code with variables that don&rsquo;t do anything and then name them after our managers.</p>
+
+<p>But it&rsquo;s not personal, is it? Management doesn&rsquo;t sit in their mansion each evening, sipping a gin martini while adjusting their toupee, thinking about how worthless you are and how to properly punish you while continuing to pay you. Management has better things to think about, like ditching the toupee in favor of hair plugs or Rogaine or whatever hair fad is popular that day.</p>
+
+<p>Plans change. You can lament your loss of three days of &ldquo;ingenious&rdquo; code that will never see the light of day, but management will be equally depressed about the hundreds (thousands?) of dollars lost paying you to work on something that&rsquo;s not production-worthy. You may feel cheated in the short-term, but hopefully you can get something positive out of this change of plan. Maybe your second attempt at the code will jive better with the base architecture, or maybe you&rsquo;ll be able to extract the functionality you need out of another component and limit code duplication, or maybe you&rsquo;ll be able to deliver a different feature that the customer can actually use.</p>
+
+<p>Sure, there may be an occasional senior engineer who thinks that the program should be implemented his or her way, and will make you throw out anything you write that has any deviation from The Plan (which never quite made it out of their heads and into any documentation). Usually you can satiate that senior engineer by listening to them and nodding your head for a few minutes. There&rsquo;s a reason that engineer carries so much weight on the project, so they&rsquo;ll probably be making a valid point while you nod your head and they&rsquo;ll respect you for agreeing with them, even though you secretly wish you could just keep doing it the way you originally planned.</p>
+
+<p>Don&rsquo;t cry over spilled milk. No one&rsquo;s actually questioning your coding competency when they change the plan. The odds are in your favor that the plan changed in the best interest of the project, and whatever code is being thrown out is likely a necessary casualty to benefit the system as a whole. Remember that most of the code you write is used, at least for a little while, so try not to dwell on the code that isn&rsquo;t.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[What's Still Possible]]></title>
+    <link href="http://larryprice.github.com/blog/2013/04/01/whats-still-possible/"/>
+    <updated>2013-04-01T22:35:00-04:00</updated>
+    <id>http://larryprice.github.com/blog/2013/04/01/whats-still-possible</id>
+    <content type="html"><![CDATA[<p>If every Miss America candidate had her way, there would be peace on Earth and all the hungry mouths would be fed. While Earthlings enjoy violence and controlling others too much to achieve world peace, I have a proposal to help feed those around the world who don&rsquo;t have enough to eat.</p>
+
+<p>It&rsquo;s not an ad campaign. I&rsquo;m not going to send random people a nickle in the mail and then tell them that they could use that nickle to feed a starving child. I&rsquo;m certainly not going to change any of my eating habits. I happen to know a huge source of food that we underutilize. My plan is to kill two birds with one stone. Well, preferably something like 3 million birds with however many stones it takes.</p>
+
+<p>I&rsquo;m talking, of course, about the terrible tyranny of the <a href="http://en.wikipedia.org/wiki/Canada_Goose">Canadian Goose</a>. A little history:</p>
+
+<p>Our ancestors domesticated Canadian Geese in ancient times and used these waterfowl for various acts of labor, including pulling tugboats down the Mississippi, plowing the great Canadian rice paddies, and keeping our elderly company during their final days of life. The young goslings flapped gingerly in the meadows pollinating the wildflowers, apple trees, and various other meadow-related objects. Much to our delight, some of our beloved geese bretheren became sentient, and started selling us medical insurance while performing a spot-on <a href="http://en.wikipedia.org/wiki/Gilbert_Gottfried">Gilbert Gottfried</a> impression.</p>
+
+<p>False. I must apologize for fooling you in this way sweet, sweet reader, but everything you read in the last paragraph was neither true nor fact. In reality, Canadian Geese serve no purpose. Canadian Geese were created accidentally during the Manhatten Project while one of the lab techs from the local university was trying to combine nuclear fission and the bubonic plague to get back at his ex-girlfriend for cheating on him. He quickly became bored of this task when she stopped responding to his texts, and thusly tossed the waste from his experiments in the river. The rest, of course, is history.</p>
+
+<p>Now here we are. There are well over <a href="http://www.ducks.org/hunting/waterfowl-id/canada-goose">3 million Canadian Geese nationwide</a>, which is decidedly more than anyone finds pleasant. These geese are no longer afraid of humans, so they tend not to run away from us. In fact, we have spoiled the birds so much that some geese will actually approach humans demanding a bite of stale bread. If no bread gift is offered, the foul fowl will emit a frightening hissing noise, raise its wings, and chase off the poor human. Any sidewalk near a pond quickly becomes covered in goose byproducts during the breeding season, which might as well be year-round. I, for one, think that the geese have gone too far. They ruin our picnics, our walks in the park, our egg-stealing competitions, and our feather-collecting scavenger hunts. It&rsquo;s time for the final showdown: Man versus Goose.</p>
+
+<p>Time to tie in the beginning and the parts where I raved like a lunatic: We hunt the geese, and we feed them to people. &lsquo;Nuff said.</p>
+
+<p>People already hunt geese, of course, but it&rsquo;s clearly not enough. Not to mention that these hunters currently just leave the gooseflesh in the woods where lower animals reap the rewards. I propose we extend goose season year-round, and provide free boxes to encourage hunters to package the gooseflesh and send it to the needy in other countries. We&rsquo;ll poison our waterways to take out as many geese as possible, and we will make a wondrous soup for whomever needs it.</p>
+
+<p>It&rsquo;s still possible to feed the hungry. But we need to <em>focus</em> in order to do it. Man versus Goose is not the solution. It&rsquo;s a demonstration of getting distracted from the original cause. The next time someone tries to get you riled up about feeding the hungry through some crazy scheme, remember that there&rsquo;s no better way than addressing the problem directly. It&rsquo;s still possible to do good in this world if you can avoid the crazy.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Blog Battle: Pvreryvre of fyne coddes]]></title>
+    <link href="http://larryprice.github.com/blog/2013/03/25/pvreryvre-of-fyne-coddes/"/>
+    <updated>2013-03-25T22:09:00-04:00</updated>
+    <id>http://larryprice.github.com/blog/2013/03/25/pvreryvre-of-fyne-coddes</id>
+    <content type="html"><![CDATA[<p>Ice pellets bounced off my head as I walked myself home late one night. The air was dreadfully cold, so I swooped into one of Carmel&rsquo;s seedy side alleys to take a shotcut. Out of the shadows crept a man wearing a long trenchcoat and thick-rimmed glasses. Hunched over, he brushed his unkempt hair out of his eyes. His coffee-stained breath rushed from beneath his pencil moustache as he asked, &ldquo;Can I interest you in any of these fine iPhone apps?&rdquo; I tried to cautiously back away. &ldquo;How would you like a real BaZynga game, only ninety-nine cents, it&rsquo;s called Perturbed Birds with Pals?&rdquo; I was briefly distracted by sirens in the distance; by the time I returned my glance to the man&rsquo;s last position he had disappeared, my virtual wallet was empty, and my phone was filled with bloatware and repetitive &lsquo;Ville-style games.</p>
+
+<p>There are more KLOCs in this world than there have been McDonald&rsquo;s hamburgers sold. How do the good programmers differentiate themselves from the common street peddlers? How do companies convince you to pay $2.99 for their app when a clone is released less than a week later for free?</p>
+
+<p>The answer? Maybe they don&rsquo;t. Maybe a comparison can be made between software companies and pharamceutical companies.</p>
+
+<p>Big Pharmaceutical companies spend many years researching, developing, and testing drugs to treat the common cold, arthritis, bad cholesterol, or even to sedate your energetic children. These drugs spend several years on the market where patents on the drug are valid, meaning that only the company that invented the drug can legally sell it. After the patent protections expire (approx 7-12 years), any big, small, or mom &amp; pop drug manufacturer is legally allowed to &ldquo;clone&rdquo; this drug and make what&rsquo;s called a &ldquo;generic.&rdquo; Generics are sold at a fraction of the cost of the original drug. At this point, no one wants to give Big Pharma $20 for 6 tablets to cure their heartburn when they could pay $5 for a year&rsquo;s supply of generics.</p>
+
+<p>Software companies tend to spend somewhere between 12 weeks and 12 months developing apps that will be consumed by the general population. If the company just released an Android or iOS app, then the product will stay relevant somewhere between 2 weeks and 2 years. After that time, the app will either no longer have market value or will need to be revamped to please the modern consumer. Within a short number of days or weeks, there is a high probability that surly software pirates will begin to copy your app and put it on the market for free. At this point, no one wants to give your company $4.99 for an endless runner when they could just as easily find a copy for free. Of course, app developers can submit complaints and get the pirated app taken down, but more and more will crop up as time goes on, and eventually it won&rsquo;t be worth the trouble to get the doppelgangers removed.</p>
+
+<p>For both industries, a company comes up with a novel idea and presents it to the world. People who like that product can start associating the brand name with other products. After recognizing the brand, a person may start to trust that company and look for other products associated with the brand. That company will become known as a purveyor of fine wares.</p>
+
+<p>So here we stand, reader. Make code that you can be proud of; not for getting tens of thousands of downloads, but for scrawling your good name on the white boards of the world in Sharpie. The customers will keep coming back as long as you&rsquo;ve got the cure for what ails them.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Code Complete Second Edition]]></title>
+    <link href="http://larryprice.github.com/blog/2013/02/19/code-complete-second-edition/"/>
+    <updated>2013-02-19T22:38:00-05:00</updated>
+    <id>http://larryprice.github.com/blog/2013/02/19/code-complete-second-edition</id>
+    <content type="html"><![CDATA[<blockquote><p>Design is a process of carefully planning small mistakes in order to avoid making big ones.
+&mdash; Steve McConnell</p></blockquote>
+
+<h3>The Gist</h3>
+
+<p><em><a href="http://www.amazon.com/gp/product/0735619670/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0735619670&amp;linkCode=as2&amp;tag=larpriandthee-20">Code Complete Second Edition</a></em> by Steve McConnell is the ultimate programmer&rsquo;s handbook, though certainly not a pocket guide considering its massive 850+ page size. This book contains a seemingly endless amount of information regarding the state of programming circa 2004. Topics range from extremely technical, such as making code readable above making it clever, to office politics, such as dealing with non-technical managers.</p>
+
+<h3>My Opinion</h3>
+
+<p>McConnell has written an encyclopedia for software development. In doing so, the book sometimes suffers from the &ldquo;wide as an ocean, shallow as a puddle&rdquo; complex. Nonetheless, the book holds an incredible amount of information that I found refreshing to see in print.</p>
+
+<p>The use of the term &ldquo;construction&rdquo; to refer to coding throughout the book is an apt analogy for McConnell&rsquo;s views on the world of software development. Before beginning construction, a team should have a plan. Construction requires a solid base. While constructing a project, individuals should ensure that anyone else could look at their part of the project and figure out what&rsquo;s happening. Working with a partner often improves quality. People doing construction should test their work to ensure the integrity of their product. Redoing lower levels causes a lot of pain. The team is unlikely to hit the original due date. Etc, etc.</p>
+
+<p>Many things in this book go directly against what I was taught in at university. McConnell recites a quote several times in the book:</p>
+
+<blockquote><p>Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.
+&mdash; Brian Kernighan</p></blockquote>
+
+<p>At university, we&rsquo;re taught all the secrets of writing clever code: pointer manipulation, recursion, inappropriate variable reuse, and others. We were also never taught to plan ahead (&hellip;besides flowcharts, which were never required) or test, both of which McConnell highly recommends as necessary steps in software development. It&rsquo;s no wonder my programs took so long to debug! Of course, I&rsquo;ve learned to perform these tasks naturally while working as a Real Life Programmer. Reading this book is likely more helpful than taking the first few semesters of programming at university.</p>
+
+<p>A small issue I had was a wishy-washy attitude towards comments. In one chapter, McConnell describes having minimal comments in a code and keeping it mostly self-documenting. He then goes on to show all kinds of different, horrifying comments and justifies why they are sometimes okay.</p>
+
+<p>This is where I will note that <em>Code Complete Second Edition</em> is a book published by <a href="http://en.wikipedia.org/wiki/Microsoft_Press">Microsoft Press</a>. I was often surprised by McConnell&rsquo;s adamance that Visual Basic is the most popular programming language at the time of publishing. Even circa 2004 (the year this book was published), the <a href="http://www.tiobe.com/index.php/content/paperinfo/tpci/index.html">Tiobe index</a> shows VB behind Java, C, and C++. The <a href="https://sites.google.com/site/pydatalog/pypl/PyPL-PopularitY-of-Programming-Language">PyPl index</a> also shows VB behind Java, PHP, C, and C++ in 2004. For the record, VB is a silly language.</p>
+
+<h3>Who Would Like This</h3>
+
+<p>This book would be nice required reading for students. Given the length and technical depth, it&rsquo;s practically a textbook. Developers a few years out of university would still enjoy this text, but some topics are so obvious or overdone that many readers may start skipping chapters. If a developer knew of precisely the area he or she wanted to improve, then said developer could likely benefit from perusing a chapter of this book covering that topic.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Who Moved My Cheese?: An Amazing Way to Deal with Change in Your Work and in Your Life]]></title>
+    <link href="http://larryprice.github.com/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life/"/>
+    <updated>2012-11-27T20:47:00-05:00</updated>
+    <id>http://larryprice.github.com/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life</id>
+    <content type="html"><![CDATA[<p><img src="http://dontstepinthepoop.com/wp-content/uploads/2010/01/cheese.jpg" style="border: 0" width="130px" title="Who Moved My Cheese?" alt="Cover for Who Moved My Cheese?" /><br/>
+<a href="http://www.amazon.com/gp/product/0399144463/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0399144463&amp;linkCode=as2&amp;tag=larpriandthee-20"><strong>Who Moved My Cheese?: An Amazing Way to Deal with Change in Your Work and in Your Life</strong></a><br/>
+<strong>Spencer Johnson</strong></p>
+
+<hr />
+
+<h3>The Gist</h3>
+
+<p><em>Who Moved My Cheese?</em> is a book about being prepared to lose your job. The book was written during times of rapid economic growth caused by the <a href="http://en.wikipedia.org/wiki/Dot-com_boom">dot-com bubble</a>, which resulted in many companies emerging out of the primordial ooze and then falling back down into the tarpit after an extremely short time on the market. The author uses a cute analogy about cheese to convey that success is fleeting, and each day could be the day a company will shut down.</p>
+
+<h3>My Feelings</h3>
+
+<p>This is another book I read during summer 2012 and wrote a mediocre write-up regarding. This write-up is fresh and in my new write-up style.</p>
+
+<p>The authors of this book want to help people realize that their job is a gift, not a privilage. Just because a company is doing well this quarter does not imply that it will still be in business next quarter. During the time period this book was written in, this was especially true. The theory of companies during the late &lsquo;90s was to spend as much money as possible to gather as many customers as possible disregarding profits in the short-term (read: <a href="http://www.paulgraham.com/start.html">Get Large or Get Lost</a>). Of course, this kind of mentality did not fit all businesses, and many companies which looked like they would be the future leaders of the American economy were quickly forgotten by the mid-2000s (see: <a href="http://en.wikipedia.org/wiki/Pets.com">Pets.com</a>).</p>
+
+<p>The authors want employees to stop fearing change, and to accept it as a normal part of life. Sometimes companies falter, and oftentimes there&rsquo;s nothing an individual can do about it. In doing so, sometimes old friends are left behind while an individual moves on in search of bigger and better things. Sometimes it takes a long time to find those bigger and better things, but every time it&rsquo;s worth it due to the thrill of confronting your fears and exploring something new.</p>
+
+<p>The use of a &ldquo;maze&rdquo; with two tiny people and two anthropomorphic mice is strange and feels purposefully forced. The authors wanted to make a memorable anecdote, and they succeeded with their strange analogy. Having said that, several times I was confused by the names of the four characters as they were very similar and nonsensical. Because of this, I had to reread some sections after referencing the first page of the book to determine who was who.</p>
+
+<p>The primary author appended &ldquo;MD&rdquo; to his name on the front cover. Similarly, the &ldquo;secondary&rdquo; author appended a &ldquo;PhD&rdquo; to his name on the front cover. This bothered me as it is an obvious ploy to make people value the opinions held within the book more highly because they are written by &ldquo;doctors.&rdquo;</p>
+
+<h3>Who Would Like This</h3>
+
+<p>This is a book that tries to prepare people for the worst and to teach them not to just give up when the future looks grim. It could be an interesting book for anyone, especially after several years of an economic boom caused by a new technology. A person who is very content in their current position at a company could also benefit from this book, as it may give them some incentive to seek out change.</p>
+]]></content>
+  </entry>
+  
+</feed>

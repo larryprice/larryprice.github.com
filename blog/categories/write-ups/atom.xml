@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: write-ups | Larry Price]]></title>
+  <link href="http://larryprice.github.com/blog/categories/write-ups/atom.xml" rel="self"/>
+  <link href="http://larryprice.github.com/"/>
+  <updated>2013-11-14T22:01:21-05:00</updated>
+  <id>http://larryprice.github.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The Pragmatic Programmer]]></title>
+    <link href="http://larryprice.github.com/blog/2013/09/08/the-pragmatic-programmer/"/>
+    <updated>2013-09-08T12:00:00-04:00</updated>
+    <id>http://larryprice.github.com/blog/2013/09/08/the-pragmatic-programmer</id>
+    <content type="html"><![CDATA[<blockquote><p>Don&rsquo;t be a slave to history. Don&rsquo;t let existing code dictate future code. All code can be replaced if it is no longer appropriate</p></blockquote>
+
+<h3>The Gist</h3>
+
+<p><a href="http://www.amazon.com/gp/product/020161622X/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=020161622X&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>The Pragmatic Programmer</em></a> written by Andrew Hunt and David Thomas is a book about being an above-average software developer.</p>
+
+<h3>My Opinion</h3>
+
+<p>There are many good concepts in this book. However, I&rsquo;ve been reading a bit much lately and found that most of the topics covered have been rehashed in other books. As it turns out, re-reading this kind of motivational book is less exciting when you&rsquo;ve read similar texts earlier in the year.</p>
+
+<p>I did enjoy the section on Refactoring; there has been some discussion on my current project team of what to do when you see &ldquo;gnarly&rdquo; code. This section reiterates the fact that poorly-written code should be updated. The authors talk about treating code as organic. Refactoring your code as it grows is the same as reevaluating oneself as one grows older. Changing one&rsquo;s hair or clothes, changing what one eats or reads or watches (inputs), or changing a daily routine is just refactoring of your daily life: the person is the same and accomplishes largely the same tasks, but in a slightly different manner.</p>
+
+<p>One tip in this book is &ldquo;Use one editor well.&rdquo; I&rsquo;ve found that I love to use <a href="http://www.sublimetext.com/">Sublime Text</a> for my work in Ruby, Python, and markup languages. Having said that, I find Sublime an inappropriate tool for doing C++ (<a href="https://qt-project.org/wiki/Category:Tools::QtCreator">Qt Creator</a>), Java (<a href="http://eclipse.org/">Eclipse</a> or even <a href="https://netbeans.org/">NetBeans</a>), or anything .NET (duh Visual Studio). Considering my job could involve any programming language, I would revise this tip to &ldquo;Use the right editor for the job, and learn to use it well.&rdquo;</p>
+
+<p>The chapter introductions were largely worthless to me: long-winded summaries of EVERYTHING in the chapter. I eventually trained myself to automatically skip the chapter intros in favor of reading the details. It seems that I could have just as easily gone the other way and gotten away with only reading the intros, but that hardly seems like any fun.</p>
+
+<h3>Who Would Like This</h3>
+
+<p>Fresh-outs should read this book. It&rsquo;s not too long and it&rsquo;s split into manageable chapters. Great for fresh-out book clubs, in which I probably should have participated.</p>
+
+<p>Who would not like this? People who have read books with similar premeses, such as <a href="/blog/2013/02/19/code-complete-second-edition/"><em>Code Complete</em></a>, within recent memory.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Effective C++]]></title>
+    <link href="http://larryprice.github.com/blog/2013/07/16/effective-c-plus-plus/"/>
+    <updated>2013-07-16T22:11:00-04:00</updated>
+    <id>http://larryprice.github.com/blog/2013/07/16/effective-c-plus-plus</id>
+    <content type="html"><![CDATA[<h3>The Gist</h3>
+
+<p><a href="http://www.amazon.com/gp/product/0321334876/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0321334876&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Effective C++</em></a> is a list of ways to write not-your-average-bear C++ code. The author, <a href="http://www.aristeia.com/">Scott Meyers</a>, outlines 8 specific topics for improving code, and a few more miscellaneous tips.</p>
+
+<h3>My Opinion</h3>
+
+<p>Lots of good can come from reading this book. I borrowed it from a more-experienced co-worker and noticed many of the interesting coding standards this co-worker used came directly from this book. And I agree with it. I&rsquo;ve been actively trying to follow the lessons learned in this book from the moment I picked it up.</p>
+
+<p>I learned C++ the hard way: I was thrown into an internship where I didn&rsquo;t really have enough skills to contribute to the project, and my &ldquo;boss&rdquo; didn&rsquo;t really have anywhere to put me. So I was handed a book, pointed to <a href="http://www.cplusplus.com/">this wonderous website</a>, and I wrote some little helper apps for the project. I wasn&rsquo;t taught anything about form or any of that formal business. Then I took a C++ class in college, and never bothered to learn any of the coding standards because I had enough previous knowledge to get by my own way (and appear to be really good while doing it).</p>
+
+<p>So this book showed me a lot of the why certain things in C++ are the way they are. It explained to me that a copy constructor is called every time you pass an object directly through a function, and how assignment operators are used whenever an equals sign appears. It told me why my destructors need to be virtual. It explained a lot about smart_ptr and auto_ptr that I never thought to think about.</p>
+
+<p>Admittedly, there are parts of the book that are hard to follow. I consider Chapter 7 (Templates and Generic Programming) and Chapter 8 (Customizing new and delete) to be extremely technical chapters not meant for the faint of heart, and the lessons learned in these chapters are not necessarily useful in day-to-day programming. Chapter 9 is simply called Miscellany, and it delivers no new information for improving one&rsquo;s C++ skills.</p>
+
+<h3>Who Would Like This</h3>
+
+<p>C++ Programmers should have this book (at least the first 6 chapters) crammed down their throats and into their squishy pink brains. After learning all the &ldquo;basic&rdquo; concepts of C++, the lessons this book teaches in design and the nature of C++ should be taken into consideration.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Joel On Software]]></title>
+    <link href="http://larryprice.github.com/blog/2013/04/28/joel-on-software/"/>
+    <updated>2013-04-28T11:38:00-04:00</updated>
+    <id>http://larryprice.github.com/blog/2013/04/28/joel-on-software</id>
+    <content type="html"><![CDATA[<blockquote><p>We&rsquo;re programmers. Programmers are, in their hearts, architects, and the
+first thing they want to do when they get to a site is to bulldoze the place
+flat and build something grand. We&rsquo;re not excited by incremental renovation:
+tinkering, improving, planting flower beds.</p>
+
+<p>&mdash; Joel Spolsky, &ldquo;Things you Should Never Do, Part I&rdquo;</p></blockquote>
+
+<h3>The Gist</h3>
+
+<p><a href="http://www.amazon.com/gp/product/1590593898/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1590593898&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Joel On Software</em></a> is a collection of blog posts by the great <a href="http://www.joelonsoftware.com/">Joel Spolsky</a>. He has risen to Internet Fame after his experience working for Microsoft and eventually starting his own company. The &ldquo;chapters&rdquo; (blog posts) provide insight into picking a language for your codebase, recruiting engineers, managing programmers, fixing bugs, paper prototyping, and how Microsoft works.</p>
+
+<h3>My Opinion</h3>
+
+<p>Joel Spolsky is a god sent down from Mount Olympus to calmly explain to us why we are sometimes terrible people and then goes on to tell us it&rsquo;s okay and we should learn from our past. I loved this book, especially since I read it at the same time as some really terrible books (namely <a href="http://www.amazon.com/gp/product/0672326140/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0672326140&amp;linkCode=as2&amp;tag=larpriandthee-20">The Inmates are Running the Asylum</a> and <a href="http://www.amazon.com/gp/product/1491017082/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1491017082&amp;linkCode=as2&amp;tag=larpriandthee-20">Enterprise Games</a>; I do not recommend these books).</p>
+
+<p>Spolsky talks a lot about specs in the first part of the book, and at first I thought that he was stating too much of the obvious; but then why don&rsquo;t we do specs in this obvious way? Instead, we resign ourselves to write a tiny portion of the spec, start programming, and then implicitly change the spec while only haphazardly updating our documentation. I&rsquo;ve been on projects before where we would have greatly benefitted from having a solid spec; we knew exactly what needed to be done, because we were rewriting a successful product the company had released several years ago. With an ever-changing spec, we programmed ourselves into a hole, and struggled for at least half a year to claw our way back out. I have to wonder if more pre-planning would have saved us from ourselves.</p>
+
+<p>Spolsky&rsquo;s advice on hiring people is invaluable (<a href="http://www.joelonsoftware.com/articles/GuerrillaInterviewing3.html">The Guerrilla Guide to Interviewing</a>). In fact, I wish that I had read some of these blog posts while I was interviewing. Spolsky says that recruiters should ask &ldquo;impossible questions&rdquo; and not worry about what the answers given are, just that the recruit comes up with something. He says to stop asking trivia questions. He talks about relying on all interviewers equally: if any two interviewers say &ldquo;No&rdquo; to a candidate, the candidate is toast. He talks about asking candidates about projects and looking for passion, which is almost always the sign of a good programmer.</p>
+
+<p>Spolsky talks about the commodity market of software/hardware. To sum it up, the supply of one drives the demand of the other. This section made me think about the current PC market: hardware is cheap <em>and</em> software is cheap. Not only is software cheap, but it&rsquo;s often <em>free</em>. Prices for hardware haven&rsquo;t been going down at nearly the rate it used to, but that seems natural as the price approaches the cost of labor and parts. Most of the hardware innovation right now seems to be aimed at the tiny computers in our pockets (or <a href="http://www.google.com/glass/start/">on our face</a>, soon enough). Google&rsquo;s software makes money by displaying ads using its search engine, so Google has entered the market of making software that is compatible with all kinds of different hardware. Google has played the commodities game like a champ, getting hardware running their software into hundreds of millions of pockets.</p>
+
+<p>Some of the weaker parts of the book are when Spolsky talks about .NET. I&rsquo;m not going to go into detail, but when he wrote these posts, .NET was just entering the market. Spolsky starts by bashing .NET for making all the old Windows API code unusable, but in later blog posts falls hard for .NET and starts thinking about ways to rewrite his entire life in .NET.</p>
+
+<h3>Who Would Like This</h3>
+
+<p>I believe that programmers are the main audience for this book, and I am a programmer who loved reading it. Spolsky does not talk down to the reader, nor does he dumb down the nitty-gritty technical blog posts.</p>
+
+<p>Programmers who intend to become managers may get added benefit from this book, as Spolsky discusses some interesting recruiting techniques and ways to deal with programmers. My company uses some of Spolsky&rsquo;s advice when hiring engineers (quite a bit of it, thinking back to my interview), and we&rsquo;ve been hiring only the best and brightest cowboys in the Midwest for years.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Code Complete Second Edition]]></title>
+    <link href="http://larryprice.github.com/blog/2013/02/19/code-complete-second-edition/"/>
+    <updated>2013-02-19T22:38:00-05:00</updated>
+    <id>http://larryprice.github.com/blog/2013/02/19/code-complete-second-edition</id>
+    <content type="html"><![CDATA[<blockquote><p>Design is a process of carefully planning small mistakes in order to avoid making big ones.
+&mdash; Steve McConnell</p></blockquote>
+
+<h3>The Gist</h3>
+
+<p><em><a href="http://www.amazon.com/gp/product/0735619670/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0735619670&amp;linkCode=as2&amp;tag=larpriandthee-20">Code Complete Second Edition</a></em> by Steve McConnell is the ultimate programmer&rsquo;s handbook, though certainly not a pocket guide considering its massive 850+ page size. This book contains a seemingly endless amount of information regarding the state of programming circa 2004. Topics range from extremely technical, such as making code readable above making it clever, to office politics, such as dealing with non-technical managers.</p>
+
+<h3>My Opinion</h3>
+
+<p>McConnell has written an encyclopedia for software development. In doing so, the book sometimes suffers from the &ldquo;wide as an ocean, shallow as a puddle&rdquo; complex. Nonetheless, the book holds an incredible amount of information that I found refreshing to see in print.</p>
+
+<p>The use of the term &ldquo;construction&rdquo; to refer to coding throughout the book is an apt analogy for McConnell&rsquo;s views on the world of software development. Before beginning construction, a team should have a plan. Construction requires a solid base. While constructing a project, individuals should ensure that anyone else could look at their part of the project and figure out what&rsquo;s happening. Working with a partner often improves quality. People doing construction should test their work to ensure the integrity of their product. Redoing lower levels causes a lot of pain. The team is unlikely to hit the original due date. Etc, etc.</p>
+
+<p>Many things in this book go directly against what I was taught in at university. McConnell recites a quote several times in the book:</p>
+
+<blockquote><p>Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.
+&mdash; Brian Kernighan</p></blockquote>
+
+<p>At university, we&rsquo;re taught all the secrets of writing clever code: pointer manipulation, recursion, inappropriate variable reuse, and others. We were also never taught to plan ahead (&hellip;besides flowcharts, which were never required) or test, both of which McConnell highly recommends as necessary steps in software development. It&rsquo;s no wonder my programs took so long to debug! Of course, I&rsquo;ve learned to perform these tasks naturally while working as a Real Life Programmer. Reading this book is likely more helpful than taking the first few semesters of programming at university.</p>
+
+<p>A small issue I had was a wishy-washy attitude towards comments. In one chapter, McConnell describes having minimal comments in a code and keeping it mostly self-documenting. He then goes on to show all kinds of different, horrifying comments and justifies why they are sometimes okay.</p>
+
+<p>This is where I will note that <em>Code Complete Second Edition</em> is a book published by <a href="http://en.wikipedia.org/wiki/Microsoft_Press">Microsoft Press</a>. I was often surprised by McConnell&rsquo;s adamance that Visual Basic is the most popular programming language at the time of publishing. Even circa 2004 (the year this book was published), the <a href="http://www.tiobe.com/index.php/content/paperinfo/tpci/index.html">Tiobe index</a> shows VB behind Java, C, and C++. The <a href="https://sites.google.com/site/pydatalog/pypl/PyPL-PopularitY-of-Programming-Language">PyPl index</a> also shows VB behind Java, PHP, C, and C++ in 2004. For the record, VB is a silly language.</p>
+
+<h3>Who Would Like This</h3>
+
+<p>This book would be nice required reading for students. Given the length and technical depth, it&rsquo;s practically a textbook. Developers a few years out of university would still enjoy this text, but some topics are so obvious or overdone that many readers may start skipping chapters. If a developer knew of precisely the area he or she wanted to improve, then said developer could likely benefit from perusing a chapter of this book covering that topic.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Who Moved My Cheese?: An Amazing Way to Deal with Change in Your Work and in Your Life]]></title>
+    <link href="http://larryprice.github.com/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life/"/>
+    <updated>2012-11-27T20:47:00-05:00</updated>
+    <id>http://larryprice.github.com/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life</id>
+    <content type="html"><![CDATA[<p><img src="http://dontstepinthepoop.com/wp-content/uploads/2010/01/cheese.jpg" style="border: 0" width="130px" title="Who Moved My Cheese?" alt="Cover for Who Moved My Cheese?" /><br/>
+<a href="http://www.amazon.com/gp/product/0399144463/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0399144463&amp;linkCode=as2&amp;tag=larpriandthee-20"><strong>Who Moved My Cheese?: An Amazing Way to Deal with Change in Your Work and in Your Life</strong></a><br/>
+<strong>Spencer Johnson</strong></p>
+
+<hr />
+
+<h3>The Gist</h3>
+
+<p><em>Who Moved My Cheese?</em> is a book about being prepared to lose your job. The book was written during times of rapid economic growth caused by the <a href="http://en.wikipedia.org/wiki/Dot-com_boom">dot-com bubble</a>, which resulted in many companies emerging out of the primordial ooze and then falling back down into the tarpit after an extremely short time on the market. The author uses a cute analogy about cheese to convey that success is fleeting, and each day could be the day a company will shut down.</p>
+
+<h3>My Feelings</h3>
+
+<p>This is another book I read during summer 2012 and wrote a mediocre write-up regarding. This write-up is fresh and in my new write-up style.</p>
+
+<p>The authors of this book want to help people realize that their job is a gift, not a privilage. Just because a company is doing well this quarter does not imply that it will still be in business next quarter. During the time period this book was written in, this was especially true. The theory of companies during the late &lsquo;90s was to spend as much money as possible to gather as many customers as possible disregarding profits in the short-term (read: <a href="http://www.paulgraham.com/start.html">Get Large or Get Lost</a>). Of course, this kind of mentality did not fit all businesses, and many companies which looked like they would be the future leaders of the American economy were quickly forgotten by the mid-2000s (see: <a href="http://en.wikipedia.org/wiki/Pets.com">Pets.com</a>).</p>
+
+<p>The authors want employees to stop fearing change, and to accept it as a normal part of life. Sometimes companies falter, and oftentimes there&rsquo;s nothing an individual can do about it. In doing so, sometimes old friends are left behind while an individual moves on in search of bigger and better things. Sometimes it takes a long time to find those bigger and better things, but every time it&rsquo;s worth it due to the thrill of confronting your fears and exploring something new.</p>
+
+<p>The use of a &ldquo;maze&rdquo; with two tiny people and two anthropomorphic mice is strange and feels purposefully forced. The authors wanted to make a memorable anecdote, and they succeeded with their strange analogy. Having said that, several times I was confused by the names of the four characters as they were very similar and nonsensical. Because of this, I had to reread some sections after referencing the first page of the book to determine who was who.</p>
+
+<p>The primary author appended &ldquo;MD&rdquo; to his name on the front cover. Similarly, the &ldquo;secondary&rdquo; author appended a &ldquo;PhD&rdquo; to his name on the front cover. This bothered me as it is an obvious ploy to make people value the opinions held within the book more highly because they are written by &ldquo;doctors.&rdquo;</p>
+
+<h3>Who Would Like This</h3>
+
+<p>This is a book that tries to prepare people for the worst and to teach them not to just give up when the future looks grim. It could be an interesting book for anyone, especially after several years of an economic boom caused by a new technology. A person who is very content in their current position at a company could also benefit from this book, as it may give them some incentive to seek out change.</p>
+]]></content>
+  </entry>
+  
+</feed>

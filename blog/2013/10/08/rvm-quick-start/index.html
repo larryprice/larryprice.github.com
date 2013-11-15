@@ -1,0 +1,381 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>RVM Quick Start - Larry Price</title>
+  <meta name="author" content="Larry Price">
+
+  
+  <meta name="description" content="When I was working on a few different projects at once, I started running into issues where my Ruby gem versions would start to mismatch. How did I &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://larryprice.github.com/blog/2013/10/08/rvm-quick-start">
+  <link href="/cupicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Larry Price" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Montserrat+Alternates|Marcellus' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35669093-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner" style="background:url(/images/coffee-stain.png) top right no-repeat; background-size: auto 100%;"><hgroup>
+  <h1><a href="/">Larry Price</a></h1>
+  
+    <h2>And The Endless Cup Of Coffee</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:larryprice.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/books">Books</a></li>
+  <li><a href="/blog/projects">Projects</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">RVM Quick Start</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-08T22:10:00-04:00" pubdate data-updated="true">Oct 8<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>When I was working on a few different projects at once, I started running into issues where my Ruby gem versions would start to mismatch. How did I fix that issue? Naively. I adjusted the versions as necessary so my gems were always the same version. That was&hellip; pretty dumb. To make up for my past ignorance, I&rsquo;ve been exploring ways to manage my Ruby versions and my gems intelligently. Enter <a href="https://rvm.io/">RVM</a>.</p>
+
+<p>RVM is a simple tool to solve just problems. And it works pretty well. I hit some kinks along the way, but my installation pleases me well enough. Getting RVM is not for the faint of heart. Maybe there are better ways to do it, but the website says to execute the following:</p>
+
+<figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; curl -L https://get.rvm.io | bash -s stable
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This command uses curl to fetch the data that lives at <code>https://get.rvm.io</code>, which happens to be a big bash script. It executes the bash script with the args <code>-s stable</code>. &lsquo;Stable&rsquo; means the latest stable release of RVM. I could just as easily give it &lsquo;dev&rsquo; and get the latest developer release instead, but I really don&rsquo;t want that. So that command does a lot of stuff and may give you some further instructions to run before you can continue. Use that big head of yours and follow the instructions. You may also need to restart a terminal to get RVM to be recognized as a command. Since I was using <code>gnome-terminal</code>, I had to follow these <a href="https://rvm.io/integration/gnome-terminal">instructions</a>.</p>
+
+<p>Now I want RVM to know about some Ruby versions. For a full list of possible Ruby versions to install, run <code>rvm list known</code>. I just want 1.9.3. I found that I needed to do this even though I had 1.9.3 installed on my system previously.</p>
+
+<figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; rvm install ruby-1.9.3
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In Ubuntu 13.04, this command installs ruby-1.9.3 in <code>~/.rvm/rubies/ruby-1.9.3-p448/bin/ruby</code>. I&rsquo;ve found that this also sets my default Ruby to the RVM version of Ruby, which I don&rsquo;t want. To verify and undo this, I executed the following commands outside of my project directory.</p>
+
+<figure class='code'><figcaption><span>/home/lrp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; which ruby
+</span><span class='line'>/home/lrp/.rvm/rubies/ruby-1.9.3-p448/bin/ruby
+</span><span class='line'>&gt; <span class="nb">echo</span> <span class="s2">&quot;D&#39;oh&quot;</span>
+</span><span class='line'>D<span class="err">&#39;</span>oh
+</span><span class='line'>&gt; rvm use system
+</span><span class='line'>Now using system ruby.
+</span><span class='line'>&gt; which ruby
+</span><span class='line'>/usr/bin/ruby
+</span><span class='line'>&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now that that&rsquo;s settled, I want to tell RVM to use the local version of Ruby for my project and to install any gems in a special location.</p>
+
+<figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; rvm 1.9.3@my-project --create --ruby-version
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This creates a gemset and ruby-version file (<code>.ruby-gemset</code> and <code>.ruby-version</code> files) using the Ruby installation 1.9.3 created above. I specifiy to use <code>--ruby-version</code> instead of <code>--rvmrc</code> because RVM told me that I should. After some research, the <code>.ruby-version</code> file is used by several other tools, so this will keep my potential number of config files low. Now I check that all my Ruby versions are okay.</p>
+
+<figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; which ruby
+</span><span class='line'>/home/lrp/.rvm/rubies/ruby-1.9.3-p448/bin/ruby
+</span><span class='line'>&gt; <span class="nb">cd</span> ..
+</span><span class='line'>&gt; which ruby
+</span><span class='line'>/usr/bin/ruby
+</span><span class='line'>&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When in my project directory, all the gems I install will be installed to my specified gemset, which means they are no longer cluttering my global gemspace, even when I install them using Bundler. It also means that I can use ruby-1.9.3 for this project and 2.0 for another project with minimal mental overhead. This makes me a happy developer.</p>
+
+<p>I only glazed over the installation process and documentation for RVM. Go to <a href="https://rvm.io/">the web site</a> for more.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Larry Price</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-08T22:10:00-04:00" pubdate data-updated="true">Oct 8<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ruby/'>ruby</a>, <a class='category' href='/blog/categories/rvm/'>rvm</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  <div class="g-plusone" data-size="small"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/09/08/the-pragmatic-programmer/" title="Previous Post: The Pragmatic Programmer">&laquo; The Pragmatic Programmer</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/" title="Next Post: Installing GTest and GMock Libs in Ubuntu 13.04">Installing GTest and GMock Libs in Ubuntu 13.04 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>void? Larry</h1>
+  <p>I'm a codeslinger debugging from the mean streets of Indiana. Welcome to my blog, where I'll tell the tales of wondrous things I discover in the digital jungle. Leave a comment, tweet me <a href="https://twitter.com/larryrprice">@larryrprice</a>, or find me on <a href="http://www.linkedin.com/pub/larry-price/3a/630/47b">LinkedIn</a>.</p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/11/14/copy-data-using-qmake/">Copy Data Using qmake</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/">Installing GTest and GMock Libs in Ubuntu 13.04</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/08/rvm-quick-start/">RVM Quick Start</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/08/the-pragmatic-programmer/">The Pragmatic Programmer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/31/using-foreman-to-create-an-upstart-service/">Using Foreman to Create an Upstart Service</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Tag Cloud</h1>
+    <span id="tag-cloud"><a href='/blog/categories/c-' style='font-size: 112.0%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 106.0%'>capybara</a> <a href='/blog/categories/cucumber' style='font-size: 112.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 130.0%'>database</a> <a href='/blog/categories/foreman' style='font-size: 106.0%'>foreman</a> <a href='/blog/categories/gmock' style='font-size: 106.0%'>gmock</a> <a href='/blog/categories/gtest' style='font-size: 106.0%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 106.0%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 106.0%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 106.0%'>heroku</a> <a href='/blog/categories/linux' style='font-size: 106.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 112.0%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 118.0%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 106.0%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 106.0%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 106.0%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 112.0%'>nosql</a> <a href='/blog/categories/pokephile' style='font-size: 124.0%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 106.0%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 106.0%'>qt</a> <a href='/blog/categories/rails' style='font-size: 106.0%'>rails</a> <a href='/blog/categories/retro' style='font-size: 112.0%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 112.0%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 148.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 106.0%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 106.0%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 142.0%'>sep-blog-battle</a> <a href='/blog/categories/sinatra' style='font-size: 124.0%'>sinatra</a> <a href='/blog/categories/tdd' style='font-size: 106.0%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 106.0%'>testing</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 106.0%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 106.0%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 106.0%'>upstart</a> <a href='/blog/categories/web' style='font-size: 118.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 142.0%'>write-ups</a> </span>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/larryprice">@larryprice</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'larryprice',
+            count: 5,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  <center>
+	  Copyright &copy; 2013 - Larry Price -
+	  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span><br/>
+	  Note: Views and opinions expressed belong solely to the author and do not represent the views of the any other person or company.
+	</center>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'larryprice';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://larryprice.github.com/blog/2013/10/08/rvm-quick-start/';
+        var disqus_url = 'http://larryprice.github.com/blog/2013/10/08/rvm-quick-start/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

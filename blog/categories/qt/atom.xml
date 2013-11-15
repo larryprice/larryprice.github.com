@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: qt | Larry Price]]></title>
+  <link href="http://larryprice.github.com/blog/categories/qt/atom.xml" rel="self"/>
+  <link href="http://larryprice.github.com/"/>
+  <updated>2013-11-14T22:01:21-05:00</updated>
+  <id>http://larryprice.github.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Copy Data Using qmake]]></title>
+    <link href="http://larryprice.github.com/blog/2013/11/14/copy-data-using-qmake/"/>
+    <updated>2013-11-14T21:24:00-05:00</updated>
+    <id>http://larryprice.github.com/blog/2013/11/14/copy-data-using-qmake</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ll take things that should be really easy but are in fact impossible for $1000, Mr Trebek.</p>
+
+<p>I have a <a href="https://qt-project.org/wiki/Qt_5.0">Qt</a> desktop app that uses <a href="https://qt-project.org/doc/qt-4.8/qmake-manual.html">qmake</a>. I have tests. I have test data that I need to copy to my build directory. Not only that, but I want to copy a whole directory recursively. In Linux <em>and</em> Windows. You must be thinking to yourself, &lsquo;There&rsquo;s no way that&rsquo;s possible, leave me out of your crazy plans!&rsquo; Well to that I say nay. Nay indeed.</p>
+
+<p>I originally copied my test data using the <code>INSTALLS</code> variable. My data folder is just a directory sitting in the test source called &ldquo;TestData.&rdquo; This solution is fantastic because it works cross-platform.</p>
+
+<p>``` make MyBAProjectTest.pro
+install_it.path = $${OUT_PWD}
+install_it.files += TestData/</p>
+
+<p>INSTALLS += install_it
+```</p>
+
+<p>However, this means that if I ever have a clean directory, I have to run <code>make install</code> to install my test data. What a pain! Why bother! Why even write tests when life is this unjust!</p>
+
+<p>BUT WAIT! After combing the depths of the internets for much of the evening, I was able to find many halfway solutions to my original problem. The concept is to add commands to the <code>QMAKE_POST_LINK</code> variable.</p>
+
+<p>For Linux, I use <code>cp</code>:</p>
+
+<p><code>make MyBAProjectTest.pro
+QMAKE_POST_LINK += $$quote(cp -rf $${PWD}/TestData $${OUT_PWD})
+</code></p>
+
+<p>For Windows, I use <code>xcopy</code>:</p>
+
+<p>``` make MyBAProjectTest.pro
+PWD_WIN = $${PWD}
+PWD_WIN ~= s,/,\,g</p>
+
+<p>QMAKE_POST_LINK += $$quote(mkdir DestFolder)
+QMAKE_POST_LINK += $$quote(xcopy $${PWD_WIN}\TestData $${OUT_PWD_WIN}\TestData /E)
+```</p>
+
+<p>I also want that directory to be deleted when I run <code>make clean</code>. Cleaning up just means adding some commands to the <code>QMAKE_CLEAN</code> directive. I also want to run the appropriate commands whether I&rsquo;m on Unix or Windows without having to modify my <code>.pro</code> file. Wrapping the previous commands in what I call an &ldquo;OS-space&rdquo; will cause those commands to only run in the specified operating system.</p>
+
+<p>``` make MyBAProjectTest.pro
+win32 {</p>
+
+<pre><code>PWD_WIN = $${PWD}
+PWD_WIN ~= s,/,\\,g
+
+QMAKE_POST_LINK += $$quote(mkdir DestFolder)
+QMAKE_POST_LINK += $$quote(xcopy $${PWD_WIN}\\TestData $${OUT_PWD_WIN}\\TestData /E)
+
+QMAKE_CLEAN += /s /f /q TestData &amp;&amp; rd /s /q TestData
+</code></pre>
+
+<p>}</p>
+
+<p>unix {</p>
+
+<pre><code>QMAKE_POST_LINK += $$quote(cp -rf $${PWD}/TestData $${OUT_PWD})
+
+QMAKE_CLEAN += -r TestData
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Data copied, tests working again. Take that, Nokia; no matter how difficult you make your build-processing tool, I&rsquo;ll figure out how to contort it to my whims.</p>
+]]></content>
+  </entry>
+  
+</feed>

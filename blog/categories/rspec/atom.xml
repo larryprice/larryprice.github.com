@@ -1,0 +1,618 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: rspec | Larry Price]]></title>
+  <link href="http://larryprice.github.com/blog/categories/rspec/atom.xml" rel="self"/>
+  <link href="http://larryprice.github.com/"/>
+  <updated>2013-11-14T22:01:21-05:00</updated>
+  <id>http://larryprice.github.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Moving from the MongoDB Ruby Driver to Mongoid]]></title>
+    <link href="http://larryprice.github.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/"/>
+    <updated>2013-01-05T20:04:00-05:00</updated>
+    <id>http://larryprice.github.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid</id>
+    <content type="html"><![CDATA[<p>This is Part 2 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="/blog/categories/pokephile">Pokephile category</a>. Part 2 details refactoring code using the MongoDB Ruby driver to use Mongoid. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>.</p>
+
+<h3>What I&rsquo;ve Done</h3>
+
+<p>In a <a href="/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/">previous post</a>, I described creating a class that would populate a database with data scraped from the internet. I used the MongoDB Ruby driver to accomplish this. However, using the driver can be laborious and there are simpler ways. In this post, I&rsquo;m going to refactor the Populater class to use Mongoid.</p>
+
+<h3>Mongoid</h3>
+
+<p><a href="http://http://mongoid.org/en/mongoid/index.html">Mongoid</a> (pronounced mann-goyd) is an Object-Document Wrapper for Ruby. Using mongoid abstracts some of the database operations that must be performed when using the MongoDB Ruby driver. It comes in handy when using models in an MVC application. To install the Mongoid gem:</p>
+
+<p><code>
+sudo gem install mongoid
+</code></p>
+
+<h3>Refactoring</h3>
+
+<p>In populater.rb, we only inserted one structure of document into our &ldquo;pokemons&rdquo; collection. That makes this a great opportunity to use Mongoid. We remember that there were four fields in our document: number (string), name (string), image link (string), and types (array). Knowing this, we can create a model for this data:</p>
+
+<p>``` ruby project/pokemon.rb
+require &lsquo;mongoid&rsquo;</p>
+
+<p>class Pokemon</p>
+
+<pre><code>include Mongoid::Document
+
+field :number, type: String
+field :name, type: String
+field :types, type: Array
+field :image, type: String
+</code></pre>
+
+<p>end
+```</p>
+
+<p>And that&rsquo;s it for our model. Although we specified the types in this case, it&rsquo;s not necessary if we want a looser definition of our model. Here&rsquo;s how we change our implementation file:</p>
+
+<p>``` ruby project/tools/populate/populater.rb</p>
+
+<h1>require &lsquo;mongo&rsquo; #deleted</h1>
+
+<p>require_relative &lsquo;../../pokemon&rsquo; #added
+require &lsquo;nokogiri&rsquo;
+require &lsquo;open-uri&rsquo;</p>
+
+<p>class Populater</p>
+
+<pre><code>#def initialize(db_name) #removed
+</code></pre>
+
+<p>  def initialize #added</p>
+
+<pre><code>  #@col = Mongo::Connection.new.db(db_name)["pokemons"] #deleted
+  #@col.remove #deleted
+  Pokemon.delete_all #added
+  @data = Nokogiri::HTML(open("http://pokemon.wikia.com/wiki/List_of_Pok%C3%A9mon"))
+</code></pre>
+
+<p>  end</p>
+
+<p>  def add_pokemon(num_to_add)</p>
+
+<pre><code>@data.xpath("//table[@class='wikitable sortable']/tr").each do |row|
+    break if num_to_add &lt;= 0
+    dex_num = row.at_xpath('td/text()').to_s.strip
+    next if dex_num.nil? || dex_num.empty?
+    dex_name = row.at_xpath('td[2]/a/text()').to_s.strip
+
+    unless dex_num == "000"
+        type_1 = row.at_xpath('td[4]/a/span/text()').to_s.strip
+        type_2 = row.at_xpath('td[5]/a/span/text()').to_s.strip || row.at_xpath('td[5]/text()').to_s.strip
+        image_link = "http://img.pokemondb.net/artwork/#{dex_name.downcase}.jpg"
+    else
+        type_1 = row.at_xpath('td[4]/text()').to_s.strip
+        type_2 = row.at_xpath('td[5]/text()').to_s.strip
+        image_link = "images/missingo.png"
+    end
+
+    types = Array.new
+    types &lt;&lt; type_1 unless type_1.nil? || type_1.empty?
+    types &lt;&lt; type_2 unless type_2.nil? || type_2.empty?
+
+    #@col.insert({:number =&gt; dex_num, :name =&gt; dex_name, :types =&gt; types, :image =&gt; image_link}) #deleted
+    Pokemon.create {:number =&gt; dex_num, :name =&gt; dex_name, :types =&gt; types, :image =&gt; image_link} #added
+
+    num_to_add -= 1
+end
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>That one&rsquo;s easy. We deleted four lines and added 3. However, now you can see that the Populater does not have to deal with connecting to the database, it only has to know what model it wants to modify. So we&rsquo;ve removed some complexity from this file by no longer requiring the database name on initialization. However, that means that someone else has to be in charge of setting up the initial connection. In the overlying project, we want that someone else to be a controller. In our tests, we want that someone else to be our test file. So let&rsquo;s do it. We&rsquo;re going to start by adding a config section in our before:all block.</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+require_relative &lsquo;../../populate/populater&rsquo;</p>
+
+<h1>require &lsquo;mongo&rsquo; #removed</h1>
+
+<p>require &lsquo;mongoid&rsquo; #added
+require_relative &lsquo;../../../pokemon&rsquo;</p>
+
+<p>describe Populater do</p>
+
+<pre><code>before:all do
+    Mongoid.configure do |config| #added
+        config.connect_to 'test' #added
+    end # added
+    #@col = Mongo::Connection.new.db('test')["pokemons"] # removed
+end
+...
+</code></pre>
+
+<p>end
+```</p>
+
+<p>In doing this, we&rsquo;ve set up any of our document models to use the &lsquo;test&rsquo; database. Now we go through each test and replace the Mongo Ruby Driver syntax with Mongoid syntax, which is similar to Ruby&rsquo;s Array syntax.</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+&hellip;</p>
+
+<p>describe Populater do</p>
+
+<pre><code>...
+before:each do
+    #@populater = Populater.new('test') #removed
+    @populater = Populater.new #added
+end
+
+describe "#new" do
+    it "does not throw when creating instance" do
+        #expect {Populater.new('test')}.to_not raise_error #removed
+        expect {Populater.new}.to_not raise_error #added
+    end
+
+    it "takes one param and returns a Populater instance" do
+        @populater.should be_an_instance_of Populater
+    end
+
+    it "empties pokemon collection" do
+        #@col.insert({:test =&gt; "hi there"}) #removed
+        #@col.find.count.should_not eql 0 #removed
+        #Populater.new('test') #removed
+        #@col.find.count.should eql 0 #removed
+        Pokemon.create #added
+        Pokemon.count.should eql 1 #added
+        Populater.new #added
+        Pokemon.count.should eql 0 #added
+    end
+end
+...
+</code></pre>
+
+<p>end
+```</p>
+
+<p>The &lsquo;new&rsquo; tests are straightforward. We remove the usage of an input parameter to the Populater initializer. The only significant change we make is to the &ldquo;empties pokemon collection&rdquo; test. Here we replace the Mongo Ruby Driver syntax of inserting into a collection with Mongoid syntax of creating a Pokemon document. The &lsquo;create&rsquo; method inserts a document into the collection with the given values, or defaults if none are given. We also see that we can remove the &ldquo;find&rdquo; syntax completely and just use a &ldquo;count&rdquo; method on the document type.</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+&hellip;
+describe Populater do</p>
+
+<pre><code>...
+describe "#add_pokemon" do
+    it "adds 0 pokemon given 0" do
+        @populater.add_pokemon 0
+        #@col.find.count.should eql 0 #removed
+        Pokemon.count.should eql 0 #added
+    end
+    ...
+    it "adds pokemon with a number" do
+        @populater.add_pokemon 1
+        #@col.find.count.should eql 1 #removed
+        #@col.find.first['number'].should_not be_nil #removed
+        Pokemon.count.should eql 1 #added
+        Pokemon.first['number'].should_not be_nil #added
+end
+  ...
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>The tests for adding 0, 1, and 2 documents to the collection are all very similar. The only change is to replace the Mongo Ruby Driver &ldquo;find.count&rdquo; syntax with the Mongoid &ldquo;count.&rdquo; The &ldquo;adds pokemon with a ____&rdquo; tests all undergo the same changes. I replace the &ldquo;.find.first&rdquo; statement with a simple &ldquo;.first&rdquo; to get the same meaning. So our Populater has been converted to use Mongoid instead of the Mongo Ruby Driver. Bully for us.</p>
+
+<p>There&rsquo;s one more change that would be nice to make before we hang up our hats. Configuring Mongoid using the .config syntax is okay, but it would be a lot nicer to keep all of our configuration in a file. We can create such a file called &ldquo;mongoid.yml&rdquo; and put some configuration information in it:</p>
+
+<p>``` yml project/mongoid.yml
+test:
+  sessions:</p>
+
+<pre><code>default:
+  database: test
+  hosts:
+    - localhost
+</code></pre>
+
+<p>```</p>
+
+<p>This syntax is valid in Mongoid 3.x. This is a very simply configuration for our test environment. Now we can go back into our test file and change the &lsquo;before:all&rsquo; block:</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+&hellip;
+describe Populater do</p>
+
+<pre><code>before:all do
+    #Mongoid.configure do |config| #removed
+    #   config.connect_to 'test' #removed
+    #end # removed
+    Mongoid.load! '../../../mongoid.yml', 'test' #added
+end
+...
+</code></pre>
+
+<p>end
+```</p>
+
+<p>The second parameter can be a string or a symbol. Now there&rsquo;s only one file to modify the environment configurations, and we&rsquo;re better off for it.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Schemaless databases with Ruby and MongoDB]]></title>
+    <link href="http://larryprice.github.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/"/>
+    <updated>2013-01-05T16:54:00-05:00</updated>
+    <id>http://larryprice.github.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb</id>
+    <content type="html"><![CDATA[<p>This is Part 1 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="/blog/categories/pokephile">Pokephile category</a>. Part 1 details getting started with MongoDB and creating a collection using data scraped off the web using <a href="http://nokogiri.org/">Nokogiri</a>. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>.</p>
+
+<h3>A little background</h3>
+
+<p>NoSQL is a database service used when working with a large amount of data that doesn&rsquo;t fit a relational model (read: <a href="http://en.wikipedia.org/wiki/Nosql">wikipedia</a>). It allows for mass storage without the overhead of SQL relations. There are many types of schemaless database services (<a href="http://en.wikipedia.org/wiki/Nosql#Taxonomy">here&rsquo;s a list</a>), but in particular I&rsquo;ve been looking into what&rsquo;s called &ldquo;Document Store.&rdquo;</p>
+
+<p>Documents can be any number of key-value fields with a unique id. Document Store services usually encode data in a simple format such as XML, YAML, JSON, or BSON for storage purposes. MongoDB is a document store service which uses BSON to store documents. In Mongo, we connect to a specific database and then we can look through &ldquo;collections,&rdquo; which are more-or-less equivalent to &ldquo;tables&rdquo; in relational databases.</p>
+
+<h3>What about MongoDB and the Ruby driver?</h3>
+
+<p>The first step is to get MongoDB working on your machine. Install MongoDB for your system &mdash; on Ubuntu 12.10 I do this:</p>
+
+<p><code>
+sudo apt-get install mongodb mongodb-dev mongodb-clients mongodb-server
+</code></p>
+
+<p>Then we start up the daemon:</p>
+
+<p><code>
+sudo service mongodb start
+</code></p>
+
+<h3>What&rsquo;s the concept?</h3>
+
+<p>The concept here is that we are going to have a database populated with <a href="http://www.pokemon.com/">Pokemon</a>. The user types a Pokemon&rsquo;s name into a search field and submits the form, which brings up an image of the Pokemon and some useful information.</p>
+
+<h3>Getting started</h3>
+
+<p>Since I would like to focus on MongoDB, we can start by populating our database with Pokemon. If you&rsquo;re not familiar with Pokemon, there are lots of them (~650 at the date of this blog post). For my purposes, I may want to only add the first ~150 Pokemon, or I may want to add every Pokemon imaginable. I want it to be easy to add more if any new ones are added. So I&rsquo;m going to start this project by creating a Populater, and we&rsquo;re going to use TDD to help us create it.</p>
+
+<p>If you don&rsquo;t have RSpec installed, it&rsquo;s as easy as opening up a shell and:</p>
+
+<p><code>
+$ sudo gem install rspec mongo
+</code></p>
+
+<p>I&rsquo;m going to put the Populater in a tools directory, and I&rsquo;m going to put my spec files in a test/spec directory. The directory structure I want to use is as follows:</p>
+
+<p><code>
+project
+--tools
+----populate
+----test
+------spec
+</code></p>
+
+<p>In the &lsquo;tools/test/spec&rsquo; directory, I create &lsquo;populater_spec.rb.&rsquo; We&rsquo;ll write our first test:</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+describe Populater do</p>
+
+<pre><code>describe "#new" do
+    it "does not throw when creating instance" do
+        expect {Populater.new}.to_not raise_error
+    end
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>The syntax for RSpec is mostly pseudo-English, so it&rsquo;s fairly straightforward to follow. The first &lsquo;describe&rsquo; block says that we are describing the Populater class. The second &lsquo;describe&rsquo; block says that we are describing the &lsquo;new&rsquo; method of the &lsquo;Populater&rsquo; class. The inner-most block is our test. We want to make sure that no exception is thrown when we create a new Populater. To run this test, open a terminal and type:</p>
+
+<p><code>bash Running Rspec
+$ pwd
+~/project/tools/test
+$ rspec populater_spec.rb
+</code></p>
+
+<p>We get a big fat compile error, obviously due to the fact that there&rsquo;s no such thing as a &lsquo;Populater&rsquo; class. So create the file &lsquo;populater.rb&rsquo; in &lsquo;project/tools/populate&rsquo; and create the class:</p>
+
+<p><code>ruby project/tools/populate/populater.rb
+class Populater
+end
+</code></p>
+
+<p>And include the &lsquo;Populater&rsquo; class in our spec file:</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+require_relative &lsquo;../../populate/populater&rsquo;</p>
+
+<p>describe Populater do</p>
+
+<pre><code>describe "#new" do
+    it "does not throw when creating instance" do
+        expect {Populater.new}.to_not raise_error
+    end
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>Now run rspec. Hooray, we&rsquo;re passing all our tests! Let&rsquo;s add another test and some let&rsquo;s have RSpec do a little work before each test.</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+require_relative &lsquo;../../populate/populater&rsquo;</p>
+
+<p>describe Populater do</p>
+
+<pre><code>before:each do
+    @populater = Populater.new
+end
+
+describe "#new" do
+    it "does not throw when creating instance" do
+        expect {Populater.new}.to_not raise_error
+    end
+
+    it "takes no params and returns a Populater instance" do
+        @populater.should be_an_instance_of Populater
+    end
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>The &lsquo;before:each&rsquo; syntax tells RSpec to perform this action before running each test. This way, we don&rsquo;t have to type out &lsquo;Populater.new&rsquo; in each test. When we run RSpec, this test passes. Now let&rsquo;s actually do something meaningful in our new call. We want the Populater to empty all Pokemon from our database as it begins. In order to do this, we need to also tell the Populater what database to use, so we&rsquo;ll refactor slightly to pass in the name of our database to the Populater.</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+require_relative &lsquo;../../populate/populater&rsquo;
+require &lsquo;mongo&rsquo;</p>
+
+<p>describe Populater do</p>
+
+<pre><code>before:all do
+    @col = Mongo::Connection.new.db('test')["pokemons"]
+end
+before:each do
+    @populater = Populater.new('test')
+end
+
+describe "#new" do
+    it "does not throw when creating instance" do
+        expect {Populater.new('test')}.to_not raise_error
+    end
+
+    it "takes one param and returns a Populater instance" do
+        @populater.should be_an_instance_of Populater
+    end
+
+    it "empties pokemon collection" do
+        @col.insert({:test =&gt; "hi there"})
+        @col.find.count.should_not eql 0
+        Populater.new('test')
+        @col.find.count.should eql 0
+    end
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>Similar to the &lsquo;before:each&rsquo; syntax, the &lsquo;before:all&rsquo; syntax runs the statement once. Here we want to get a handle to the &lsquo;pokemons&rsquo; collection from our &lsquo;test&rsquo; database. In our test, we run a &lsquo;find&rsquo; with no arguments on the &lsquo;pokemons&rsquo; collection to query everything in that collection. We also have an &lsquo;insert&rsquo; statement where we insert an arbitrary document into our collection. You&rsquo;ll note later that this garbage document looks nothing like the Pokemon documents we insert, which is just another reason to love document-store databases. We run RSpec and we fail the test. Let&rsquo;s open up &lsquo;populater.rb&rsquo; and fix this.</p>
+
+<p>``` ruby project/tools/populate/populater.rb
+require &lsquo;mongo&rsquo;</p>
+
+<p>class Populater</p>
+
+<pre><code>def initialize(db_name)
+    @col = Mongo::Connection.new.db(db_name)["pokemons"]
+    @col.remove
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>Test fixed. We connect to the same database and access the same collection and remove all the old data on intialize. So now we actually want to add Pokemon to the collection. We&rsquo;ll pick up a new &lsquo;describe&rsquo; block for an &lsquo;add_pokemon&rsquo; method. We&rsquo;ll then test that calling it with 0 adds no Pokemon to the collection.</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+&hellip;
+describe &ldquo;#add_pokemon&rdquo; do</p>
+
+<pre><code>it "adds 0 pokemon given 0" do
+    @populater.add_pokemon 0
+    @col.find.count.should eql 0
+end
+</code></pre>
+
+<p>end
+&hellip;
+```</p>
+
+<p>When we run our tests, we get a NoMethodError and fail. We create a trivial fix in populater.rb</p>
+
+<p>``` ruby project/tools/populate/populater.rb
+class Populater</p>
+
+<pre><code>...
+
+def add_pokemon(num)
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>And we pass the test, having added 0 Pokemon to our database. Let&rsquo;s do it with 1 now.</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+&hellip;
+describe &ldquo;#add_pokemon&rdquo; do</p>
+
+<pre><code>...
+it "adds 1 pokemon given 1" do
+    @populater.add_pokemon 1
+    @col.find.count.should eql 1
+end
+</code></pre>
+
+<p>end
+&hellip;
+```</p>
+
+<p>We fail. Another trivial fix:</p>
+
+<p>``` ruby project/tools/populate/populater.rb
+class Populater</p>
+
+<pre><code>...
+
+def add_pokemon(num)
+    (0...num).each do |x|
+        @col.insert({number: x})
+    end
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>We pass again. We&rsquo;ll also pass when checking for multiple Pokemon:</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+&hellip;
+describe &ldquo;#add_pokemon&rdquo; do</p>
+
+<pre><code>...
+it "adds 2 pokemon given 2" do
+    @populater.add_pokemon 2
+    @col.find.count.should eql 2
+end
+</code></pre>
+
+<p>end
+&hellip;
+```</p>
+
+<p>But we&rsquo;re missing substance. There&rsquo;s only garbage being shoved in our database. Our TDD methodology breaks down slightly here because we want our database to have dynamic information scraped from a website, and I don&rsquo;t want to hard code any data nor do I want to scrape the same website in my tests and my implementation. So we&rsquo;re going to do a little bit of behind-the-scenes stuff and test that the fields we want are simply not nil. I want each Pokemon to have a number, name, an array of types, and a link to an image:</p>
+
+<p>``` ruby project/tools/test/spec/populater_spec.rb
+&hellip;
+describe &ldquo;#add_pokemon&rdquo; do</p>
+
+<pre><code>...
+it "adds pokemon with a number" do
+    @populater.add_pokemon 1
+    @col.find.count.should eql 1
+    @col.find.first['number'].should_not be_nil
+end
+it "adds pokemon with a name" do
+    @populater.add_pokemon 1
+    @col.find.count.should eql 1
+    @col.find.first['name'].should_not be_nil
+end
+it "adds pokemon with array of types" do
+    @populater.add_pokemon 1
+    @col.find.count.should eql 1
+    types = @col.find.first['types']
+    types.should_not be_nil
+    types.should be_an_instance_of Array
+    types.should have_at_least(1).items
+    types.should have_at_most(2).items
+end
+it "adds pokemon with image link" do
+    @populater.add_pokemon 1
+    @col.find.count.should eql 1
+    image = @col.find.first['image']
+    image.should_not be_nil
+    image.should_not be_empty
+end
+</code></pre>
+
+<p>end
+&hellip;
+```</p>
+
+<p>There are many websites where you can get this kind of data for each Pokemon, but I chose <a href="http://pokemon.wikia.com/wiki/List_of_Pok%C3%A9mon">the Pokemon Wiki</a> for its consistency. In the initializer of the Populater, I open up the URL using Nokogiri so I can access the sweet, creamy data contained within. In my add_pokemon method, I extract this data I want based on the way the table is set up on the website. To continue, we need to install the Nokogiri gem:</p>
+
+<p><code>
+sudo gem install nokogiri
+</code></p>
+
+<p>And now we add the logic to add_pokemon:</p>
+
+<p>``` ruby project/tools/populate/populater.rb
+require &lsquo;mongo&rsquo;
+require &lsquo;nokogiri&rsquo;
+require &lsquo;open-uri&rsquo;</p>
+
+<p>class Populater</p>
+
+<pre><code>def initialize(db_name)
+    @col = Mongo::Connection.new.db(db_name)["pokemons"]
+    @col.remove
+    @data = Nokogiri::HTML(open("http://pokemon.wikia.com/wiki/List_of_Pok%C3%A9mon"))
+end
+
+def add_pokemon(num_to_add)
+    @data.xpath("//table[@class='wikitable sortable']/tr").each do |row|
+        break if num_to_add &lt;= 0
+        dex_num = row.at_xpath('td/text()').to_s.strip
+        next if dex_num.nil? || dex_num.empty?
+        dex_name = row.at_xpath('td[2]/a/text()').to_s.strip
+
+        unless dex_num == "000"
+            type_1 = row.at_xpath('td[4]/a/span/text()').to_s.strip
+            type_2 = row.at_xpath('td[5]/a/span/text()').to_s.strip || row.at_xpath('td[5]/text()').to_s.strip
+            image_link = "http://img.pokemondb.net/artwork/#{dex_name.downcase}.jpg"
+        else
+            type_1 = row.at_xpath('td[4]/text()').to_s.strip
+            type_2 = row.at_xpath('td[5]/text()').to_s.strip
+            image_link = "images/missingo.png"
+        end
+
+        types = Array.new
+        types &lt;&lt; type_1 unless type_1.nil? || type_1.empty?
+        types &lt;&lt; type_2 unless type_2.nil? || type_2.empty?
+
+        @col.insert({:number =&gt; dex_num, :name =&gt; dex_name, :types =&gt; types, :image =&gt; image_link})
+
+        num_to_add -= 1
+    end
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<p>I&rsquo;ll admit The add_pokemon method is now quite a bit more daunting to interpret. Here&rsquo;s the breakdown of what&rsquo;s going on: Nokogiri finds us the table tag with class of &lsquo;wikitable sortable&rsquo; and we iterate over that. There are two breaking conditions of our loop: we hit the max number of Pokemon as given, or we can&rsquo;t find anymore Pokemon in the table. So we check that we haven&rsquo;t hit our max. Then we find the Pokemon&rsquo;s number in the table after we manually parse the HTML. In the case of this table, the first row is all garbage, so we continue to the next row if we are on the first row.  We then grab the name from the table, which is luckily always in the same place. The branch is for the special case of Pokemon #000 (Missingo), which is set up slightly differently in the table for some reason. We create an empty array and shove our types in it, but we have to be careful because not all Pokemon have two types. We then create a document in the braces and insert it into the collection. The final step is to decrement the loop counter.</p>
+
+<p>Tests pass. We now have a working Populater! Now we can either write a script or open up the irb and populate as necessary and we know that the Populater is functional:</p>
+
+<p>``` ruby Populating Databases
+$ irb</p>
+
+<blockquote><blockquote><p>Dir.pwd
+=> &ldquo;project/tools/populate&rdquo;
+require &lsquo;mongo&rsquo;
+=> true
+col = Mongo::Connection.new.db(&lsquo;dev&rsquo;)[&ldquo;pokemons&rdquo;]
+=> &hellip;
+col.find.count
+=> 0
+require &lsquo;./populater&rsquo;
+=> true
+Populater.new(&lsquo;dev&rsquo;).add_pokemon 152
+=> nil
+col.find.count
+152</p>
+
+<p>```</p></blockquote></blockquote>
+
+<p>If you want to further familiarize yourself with the MongoDB Ruby driver, you should check out the MongoDB Koans. Unfortunately, the original <a href="https://github.com/tredfern/MongoDB_Koans">MongoDB Koans</a> have not been updated in a while, and so my more recent installations of Ruby and the MongoDB driver didn&rsquo;t work. I found a set of <a href="https://github.com/edgecase/ruby_koans">updated koans</a> which worked with my install of Ruby 1.9.3. However, the updated version also had a couple of annoying issues with deprecations, so I created <a href="https://github.com/larryprice/MongoDB_Koans">my own fork</a> on GitHub with the fixes.</p>
+]]></content>
+  </entry>
+  
+</feed>

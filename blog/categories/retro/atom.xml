@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: retro | Larry Price]]></title>
+  <link href="http://larryprice.github.com/blog/categories/retro/atom.xml" rel="self"/>
+  <link href="http://larryprice.github.com/"/>
+  <updated>2013-11-14T22:01:21-05:00</updated>
+  <id>http://larryprice.github.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[On the Futility of Man and Trying to Divide a Sinatra App into Separate Controllers]]></title>
+    <link href="http://larryprice.github.com/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/"/>
+    <updated>2013-08-26T22:35:00-04:00</updated>
+    <id>http://larryprice.github.com/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers</id>
+    <content type="html"><![CDATA[<p>Oh, <a href="http://www.sinatrarb.com/">Sinatra</a>. You&rsquo;re oh-so-very dear to me. You made it so easy for me to write my <a href="http://capitalpunishment.herokuapp.com">first</a> <a href="http://pokephile.herokuapp.com">web</a> apps. All I had to do was write a couple routes and throw together a few HTML-like files and I had a web app. I used pattern matching to reduce the web-facing code for <a href="https://github.com/larryprice/CapitalPunishment">Capital Punishment</a> from ~500 lines of code to &lt;100 lines of code. You are perfect for writing small-time web applications.</p>
+
+<p>But what about large web applications? What about a web app that has normal users and admin users, makes lots of database reads and writes (my previous apps only did reads from a user-facing perspective), and has to be able to show the history of everything, forever, to the authorized users who request it?</p>
+
+<p>You see, Sinatra is kind of an <a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">MVC framework</a>, but not exactly. In Sinatra, you have Views (your HTML inter-mixed with Ruby code in your desired DSL) and you have Controllers (each of your routes). When a database is involved, you can use something like <a href="https://github.com/bmizerany/sinatra-activerecord">ActiveRecord</a> or <a href="http://mongoid.org/en/mongoid/index.html">Mongoid</a> or <a href="http://datamapper.org/">DataMapper</a> and you have yourself Models.</p>
+
+<p>So every route is kind of a Controller. Every. Route. In Capital Punishment, there were once 8 routes (there are now 7). In the project I&rsquo;ve been working on recently, there are currently 56 routes. 56 routes in the language described above means I kind of have 56 controllers.</p>
+
+<p>That&rsquo;s been pretty overwhelming, especially since the traditional way of creating routes in Sinatra is to shove them all in the same file. There are a few ways I could think of to address this. The way we chose six months ago (for better or worse) was found <a href="http://stackoverflow.com/questions/5877000/what-is-a-controller-in-sinatra">on StackOverflow</a>, and involves creating a bunch of different files where you shove all related routes. So you get this situation:</p>
+
+<p>``` ruby app.rb
+class App &lt; Sinatra::Base
+end</p>
+
+<p>require_relative &lsquo;controllers/helpers&rsquo;</p>
+
+<p>Dir.glob(&ldquo;#{File.dirname(<strong>FILE</strong>)}/controllers/*.rb&rdquo;).each do |file|
+  require file.chomp(File.extname(file))
+end</p>
+
+<p>class App
+  get &lsquo;/&rsquo; do</p>
+
+<pre><code>erb :home
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>``` ruby controllers/reports_controller.rb
+class App
+  get &lsquo;/reports/user_bills&rsquo; do</p>
+
+<pre><code>erb :user_bills_report
+</code></pre>
+
+<p>  end
+  &hellip;
+end
+```</p>
+
+<p>And so on and so forth. This works fine for a while, but we&rsquo;ve ended up with 13 &ldquo;controller&rdquo; files, many of which are not trivial. This also makes the App class quite large since its controllers handle most of the logic for the app. This also doesn&rsquo;t enforce any kind of URL-naming logic, so if a developer is working hard (s)he may create both <code>/reports/user_bills</code> and <code>user_info_reports</code> without realizing the inconsistency (s)he just injected into the system.</p>
+
+<p>In hindsight, this method is not perfect. I think that the Rails method of individual controllers is significantly better for large apps. Some people have been using other methods for trying to make Sinatra more MVC, such as <a href="https://github.com/jorrizza/sinatra-mvc">sinatra-mvc</a>. To be frank, sinatra-mvc pretty much does the same thing we&rsquo;ve done, but with more structure.</p>
+
+<p>I think what I&rsquo;ve learned is that you should use a tool for its intended purpose. Sinatra was written to quickly create web apps in Ruby with minimal effort. Once you have more than 10-15 routes, you should reconsider whether your app can still be called &ldquo;minimal effort.&rdquo; Sinatra may fly you to the moon, but you&rsquo;re unlikely to see what spring is like on Jupiter or Mars.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The Trouble with Time Zones (aka Learn From My Mistakes Part 1)]]></title>
+    <link href="http://larryprice.github.com/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1/"/>
+    <updated>2013-08-07T22:00:00-04:00</updated>
+    <id>http://larryprice.github.com/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1</id>
+    <content type="html"><![CDATA[<blockquote><p>As a user, my data&rsquo;s LastModifiedDate should not be updated when I Export it, and it should be in UTC.</p></blockquote>
+
+<p>That&rsquo;s the gist of the story I was tasked with a few weeks ago. Seemed easy enough: just set the &ldquo;LastModifiedDate&rdquo; field of each XML node to the LastModifiedDate pulled from the database converted to UTC. I can do the development and write up some Cucumber tests in an hour, two hours tops. Find a few small caveats along the way, get it out of development and through code review by the next morning. Push it to the mainline and watch the build go green. All done, dust off my hands and move on to something else.</p>
+
+<p>When has anything ever been that simple? Certainly not in the fantastical world of software development! About ten minutes after the build server confirmed a successful build of my code on the tip of our main branch, a face popped up over the cube wall. &ldquo;Hey, why&rsquo;d you break the build?&rdquo; My teammate was having trouble running my LastModifiedDate tests. All of his time comparisons were off by an hour. My computer (and the build server) were in one time zone; his was in another. I immediately realized the exact lines of the code that weren&rsquo;t dealing with time zones. We agreed to let the code remain on the build server instead of backing it out since the build server was green, and I created/tested/pushed a couple of patches to fix the problem. Green build on the build server. Green build amongst all my time-disabled peers. The next morning I had a panic attack in the shower thinking about how some of my test data could be affected by the switch to UTC. I rushed into work early and put in another patch, this one slightly changing the format of some of my test data. After doing this, I realized that what I had done was completely unnecessary and decided I should probably get my blood pressure checked.</p>
+
+<p>Then: silence. I was satisfied I&rsquo;d seen the end of my time zone issues which I&rsquo;d spent nearly as much time patching as I had developing the initial solution. Two weeks pass. Monday morning there&rsquo;s an email from another country in my inbox, &ldquo;This test was written that only works in American time zones! Who is fixing this?&rdquo; After quite a few emails and chats I found that their main branch had merged in a version of our main branch between my original solution and my patch. The developer agreed to be patient until his team could start using the newer version of our branch. Four hours later I get another email from developers on another continent. I sent them the patches I made previously compressed into one to keep them working.</p>
+
+<p>Was this a small mistake? On a project with a small, local team the answer is definitely yes. This project in particular involves a large number of developers who don&rsquo;t all test in the same time zone and who work on a number of different branches that feed into each other in weekly chunks. Despite that, I think this error could have gone greatly unnoticed had I simply backed out the original changes and pushed the patches and original solution together. My confidence (hubris?) really bit me on this one. Initially only a single developer seemed to be affected by my oversight; fate selected a build between my original solution and my patches to push to the other branches to make sure more people noticed my mistake.</p>
+
+<p><strong>In hindsight</strong>, The Right Thing to Do was to assume fault and back out immediately. One developer having build issues is still one more than should have been affected. Here&rsquo;s hoping this bit o' hindsight today leads to better foresight tomorrow.</p>
+]]></content>
+  </entry>
+  
+</feed>
