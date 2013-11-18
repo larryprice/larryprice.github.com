@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="http://larryprice.github.io/atom.xml" rel="self"/>
   <link href="http://larryprice.github.io/"/>
-  <updated>2013-11-15T23:01:18-05:00</updated>
+  <updated>2013-11-17T21:20:11-05:00</updated>
   <id>http://larryprice.github.io/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,23 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[SEP Blog Battle: Tools of the Trade]]></title>
+    <link href="http://larryprice.github.io/blog/2013/11/17/sep-blog-battle-tools-of-the-trade/"/>
+    <updated>2013-11-17T20:59:00-05:00</updated>
+    <id>http://larryprice.github.io/blog/2013/11/17/sep-blog-battle-tools-of-the-trade</id>
+    <content type="html"><![CDATA[<p>To whom do I owe any programming success I may have in a given day? My education? My wonderful peers? The shriveled wad of grey goo in my head? None of the above.</p>
+
+<p>My search engine. <a href="https://duckduckgo.com">DuckDuckGo</a>. <a href="https://encrypted.google.com">Google</a>. <a href="https://wikipedia.org">Wikipedia</a>. Hardly a problem exists that can&rsquo;t be assisted in some way by a quick search.</p>
+
+<p>How do I use Google Go (<a href="http://golang.org/doc/effective_go.html">answer</a>)? How do I use tags in <a href="https://github.com/cucumber/cucumber-cpp">cucumber-cpp</a> (<a href="http://larryprice.github.io/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">answer</a>)? How do I brush my teeth without toothpaste (<a href="http://www.wikihow.com/Brush-Teeth-Without-Toothpaste">answer</a>? What&rsquo;s the deal with airline food (<a href="http://youtu.be/n0E7EaRLmSI">answer</a>)?</p>
+
+<p>It&rsquo;s all so easy. It&rsquo;s right at your fingertips. A proficient programmer these days has to also be a proficient &ldquo;Googler.&rdquo; However, a programmer&rsquo;s job description is not &ldquo;copies all code from the internet.&rdquo; Although the odds are high that someone has had a problem very similar to yours, you need to be able to take that code as an example and adapt it to your current situation. If that weren&rsquo;t the case, I think we&rsquo;d be losing our jobs to high school kids pretty quickly.</p>
+
+<p>So at the end of the day, make sure to be thankful to your search engine. Buy it flowers, make it dinner, rub its feet; just let it know how much you appreciate all the hard work it does for you when you do nothing but ask it silly questions all day.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Copy Data Using qmake]]></title>
@@ -2614,39 +2631,6 @@ tinkering, improving, planting flower beds.</p>
 
 
 <p>If you want to further familiarize yourself with the MongoDB Ruby driver, you should check out the MongoDB Koans. Unfortunately, the original <a href="https://github.com/tredfern/MongoDB_Koans">MongoDB Koans</a> have not been updated in a while, and so my more recent installations of Ruby and the MongoDB driver didn&rsquo;t work. I found a set of <a href="https://github.com/edgecase/ruby_koans">updated koans</a> which worked with my install of Ruby 1.9.3. However, the updated version also had a couple of annoying issues with deprecations, so I created <a href="https://github.com/larryprice/MongoDB_Koans">my own fork</a> on GitHub with the fixes.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Who Moved My Cheese?: An Amazing Way to Deal with Change in Your Work and in Your Life]]></title>
-    <link href="http://larryprice.github.io/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life/"/>
-    <updated>2012-11-27T20:47:00-05:00</updated>
-    <id>http://larryprice.github.io/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life</id>
-    <content type="html"><![CDATA[<p><img src="http://dontstepinthepoop.com/wp-content/uploads/2010/01/cheese.jpg" style="border: 0" width="130px" title="Who Moved My Cheese?" alt="Cover for Who Moved My Cheese?" /><br/>
-<a href="http://www.amazon.com/gp/product/0399144463/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0399144463&amp;linkCode=as2&amp;tag=larpriandthee-20"><strong>Who Moved My Cheese?: An Amazing Way to Deal with Change in Your Work and in Your Life</strong></a><br/>
-<strong>Spencer Johnson</strong></p>
-
-<hr />
-
-<h3>The Gist</h3>
-
-<p><em>Who Moved My Cheese?</em> is a book about being prepared to lose your job. The book was written during times of rapid economic growth caused by the <a href="http://en.wikipedia.org/wiki/Dot-com_boom">dot-com bubble</a>, which resulted in many companies emerging out of the primordial ooze and then falling back down into the tarpit after an extremely short time on the market. The author uses a cute analogy about cheese to convey that success is fleeting, and each day could be the day a company will shut down.</p>
-
-<h3>My Feelings</h3>
-
-<p>This is another book I read during summer 2012 and wrote a mediocre write-up regarding. This write-up is fresh and in my new write-up style.</p>
-
-<p>The authors of this book want to help people realize that their job is a gift, not a privilage. Just because a company is doing well this quarter does not imply that it will still be in business next quarter. During the time period this book was written in, this was especially true. The theory of companies during the late &lsquo;90s was to spend as much money as possible to gather as many customers as possible disregarding profits in the short-term (read: <a href="http://www.paulgraham.com/start.html">Get Large or Get Lost</a>). Of course, this kind of mentality did not fit all businesses, and many companies which looked like they would be the future leaders of the American economy were quickly forgotten by the mid-2000s (see: <a href="http://en.wikipedia.org/wiki/Pets.com">Pets.com</a>).</p>
-
-<p>The authors want employees to stop fearing change, and to accept it as a normal part of life. Sometimes companies falter, and oftentimes there&rsquo;s nothing an individual can do about it. In doing so, sometimes old friends are left behind while an individual moves on in search of bigger and better things. Sometimes it takes a long time to find those bigger and better things, but every time it&rsquo;s worth it due to the thrill of confronting your fears and exploring something new.</p>
-
-<p>The use of a &ldquo;maze&rdquo; with two tiny people and two anthropomorphic mice is strange and feels purposefully forced. The authors wanted to make a memorable anecdote, and they succeeded with their strange analogy. Having said that, several times I was confused by the names of the four characters as they were very similar and nonsensical. Because of this, I had to reread some sections after referencing the first page of the book to determine who was who.</p>
-
-<p>The primary author appended &ldquo;MD&rdquo; to his name on the front cover. Similarly, the &ldquo;secondary&rdquo; author appended a &ldquo;PhD&rdquo; to his name on the front cover. This bothered me as it is an obvious ploy to make people value the opinions held within the book more highly because they are written by &ldquo;doctors.&rdquo;</p>
-
-<h3>Who Would Like This</h3>
-
-<p>This is a book that tries to prepare people for the worst and to teach them not to just give up when the future looks grim. It could be an interesting book for anyone, especially after several years of an economic boom caused by a new technology. A person who is very content in their current position at a company could also benefit from this book, as it may give them some incentive to seek out change.</p>
 ]]></content>
   </entry>
   

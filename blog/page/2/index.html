@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="Oh, Sinatra. You&rsquo;re oh-so-very dear to me. You made it so easy for me to write my first web apps. All I had to do was write a couple routes and &hellip;">
+  <meta name="description" content="I just finished my first attempt at deploying a web app to run automatically in the background on a friend&rsquo;s server. Pretty easy, really. The &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,105 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/08/31/using-foreman-to-create-an-upstart-service/">Using Foreman to Create an Upstart Service</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-31T17:05:00-04:00" pubdate data-updated="true">Aug 31<span>st</span>, 2013</time>
+        
+         | <a href="/blog/2013/08/31/using-foreman-to-create-an-upstart-service/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I just finished my first attempt at deploying a web app to run automatically in the background on a friend&rsquo;s server. Pretty easy, really. The first thing I did was install <a href="https://github.com/ddollar/foreman">foreman</a>. Assuming you have ruby and rubygems installed:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo gem install foreman
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next I needed to give foreman the commands to start my app. I created a file in the root of my project directory called &lsquo;Procfile&rsquo; and gave it the steps I would run to start my app manually. For the sake of simplicity, let&rsquo;s say I run my app pretty barebones:</p>
+
+<figure class='code'><figcaption><span>Procfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>web: bundle <span class="nb">exec </span>rackup
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now when I run <code>foreman start</code>, foreman will use <a href="http://bundler.io/">Bundler</a> to execute rackup with the correct gems in my Gemfile. Now exporting upstart config files is pretty easy.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo foreman <span class="nb">export </span>upstart --app<span class="o">=</span>MyApp --user<span class="o">=</span>root /etc/init
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That command creates the .conf files needed for upstart to control the service called &lsquo;MyApp&rsquo; as the user &lsquo;root.&rsquo; It puts all the .conf files in <code>/etc/init</code> (which is where Ubuntu puts such things) and will create a default log directory in <code>/var/log/MyApp</code>. Now I can control my service by running <code>service MyApp start</code>, <code>service MyApp stop</code>, <code>service MyApp restart</code>, and <code>service MyApp status</code>. Hooray for me.</p>
+
+<p>But I need to run my app in two ways: in dev mode on a local port with my dev database, and I need to run it in production mode using port 80 and the production database. I&rsquo;ve also heard that using <a href="https://en.wikipedia.org/wiki/WEBrick">webrick</a> (the default server installed with rackup) is great for develpment, but I should be using something else for my production server. So I made some config files for foreman:</p>
+
+<figure class='code'><figcaption><span>development.env</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">RACK_ENV</span><span class="o">=</span>development
+</span><span class='line'><span class="nv">PORT</span><span class="o">=</span>9292
+</span><span class='line'><span class="nv">SERVER</span><span class="o">=</span>rackup
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>production.env</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">RACK_ENV</span><span class="o">=</span>production
+</span><span class='line'><span class="nv">PORT</span><span class="o">=</span>80
+</span><span class='line'><span class="nv">SERVER</span><span class="o">=</span>unicorn
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And I change my Procfile to:</p>
+
+<figure class='code'><figcaption><span>Procfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>web: bundle <span class="nb">exec</span> <span class="nv">$SERVER</span> -p <span class="nv">$PORT</span> -E <span class="nv">$RACK_ENV</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ridiculously configured. Now when I run <code>foreman start</code>, it will error out. I need to specify my environment file:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>foreman start -e production.env
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now foreman will use Bundler to startup the server specified in <code>$SERVER</code>, run the app on port <code>$PORT</code> (-p), and will pass through the environment listed as <code>$RACK_ENV</code> to my application (-E), allowing my app to do whatever configuration it does given the current environment. Power to the people.</p>
+
+<p><a href="http://michaelvanrooijen.com/articles/2011/06/08-managing-and-monitoring-your-ruby-application-with-foreman-and-upstart/">I found that this guy</a> does a lot more complicated stuff with Foreman, if you need more.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -367,71 +466,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/04/28/joel-on-software/">Joel on Software</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-28T11:38:00-04:00" pubdate data-updated="true">Apr 28<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/04/28/joel-on-software/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p>We&rsquo;re programmers. Programmers are, in their hearts, architects, and the
-first thing they want to do when they get to a site is to bulldoze the place
-flat and build something grand. We&rsquo;re not excited by incremental renovation:
-tinkering, improving, planting flower beds.</p>
-
-<p>&mdash; Joel Spolsky, &ldquo;Things you Should Never Do, Part I&rdquo;</p></blockquote>
-
-<h3>The Gist</h3>
-
-<p><a href="http://www.amazon.com/gp/product/1590593898/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1590593898&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Joel On Software</em></a> is a collection of blog posts by the great <a href="http://www.joelonsoftware.com/">Joel Spolsky</a>. He has risen to Internet Fame after his experience working for Microsoft and eventually starting his own company. The &ldquo;chapters&rdquo; (blog posts) provide insight into picking a language for your codebase, recruiting engineers, managing programmers, fixing bugs, paper prototyping, and how Microsoft works.</p>
-
-<h3>My Opinion</h3>
-
-<p>Joel Spolsky is a god sent down from Mount Olympus to calmly explain to us why we are sometimes terrible people and then goes on to tell us it&rsquo;s okay and we should learn from our past. I loved this book, especially since I read it at the same time as some really terrible books (namely <a href="http://www.amazon.com/gp/product/0672326140/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0672326140&amp;linkCode=as2&amp;tag=larpriandthee-20">The Inmates are Running the Asylum</a> and <a href="http://www.amazon.com/gp/product/1491017082/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1491017082&amp;linkCode=as2&amp;tag=larpriandthee-20">Enterprise Games</a>; I do not recommend these books).</p>
-
-<p>Spolsky talks a lot about specs in the first part of the book, and at first I thought that he was stating too much of the obvious; but then why don&rsquo;t we do specs in this obvious way? Instead, we resign ourselves to write a tiny portion of the spec, start programming, and then implicitly change the spec while only haphazardly updating our documentation. I&rsquo;ve been on projects before where we would have greatly benefitted from having a solid spec; we knew exactly what needed to be done, because we were rewriting a successful product the company had released several years ago. With an ever-changing spec, we programmed ourselves into a hole, and struggled for at least half a year to claw our way back out. I have to wonder if more pre-planning would have saved us from ourselves.</p>
-
-<p>Spolsky&rsquo;s advice on hiring people is invaluable (<a href="http://www.joelonsoftware.com/articles/GuerrillaInterviewing3.html">The Guerrilla Guide to Interviewing</a>). In fact, I wish that I had read some of these blog posts while I was interviewing. Spolsky says that recruiters should ask &ldquo;impossible questions&rdquo; and not worry about what the answers given are, just that the recruit comes up with something. He says to stop asking trivia questions. He talks about relying on all interviewers equally: if any two interviewers say &ldquo;No&rdquo; to a candidate, the candidate is toast. He talks about asking candidates about projects and looking for passion, which is almost always the sign of a good programmer.</p>
-
-<p>Spolsky talks about the commodity market of software/hardware. To sum it up, the supply of one drives the demand of the other. This section made me think about the current PC market: hardware is cheap <em>and</em> software is cheap. Not only is software cheap, but it&rsquo;s often <em>free</em>. Prices for hardware haven&rsquo;t been going down at nearly the rate it used to, but that seems natural as the price approaches the cost of labor and parts. Most of the hardware innovation right now seems to be aimed at the tiny computers in our pockets (or <a href="http://www.google.com/glass/start/">on our face</a>, soon enough). Google&rsquo;s software makes money by displaying ads using its search engine, so Google has entered the market of making software that is compatible with all kinds of different hardware. Google has played the commodities game like a champ, getting hardware running their software into hundreds of millions of pockets.</p>
-
-<p>Some of the weaker parts of the book are when Spolsky talks about .NET. I&rsquo;m not going to go into detail, but when he wrote these posts, .NET was just entering the market. Spolsky starts by bashing .NET for making all the old Windows API code unusable, but in later blog posts falls hard for .NET and starts thinking about ways to rewrite his entire life in .NET.</p>
-
-<h3>Who Would Like This</h3>
-
-<p>I believe that programmers are the main audience for this book, and I am a programmer who loved reading it. Spolsky does not talk down to the reader, nor does he dumb down the nitty-gritty technical blog posts.</p>
-
-<p>Programmers who intend to become managers may get added benefit from this book, as Spolsky discusses some interesting recruiting techniques and ways to deal with programmers. My company uses some of Spolsky&rsquo;s advice when hiring engineers (quite a bit of it, thinking back to my interview), and we&rsquo;ve been hiring only the best and brightest cowboys in the Midwest for years.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -461,6 +495,10 @@ tinkering, improving, planting flower beds.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/11/17/sep-blog-battle-tools-of-the-trade/">SEP Blog Battle: Tools of the Trade</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/14/copy-data-using-qmake/">Copy Data Using qmake</a>
       </li>
     
@@ -476,15 +514,11 @@ tinkering, improving, planting flower beds.</p>
         <a href="/blog/2013/09/08/the-pragmatic-programmer/">The Pragmatic Programmer</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2013/08/31/using-foreman-to-create-an-upstart-service/">Using Foreman to Create an Upstart Service</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/c-plus-plus' style='font-size: 112.0%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 106.0%'>capybara</a> <a href='/blog/categories/cucumber' style='font-size: 112.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 130.0%'>database</a> <a href='/blog/categories/foreman' style='font-size: 106.0%'>foreman</a> <a href='/blog/categories/gmock' style='font-size: 106.0%'>gmock</a> <a href='/blog/categories/gtest' style='font-size: 106.0%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 106.0%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 106.0%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 106.0%'>heroku</a> <a href='/blog/categories/linux' style='font-size: 106.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 112.0%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 118.0%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 106.0%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 106.0%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 106.0%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 112.0%'>nosql</a> <a href='/blog/categories/pokephile' style='font-size: 124.0%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 106.0%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 106.0%'>qt</a> <a href='/blog/categories/rails' style='font-size: 106.0%'>rails</a> <a href='/blog/categories/retro' style='font-size: 112.0%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 112.0%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 148.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 106.0%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 106.0%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 142.0%'>sep-blog-battle</a> <a href='/blog/categories/sinatra' style='font-size: 124.0%'>sinatra</a> <a href='/blog/categories/tdd' style='font-size: 106.0%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 106.0%'>testing</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 106.0%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 106.0%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 106.0%'>upstart</a> <a href='/blog/categories/web' style='font-size: 118.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 142.0%'>write-ups</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/c-plus-plus' style='font-size: 112.0%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 106.0%'>capybara</a> <a href='/blog/categories/cucumber' style='font-size: 112.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 130.0%'>database</a> <a href='/blog/categories/foreman' style='font-size: 106.0%'>foreman</a> <a href='/blog/categories/gmock' style='font-size: 106.0%'>gmock</a> <a href='/blog/categories/gtest' style='font-size: 106.0%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 106.0%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 106.0%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 106.0%'>heroku</a> <a href='/blog/categories/linux' style='font-size: 106.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 112.0%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 118.0%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 106.0%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 106.0%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 106.0%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 112.0%'>nosql</a> <a href='/blog/categories/pokephile' style='font-size: 124.0%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 106.0%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 106.0%'>qt</a> <a href='/blog/categories/rails' style='font-size: 106.0%'>rails</a> <a href='/blog/categories/retro' style='font-size: 112.0%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 112.0%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 148.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 106.0%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 106.0%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 148.0%'>sep-blog-battle</a> <a href='/blog/categories/sinatra' style='font-size: 124.0%'>sinatra</a> <a href='/blog/categories/tdd' style='font-size: 106.0%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 106.0%'>testing</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 106.0%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 106.0%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 106.0%'>upstart</a> <a href='/blog/categories/web' style='font-size: 118.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 142.0%'>write-ups</a> </span>
 </section>
 
 <section>
