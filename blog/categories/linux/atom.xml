@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | Larry Price]]></title>
   <link href="http://larryprice.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://larryprice.github.io/"/>
-  <updated>2013-11-22T21:14:05-05:00</updated>
+  <updated>2013-12-10T20:23:13-05:00</updated>
   <id>http://larryprice.github.io/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,62 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Login shell not sourcing .bashrc: A brief lesson in dot-files]]></title>
+    <link href="http://larryprice.github.io/blog/2013/12/10/login-shell-not-sourcing-bashrc/"/>
+    <updated>2013-12-10T19:45:00-05:00</updated>
+    <id>http://larryprice.github.io/blog/2013/12/10/login-shell-not-sourcing-bashrc</id>
+    <content type="html"><![CDATA[<p>I have a confession: I&rsquo;ve been avoiding using <a href="https://rvm.io/">rvm</a> for the past few weeks for stupid reasons.</p>
+
+<p>When using <code>rvm</code> with <code>gnome-terminal</code>, I have to tell <code>gnome-terminal</code> to run as a login shell so that <code>/etc/profile</code> is sourced. The login shell is then supposed to source <code>$HOME/profile</code>, which is then supposed to source <code>$HOME/.bashrc</code>. Installing <code>rvm</code> results in me editing my <code>.bash_profile</code> to add the following line:</p>
+
+<p><code>bash .bash_profile
+[[ -s "$HOME/.rvm/scripts/rvm" ]] &amp;&amp; source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+</code></p>
+
+<p>All my <code>rvm</code> environments seem to work, so this is a success, right?</p>
+
+<p>Well, I type the good ol' <code>ls</code> command and I notice that all my colors are missing. I notice that the terminal title no longer reads the present working directory, but instead greets me with a disinterested &ldquo;Terminal.&rdquo; What happened?</p>
+
+<p>Eventually I realized that this was a problem caused by not sourcing my <code>.bashrc</code>. Where did I go wrong?</p>
+
+<p>The login shell sources <code>$HOME/.profile</code> UNLESS <code>$HOME/.bash_profile</code> exists, in which case it only sources the latter. So what are the contents of my <code>$HOME/.profile</code>?</p>
+
+<p>``` bash .profile</p>
+
+<h1>~/.profile: executed by the command interpreter for login shells.</h1>
+
+<h1>[cut for brevity]</h1>
+
+<h1>if running bash</h1>
+
+<p>if [ -n &ldquo;$BASH_VERSION&rdquo; ]; then</p>
+
+<pre><code># include .bashrc if it exists
+if [ -f "$HOME/.bashrc" ]; then
+  . "$HOME/.bashrc"
+fi
+</code></pre>
+
+<p>fi</p>
+
+<h1>[cut for brevity]</h1>
+
+<p>```</p>
+
+<p>Aha! The sneaky dot-file actually sources <code>$HOME/.bashrc</code>, and my shiny new <code>$HOME/.bash_profile</code> doesn&rsquo;t. I fixed this by sourcing <code>$HOME/.profile</code> in <code>$HOME/.bash_profile</code>.</p>
+
+<p><code>bash .bash_profile
+[ -f "$HOME/.profile" ] &amp;&amp; source "$HOME/.profile"
+[[ -s "$HOME/.rvm/scripts/rvm" ]] &amp;&amp; source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+</code></p>
+
+<p>For the memory-impaired: <code>.bash_profile</code> sources <code>.profile</code> sources <code>.bashrc</code>.</p>
+
+<p>Re-open <code>gnome-terminal</code> to find my colors are fixed, my title is correct, and <code>rvm</code> plays the right notes. The world is at peace once again, and I don&rsquo;t have to avoid using <code>rvm</code>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How Linux Works: What Every Superuser Should Know]]></title>
