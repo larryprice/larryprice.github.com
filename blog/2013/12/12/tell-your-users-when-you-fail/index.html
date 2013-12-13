@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: retro - Larry Price</title>
+  <title>Tell Your Users When You Fail - Larry Price</title>
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="Category: retro">
+  <meta name="description" content="Your users put a lot of faith in you. They put up with your terrible design, your horrible taste in color scheme, and your ability to take up over &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://larryprice.github.ioblog/categories/retro">
+  <link rel="canonical" href="http://larryprice.github.io/blog/2013/12/12/tell-your-users-when-you-fail">
   <link href="/cupicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Larry Price" type="application/atom+xml">
@@ -79,50 +79,151 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Retro</h1>
+    
+      <h1 class="entry-title">Tell Your Users When You Fail</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-12T19:41:00-05:00" pubdate data-updated="true">Dec 12<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>Your users put a lot of faith in you. They put up with your terrible design, your horrible taste in color scheme, and your ability to take up over 100% of their computer&rsquo;s memory. With that in mind, don&rsquo;t these poor people deserve a little bit of honesty?</p>
 
-  
-  <h2>2013</h2>
+<p>I came across some code recently that irked me. This code asks for a handle to a database abstraction class and then runs a query on it. It looks kinda like this:</p>
 
-<article>
-  
-<h1><a href="/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/">On the Futility of Man and Trying to Divide a Sinatra App into Separate Controllers</a></h1>
-<time datetime="2013-08-26T22:35:00-04:00" pubdate><span class='month'>Aug</span> <span class='day'>26</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/mvc/'>mvc</a>, <a class='category' href='/blog/categories/retro/'>retro</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>, <a class='category' href='/blog/categories/sinatra/'>sinatra</a>, <a class='category' href='/blog/categories/web/'>web</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1/">The Trouble with Time Zones (aka Learn From My Mistakes Part 1)</a></h1>
-<time datetime="2013-08-07T22:00:00-04:00" pubdate><span class='month'>Aug</span> <span class='day'>07</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/retro/'>retro</a></span>
-</footer>
+<figure class='code'><figcaption><span>settings.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">changeSettings</span><span class="p">(</span><span class="n">newSettings</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">db</span> <span class="o">=</span> <span class="n">dbFactory</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;settings.db&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">if</span> <span class="o">!</span><span class="n">db</span><span class="o">.</span><span class="n">nil?</span>
+</span><span class='line'>    <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">buildSaveQuery</span><span class="p">(</span><span class="n">newSettings</span><span class="p">))</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-</article>
+<p>How nice that <code>changeSettings</code> doesn&rsquo;t try to play with a <code>nil</code> database, right? But what about the user&rsquo;s data? It wasn&rsquo;t saved. And no one knows. <em>Not even you</em>. Now, maybe the user will happily continue what he&rsquo;s doing until he notices that his new settings aren&rsquo;t quite right. So he goes back to them again. Same result. Repeat ad infinitum.</p>
 
+<p>How I would initially approach this is to add an <code>else</code> statement that launches a dialog giving some useful data to the user. Whatever you do, for the love of code, DO NOT tell the user that you had database problems. For most applications, the user will have no idea what that means. It might look something like this:</p>
+
+<figure class='code'><figcaption><span>settings.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">changeSettings</span><span class="p">(</span><span class="n">newSettings</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">db</span> <span class="o">=</span> <span class="n">dbFactory</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;settings.db&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">if</span> <span class="o">!</span><span class="n">db</span><span class="o">.</span><span class="n">nil?</span>
+</span><span class='line'>    <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">buildSaveQuery</span><span class="p">(</span><span class="n">newSettings</span><span class="p">))</span>
+</span><span class='line'>  <span class="k">else</span>
+</span><span class='line'>    <span class="n">showDialog</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Save Failed!&quot;</span><span class="p">,</span>
+</span><span class='line'>               <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;I&#39;m sorry, but your data could not be saved.&quot;</span> <span class="o">+</span>
+</span><span class='line'>                   <span class="s2">&quot;Press &#39;Try Again&#39; to give it another go.&quot;</span> <span class="o">+</span>
+</span><span class='line'>                   <span class="s2">&quot;If the problem persists, restart the application&quot;</span> <span class="o">+</span>
+</span><span class='line'>                   <span class="s2">&quot; or contact system support.&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is not a bad solution. But what about all the other places in the code I get the database from the factory? I&rsquo;d have to update those as well. It would be better to be able to code the factory to launch a similar error dialog whenever this happens. Even better, let me hand the factory a reference to an appropriate dialog whenever I call <code>dbFactory.get</code>.</p>
+
+<p>Another much more frightening possibility is to skip the <code>nil</code> check. Can you guarantee that <code>dbFactory.get</code> will never be <code>nil</code>? In that case, this option is actually pretty good.</p>
+
+<p>Even if that&rsquo;s not a guarantee you can make, it may still be a valid solution. <a href="http://www.artima.com/intv/defenseP.html">Crash early before you do too much damage</a>. Now, if there&rsquo;s some kind of crash-handler or global exception-catcher in your application, then you can catch the impending crash and tell the user the application needs to be restarted&hellip; And the app probably needs to be restarted anyway! There&rsquo;s no need to keep running after you&rsquo;ve reached some horrible error state that needs to be addressed.</p>
+
+<p>Just do <em>something</em>! Your users (especially if that happens to include me) will appreciate your honesty, even if it&rsquo;s so brutal that they have to restart the application.</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Larry Price</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-12T19:41:00-05:00" pubdate data-updated="true">Dec 12<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/non-technical/'>non-technical</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  <div class="g-plusone" data-size="small"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/12/10/login-shell-not-sourcing-bashrc/" title="Previous Post: Login shell not sourcing .bashrc: A brief lesson in dot-files">&laquo; Login shell not sourcing .bashrc: A brief lesson in dot-files</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -222,7 +323,10 @@
       var disqus_shortname = 'larryprice';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://larryprice.github.io/blog/2013/12/12/tell-your-users-when-you-fail/';
+        var disqus_url = 'http://larryprice.github.io/blog/2013/12/12/tell-your-users-when-you-fail/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

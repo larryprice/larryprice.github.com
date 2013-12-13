@@ -4,7 +4,7 @@
   <title><![CDATA[Category: non-technical | Larry Price]]></title>
   <link href="http://larryprice.github.io/blog/categories/non-technical/atom.xml" rel="self"/>
   <link href="http://larryprice.github.io/"/>
-  <updated>2013-12-10T20:23:13-05:00</updated>
+  <updated>2013-12-12T20:22:24-05:00</updated>
   <id>http://larryprice.github.io/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,62 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Tell Your Users When You Fail]]></title>
+    <link href="http://larryprice.github.io/blog/2013/12/12/tell-your-users-when-you-fail/"/>
+    <updated>2013-12-12T19:41:00-05:00</updated>
+    <id>http://larryprice.github.io/blog/2013/12/12/tell-your-users-when-you-fail</id>
+    <content type="html"><![CDATA[<p>Your users put a lot of faith in you. They put up with your terrible design, your horrible taste in color scheme, and your ability to take up over 100% of their computer&rsquo;s memory. With that in mind, don&rsquo;t these poor people deserve a little bit of honesty?</p>
+
+<p>I came across some code recently that irked me. This code asks for a handle to a database abstraction class and then runs a query on it. It looks kinda like this:</p>
+
+<p>``` ruby settings.rb
+def changeSettings(newSettings)
+  db = dbFactory.get(&ldquo;settings.db&rdquo;)
+  if !db.nil?</p>
+
+<pre><code>db.execute(buildSaveQuery(newSettings))
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>How nice that <code>changeSettings</code> doesn&rsquo;t try to play with a <code>nil</code> database, right? But what about the user&rsquo;s data? It wasn&rsquo;t saved. And no one knows. <em>Not even you</em>. Now, maybe the user will happily continue what he&rsquo;s doing until he notices that his new settings aren&rsquo;t quite right. So he goes back to them again. Same result. Repeat ad infinitum.</p>
+
+<p>How I would initially approach this is to add an <code>else</code> statement that launches a dialog giving some useful data to the user. Whatever you do, for the love of code, DO NOT tell the user that you had database problems. For most applications, the user will have no idea what that means. It might look something like this:</p>
+
+<p>``` ruby settings.rb
+def changeSettings(newSettings)
+  db = dbFactory.get(&ldquo;settings.db&rdquo;)
+  if !db.nil?</p>
+
+<pre><code>db.execute(buildSaveQuery(newSettings))
+</code></pre>
+
+<p>  else</p>
+
+<pre><code>showDialog(title="Save Failed!",
+           msg="I'm sorry, but your data could not be saved." +
+               "Press 'Try Again' to give it another go." +
+               "If the problem persists, restart the application" +
+               " or contact system support.")
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>This is not a bad solution. But what about all the other places in the code I get the database from the factory? I&rsquo;d have to update those as well. It would be better to be able to code the factory to launch a similar error dialog whenever this happens. Even better, let me hand the factory a reference to an appropriate dialog whenever I call <code>dbFactory.get</code>.</p>
+
+<p>Another much more frightening possibility is to skip the <code>nil</code> check. Can you guarantee that <code>dbFactory.get</code> will never be <code>nil</code>? In that case, this option is actually pretty good.</p>
+
+<p>Even if that&rsquo;s not a guarantee you can make, it may still be a valid solution. <a href="http://www.artima.com/intv/defenseP.html">Crash early before you do too much damage</a>. Now, if there&rsquo;s some kind of crash-handler or global exception-catcher in your application, then you can catch the impending crash and tell the user the application needs to be restarted&hellip; And the app probably needs to be restarted anyway! There&rsquo;s no need to keep running after you&rsquo;ve reached some horrible error state that needs to be addressed.</p>
+
+<p>Just do <em>something</em>! Your users (especially if that happens to include me) will appreciate your honesty, even if it&rsquo;s so brutal that they have to restart the application.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Changing Plans]]></title>
@@ -116,39 +172,6 @@
 <h3>Who Would Like This</h3>
 
 <p>This book would be nice required reading for students. Given the length and technical depth, it&rsquo;s practically a textbook. Developers a few years out of university would still enjoy this text, but some topics are so obvious or overdone that many readers may start skipping chapters. If a developer knew of precisely the area he or she wanted to improve, then said developer could likely benefit from perusing a chapter of this book covering that topic.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Who Moved My Cheese?: An Amazing Way to Deal with Change in Your Work and in Your Life]]></title>
-    <link href="http://larryprice.github.io/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life/"/>
-    <updated>2012-11-27T20:47:00-05:00</updated>
-    <id>http://larryprice.github.io/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life</id>
-    <content type="html"><![CDATA[<p><img src="http://dontstepinthepoop.com/wp-content/uploads/2010/01/cheese.jpg" style="border: 0" width="130px" title="Who Moved My Cheese?" alt="Cover for Who Moved My Cheese?" /><br/>
-<a href="http://www.amazon.com/gp/product/0399144463/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0399144463&amp;linkCode=as2&amp;tag=larpriandthee-20"><strong>Who Moved My Cheese?: An Amazing Way to Deal with Change in Your Work and in Your Life</strong></a><br/>
-<strong>Spencer Johnson</strong></p>
-
-<hr />
-
-<h3>The Gist</h3>
-
-<p><em>Who Moved My Cheese?</em> is a book about being prepared to lose your job. The book was written during times of rapid economic growth caused by the <a href="http://en.wikipedia.org/wiki/Dot-com_boom">dot-com bubble</a>, which resulted in many companies emerging out of the primordial ooze and then falling back down into the tarpit after an extremely short time on the market. The author uses a cute analogy about cheese to convey that success is fleeting, and each day could be the day a company will shut down.</p>
-
-<h3>My Feelings</h3>
-
-<p>This is another book I read during summer 2012 and wrote a mediocre write-up regarding. This write-up is fresh and in my new write-up style.</p>
-
-<p>The authors of this book want to help people realize that their job is a gift, not a privilage. Just because a company is doing well this quarter does not imply that it will still be in business next quarter. During the time period this book was written in, this was especially true. The theory of companies during the late &lsquo;90s was to spend as much money as possible to gather as many customers as possible disregarding profits in the short-term (read: <a href="http://www.paulgraham.com/start.html">Get Large or Get Lost</a>). Of course, this kind of mentality did not fit all businesses, and many companies which looked like they would be the future leaders of the American economy were quickly forgotten by the mid-2000s (see: <a href="http://en.wikipedia.org/wiki/Pets.com">Pets.com</a>).</p>
-
-<p>The authors want employees to stop fearing change, and to accept it as a normal part of life. Sometimes companies falter, and oftentimes there&rsquo;s nothing an individual can do about it. In doing so, sometimes old friends are left behind while an individual moves on in search of bigger and better things. Sometimes it takes a long time to find those bigger and better things, but every time it&rsquo;s worth it due to the thrill of confronting your fears and exploring something new.</p>
-
-<p>The use of a &ldquo;maze&rdquo; with two tiny people and two anthropomorphic mice is strange and feels purposefully forced. The authors wanted to make a memorable anecdote, and they succeeded with their strange analogy. Having said that, several times I was confused by the names of the four characters as they were very similar and nonsensical. Because of this, I had to reread some sections after referencing the first page of the book to determine who was who.</p>
-
-<p>The primary author appended &ldquo;MD&rdquo; to his name on the front cover. Similarly, the &ldquo;secondary&rdquo; author appended a &ldquo;PhD&rdquo; to his name on the front cover. This bothered me as it is an obvious ploy to make people value the opinions held within the book more highly because they are written by &ldquo;doctors.&rdquo;</p>
-
-<h3>Who Would Like This</h3>
-
-<p>This is a book that tries to prepare people for the worst and to teach them not to just give up when the future looks grim. It could be an interesting book for anyone, especially after several years of an economic boom caused by a new technology. A person who is very content in their current position at a company could also benefit from this book, as it may give them some incentive to seek out change.</p>
 ]]></content>
   </entry>
   
