@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | Larry Price]]></title>
   <link href="http://larryprice.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://larryprice.github.io/"/>
-  <updated>2013-12-12T20:22:24-05:00</updated>
+  <updated>2013-12-15T18:42:09-05:00</updated>
   <id>http://larryprice.github.io/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,67 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Setting up a Go environment in Ubuntu]]></title>
+    <link href="http://larryprice.github.io/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04/"/>
+    <updated>2013-12-15T18:40:00-05:00</updated>
+    <id>http://larryprice.github.io/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04</id>
+    <content type="html"><![CDATA[<p>Some very light cajoling led me to do some investigation into <a href="http://golang.org/">Google Go</a> (often called <strong>golang</strong> for ease of internet search). This is a brief recounting of how I got up and running on <a href="http://ubuntu.com">Ubuntu</a> (first 12.04 and then 13.10). Luckily, this has been made espcially easy for us with the introduction of a <a href="http://packages.ubuntu.com/precise/golang">golang package in the Ubuntu package repositories</a>. There are also <a href="http://golang.org/doc/install">official installation instructions</a> if you don&rsquo;t like mine.</p>
+
+<p>Open up a terminal and let loose:</p>
+
+<p><code>bash
+$ sudo apt-get install golang
+</code></p>
+
+<p>The download is pretty heavy, so this step may take some time. Eventually the installer for <code>golang-go</code> will ask you if you want to &ldquo;Report installation of public packages to Go Dashboard.&rdquo; I&rsquo;ve been choosing &ldquo;No&rdquo; to this question and have no complaints.</p>
+
+<p>Now comes the fun part. Serious Go development relies on having a &ldquo;workspace&rdquo; setup involving a specific directory structure including <code>bin/</code>, <code>pkg/</code>, and <code>src/</code> directories. Google&rsquo;s <a href="http://golang.org/doc/code.html">official set-up page</a> contains more information about these workspaces.</p>
+
+<p>I&rsquo;m not a big fan of putting a visible directory in <code>$HOME</code>, so I opted to make a hidden directory called <code>.go</code>. After creating the directory, the environment variable <code>$GOPATH</code> needs to be set and <code>$PATH</code> needs to be adjusted.</p>
+
+<p><code>bash
+$ mkdir ~/.go
+$ echo "GOPATH=$HOME/.go" &gt;&gt; ~/.bashrc
+$ echo "export GOPATH" &gt;&gt; ~/.bashrc
+$ echo "PATH=\$PATH:\$GOPATH/bin # Add GOPATH/bin to PATH for scripting" &gt;&gt; ~/.bashrc
+$ source ~/.bashrc
+</code></p>
+
+<p>Now I&rsquo;m going to create a go project and add a link to it in the workspace I just created.</p>
+
+<p><code>bash
+$ mkdir -p $GOPATH/src/github.com/user
+$ mkdir ~/hello-go
+$ ln -s ~/hello-go ~/.go/src/github.com/user/hello-go
+</code></p>
+
+<p>For some actual test code, I&rsquo;ll add a file in my <code>hello-go/</code> directory called <code>hello.go</code> with the following code:</p>
+
+<p>``` go hello.go
+package main</p>
+
+<p>import &ldquo;fmt&rdquo;</p>
+
+<p>func main() {
+  fmt.Println(&ldquo;Hello world&rdquo;)
+}
+```</p>
+
+<p>Now I&rsquo;m going to install the binary created from compiling this code into my <code>$GOPATH</code> to verify that my workspace is set up correctly, then I&rsquo;ll run it to behold the fruit of my efforts.</p>
+
+<p><code>bash
+$ go install github.com/user/hello-go
+$ hello-go
+Hello world
+</code></p>
+
+<p>Installing is not necessary every time I want to test that my code compiles; running <code>go build</code> in the source directory will create a local executable that can be executed for incremental testing.</p>
+
+<p>If you&rsquo;re interested in learning golang, I would recommend doing the <a href="http://tour.golang.org/">go tour</a>. It goes way beyond a trivial hello world program and gives you some insight into many coplex go concepts (I even posted <a href="https://gist.github.com/larryprice/7647808">my solutions as a gist</a>, if you&rsquo;re interested).</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Login shell not sourcing .bashrc: A brief lesson in dot-files]]></title>

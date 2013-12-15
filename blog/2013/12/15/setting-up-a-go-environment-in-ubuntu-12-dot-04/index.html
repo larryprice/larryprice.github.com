@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>I Don't Have Time - Larry Price</title>
+  <title>Setting up a Go environment in Ubuntu - Larry Price</title>
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="&ldquo;Wanna go for a walk?&rdquo; my wife asks over my shoulder. &ldquo;I don&rsquo;t have time for your walks, woman! I&rsquo;ve got a city to run &hellip;">
+  <meta name="description" content="Some very light cajoling led me to do some investigation into Google Go (often called golang for ease of internet search). This is a brief recounting &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://larryprice.github.io/blog/2012/10/24/i-dont-have-time">
+  <link rel="canonical" href="http://larryprice.github.io/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04">
   <link href="/cupicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Larry Price" type="application/atom+xml">
@@ -83,7 +83,7 @@
   
   <header>
     
-      <h1 class="entry-title">I Don't Have Time</h1>
+      <h1 class="entry-title">Setting Up a Go Environment in Ubuntu</h1>
     
     
       <p class="meta">
@@ -99,7 +99,7 @@
   
 
 
-<time datetime="2012-10-24T22:35:00-04:00" pubdate data-updated="true">Oct 24<span>th</span>, 2012</time>
+<time datetime="2013-12-15T18:40:00-05:00" pubdate data-updated="true">Dec 15<span>th</span>, 2013</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -108,25 +108,78 @@
   </header>
 
 
-<div class="entry-content"><p>&ldquo;Wanna go for a walk?&rdquo; my wife asks over my shoulder.</p>
+<div class="entry-content"><p>Some very light cajoling led me to do some investigation into <a href="http://golang.org/">Google Go</a> (often called <strong>golang</strong> for ease of internet search). This is a brief recounting of how I got up and running on <a href="http://ubuntu.com">Ubuntu</a> (first 12.04 and then 13.10). Luckily, this has been made espcially easy for us with the introduction of a <a href="http://packages.ubuntu.com/precise/golang">golang package in the Ubuntu package repositories</a>. There are also <a href="http://golang.org/doc/install">official installation instructions</a> if you don&rsquo;t like mine.</p>
 
-<p>&ldquo;I don&rsquo;t have time for your walks, woman! I&rsquo;ve got a city to run!&rdquo; I exclaim as I frantically move the mouse around the screen to raise taxes on the rich so I can afford to build another statue of myself in the blossoming city of Velcro. I&rsquo;d been absolutely engulfed in the popular city simulator <a href="http://en.wikipedia.org/wiki/Simcity_4"><em>SimCity 4</em></a> for about five hours already that day. Needless to say, my wife &ldquo;convinced&rdquo; me to hit the pause button on the game and join her back in reality, where I&rsquo;m a software developer who has to go on walks to counter his poor eating habits.</p>
+<p>Open up a terminal and let loose:</p>
 
-<p>We take time too seriously.</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install golang
+</span></code></pre></td></tr></table></div></figure>
 
-<p>When we feel like we don&rsquo;t have enough time, we complain. When we feel like we have too much time, we think we&rsquo;re bored, and so we complain about that.</p>
 
-<p>Maybe if we spent less time complaining, we&rsquo;d have time to see how ridiculous we are.</p>
+<p>The download is pretty heavy, so this step may take some time. Eventually the installer for <code>golang-go</code> will ask you if you want to &ldquo;Report installation of public packages to Go Dashboard.&rdquo; I&rsquo;ve been choosing &ldquo;No&rdquo; to this question and have no complaints.</p>
 
-<p>Time is time. What&rsquo;s there is there, and we&rsquo;re not getting any more or less of it based on what we get accomplished in a given day.</p>
+<p>Now comes the fun part. Serious Go development relies on having a &ldquo;workspace&rdquo; setup involving a specific directory structure including <code>bin/</code>, <code>pkg/</code>, and <code>src/</code> directories. Google&rsquo;s <a href="http://golang.org/doc/code.html">official set-up page</a> contains more information about these workspaces.</p>
 
-<p>&hellip;Unless of course what you accomplish is manipulating time in some manner. Or you create a serum to slow/expediate/stop the aging process. But those are side projects to talk about in another blog post on another day.</p>
+<p>I&rsquo;m not a big fan of putting a visible directory in <code>$HOME</code>, so I opted to make a hidden directory called <code>.go</code>. After creating the directory, the environment variable <code>$GOPATH</code> needs to be set and <code>$PATH</code> needs to be adjusted.</p>
 
-<p>Back to <em>SimCity 4</em>. After I rediscovered the dusty game disc at my parents&#8217; house, the game completely absorbed me, even 10 years after it was originally released (my computer is finally powerful enough to play it). I didn&rsquo;t mind that it was taking up so much of my time. I had a myriad of more conventional things I wanted to do that weekend: side projects to work on, books to read, TV shows to watch, internets to check, housework to do, groceries to buy, and meals to cook; but none of that mattered.</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mkdir ~/.go
+</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;GOPATH=$HOME/.go&quot;</span> &gt;&gt; ~/.bashrc
+</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;export GOPATH&quot;</span> &gt;&gt; ~/.bashrc
+</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;PATH=\$PATH:\$GOPATH/bin # Add GOPATH/bin to PATH for scripting&quot;</span> &gt;&gt; ~/.bashrc
+</span><span class='line'><span class="nv">$ </span><span class="nb">source</span> ~/.bashrc
+</span></code></pre></td></tr></table></div></figure>
 
-<p>I repeat: none of that important-sounding stuff mattered. I had stumbled upon this completely arbitrary childhood memory to relive, so everything else took a back seat. I don&rsquo;t regret all the hours I ended up spending on that game, as a kid or as an adult. A compulsive opportunity arose to have some fun and I snatched it up. I stopped worrying about time and decided to just enjoy myself. You should try it sometime. We spend way too much of our time trying to abide by our schedules and to-do lists. The best parts of life are when you stumble upon something that makes you completely forget what you were doing before you found it, and then continues to obliterate any plans you might have had for the rest of the day.</p>
 
-<p>Now if you&rsquo;ll excuse me, I have a city to run.</p>
+<p>Now I&rsquo;m going to create a go project and add a link to it in the workspace I just created.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mkdir -p <span class="nv">$GOPATH</span>/src/github.com/user
+</span><span class='line'><span class="nv">$ </span>mkdir ~/hello-go
+</span><span class='line'><span class="nv">$ </span>ln -s ~/hello-go ~/.go/src/github.com/user/hello-go
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For some actual test code, I&rsquo;ll add a file in my <code>hello-go/</code> directory called <code>hello.go</code> with the following code:</p>
+
+<figure class='code'><figcaption><span>hello.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">main</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="s">&quot;fmt&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Hello world&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now I&rsquo;m going to install the binary created from compiling this code into my <code>$GOPATH</code> to verify that my workspace is set up correctly, then I&rsquo;ll run it to behold the fruit of my efforts.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>go install github.com/user/hello-go
+</span><span class='line'><span class="nv">$ </span>hello-go
+</span><span class='line'>Hello world
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Installing is not necessary every time I want to test that my code compiles; running <code>go build</code> in the source directory will create a local executable that can be executed for incremental testing.</p>
+
+<p>If you&rsquo;re interested in learning golang, I would recommend doing the <a href="http://tour.golang.org/">go tour</a>. It goes way beyond a trivial hello world program and gives you some insight into many coplex go concepts (I even posted <a href="https://gist.github.com/larryprice/7647808">my solutions as a gist</a>, if you&rsquo;re interested).</p>
 </div>
 
 
@@ -149,12 +202,12 @@
   
 
 
-<time datetime="2012-10-24T22:35:00-04:00" pubdate data-updated="true">Oct 24<span>th</span>, 2012</time>
+<time datetime="2013-12-15T18:40:00-05:00" pubdate data-updated="true">Dec 15<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/non-technical/'>non-technical</a>, <a class='category' href='/blog/categories/sep-blog-battle/'>sep-blog-battle</a>
+    <a class='category' href='/blog/categories/golang/'>golang</a>, <a class='category' href='/blog/categories/linux/'>linux</a>
   
 </span>
 
@@ -174,10 +227,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/10/19/a-hacky-solution-to-the-unicode-data-in-a-unicode-only-collation-problem/" title="Previous Post: A Hacky Solution to the Unicode data in a Unicode-only collation problem">&laquo; A Hacky Solution to the Unicode data in a Unicode-only collation problem</a>
+        <a class="basic-alignment left" href="/blog/2013/12/12/tell-your-users-when-you-fail/" title="Previous Post: Tell Your Users When You Fail">&laquo; Tell Your Users When You Fail</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2012/10/30/good-idea-bad-idea/" title="Next Post: Good Idea, Bad Idea">Good Idea, Bad Idea &raquo;</a>
       
     </p>
   </footer>
@@ -288,8 +339,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://larryprice.github.io/blog/2012/10/24/i-dont-have-time/';
-        var disqus_url = 'http://larryprice.github.io/blog/2012/10/24/i-dont-have-time/';
+        var disqus_identifier = 'http://larryprice.github.io/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04/';
+        var disqus_url = 'http://larryprice.github.io/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04/';
         var disqus_script = 'embed.js';
       
     (function () {
