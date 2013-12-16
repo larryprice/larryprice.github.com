@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="http://larryprice.github.io/atom.xml" rel="self"/>
   <link href="http://larryprice.github.io/"/>
-  <updated>2013-12-15T18:42:09-05:00</updated>
+  <updated>2013-12-15T19:51:19-05:00</updated>
   <id>http://larryprice.github.io/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Setting up a Go environment in Ubuntu]]></title>
+    <title type="html"><![CDATA[Setting Up a Go Environment in Ubuntu]]></title>
     <link href="http://larryprice.github.io/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04/"/>
     <updated>2013-12-15T18:40:00-05:00</updated>
     <id>http://larryprice.github.io/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04</id>
@@ -159,7 +159,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Login shell not sourcing .bashrc: A brief lesson in dot-files]]></title>
+    <title type="html"><![CDATA[Login Shell Not Sourcing .bashrc: A Brief Lesson in Dot-files]]></title>
     <link href="http://larryprice.github.io/blog/2013/12/10/login-shell-not-sourcing-bashrc/"/>
     <updated>2013-12-10T19:45:00-05:00</updated>
     <id>http://larryprice.github.io/blog/2013/12/10/login-shell-not-sourcing-bashrc</id>
@@ -225,7 +225,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Hooks in cucumber-cpp]]></title>
+    <title type="html"><![CDATA[Hooks in Cucumber-cpp]]></title>
     <link href="http://larryprice.github.io/blog/2013/11/22/hooks-in-cucumber-cpp/"/>
     <updated>2013-11-22T20:40:00-05:00</updated>
     <id>http://larryprice.github.io/blog/2013/11/22/hooks-in-cucumber-cpp</id>
@@ -331,7 +331,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Copy Data Using qmake]]></title>
+    <title type="html"><![CDATA[Copy Data Using Qmake]]></title>
     <link href="http://larryprice.github.io/blog/2013/11/14/copy-data-using-qmake/"/>
     <updated>2013-11-14T21:24:00-05:00</updated>
     <id>http://larryprice.github.io/blog/2013/11/14/copy-data-using-qmake</id>
@@ -644,7 +644,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[On the Futility of Man and Trying to Divide a Sinatra App into Separate Controllers]]></title>
+    <title type="html"><![CDATA[On the Futility of Man and Trying to Divide a Sinatra App Into Separate Controllers]]></title>
     <link href="http://larryprice.github.io/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/"/>
     <updated>2013-08-26T22:35:00-04:00</updated>
     <id>http://larryprice.github.io/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers</id>
@@ -770,7 +770,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[The Trouble with Time Zones (aka Learn From My Mistakes Part 1)]]></title>
+    <title type="html"><![CDATA[The Trouble With Time Zones (Aka Learn From My Mistakes Part 1)]]></title>
     <link href="http://larryprice.github.io/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1/"/>
     <updated>2013-08-07T22:00:00-04:00</updated>
     <id>http://larryprice.github.io/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1</id>
@@ -814,7 +814,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Joel On Software]]></title>
+    <title type="html"><![CDATA[Joel on Software]]></title>
     <link href="http://larryprice.github.io/blog/2013/04/28/joel-on-software/"/>
     <updated>2013-04-28T11:38:00-04:00</updated>
     <id>http://larryprice.github.io/blog/2013/04/28/joel-on-software</id>
@@ -850,7 +850,7 @@ tinkering, improving, planting flower beds.</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Tags in C++ Cucumber tests]]></title>
+    <title type="html"><![CDATA[Tags in C++ Cucumber Tests]]></title>
     <link href="http://larryprice.github.io/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/"/>
     <updated>2013-04-15T22:10:00-04:00</updated>
     <id>http://larryprice.github.io/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests</id>
@@ -1066,7 +1066,7 @@ tinkering, improving, planting flower beds.</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Blog Battle: Pvreryvre of fyne coddes]]></title>
+    <title type="html"><![CDATA[Blog Battle: Pvreryvre of Fyne Coddes]]></title>
     <link href="http://larryprice.github.io/blog/2013/03/25/pvreryvre-of-fyne-coddes/"/>
     <updated>2013-03-25T22:09:00-04:00</updated>
     <id>http://larryprice.github.io/blog/2013/03/25/pvreryvre-of-fyne-coddes</id>
