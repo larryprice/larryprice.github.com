@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="http://larryprice.github.io/atom.xml" rel="self"/>
   <link href="http://larryprice.github.io/"/>
-  <updated>2013-12-15T19:51:19-05:00</updated>
+  <updated>2014-01-07T20:45:16-05:00</updated>
   <id>http://larryprice.github.io/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,180 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Finishing the Google Go Writing Web Applications Tutorial]]></title>
+    <link href="http://larryprice.github.io/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial/"/>
+    <updated>2014-01-07T22:45:03-05:00</updated>
+    <id>http://larryprice.github.io/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial</id>
+    <content type="html"><![CDATA[<h3>A golang web app tutorial</h3>
+
+<p>I did some work with <a href="http://golang.org/">Google Go</a> recently and had the chance to follow their great tutorial <em><a href="http://golang.org/doc/articles/wiki/">Writing Web Applications</a></em>. The tutorial is pretty simple: use the Go http library to create a very simple wiki-style site. I like this tutorial a lot because there&rsquo;s not too much hand-holding, but they do eventually hand you the <a href="http://golang.org/doc/articles/wiki/final.go">final code listing</a>. Then the good people at Google give you the tall task of completing the following &lsquo;Other tasks&rsquo; without solutions:</p>
+
+<ul>
+<li>Store templates in tmpl/ and page data in data/.</li>
+<li>Add a handler to make the web root redirect to /view/FrontPage.</li>
+<li>Spruce up the page templates by making them valid HTML and adding some CSS rules.</li>
+<li>Implement inter-page linking by converting instances of [PageName] to
+&lt;a href=&ldquo;/view/PageName&rdquo;>PageName&lt;/a>. (hint: you could use regexp.ReplaceAllFunc to do this)</li>
+</ul>
+
+
+<p>This is what I&rsquo;d like to go over. I scoured the web and didn&rsquo;t have much luck finding solutions to these issues. That would be okay if they were all trivial, but the final step is not straightforward. I&rsquo;m going to assume you&rsquo;ve already gone over the tutorial. You can see <a href="https://github.com/larryprice/gowiki/">my repository on Github</a>, and I have included links to the appropriate commits in the code sections of this blog post.</p>
+
+<h4>Store templates in tmpl/ and page data in data/</h4>
+
+<p>The tutorial originally has the developer store all pages in the project directory. Every time a user made a new wiki page, a new file would creep into the project directory. All HTML templates were also stored in the project directory.</p>
+
+<p>Moving templates is quite trivial. In the global scope:</p>
+
+<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/9994d11b5275bc5faee911e5db2c994bc91052e2'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gd">-var templates = template.Must(template.ParseFiles(&quot;edit.html&quot;, &quot;view.html&quot;))</span>
+</span><span class='line'><span class="gi">+var templates = template.Must(template.ParseFiles(&quot;tmpl/edit.html&quot;, &quot;tmpl/view.html&quot;))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I found moving the page data to <code>data/</code> was a little trickier, especially if the directory didn&rsquo;t already exist. You may not have the same issue, but I remedied this by creating the directory if it doesn&rsquo;t exist. My <code>save</code> function differences:</p>
+
+<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/e86a707d37b802b2d59b8ef261b3fdcab46d5870'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'>func (p *Page) save() error {
+</span><span class='line'><span class="gd">-    filename := p.Title + &quot;.txt&quot;</span>
+</span><span class='line'><span class="gd">-    return ioutil.WriteFile(filename, p.Body, 0600)</span>
+</span><span class='line'><span class="gi">+  os.Mkdir(&quot;data&quot;, 0777)</span>
+</span><span class='line'><span class="gi">+  filename := &quot;data/&quot; + p.Title + &quot;.txt&quot;</span>
+</span><span class='line'><span class="gi">+  return ioutil.WriteFile(filename, p.Body, 0600)</span>
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Store templates in tmpl/ and page data in data/</h4>
+
+<p>All we&rsquo;re going to do is create a simple handler called <code>rootHandler</code> that redirects to a new page called <code>FrontPage</code>. We then add it in the <code>main</code> function. The tutorial had us wrap out handlers in a function call to take some special actions, but that wrapper would mess up our handler in its current form. So I just <code>Redirect</code> to the <code>view</code> handler, which will then decide whether to view or create the FrontPage.</p>
+
+<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/e41fccc2d244a3b0d62d600d94897a076c87d53d'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gi">+ func rootHandler(w http.ResponseWriter, r *http.Request) {</span>
+</span><span class='line'><span class="gi">+   http.Redirect(w, r, &quot;/view/FrontPage&quot;, http.StatusFound)</span>
+</span><span class='line'><span class="gi">+ }</span>
+</span><span class='line'>
+</span><span class='line'>...
+</span><span class='line'>
+</span><span class='line'>func main() {
+</span><span class='line'><span class="gi">+  http.HandleFunc(&quot;/&quot;, rootHandler)</span>
+</span><span class='line'>  http.HandleFunc(&quot;/view/&quot;, makeHandler(viewHandler))
+</span><span class='line'>  http.HandleFunc(&quot;/edit/&quot;, makeHandler(editHandler))
+</span><span class='line'>  http.HandleFunc(&quot;/save/&quot;, makeHandler(saveHandler))
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Spruce up the page templates by making them valid HTML and adding some CSS rules.</h4>
+
+<p>I took my old <code>.html</code> files and put them through <a href="http://validator.w3.org/#validate_by_input">a validator</a>. Making them valid only involved adding <code>DOCTYPE</code>, <code>html</code>, and <code>head</code> tags. The <code>head</code> tag needed <code>meta</code>, and <code>title</code> tags and we were valid. I&rsquo;ve shown <code>view.html</code> below.</p>
+
+<figure class='code'><figcaption><span>view.html</span><a href='https://github.com/larryprice/gowiki/commit/771b4ecc8a550ee438720dc5c3d3f47954a1e4ff'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gi">+&lt;!DOCTYPE html&gt;</span>
+</span><span class='line'><span class="gi">+&lt;html&gt;</span>
+</span><span class='line'><span class="gi">+&lt;head&gt;</span>
+</span><span class='line'><span class="gi">+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;&gt;</span>
+</span><span class='line'><span class="gi">+&lt;title&gt;Wiki made using Golang&lt;/title&gt;</span>
+</span><span class='line'><span class="gi">+&lt;/head&gt;</span>
+</span><span class='line'> &lt;h1&gt;&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'> &lt;p&gt;[&lt;a href=&quot;/edit/&quot;&gt;edit&lt;/a&gt;]&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'> &lt;div&gt;&lt;/div&gt;
+</span><span class='line'><span class="gi">+&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Implement inter-page linking by converting instances of [PageName]</h4>
+
+<p>Converting [PageName] to a hyperlink was a bit more complicated than expected. I originally just tried to run the string through <code>ReplaceAllFunc</code> and replace all instance of [PageName] with an equivalent hyperlink. This does not work because we use Go&rsquo;s <code>ExecuteTemplate</code> method to render our template. <code>ExecuteTemplate</code> escapes any HTML that we give it to prevent us from displaying unwanted HTML. Getting around this was the fun part, because I want the benefit of escaped HTML while still having the ability to substitute my own HTML.</p>
+
+<p>As it turns out, <code>ExecuteTemplate</code> will not escape variables of the type <code>template.HTML</code>. So I added another variable onto the <code>Page</code> struct called <code>DisplayBody</code>.</p>
+
+<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'>type Page struct {
+</span><span class='line'>     Title string
+</span><span class='line'>     Body  []byte
+</span><span class='line'><span class="gi">+    DisplayBody template.HTML</span>
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next, I create a regular expression to find instances of [PageName] and I put the defintion above the <code>main</code> method.</p>
+
+<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gi">+var linkRegexp = regexp.MustCompile(&quot;\\[([a-zA-Z0-9]+)\\]&quot;)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In my <code>viewHandler</code>, I escape <code>Body</code> and then set <code>DisplayBody</code> to that escaped string with the links substituted.</p>
+
+<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gi">+  escapedBody := []byte(template.HTMLEscapeString(string(p.Body)))</span>
+</span><span class='line'><span class="gi">+</span>
+</span><span class='line'><span class="gi">+  p.DisplayBody = template.HTML(linkRegexp.ReplaceAllFunc(escapedBody, func(str []byte) []byte {</span>
+</span><span class='line'><span class="gi">+      matched := linkRegexp.FindStringSubmatch(string(str))</span>
+</span><span class='line'><span class="gi">+      out := []byte(&quot;&lt;a href=\&quot;/view/&quot;+matched[1]+&quot;\&quot;&gt;&quot;+matched[1]+&quot;&lt;/a&gt;&quot;)</span>
+</span><span class='line'><span class="gi">+      return out</span>
+</span><span class='line'><span class="gi">+    }))</span>
+</span><span class='line'>  renderTemplate(w, &quot;view&quot;, p)
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To finish up, I modify the <code>view.html</code> to show <code>DisplayBody</code>. I don&rsquo;t use <code>printf</code>, because that would turn <code>DisplayBody</code> back into a <code>string</code> and <code>ExecuteTemplate</code> would escape it.</p>
+
+<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gd">-&lt;div&gt;&lt;/div&gt;</span>
+</span><span class='line'><span class="gi">+&lt;div&gt;&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And that completes the extra exercises for Google&rsquo;s <em>Writing Web Applications</em> tutorial. Hopefully one day this helps someone who gets stuck.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Setting Up a Go Environment in Ubuntu]]></title>
@@ -1083,41 +1257,6 @@ tinkering, improving, planting flower beds.</p>
 <p>For both industries, a company comes up with a novel idea and presents it to the world. People who like that product can start associating the brand name with other products. After recognizing the brand, a person may start to trust that company and look for other products associated with the brand. That company will become known as a purveyor of fine wares.</p>
 
 <p>So here we stand, reader. Make code that you can be proud of; not for getting tens of thousands of downloads, but for scrawling your good name on the white boards of the world in Sharpie. The customers will keep coming back as long as you&rsquo;ve got the cure for what ails them.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Code Complete Second Edition]]></title>
-    <link href="http://larryprice.github.io/blog/2013/02/19/code-complete-second-edition/"/>
-    <updated>2013-02-19T22:38:00-05:00</updated>
-    <id>http://larryprice.github.io/blog/2013/02/19/code-complete-second-edition</id>
-    <content type="html"><![CDATA[<blockquote><p>Design is a process of carefully planning small mistakes in order to avoid making big ones.
-&mdash; Steve McConnell</p></blockquote>
-
-<h3>The Gist</h3>
-
-<p><em><a href="http://www.amazon.com/gp/product/0735619670/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0735619670&amp;linkCode=as2&amp;tag=larpriandthee-20">Code Complete Second Edition</a></em> by Steve McConnell is the ultimate programmer&rsquo;s handbook, though certainly not a pocket guide considering its massive 850+ page size. This book contains a seemingly endless amount of information regarding the state of programming circa 2004. Topics range from extremely technical, such as making code readable above making it clever, to office politics, such as dealing with non-technical managers.</p>
-
-<h3>My Opinion</h3>
-
-<p>McConnell has written an encyclopedia for software development. In doing so, the book sometimes suffers from the &ldquo;wide as an ocean, shallow as a puddle&rdquo; complex. Nonetheless, the book holds an incredible amount of information that I found refreshing to see in print.</p>
-
-<p>The use of the term &ldquo;construction&rdquo; to refer to coding throughout the book is an apt analogy for McConnell&rsquo;s views on the world of software development. Before beginning construction, a team should have a plan. Construction requires a solid base. While constructing a project, individuals should ensure that anyone else could look at their part of the project and figure out what&rsquo;s happening. Working with a partner often improves quality. People doing construction should test their work to ensure the integrity of their product. Redoing lower levels causes a lot of pain. The team is unlikely to hit the original due date. Etc, etc.</p>
-
-<p>Many things in this book go directly against what I was taught in at university. McConnell recites a quote several times in the book:</p>
-
-<blockquote><p>Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.
-&mdash; Brian Kernighan</p></blockquote>
-
-<p>At university, we&rsquo;re taught all the secrets of writing clever code: pointer manipulation, recursion, inappropriate variable reuse, and others. We were also never taught to plan ahead (&hellip;besides flowcharts, which were never required) or test, both of which McConnell highly recommends as necessary steps in software development. It&rsquo;s no wonder my programs took so long to debug! Of course, I&rsquo;ve learned to perform these tasks naturally while working as a Real Life Programmer. Reading this book is likely more helpful than taking the first few semesters of programming at university.</p>
-
-<p>A small issue I had was a wishy-washy attitude towards comments. In one chapter, McConnell describes having minimal comments in a code and keeping it mostly self-documenting. He then goes on to show all kinds of different, horrifying comments and justifies why they are sometimes okay.</p>
-
-<p>This is where I will note that <em>Code Complete Second Edition</em> is a book published by <a href="http://en.wikipedia.org/wiki/Microsoft_Press">Microsoft Press</a>. I was often surprised by McConnell&rsquo;s adamance that Visual Basic is the most popular programming language at the time of publishing. Even circa 2004 (the year this book was published), the <a href="http://www.tiobe.com/index.php/content/paperinfo/tpci/index.html">Tiobe index</a> shows VB behind Java, C, and C++. The <a href="https://sites.google.com/site/pydatalog/pypl/PyPL-PopularitY-of-Programming-Language">PyPl index</a> also shows VB behind Java, PHP, C, and C++ in 2004. For the record, VB is a silly language.</p>
-
-<h3>Who Would Like This</h3>
-
-<p>This book would be nice required reading for students. Given the length and technical depth, it&rsquo;s practically a textbook. Developers a few years out of university would still enjoy this text, but some topics are so obvious or overdone that many readers may start skipping chapters. If a developer knew of precisely the area he or she wanted to improve, then said developer could likely benefit from perusing a chapter of this book covering that topic.</p>
 ]]></content>
   </entry>
   

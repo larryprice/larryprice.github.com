@@ -1,0 +1,486 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Finishing the Google Go Writing Web Applications Tutorial - Larry Price</title>
+  <meta name="author" content="Larry Price">
+
+  
+  <meta name="description" content="A golang web app tutorial I did some work with Google Go recently and had the chance to follow their great tutorial Writing Web Applications. The &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://larryprice.github.io/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Larry Price" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Montserrat+Alternates|Marcellus' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35669093-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner" style="background:url(/images/coffee-stain.png) top right no-repeat; background-size: auto 100%;"><hgroup>
+  <h1><a href="/">Larry Price</a></h1>
+  
+    <h2>And The Endless Cup Of Coffee</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:larryprice.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/books">Books</a></li>
+  <li><a href="/blog/projects">Projects</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Finishing the Google Go Writing Web Applications Tutorial</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-07T22:45:03-05:00" pubdate data-updated="true">Jan 7<span>th</span>, 2014</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://larryprice.github.io">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h3>A golang web app tutorial</h3>
+
+<p>I did some work with <a href="http://golang.org/">Google Go</a> recently and had the chance to follow their great tutorial <em><a href="http://golang.org/doc/articles/wiki/">Writing Web Applications</a></em>. The tutorial is pretty simple: use the Go http library to create a very simple wiki-style site. I like this tutorial a lot because there&rsquo;s not too much hand-holding, but they do eventually hand you the <a href="http://golang.org/doc/articles/wiki/final.go">final code listing</a>. Then the good people at Google give you the tall task of completing the following &lsquo;Other tasks&rsquo; without solutions:</p>
+
+<ul>
+<li>Store templates in tmpl/ and page data in data/.</li>
+<li>Add a handler to make the web root redirect to /view/FrontPage.</li>
+<li>Spruce up the page templates by making them valid HTML and adding some CSS rules.</li>
+<li>Implement inter-page linking by converting instances of [PageName] to
+&lt;a href=&ldquo;/view/PageName&rdquo;>PageName&lt;/a>. (hint: you could use regexp.ReplaceAllFunc to do this)</li>
+</ul>
+
+
+<p>This is what I&rsquo;d like to go over. I scoured the web and didn&rsquo;t have much luck finding solutions to these issues. That would be okay if they were all trivial, but the final step is not straightforward. I&rsquo;m going to assume you&rsquo;ve already gone over the tutorial. You can see <a href="https://github.com/larryprice/gowiki/">my repository on Github</a>, and I have included links to the appropriate commits in the code sections of this blog post.</p>
+
+<h4>Store templates in tmpl/ and page data in data/</h4>
+
+<p>The tutorial originally has the developer store all pages in the project directory. Every time a user made a new wiki page, a new file would creep into the project directory. All HTML templates were also stored in the project directory.</p>
+
+<p>Moving templates is quite trivial. In the global scope:</p>
+
+<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/9994d11b5275bc5faee911e5db2c994bc91052e2'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gd">-var templates = template.Must(template.ParseFiles(&quot;edit.html&quot;, &quot;view.html&quot;))</span>
+</span><span class='line'><span class="gi">+var templates = template.Must(template.ParseFiles(&quot;tmpl/edit.html&quot;, &quot;tmpl/view.html&quot;))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I found moving the page data to <code>data/</code> was a little trickier, especially if the directory didn&rsquo;t already exist. You may not have the same issue, but I remedied this by creating the directory if it doesn&rsquo;t exist. My <code>save</code> function differences:</p>
+
+<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/e86a707d37b802b2d59b8ef261b3fdcab46d5870'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'>func (p *Page) save() error {
+</span><span class='line'><span class="gd">-    filename := p.Title + &quot;.txt&quot;</span>
+</span><span class='line'><span class="gd">-    return ioutil.WriteFile(filename, p.Body, 0600)</span>
+</span><span class='line'><span class="gi">+  os.Mkdir(&quot;data&quot;, 0777)</span>
+</span><span class='line'><span class="gi">+  filename := &quot;data/&quot; + p.Title + &quot;.txt&quot;</span>
+</span><span class='line'><span class="gi">+  return ioutil.WriteFile(filename, p.Body, 0600)</span>
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Store templates in tmpl/ and page data in data/</h4>
+
+<p>All we&rsquo;re going to do is create a simple handler called <code>rootHandler</code> that redirects to a new page called <code>FrontPage</code>. We then add it in the <code>main</code> function. The tutorial had us wrap out handlers in a function call to take some special actions, but that wrapper would mess up our handler in its current form. So I just <code>Redirect</code> to the <code>view</code> handler, which will then decide whether to view or create the FrontPage.</p>
+
+<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/e41fccc2d244a3b0d62d600d94897a076c87d53d'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gi">+ func rootHandler(w http.ResponseWriter, r *http.Request) {</span>
+</span><span class='line'><span class="gi">+   http.Redirect(w, r, &quot;/view/FrontPage&quot;, http.StatusFound)</span>
+</span><span class='line'><span class="gi">+ }</span>
+</span><span class='line'>
+</span><span class='line'>...
+</span><span class='line'>
+</span><span class='line'>func main() {
+</span><span class='line'><span class="gi">+  http.HandleFunc(&quot;/&quot;, rootHandler)</span>
+</span><span class='line'>  http.HandleFunc(&quot;/view/&quot;, makeHandler(viewHandler))
+</span><span class='line'>  http.HandleFunc(&quot;/edit/&quot;, makeHandler(editHandler))
+</span><span class='line'>  http.HandleFunc(&quot;/save/&quot;, makeHandler(saveHandler))
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Spruce up the page templates by making them valid HTML and adding some CSS rules.</h4>
+
+<p>I took my old <code>.html</code> files and put them through <a href="http://validator.w3.org/#validate_by_input">a validator</a>. Making them valid only involved adding <code>DOCTYPE</code>, <code>html</code>, and <code>head</code> tags. The <code>head</code> tag needed <code>meta</code>, and <code>title</code> tags and we were valid. I&rsquo;ve shown <code>view.html</code> below.</p>
+
+<figure class='code'><figcaption><span>view.html</span><a href='https://github.com/larryprice/gowiki/commit/771b4ecc8a550ee438720dc5c3d3f47954a1e4ff'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gi">+&lt;!DOCTYPE html&gt;</span>
+</span><span class='line'><span class="gi">+&lt;html&gt;</span>
+</span><span class='line'><span class="gi">+&lt;head&gt;</span>
+</span><span class='line'><span class="gi">+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;&gt;</span>
+</span><span class='line'><span class="gi">+&lt;title&gt;Wiki made using Golang&lt;/title&gt;</span>
+</span><span class='line'><span class="gi">+&lt;/head&gt;</span>
+</span><span class='line'> &lt;h1&gt;&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'> &lt;p&gt;[&lt;a href=&quot;/edit/&quot;&gt;edit&lt;/a&gt;]&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'> &lt;div&gt;&lt;/div&gt;
+</span><span class='line'><span class="gi">+&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Implement inter-page linking by converting instances of [PageName]</h4>
+
+<p>Converting [PageName] to a hyperlink was a bit more complicated than expected. I originally just tried to run the string through <code>ReplaceAllFunc</code> and replace all instance of [PageName] with an equivalent hyperlink. This does not work because we use Go&rsquo;s <code>ExecuteTemplate</code> method to render our template. <code>ExecuteTemplate</code> escapes any HTML that we give it to prevent us from displaying unwanted HTML. Getting around this was the fun part, because I want the benefit of escaped HTML while still having the ability to substitute my own HTML.</p>
+
+<p>As it turns out, <code>ExecuteTemplate</code> will not escape variables of the type <code>template.HTML</code>. So I added another variable onto the <code>Page</code> struct called <code>DisplayBody</code>.</p>
+
+<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'>type Page struct {
+</span><span class='line'>     Title string
+</span><span class='line'>     Body  []byte
+</span><span class='line'><span class="gi">+    DisplayBody template.HTML</span>
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next, I create a regular expression to find instances of [PageName] and I put the defintion above the <code>main</code> method.</p>
+
+<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gi">+var linkRegexp = regexp.MustCompile(&quot;\\[([a-zA-Z0-9]+)\\]&quot;)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In my <code>viewHandler</code>, I escape <code>Body</code> and then set <code>DisplayBody</code> to that escaped string with the links substituted.</p>
+
+<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gi">+  escapedBody := []byte(template.HTMLEscapeString(string(p.Body)))</span>
+</span><span class='line'><span class="gi">+</span>
+</span><span class='line'><span class="gi">+  p.DisplayBody = template.HTML(linkRegexp.ReplaceAllFunc(escapedBody, func(str []byte) []byte {</span>
+</span><span class='line'><span class="gi">+      matched := linkRegexp.FindStringSubmatch(string(str))</span>
+</span><span class='line'><span class="gi">+      out := []byte(&quot;&lt;a href=\&quot;/view/&quot;+matched[1]+&quot;\&quot;&gt;&quot;+matched[1]+&quot;&lt;/a&gt;&quot;)</span>
+</span><span class='line'><span class="gi">+      return out</span>
+</span><span class='line'><span class="gi">+    }))</span>
+</span><span class='line'>  renderTemplate(w, &quot;view&quot;, p)
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To finish up, I modify the <code>view.html</code> to show <code>DisplayBody</code>. I don&rsquo;t use <code>printf</code>, because that would turn <code>DisplayBody</code> back into a <code>string</code> and <code>ExecuteTemplate</code> would escape it.</p>
+
+<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gd">-&lt;div&gt;&lt;/div&gt;</span>
+</span><span class='line'><span class="gi">+&lt;div&gt;&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And that completes the extra exercises for Google&rsquo;s <em>Writing Web Applications</em> tutorial. Hopefully one day this helps someone who gets stuck.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Larry Price</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-07T22:45:03-05:00" pubdate data-updated="true">Jan 7<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/golang/'>golang</a>, <a class='category' href='/blog/categories/web/'>web</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  <div class="g-plusone" data-size="small"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04/" title="Previous Post: Setting up a Go environment in Ubuntu">&laquo; Setting up a Go environment in Ubuntu</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <span style="display: block; text-align: center;">
+    <a href="https://github.com/larryprice" title="Github"><img src="/images/icon_github.png" class="social-media-icon" /></a>
+    <a href="https://bitbucket.org/larryprice" title="Bitbucket"><img src="/images/icon_bitbucket.png" class="social-media-icon" /></a>
+    <a href="https://twitter.com/larryrprice" title="Twitter"><img src="/images/icon_twitter.png" class="social-media-icon" /></a>
+    <a href="https://www.linkedin.com/pub/larry-price/3a/630/47b" title="LinkedIn"><img src="/images/icon_linkedin.png" class="social-media-icon" /></a>
+  </span>
+</section>
+<section>
+  <h1>void* Larry</h1>
+  <p>I'm a codeslinger debugging from the mean streets of Indiana. Welcome to my blog, where I'll tell the tales of wondrous things I discover in the digital jungle.</p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial/">Finishing the Google Go Writing Web Applications Tutorial</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04/">Setting Up a Go Environment in Ubuntu</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/12/tell-your-users-when-you-fail/">Tell Your Users When You Fail</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/10/login-shell-not-sourcing-bashrc/">Login Shell Not Sourcing .bashrc: A Brief Lesson in Dot-files</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/22/hooks-in-cucumber-cpp/">Hooks in Cucumber-cpp</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Tag Cloud</h1>
+    <span id="tag-cloud"><a href='/blog/categories/c-plus-plus' style='font-size: 116.36363636363636%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/cucumber' style='font-size: 116.36363636363636%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 127.27272727272728%'>database</a> <a href='/blog/categories/foreman' style='font-size: 105.45454545454545%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 105.45454545454545%'>foss</a> <a href='/blog/categories/gmock' style='font-size: 105.45454545454545%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 110.9090909090909%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 105.45454545454545%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 105.45454545454545%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 105.45454545454545%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/linux' style='font-size: 116.36363636363636%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 110.9090909090909%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 116.36363636363636%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 105.45454545454545%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 105.45454545454545%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 105.45454545454545%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 110.9090909090909%'>nosql</a> <a href='/blog/categories/pokephile' style='font-size: 121.81818181818181%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 105.45454545454545%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 105.45454545454545%'>qt</a> <a href='/blog/categories/rails' style='font-size: 105.45454545454545%'>rails</a> <a href='/blog/categories/retro' style='font-size: 110.9090909090909%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 110.9090909090909%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 143.63636363636363%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 110.9090909090909%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 105.45454545454545%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 143.63636363636363%'>sep-blog-battle</a> <a href='/blog/categories/sinatra' style='font-size: 121.81818181818181%'>sinatra</a> <a href='/blog/categories/tdd' style='font-size: 105.45454545454545%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 110.9090909090909%'>testing</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 105.45454545454545%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 105.45454545454545%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 105.45454545454545%'>upstart</a> <a href='/blog/categories/web' style='font-size: 121.81818181818181%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 138.1818181818182%'>write-ups</a> </span>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/larryprice">@larryprice</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'larryprice',
+            count: 5,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  <center>
+	  Copyright &copy; 2014 - Larry Price -
+	  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span><br/>
+	  Note: Views and opinions expressed belong solely to the author and do not represent the views of the any other person or company.
+	</center>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'larryprice';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://larryprice.github.io/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial/';
+        var disqus_url = 'http://larryprice.github.io/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
