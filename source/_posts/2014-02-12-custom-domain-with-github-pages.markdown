@@ -6,11 +6,11 @@ comments: true
 categories: web
 ---
 
-As of today, I'm the proud owner of [larry-price.com](larry-price.com). On the recommendation from a friend, I used [domainmonster.com](domainmonster.com) for it's cost effectiveness and usable toolset. I wanted to link my Github Pages blog (this blog!) to my new site. In case I ever want to do this again, I've provided myself (and you!) with a step-by-step guide below. Note that Github [has a page that explains how to do this](https://help.github.com/articles/setting-up-a-custom-domain-with-pages), but there's some fluff and ordering issues that turned me off from using those instructions as any more than a reference.
+As of today, I'm the proud owner of [larry-price.com](//larry-price.com). On the recommendation from a friend, I used [domainmonster.com](//domainmonster.com) for it's cost effectiveness and usable toolset. I wanted to link my Github Pages blog (this blog!) to my new site. In case I ever want to do this again, I've provided myself (and you!) with a step-by-step guide below. Note that Github [has a page that explains how to do this](//help.github.com/articles/setting-up-a-custom-domain-with-pages), but there's some fluff and ordering issues that turned me off from using those instructions as any more than a reference.
 
 ####Step 0: Buy your domain####
 
-All sites where you can purchase domains have the same domains available, but at different prices. From the sites I perused, [GoDaddy](godaddy.com) had the best search for domain names, suggesting different variations on the searched domain name. I found that [domainmonster.com](domainmonster.com) had the ugliest UI but the best prices. [Hover.com](hover.com) looked really modern and had moderate prices. Shop around and spend money.
+All sites where you can purchase domains have the same domains available, but at different prices. From the sites I perused, [GoDaddy](//godaddy.com) had the best search for domain names, suggesting different variations on the searched domain name. I found that [domainmonster.com](//domainmonster.com) had the ugliest UI but the best prices. [Hover.com](//hover.com) looked really modern and had moderate prices. Shop around and spend money.
 
 ####Step 0.5: Exercise restraint####
 
@@ -56,7 +56,7 @@ $ echo "larry-price.com" > CNAME
 
 Push that to Github and wait 0 to 10 minutes for Github to refresh your page.
 
-Note: If you're one of the few, the proud using the brilliant [Octopress](http://octopress.org/) to generate your blog, you want to make sure to add the `CNAME` file to the root of your `source/` directory. That way, when you call `deploy` your `CNAME` file will end up in the root of your `_deploy` directory.
+Note: If you're one of the few, the proud using the brilliant [Octopress](//octopress.org/) to generate your blog, you want to make sure to add the `CNAME` file to the root of your `source/` directory. That way, when you call `deploy` your `CNAME` file will end up in the root of your `_deploy` directory.
 
 ####Step 4: Behold####
 
