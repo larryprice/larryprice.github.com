@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="I just finished my first attempt at deploying a web app to run automatically in the background on a friend&rsquo;s server. Pretty easy, really. The &hellip;">
+  <meta name="description" content="I started trying to work on an open-source project and found that I needed to install googletest and googlemock on my home machine. Seemed easy &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://larryprice.github.io/blog/page/3">
+  <link rel="canonical" href="http://larry-price.com/blog/page/3">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Larry Price" type="application/atom+xml">
@@ -63,7 +63,7 @@
   
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:larryprice.github.io" />
+    <input type="hidden" name="q" value="site:larry-price.com" />
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -80,6 +80,252 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/">Installing GTest and GMock Libs in Ubuntu 13.04</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-13T11:02:00-04:00" pubdate data-updated="true">Oct 13<span>th</span>, 2013</time>
+        
+           | <a href="/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/#disqus_thread"
+             data-disqus-identifier="http://larry-price.com/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I started trying to work on an open-source project and found that I needed to install <a href="https://code.google.com/p/googletest/">googletest</a> and <a href="https://code.google.com/p/googlemock/">googlemock</a> on my home machine. Seemed easy enough, I found a package called <code>google-mock</code> in the <a href="http://packages.ubuntu.com/raring/google-mock">Raring</a> repositories which depends on a package called <code>libgtest-dev</code>. So I install it:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install -y google-mock
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And the CMake file I was running before tells me that I have gmock, but I&rsquo;m still missing gtest. What&rsquo;s going on here?</p>
+
+<p>Well, there was a changeset applied in Ubuntu 12.04 (Precise) with the following text (<a href="http://www.ubuntuupdates.org/package/core/precise/universe/base/gtest">source</a>):</p>
+
+<blockquote><p>  Stop distributing static library (although still build it, to ensure gtest
+  works). Upstream recommends against shipping the libary at all, just the
+  source. (See: <a href="http://code.google.com/p/googletest/wiki/FAQ">http://code.google.com/p/googletest/wiki/FAQ</a>)
+  The Debian maintainer plans to do this also (see BTS: 639795); do it in
+  Ubuntu now to fulfil MIR requirements.</p>
+
+<p>&mdash; Christopher James Halse Rogers Thu, 08 Mar 2012 17:45:29 +1100</p></blockquote>
+
+<p>What does that mean? That means we get to build and &ldquo;install&rdquo; the gtest libs ourselves. The source is conveniently installed in <code>/usr/src</code> after installing <code>libgtest-dev</code> (which we automatically got when we installed <code>google-mock</code>).</p>
+
+<figure class='code'><figcaption><span>Installing gtest libs</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install -y cmake --quiet
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> /usr/src/gtest
+</span><span class='line'><span class="nv">$ </span>sudo cmake -E make_directory build
+</span><span class='line'><span class="nv">$ </span>sudo cmake -E chdir build cmake .. &gt;&gt; /dev/null
+</span><span class='line'><span class="nv">$ </span>sudo cmake --build build &gt;&gt; /dev/null
+</span><span class='line'><span class="nv">$ </span>ls build/libgtest*
+</span><span class='line'>build/libgtest.a  build/libgtest_main.a
+</span><span class='line'><span class="nv">$ </span>sudo cp build/libgtest* /usr/local/lib/
+</span><span class='line'><span class="nv">$ </span>sudo rm -rf build
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>&gt;&gt; /dev/null</code> can be dropped if you would like to see the output of these commands when successful, any error text will still show up with this redirect in place. I like to move all my personally-compiled libraries (and includes) to <code>/usr/local</code>, but you could just as easily copy them over to <code>/usr/lib</code>. All of this could also be done in <code>/tmp</code> if you&rsquo;re so inclined.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/08/rvm-quick-start/">RVM Quick Start</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-08T22:10:00-04:00" pubdate data-updated="true">Oct 8<span>th</span>, 2013</time>
+        
+           | <a href="/blog/2013/10/08/rvm-quick-start/#disqus_thread"
+             data-disqus-identifier="http://larry-price.com/blog/2013/10/08/rvm-quick-start/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>When I was working on a few different projects at once, I started running into issues where my Ruby gem versions would start to mismatch. How did I fix that issue? Naively. I adjusted the versions as necessary so my gems were always the same version. That was&hellip; pretty dumb. To make up for my past ignorance, I&rsquo;ve been exploring ways to manage my Ruby versions and my gems intelligently. Enter <a href="https://rvm.io/">RVM</a>.</p>
+
+<p>RVM is a simple tool to solve just problems. And it works pretty well. I hit some kinks along the way, but my installation pleases me well enough. Getting RVM is not for the faint of heart. Maybe there are better ways to do it, but the website says to execute the following:</p>
+
+<figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; curl -L https://get.rvm.io | bash -s stable
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This command uses curl to fetch the data that lives at <code>https://get.rvm.io</code>, which happens to be a big bash script. It executes the bash script with the args <code>-s stable</code>. &lsquo;Stable&rsquo; means the latest stable release of RVM. I could just as easily give it &lsquo;dev&rsquo; and get the latest developer release instead, but I really don&rsquo;t want that. So that command does a lot of stuff and may give you some further instructions to run before you can continue. Use that big head of yours and follow the instructions. You may also need to restart a terminal to get RVM to be recognized as a command. Since I was using <code>gnome-terminal</code>, I had to follow these <a href="https://rvm.io/integration/gnome-terminal">instructions</a>.</p>
+
+<p>Now I want RVM to know about some Ruby versions. For a full list of possible Ruby versions to install, run <code>rvm list known</code>. I just want 1.9.3. I found that I needed to do this even though I had 1.9.3 installed on my system previously.</p>
+
+<figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; rvm install ruby-1.9.3
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In Ubuntu 13.04, this command installs ruby-1.9.3 in <code>~/.rvm/rubies/ruby-1.9.3-p448/bin/ruby</code>. I&rsquo;ve found that this also sets my default Ruby to the RVM version of Ruby, which I don&rsquo;t want. To verify and undo this, I executed the following commands outside of my project directory.</p>
+
+<figure class='code'><figcaption><span>/home/lrp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; which ruby
+</span><span class='line'>/home/lrp/.rvm/rubies/ruby-1.9.3-p448/bin/ruby
+</span><span class='line'>&gt; <span class="nb">echo</span> <span class="s2">&quot;D&#39;oh&quot;</span>
+</span><span class='line'>D<span class="err">&#39;</span>oh
+</span><span class='line'>&gt; rvm use system
+</span><span class='line'>Now using system ruby.
+</span><span class='line'>&gt; which ruby
+</span><span class='line'>/usr/bin/ruby
+</span><span class='line'>&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now that that&rsquo;s settled, I want to tell RVM to use the local version of Ruby for my project and to install any gems in a special location.</p>
+
+<figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; rvm 1.9.3@my-project --create --ruby-version
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This creates a gemset and ruby-version file (<code>.ruby-gemset</code> and <code>.ruby-version</code> files) using the Ruby installation 1.9.3 created above. I specifiy to use <code>--ruby-version</code> instead of <code>--rvmrc</code> because RVM told me that I should. After some research, the <code>.ruby-version</code> file is used by several other tools, so this will keep my potential number of config files low. Now I check that all my Ruby versions are okay.</p>
+
+<figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; which ruby
+</span><span class='line'>/home/lrp/.rvm/rubies/ruby-1.9.3-p448/bin/ruby
+</span><span class='line'>&gt; <span class="nb">cd</span> ..
+</span><span class='line'>&gt; which ruby
+</span><span class='line'>/usr/bin/ruby
+</span><span class='line'>&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When in my project directory, all the gems I install will be installed to my specified gemset, which means they are no longer cluttering my global gemspace, even when I install them using Bundler. It also means that I can use ruby-1.9.3 for this project and 2.0 for another project with minimal mental overhead. This makes me a happy developer.</p>
+
+<p>I only glazed over the installation process and documentation for RVM. Go to <a href="https://rvm.io/">the web site</a> for more.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/08/the-pragmatic-programmer/">The Pragmatic Programmer</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-08T12:00:00-04:00" pubdate data-updated="true">Sep 8<span>th</span>, 2013</time>
+        
+           | <a href="/blog/2013/09/08/the-pragmatic-programmer/#disqus_thread"
+             data-disqus-identifier="http://larry-price.com/blog/2013/09/08/the-pragmatic-programmer/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p>Don&rsquo;t be a slave to history. Don&rsquo;t let existing code dictate future code. All code can be replaced if it is no longer appropriate</p></blockquote>
+
+<h3>The Gist</h3>
+
+<p><a href="http://www.amazon.com/gp/product/020161622X/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=020161622X&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>The Pragmatic Programmer</em></a> written by Andrew Hunt and David Thomas is a book about being an above-average software developer.</p>
+
+<h3>My Opinion</h3>
+
+<p>There are many good concepts in this book. However, I&rsquo;ve been reading a bit much lately and found that most of the topics covered have been rehashed in other books. As it turns out, re-reading this kind of motivational book is less exciting when you&rsquo;ve read similar texts earlier in the year.</p>
+
+<p>I did enjoy the section on Refactoring; there has been some discussion on my current project team of what to do when you see &ldquo;gnarly&rdquo; code. This section reiterates the fact that poorly-written code should be updated. The authors talk about treating code as organic. Refactoring your code as it grows is the same as reevaluating oneself as one grows older. Changing one&rsquo;s hair or clothes, changing what one eats or reads or watches (inputs), or changing a daily routine is just refactoring of your daily life: the person is the same and accomplishes largely the same tasks, but in a slightly different manner.</p>
+
+<p>One tip in this book is &ldquo;Use one editor well.&rdquo; I&rsquo;ve found that I love to use <a href="http://www.sublimetext.com/">Sublime Text</a> for my work in Ruby, Python, and markup languages. Having said that, I find Sublime an inappropriate tool for doing C++ (<a href="https://qt-project.org/wiki/Category:Tools::QtCreator">Qt Creator</a>), Java (<a href="http://eclipse.org/">Eclipse</a> or even <a href="https://netbeans.org/">NetBeans</a>), or anything .NET (duh Visual Studio). Considering my job could involve any programming language, I would revise this tip to &ldquo;Use the right editor for the job, and learn to use it well.&rdquo;</p>
+
+<p>The chapter introductions were largely worthless to me: long-winded summaries of EVERYTHING in the chapter. I eventually trained myself to automatically skip the chapter intros in favor of reading the details. It seems that I could have just as easily gone the other way and gotten away with only reading the intros, but that hardly seems like any fun.</p>
+
+<h3>Who Would Like This</h3>
+
+<p>Fresh-outs should read this book. It&rsquo;s not too long and it&rsquo;s split into manageable chapters. Great for fresh-out book clubs, in which I probably should have participated.</p>
+
+<p>Who would not like this? People who have read books with similar premeses, such as <a href="/blog/2013/02/19/code-complete-second-edition/"><em>Code Complete</em></a>, within recent memory.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -105,7 +351,7 @@
 <time datetime="2013-08-31T17:05:00-04:00" pubdate data-updated="true">Aug 31<span>st</span>, 2013</time>
         
            | <a href="/blog/2013/08/31/using-foreman-to-create-an-upstart-service/#disqus_thread"
-             data-disqus-identifier="http://larryprice.github.io/blog/2013/08/31/using-foreman-to-create-an-upstart-service/">Comments</a>
+             data-disqus-identifier="http://larry-price.com/blog/2013/08/31/using-foreman-to-create-an-upstart-service/">Comments</a>
         
       </p>
     
@@ -205,7 +451,7 @@
 <time datetime="2013-08-26T22:35:00-04:00" pubdate data-updated="true">Aug 26<span>th</span>, 2013</time>
         
            | <a href="/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/#disqus_thread"
-             data-disqus-identifier="http://larryprice.github.io/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/">Comments</a>
+             data-disqus-identifier="http://larry-price.com/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/">Comments</a>
         
       </p>
     
@@ -282,195 +528,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/08/22/beware-of-group-projects/">Beware of Group Projects</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-22T21:22:00-04:00" pubdate data-updated="true">Aug 22<span>nd</span>, 2013</time>
-        
-           | <a href="/blog/2013/08/22/beware-of-group-projects/#disqus_thread"
-             data-disqus-identifier="http://larryprice.github.io/blog/2013/08/22/beware-of-group-projects/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Relying on other people is hard. I&rsquo;ve always found it difficult to understand that other people aren&rsquo;t me. Don&rsquo;t get me wrong, working with others can be really rewarding. Maybe &ldquo;Beware of Group Projects&rdquo; is not the best title. More like &ldquo;Be Wary that Working with Others is Not the Same as Working with Yourself.&rdquo; But that&rsquo;s a pretty long title, and reading (like working with others) is hard.</p>
-
-<p>I&rsquo;ve been spending a lot of my spare time collaborating on a project with a small group of other developers. I normally do this kind of thing on my own. I started thinking about the differences in working by myself and collaborating with other devs. Then I decided that it would look good in a list format comparing each circumstance from both sides. I was wrong, but couldn&rsquo;t think of a better way to present it.</p>
-
-<h2>Let&rsquo;s Start a New Project!</h2>
-
-<p><strong>As an Individual</strong>: This project is going to help me! I can use this new technology and I&rsquo;ll learn so much!<br/>
-<strong>As a Group</strong>: This project is going to help our customer! We can use this new technology and everyone will learn so much!</p>
-
-<h2>Let&rsquo;s Work!</h2>
-
-<p><strong>As an Individual</strong>: I&rsquo;ve got 5 minutes, that&rsquo;s enough time to make those adjustments I&rsquo;ve been thinking about&hellip;<br/>
-<strong>As a Group</strong>: We&rsquo;ve got 5 minutes, but once we find a conference room, set up the projector, and update our branch I&rsquo;ll have to go pick up my wife. Pass.</p>
-
-<h2>Let&rsquo;s Not Work</h2>
-
-<p><strong>As an Individual</strong>: I could work, or I could just play Prison Architect all weekend. &hellip;I&rsquo;ll have the happiest inmates this side of Alcatraz by Monday morning!<br/>
-<strong>As a Group</strong>: We&rsquo;ve set aside these times to meet, you should come help! There might be pizza if you stay long enough.</p>
-
-<h2>Knowledge</h2>
-
-<p><strong>As an Individual</strong>: Now I know how to do X.<br/>
-<strong>As a Group</strong>: Now I know how to do X. Now you know how to do X, and you know how to do X, and you know how to do X! I&rsquo;m the Oprah of Knowing X!</p>
-
-<h2>Coding Standards</h2>
-
-<p><strong>As an Individual</strong>: Whoops, I mixed camelCase and under_scores when naming my classes. Oh well.<br/>
-<strong>As a Group</strong>: For the love of Linux Torvalds, how do you not remember to prefix your public member variables with &lsquo;pub_&rsquo; and postfix your private member variables with &lsquo;_private&rsquo;?</p>
-
-<h2>Testing</h2>
-
-<p><strong>As an Individual</strong>: Pfft.<br/>
-<strong>As a Group</strong>: TEST ALL THE THINGS! It&rsquo;s the best way we can guarantee that our code changes don&rsquo;t break existing functionality.</p>
-
-<h2>I&rsquo;m Bored</h2>
-
-<p><strong>As an Individual</strong>: Forget the months of work spent on X, I think I&rsquo;ll work on Y now.<br/>
-<strong>As a Group</strong>: If we finish, we&rsquo;ll have made something useful. Someone needs us this! You&rsquo;ll be happy you kept working on it in a few weeks.</p>
-
-<h2>We&rsquo;re Done!</h2>
-
-<p><strong>As an Individual</strong>: I made an app that let&rsquo;s you draw circles. A job well done, if I do say so myself. I believe I&rsquo;ll have a beer.<br/>
-<strong>As a Group</strong>: We invented the warp drive, but it hits a theoretical limit at approximately 9.5 warp. Beer all around! We start work on version 2.0 next week!</p>
-
-<p>The point is that working with others is not bad. In fact, working with others helps give me a sense of responsibility in what I&rsquo;m working on, and motivates me to continue even when I&rsquo;m in a lull. I&rsquo;ve thrown out so many individual side-projects because I just wasn&rsquo;t motivated, or was no longer convinced of its usefulness. It&rsquo;s also (theoretically) easier to build bigger projects with groups because there are more arms to swing more hammers.</p>
-
-<p>&ldquo;Beware of Group Projects&rdquo; if you don&rsquo;t have time, or if you can&rsquo;t compromise, or if you don&rsquo;t care. Otherwise, just be wary that working with others is not the same as working with yourself.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1/">The Trouble With Time Zones (Aka Learn From My Mistakes Part 1)</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-07T22:00:00-04:00" pubdate data-updated="true">Aug 7<span>th</span>, 2013</time>
-        
-           | <a href="/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1/#disqus_thread"
-             data-disqus-identifier="http://larryprice.github.io/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p>As a user, my data&rsquo;s LastModifiedDate should not be updated when I Export it, and it should be in UTC.</p></blockquote>
-
-<p>That&rsquo;s the gist of the story I was tasked with a few weeks ago. Seemed easy enough: just set the &ldquo;LastModifiedDate&rdquo; field of each XML node to the LastModifiedDate pulled from the database converted to UTC. I can do the development and write up some Cucumber tests in an hour, two hours tops. Find a few small caveats along the way, get it out of development and through code review by the next morning. Push it to the mainline and watch the build go green. All done, dust off my hands and move on to something else.</p>
-
-<p>When has anything ever been that simple? Certainly not in the fantastical world of software development! About ten minutes after the build server confirmed a successful build of my code on the tip of our main branch, a face popped up over the cube wall. &ldquo;Hey, why&rsquo;d you break the build?&rdquo; My teammate was having trouble running my LastModifiedDate tests. All of his time comparisons were off by an hour. My computer (and the build server) were in one time zone; his was in another. I immediately realized the exact lines of the code that weren&rsquo;t dealing with time zones. We agreed to let the code remain on the build server instead of backing it out since the build server was green, and I created/tested/pushed a couple of patches to fix the problem. Green build on the build server. Green build amongst all my time-disabled peers. The next morning I had a panic attack in the shower thinking about how some of my test data could be affected by the switch to UTC. I rushed into work early and put in another patch, this one slightly changing the format of some of my test data. After doing this, I realized that what I had done was completely unnecessary and decided I should probably get my blood pressure checked.</p>
-
-<p>Then: silence. I was satisfied I&rsquo;d seen the end of my time zone issues which I&rsquo;d spent nearly as much time patching as I had developing the initial solution. Two weeks pass. Monday morning there&rsquo;s an email from another country in my inbox, &ldquo;This test was written that only works in American time zones! Who is fixing this?&rdquo; After quite a few emails and chats I found that their main branch had merged in a version of our main branch between my original solution and my patch. The developer agreed to be patient until his team could start using the newer version of our branch. Four hours later I get another email from developers on another continent. I sent them the patches I made previously compressed into one to keep them working.</p>
-
-<p>Was this a small mistake? On a project with a small, local team the answer is definitely yes. This project in particular involves a large number of developers who don&rsquo;t all test in the same time zone and who work on a number of different branches that feed into each other in weekly chunks. Despite that, I think this error could have gone greatly unnoticed had I simply backed out the original changes and pushed the patches and original solution together. My confidence (hubris?) really bit me on this one. Initially only a single developer seemed to be affected by my oversight; fate selected a build between my original solution and my patches to push to the other branches to make sure more people noticed my mistake.</p>
-
-<p><strong>In hindsight</strong>, The Right Thing to Do was to assume fault and back out immediately. One developer having build issues is still one more than should have been affected. Here&rsquo;s hoping this bit o&#8217; hindsight today leads to better foresight tomorrow.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/16/effective-c-plus-plus/">Effective C++</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-16T22:11:00-04:00" pubdate data-updated="true">Jul 16<span>th</span>, 2013</time>
-        
-           | <a href="/blog/2013/07/16/effective-c-plus-plus/#disqus_thread"
-             data-disqus-identifier="http://larryprice.github.io/blog/2013/07/16/effective-c-plus-plus/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>The Gist</h3>
-
-<p><a href="http://www.amazon.com/gp/product/0321334876/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0321334876&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Effective C++</em></a> is a list of ways to write not-your-average-bear C++ code. The author, <a href="http://www.aristeia.com/">Scott Meyers</a>, outlines 8 specific topics for improving code, and a few more miscellaneous tips.</p>
-
-<h3>My Opinion</h3>
-
-<p>Lots of good can come from reading this book. I borrowed it from a more-experienced co-worker and noticed many of the interesting coding standards this co-worker used came directly from this book. And I agree with it. I&rsquo;ve been actively trying to follow the lessons learned in this book from the moment I picked it up.</p>
-
-<p>I learned C++ the hard way: I was thrown into an internship where I didn&rsquo;t really have enough skills to contribute to the project, and my &ldquo;boss&rdquo; didn&rsquo;t really have anywhere to put me. So I was handed a book, pointed to <a href="http://www.cplusplus.com/">this wonderous website</a>, and I wrote some little helper apps for the project. I wasn&rsquo;t taught anything about form or any of that formal business. Then I took a C++ class in college, and never bothered to learn any of the coding standards because I had enough previous knowledge to get by my own way (and appear to be really good while doing it).</p>
-
-<p>So this book showed me a lot of the why certain things in C++ are the way they are. It explained to me that a copy constructor is called every time you pass an object directly through a function, and how assignment operators are used whenever an equals sign appears. It told me why my destructors need to be virtual. It explained a lot about smart_ptr and auto_ptr that I never thought to think about.</p>
-
-<p>Admittedly, there are parts of the book that are hard to follow. I consider Chapter 7 (Templates and Generic Programming) and Chapter 8 (Customizing new and delete) to be extremely technical chapters not meant for the faint of heart, and the lessons learned in these chapters are not necessarily useful in day-to-day programming. Chapter 9 is simply called Miscellany, and it delivers no new information for improving one&rsquo;s C++ skills.</p>
-
-<h3>Who Would Like This</h3>
-
-<p>C++ Programmers should have this book (at least the first 6 chapters) crammed down their throats and into their squishy pink brains. After learning all the &ldquo;basic&rdquo; concepts of C++, the lessons this book teaches in design and the nature of C++ should be taken into consideration.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -500,6 +557,18 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/">Convincing Rvm to Let You Use Ruby 2.1.0</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/">Letting the Browser Decide Betwen HTTP and HTTPS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/12/custom-domain-with-github-pages/">Custom Domain With Github Pages</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial/">Finishing the Google Go Writing Web Applications Tutorial</a>
       </li>
     
@@ -507,23 +576,11 @@
         <a href="/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04/">Setting Up a Go Environment in Ubuntu</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2013/12/12/tell-your-users-when-you-fail/">Tell Your Users When You Fail</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/12/10/login-shell-not-sourcing-bashrc/">Login Shell Not Sourcing .bashrc: A Brief Lesson in Dot-files</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/11/22/hooks-in-cucumber-cpp/">Hooks in Cucumber-cpp</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/c-plus-plus' style='font-size: 116.36363636363636%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/cucumber' style='font-size: 116.36363636363636%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 127.27272727272728%'>database</a> <a href='/blog/categories/foreman' style='font-size: 105.45454545454545%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 105.45454545454545%'>foss</a> <a href='/blog/categories/gmock' style='font-size: 105.45454545454545%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 110.9090909090909%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 105.45454545454545%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 105.45454545454545%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 105.45454545454545%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/linux' style='font-size: 116.36363636363636%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 110.9090909090909%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 116.36363636363636%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 105.45454545454545%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 105.45454545454545%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 105.45454545454545%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 110.9090909090909%'>nosql</a> <a href='/blog/categories/pokephile' style='font-size: 121.81818181818181%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 105.45454545454545%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 105.45454545454545%'>qt</a> <a href='/blog/categories/rails' style='font-size: 105.45454545454545%'>rails</a> <a href='/blog/categories/retro' style='font-size: 110.9090909090909%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 110.9090909090909%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 143.63636363636363%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 110.9090909090909%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 105.45454545454545%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 143.63636363636363%'>sep-blog-battle</a> <a href='/blog/categories/sinatra' style='font-size: 121.81818181818181%'>sinatra</a> <a href='/blog/categories/tdd' style='font-size: 105.45454545454545%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 110.9090909090909%'>testing</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 105.45454545454545%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 105.45454545454545%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 105.45454545454545%'>upstart</a> <a href='/blog/categories/web' style='font-size: 121.81818181818181%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 138.1818181818182%'>write-ups</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/c-plus-plus' style='font-size: 116.36363636363636%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/cucumber' style='font-size: 116.36363636363636%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 127.27272727272728%'>database</a> <a href='/blog/categories/foreman' style='font-size: 105.45454545454545%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 105.45454545454545%'>foss</a> <a href='/blog/categories/gmock' style='font-size: 105.45454545454545%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 110.9090909090909%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 105.45454545454545%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 105.45454545454545%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 105.45454545454545%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/linux' style='font-size: 121.81818181818181%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 110.9090909090909%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 116.36363636363636%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 105.45454545454545%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 105.45454545454545%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 105.45454545454545%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 110.9090909090909%'>nosql</a> <a href='/blog/categories/pokephile' style='font-size: 121.81818181818181%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 105.45454545454545%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 105.45454545454545%'>qt</a> <a href='/blog/categories/rails' style='font-size: 105.45454545454545%'>rails</a> <a href='/blog/categories/retro' style='font-size: 110.9090909090909%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 110.9090909090909%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 149.0909090909091%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 116.36363636363636%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 105.45454545454545%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 143.63636363636363%'>sep-blog-battle</a> <a href='/blog/categories/sinatra' style='font-size: 121.81818181818181%'>sinatra</a> <a href='/blog/categories/tdd' style='font-size: 105.45454545454545%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 110.9090909090909%'>testing</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 105.45454545454545%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 105.45454545454545%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 105.45454545454545%'>upstart</a> <a href='/blog/categories/web' style='font-size: 132.72727272727272%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 138.1818181818182%'>write-ups</a> </span>
 </section>
 
 <section>

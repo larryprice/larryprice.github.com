@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: mongodb | Larry Price]]></title>
-  <link href="http://larryprice.github.io/blog/categories/mongodb/atom.xml" rel="self"/>
-  <link href="http://larryprice.github.io/"/>
-  <updated>2014-01-07T20:45:16-05:00</updated>
-  <id>http://larryprice.github.io/</id>
+  <link href="http://larry-price.com/blog/categories/mongodb/atom.xml" rel="self"/>
+  <link href="http://larry-price.com/"/>
+  <updated>2014-02-22T16:45:19-05:00</updated>
+  <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Moving from the MongoDB Ruby Driver to Mongoid]]></title>
-    <link href="http://larryprice.github.io/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/"/>
+    <link href="http://larry-price.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/"/>
     <updated>2013-01-05T20:04:00-05:00</updated>
-    <id>http://larryprice.github.io/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid</id>
+    <id>http://larry-price.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid</id>
     <content type="html"><![CDATA[<p>This is Part 2 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="/blog/categories/pokephile">Pokephile category</a>. Part 2 details refactoring code using the MongoDB Ruby driver to use Mongoid. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>.</p>
 
 <h3>What I&rsquo;ve Done</h3>
@@ -242,9 +242,9 @@ end
   
   <entry>
     <title type="html"><![CDATA[Schemaless databases with Ruby and MongoDB]]></title>
-    <link href="http://larryprice.github.io/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/"/>
+    <link href="http://larry-price.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/"/>
     <updated>2013-01-05T16:54:00-05:00</updated>
-    <id>http://larryprice.github.io/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb</id>
+    <id>http://larry-price.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb</id>
     <content type="html"><![CDATA[<p>This is Part 1 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="/blog/categories/pokephile">Pokephile category</a>. Part 1 details getting started with MongoDB and creating a collection using data scraped off the web using <a href="http://nokogiri.org/">Nokogiri</a>. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>.</p>
 
 <h3>A little background</h3>

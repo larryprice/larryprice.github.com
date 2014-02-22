@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: web | Larry Price]]></title>
-  <link href="http://larryprice.github.io/blog/categories/web/atom.xml" rel="self"/>
-  <link href="http://larryprice.github.io/"/>
-  <updated>2014-01-07T20:45:16-05:00</updated>
-  <id>http://larryprice.github.io/</id>
+  <link href="http://larry-price.com/blog/categories/web/atom.xml" rel="self"/>
+  <link href="http://larry-price.com/"/>
+  <updated>2014-02-22T16:45:19-05:00</updated>
+  <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     
@@ -14,10 +14,92 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Letting the Browser Decide Betwen HTTP and HTTPS]]></title>
+    <link href="http://larry-price.com/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/"/>
+    <updated>2014-02-13T17:55:00-05:00</updated>
+    <id>http://larry-price.com/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https</id>
+    <content type="html"><![CDATA[<p>While working on SEP Labs' <a href="//h2w.cc">Health2Wealth</a> app, I got my first taste of setting up a website to use secure connections. I&rsquo;ve been using the browser extension <a href="//www.eff.org/https-everywhere">HTTPS Everywhere</a> for quite some time now, so all of the web pages that I visit attempt to using <code>HTTPS</code>instead of the standard <code>HTTP</code>. When I inadvertently started testing our app with <code>HTTPS</code>, things got a little weird.</p>
+
+<p>My machine was able to open most of a page, but it wouldn&rsquo;t load some of the graphics or javascript we had embedded in the page. I was the only one able to reproduce it, so we chalked it up to a wonky machine. Then I suddenly remembered that I was using HTTPS Everywhere. I found the area in FireFox that warns you about insecure connections and found that our page was only <em>partially</em> loading on my browser because some of the content was insecure. From there I enabled an option to reveal the insecure elements, which forced my page to load everything correctly. So now we needed to find what was insecure about our page. I trekked through the codebase and found that some of our graphs and links were hard-coded to use <code>HTTP</code>. My initial thought was just to force them to use <code>HTTPS</code>, which is <a href="//lists.w3.org/Archives/Public/ietf-http-wg/2013OctDec/0625.html">almost certainly the impending standard</a>. With a quick search, I found that there exists a <strong>real</strong> solution to this problem.</p>
+
+<p>Let&rsquo;s say I have a very normal web application, so I want to include <a href="//jquery.com">jQuery</a> embedded in my page. I initially copy-paste <code>&lt;script src='http://code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code> right into my <code>&lt;head&gt;</code> node, which normally seems fine. Unfortunately, this is where issues arise. I&rsquo;m now forcing the user to make a connection which may or may not be secure to fetch data from an insecure page.</p>
+
+<p>By removing the <code>http:</code> from the <code>http://</code>, the issue of deciding whether to fetch the file using <code>HTTP</code> or <code>HTTPS</code> is left to the web browser. So my script include becomes <code>&lt;script src='http://larry-price.com//code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code> This also works for links, images, and web fonts. In fact, every link included in this post uses the same principal, where I leave the protocol out of what becomes the <code>href</code> tag.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Custom Domain with Github Pages]]></title>
+    <link href="http://larry-price.com/blog/2014/02/12/custom-domain-with-github-pages/"/>
+    <updated>2014-02-12T21:30:00-05:00</updated>
+    <id>http://larry-price.com/blog/2014/02/12/custom-domain-with-github-pages</id>
+    <content type="html"><![CDATA[<p>As of today, I&rsquo;m the proud owner of <a href="//larry-price.com">larry-price.com</a>. On the recommendation from a friend, I used <a href="//domainmonster.com">domainmonster.com</a> for it&rsquo;s cost effectiveness and usable toolset. I wanted to link my Github Pages blog (this blog!) to my new site. In case I ever want to do this again, I&rsquo;ve provided myself (and you!) with a step-by-step guide below. Note that Github <a href="//help.github.com/articles/setting-up-a-custom-domain-with-pages">has a page that explains how to do this</a>, but there&rsquo;s some fluff and ordering issues that turned me off from using those instructions as any more than a reference.</p>
+
+<h4>Step 0: Buy your domain</h4>
+
+<p>All sites where you can purchase domains have the same domains available, but at different prices. From the sites I perused, <a href="//godaddy.com">GoDaddy</a> had the best search for domain names, suggesting different variations on the searched domain name. I found that <a href="//domainmonster.com">domainmonster.com</a> had the ugliest UI but the best prices. <a href="//hover.com">Hover.com</a> looked really modern and had moderate prices. Shop around and spend money.</p>
+
+<h4>Step 0.5: Exercise restraint</h4>
+
+<p>At this point in the process, <strong>don&rsquo;t go to your site</strong>.</p>
+
+<p>My guess is you already have. If you don&rsquo;t have the ability to go back in time, don&rsquo;t sweat it, just know that you probably won&rsquo;t be able to verify the fruits of your labor for a few hours.</p>
+
+<h4>Step 1: Setting up an &lsquo;A Record&rsquo;</h4>
+
+<p>Find the ip address where your site is currently hosted. For me (replace URL with your own):</p>
+
+<p>``` bash
+$ nslookup larryprice.github.io
+Server:   127.0.1.1
+Address:  127.0.1.1#53</p>
+
+<p>Non-authoritative answer:
+Name: larryprice.github.io
+Address: 199.27.74.133
+```</p>
+
+<p>You should be able to &ldquo;manage&rdquo; your domain on your domain provider&rsquo;s website. In the &ldquo;management&rdquo; area, you should be able to find a section about &ldquo;DNS&rdquo;. Find something labeled &ldquo;A records.&rdquo; There will likely already be one or two entries here &ndash; one for the IP address of your new domain and one with the IP address of your domain with &ldquo;www.&rdquo; prepended.</p>
+
+<p>Modify the entry (or entries) with the IP address found using <code>nslookup</code> (&ldquo;199.27.74.133&rdquo; from the example above). Save your site settings.</p>
+
+<h4>Step 2: Mucking with the &ldquo;www&rdquo; instance</h4>
+
+<p>While we&rsquo;re modifying these settings, we might as well move the &lsquo;www&rsquo; case out of the &ldquo;A records&rdquo;. Go ahead and delete it.</p>
+
+<p>Look for something named &ldquo;CNAME records&rdquo;, or figure out how to add records in general. We&rsquo;re going to add a CNAME record where the &ldquo;Alias&rdquo; is &ldquo;www&rdquo; and the &ldquo;Address&rdquo; is your site&rsquo;s name. In my case, my &ldquo;Alias&rdquo; field is &ldquo;www&rdquo; and my &ldquo;Address&rdquo; field is &ldquo;larry-price.com&rdquo;. Add the record and cross your fingers for success.</p>
+
+<h4>Step 3: Telling Github Pages what to do</h4>
+
+<p>Alhtough Github Pages is magical in its own right, it doesn&rsquo;t know what to do when receiving a request from the &ldquo;A record&rdquo; we created in Step 2 without further instruction.</p>
+
+<p>If you&rsquo;re using Github Pages for a user page, we are going to make this change on the <code>master</code> branch. If this is a project page, do it on the <code>gh-pages</code> branch.</p>
+
+<p>All we have to do is put our new domain into a file in the root folder called <code>CNAME</code>. Let&rsquo;s do it in one fell swoop of the command line.</p>
+
+<p><code>bash
+$ echo "larry-price.com" &gt; CNAME
+</code></p>
+
+<p>Push that to Github and wait 0 to 10 minutes for Github to refresh your page.</p>
+
+<p>Note: If you&rsquo;re one of the few, the proud using the brilliant <a href="//octopress.org/">Octopress</a> to generate your blog, you want to make sure to add the <code>CNAME</code> file to the root of your <code>source/</code> directory. That way, when you call <code>deploy</code> your <code>CNAME</code> file will end up in the root of your <code>_deploy</code> directory.</p>
+
+<h4>Step 4: Behold</h4>
+
+<p>Check your Github repository&rsquo;s &ldquo;Settings&rdquo; section. In the &ldquo;GitHub Pages&rdquo; section, you should now see something along the lines of &ldquo;Your site is published at <a href="http://larry-price.com">http://larry-price.com</a>&rdquo;. Go, young one, and visit your new site; and behold the glory you have brought to your family.</p>
+
+<p>I&rsquo;ll note that this is the point where not obeying Step 0.5 will cause issues. Once your internets knows that your page hit a certain DNS, it takes a few hours to refresh. In my case it only took about 2 hours, but it may take between 12 and 48 hours to refresh. A workaround to see if everything is working is to pull out your smart phone and use your carrier&rsquo;s network to check your new site, since that area of the internets is probably still untainted. (All of this paragraph is a simplified thought process on how DNS works, considering that&rsquo;s the level I understand it.)</p>
+
+<p>Now fly, my children, and spread yourself over the internet with dozens of silly domain names!</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Finishing the Google Go Writing Web Applications Tutorial]]></title>
-    <link href="http://larryprice.github.io/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial/"/>
+    <link href="http://larry-price.com/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial/"/>
     <updated>2014-01-07T22:45:03-05:00</updated>
-    <id>http://larryprice.github.io/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial</id>
+    <id>http://larry-price.com/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial</id>
     <content type="html"><![CDATA[<h3>A golang web app tutorial</h3>
 
 <p>I did some work with <a href="http://golang.org/">Google Go</a> recently and had the chance to follow their great tutorial <em><a href="http://golang.org/doc/articles/wiki/">Writing Web Applications</a></em>. The tutorial is pretty simple: use the Go http library to create a very simple wiki-style site. I like this tutorial a lot because there&rsquo;s not too much hand-holding, but they do eventually hand you the <a href="http://golang.org/doc/articles/wiki/final.go">final code listing</a>. Then the good people at Google give you the tall task of completing the following &lsquo;Other tasks&rsquo; without solutions:</p>
@@ -27,7 +109,7 @@
 <li>Add a handler to make the web root redirect to /view/FrontPage.</li>
 <li>Spruce up the page templates by making them valid HTML and adding some CSS rules.</li>
 <li>Implement inter-page linking by converting instances of [PageName] to
-&lt;a href=&ldquo;<a href="http://larryprice.github.io/view/PageName">http://larryprice.github.io/view/PageName</a>&rdquo;>PageName&lt;/a>. (hint: you could use regexp.ReplaceAllFunc to do this)</li>
+&lt;a href=&ldquo;<a href="http://larry-price.com/view/PageName">http://larry-price.com/view/PageName</a>&rdquo;>PageName&lt;/a>. (hint: you could use regexp.ReplaceAllFunc to do this)</li>
 </ul>
 
 
@@ -87,7 +169,7 @@ func (p *Page) save() error {
 +</head>
  <h1></h1></p>
 
-<p> <p>[<a href="http://larryprice.github.io/edit/">edit</a>]</p></p>
+<p> <p>[<a href="http://larry-price.com/edit/">edit</a>]</p></p>
 
 <p> <div></div>
 +</html>
@@ -146,9 +228,9 @@ type Page struct {</p>
   
   <entry>
     <title type="html"><![CDATA[Using Foreman to Create an Upstart Service]]></title>
-    <link href="http://larryprice.github.io/blog/2013/08/31/using-foreman-to-create-an-upstart-service/"/>
+    <link href="http://larry-price.com/blog/2013/08/31/using-foreman-to-create-an-upstart-service/"/>
     <updated>2013-08-31T17:05:00-04:00</updated>
-    <id>http://larryprice.github.io/blog/2013/08/31/using-foreman-to-create-an-upstart-service</id>
+    <id>http://larry-price.com/blog/2013/08/31/using-foreman-to-create-an-upstart-service</id>
     <content type="html"><![CDATA[<p>I just finished my first attempt at deploying a web app to run automatically in the background on a friend&rsquo;s server. Pretty easy, really. The first thing I did was install <a href="https://github.com/ddollar/foreman">foreman</a>. Assuming you have ruby and rubygems installed:</p>
 
 <p><code>bash
@@ -203,9 +285,9 @@ $ foreman start -e production.env
   
   <entry>
     <title type="html"><![CDATA[On the Futility of Man and Trying to Divide a Sinatra App into Separate Controllers]]></title>
-    <link href="http://larryprice.github.io/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/"/>
+    <link href="http://larry-price.com/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/"/>
     <updated>2013-08-26T22:35:00-04:00</updated>
-    <id>http://larryprice.github.io/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers</id>
+    <id>http://larry-price.com/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers</id>
     <content type="html"><![CDATA[<p>Oh, <a href="http://www.sinatrarb.com/">Sinatra</a>. You&rsquo;re oh-so-very dear to me. You made it so easy for me to write my <a href="http://capitalpunishment.herokuapp.com">first</a> <a href="http://pokephile.herokuapp.com">web</a> apps. All I had to do was write a couple routes and throw together a few HTML-like files and I had a web app. I used pattern matching to reduce the web-facing code for <a href="https://github.com/larryprice/CapitalPunishment">Capital Punishment</a> from ~500 lines of code to &lt;100 lines of code. You are perfect for writing small-time web applications.</p>
 
 <p>But what about large web applications? What about a web app that has normal users and admin users, makes lots of database reads and writes (my previous apps only did reads from a user-facing perspective), and has to be able to show the history of everything, forever, to the authorized users who request it?</p>
@@ -253,68 +335,6 @@ end
 <p>In hindsight, this method is not perfect. I think that the Rails method of individual controllers is significantly better for large apps. Some people have been using other methods for trying to make Sinatra more MVC, such as <a href="https://github.com/jorrizza/sinatra-mvc">sinatra-mvc</a>. To be frank, sinatra-mvc pretty much does the same thing we&rsquo;ve done, but with more structure.</p>
 
 <p>I think what I&rsquo;ve learned is that you should use a tool for its intended purpose. Sinatra was written to quickly create web apps in Ruby with minimal effort. Once you have more than 10-15 routes, you should reconsider whether your app can still be called &ldquo;minimal effort.&rdquo; Sinatra may fly you to the moon, but you&rsquo;re unlikely to see what spring is like on Jupiter or Mars.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A Hacky Solution to the Unicode data in a Unicode-only collation problem]]></title>
-    <link href="http://larryprice.github.io/blog/2012/10/19/a-hacky-solution-to-the-unicode-data-in-a-unicode-only-collation-problem/"/>
-    <updated>2012-10-19T17:23:00-04:00</updated>
-    <id>http://larryprice.github.io/blog/2012/10/19/a-hacky-solution-to-the-unicode-data-in-a-unicode-only-collation-problem</id>
-    <content type="html"><![CDATA[<h2>The Issue Rises <a id="problem"></a></h2>
-
-<p>Earlier this week a defect was found in my application. A defect that I could have sworn I fixed several weeks ago and written about in a <a href="http://nullablevoid.blogspot.com/2012/10/unicode-data-in-unicode-only-collation.html">previous blog post</a>. Let me start from the beginning:</p>
-
-<h4>The Setup</h4>
-
-<p>The application is a web app using Rails 3.2, MSSQL Server for the database, and Tiny-TDS for database communications from the CloudFoundry server. There are three different types of builds and three databases I access: development (for development, obviously), staging (for testing), and production (for the users to complain about, mostly).</p>
-
-<h4>The Original Issue</h4>
-
-<p>I inherited this code and ran it on my dev build with no issues. Upon doing some testing with the staging build, the page crashed. The logs revealed the following (horrible) error:</p>
-
-<p><code>ruby Vague error
-Unicode data in a Unicode-only collation or ntext data cannot be sent to clients using DB-Library (such as ISQL) or ODBC version 3.7 or earlier.
-</code></p>
-
-<p>What does this mean? Well. Beats me. <a href="http://dirk.net/2010/09/18/sql-server-with-freetds-unicode-data-error/">Several</a> <a href="http://stackoverflow.com/questions/5414890/mssql-query-issue-in-php-and-querying-text-data">sources</a> had <a href="http://stackoverflow.com/questions/8705008/tiny-tds-error-on-heroku-connecting-to-sqlserver-db">similar</a> <a href="http://findyourscript.com/index.php/2011/05/20/unicode-data-in-a-unicode-only-collation-or-ntext-data-cannot-be-sent-to-clients-using-db-library/">issues</a> and the ones I liked eventually came to the conclusion that ntext and nvarchar variables in the database were ticking off the host server. <a href="http://msdn.microsoft.com/en-us/library/ms186939.aspx">Apparently</a>, text variables are translated to nvarchar(MAX), where MAX is something like 2GB of data. I hunted through my database and, sure enough, the &lsquo;Narrative&rsquo; column was an nvarchar(MAX).</p>
-
-<h4>The Original Fix</h4>
-
-<p>Based on the mighty power of the internet, I decided that the best thing for me to do was to change the variable in the database from a &ldquo;text&rdquo; to a &ldquo;string&rdquo; with a limit of 8000 (which translates to varchar(8000)) using this migration:</p>
-
-<p>``` ruby Simple migration
-class ChangeNarrativeColumnToVarChar &lt; ActiveRecord::Migration
-  def change</p>
-
-<pre><code>change_column :evaluation, :narrative, :string, :limit =&gt; 8000
-</code></pre>
-
-<p>  end
-```</p>
-
-<p>I ran through my repro steps and&hellip; Drumroll&hellip; Suspense&hellip; It worked! Or so it appeared. I went to the narrative textbox and put some words in it, saved, and confirmed that everything was great. Then I pushed it to production and heard nothing for two weeks.</p>
-
-<h2>Failure Is Always An Option <a id="failure"></a></h2>
-
-<p>Too bad that wasn&rsquo;t the end of the story. This week my users finally started using the app again. They found all kinds of defects, of course, but one in particular that caught me off guard: When viewing the narrative text, which we had &ldquo;fixed&rdquo; using that little migration above, the text cut off to about two lines. Two lines? I never really bothered to test more than a couple words or a short, goofy phrase. So I opened up the app on my dev build and it worked great with up to 8000 characters. I switched over to the staging build and was able to reproduce the error immediately.</p>
-
-<p>At first I thought it was just the test_area, but I was wrong. Even static fields which displayed narrative cut off text. After some testing, the text was always cut off to 255 characters. I watched the SQL logs and confirmed that all 8000 characters would come back from the SQL queries. I looked in the database and verified the data was still present. What was going on?</p>
-
-<h4>Dear Rails: Oh, you</h4>
-
-<p>I thought and eventually realized something: the default of a &ldquo;string&rdquo; in Rails is 255 characters. Rails was cutting off my text. Curse you, Rails, I trusted you with my heart!</p>
-
-<h4>The Fix</h4>
-
-<p>Alright. The fix. Unfortunately, the fix sucks. In my app, I had to get the whole model that contained a narrative. Doing only that, the narrative would be cut short. So then I had to get the narrative again, and this time cast that sucker to a &ldquo;text.&rdquo;</p>
-
-<p><code>ruby &lt; 1337 Hax
-@eval = Evaluation.find(:id =&gt; id)
-@eval.narrative = Evaluation.select("id as id, CAST(narrative as text) as narrative").where(:id =&gt; id).first.narrative
-</code></p>
-
-<p>There&rsquo;s a part of me that likes sensible, clean code. This code did not come from that part of me. If you really want, you can do a select and get all the columns of your model, and then case the field in question, but what if your columns change? I didn&rsquo;t want to be responsible for that, especially after I hand this code off to someone else in the coming weeks.</p>
 ]]></content>
   </entry>
   

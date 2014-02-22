@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: http://larryprice.github.io/sitemap.xml 
+Sitemap: http://larry-price.com/sitemap.xml 

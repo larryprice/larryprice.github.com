@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: heroku | Larry Price]]></title>
-  <link href="http://larryprice.github.io/blog/categories/heroku/atom.xml" rel="self"/>
-  <link href="http://larryprice.github.io/"/>
-  <updated>2014-01-07T20:45:16-05:00</updated>
-  <id>http://larryprice.github.io/</id>
+  <link href="http://larry-price.com/blog/categories/heroku/atom.xml" rel="self"/>
+  <link href="http://larry-price.com/"/>
+  <updated>2014-02-22T16:45:19-05:00</updated>
+  <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Pushing an Application to Heroku that Uses Ruby and Mongo]]></title>
-    <link href="http://larryprice.github.io/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo/"/>
+    <link href="http://larry-price.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo/"/>
     <updated>2013-01-20T11:55:00-05:00</updated>
-    <id>http://larryprice.github.io/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo</id>
+    <id>http://larry-price.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo</id>
     <content type="html"><![CDATA[<p><em>This is Part 3 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="/blog/categories/pokephile">Pokephile category</a>. Part 4 of this series details moving from a development environment to a production environment using <a href="http://heroku.com/">Heroku</a>. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>, and the final product can be found <a href="http://pokephile.herokuapp.com">here</a>.</em></p>
 
 <p><a href="http://heroku.com/">Heroku</a> is a hosting service for different types of web applications. The best thing about Heroku is it&rsquo;s free, you get a decent subdomain for your application, and there&rsquo;s no spam email. Go ahead and <a href="http://api.heroku.com/signup">sign up</a> if you don&rsquo;t already have an account.</p>

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Larry Price]]></title>
-  <link href="http://larryprice.github.io/atom.xml" rel="self"/>
-  <link href="http://larryprice.github.io/"/>
-  <updated>2014-01-07T20:45:16-05:00</updated>
-  <id>http://larryprice.github.io/</id>
+  <link href="http://larry-price.com/atom.xml" rel="self"/>
+  <link href="http://larry-price.com/"/>
+  <updated>2014-02-22T16:45:19-05:00</updated>
+  <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     
@@ -14,10 +14,170 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Convincing Rvm to Let You Use Ruby 2.1.0]]></title>
+    <link href="http://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/"/>
+    <updated>2014-02-22T16:46:00-05:00</updated>
+    <id>http://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0</id>
+    <content type="html"><![CDATA[<p><a href="http://larry-price.com//ruby-lang.org/en/news/2013/12/25/ruby-2-1-0-is-released/">Ruby 2.1.0 went stable</a> a few months ago, and <a href="http://larry-price.com//ruby-lang.org/en/news/2014/01/10/ruby-1-9-3-will-end-on-2015/">Ruby 1.9.3 support</a> will end in a just over a year.</p>
+
+<p>You know what that means: Warplanes in the sky falling to the ground, dogs and cats getting along like old pals, and people wandering aimlessly through the streets trying to remember the last time they saw a green build.</p>
+
+<p>Believe it or not, all of these things can be prevented. Once upon a time, I wrote about <a href="http://larry-price.com/blog/2013/10/08/rvm-quick-start/">configuring and using rvm</a> to control individual ruby environments for each of your projects. If it&rsquo;s been a while since you installed your copy of <a href="http://larry-price.com//rvm.io/">rvm</a>, you might have some trouble installing and using newer version of ruby. Lucky for us, those clever rvm developers made it easy to get around this.</p>
+
+<p>In my case, I want to upgrade a project to use <code>ruby 2.1.0</code>. The first time I tried to run <code>rvm install ruby-2.1.0</code>, I ended up installing <code>ruby-2.1.0-preview1</code>. I realized that I had installed rvm on this machine around October 2013, and <code>ruby 2.1.0</code> was released in December 2013, so rvm had no idea that <code>ruby 2.1.0</code> was stable. Updating rvm (in the root of the project directory):</p>
+
+<figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm get stable
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There will be some amount of text on the screen if your system needs to be updated. Note that you must be connected to the internet if you want rvm to update. Now we do the install of our brand new ruby:</p>
+
+<figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm install ruby-2.1.0
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Again, text on the screen from fetching of data from the internet. But hopefully you see something that tells you the operation was successful. You can also verify which rubies you have installed using the <code>list</code> command:</p>
+
+<figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm list rubies
+</span><span class='line'>   ruby-1.9.3-p448 <span class="o">[</span> x86_64 <span class="o">]</span>
+</span><span class='line'><span class="o">=</span>&gt; ruby-2.0.0-p247 <span class="o">[</span> x86_64 <span class="o">]</span>
+</span><span class='line'> * ruby-2.1.0 <span class="o">[</span> x86_64 <span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># =&gt; - current</span>
+</span><span class='line'><span class="c"># =* - current &amp;&amp; default</span>
+</span><span class='line'><span class="c">#  * - default</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we tell our current project to use <code>ruby 2.1.0</code>:</p>
+
+<figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm use ruby-2.1.0
+</span><span class='line'><span class="nv">$ </span>which ruby
+</span><span class='line'>/home/lrp/.rvm/rubies/ruby-2.1.0/bin/ruby
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Alright! Crisis averted. If you&rsquo;re using <a href="http://larry-price.com//bundler.io/">bundler</a> with this project, be sure to change your ruby version (usually located near the top of the <code>Gemfile</code>).</p>
+
+<p>What about setting up a new project using <code>ruby 2.1.0</code>? Easy! Switch to the project directory and:</p>
+
+<figure class='code'><figcaption><span>/home/lrp/Projects/2014/newRubyProject</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm 2.1.0@newRubyProject --create --ruby-version
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Oh, rvm, you make life <em>too</em> easy sometimes.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Letting the Browser Decide Betwen HTTP and HTTPS]]></title>
+    <link href="http://larry-price.com/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/"/>
+    <updated>2014-02-13T17:55:00-05:00</updated>
+    <id>http://larry-price.com/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https</id>
+    <content type="html"><![CDATA[<p>While working on SEP Labs&#8217; <a href="http://larry-price.com//h2w.cc">Health2Wealth</a> app, I got my first taste of setting up a website to use secure connections. I&rsquo;ve been using the browser extension <a href="http://larry-price.com//www.eff.org/https-everywhere">HTTPS Everywhere</a> for quite some time now, so all of the web pages that I visit attempt to using <code>HTTPS</code>instead of the standard <code>HTTP</code>. When I inadvertently started testing our app with <code>HTTPS</code>, things got a little weird.</p>
+
+<p>My machine was able to open most of a page, but it wouldn&rsquo;t load some of the graphics or javascript we had embedded in the page. I was the only one able to reproduce it, so we chalked it up to a wonky machine. Then I suddenly remembered that I was using HTTPS Everywhere. I found the area in FireFox that warns you about insecure connections and found that our page was only <em>partially</em> loading on my browser because some of the content was insecure. From there I enabled an option to reveal the insecure elements, which forced my page to load everything correctly. So now we needed to find what was insecure about our page. I trekked through the codebase and found that some of our graphs and links were hard-coded to use <code>HTTP</code>. My initial thought was just to force them to use <code>HTTPS</code>, which is <a href="http://larry-price.com//lists.w3.org/Archives/Public/ietf-http-wg/2013OctDec/0625.html">almost certainly the impending standard</a>. With a quick search, I found that there exists a <strong>real</strong> solution to this problem.</p>
+
+<p>Let&rsquo;s say I have a very normal web application, so I want to include <a href="http://larry-price.com//jquery.com">jQuery</a> embedded in my page. I initially copy-paste <code>&lt;script src='http://code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code> right into my <code>&lt;head&gt;</code> node, which normally seems fine. Unfortunately, this is where issues arise. I&rsquo;m now forcing the user to make a connection which may or may not be secure to fetch data from an insecure page.</p>
+
+<p>By removing the <code>http:</code> from the <code>http://</code>, the issue of deciding whether to fetch the file using <code>HTTP</code> or <code>HTTPS</code> is left to the web browser. So my script include becomes <code>&lt;script src='http://larry-price.com//code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code> This also works for links, images, and web fonts. In fact, every link included in this post uses the same principal, where I leave the protocol out of what becomes the <code>href</code> tag.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Custom Domain With Github Pages]]></title>
+    <link href="http://larry-price.com/blog/2014/02/12/custom-domain-with-github-pages/"/>
+    <updated>2014-02-12T21:30:00-05:00</updated>
+    <id>http://larry-price.com/blog/2014/02/12/custom-domain-with-github-pages</id>
+    <content type="html"><![CDATA[<p>As of today, I&rsquo;m the proud owner of <a href="http://larry-price.com//larry-price.com">larry-price.com</a>. On the recommendation from a friend, I used <a href="http://larry-price.com//domainmonster.com">domainmonster.com</a> for it&rsquo;s cost effectiveness and usable toolset. I wanted to link my Github Pages blog (this blog!) to my new site. In case I ever want to do this again, I&rsquo;ve provided myself (and you!) with a step-by-step guide below. Note that Github <a href="http://larry-price.com//help.github.com/articles/setting-up-a-custom-domain-with-pages">has a page that explains how to do this</a>, but there&rsquo;s some fluff and ordering issues that turned me off from using those instructions as any more than a reference.</p>
+
+<h4>Step 0: Buy your domain</h4>
+
+<p>All sites where you can purchase domains have the same domains available, but at different prices. From the sites I perused, <a href="http://larry-price.com//godaddy.com">GoDaddy</a> had the best search for domain names, suggesting different variations on the searched domain name. I found that <a href="http://larry-price.com//domainmonster.com">domainmonster.com</a> had the ugliest UI but the best prices. <a href="http://larry-price.com//hover.com">Hover.com</a> looked really modern and had moderate prices. Shop around and spend money.</p>
+
+<h4>Step 0.5: Exercise restraint</h4>
+
+<p>At this point in the process, <strong>don&rsquo;t go to your site</strong>.</p>
+
+<p>My guess is you already have. If you don&rsquo;t have the ability to go back in time, don&rsquo;t sweat it, just know that you probably won&rsquo;t be able to verify the fruits of your labor for a few hours.</p>
+
+<h4>Step 1: Setting up an &lsquo;A Record&rsquo;</h4>
+
+<p>Find the ip address where your site is currently hosted. For me (replace URL with your own):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>nslookup larryprice.github.io
+</span><span class='line'>Server:   127.0.1.1
+</span><span class='line'>Address:  127.0.1.1#53
+</span><span class='line'>
+</span><span class='line'>Non-authoritative answer:
+</span><span class='line'>Name: larryprice.github.io
+</span><span class='line'>Address: 199.27.74.133
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You should be able to &ldquo;manage&rdquo; your domain on your domain provider&rsquo;s website. In the &ldquo;management&rdquo; area, you should be able to find a section about &ldquo;DNS&rdquo;. Find something labeled &ldquo;A records.&rdquo; There will likely already be one or two entries here &ndash; one for the IP address of your new domain and one with the IP address of your domain with &ldquo;www.&rdquo; prepended.</p>
+
+<p>Modify the entry (or entries) with the IP address found using <code>nslookup</code> (&ldquo;199.27.74.133&rdquo; from the example above). Save your site settings.</p>
+
+<h4>Step 2: Mucking with the &ldquo;www&rdquo; instance</h4>
+
+<p>While we&rsquo;re modifying these settings, we might as well move the &lsquo;www&rsquo; case out of the &ldquo;A records&rdquo;. Go ahead and delete it.</p>
+
+<p>Look for something named &ldquo;CNAME records&rdquo;, or figure out how to add records in general. We&rsquo;re going to add a CNAME record where the &ldquo;Alias&rdquo; is &ldquo;www&rdquo; and the &ldquo;Address&rdquo; is your site&rsquo;s name. In my case, my &ldquo;Alias&rdquo; field is &ldquo;www&rdquo; and my &ldquo;Address&rdquo; field is &ldquo;larry-price.com&rdquo;. Add the record and cross your fingers for success.</p>
+
+<h4>Step 3: Telling Github Pages what to do</h4>
+
+<p>Alhtough Github Pages is magical in its own right, it doesn&rsquo;t know what to do when receiving a request from the &ldquo;A record&rdquo; we created in Step 2 without further instruction.</p>
+
+<p>If you&rsquo;re using Github Pages for a user page, we are going to make this change on the <code>master</code> branch. If this is a project page, do it on the <code>gh-pages</code> branch.</p>
+
+<p>All we have to do is put our new domain into a file in the root folder called <code>CNAME</code>. Let&rsquo;s do it in one fell swoop of the command line.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;larry-price.com&quot;</span> &gt; CNAME
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Push that to Github and wait 0 to 10 minutes for Github to refresh your page.</p>
+
+<p>Note: If you&rsquo;re one of the few, the proud using the brilliant <a href="http://larry-price.com//octopress.org/">Octopress</a> to generate your blog, you want to make sure to add the <code>CNAME</code> file to the root of your <code>source/</code> directory. That way, when you call <code>deploy</code> your <code>CNAME</code> file will end up in the root of your <code>_deploy</code> directory.</p>
+
+<h4>Step 4: Behold</h4>
+
+<p>Check your Github repository&rsquo;s &ldquo;Settings&rdquo; section. In the &ldquo;GitHub Pages&rdquo; section, you should now see something along the lines of &ldquo;Your site is published at <a href="http://larry-price.com">http://larry-price.com</a>&rdquo;. Go, young one, and visit your new site; and behold the glory you have brought to your family.</p>
+
+<p>I&rsquo;ll note that this is the point where not obeying Step 0.5 will cause issues. Once your internets knows that your page hit a certain DNS, it takes a few hours to refresh. In my case it only took about 2 hours, but it may take between 12 and 48 hours to refresh. A workaround to see if everything is working is to pull out your smart phone and use your carrier&rsquo;s network to check your new site, since that area of the internets is probably still untainted. (All of this paragraph is a simplified thought process on how DNS works, considering that&rsquo;s the level I understand it.)</p>
+
+<p>Now fly, my children, and spread yourself over the internet with dozens of silly domain names!</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Finishing the Google Go Writing Web Applications Tutorial]]></title>
-    <link href="http://larryprice.github.io/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial/"/>
+    <link href="http://larry-price.com/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial/"/>
     <updated>2014-01-07T22:45:03-05:00</updated>
-    <id>http://larryprice.github.io/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial</id>
+    <id>http://larry-price.com/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial</id>
     <content type="html"><![CDATA[<h3>A golang web app tutorial</h3>
 
 <p>I did some work with <a href="http://golang.org/">Google Go</a> recently and had the chance to follow their great tutorial <em><a href="http://golang.org/doc/articles/wiki/">Writing Web Applications</a></em>. The tutorial is pretty simple: use the Go http library to create a very simple wiki-style site. I like this tutorial a lot because there&rsquo;s not too much hand-holding, but they do eventually hand you the <a href="http://golang.org/doc/articles/wiki/final.go">final code listing</a>. Then the good people at Google give you the tall task of completing the following &lsquo;Other tasks&rsquo; without solutions:</p>
@@ -189,9 +349,9 @@
   
   <entry>
     <title type="html"><![CDATA[Setting Up a Go Environment in Ubuntu]]></title>
-    <link href="http://larryprice.github.io/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04/"/>
+    <link href="http://larry-price.com/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04/"/>
     <updated>2013-12-15T18:40:00-05:00</updated>
-    <id>http://larryprice.github.io/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04</id>
+    <id>http://larry-price.com/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04</id>
     <content type="html"><![CDATA[<p>Some very light cajoling led me to do some investigation into <a href="http://golang.org/">Google Go</a> (often called <strong>golang</strong> for ease of internet search). This is a brief recounting of how I got up and running on <a href="http://ubuntu.com">Ubuntu</a> (first 12.04 and then 13.10). Luckily, this has been made espcially easy for us with the introduction of a <a href="http://packages.ubuntu.com/precise/golang">golang package in the Ubuntu package repositories</a>. There are also <a href="http://golang.org/doc/install">official installation instructions</a> if you don&rsquo;t like mine.</p>
 
 <p>Open up a terminal and let loose:</p>
@@ -269,9 +429,9 @@
   
   <entry>
     <title type="html"><![CDATA[Tell Your Users When You Fail]]></title>
-    <link href="http://larryprice.github.io/blog/2013/12/12/tell-your-users-when-you-fail/"/>
+    <link href="http://larry-price.com/blog/2013/12/12/tell-your-users-when-you-fail/"/>
     <updated>2013-12-12T19:41:00-05:00</updated>
-    <id>http://larryprice.github.io/blog/2013/12/12/tell-your-users-when-you-fail</id>
+    <id>http://larry-price.com/blog/2013/12/12/tell-your-users-when-you-fail</id>
     <content type="html"><![CDATA[<p>Your users put a lot of faith in you. They put up with your terrible design, your horrible taste in color scheme, and your ability to take up over 100% of their computer&rsquo;s memory. With that in mind, don&rsquo;t these poor people deserve a little bit of honesty?</p>
 
 <p>I came across some code recently that irked me. This code asks for a handle to a database abstraction class and then runs a query on it. It looks kinda like this:</p>
@@ -334,9 +494,9 @@
   
   <entry>
     <title type="html"><![CDATA[Login Shell Not Sourcing .bashrc: A Brief Lesson in Dot-files]]></title>
-    <link href="http://larryprice.github.io/blog/2013/12/10/login-shell-not-sourcing-bashrc/"/>
+    <link href="http://larry-price.com/blog/2013/12/10/login-shell-not-sourcing-bashrc/"/>
     <updated>2013-12-10T19:45:00-05:00</updated>
-    <id>http://larryprice.github.io/blog/2013/12/10/login-shell-not-sourcing-bashrc</id>
+    <id>http://larry-price.com/blog/2013/12/10/login-shell-not-sourcing-bashrc</id>
     <content type="html"><![CDATA[<p>I have a confession: I&rsquo;ve been avoiding using <a href="https://rvm.io/">rvm</a> for the past few weeks for stupid reasons.</p>
 
 <p>When using <code>rvm</code> with <code>gnome-terminal</code>, I have to tell <code>gnome-terminal</code> to run as a login shell so that <code>/etc/profile</code> is sourced. The login shell is then supposed to source <code>$HOME/profile</code>, which is then supposed to source <code>$HOME/.bashrc</code>. Installing <code>rvm</code> results in me editing my <code>.bash_profile</code> to add the following line:</p>
@@ -400,10 +560,10 @@
   
   <entry>
     <title type="html"><![CDATA[Hooks in Cucumber-cpp]]></title>
-    <link href="http://larryprice.github.io/blog/2013/11/22/hooks-in-cucumber-cpp/"/>
+    <link href="http://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp/"/>
     <updated>2013-11-22T20:40:00-05:00</updated>
-    <id>http://larryprice.github.io/blog/2013/11/22/hooks-in-cucumber-cpp</id>
-    <content type="html"><![CDATA[<p>A few months ago <a href="http://larryprice.github.io/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">I blogged about tags</a> in <a href="https://github.com/cucumber/cucumber-cpp">cucumber-c++</a>. The scenario I presented involved using tags to call a <code>BEFORE</code> hook before the first scenario and an <code>AFTER</code> hook after the last scenario. The code looked a little bit like this:</p>
+    <id>http://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp</id>
+    <content type="html"><![CDATA[<p>A few months ago <a href="http://larry-price.com/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">I blogged about tags</a> in <a href="https://github.com/cucumber/cucumber-cpp">cucumber-c++</a>. The scenario I presented involved using tags to call a <code>BEFORE</code> hook before the first scenario and an <code>AFTER</code> hook after the last scenario. The code looked a little bit like this:</p>
 
 <figure class='code'><figcaption><span>DoStuff.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -489,9 +649,9 @@
   
   <entry>
     <title type="html"><![CDATA[SEP Blog Battle: Tools of the Trade]]></title>
-    <link href="http://larryprice.github.io/blog/2013/11/17/sep-blog-battle-tools-of-the-trade/"/>
+    <link href="http://larry-price.com/blog/2013/11/17/sep-blog-battle-tools-of-the-trade/"/>
     <updated>2013-11-17T20:59:00-05:00</updated>
-    <id>http://larryprice.github.io/blog/2013/11/17/sep-blog-battle-tools-of-the-trade</id>
+    <id>http://larry-price.com/blog/2013/11/17/sep-blog-battle-tools-of-the-trade</id>
     <content type="html"><![CDATA[<p>To whom do I owe any programming success I may have in a given day? My education? My wonderful peers? The shriveled wad of grey goo in my head? None of the above.</p>
 
 <p>My search engine. <a href="https://duckduckgo.com">DuckDuckGo</a>. <a href="https://encrypted.google.com">Google</a>. <a href="https://wikipedia.org">Wikipedia</a>. Hardly a problem exists that can&rsquo;t be assisted in some way by a quick search.</p>
@@ -506,9 +666,9 @@
   
   <entry>
     <title type="html"><![CDATA[Copy Data Using Qmake]]></title>
-    <link href="http://larryprice.github.io/blog/2013/11/14/copy-data-using-qmake/"/>
+    <link href="http://larry-price.com/blog/2013/11/14/copy-data-using-qmake/"/>
     <updated>2013-11-14T21:24:00-05:00</updated>
-    <id>http://larryprice.github.io/blog/2013/11/14/copy-data-using-qmake</id>
+    <id>http://larry-price.com/blog/2013/11/14/copy-data-using-qmake</id>
     <content type="html"><![CDATA[<p>I&rsquo;ll take things that should be really easy but are in fact impossible for $1000, Mr Trebek.</p>
 
 <p>I have a <a href="https://qt-project.org/wiki/Qt_5.0">Qt</a> desktop app that uses <a href="https://qt-project.org/doc/qt-4.8/qmake-manual.html">qmake</a>. I have tests. I have test data that I need to copy to my build directory. Not only that, but I want to copy a whole directory recursively. In Linux <em>and</em> Windows. You must be thinking to yourself, &lsquo;There&rsquo;s no way that&rsquo;s possible, leave me out of your crazy plans!&rsquo; Well to that I say nay. Nay indeed.</p>
@@ -593,9 +753,9 @@
   
   <entry>
     <title type="html"><![CDATA[Installing GTest and GMock Libs in Ubuntu 13.04]]></title>
-    <link href="http://larryprice.github.io/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/"/>
+    <link href="http://larry-price.com/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/"/>
     <updated>2013-10-13T11:02:00-04:00</updated>
-    <id>http://larryprice.github.io/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04</id>
+    <id>http://larry-price.com/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04</id>
     <content type="html"><![CDATA[<p>I started trying to work on an open-source project and found that I needed to install <a href="https://code.google.com/p/googletest/">googletest</a> and <a href="https://code.google.com/p/googlemock/">googlemock</a> on my home machine. Seemed easy enough, I found a package called <code>google-mock</code> in the <a href="http://packages.ubuntu.com/raring/google-mock">Raring</a> repositories which depends on a package called <code>libgtest-dev</code>. So I install it:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -644,9 +804,9 @@
   
   <entry>
     <title type="html"><![CDATA[RVM Quick Start]]></title>
-    <link href="http://larryprice.github.io/blog/2013/10/08/rvm-quick-start/"/>
+    <link href="http://larry-price.com/blog/2013/10/08/rvm-quick-start/"/>
     <updated>2013-10-08T22:10:00-04:00</updated>
-    <id>http://larryprice.github.io/blog/2013/10/08/rvm-quick-start</id>
+    <id>http://larry-price.com/blog/2013/10/08/rvm-quick-start</id>
     <content type="html"><![CDATA[<p>When I was working on a few different projects at once, I started running into issues where my Ruby gem versions would start to mismatch. How did I fix that issue? Naively. I adjusted the versions as necessary so my gems were always the same version. That was&hellip; pretty dumb. To make up for my past ignorance, I&rsquo;ve been exploring ways to manage my Ruby versions and my gems intelligently. Enter <a href="https://rvm.io/">RVM</a>.</p>
 
 <p>RVM is a simple tool to solve just problems. And it works pretty well. I hit some kinks along the way, but my installation pleases me well enough. Getting RVM is not for the faint of heart. Maybe there are better ways to do it, but the website says to execute the following:</p>
@@ -720,9 +880,9 @@
   
   <entry>
     <title type="html"><![CDATA[The Pragmatic Programmer]]></title>
-    <link href="http://larryprice.github.io/blog/2013/09/08/the-pragmatic-programmer/"/>
+    <link href="http://larry-price.com/blog/2013/09/08/the-pragmatic-programmer/"/>
     <updated>2013-09-08T12:00:00-04:00</updated>
-    <id>http://larryprice.github.io/blog/2013/09/08/the-pragmatic-programmer</id>
+    <id>http://larry-price.com/blog/2013/09/08/the-pragmatic-programmer</id>
     <content type="html"><![CDATA[<blockquote><p>Don&rsquo;t be a slave to history. Don&rsquo;t let existing code dictate future code. All code can be replaced if it is no longer appropriate</p></blockquote>
 
 <h3>The Gist</h3>
@@ -743,15 +903,15 @@
 
 <p>Fresh-outs should read this book. It&rsquo;s not too long and it&rsquo;s split into manageable chapters. Great for fresh-out book clubs, in which I probably should have participated.</p>
 
-<p>Who would not like this? People who have read books with similar premeses, such as <a href="http://larryprice.github.io/blog/2013/02/19/code-complete-second-edition/"><em>Code Complete</em></a>, within recent memory.</p>
+<p>Who would not like this? People who have read books with similar premeses, such as <a href="http://larry-price.com/blog/2013/02/19/code-complete-second-edition/"><em>Code Complete</em></a>, within recent memory.</p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Using Foreman to Create an Upstart Service]]></title>
-    <link href="http://larryprice.github.io/blog/2013/08/31/using-foreman-to-create-an-upstart-service/"/>
+    <link href="http://larry-price.com/blog/2013/08/31/using-foreman-to-create-an-upstart-service/"/>
     <updated>2013-08-31T17:05:00-04:00</updated>
-    <id>http://larryprice.github.io/blog/2013/08/31/using-foreman-to-create-an-upstart-service</id>
+    <id>http://larry-price.com/blog/2013/08/31/using-foreman-to-create-an-upstart-service</id>
     <content type="html"><![CDATA[<p>I just finished my first attempt at deploying a web app to run automatically in the background on a friend&rsquo;s server. Pretty easy, really. The first thing I did was install <a href="https://github.com/ddollar/foreman">foreman</a>. Assuming you have ruby and rubygems installed:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -819,9 +979,9 @@
   
   <entry>
     <title type="html"><![CDATA[On the Futility of Man and Trying to Divide a Sinatra App Into Separate Controllers]]></title>
-    <link href="http://larryprice.github.io/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/"/>
+    <link href="http://larry-price.com/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/"/>
     <updated>2013-08-26T22:35:00-04:00</updated>
-    <id>http://larryprice.github.io/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers</id>
+    <id>http://larry-price.com/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers</id>
     <content type="html"><![CDATA[<p>Oh, <a href="http://www.sinatrarb.com/">Sinatra</a>. You&rsquo;re oh-so-very dear to me. You made it so easy for me to write my <a href="http://capitalpunishment.herokuapp.com">first</a> <a href="http://pokephile.herokuapp.com">web</a> apps. All I had to do was write a couple routes and throw together a few HTML-like files and I had a web app. I used pattern matching to reduce the web-facing code for <a href="https://github.com/larryprice/CapitalPunishment">Capital Punishment</a> from ~500 lines of code to &lt;100 lines of code. You are perfect for writing small-time web applications.</p>
 
 <p>But what about large web applications? What about a web app that has normal users and admin users, makes lots of database reads and writes (my previous apps only did reads from a user-facing perspective), and has to be able to show the history of everything, forever, to the authorized users who request it?</p>
@@ -890,9 +1050,9 @@
   
   <entry>
     <title type="html"><![CDATA[Beware of Group Projects]]></title>
-    <link href="http://larryprice.github.io/blog/2013/08/22/beware-of-group-projects/"/>
+    <link href="http://larry-price.com/blog/2013/08/22/beware-of-group-projects/"/>
     <updated>2013-08-22T21:22:00-04:00</updated>
-    <id>http://larryprice.github.io/blog/2013/08/22/beware-of-group-projects</id>
+    <id>http://larry-price.com/blog/2013/08/22/beware-of-group-projects</id>
     <content type="html"><![CDATA[<p>Relying on other people is hard. I&rsquo;ve always found it difficult to understand that other people aren&rsquo;t me. Don&rsquo;t get me wrong, working with others can be really rewarding. Maybe &ldquo;Beware of Group Projects&rdquo; is not the best title. More like &ldquo;Be Wary that Working with Others is Not the Same as Working with Yourself.&rdquo; But that&rsquo;s a pretty long title, and reading (like working with others) is hard.</p>
 
 <p>I&rsquo;ve been spending a lot of my spare time collaborating on a project with a small group of other developers. I normally do this kind of thing on my own. I started thinking about the differences in working by myself and collaborating with other devs. Then I decided that it would look good in a list format comparing each circumstance from both sides. I was wrong, but couldn&rsquo;t think of a better way to present it.</p>
@@ -945,9 +1105,9 @@
   
   <entry>
     <title type="html"><![CDATA[The Trouble With Time Zones (Aka Learn From My Mistakes Part 1)]]></title>
-    <link href="http://larryprice.github.io/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1/"/>
+    <link href="http://larry-price.com/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1/"/>
     <updated>2013-08-07T22:00:00-04:00</updated>
-    <id>http://larryprice.github.io/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1</id>
+    <id>http://larry-price.com/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1</id>
     <content type="html"><![CDATA[<blockquote><p>As a user, my data&rsquo;s LastModifiedDate should not be updated when I Export it, and it should be in UTC.</p></blockquote>
 
 <p>That&rsquo;s the gist of the story I was tasked with a few weeks ago. Seemed easy enough: just set the &ldquo;LastModifiedDate&rdquo; field of each XML node to the LastModifiedDate pulled from the database converted to UTC. I can do the development and write up some Cucumber tests in an hour, two hours tops. Find a few small caveats along the way, get it out of development and through code review by the next morning. Push it to the mainline and watch the build go green. All done, dust off my hands and move on to something else.</p>
@@ -964,9 +1124,9 @@
   
   <entry>
     <title type="html"><![CDATA[Effective C++]]></title>
-    <link href="http://larryprice.github.io/blog/2013/07/16/effective-c-plus-plus/"/>
+    <link href="http://larry-price.com/blog/2013/07/16/effective-c-plus-plus/"/>
     <updated>2013-07-16T22:11:00-04:00</updated>
-    <id>http://larryprice.github.io/blog/2013/07/16/effective-c-plus-plus</id>
+    <id>http://larry-price.com/blog/2013/07/16/effective-c-plus-plus</id>
     <content type="html"><![CDATA[<h3>The Gist</h3>
 
 <p><a href="http://www.amazon.com/gp/product/0321334876/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0321334876&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Effective C++</em></a> is a list of ways to write not-your-average-bear C++ code. The author, <a href="http://www.aristeia.com/">Scott Meyers</a>, outlines 8 specific topics for improving code, and a few more miscellaneous tips.</p>
@@ -989,9 +1149,9 @@
   
   <entry>
     <title type="html"><![CDATA[Joel on Software]]></title>
-    <link href="http://larryprice.github.io/blog/2013/04/28/joel-on-software/"/>
+    <link href="http://larry-price.com/blog/2013/04/28/joel-on-software/"/>
     <updated>2013-04-28T11:38:00-04:00</updated>
-    <id>http://larryprice.github.io/blog/2013/04/28/joel-on-software</id>
+    <id>http://larry-price.com/blog/2013/04/28/joel-on-software</id>
     <content type="html"><![CDATA[<blockquote><p>We&rsquo;re programmers. Programmers are, in their hearts, architects, and the
 first thing they want to do when they get to a site is to bulldoze the place
 flat and build something grand. We&rsquo;re not excited by incremental renovation:
@@ -1025,9 +1185,9 @@ tinkering, improving, planting flower beds.</p>
   
   <entry>
     <title type="html"><![CDATA[Tags in C++ Cucumber Tests]]></title>
-    <link href="http://larryprice.github.io/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/"/>
+    <link href="http://larry-price.com/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/"/>
     <updated>2013-04-15T22:10:00-04:00</updated>
-    <id>http://larryprice.github.io/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests</id>
+    <id>http://larry-price.com/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests</id>
     <content type="html"><![CDATA[<p>The project I&rsquo;m working on is slowly adding <a href="https://github.com/cucumber/cucumber-cpp">Cucumber</a> acceptance tests to our massive code base in order to replace aging <a href="https://code.google.com/p/robotframework/">Robot tests</a>. One would think that getting developers on our team to use Cucumber would be east, since it uses <a href="https://code.google.com/p/googletest/">googletest</a> and <a href="https://code.google.com/p/googlemock/">googlemock</a> which we use for our unit tests. Unfortunately, very few people on the team have been motivated to write integration tests using the new framework, so I have very few people to go to when I have problems writing my own integration tests.</p>
 
 <p>The area of the code I deal with uses <a href="http://www.mono-project.com/Embedding_Mono">embedded mono</a> to communicate with some C# libraries that we share with other applications. This means we have unmanaged memory which talks with managed memory. This has caused us more headaches than I care to remember. One such problem is that we have a static object that we only want to create and destroy once. So I write my first Cucumber test:</p>
@@ -1186,77 +1346,6 @@ tinkering, improving, planting flower beds.</p>
 <p>Now my MonoDomain is only created <em>before</em> the scenario labeled <code>@first</code> and <em>after</em> the scenario labeled <code>@last</code>. Obviously, this isn&rsquo;t the cleanest fix imaginable, but it was the cleanest fix <em>available</em>. Whenever someone wants to add a new step to this test, they need to remember to move the <code>@last</code> tag to their scenario. However, I have the hope that it will be pretty obvious that the second scenario is no longer &ldquo;last&rdquo; when there is a third scenario following the &ldquo;last&rdquo; scenario. Anyway, it leaves me happy enough, since now my tests don&rsquo;t explode and I&rsquo;m able to reuse ~50% of the steps I had already written for the first scenario. I added a third scenario later on and 9 out of the 10 steps in the scenario were reused from the first and second scenario.</p>
 
 <p>There are lots of other cool things you can do with Cucumber tags, like having multiple tags on objects. All tags that match <code>@first</code> will do one thing, but tags that match <code>@first</code> and <code>@second</code> can have multiple <code>BEFORE()</code> or <code>AFTER()</code> clauses.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Changing Plans]]></title>
-    <link href="http://larryprice.github.io/blog/2013/04/09/changing-plans/"/>
-    <updated>2013-04-09T21:45:00-04:00</updated>
-    <id>http://larryprice.github.io/blog/2013/04/09/changing-plans</id>
-    <content type="html"><![CDATA[<p>Your code is being sent to the dump.</p>
-
-<p>Don&rsquo;t take it personally. Your code isn&rsquo;t <em>bad</em>. It&rsquo;s just <em>garbage</em>.</p>
-
-<p>Maybe your code wasn&rsquo;t written the way they wanted you to write it. Or maybe they realized that they had already written this code three months ago. Or maybe the customer suddenly decided that they don&rsquo;t need their smartphone to emit fragrances based on the text message they just received.</p>
-
-<p>The &ldquo;why&rdquo; doesn&rsquo;t matter. Plans changed. Your unused code isn&rsquo;t aging well and it&rsquo;s starting to stink up the place, so just do us all a favor and get it outta here!</p>
-
-<p>As developers, we <em>always</em> take this kind of thing personally. Our code is an extension of ourselves. When we feel good, we write code that&rsquo;s clean and concise. When we feel meh, our code is unimaginative and takes longer to write. When we feel bad, we litter the code with variables that don&rsquo;t do anything and then name them after our managers.</p>
-
-<p>But it&rsquo;s not personal, is it? Management doesn&rsquo;t sit in their mansion each evening, sipping a gin martini while adjusting their toupee, thinking about how worthless you are and how to properly punish you while continuing to pay you. Management has better things to think about, like ditching the toupee in favor of hair plugs or Rogaine or whatever hair fad is popular that day.</p>
-
-<p>Plans change. You can lament your loss of three days of &ldquo;ingenious&rdquo; code that will never see the light of day, but management will be equally depressed about the hundreds (thousands?) of dollars lost paying you to work on something that&rsquo;s not production-worthy. You may feel cheated in the short-term, but hopefully you can get something positive out of this change of plan. Maybe your second attempt at the code will jive better with the base architecture, or maybe you&rsquo;ll be able to extract the functionality you need out of another component and limit code duplication, or maybe you&rsquo;ll be able to deliver a different feature that the customer can actually use.</p>
-
-<p>Sure, there may be an occasional senior engineer who thinks that the program should be implemented his or her way, and will make you throw out anything you write that has any deviation from The Plan (which never quite made it out of their heads and into any documentation). Usually you can satiate that senior engineer by listening to them and nodding your head for a few minutes. There&rsquo;s a reason that engineer carries so much weight on the project, so they&rsquo;ll probably be making a valid point while you nod your head and they&rsquo;ll respect you for agreeing with them, even though you secretly wish you could just keep doing it the way you originally planned.</p>
-
-<p>Don&rsquo;t cry over spilled milk. No one&rsquo;s actually questioning your coding competency when they change the plan. The odds are in your favor that the plan changed in the best interest of the project, and whatever code is being thrown out is likely a necessary casualty to benefit the system as a whole. Remember that most of the code you write is used, at least for a little while, so try not to dwell on the code that isn&rsquo;t.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[What's Still Possible]]></title>
-    <link href="http://larryprice.github.io/blog/2013/04/01/whats-still-possible/"/>
-    <updated>2013-04-01T22:35:00-04:00</updated>
-    <id>http://larryprice.github.io/blog/2013/04/01/whats-still-possible</id>
-    <content type="html"><![CDATA[<p>If every Miss America candidate had her way, there would be peace on Earth and all the hungry mouths would be fed. While Earthlings enjoy violence and controlling others too much to achieve world peace, I have a proposal to help feed those around the world who don&rsquo;t have enough to eat.</p>
-
-<p>It&rsquo;s not an ad campaign. I&rsquo;m not going to send random people a nickle in the mail and then tell them that they could use that nickle to feed a starving child. I&rsquo;m certainly not going to change any of my eating habits. I happen to know a huge source of food that we underutilize. My plan is to kill two birds with one stone. Well, preferably something like 3 million birds with however many stones it takes.</p>
-
-<p>I&rsquo;m talking, of course, about the terrible tyranny of the <a href="http://en.wikipedia.org/wiki/Canada_Goose">Canadian Goose</a>. A little history:</p>
-
-<p>Our ancestors domesticated Canadian Geese in ancient times and used these waterfowl for various acts of labor, including pulling tugboats down the Mississippi, plowing the great Canadian rice paddies, and keeping our elderly company during their final days of life. The young goslings flapped gingerly in the meadows pollinating the wildflowers, apple trees, and various other meadow-related objects. Much to our delight, some of our beloved geese bretheren became sentient, and started selling us medical insurance while performing a spot-on <a href="http://en.wikipedia.org/wiki/Gilbert_Gottfried">Gilbert Gottfried</a> impression.</p>
-
-<p>False. I must apologize for fooling you in this way sweet, sweet reader, but everything you read in the last paragraph was neither true nor fact. In reality, Canadian Geese serve no purpose. Canadian Geese were created accidentally during the Manhatten Project while one of the lab techs from the local university was trying to combine nuclear fission and the bubonic plague to get back at his ex-girlfriend for cheating on him. He quickly became bored of this task when she stopped responding to his texts, and thusly tossed the waste from his experiments in the river. The rest, of course, is history.</p>
-
-<p>Now here we are. There are well over <a href="http://www.ducks.org/hunting/waterfowl-id/canada-goose">3 million Canadian Geese nationwide</a>, which is decidedly more than anyone finds pleasant. These geese are no longer afraid of humans, so they tend not to run away from us. In fact, we have spoiled the birds so much that some geese will actually approach humans demanding a bite of stale bread. If no bread gift is offered, the foul fowl will emit a frightening hissing noise, raise its wings, and chase off the poor human. Any sidewalk near a pond quickly becomes covered in goose byproducts during the breeding season, which might as well be year-round. I, for one, think that the geese have gone too far. They ruin our picnics, our walks in the park, our egg-stealing competitions, and our feather-collecting scavenger hunts. It&rsquo;s time for the final showdown: Man versus Goose.</p>
-
-<p>Time to tie in the beginning and the parts where I raved like a lunatic: We hunt the geese, and we feed them to people. &lsquo;Nuff said.</p>
-
-<p>People already hunt geese, of course, but it&rsquo;s clearly not enough. Not to mention that these hunters currently just leave the gooseflesh in the woods where lower animals reap the rewards. I propose we extend goose season year-round, and provide free boxes to encourage hunters to package the gooseflesh and send it to the needy in other countries. We&rsquo;ll poison our waterways to take out as many geese as possible, and we will make a wondrous soup for whomever needs it.</p>
-
-<p>It&rsquo;s still possible to feed the hungry. But we need to <em>focus</em> in order to do it. Man versus Goose is not the solution. It&rsquo;s a demonstration of getting distracted from the original cause. The next time someone tries to get you riled up about feeding the hungry through some crazy scheme, remember that there&rsquo;s no better way than addressing the problem directly. It&rsquo;s still possible to do good in this world if you can avoid the crazy.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Blog Battle: Pvreryvre of Fyne Coddes]]></title>
-    <link href="http://larryprice.github.io/blog/2013/03/25/pvreryvre-of-fyne-coddes/"/>
-    <updated>2013-03-25T22:09:00-04:00</updated>
-    <id>http://larryprice.github.io/blog/2013/03/25/pvreryvre-of-fyne-coddes</id>
-    <content type="html"><![CDATA[<p>Ice pellets bounced off my head as I walked myself home late one night. The air was dreadfully cold, so I swooped into one of Carmel&rsquo;s seedy side alleys to take a shotcut. Out of the shadows crept a man wearing a long trenchcoat and thick-rimmed glasses. Hunched over, he brushed his unkempt hair out of his eyes. His coffee-stained breath rushed from beneath his pencil moustache as he asked, &ldquo;Can I interest you in any of these fine iPhone apps?&rdquo; I tried to cautiously back away. &ldquo;How would you like a real BaZynga game, only ninety-nine cents, it&rsquo;s called Perturbed Birds with Pals?&rdquo; I was briefly distracted by sirens in the distance; by the time I returned my glance to the man&rsquo;s last position he had disappeared, my virtual wallet was empty, and my phone was filled with bloatware and repetitive &lsquo;Ville-style games.</p>
-
-<p>There are more KLOCs in this world than there have been McDonald&rsquo;s hamburgers sold. How do the good programmers differentiate themselves from the common street peddlers? How do companies convince you to pay $2.99 for their app when a clone is released less than a week later for free?</p>
-
-<p>The answer? Maybe they don&rsquo;t. Maybe a comparison can be made between software companies and pharamceutical companies.</p>
-
-<p>Big Pharmaceutical companies spend many years researching, developing, and testing drugs to treat the common cold, arthritis, bad cholesterol, or even to sedate your energetic children. These drugs spend several years on the market where patents on the drug are valid, meaning that only the company that invented the drug can legally sell it. After the patent protections expire (approx 7-12 years), any big, small, or mom &amp; pop drug manufacturer is legally allowed to &ldquo;clone&rdquo; this drug and make what&rsquo;s called a &ldquo;generic.&rdquo; Generics are sold at a fraction of the cost of the original drug. At this point, no one wants to give Big Pharma $20 for 6 tablets to cure their heartburn when they could pay $5 for a year&rsquo;s supply of generics.</p>
-
-<p>Software companies tend to spend somewhere between 12 weeks and 12 months developing apps that will be consumed by the general population. If the company just released an Android or iOS app, then the product will stay relevant somewhere between 2 weeks and 2 years. After that time, the app will either no longer have market value or will need to be revamped to please the modern consumer. Within a short number of days or weeks, there is a high probability that surly software pirates will begin to copy your app and put it on the market for free. At this point, no one wants to give your company $4.99 for an endless runner when they could just as easily find a copy for free. Of course, app developers can submit complaints and get the pirated app taken down, but more and more will crop up as time goes on, and eventually it won&rsquo;t be worth the trouble to get the doppelgangers removed.</p>
-
-<p>For both industries, a company comes up with a novel idea and presents it to the world. People who like that product can start associating the brand name with other products. After recognizing the brand, a person may start to trust that company and look for other products associated with the brand. That company will become known as a purveyor of fine wares.</p>
-
-<p>So here we stand, reader. Make code that you can be proud of; not for getting tens of thousands of downloads, but for scrawling your good name on the white boards of the world in Sharpie. The customers will keep coming back as long as you&rsquo;ve got the cure for what ails them.</p>
 ]]></content>
   </entry>
   

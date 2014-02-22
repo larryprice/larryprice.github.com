@@ -2,178 +2,192 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>
-            http://larryprice.github.io/blog/2012/10/19/a-hacky-solution-to-the-unicode-data-in-a-unicode-only-collation-problem/
+            http://larry-price.com/blog/2012/10/19/a-hacky-solution-to-the-unicode-data-in-a-unicode-only-collation-problem/
         </loc>
         <lastmod>2013-12-15T19:44:57-05:00</lastmod>
     </url>
     <url>
-        <loc>http://larryprice.github.io/blog/2012/10/24/i-dont-have-time/</loc>
+        <loc>http://larry-price.com/blog/2012/10/24/i-dont-have-time/</loc>
         <lastmod>2013-12-15T19:44:57-05:00</lastmod>
     </url>
     <url>
-        <loc>http://larryprice.github.io/blog/2012/10/30/good-idea-bad-idea/</loc>
+        <loc>http://larry-price.com/blog/2012/10/30/good-idea-bad-idea/</loc>
         <lastmod>2013-12-15T19:44:57-05:00</lastmod>
     </url>
     <url>
-        <loc>http://larryprice.github.io/blog/2012/11/08/the-optimistic-programmer/</loc>
-        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larryprice.github.io/blog/2012/11/26/how-linux-works-what-every-superuser-should-know/
-        </loc>
+        <loc>http://larry-price.com/blog/2012/11/08/the-optimistic-programmer/</loc>
         <lastmod>2013-12-15T19:44:57-05:00</lastmod>
     </url>
     <url>
         <loc>
-            http://larryprice.github.io/blog/2012/11/26/the-passionate-programmer-creating-a-remarkable-career-in-software-development/
+            http://larry-price.com/blog/2012/11/26/how-linux-works-what-every-superuser-should-know/
         </loc>
         <lastmod>2013-12-15T19:44:57-05:00</lastmod>
     </url>
     <url>
         <loc>
-            http://larryprice.github.io/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life/
+            http://larry-price.com/blog/2012/11/26/the-passionate-programmer-creating-a-remarkable-career-in-software-development/
         </loc>
         <lastmod>2013-12-15T19:44:57-05:00</lastmod>
     </url>
     <url>
         <loc>
-            http://larryprice.github.io/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/
+            http://larry-price.com/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life/
         </loc>
         <lastmod>2013-12-15T19:44:57-05:00</lastmod>
     </url>
     <url>
         <loc>
-            http://larryprice.github.io/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/
+            http://larry-price.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/
         </loc>
         <lastmod>2013-12-15T19:44:57-05:00</lastmod>
     </url>
     <url>
         <loc>
-            http://larryprice.github.io/blog/2013/01/19/testing-a-sinatra-app-with-capybara/
+            http://larry-price.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/
+        </loc>
+        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://larry-price.com/blog/2013/01/19/testing-a-sinatra-app-with-capybara/</loc>
+        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://larry-price.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo/
+        </loc>
+        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://larry-price.com/blog/2013/02/19/code-complete-second-edition/</loc>
+        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://larry-price.com/blog/2013/03/25/pvreryvre-of-fyne-coddes/</loc>
+        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://larry-price.com/blog/2013/04/01/whats-still-possible/</loc>
+        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://larry-price.com/blog/2013/04/09/changing-plans/</loc>
+        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://larry-price.com/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/</loc>
+        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://larry-price.com/blog/2013/04/28/joel-on-software/</loc>
+        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://larry-price.com/blog/2013/07/16/effective-c-plus-plus/</loc>
+        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://larry-price.com/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1/
+        </loc>
+        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://larry-price.com/blog/2013/08/22/beware-of-group-projects/</loc>
+        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://larry-price.com/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/
         </loc>
         <lastmod>2013-12-15T19:44:57-05:00</lastmod>
     </url>
     <url>
         <loc>
-            http://larryprice.github.io/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo/
+            http://larry-price.com/blog/2013/08/31/using-foreman-to-create-an-upstart-service/
         </loc>
         <lastmod>2013-12-15T19:44:57-05:00</lastmod>
     </url>
     <url>
-        <loc>http://larryprice.github.io/blog/2013/02/19/code-complete-second-edition/</loc>
+        <loc>http://larry-price.com/blog/2013/09/08/the-pragmatic-programmer/</loc>
         <lastmod>2013-12-15T19:44:57-05:00</lastmod>
     </url>
     <url>
-        <loc>http://larryprice.github.io/blog/2013/03/25/pvreryvre-of-fyne-coddes/</loc>
-        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larryprice.github.io/blog/2013/04/01/whats-still-possible/</loc>
-        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larryprice.github.io/blog/2013/04/09/changing-plans/</loc>
-        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larryprice.github.io/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/</loc>
-        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larryprice.github.io/blog/2013/04/28/joel-on-software/</loc>
-        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larryprice.github.io/blog/2013/07/16/effective-c-plus-plus/</loc>
+        <loc>http://larry-price.com/blog/2013/10/08/rvm-quick-start/</loc>
         <lastmod>2013-12-15T19:44:57-05:00</lastmod>
     </url>
     <url>
         <loc>
-            http://larryprice.github.io/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1/
+            http://larry-price.com/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/
         </loc>
         <lastmod>2013-12-15T19:44:57-05:00</lastmod>
     </url>
     <url>
-        <loc>http://larryprice.github.io/blog/2013/08/22/beware-of-group-projects/</loc>
+        <loc>http://larry-price.com/blog/2013/11/14/copy-data-using-qmake/</loc>
+        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://larry-price.com/blog/2013/11/17/sep-blog-battle-tools-of-the-trade/</loc>
+        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp/</loc>
+        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://larry-price.com/blog/2013/12/10/login-shell-not-sourcing-bashrc/</loc>
+        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://larry-price.com/blog/2013/12/12/tell-your-users-when-you-fail/</loc>
         <lastmod>2013-12-15T19:44:57-05:00</lastmod>
     </url>
     <url>
         <loc>
-            http://larryprice.github.io/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/
-        </loc>
-        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larryprice.github.io/blog/2013/08/31/using-foreman-to-create-an-upstart-service/
-        </loc>
-        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larryprice.github.io/blog/2013/09/08/the-pragmatic-programmer/</loc>
-        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larryprice.github.io/blog/2013/10/08/rvm-quick-start/</loc>
-        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larryprice.github.io/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/
-        </loc>
-        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larryprice.github.io/blog/2013/11/14/copy-data-using-qmake/</loc>
-        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larryprice.github.io/blog/2013/11/17/sep-blog-battle-tools-of-the-trade/</loc>
-        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larryprice.github.io/blog/2013/11/22/hooks-in-cucumber-cpp/</loc>
-        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larryprice.github.io/blog/2013/12/10/login-shell-not-sourcing-bashrc/</loc>
-        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larryprice.github.io/blog/2013/12/12/tell-your-users-when-you-fail/</loc>
-        <lastmod>2013-12-15T19:44:57-05:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larryprice.github.io/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04/
+            http://larry-price.com/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04/
         </loc>
         <lastmod>2013-12-15T19:44:57-05:00</lastmod>
     </url>
     <url>
         <loc>
-            http://larryprice.github.io/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial/
+            http://larry-price.com/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial/
         </loc>
         <lastmod>2014-01-07T20:44:58-05:00</lastmod>
     </url>
     <url>
-        <loc>http://larryprice.github.io/blog/archives/</loc>
-        <lastmod>2014-01-07T20:44:58-05:00</lastmod>
+        <loc>http://larry-price.com/blog/2014/02/12/custom-domain-with-github-pages/</loc>
+        <lastmod>2014-02-22T13:12:20-05:00</lastmod>
     </url>
     <url>
-        <loc>http://larryprice.github.io/blog/projects/</loc>
-        <lastmod>2014-01-07T20:44:58-05:00</lastmod>
+        <loc>
+            http://larry-price.com/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/
+        </loc>
+        <lastmod>2014-02-22T13:12:20-05:00</lastmod>
     </url>
     <url>
-        <loc>http://larryprice.github.io/blog/books/</loc>
-        <lastmod>2014-01-07T20:44:58-05:00</lastmod>
+        <loc>
+            http://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/
+        </loc>
+        <lastmod>2014-02-22T16:45:15-05:00</lastmod>
     </url>
     <url>
-        <loc>http://larryprice.github.io/</loc>
-        <lastmod>2014-01-07T20:44:58-05:00</lastmod>
+        <loc>http://larry-price.com/blog/archives/</loc>
+        <lastmod>2014-02-22T16:45:15-05:00</lastmod>
     </url>
     <url>
-        <loc>http://larryprice.github.io/robots.txt</loc>
+        <loc>http://larry-price.com/blog/projects/</loc>
+        <lastmod>2014-02-22T16:45:15-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://larry-price.com/blog/books/</loc>
+        <lastmod>2014-02-22T16:45:15-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://larry-price.com/</loc>
+        <lastmod>2014-02-22T16:45:15-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://larry-price.com/robots.txt</loc>
         <lastmod>2013-12-15T19:42:44-05:00</lastmod>
     </url>
 </urlset>

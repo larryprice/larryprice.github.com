@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: foss | Larry Price]]></title>
-  <link href="http://larryprice.github.io/blog/categories/foss/atom.xml" rel="self"/>
-  <link href="http://larryprice.github.io/"/>
-  <updated>2014-01-07T20:45:16-05:00</updated>
-  <id>http://larryprice.github.io/</id>
+  <link href="http://larry-price.com/blog/categories/foss/atom.xml" rel="self"/>
+  <link href="http://larry-price.com/"/>
+  <updated>2014-02-22T16:45:19-05:00</updated>
+  <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Hooks in cucumber-cpp]]></title>
-    <link href="http://larryprice.github.io/blog/2013/11/22/hooks-in-cucumber-cpp/"/>
+    <link href="http://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp/"/>
     <updated>2013-11-22T20:40:00-05:00</updated>
-    <id>http://larryprice.github.io/blog/2013/11/22/hooks-in-cucumber-cpp</id>
+    <id>http://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp</id>
     <content type="html"><![CDATA[<p>A few months ago <a href="/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">I blogged about tags</a> in <a href="https://github.com/cucumber/cucumber-cpp">cucumber-c++</a>. The scenario I presented involved using tags to call a <code>BEFORE</code> hook before the first scenario and an <code>AFTER</code> hook after the last scenario. The code looked a little bit like this:</p>
 
 <p>``` cucumber DoStuff.feature
