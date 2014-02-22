@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="Your users put a lot of faith in you. They put up with your terrible design, your horrible taste in color scheme, and your ability to take up over &hellip;">
+  <meta name="description" content="Some very light cajoling led me to do some investigation into Google Go (often called golang for ease of internet search). This is a brief recounting &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,116 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04/">Setting Up a Go Environment in Ubuntu</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-15T18:40:00-05:00" pubdate data-updated="true">Dec 15<span>th</span>, 2013</time>
+        
+           | <a href="/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04/#disqus_thread"
+             data-disqus-identifier="http://larry-price.com/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Some very light cajoling led me to do some investigation into <a href="http://golang.org/">Google Go</a> (often called <strong>golang</strong> for ease of internet search). This is a brief recounting of how I got up and running on <a href="http://ubuntu.com">Ubuntu</a> (first 12.04 and then 13.10). Luckily, this has been made espcially easy for us with the introduction of a <a href="http://packages.ubuntu.com/precise/golang">golang package in the Ubuntu package repositories</a>. There are also <a href="http://golang.org/doc/install">official installation instructions</a> if you don&rsquo;t like mine.</p>
+
+<p>Open up a terminal and let loose:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install golang
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The download is pretty heavy, so this step may take some time. Eventually the installer for <code>golang-go</code> will ask you if you want to &ldquo;Report installation of public packages to Go Dashboard.&rdquo; I&rsquo;ve been choosing &ldquo;No&rdquo; to this question and have no complaints.</p>
+
+<p>Now comes the fun part. Serious Go development relies on having a &ldquo;workspace&rdquo; setup involving a specific directory structure including <code>bin/</code>, <code>pkg/</code>, and <code>src/</code> directories. Google&rsquo;s <a href="http://golang.org/doc/code.html">official set-up page</a> contains more information about these workspaces.</p>
+
+<p>I&rsquo;m not a big fan of putting a visible directory in <code>$HOME</code>, so I opted to make a hidden directory called <code>.go</code>. After creating the directory, the environment variable <code>$GOPATH</code> needs to be set and <code>$PATH</code> needs to be adjusted.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mkdir ~/.go
+</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;GOPATH=$HOME/.go&quot;</span> &gt;&gt; ~/.bashrc
+</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;export GOPATH&quot;</span> &gt;&gt; ~/.bashrc
+</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;PATH=\$PATH:\$GOPATH/bin # Add GOPATH/bin to PATH for scripting&quot;</span> &gt;&gt; ~/.bashrc
+</span><span class='line'><span class="nv">$ </span><span class="nb">source</span> ~/.bashrc
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now I&rsquo;m going to create a go project and add a link to it in the workspace I just created.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mkdir -p <span class="nv">$GOPATH</span>/src/github.com/user
+</span><span class='line'><span class="nv">$ </span>mkdir ~/hello-go
+</span><span class='line'><span class="nv">$ </span>ln -s ~/hello-go ~/.go/src/github.com/user/hello-go
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For some actual test code, I&rsquo;ll add a file in my <code>hello-go/</code> directory called <code>hello.go</code> with the following code:</p>
+
+<figure class='code'><figcaption><span>hello.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">main</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="s">&quot;fmt&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Hello world&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now I&rsquo;m going to install the binary created from compiling this code into my <code>$GOPATH</code> to verify that my workspace is set up correctly, then I&rsquo;ll run it to behold the fruit of my efforts.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>go install github.com/user/hello-go
+</span><span class='line'><span class="nv">$ </span>hello-go
+</span><span class='line'>Hello world
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Installing is not necessary every time I want to test that my code compiles; running <code>go build</code> in the source directory will create a local executable that can be executed for incremental testing.</p>
+
+<p>If you&rsquo;re interested in learning golang, I would recommend doing the <a href="http://tour.golang.org/">go tour</a>. It goes way beyond a trivial hello world program and gives you some insight into many coplex go concepts (I even posted <a href="https://gist.github.com/larryprice/7647808">my solutions as a gist</a>, if you&rsquo;re interested).</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -438,123 +548,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/11/14/copy-data-using-qmake/">Copy Data Using Qmake</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-11-14T21:24:00-05:00" pubdate data-updated="true">Nov 14<span>th</span>, 2013</time>
-        
-           | <a href="/blog/2013/11/14/copy-data-using-qmake/#disqus_thread"
-             data-disqus-identifier="http://larry-price.com/blog/2013/11/14/copy-data-using-qmake/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&rsquo;ll take things that should be really easy but are in fact impossible for $1000, Mr Trebek.</p>
-
-<p>I have a <a href="https://qt-project.org/wiki/Qt_5.0">Qt</a> desktop app that uses <a href="https://qt-project.org/doc/qt-4.8/qmake-manual.html">qmake</a>. I have tests. I have test data that I need to copy to my build directory. Not only that, but I want to copy a whole directory recursively. In Linux <em>and</em> Windows. You must be thinking to yourself, &lsquo;There&rsquo;s no way that&rsquo;s possible, leave me out of your crazy plans!&rsquo; Well to that I say nay. Nay indeed.</p>
-
-<p>I originally copied my test data using the <code>INSTALLS</code> variable. My data folder is just a directory sitting in the test source called &ldquo;TestData.&rdquo; This solution is fantastic because it works cross-platform.</p>
-
-<figure class='code'><figcaption><span>MyBAProjectTest.pro</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='make'><span class='line'><span class="nv">install_it.path</span> <span class="o">=</span> <span class="nv">$$</span><span class="o">{</span>OUT_PWD<span class="o">}</span>
-</span><span class='line'><span class="nv">install_it.files</span> <span class="o">+=</span> TestData/
-</span><span class='line'>
-</span><span class='line'><span class="nv">INSTALLS</span> <span class="o">+=</span> install_it
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>However, this means that if I ever have a clean directory, I have to run <code>make install</code> to install my test data. What a pain! Why bother! Why even write tests when life is this unjust!</p>
-
-<p>BUT WAIT! After combing the depths of the internets for much of the evening, I was able to find many halfway solutions to my original problem. The concept is to add commands to the <code>QMAKE_POST_LINK</code> variable.</p>
-
-<p>For Linux, I use <code>cp</code>:</p>
-
-<figure class='code'><figcaption><span>MyBAProjectTest.pro</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='make'><span class='line'><span class="nv">QMAKE_POST_LINK</span> <span class="o">+=</span> <span class="nv">$$</span>quote<span class="o">(</span>cp -rf <span class="nv">$$</span><span class="o">{</span>PWD<span class="o">}</span>/TestData <span class="nv">$$</span><span class="o">{</span>OUT_PWD<span class="o">})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>For Windows, I use <code>xcopy</code>:</p>
-
-<figure class='code'><figcaption><span>MyBAProjectTest.pro</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='make'><span class='line'><span class="nv">PWD_WIN</span> <span class="o">=</span> <span class="nv">$$</span><span class="o">{</span>PWD<span class="o">}</span>
-</span><span class='line'><span class="err">PWD_WIN</span> <span class="err">~=</span> <span class="err">s,/,\\,g</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">QMAKE_POST_LINK</span> <span class="o">+=</span> <span class="nv">$$</span>quote<span class="o">(</span>mkdir DestFolder<span class="o">)</span>
-</span><span class='line'><span class="nv">QMAKE_POST_LINK</span> <span class="o">+=</span> <span class="nv">$$</span>quote<span class="o">(</span>xcopy <span class="nv">$$</span><span class="o">{</span>PWD_WIN<span class="o">}</span><span class="se">\\</span>TestData <span class="nv">$$</span><span class="o">{</span>OUT_PWD_WIN<span class="o">}</span><span class="se">\\</span>TestData /E<span class="o">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I also want that directory to be deleted when I run <code>make clean</code>. Cleaning up just means adding some commands to the <code>QMAKE_CLEAN</code> directive. I also want to run the appropriate commands whether I&rsquo;m on Unix or Windows without having to modify my <code>.pro</code> file. Wrapping the previous commands in what I call an &ldquo;OS-space&rdquo; will cause those commands to only run in the specified operating system.</p>
-
-<figure class='code'><figcaption><span>MyBAProjectTest.pro</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='make'><span class='line'><span class="err">win32</span> <span class="err">{</span>
-</span><span class='line'>    <span class="nv">PWD_WIN</span> <span class="o">=</span> <span class="nv">$$</span><span class="o">{</span>PWD<span class="o">}</span>
-</span><span class='line'>    PWD_WIN ~<span class="o">=</span> s,/,<span class="se">\\</span>,g
-</span><span class='line'>
-</span><span class='line'>    QMAKE_POST_LINK +<span class="o">=</span> <span class="nv">$$</span>quote<span class="o">(</span>mkdir DestFolder<span class="o">)</span>
-</span><span class='line'>    QMAKE_POST_LINK +<span class="o">=</span> <span class="nv">$$</span>quote<span class="o">(</span>xcopy <span class="nv">$$</span><span class="o">{</span>PWD_WIN<span class="o">}</span><span class="se">\\</span>TestData <span class="nv">$$</span><span class="o">{</span>OUT_PWD_WIN<span class="o">}</span><span class="se">\\</span>TestData /E<span class="o">)</span>
-</span><span class='line'>
-</span><span class='line'>    QMAKE_CLEAN +<span class="o">=</span> /s /f /q TestData <span class="o">&amp;&amp;</span> rd /s /q TestData
-</span><span class='line'><span class="err">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="err">unix</span> <span class="err">{</span>
-</span><span class='line'>    <span class="nv">QMAKE_POST_LINK</span> <span class="o">+=</span> <span class="nv">$$</span>quote<span class="o">(</span>cp -rf <span class="nv">$$</span><span class="o">{</span>PWD<span class="o">}</span>/TestData <span class="nv">$$</span><span class="o">{</span>OUT_PWD<span class="o">})</span>
-</span><span class='line'>
-</span><span class='line'>    QMAKE_CLEAN +<span class="o">=</span> -r TestData
-</span><span class='line'><span class="err">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Data copied, tests working again. Take that, Nokia; no matter how difficult you make your build-processing tool, I&rsquo;ll figure out how to contort it to my whims.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -584,6 +577,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/02/22/let-me-be-a-billboard-for-duckduckgo-for-a-few-minutes/">Let Me Be a Billboard for DuckDuckGo for a Few Minutes</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/">Convincing Rvm to Let You Use Ruby 2.1.0</a>
       </li>
     
@@ -599,15 +596,11 @@
         <a href="/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial/">Finishing the Google Go Writing Web Applications Tutorial</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04/">Setting Up a Go Environment in Ubuntu</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/c-plus-plus' style='font-size: 116.36363636363636%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/cucumber' style='font-size: 116.36363636363636%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 127.27272727272728%'>database</a> <a href='/blog/categories/foreman' style='font-size: 105.45454545454545%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 105.45454545454545%'>foss</a> <a href='/blog/categories/gmock' style='font-size: 105.45454545454545%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 110.9090909090909%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 105.45454545454545%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 105.45454545454545%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 105.45454545454545%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/linux' style='font-size: 121.81818181818181%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 110.9090909090909%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 116.36363636363636%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 105.45454545454545%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 105.45454545454545%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 105.45454545454545%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 110.9090909090909%'>nosql</a> <a href='/blog/categories/pokephile' style='font-size: 121.81818181818181%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 105.45454545454545%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 105.45454545454545%'>qt</a> <a href='/blog/categories/rails' style='font-size: 105.45454545454545%'>rails</a> <a href='/blog/categories/retro' style='font-size: 110.9090909090909%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 110.9090909090909%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 149.0909090909091%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 116.36363636363636%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 105.45454545454545%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 143.63636363636363%'>sep-blog-battle</a> <a href='/blog/categories/sinatra' style='font-size: 121.81818181818181%'>sinatra</a> <a href='/blog/categories/tdd' style='font-size: 105.45454545454545%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 110.9090909090909%'>testing</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 105.45454545454545%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 105.45454545454545%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 105.45454545454545%'>upstart</a> <a href='/blog/categories/web' style='font-size: 132.72727272727272%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 138.1818181818182%'>write-ups</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/c-plus-plus' style='font-size: 115.0%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.0%'>capybara</a> <a href='/blog/categories/cucumber' style='font-size: 115.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 125.0%'>database</a> <a href='/blog/categories/foreman' style='font-size: 105.0%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 105.0%'>foss</a> <a href='/blog/categories/gmock' style='font-size: 105.0%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 110.0%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 105.0%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 105.0%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 105.0%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.0%'>heroku</a> <a href='/blog/categories/internet' style='font-size: 105.0%'>internet</a> <a href='/blog/categories/linux' style='font-size: 120.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 110.0%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 115.0%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 105.0%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 105.0%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 105.0%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 110.0%'>nosql</a> <a href='/blog/categories/pokephile' style='font-size: 120.0%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 105.0%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 105.0%'>qt</a> <a href='/blog/categories/rails' style='font-size: 105.0%'>rails</a> <a href='/blog/categories/retro' style='font-size: 110.0%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 110.0%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 145.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 115.0%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 105.0%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 140.0%'>sep-blog-battle</a> <a href='/blog/categories/sinatra' style='font-size: 120.0%'>sinatra</a> <a href='/blog/categories/tdd' style='font-size: 105.0%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 110.0%'>testing</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 105.0%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 105.0%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 105.0%'>upstart</a> <a href='/blog/categories/web' style='font-size: 130.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 135.0%'>write-ups</a> </span>
 </section>
 
 <section>

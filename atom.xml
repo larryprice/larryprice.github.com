@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="http://larry-price.com/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-02-22T16:45:19-05:00</updated>
+  <updated>2014-02-22T17:46:29-05:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,41 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Let Me Be a Billboard for DuckDuckGo for a Few Minutes]]></title>
+    <link href="http://larry-price.com/blog/2014/02/22/let-me-be-a-billboard-for-duckduckgo-for-a-few-minutes/"/>
+    <updated>2014-02-22T17:47:00-05:00</updated>
+    <id>http://larry-price.com/blog/2014/02/22/let-me-be-a-billboard-for-duckduckgo-for-a-few-minutes</id>
+    <content type="html"><![CDATA[<p>I would describe my job as 10% cleverness, 10% tenacity, 30% historical knowledge, and 50% searching the internet.</p>
+
+<p>As you can see, a good search engine is extremely important to me. My job depends on it. Opening <a href="http://larry-price.com//www.chromium.org/Home">Chromium&rsquo;s</a> history, I can see that I have recently searched for microwaves, <a href="http://larry-price.com//rubygems.org/gems/activesupport">activesupport</a> compatibility in <a href="http://larry-price.com//www.ruby-lang.org/en/">ruby 2.1.0</a>, deleting branches in git, and glibc backwards compatibility.</p>
+
+<p>I don&rsquo;t use <a href="http://larry-price.com//google.com">Lord Google</a> as my default search engine. Instead I use <a href="http://larry-price.com//duckduckgo.com">DuckDuckGo</a>. From <a href="http://larry-price.com//en.wikipedia.org/wiki/Duck_Duck_Go">Wikipedia</a>:</p>
+
+<blockquote><p>DuckDuckGo is an Internet search engine that emphasizes protecting searchers&#8217; privacy and avoiding the &ldquo;filter bubble&rdquo; of personalized search results. DuckDuckGo distinguishes itself from other search engines by not profiling its users and by deliberately showing all users the same search results for a given search term. DuckDuckGo also emphasizes getting information from the best sources rather than the most sources&hellip;.</p></blockquote>
+
+<p>The gist is that DuckDuckGo does not personalize your search results based on demographics or search history. It doesn&rsquo;t store your IP address and it doesn&rsquo;t log your information. You cannot &ldquo;log in&rdquo; to the DuckDuckGo website.</p>
+
+<p>Getting down to brass tacks: How does it do search?</p>
+
+<p>Searching on DuckDuckGo for queries such as &ldquo;Will Ferrell&rdquo; or &ldquo;Markdown&rdquo; will give you a blurb at the top of your search results from Wikipedia about that matching query. Searching programming topics (like &ldquo;ruby random array&rdquo; or &ldquo;asp.net create table&rdquo;) will give you a near-matching StackOverflow answer. Searching for a single word will usually give you the definition.</p>
+
+<p>A query that seems mistyped will ask you if you want to correct it. Search speed is comparable to Google, I&rsquo;ve noticed no difference.</p>
+
+<p>Looking at the result of your query, you get your search results middle-aligned. <strong>Middle. Aligned</strong> I know you probably don&rsquo;t think that&rsquo;s a big deal, but go do a Google search right now. It&rsquo;s left-aligned. Same with <a href="http://larry-price.com//bing.com">Bing</a>. Do you see what&rsquo;s on the right half of your monitor? <strong>Nothing.</strong> When running a Google search with my 22&#8221; monitor (~19&#8221; of horizontal space), there are 13&#8221; of wasted space. About 9&#8221; on Bing.</p>
+
+<p>So, you&rsquo;ve just done a search on DuckDuckGo. Now you can use the Up/Down arrows on your keyboard to navigate the search results. Pressing Enter takes you to the website. I vaguely remember that Google used to allow this, but it seems to have disappeared from the default search results.</p>
+
+<p>Don&rsquo;t like being able to see the combined search results of 50+ search engines? !Bang syntax is the answer.</p>
+
+<p>What is !bang syntax? Let&rsquo;s say you&rsquo;re me and you&rsquo;re looking for over-the range microwaves. I type into my DuckDuckGo search <code>microwaves !a</code> and DuckDuckGo takes me straight to <a href="http://larry-price.com//amazon.com">Amazon</a>, showing me search results for all those sweet, sweet microwaves. <code>!g</code> takes you to Google, <code>!w</code> takes you to Wikipedia, <code>!gi</code> takes you to Google Images, <code>!yt</code> takes you to Youtube, <code>!lowes</code> takes you to the Lowe&rsquo;s search results, <code>!gog</code> takes you to Good Ol&#8217; Games, and <a href="http://larry-price.com//duckduckgo.com/bang.html">on and on and on and on and on</a>.</p>
+
+<p>There are <a href="http://larry-price.com//duckduckgo.com/goodies">100s of other goodies</a> as well. Do math using an &ldquo;=&rdquo; sign, like &ldquo;=128*256&rdquo;. Find &ldquo;Hello, World&rdquo; examples by searching for &ldquo;hello world perl&rdquo; or &ldquo;hello world clojure&rdquo;. Do a Twitter hashtag search to find out what &ldquo;#yolo&rdquo; means. Currency conversions. Unit conversions. Convert between timezones.</p>
+
+<p>Okay, enough shameless plugging for my favorite search engine. Give it a chance. Let those Google servers cool down for a few microseconds, they won&rsquo;t mind.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Convincing Rvm to Let You Use Ruby 2.1.0]]></title>
@@ -1180,172 +1215,6 @@ tinkering, improving, planting flower beds.</p>
 <p>I believe that programmers are the main audience for this book, and I am a programmer who loved reading it. Spolsky does not talk down to the reader, nor does he dumb down the nitty-gritty technical blog posts.</p>
 
 <p>Programmers who intend to become managers may get added benefit from this book, as Spolsky discusses some interesting recruiting techniques and ways to deal with programmers. My company uses some of Spolsky&rsquo;s advice when hiring engineers (quite a bit of it, thinking back to my interview), and we&rsquo;ve been hiring only the best and brightest cowboys in the Midwest for years.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Tags in C++ Cucumber Tests]]></title>
-    <link href="http://larry-price.com/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/"/>
-    <updated>2013-04-15T22:10:00-04:00</updated>
-    <id>http://larry-price.com/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests</id>
-    <content type="html"><![CDATA[<p>The project I&rsquo;m working on is slowly adding <a href="https://github.com/cucumber/cucumber-cpp">Cucumber</a> acceptance tests to our massive code base in order to replace aging <a href="https://code.google.com/p/robotframework/">Robot tests</a>. One would think that getting developers on our team to use Cucumber would be east, since it uses <a href="https://code.google.com/p/googletest/">googletest</a> and <a href="https://code.google.com/p/googlemock/">googlemock</a> which we use for our unit tests. Unfortunately, very few people on the team have been motivated to write integration tests using the new framework, so I have very few people to go to when I have problems writing my own integration tests.</p>
-
-<p>The area of the code I deal with uses <a href="http://www.mono-project.com/Embedding_Mono">embedded mono</a> to communicate with some C# libraries that we share with other applications. This means we have unmanaged memory which talks with managed memory. This has caused us more headaches than I care to remember. One such problem is that we have a static object that we only want to create and destroy once. So I write my first Cucumber test:</p>
-
-<figure class='code'><figcaption><span>DoStuff.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Do that thing that we have to do</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Do it my way</span>
-</span><span class='line'><span class="k">  Given </span><span class="nf">I have done step </span><span class="s">1</span><span class="nf"></span>
-</span><span class='line'><span class="nf">  </span><span class="k">When </span><span class="nf">I do step </span><span class="s">2</span><span class="nf"></span>
-</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">I should see results</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>DoStuff_StepDefinitions.cpp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="cp">#include &lt;cucumber-cpp/defs.hpp&gt;</span>
-</span><span class='line'><span class="cp">#include &lt;gtest/gtest.h&gt;</span>
-</span><span class='line'><span class="cp">#include &lt;mono/jit/jit.h&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">const</span> <span class="n">QString</span> <span class="n">DOMAIN_NAME</span> <span class="o">=</span> <span class="s">&quot;bridge&quot;</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">Context</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="c1">// The static Mono object</span>
-</span><span class='line'>  <span class="k">static</span> <span class="n">MonoDomain</span> <span class="o">*</span><span class="n">Domain</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">BEFORE</span><span class="p">()</span> <span class="p">{</span> <span class="n">Context</span><span class="o">::</span><span class="n">Domain</span> <span class="o">=</span> <span class="n">mono_jit_init</span><span class="p">(</span><span class="n">DOMAIN_NAME</span><span class="p">);</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">AFTER</span><span class="p">()</span> <span class="p">{</span> <span class="n">mono_jit_cleanup</span><span class="p">(</span><span class="n">Context</span><span class="o">::</span><span class="n">Domain</span><span class="p">);</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">GIVEN</span><span class="p">(</span><span class="s">&quot;^I have done step 1$&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">WHEN</span><span class="p">(</span><span class="s">&quot;^I do step 2$&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">THEN</span><span class="p">(</span><span class="s">&quot;^I should see results$&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Before my scenario starts, the <code>BEFORE()</code> function is called and my MonoDomain object is created. When the scenario ends, my <code>AFTER()</code> statement is called and the objects in my MonoDomain are cleaned up. Now, I add a second scenario.</p>
-
-<figure class='code'><figcaption><span>DoStuff.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Do that thing that we have to do</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Do it my way</span>
-</span><span class='line'><span class="nf">  ...</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">Scenario: Do it your way</span>
-</span><span class='line'><span class="nf">  ...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now I run my Cucumber test, and Mono explodes. Why? Because the <code>BEFORE()</code> and <code>AFTER()</code> functions are not <em>before all</em> and <em>after all</em>, but <em>before each</em> and <em>after each</em>.</p>
-
-<p>So what should we do? Move the function calls in the <code>BEFORE()</code> and <code>AFTER()</code> statements into the constructor and destructor of the Context class?</p>
-
-<p>Same problem. Are there <code>BEFORE_ALL()</code> and <code>AFTER_ALL()</code> macros? No.</p>
-
-<p>I began to panic. I asked the person who taught me how to write Cucumber tests in C++. Our idea was to create the MonoDomain during what I knew would be the first step, and delete it after what I knew would be the last step. Oh, the horror! That would mean not being able to reuse those steps, not to mention moving the creation/destruction code around anytime I wanted to add new steps or change the order of my previous steps. We also thought about making specific steps and sticking them at the front of the first scenario and at the end of the last scenario. This still meant that the lay developer would have to recognize these first and last steps from the others. I asked my local senior engineer, and his advice was to create separate Cucumber tests for each scenario I intended to create. My plan was to write 6 scenarios in the long-term for this feature, and I really didn&rsquo;t want to turn these very similar tests with beautifully reusable steps into 6 features.</p>
-
-<p>Then it hit me: Cucumber is open source. I found the source <a href="https://github.com/cucumber/cucumber-cpp">on Github</a> and started looking through <a href="https://github.com/cucumber/cucumber-cpp/tree/master/examples/">the example code</a>. It was there that I discovered <a href="https://github.com/cucumber/cucumber-cpp/tree/master/examples/FeatureShowcase/tag">tags</a>. Tags were the solution to my problem.</p>
-
-<figure class='code'><figcaption><span>DoStuff.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Do that thing that we have to do</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">@first</span>
-</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Do it my way</span>
-</span><span class='line'><span class="nf">  ...</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">@last</span>
-</span><span class='line'><span class="nf">Scenario: Do it your way</span>
-</span><span class='line'><span class="nf">  ...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Using tags, I could label my scenarios with meaningful <code>@first</code> and <code>@last</code> tags to signify the beginning and end of my tests. The trick is to then add the required tags to my <code>BEFORE()</code> and <code>AFTER()</code> macro as such:</p>
-
-<figure class='code'><figcaption><span>DoStuff_StepDefinitions.cpp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="cp">#include &lt;cucumber-cpp/defs.hpp&gt;</span>
-</span><span class='line'><span class="cp">#include &lt;gtest/gtest.h&gt;</span>
-</span><span class='line'><span class="cp">#include &lt;mono/jit/jit.h&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">const</span> <span class="n">QString</span> <span class="n">DOMAIN_NAME</span> <span class="o">=</span> <span class="s">&quot;bridge&quot;</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">Context</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="c1">// The static Mono object</span>
-</span><span class='line'>  <span class="k">static</span> <span class="n">MonoDomain</span> <span class="o">*</span><span class="n">Domain</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">BEFORE</span><span class="p">(</span><span class="s">&quot;@first&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">Context</span><span class="o">::</span><span class="n">Domain</span> <span class="o">=</span> <span class="n">mono_jit_init</span><span class="p">(</span><span class="n">DOMAIN_NAME</span><span class="p">);</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">AFTER</span><span class="p">(</span><span class="s">&quot;@last&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">mono_jit_cleanup</span><span class="p">(</span><span class="n">Context</span><span class="o">::</span><span class="n">Domain</span><span class="p">);</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// ...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now my MonoDomain is only created <em>before</em> the scenario labeled <code>@first</code> and <em>after</em> the scenario labeled <code>@last</code>. Obviously, this isn&rsquo;t the cleanest fix imaginable, but it was the cleanest fix <em>available</em>. Whenever someone wants to add a new step to this test, they need to remember to move the <code>@last</code> tag to their scenario. However, I have the hope that it will be pretty obvious that the second scenario is no longer &ldquo;last&rdquo; when there is a third scenario following the &ldquo;last&rdquo; scenario. Anyway, it leaves me happy enough, since now my tests don&rsquo;t explode and I&rsquo;m able to reuse ~50% of the steps I had already written for the first scenario. I added a third scenario later on and 9 out of the 10 steps in the scenario were reused from the first and second scenario.</p>
-
-<p>There are lots of other cool things you can do with Cucumber tags, like having multiple tags on objects. All tags that match <code>@first</code> will do one thing, but tags that match <code>@first</code> and <code>@second</code> can have multiple <code>BEFORE()</code> or <code>AFTER()</code> clauses.</p>
 ]]></content>
   </entry>
   

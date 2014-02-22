@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: internet | Larry Price]]></title>
+  <link href="http://larry-price.com/blog/categories/internet/atom.xml" rel="self"/>
+  <link href="http://larry-price.com/"/>
+  <updated>2014-02-22T17:46:29-05:00</updated>
+  <id>http://larry-price.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Let me be a billboard for DuckDuckGo for a few minutes]]></title>
+    <link href="http://larry-price.com/blog/2014/02/22/let-me-be-a-billboard-for-duckduckgo-for-a-few-minutes/"/>
+    <updated>2014-02-22T17:47:00-05:00</updated>
+    <id>http://larry-price.com/blog/2014/02/22/let-me-be-a-billboard-for-duckduckgo-for-a-few-minutes</id>
+    <content type="html"><![CDATA[<p>I would describe my job as 10% cleverness, 10% tenacity, 30% historical knowledge, and 50% searching the internet.</p>
+
+<p>As you can see, a good search engine is extremely important to me. My job depends on it. Opening <a href="//www.chromium.org/Home">Chromium&rsquo;s</a> history, I can see that I have recently searched for microwaves, <a href="//rubygems.org/gems/activesupport">activesupport</a> compatibility in <a href="//www.ruby-lang.org/en/">ruby 2.1.0</a>, deleting branches in git, and glibc backwards compatibility.</p>
+
+<p>I don&rsquo;t use <a href="//google.com">Lord Google</a> as my default search engine. Instead I use <a href="//duckduckgo.com">DuckDuckGo</a>. From <a href="//en.wikipedia.org/wiki/Duck_Duck_Go">Wikipedia</a>:</p>
+
+<blockquote><p>DuckDuckGo is an Internet search engine that emphasizes protecting searchers' privacy and avoiding the &ldquo;filter bubble&rdquo; of personalized search results. DuckDuckGo distinguishes itself from other search engines by not profiling its users and by deliberately showing all users the same search results for a given search term. DuckDuckGo also emphasizes getting information from the best sources rather than the most sources&hellip;.</p></blockquote>
+
+<p>The gist is that DuckDuckGo does not personalize your search results based on demographics or search history. It doesn&rsquo;t store your IP address and it doesn&rsquo;t log your information. You cannot &ldquo;log in&rdquo; to the DuckDuckGo website.</p>
+
+<p>Getting down to brass tacks: How does it do search?</p>
+
+<p>Searching on DuckDuckGo for queries such as &ldquo;Will Ferrell&rdquo; or &ldquo;Markdown&rdquo; will give you a blurb at the top of your search results from Wikipedia about that matching query. Searching programming topics (like &ldquo;ruby random array&rdquo; or &ldquo;asp.net create table&rdquo;) will give you a near-matching StackOverflow answer. Searching for a single word will usually give you the definition.</p>
+
+<p>A query that seems mistyped will ask you if you want to correct it. Search speed is comparable to Google, I&rsquo;ve noticed no difference.</p>
+
+<p>Looking at the result of your query, you get your search results middle-aligned. <strong>Middle. Aligned</strong> I know you probably don&rsquo;t think that&rsquo;s a big deal, but go do a Google search right now. It&rsquo;s left-aligned. Same with <a href="//bing.com">Bing</a>. Do you see what&rsquo;s on the right half of your monitor? <strong>Nothing.</strong> When running a Google search with my 22" monitor (~19" of horizontal space), there are 13" of wasted space. About 9" on Bing.</p>
+
+<p>So, you&rsquo;ve just done a search on DuckDuckGo. Now you can use the Up/Down arrows on your keyboard to navigate the search results. Pressing Enter takes you to the website. I vaguely remember that Google used to allow this, but it seems to have disappeared from the default search results.</p>
+
+<p>Don&rsquo;t like being able to see the combined search results of 50+ search engines? !Bang syntax is the answer.</p>
+
+<p>What is !bang syntax? Let&rsquo;s say you&rsquo;re me and you&rsquo;re looking for over-the range microwaves. I type into my DuckDuckGo search <code>microwaves !a</code> and DuckDuckGo takes me straight to <a href="//amazon.com">Amazon</a>, showing me search results for all those sweet, sweet microwaves. <code>!g</code> takes you to Google, <code>!w</code> takes you to Wikipedia, <code>!gi</code> takes you to Google Images, <code>!yt</code> takes you to Youtube, <code>!lowes</code> takes you to the Lowe&rsquo;s search results, <code>!gog</code> takes you to Good Ol' Games, and <a href="//duckduckgo.com/bang.html">on and on and on and on and on</a>.</p>
+
+<p>There are <a href="//duckduckgo.com/goodies">100s of other goodies</a> as well. Do math using an &ldquo;=&rdquo; sign, like &ldquo;=128*256&rdquo;. Find &ldquo;Hello, World&rdquo; examples by searching for &ldquo;hello world perl&rdquo; or &ldquo;hello world clojure&rdquo;. Do a Twitter hashtag search to find out what &ldquo;#yolo&rdquo; means. Currency conversions. Unit conversions. Convert between timezones.</p>
+
+<p>Okay, enough shameless plugging for my favorite search engine. Give it a chance. Let those Google servers cool down for a few microseconds, they won&rsquo;t mind.</p>
+]]></content>
+  </entry>
+  
+</feed>
