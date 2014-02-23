@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-02-22T17:46:29-05:00</updated>
+  <updated>2014-02-22T19:47:49-05:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,119 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Using x-editable to do in-line editing for you]]></title>
+    <link href="http://larry-price.com/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you/"/>
+    <updated>2014-02-22T19:15:00-05:00</updated>
+    <id>http://larry-price.com/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you</id>
+    <content type="html"><![CDATA[<p>In-line editing is traditionally difficult. Taking a static HTML node and turning it into an editable text field and then sending that data off somewhere is a little bit more Javascript than I like to write. My team and I came up against a very difficult UX problem which I spent over a week trying to understand. After building and discussing several solutions, we eventually decided to narrow the scope of what the user should be able to change. We would present the user with a table where one of the columns would be editable.</p>
+
+<p>Rather than showing a table with the third column always as a field for text entry, I used the Javascript library <a href="//vitalets.github.io/x-editable/">X-editable</a>. X-editable allows me to display my editable item as a link. When the user clicks the item, the link turns into a text field with a Save/Cancel button (and a &lsquo;clear&rsquo; button as a bonus). The &lsquo;Save&rsquo; button submits an AJAX &lsquo;POST&rsquo; or &lsquo;PUTS&rsquo;, where we are then allowed to validate and save the data. The &lsquo;Cancel&rsquo; button turns the text field back into a link with the original value.</p>
+
+<p>Hooray, someone else has already done the hard work for us! So, what I want to do is dynamically generate a table with objects and allow the user to edit one of the columns. In my case, only the end column is editable, but I could just as easily spread this availability to all my columns. I&rsquo;m using all my favorite tools to create this page, specifically <a href="//ruby-lang.org/en/">ruby</a>, <a href="//sinatrarb.com">Sinatra</a>, <a href="//getbootstrap.com">Twitter Bootstrap</a>, and <a href="//haml.info">HAML</a>.</p>
+
+<p>X-editable has implementations using Bootstrap, jQuery UI, and jQuery. Since I&rsquo;m already using Bootstrap in my app, I&rsquo;m going to go with that version. Note that there are Bootstrap 2 and Bootstrap 3 builds of X-editable, and I&rsquo;m using the Bootstrap 3 variety.</p>
+
+<p>First I include the necessary files at the top of my HAML document.</p>
+
+<p>``` haml /views/manage_data.haml
+%script{src: &ldquo;//code.jquery.com/jquery.js&rdquo;}
+%script{src: &ldquo;//getbootstrap.com/dist/js/bootstrap.min.js&rdquo;}
+%link{href: &ldquo;//getbootstrap.com/dist/css/bootstrap.min.css&rdquo;, rel: &ldquo;stylesheet&rdquo;}</p>
+
+<p>%link{href: &ldquo;//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css&rdquo;, rel: &ldquo;stylesheet&rdquo;}
+%script{src: &ldquo;//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js&rdquo;}
+```</p>
+
+<p>I&rsquo;m going to dumb my page down so I only have to show the important parts. I&rsquo;m going to create a table from an array of hashes called <code>@options</code>. Each hash has two important fields for this table: Points and Dollars. I will iterate over <code>@options</code>, displaying the <code>points</code> field as plain text and the <code>dollars</code> field as an X-editable link. Each hash also has a <code>value</code> field containing the primary key for the object to be edited.</p>
+
+<p>``` haml /views/manage_data.haml
+.container
+  .row</p>
+
+<pre><code>.col-md-6
+  %table{id: "edit_points_goal", class: "table table-responsive table-hover table-bordered"}
+    %thead
+      %tr
+        %th{width: "35%"}
+          Points
+        %th{width: "65%"}
+          Dollars
+    %tbody
+      - @options.each do |option|
+        %tr
+          %td{style: "height: 45px; padding: 4px 8px; vertical-align: middle;"}
+            #{option[:points]}
+          %td{style: "height: 45px; padding: 4px 8px; vertical-align: middle;"}
+            %a{href:"javascript:void(0)", "data-type"=&gt;"text", "data-pk"=&gt;"#{option[:value]}", "data-url"=&gt;"/update", "data-title"=&gt;"Enter dollar amount"}
+              #{option[:dollars]}
+</code></pre>
+
+<p>```</p>
+
+<p>The important part is the <code>a</code> tag:</p>
+
+<ul>
+<li><code>href</code> goes nowhere.</li>
+<li><code>data-type</code> tells X-editable how it will edit the presented data. According to the docs, types include text, textarea, select, date, checklist and more.</li>
+<li><code>data-pk</code> is the primary key of our data in the database. In my case, that comes to me stored in the <code>value</code> field of the option hash.</li>
+<li><code>data-url</code> is the <code>post</code> method that will be used to interpret the data.</li>
+<li><code>data-title</code> is used to tell the user what to do.</li>
+</ul>
+
+
+<p>Our code won&rsquo;t do anything yet seeing as it&rsquo;s not connected. We need some Javascript to do that. I put the Javascript at the top of my file, underneath the included files. The first thing we need to do is tell X-editable what type of editing we&rsquo;ll be doing. The options are in-line editing or a pop-up. I want the in-line editing in this case. The second thing I want to do is to set the <code>editable</code> attribute on the appropriate DOM objects. Since I&rsquo;m using an array, I found the easiest way to do this was to start at the table&rsquo;s id (edit_points_goal) and trace down to the <code>a</code> tag.</p>
+
+<p>``` haml /views/manage_data.haml
+:javascript
+  $.fn.editable.defaults.mode = &lsquo;inline&rsquo;;</p>
+
+<p>  $(document).ready(function() {</p>
+
+<pre><code>if (#{vm.editable}) {
+  $('#edit_points_goal tbody tr td a').editable();
+}
+</code></pre>
+
+<p>  });
+```</p>
+
+<p>Now we need to deal with the <code>post</code> request. If you&rsquo;re really impatient to see things work, you should be able to see your in-line editable code in action, but the <code>post</code> call will fail with a &ldquo;NoMethodError.&rdquo;</p>
+
+<p>Our <code>post</code> is going to be really simple. We verify that we have a non-negative integer and we either save and return 200 or we return 400 with an appropriate message. Our table in this example is just called <code>Data</code>, and we use <code>find</code> to get a value out of the database.</p>
+
+<p>``` ruby web.rb
+post &ldquo;/update&rdquo; do
+  data = Data.find(id: params[&ldquo;pk&rdquo;])</p>
+
+<p>  unless params[&ldquo;value&rdquo;].match(/[^0-9]/)</p>
+
+<pre><code>data = params["value"].to_i
+data.save
+return 200
+</code></pre>
+
+<p>  end</p>
+
+<p>  return {400, [], &ldquo;Please enter a valid non-negative number&rdquo;}
+end
+```</p>
+
+<p>Things should be working now. When you enter good data and click the &lsquo;Ok&rsquo; button, our <code>post</code> will be called and the text field will turn back into a link. When you enter bad data, you should see our error message below the text field box.</p>
+
+<p>Issues I encountered:</p>
+
+<ul>
+<li>Table column width shifting &ndash; Fixed by setting the widths explicitly, as seen above (35% and 65%).</li>
+<li>Table height shifting &ndash; Fixed by setting the style of the <code>td</code> as seen above to give a larger height, more padding, and aligning the inner objects explicitly. I would recommend moving this definition to a <code>.css</code> or <code>.scss</code> file.</li>
+<li>&ldquo;NoMethodError&rdquo; after clicking Go &ndash; Unfortunately, if you made any coding errors in your route, you won&rsquo;t be able to see the Sinatra error page but will instead you&rsquo;ll be presented with a giant wall of HTML below the text box. Try to parse this error, but if you struggle to find out what went wrong you can always substitute a form-post method in place of the <code>a</code> tag, which may allow you to more easily figure out the problem.</li>
+</ul>
+
+
+<p>The <a href="//vitalets.github.io/x-editable/docs.html">X-editable docs</a> are extremely helpful for beginners. There is even more detail on the X-editable site, including editing multiple items, editing dates, and using a pop-up to edit the data.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Convincing rvm to let you use ruby 2.1.0]]></title>
@@ -244,188 +357,6 @@ end
 <p>In hindsight, this method is not perfect. I think that the Rails method of individual controllers is significantly better for large apps. Some people have been using other methods for trying to make Sinatra more MVC, such as <a href="https://github.com/jorrizza/sinatra-mvc">sinatra-mvc</a>. To be frank, sinatra-mvc pretty much does the same thing we&rsquo;ve done, but with more structure.</p>
 
 <p>I think what I&rsquo;ve learned is that you should use a tool for its intended purpose. Sinatra was written to quickly create web apps in Ruby with minimal effort. Once you have more than 10-15 routes, you should reconsider whether your app can still be called &ldquo;minimal effort.&rdquo; Sinatra may fly you to the moon, but you&rsquo;re unlikely to see what spring is like on Jupiter or Mars.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Pushing an Application to Heroku that Uses Ruby and Mongo]]></title>
-    <link href="http://larry-price.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo/"/>
-    <updated>2013-01-20T11:55:00-05:00</updated>
-    <id>http://larry-price.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo</id>
-    <content type="html"><![CDATA[<p><em>This is Part 3 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="/blog/categories/pokephile">Pokephile category</a>. Part 4 of this series details moving from a development environment to a production environment using <a href="http://heroku.com/">Heroku</a>. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>, and the final product can be found <a href="http://pokephile.herokuapp.com">here</a>.</em></p>
-
-<p><a href="http://heroku.com/">Heroku</a> is a hosting service for different types of web applications. The best thing about Heroku is it&rsquo;s free, you get a decent subdomain for your application, and there&rsquo;s no spam email. Go ahead and <a href="http://api.heroku.com/signup">sign up</a> if you don&rsquo;t already have an account.</p>
-
-<p>Now we need the Heroku Toolbelt. I&rsquo;ll illustrate for Ubuntu 12.10, but there&rsquo;s also <a href="https://toolbelt.heroku.com/">documentation for installing on any OS</a>.</p>
-
-<p><code>bash
-$ wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
-</code></p>
-
-<p>The toolbelt installs some Heroku-specific applications in addition to ensuring you have Foreman and <a href="http://git-scm.com/">Git</a> on your system. Now it&rsquo;s time to tell the Heroku Toolbelt who we are.</p>
-
-<p><code>bash Step 3 - Modified Excerpt from the Heroku Getting Started guide
-$ heroku login
-Enter your Heroku credentials.
-Email: larry@example.com
-Password:
-Could not find an existing public key.
-Would you like to generate one? [Yn]
-Generating new SSH public key.
-Uploading ssh public key /home/larry/.ssh/id_rsa.pub
-</code></p>
-
-<p>In order for Heroku to figure out what ruby gems are needed to run your application, you need to specify a Gemfile. It&rsquo;s wise to specify a specific version of Ruby, and it&rsquo;s also a good idea to keep the gems' versions close to the state you developed with. For the <a href="/blog/categories/pokephile">Pokephile</a> application created in this series, this is my Gemfile:</p>
-
-<p>``` ruby project/Gemfile
-source :rubygems</p>
-
-<p>ruby &lsquo;1.9.3&rsquo;</p>
-
-<p>gem &lsquo;sinatra&rsquo;, &lsquo;~>1.3.2&rsquo;
-gem &lsquo;haml&rsquo;, &lsquo;~>3.1.6&rsquo;
-gem &lsquo;mongoid&rsquo;, &lsquo;~>3.0.14&rsquo;</p>
-
-<p>group :development, :test do</p>
-
-<pre><code>gem 'capybara', '~&gt;2.0.1'
-gem 'rspec', '~&gt;2.11.0'
-gem 'nokogiri', '~&gt;1.5.5'
-</code></pre>
-
-<p>end
-```</p>
-
-<p>First I specify a source for my gems: &lsquo;rubygems&rsquo; defaults to &ldquo;<a href="http://rubygems.org">http://rubygems.org</a>&rdquo; and hasn&rsquo;t failed me yet. Next I specify that I want to use Ruby 1.9.3, a necessity because Mongoid 3.x doesn&rsquo;t work correctly with 1.9.2. The versions of the first three gems were chosen by typing the following in the command line to determine which version I had installed on my machine:</p>
-
-<p><code>bash
-$ gem query | grep 'sinatra\|haml\|mongoid'
-haml (3.1.7, 3.1.6)
-mongoid (3.0.17, 3.0.15, 3.0.14)
-sinatra (1.3.3, 1.3.2)
-sinatra-contrib (1.3.2)
-sinatra-reloader (1.0)
-</code></p>
-
-<p>The &lsquo;~>&rsquo; operator tells Bundler to use greater-than-equal but stop before next highest version. So, for Sinatra &lsquo;~>1.3.2&rsquo; means that Bundler will accept anything greater-than-or-equal-to &lsquo;1.3.2&rsquo; and less than &lsquo;1.4.0.&rsquo; I tend to rely on the &lsquo;~>&rsquo; operator so I can be sure no APIs are changed in my gems.</p>
-
-<p>The next block is a conditional checking in which environment the gems are being installed. This defaults to :development if none is specified. I put the gems used for testing in this block since they&rsquo;re not needed to run the application, but a developer/tester would need these to run the tests.</p>
-
-<p>For this Gemfile to be meaningful, we need to use a program called <a href="http://gembundler.com/">Bundler</a> to &ldquo;bundle&rdquo; the gems and their dependencies in a Gemfile.lock file.</p>
-
-<p><code>bash
-$ pwd
-project/
-$ sudo apt-get install bundler
-...
-$ bundle install
-...
-Your bundle is complete! Use `bundle show [gemname]` to see where a bundled gem is installed.
-</code></p>
-
-<p>Running bundler will create a Gemfile.lock file and make sure your system has the specified gems. If some gems are missing or need new versions to be installed, bundler will ask the user for their password to get the required gems.</p>
-
-<p>The next step for setting things up is to set up Git. If your application is already using Git, you only need to commit all files to verify that the Gemfile and Gemfile.lock make it into the repository.</p>
-
-<p><code>bash
-$ cd project/
-$ git init
-$ git add .
-$ git commit -m "Initial commit."
-</code></p>
-
-<p>Now we create a Heroku project and give it a meaningful name. If you can&rsquo;t think of a meaningful name, use &lsquo;heroku create&rsquo; and Heroku will come up with something for you.</p>
-
-<p><code>bash
-$ heroku create meaningful-name
-Creating meaningful-name... done, stack is cedar
-http://meaningful-name.herokuapp.com/ | git@heroku.com:meaningful-name.git
-Git remote heroku added
-</code></p>
-
-<p>We&rsquo;re almost there. Because we included accessing Mongo databases in our application, we have to take care of that on the web. The easiest way to do that is using a Heroku Add-on. At this time, there are two major Heroku Add-ons for Mongo databases: <a href="https://addons.heroku.com/mongolab">MongoLab</a> and <a href="https://addons.heroku.com/mongohq">MongoHQ</a>. Both services have a starter service for $0/month, which is pretty awesome in my opinion. I flipped a coin and picked MongoLab for this application. Adding the add-on to our project:</p>
-
-<p><code>bash
-$ heroku addons:add mongolab:starter
-</code></p>
-
-<p>If you haven&rsquo;t already, Heroku will ask you to &ldquo;verify your account&rdquo; before continuing. This means that you have to put in some credit card information. Note that you will not be charged, I guess Heroku just wants some indication that you might eventually pay for something. After you put in your credit card information, you may need to run the above command again.</p>
-
-<p>Now that MongoLab is set up on the server-side, we need to tell Mongoid how to connect to that server. The following command will give you the environment variable needed to connect to the server:</p>
-
-<p><code>bash
-$ heroku config | grep MONGOLAB_URI
-</code></p>
-
-<p>Now we update our mongoid.yml file to use that string:</p>
-
-<p>``` yml project/mongoid.yml
-development:
-  sessions:</p>
-
-<pre><code>default:
-  database: dev
-  hosts:
-    - localhost
-</code></pre>
-
-<p>  options:</p>
-
-<p>test:
-  sessions:</p>
-
-<pre><code>default:
-  database: test
-  hosts:
-    - localhost
-</code></pre>
-
-<p>production:
-  sessions:</p>
-
-<pre><code>default:
-  uri: &lt;%= ENV['MONGOLAB_URI'] %&gt;
-  options:
-    skip_version_check: true
-    safe: true
-</code></pre>
-
-<p>```</p>
-
-<p>Because of the way my application works, I want to prepopulate the database with some Pokemon.</p>
-
-<p><code>`` bash
-$ export MONGOLAB_URI=</code>heroku config | grep MONGOLAB_URI | cut -c 15-`
-$ pwd
-project/
-$ cd tools/populate
-$ irb</p>
-
-<blockquote><blockquote><p>require &lsquo;./populater&rsquo;
-true
-require &lsquo;mongoid&rsquo;
-true
-Mongoid.load! &lsquo;../../mongoid.yml&rsquo;, :production
-{&ldquo;sessions&rdquo;=>{&ldquo;default&rdquo;=>{&ldquo;uri&rdquo;=>nil, &ldquo;options&rdquo;=>{&ldquo;skip_version_check&rdquo;=>true, &ldquo;safe&rdquo;=>true}}}}
-Populater.new.add_pokemon 1000
-nil
-```</p></blockquote></blockquote>
-
-<p>With the production database populated, we need to set an environment variable in our production application defining the environment.</p>
-
-<p><code>bash
-$ heroku config:add MONGOID_ENV=production
-</code></p>
-
-<p>Now that we&rsquo;ve made changes to the mongoid.yml file, we should commit again and push to Heroku.</p>
-
-<p><code>bash
-$ git commit -a -m "Updating mongoid.yml file for production"
-...
-$ git push heroku master
-</code></p>
-
-<p>And that&rsquo;s it! Check your Heroku URL to make sure everything looks okay and call it a day, or make some upgrades as I did for my <a href="http://pokephile.herokuapp.com">personal version of this project</a>.</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: web | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/web/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-02-22T17:46:29-05:00</updated>
+  <updated>2014-02-22T19:47:49-05:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,119 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Using x-editable to do in-line editing for you]]></title>
+    <link href="http://larry-price.com/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you/"/>
+    <updated>2014-02-22T19:15:00-05:00</updated>
+    <id>http://larry-price.com/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you</id>
+    <content type="html"><![CDATA[<p>In-line editing is traditionally difficult. Taking a static HTML node and turning it into an editable text field and then sending that data off somewhere is a little bit more Javascript than I like to write. My team and I came up against a very difficult UX problem which I spent over a week trying to understand. After building and discussing several solutions, we eventually decided to narrow the scope of what the user should be able to change. We would present the user with a table where one of the columns would be editable.</p>
+
+<p>Rather than showing a table with the third column always as a field for text entry, I used the Javascript library <a href="//vitalets.github.io/x-editable/">X-editable</a>. X-editable allows me to display my editable item as a link. When the user clicks the item, the link turns into a text field with a Save/Cancel button (and a &lsquo;clear&rsquo; button as a bonus). The &lsquo;Save&rsquo; button submits an AJAX &lsquo;POST&rsquo; or &lsquo;PUTS&rsquo;, where we are then allowed to validate and save the data. The &lsquo;Cancel&rsquo; button turns the text field back into a link with the original value.</p>
+
+<p>Hooray, someone else has already done the hard work for us! So, what I want to do is dynamically generate a table with objects and allow the user to edit one of the columns. In my case, only the end column is editable, but I could just as easily spread this availability to all my columns. I&rsquo;m using all my favorite tools to create this page, specifically <a href="//ruby-lang.org/en/">ruby</a>, <a href="//sinatrarb.com">Sinatra</a>, <a href="//getbootstrap.com">Twitter Bootstrap</a>, and <a href="//haml.info">HAML</a>.</p>
+
+<p>X-editable has implementations using Bootstrap, jQuery UI, and jQuery. Since I&rsquo;m already using Bootstrap in my app, I&rsquo;m going to go with that version. Note that there are Bootstrap 2 and Bootstrap 3 builds of X-editable, and I&rsquo;m using the Bootstrap 3 variety.</p>
+
+<p>First I include the necessary files at the top of my HAML document.</p>
+
+<p>``` haml /views/manage_data.haml
+%script{src: &ldquo;//code.jquery.com/jquery.js&rdquo;}
+%script{src: &ldquo;//getbootstrap.com/dist/js/bootstrap.min.js&rdquo;}
+%link{href: &ldquo;//getbootstrap.com/dist/css/bootstrap.min.css&rdquo;, rel: &ldquo;stylesheet&rdquo;}</p>
+
+<p>%link{href: &ldquo;//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css&rdquo;, rel: &ldquo;stylesheet&rdquo;}
+%script{src: &ldquo;//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js&rdquo;}
+```</p>
+
+<p>I&rsquo;m going to dumb my page down so I only have to show the important parts. I&rsquo;m going to create a table from an array of hashes called <code>@options</code>. Each hash has two important fields for this table: Points and Dollars. I will iterate over <code>@options</code>, displaying the <code>points</code> field as plain text and the <code>dollars</code> field as an X-editable link. Each hash also has a <code>value</code> field containing the primary key for the object to be edited.</p>
+
+<p>``` haml /views/manage_data.haml
+.container
+  .row</p>
+
+<pre><code>.col-md-6
+  %table{id: "edit_points_goal", class: "table table-responsive table-hover table-bordered"}
+    %thead
+      %tr
+        %th{width: "35%"}
+          Points
+        %th{width: "65%"}
+          Dollars
+    %tbody
+      - @options.each do |option|
+        %tr
+          %td{style: "height: 45px; padding: 4px 8px; vertical-align: middle;"}
+            #{option[:points]}
+          %td{style: "height: 45px; padding: 4px 8px; vertical-align: middle;"}
+            %a{href:"javascript:void(0)", "data-type"=&gt;"text", "data-pk"=&gt;"#{option[:value]}", "data-url"=&gt;"/update", "data-title"=&gt;"Enter dollar amount"}
+              #{option[:dollars]}
+</code></pre>
+
+<p>```</p>
+
+<p>The important part is the <code>a</code> tag:</p>
+
+<ul>
+<li><code>href</code> goes nowhere.</li>
+<li><code>data-type</code> tells X-editable how it will edit the presented data. According to the docs, types include text, textarea, select, date, checklist and more.</li>
+<li><code>data-pk</code> is the primary key of our data in the database. In my case, that comes to me stored in the <code>value</code> field of the option hash.</li>
+<li><code>data-url</code> is the <code>post</code> method that will be used to interpret the data.</li>
+<li><code>data-title</code> is used to tell the user what to do.</li>
+</ul>
+
+
+<p>Our code won&rsquo;t do anything yet seeing as it&rsquo;s not connected. We need some Javascript to do that. I put the Javascript at the top of my file, underneath the included files. The first thing we need to do is tell X-editable what type of editing we&rsquo;ll be doing. The options are in-line editing or a pop-up. I want the in-line editing in this case. The second thing I want to do is to set the <code>editable</code> attribute on the appropriate DOM objects. Since I&rsquo;m using an array, I found the easiest way to do this was to start at the table&rsquo;s id (edit_points_goal) and trace down to the <code>a</code> tag.</p>
+
+<p>``` haml /views/manage_data.haml
+:javascript
+  $.fn.editable.defaults.mode = &lsquo;inline&rsquo;;</p>
+
+<p>  $(document).ready(function() {</p>
+
+<pre><code>if (#{vm.editable}) {
+  $('#edit_points_goal tbody tr td a').editable();
+}
+</code></pre>
+
+<p>  });
+```</p>
+
+<p>Now we need to deal with the <code>post</code> request. If you&rsquo;re really impatient to see things work, you should be able to see your in-line editable code in action, but the <code>post</code> call will fail with a &ldquo;NoMethodError.&rdquo;</p>
+
+<p>Our <code>post</code> is going to be really simple. We verify that we have a non-negative integer and we either save and return 200 or we return 400 with an appropriate message. Our table in this example is just called <code>Data</code>, and we use <code>find</code> to get a value out of the database.</p>
+
+<p>``` ruby web.rb
+post &ldquo;/update&rdquo; do
+  data = Data.find(id: params[&ldquo;pk&rdquo;])</p>
+
+<p>  unless params[&ldquo;value&rdquo;].match(/[^0-9]/)</p>
+
+<pre><code>data = params["value"].to_i
+data.save
+return 200
+</code></pre>
+
+<p>  end</p>
+
+<p>  return {400, [], &ldquo;Please enter a valid non-negative number&rdquo;}
+end
+```</p>
+
+<p>Things should be working now. When you enter good data and click the &lsquo;Ok&rsquo; button, our <code>post</code> will be called and the text field will turn back into a link. When you enter bad data, you should see our error message below the text field box.</p>
+
+<p>Issues I encountered:</p>
+
+<ul>
+<li>Table column width shifting &ndash; Fixed by setting the widths explicitly, as seen above (35% and 65%).</li>
+<li>Table height shifting &ndash; Fixed by setting the style of the <code>td</code> as seen above to give a larger height, more padding, and aligning the inner objects explicitly. I would recommend moving this definition to a <code>.css</code> or <code>.scss</code> file.</li>
+<li>&ldquo;NoMethodError&rdquo; after clicking Go &ndash; Unfortunately, if you made any coding errors in your route, you won&rsquo;t be able to see the Sinatra error page but will instead you&rsquo;ll be presented with a giant wall of HTML below the text box. Try to parse this error, but if you struggle to find out what went wrong you can always substitute a form-post method in place of the <code>a</code> tag, which may allow you to more easily figure out the problem.</li>
+</ul>
+
+
+<p>The <a href="//vitalets.github.io/x-editable/docs.html">X-editable docs</a> are extremely helpful for beginners. There is even more detail on the X-editable site, including editing multiple items, editing dates, and using a pop-up to edit the data.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Letting the Browser Decide Betwen HTTP and HTTPS]]></title>
@@ -280,61 +393,6 @@ $ foreman start -e production.env
 <p>Now foreman will use Bundler to startup the server specified in <code>$SERVER</code>, run the app on port <code>$PORT</code> (-p), and will pass through the environment listed as <code>$RACK_ENV</code> to my application (-E), allowing my app to do whatever configuration it does given the current environment. Power to the people.</p>
 
 <p><a href="http://michaelvanrooijen.com/articles/2011/06/08-managing-and-monitoring-your-ruby-application-with-foreman-and-upstart/">I found that this guy</a> does a lot more complicated stuff with Foreman, if you need more.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[On the Futility of Man and Trying to Divide a Sinatra App into Separate Controllers]]></title>
-    <link href="http://larry-price.com/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/"/>
-    <updated>2013-08-26T22:35:00-04:00</updated>
-    <id>http://larry-price.com/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers</id>
-    <content type="html"><![CDATA[<p>Oh, <a href="http://www.sinatrarb.com/">Sinatra</a>. You&rsquo;re oh-so-very dear to me. You made it so easy for me to write my <a href="http://capitalpunishment.herokuapp.com">first</a> <a href="http://pokephile.herokuapp.com">web</a> apps. All I had to do was write a couple routes and throw together a few HTML-like files and I had a web app. I used pattern matching to reduce the web-facing code for <a href="https://github.com/larryprice/CapitalPunishment">Capital Punishment</a> from ~500 lines of code to &lt;100 lines of code. You are perfect for writing small-time web applications.</p>
-
-<p>But what about large web applications? What about a web app that has normal users and admin users, makes lots of database reads and writes (my previous apps only did reads from a user-facing perspective), and has to be able to show the history of everything, forever, to the authorized users who request it?</p>
-
-<p>You see, Sinatra is kind of an <a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">MVC framework</a>, but not exactly. In Sinatra, you have Views (your HTML inter-mixed with Ruby code in your desired DSL) and you have Controllers (each of your routes). When a database is involved, you can use something like <a href="https://github.com/bmizerany/sinatra-activerecord">ActiveRecord</a> or <a href="http://mongoid.org/en/mongoid/index.html">Mongoid</a> or <a href="http://datamapper.org/">DataMapper</a> and you have yourself Models.</p>
-
-<p>So every route is kind of a Controller. Every. Route. In Capital Punishment, there were once 8 routes (there are now 7). In the project I&rsquo;ve been working on recently, there are currently 56 routes. 56 routes in the language described above means I kind of have 56 controllers.</p>
-
-<p>That&rsquo;s been pretty overwhelming, especially since the traditional way of creating routes in Sinatra is to shove them all in the same file. There are a few ways I could think of to address this. The way we chose six months ago (for better or worse) was found <a href="http://stackoverflow.com/questions/5877000/what-is-a-controller-in-sinatra">on StackOverflow</a>, and involves creating a bunch of different files where you shove all related routes. So you get this situation:</p>
-
-<p>``` ruby app.rb
-class App &lt; Sinatra::Base
-end</p>
-
-<p>require_relative &lsquo;controllers/helpers&rsquo;</p>
-
-<p>Dir.glob(&ldquo;#{File.dirname(<strong>FILE</strong>)}/controllers/*.rb&rdquo;).each do |file|
-  require file.chomp(File.extname(file))
-end</p>
-
-<p>class App
-  get &lsquo;/&rsquo; do</p>
-
-<pre><code>erb :home
-</code></pre>
-
-<p>  end
-end
-```</p>
-
-<p>``` ruby controllers/reports_controller.rb
-class App
-  get &lsquo;/reports/user_bills&rsquo; do</p>
-
-<pre><code>erb :user_bills_report
-</code></pre>
-
-<p>  end
-  &hellip;
-end
-```</p>
-
-<p>And so on and so forth. This works fine for a while, but we&rsquo;ve ended up with 13 &ldquo;controller&rdquo; files, many of which are not trivial. This also makes the App class quite large since its controllers handle most of the logic for the app. This also doesn&rsquo;t enforce any kind of URL-naming logic, so if a developer is working hard (s)he may create both <code>/reports/user_bills</code> and <code>user_info_reports</code> without realizing the inconsistency (s)he just injected into the system.</p>
-
-<p>In hindsight, this method is not perfect. I think that the Rails method of individual controllers is significantly better for large apps. Some people have been using other methods for trying to make Sinatra more MVC, such as <a href="https://github.com/jorrizza/sinatra-mvc">sinatra-mvc</a>. To be frank, sinatra-mvc pretty much does the same thing we&rsquo;ve done, but with more structure.</p>
-
-<p>I think what I&rsquo;ve learned is that you should use a tool for its intended purpose. Sinatra was written to quickly create web apps in Ruby with minimal effort. Once you have more than 10-15 routes, you should reconsider whether your app can still be called &ldquo;minimal effort.&rdquo; Sinatra may fly you to the moon, but you&rsquo;re unlikely to see what spring is like on Jupiter or Mars.</p>
 ]]></content>
   </entry>
   

@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Larry Price</title>
+  <title>Using X-editable to Do In-line Editing for You - Larry Price</title>
   <meta name="author" content="Larry Price">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://larry-price.com">
+  <link rel="canonical" href="http://larry-price.com/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Larry Price" type="application/atom+xml">
@@ -78,15 +78,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you/">Using X-editable to Do In-line Editing for You</a></h1>
+      <h1 class="entry-title">Using X-editable to Do In-line Editing for You</h1>
     
     
       <p class="meta">
@@ -104,15 +101,15 @@
 
 <time datetime="2014-02-22T19:15:00-05:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2014</time>
         
-           | <a href="/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you/#disqus_thread"
-             data-disqus-identifier="http://larry-price.com/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you/">Comments</a>
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://larry-price.com">Comments</a>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>In-line editing is traditionally difficult. Taking a static HTML node and turning it into an editable text field and then sending that data off somewhere is a little bit more Javascript than I like to write. My team and I came up against a very difficult UX problem which I spent over a week trying to understand. After building and discussing several solutions, we eventually decided to narrow the scope of what the user should be able to change. We would present the user with a table where one of the columns would be editable.</p>
+<div class="entry-content"><p>In-line editing is traditionally difficult. Taking a static HTML node and turning it into an editable text field and then sending that data off somewhere is a little bit more Javascript than I like to write. My team and I came up against a very difficult UX problem which I spent over a week trying to understand. After building and discussing several solutions, we eventually decided to narrow the scope of what the user should be able to change. We would present the user with a table where one of the columns would be editable.</p>
 
 <p>Rather than showing a table with the third column always as a field for text entry, I used the Javascript library <a href="//vitalets.github.io/x-editable/">X-editable</a>. X-editable allows me to display my editable item as a link. When the user clicks the item, the link turns into a text field with a Save/Cancel button (and a &lsquo;clear&rsquo; button as a bonus). The &lsquo;Save&rsquo; button submits an AJAX &lsquo;POST&rsquo; or &lsquo;PUTS&rsquo;, where we are then allowed to validate and save the data. The &lsquo;Cancel&rsquo; button turns the text field back into a link with the original value.</p>
 
@@ -252,87 +249,16 @@
 
 <p>The <a href="//vitalets.github.io/x-editable/docs.html">X-editable docs</a> are extremely helpful for beginners. There is even more detail on the X-editable site, including editing multiple items, editing dates, and using a pop-up to edit the data.</p>
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/02/22/let-me-be-a-billboard-for-duckduckgo-for-a-few-minutes/">Let Me Be a Billboard for DuckDuckGo for a Few Minutes</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
   
 
+<span class="byline author vcard">Posted by <span class="fn">Larry Price</span></span>
 
-<time datetime="2014-02-22T17:47:00-05:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2014</time>
-        
-           | <a href="/blog/2014/02/22/let-me-be-a-billboard-for-duckduckgo-for-a-few-minutes/#disqus_thread"
-             data-disqus-identifier="http://larry-price.com/blog/2014/02/22/let-me-be-a-billboard-for-duckduckgo-for-a-few-minutes/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I would describe my job as 10% cleverness, 10% tenacity, 30% historical knowledge, and 50% searching the internet.</p>
-
-<p>As you can see, a good search engine is extremely important to me. My job depends on it. Opening <a href="//www.chromium.org/Home">Chromium&rsquo;s</a> history, I can see that I have recently searched for microwaves, <a href="//rubygems.org/gems/activesupport">activesupport</a> compatibility in <a href="//www.ruby-lang.org/en/">ruby 2.1.0</a>, deleting branches in git, and glibc backwards compatibility.</p>
-
-<p>I don&rsquo;t use <a href="//google.com">Lord Google</a> as my default search engine. Instead I use <a href="//duckduckgo.com">DuckDuckGo</a>. From <a href="//en.wikipedia.org/wiki/Duck_Duck_Go">Wikipedia</a>:</p>
-
-<blockquote><p>DuckDuckGo is an Internet search engine that emphasizes protecting searchers&#8217; privacy and avoiding the &ldquo;filter bubble&rdquo; of personalized search results. DuckDuckGo distinguishes itself from other search engines by not profiling its users and by deliberately showing all users the same search results for a given search term. DuckDuckGo also emphasizes getting information from the best sources rather than the most sources&hellip;.</p></blockquote>
-
-<p>The gist is that DuckDuckGo does not personalize your search results based on demographics or search history. It doesn&rsquo;t store your IP address and it doesn&rsquo;t log your information. You cannot &ldquo;log in&rdquo; to the DuckDuckGo website.</p>
-
-<p>Getting down to brass tacks: How does it do search?</p>
-
-<p>Searching on DuckDuckGo for queries such as &ldquo;Will Ferrell&rdquo; or &ldquo;Markdown&rdquo; will give you a blurb at the top of your search results from Wikipedia about that matching query. Searching programming topics (like &ldquo;ruby random array&rdquo; or &ldquo;asp.net create table&rdquo;) will give you a near-matching StackOverflow answer. Searching for a single word will usually give you the definition.</p>
-
-<p>A query that seems mistyped will ask you if you want to correct it. Search speed is comparable to Google, I&rsquo;ve noticed no difference.</p>
-
-<p>Looking at the result of your query, you get your search results middle-aligned. <strong>Middle. Aligned</strong> I know you probably don&rsquo;t think that&rsquo;s a big deal, but go do a Google search right now. It&rsquo;s left-aligned. Same with <a href="//bing.com">Bing</a>. Do you see what&rsquo;s on the right half of your monitor? <strong>Nothing.</strong> When running a Google search with my 22&#8221; monitor (~19&#8221; of horizontal space), there are 13&#8221; of wasted space. About 9&#8221; on Bing.</p>
-
-<p>So, you&rsquo;ve just done a search on DuckDuckGo. Now you can use the Up/Down arrows on your keyboard to navigate the search results. Pressing Enter takes you to the website. I vaguely remember that Google used to allow this, but it seems to have disappeared from the default search results.</p>
-
-<p>Don&rsquo;t like being able to see the combined search results of 50+ search engines? !Bang syntax is the answer.</p>
-
-<p>What is !bang syntax? Let&rsquo;s say you&rsquo;re me and you&rsquo;re looking for over-the range microwaves. I type into my DuckDuckGo search <code>microwaves !a</code> and DuckDuckGo takes me straight to <a href="//amazon.com">Amazon</a>, showing me search results for all those sweet, sweet microwaves. <code>!g</code> takes you to Google, <code>!w</code> takes you to Wikipedia, <code>!gi</code> takes you to Google Images, <code>!yt</code> takes you to Youtube, <code>!lowes</code> takes you to the Lowe&rsquo;s search results, <code>!gog</code> takes you to Good Ol&#8217; Games, and <a href="//duckduckgo.com/bang.html">on and on and on and on and on</a>.</p>
-
-<p>There are <a href="//duckduckgo.com/goodies">100s of other goodies</a> as well. Do math using an &ldquo;=&rdquo; sign, like &ldquo;=128*256&rdquo;. Find &ldquo;Hello, World&rdquo; examples by searching for &ldquo;hello world perl&rdquo; or &ldquo;hello world clojure&rdquo;. Do a Twitter hashtag search to find out what &ldquo;#yolo&rdquo; means. Currency conversions. Unit conversions. Convert between timezones.</p>
-
-<p>Okay, enough shameless plugging for my favorite search engine. Give it a chance. Let those Google servers cool down for a few microseconds, they won&rsquo;t mind.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/">Convincing Rvm to Let You Use Ruby 2.1.0</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
@@ -344,243 +270,46 @@
   
 
 
-<time datetime="2014-02-22T16:46:00-05:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2014</time>
-        
-           | <a href="/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/#disqus_thread"
-             data-disqus-identifier="http://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="//ruby-lang.org/en/news/2013/12/25/ruby-2-1-0-is-released/">Ruby 2.1.0 went stable</a> a few months ago, and <a href="//ruby-lang.org/en/news/2014/01/10/ruby-1-9-3-will-end-on-2015/">Ruby 1.9.3 support</a> will end in a just over a year.</p>
-
-<p>You know what that means: Warplanes in the sky falling to the ground, dogs and cats getting along like old pals, and people wandering aimlessly through the streets trying to remember the last time they saw a green build.</p>
-
-<p>Believe it or not, all of these things can be prevented. Once upon a time, I wrote about <a href="/blog/2013/10/08/rvm-quick-start/">configuring and using rvm</a> to control individual ruby environments for each of your projects. If it&rsquo;s been a while since you installed your copy of <a href="//rvm.io/">rvm</a>, you might have some trouble installing and using newer version of ruby. Lucky for us, those clever rvm developers made it easy to get around this.</p>
-
-<p>In my case, I want to upgrade a project to use <code>ruby 2.1.0</code>. The first time I tried to run <code>rvm install ruby-2.1.0</code>, I ended up installing <code>ruby-2.1.0-preview1</code>. I realized that I had installed rvm on this machine around October 2013, and <code>ruby 2.1.0</code> was released in December 2013, so rvm had no idea that <code>ruby 2.1.0</code> was stable. Updating rvm (in the root of the project directory):</p>
-
-<figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm get stable
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There will be some amount of text on the screen if your system needs to be updated. Note that you must be connected to the internet if you want rvm to update. Now we do the install of our brand new ruby:</p>
-
-<figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm install ruby-2.1.0
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Again, text on the screen from fetching of data from the internet. But hopefully you see something that tells you the operation was successful. You can also verify which rubies you have installed using the <code>list</code> command:</p>
-
-<figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm list rubies
-</span><span class='line'>   ruby-1.9.3-p448 <span class="o">[</span> x86_64 <span class="o">]</span>
-</span><span class='line'><span class="o">=</span>&gt; ruby-2.0.0-p247 <span class="o">[</span> x86_64 <span class="o">]</span>
-</span><span class='line'> * ruby-2.1.0 <span class="o">[</span> x86_64 <span class="o">]</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># =&gt; - current</span>
-</span><span class='line'><span class="c"># =* - current &amp;&amp; default</span>
-</span><span class='line'><span class="c">#  * - default</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now we tell our current project to use <code>ruby 2.1.0</code>:</p>
-
-<figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm use ruby-2.1.0
-</span><span class='line'><span class="nv">$ </span>which ruby
-</span><span class='line'>/home/lrp/.rvm/rubies/ruby-2.1.0/bin/ruby
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Alright! Crisis averted. If you&rsquo;re using <a href="//bundler.io/">bundler</a> with this project, be sure to change your ruby version (usually located near the top of the <code>Gemfile</code>).</p>
-
-<p>What about setting up a new project using <code>ruby 2.1.0</code>? Easy! Switch to the project directory and:</p>
-
-<figure class='code'><figcaption><span>/home/lrp/Projects/2014/newRubyProject</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm 2.1.0@newRubyProject --create --ruby-version
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Oh, rvm, you make life <em>too</em> easy sometimes.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
+<time datetime="2014-02-22T19:15:00-05:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2014</time>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/">Letting the Browser Decide Betwen HTTP and HTTPS</a></h1>
-    
-    
-      <p class="meta">
-        
 
-
-
-
-
-
-
-
+<span class="categories">
   
+    <a class='category' href='/blog/categories/ruby/'>ruby</a>, <a class='category' href='/blog/categories/web/'>web</a>
+  
+</span>
 
 
-<time datetime="2014-02-13T17:55:00-05:00" pubdate data-updated="true">Feb 13<span>th</span>, 2014</time>
-        
-           | <a href="/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/#disqus_thread"
-             data-disqus-identifier="http://larry-price.com/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/">Comments</a>
-        
-      </p>
+    </p>
     
-  </header>
-
-
-  <div class="entry-content"><p>While working on SEP Labs&#8217; <a href="//h2w.cc">Health2Wealth</a> app, I got my first taste of setting up a website to use secure connections. I&rsquo;ve been using the browser extension <a href="//www.eff.org/https-everywhere">HTTPS Everywhere</a> for quite some time now, so all of the web pages that I visit attempt to using <code>HTTPS</code>instead of the standard <code>HTTP</code>. When I inadvertently started testing our app with <code>HTTPS</code>, things got a little weird.</p>
-
-<p>My machine was able to open most of a page, but it wouldn&rsquo;t load some of the graphics or javascript we had embedded in the page. I was the only one able to reproduce it, so we chalked it up to a wonky machine. Then I suddenly remembered that I was using HTTPS Everywhere. I found the area in FireFox that warns you about insecure connections and found that our page was only <em>partially</em> loading on my browser because some of the content was insecure. From there I enabled an option to reveal the insecure elements, which forced my page to load everything correctly. So now we needed to find what was insecure about our page. I trekked through the codebase and found that some of our graphs and links were hard-coded to use <code>HTTP</code>. My initial thought was just to force them to use <code>HTTPS</code>, which is <a href="//lists.w3.org/Archives/Public/ietf-http-wg/2013OctDec/0625.html">almost certainly the impending standard</a>. With a quick search, I found that there exists a <strong>real</strong> solution to this problem.</p>
-
-<p>Let&rsquo;s say I have a very normal web application, so I want to include <a href="//jquery.com">jQuery</a> embedded in my page. I initially copy-paste <code>&lt;script src='http://code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code> right into my <code>&lt;head&gt;</code> node, which normally seems fine. Unfortunately, this is where issues arise. I&rsquo;m now forcing the user to make a connection which may or may not be secure to fetch data from an insecure page.</p>
-
-<p>By removing the <code>http:</code> from the <code>http://</code>, the issue of deciding whether to fetch the file using <code>HTTP</code> or <code>HTTPS</code> is left to the web browser. So my script include becomes <code>&lt;script src='//code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code> This also works for links, images, and web fonts. In fact, every link included in this post uses the same principal, where I leave the protocol out of what becomes the <code>href</code> tag.</p>
+      <div class="sharing">
+  
+  
+  <div class="g-plusone" data-size="small"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
 </div>
-  
-  
 
-
-    </article>
-  
-  
-    <article>
+    
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/02/12/custom-domain-with-github-pages/">Custom Domain With Github Pages</a></h1>
-    
-    
-      <p class="meta">
-        
+        <a class="basic-alignment left" href="/blog/2014/02/22/let-me-be-a-billboard-for-duckduckgo-for-a-few-minutes/" title="Previous Post: Let me be a billboard for DuckDuckGo for a few minutes">&laquo; Let me be a billboard for DuckDuckGo for a few minutes</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-12T21:30:00-05:00" pubdate data-updated="true">Feb 12<span>th</span>, 2014</time>
-        
-           | <a href="/blog/2014/02/12/custom-domain-with-github-pages/#disqus_thread"
-             data-disqus-identifier="http://larry-price.com/blog/2014/02/12/custom-domain-with-github-pages/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>As of today, I&rsquo;m the proud owner of <a href="//larry-price.com">larry-price.com</a>. On the recommendation from a friend, I used <a href="//domainmonster.com">domainmonster.com</a> for it&rsquo;s cost effectiveness and usable toolset. I wanted to link my Github Pages blog (this blog!) to my new site. In case I ever want to do this again, I&rsquo;ve provided myself (and you!) with a step-by-step guide below. Note that Github <a href="//help.github.com/articles/setting-up-a-custom-domain-with-pages">has a page that explains how to do this</a>, but there&rsquo;s some fluff and ordering issues that turned me off from using those instructions as any more than a reference.</p>
-
-<h4>Step 0: Buy your domain</h4>
-
-<p>All sites where you can purchase domains have the same domains available, but at different prices. From the sites I perused, <a href="//godaddy.com">GoDaddy</a> had the best search for domain names, suggesting different variations on the searched domain name. I found that <a href="//domainmonster.com">domainmonster.com</a> had the ugliest UI but the best prices. <a href="//hover.com">Hover.com</a> looked really modern and had moderate prices. Shop around and spend money.</p>
-
-<h4>Step 0.5: Exercise restraint</h4>
-
-<p>At this point in the process, <strong>don&rsquo;t go to your site</strong>.</p>
-
-<p>My guess is you already have. If you don&rsquo;t have the ability to go back in time, don&rsquo;t sweat it, just know that you probably won&rsquo;t be able to verify the fruits of your labor for a few hours.</p>
-
-<h4>Step 1: Setting up an &lsquo;A Record&rsquo;</h4>
-
-<p>Find the ip address where your site is currently hosted. For me (replace URL with your own):</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>nslookup larryprice.github.io
-</span><span class='line'>Server:   127.0.1.1
-</span><span class='line'>Address:  127.0.1.1#53
-</span><span class='line'>
-</span><span class='line'>Non-authoritative answer:
-</span><span class='line'>Name: larryprice.github.io
-</span><span class='line'>Address: 199.27.74.133
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You should be able to &ldquo;manage&rdquo; your domain on your domain provider&rsquo;s website. In the &ldquo;management&rdquo; area, you should be able to find a section about &ldquo;DNS&rdquo;. Find something labeled &ldquo;A records.&rdquo; There will likely already be one or two entries here &ndash; one for the IP address of your new domain and one with the IP address of your domain with &ldquo;www.&rdquo; prepended.</p>
-
-<p>Modify the entry (or entries) with the IP address found using <code>nslookup</code> (&ldquo;199.27.74.133&rdquo; from the example above). Save your site settings.</p>
-
-<h4>Step 2: Mucking with the &ldquo;www&rdquo; instance</h4>
-
-<p>While we&rsquo;re modifying these settings, we might as well move the &lsquo;www&rsquo; case out of the &ldquo;A records&rdquo;. Go ahead and delete it.</p>
-
-<p>Look for something named &ldquo;CNAME records&rdquo;, or figure out how to add records in general. We&rsquo;re going to add a CNAME record where the &ldquo;Alias&rdquo; is &ldquo;www&rdquo; and the &ldquo;Address&rdquo; is your site&rsquo;s name. In my case, my &ldquo;Alias&rdquo; field is &ldquo;www&rdquo; and my &ldquo;Address&rdquo; field is &ldquo;larry-price.com&rdquo;. Add the record and cross your fingers for success.</p>
-
-<h4>Step 3: Telling Github Pages what to do</h4>
-
-<p>Alhtough Github Pages is magical in its own right, it doesn&rsquo;t know what to do when receiving a request from the &ldquo;A record&rdquo; we created in Step 2 without further instruction.</p>
-
-<p>If you&rsquo;re using Github Pages for a user page, we are going to make this change on the <code>master</code> branch. If this is a project page, do it on the <code>gh-pages</code> branch.</p>
-
-<p>All we have to do is put our new domain into a file in the root folder called <code>CNAME</code>. Let&rsquo;s do it in one fell swoop of the command line.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;larry-price.com&quot;</span> &gt; CNAME
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Push that to Github and wait 0 to 10 minutes for Github to refresh your page.</p>
-
-<p>Note: If you&rsquo;re one of the few, the proud using the brilliant <a href="//octopress.org/">Octopress</a> to generate your blog, you want to make sure to add the <code>CNAME</code> file to the root of your <code>source/</code> directory. That way, when you call <code>deploy</code> your <code>CNAME</code> file will end up in the root of your <code>_deploy</code> directory.</p>
-
-<h4>Step 4: Behold</h4>
-
-<p>Check your Github repository&rsquo;s &ldquo;Settings&rdquo; section. In the &ldquo;GitHub Pages&rdquo; section, you should now see something along the lines of &ldquo;Your site is published at <a href="http://larry-price.com">http://larry-price.com</a>&rdquo;. Go, young one, and visit your new site; and behold the glory you have brought to your family.</p>
-
-<p>I&rsquo;ll note that this is the point where not obeying Step 0.5 will cause issues. Once your internets knows that your page hit a certain DNS, it takes a few hours to refresh. In my case it only took about 2 hours, but it may take between 12 and 48 hours to refresh. A workaround to see if everything is working is to pull out your smart phone and use your carrier&rsquo;s network to check your new site, since that area of the internets is probably still untainted. (All of this paragraph is a simplified thought process on how DNS works, considering that&rsquo;s the level I understand it.)</p>
-
-<p>Now fly, my children, and spread yourself over the internet with dozens of silly domain names!</p>
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
-  
-  
+  </section>
 
-
-    </article>
-  
-  <div class="pagination">
-    
-      <a class="prev" href="/blog/page/2/">&larr; Older</a>
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
 </div>
+
 <aside class="sidebar">
   
     <section>
@@ -593,7 +322,7 @@
 </section>
 <section>
   <h1>void* Larry</h1>
-  <p>I&#8217;m a codeslinger debugging from the mean streets of Indiana. Welcome to my blog, where I&#8217;ll tell the tales of wondrous things I discover in the digital jungle.</p>
+  <p>I'm a codeslinger debugging from the mean streets of Indiana. Welcome to my blog, where I'll tell the tales of wondrous things I discover in the digital jungle.</p>
 </section>
 <section>
   <h1>Recent Posts</h1>
@@ -629,7 +358,7 @@
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/larryprice">@larryprice</a> on GitHub
@@ -659,6 +388,7 @@
   
 </aside>
 
+
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -676,7 +406,10 @@
       var disqus_shortname = 'larryprice';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://larry-price.com/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you/';
+        var disqus_url = 'http://larry-price.com/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

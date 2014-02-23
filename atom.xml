@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="http://larry-price.com/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-02-22T17:46:29-05:00</updated>
+  <updated>2014-02-22T19:47:49-05:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,153 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Using X-editable to Do In-line Editing for You]]></title>
+    <link href="http://larry-price.com/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you/"/>
+    <updated>2014-02-22T19:15:00-05:00</updated>
+    <id>http://larry-price.com/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you</id>
+    <content type="html"><![CDATA[<p>In-line editing is traditionally difficult. Taking a static HTML node and turning it into an editable text field and then sending that data off somewhere is a little bit more Javascript than I like to write. My team and I came up against a very difficult UX problem which I spent over a week trying to understand. After building and discussing several solutions, we eventually decided to narrow the scope of what the user should be able to change. We would present the user with a table where one of the columns would be editable.</p>
+
+<p>Rather than showing a table with the third column always as a field for text entry, I used the Javascript library <a href="http://larry-price.com//vitalets.github.io/x-editable/">X-editable</a>. X-editable allows me to display my editable item as a link. When the user clicks the item, the link turns into a text field with a Save/Cancel button (and a &lsquo;clear&rsquo; button as a bonus). The &lsquo;Save&rsquo; button submits an AJAX &lsquo;POST&rsquo; or &lsquo;PUTS&rsquo;, where we are then allowed to validate and save the data. The &lsquo;Cancel&rsquo; button turns the text field back into a link with the original value.</p>
+
+<p>Hooray, someone else has already done the hard work for us! So, what I want to do is dynamically generate a table with objects and allow the user to edit one of the columns. In my case, only the end column is editable, but I could just as easily spread this availability to all my columns. I&rsquo;m using all my favorite tools to create this page, specifically <a href="http://larry-price.com//ruby-lang.org/en/">ruby</a>, <a href="http://larry-price.com//sinatrarb.com">Sinatra</a>, <a href="http://larry-price.com//getbootstrap.com">Twitter Bootstrap</a>, and <a href="http://larry-price.com//haml.info">HAML</a>.</p>
+
+<p>X-editable has implementations using Bootstrap, jQuery UI, and jQuery. Since I&rsquo;m already using Bootstrap in my app, I&rsquo;m going to go with that version. Note that there are Bootstrap 2 and Bootstrap 3 builds of X-editable, and I&rsquo;m using the Bootstrap 3 variety.</p>
+
+<p>First I include the necessary files at the top of my HAML document.</p>
+
+<figure class='code'><figcaption><span>/views/manage_data.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nt">%script</span><span class="p">{</span><span class="ss">src</span><span class="p">:</span> <span class="s2">&quot;//code.jquery.com/jquery.js&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="nt">%script</span><span class="p">{</span><span class="ss">src</span><span class="p">:</span> <span class="s2">&quot;//getbootstrap.com/dist/js/bootstrap.min.js&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="nt">%link</span><span class="p">{</span><span class="ss">href</span><span class="p">:</span> <span class="s2">&quot;//getbootstrap.com/dist/css/bootstrap.min.css&quot;</span><span class="p">,</span> <span class="ss">rel</span><span class="p">:</span> <span class="s2">&quot;stylesheet&quot;</span><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">%link</span><span class="p">{</span><span class="ss">href</span><span class="p">:</span> <span class="s2">&quot;//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css&quot;</span><span class="p">,</span> <span class="ss">rel</span><span class="p">:</span> <span class="s2">&quot;stylesheet&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="nt">%script</span><span class="p">{</span><span class="ss">src</span><span class="p">:</span> <span class="s2">&quot;//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js&quot;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I&rsquo;m going to dumb my page down so I only have to show the important parts. I&rsquo;m going to create a table from an array of hashes called <code>@options</code>. Each hash has two important fields for this table: Points and Dollars. I will iterate over <code>@options</code>, displaying the <code>points</code> field as plain text and the <code>dollars</code> field as an X-editable link. Each hash also has a <code>value</code> field containing the primary key for the object to be edited.</p>
+
+<figure class='code'><figcaption><span>/views/manage_data.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nc">.container</span>
+</span><span class='line'>  <span class="nc">.row</span>
+</span><span class='line'>    <span class="nc">.col-md-6</span>
+</span><span class='line'>      <span class="nt">%table</span><span class="p">{</span><span class="nb">id</span><span class="p">:</span> <span class="s2">&quot;edit_points_goal&quot;</span><span class="p">,</span> <span class="ss">class</span><span class="p">:</span> <span class="s2">&quot;table table-responsive table-hover table-bordered&quot;</span><span class="p">}</span>
+</span><span class='line'>        <span class="nt">%thead</span>
+</span><span class='line'>          <span class="nt">%tr</span>
+</span><span class='line'>            <span class="nt">%th</span><span class="p">{</span><span class="ss">width</span><span class="p">:</span> <span class="s2">&quot;35%&quot;</span><span class="p">}</span>
+</span><span class='line'>              Points
+</span><span class='line'>            <span class="nt">%th</span><span class="p">{</span><span class="ss">width</span><span class="p">:</span> <span class="s2">&quot;65%&quot;</span><span class="p">}</span>
+</span><span class='line'>              Dollars
+</span><span class='line'>        <span class="nt">%tbody</span>
+</span><span class='line'>          <span class="p">-</span> <span class="vi">@options</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">option</span><span class="o">|</span>
+</span><span class='line'>            <span class="nt">%tr</span>
+</span><span class='line'>              <span class="nt">%td</span><span class="p">{</span><span class="ss">style</span><span class="p">:</span> <span class="s2">&quot;height: 45px; padding: 4px 8px; vertical-align: middle;&quot;</span><span class="p">}</span>
+</span><span class='line'>                <span class="si">#{</span><span class="n">option</span><span class="o">[</span><span class="ss">:points</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>              <span class="nt">%td</span><span class="p">{</span><span class="ss">style</span><span class="p">:</span> <span class="s2">&quot;height: 45px; padding: 4px 8px; vertical-align: middle;&quot;</span><span class="p">}</span>
+</span><span class='line'>                <span class="nt">%a</span><span class="p">{</span><span class="ss">href</span><span class="p">:</span><span class="s2">&quot;javascript:void(0)&quot;</span><span class="p">,</span> <span class="s2">&quot;data-type&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;data-pk&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">option</span><span class="o">[</span><span class="ss">:value</span><span class="o">]</span><span class="si">}</span>&quot;, &quot;data-url&quot;=&gt;&quot;/update&quot;, &quot;data-title&quot;=&gt;&quot;Enter dollar amount&quot;}
+</span><span class='line'>                  <span class="si">#{</span><span class="n">option</span><span class="o">[</span><span class="ss">:dollars</span><span class="o">]</span><span class="si">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The important part is the <code>a</code> tag:</p>
+
+<ul>
+<li><code>href</code> goes nowhere.</li>
+<li><code>data-type</code> tells X-editable how it will edit the presented data. According to the docs, types include text, textarea, select, date, checklist and more.</li>
+<li><code>data-pk</code> is the primary key of our data in the database. In my case, that comes to me stored in the <code>value</code> field of the option hash.</li>
+<li><code>data-url</code> is the <code>post</code> method that will be used to interpret the data.</li>
+<li><code>data-title</code> is used to tell the user what to do.</li>
+</ul>
+
+
+<p>Our code won&rsquo;t do anything yet seeing as it&rsquo;s not connected. We need some Javascript to do that. I put the Javascript at the top of my file, underneath the included files. The first thing we need to do is tell X-editable what type of editing we&rsquo;ll be doing. The options are in-line editing or a pop-up. I want the in-line editing in this case. The second thing I want to do is to set the <code>editable</code> attribute on the appropriate DOM objects. Since I&rsquo;m using an array, I found the easiest way to do this was to start at the table&rsquo;s id (edit_points_goal) and trace down to the <code>a</code> tag.</p>
+
+<figure class='code'><figcaption><span>/views/manage_data.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nd">:javascript</span>
+</span><span class='line'>  <span class="nd">$.fn.editable.defaults.mode = &#39;inline&#39;;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nd">$(document).ready(function() {</span>
+</span><span class='line'>    <span class="nd">if (</span><span class="si">#{</span><span class="n">vm</span><span class="o">.</span><span class="n">editable</span><span class="si">}</span><span class="nd">) {</span>
+</span><span class='line'>      <span class="nd">$(&#39;#edit_points_goal tbody tr td a&#39;).editable();</span>
+</span><span class='line'>    <span class="nd">}</span>
+</span><span class='line'>  <span class="nd">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we need to deal with the <code>post</code> request. If you&rsquo;re really impatient to see things work, you should be able to see your in-line editable code in action, but the <code>post</code> call will fail with a &ldquo;NoMethodError.&rdquo;</p>
+
+<p>Our <code>post</code> is going to be really simple. We verify that we have a non-negative integer and we either save and return 200 or we return 400 with an appropriate message. Our table in this example is just called <code>Data</code>, and we use <code>find</code> to get a value out of the database.</p>
+
+<figure class='code'><figcaption><span>web.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">post</span> <span class="s2">&quot;/update&quot;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">data</span> <span class="o">=</span> <span class="no">Data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="n">params</span><span class="o">[</span><span class="s2">&quot;pk&quot;</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">unless</span> <span class="n">params</span><span class="o">[</span><span class="s2">&quot;value&quot;</span><span class="o">].</span><span class="n">match</span><span class="p">(</span><span class="sr">/[^0-9]/</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">data</span> <span class="o">=</span> <span class="n">params</span><span class="o">[</span><span class="s2">&quot;value&quot;</span><span class="o">].</span><span class="n">to_i</span>
+</span><span class='line'>    <span class="n">data</span><span class="o">.</span><span class="n">save</span>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">200</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="p">{</span><span class="mi">400</span><span class="p">,</span> <span class="o">[]</span><span class="p">,</span> <span class="s2">&quot;Please enter a valid non-negative number&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Things should be working now. When you enter good data and click the &lsquo;Ok&rsquo; button, our <code>post</code> will be called and the text field will turn back into a link. When you enter bad data, you should see our error message below the text field box.</p>
+
+<p>Issues I encountered:</p>
+
+<ul>
+<li>Table column width shifting &ndash; Fixed by setting the widths explicitly, as seen above (35% and 65%).</li>
+<li>Table height shifting &ndash; Fixed by setting the style of the <code>td</code> as seen above to give a larger height, more padding, and aligning the inner objects explicitly. I would recommend moving this definition to a <code>.css</code> or <code>.scss</code> file.</li>
+<li>&ldquo;NoMethodError&rdquo; after clicking Go &ndash; Unfortunately, if you made any coding errors in your route, you won&rsquo;t be able to see the Sinatra error page but will instead you&rsquo;ll be presented with a giant wall of HTML below the text box. Try to parse this error, but if you struggle to find out what went wrong you can always substitute a form-post method in place of the <code>a</code> tag, which may allow you to more easily figure out the problem.</li>
+</ul>
+
+
+<p>The <a href="http://larry-price.com//vitalets.github.io/x-editable/docs.html">X-editable docs</a> are extremely helpful for beginners. There is even more detail on the X-editable site, including editing multiple items, editing dates, and using a pop-up to edit the data.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Let Me Be a Billboard for DuckDuckGo for a Few Minutes]]></title>
@@ -1179,42 +1326,6 @@
 <h3>Who Would Like This</h3>
 
 <p>C++ Programmers should have this book (at least the first 6 chapters) crammed down their throats and into their squishy pink brains. After learning all the &ldquo;basic&rdquo; concepts of C++, the lessons this book teaches in design and the nature of C++ should be taken into consideration.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Joel on Software]]></title>
-    <link href="http://larry-price.com/blog/2013/04/28/joel-on-software/"/>
-    <updated>2013-04-28T11:38:00-04:00</updated>
-    <id>http://larry-price.com/blog/2013/04/28/joel-on-software</id>
-    <content type="html"><![CDATA[<blockquote><p>We&rsquo;re programmers. Programmers are, in their hearts, architects, and the
-first thing they want to do when they get to a site is to bulldoze the place
-flat and build something grand. We&rsquo;re not excited by incremental renovation:
-tinkering, improving, planting flower beds.</p>
-
-<p>&mdash; Joel Spolsky, &ldquo;Things you Should Never Do, Part I&rdquo;</p></blockquote>
-
-<h3>The Gist</h3>
-
-<p><a href="http://www.amazon.com/gp/product/1590593898/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1590593898&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Joel On Software</em></a> is a collection of blog posts by the great <a href="http://www.joelonsoftware.com/">Joel Spolsky</a>. He has risen to Internet Fame after his experience working for Microsoft and eventually starting his own company. The &ldquo;chapters&rdquo; (blog posts) provide insight into picking a language for your codebase, recruiting engineers, managing programmers, fixing bugs, paper prototyping, and how Microsoft works.</p>
-
-<h3>My Opinion</h3>
-
-<p>Joel Spolsky is a god sent down from Mount Olympus to calmly explain to us why we are sometimes terrible people and then goes on to tell us it&rsquo;s okay and we should learn from our past. I loved this book, especially since I read it at the same time as some really terrible books (namely <a href="http://www.amazon.com/gp/product/0672326140/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0672326140&amp;linkCode=as2&amp;tag=larpriandthee-20">The Inmates are Running the Asylum</a> and <a href="http://www.amazon.com/gp/product/1491017082/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1491017082&amp;linkCode=as2&amp;tag=larpriandthee-20">Enterprise Games</a>; I do not recommend these books).</p>
-
-<p>Spolsky talks a lot about specs in the first part of the book, and at first I thought that he was stating too much of the obvious; but then why don&rsquo;t we do specs in this obvious way? Instead, we resign ourselves to write a tiny portion of the spec, start programming, and then implicitly change the spec while only haphazardly updating our documentation. I&rsquo;ve been on projects before where we would have greatly benefitted from having a solid spec; we knew exactly what needed to be done, because we were rewriting a successful product the company had released several years ago. With an ever-changing spec, we programmed ourselves into a hole, and struggled for at least half a year to claw our way back out. I have to wonder if more pre-planning would have saved us from ourselves.</p>
-
-<p>Spolsky&rsquo;s advice on hiring people is invaluable (<a href="http://www.joelonsoftware.com/articles/GuerrillaInterviewing3.html">The Guerrilla Guide to Interviewing</a>). In fact, I wish that I had read some of these blog posts while I was interviewing. Spolsky says that recruiters should ask &ldquo;impossible questions&rdquo; and not worry about what the answers given are, just that the recruit comes up with something. He says to stop asking trivia questions. He talks about relying on all interviewers equally: if any two interviewers say &ldquo;No&rdquo; to a candidate, the candidate is toast. He talks about asking candidates about projects and looking for passion, which is almost always the sign of a good programmer.</p>
-
-<p>Spolsky talks about the commodity market of software/hardware. To sum it up, the supply of one drives the demand of the other. This section made me think about the current PC market: hardware is cheap <em>and</em> software is cheap. Not only is software cheap, but it&rsquo;s often <em>free</em>. Prices for hardware haven&rsquo;t been going down at nearly the rate it used to, but that seems natural as the price approaches the cost of labor and parts. Most of the hardware innovation right now seems to be aimed at the tiny computers in our pockets (or <a href="http://www.google.com/glass/start/">on our face</a>, soon enough). Google&rsquo;s software makes money by displaying ads using its search engine, so Google has entered the market of making software that is compatible with all kinds of different hardware. Google has played the commodities game like a champ, getting hardware running their software into hundreds of millions of pockets.</p>
-
-<p>Some of the weaker parts of the book are when Spolsky talks about .NET. I&rsquo;m not going to go into detail, but when he wrote these posts, .NET was just entering the market. Spolsky starts by bashing .NET for making all the old Windows API code unusable, but in later blog posts falls hard for .NET and starts thinking about ways to rewrite his entire life in .NET.</p>
-
-<h3>Who Would Like This</h3>
-
-<p>I believe that programmers are the main audience for this book, and I am a programmer who loved reading it. Spolsky does not talk down to the reader, nor does he dumb down the nitty-gritty technical blog posts.</p>
-
-<p>Programmers who intend to become managers may get added benefit from this book, as Spolsky discusses some interesting recruiting techniques and ways to deal with programmers. My company uses some of Spolsky&rsquo;s advice when hiring engineers (quite a bit of it, thinking back to my interview), and we&rsquo;ve been hiring only the best and brightest cowboys in the Midwest for years.</p>
 ]]></content>
   </entry>
   
