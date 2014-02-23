@@ -156,7 +156,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h4>Store templates in tmpl/ and page data in data/</h4>
+<h4>Add a handler to make the web root redirect to /view/FrontPage</h4>
 
 <p>All we&rsquo;re going to do is create a simple handler called <code>rootHandler</code> that redirects to a new page called <code>FrontPage</code>. We then add it in the <code>main</code> function. The tutorial had us wrap out handlers in a function call to take some special actions, but that wrapper would mess up our handler in its current form. So I just <code>Redirect</code> to the <code>view</code> handler, which will then decide whether to view or create the FrontPage.</p>
 
