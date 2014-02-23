@@ -41,7 +41,7 @@ func (p *Page) save() error {
 }
 ```
 
-####Store templates in tmpl/ and page data in data/
+####Add a handler to make the web root redirect to /view/FrontPage
 
 All we're going to do is create a simple handler called `rootHandler` that redirects to a new page called `FrontPage`. We then add it in the `main` function. The tutorial had us wrap out handlers in a function call to take some special actions, but that wrapper would mess up our handler in its current form. So I just `Redirect` to the `view` handler, which will then decide whether to view or create the FrontPage.
 
