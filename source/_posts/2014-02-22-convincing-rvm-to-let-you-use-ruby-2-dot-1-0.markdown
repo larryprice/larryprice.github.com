@@ -40,7 +40,14 @@ $ rvm list rubies
 Now we tell our current project to use `ruby 2.1.0`:
 
 ``` bash /home/lrp/Projects/2014/projNeedingRuby210
-$ rvm use ruby-2.1.0
+$ rm .ruby-version .ruby-gemset
+$ rvm 2.1.0@projNeedingRuby210 --create --ruby-version
+ruby-2.1.0 - #gemset created /home/lrp/.rvm/gems/ruby-2.1.0@test-app
+ruby-2.1.0 - #generating test-app wrappers.
+$ rvm gemset copy 2.0.0-p247@projNeedingRuby210 2.1.0@projNeedingRuby210
+Copying gemset from 2.0.0-p247@test-app to 2.1.0@test-app
+Generating gemset wrappers ruby-2.1.0@test-app.
+Making gemset 2.1.0@test-app pristine.
 $ which ruby
 /home/lrp/.rvm/rubies/ruby-2.1.0/bin/ruby
 ```
