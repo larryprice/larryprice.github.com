@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="http://larry-price.com/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-02-23T09:44:02-05:00</updated>
+  <updated>2014-02-24T21:01:02-05:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -20,9 +20,9 @@
     <id>http://larry-price.com/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you</id>
     <content type="html"><![CDATA[<p>In-line editing is traditionally difficult. Taking a static HTML node and turning it into an editable text field and then sending that data off somewhere is a little bit more Javascript than I like to write. My team and I came up against a very difficult UX problem which I spent over a week trying to understand. After building and discussing several solutions, we eventually decided to narrow the scope of what the user should be able to change. We would present the user with a table where one of the columns would be editable.</p>
 
-<p>Rather than showing a table with the third column always as a field for text entry, I used the Javascript library <a href="http://larry-price.com//vitalets.github.io/x-editable/">X-editable</a>. X-editable allows me to display my editable item as a link. When the user clicks the item, the link turns into a text field with a Save/Cancel button (and a &lsquo;clear&rsquo; button as a bonus). The &lsquo;Save&rsquo; button submits an AJAX &lsquo;POST&rsquo; or &lsquo;PUTS&rsquo;, where we are then allowed to validate and save the data. The &lsquo;Cancel&rsquo; button turns the text field back into a link with the original value.</p>
+<p>Rather than showing a table with the third column always as a field for text entry, I used the Javascript library <a href="//vitalets.github.io/x-editable/">X-editable</a>. X-editable allows me to display my editable item as a link. When the user clicks the item, the link turns into a text field with a Save/Cancel button (and a &lsquo;clear&rsquo; button as a bonus). The &lsquo;Save&rsquo; button submits an AJAX &lsquo;POST&rsquo; or &lsquo;PUTS&rsquo;, where we are then allowed to validate and save the data. The &lsquo;Cancel&rsquo; button turns the text field back into a link with the original value.</p>
 
-<p>Hooray, someone else has already done the hard work for us! So, what I want to do is dynamically generate a table with objects and allow the user to edit one of the columns. In my case, only the end column is editable, but I could just as easily spread this availability to all my columns. I&rsquo;m using all my favorite tools to create this page, specifically <a href="http://larry-price.com//ruby-lang.org/en/">ruby</a>, <a href="http://larry-price.com//sinatrarb.com">Sinatra</a>, <a href="http://larry-price.com//getbootstrap.com">Twitter Bootstrap</a>, and <a href="http://larry-price.com//haml.info">HAML</a>.</p>
+<p>Hooray, someone else has already done the hard work for us! So, what I want to do is dynamically generate a table with objects and allow the user to edit one of the columns. In my case, only the end column is editable, but I could just as easily spread this availability to all my columns. I&rsquo;m using all my favorite tools to create this page, specifically <a href="//ruby-lang.org/en/">ruby</a>, <a href="//sinatrarb.com">Sinatra</a>, <a href="//getbootstrap.com">Twitter Bootstrap</a>, and <a href="//haml.info">HAML</a>.</p>
 
 <p>X-editable has implementations using Bootstrap, jQuery UI, and jQuery. Since I&rsquo;m already using Bootstrap in my app, I&rsquo;m going to go with that version. Note that there are Bootstrap 2 and Bootstrap 3 builds of X-editable, and I&rsquo;m using the Bootstrap 3 variety.</p>
 
@@ -156,7 +156,7 @@
 </ul>
 
 
-<p>The <a href="http://larry-price.com//vitalets.github.io/x-editable/docs.html">X-editable docs</a> are extremely helpful for beginners. There is even more detail on the X-editable site, including editing multiple items, editing dates, and using a pop-up to edit the data.</p>
+<p>The <a href="//vitalets.github.io/x-editable/docs.html">X-editable docs</a> are extremely helpful for beginners. There is even more detail on the X-editable site, including editing multiple items, editing dates, and using a pop-up to edit the data.</p>
 ]]></content>
   </entry>
   
@@ -167,9 +167,9 @@
     <id>http://larry-price.com/blog/2014/02/22/let-me-be-a-billboard-for-duckduckgo-for-a-few-minutes</id>
     <content type="html"><![CDATA[<p>I would describe my job as 10% cleverness, 10% tenacity, 30% historical knowledge, and 50% searching the internet.</p>
 
-<p>As you can see, a good search engine is extremely important to me. My job depends on it. Opening <a href="http://larry-price.com//www.chromium.org/Home">Chromium&rsquo;s</a> history, I can see that I have recently searched for microwaves, <a href="http://larry-price.com//rubygems.org/gems/activesupport">activesupport</a> compatibility in <a href="http://larry-price.com//www.ruby-lang.org/en/">ruby 2.1.0</a>, deleting branches in git, and glibc backwards compatibility.</p>
+<p>As you can see, a good search engine is extremely important to me. My job depends on it. Opening <a href="//www.chromium.org/Home">Chromium&rsquo;s</a> history, I can see that I have recently searched for microwaves, <a href="//rubygems.org/gems/activesupport">activesupport</a> compatibility in <a href="//www.ruby-lang.org/en/">ruby 2.1.0</a>, deleting branches in git, and glibc backwards compatibility.</p>
 
-<p>I don&rsquo;t use <a href="http://larry-price.com//google.com">Lord Google</a> as my default search engine. Instead I use <a href="http://larry-price.com//duckduckgo.com">DuckDuckGo</a>. From <a href="http://larry-price.com//en.wikipedia.org/wiki/Duck_Duck_Go">Wikipedia</a>:</p>
+<p>I don&rsquo;t use <a href="//google.com">Lord Google</a> as my default search engine. Instead I use <a href="//duckduckgo.com">DuckDuckGo</a>. From <a href="//en.wikipedia.org/wiki/Duck_Duck_Go">Wikipedia</a>:</p>
 
 <blockquote><p>DuckDuckGo is an Internet search engine that emphasizes protecting searchers&#8217; privacy and avoiding the &ldquo;filter bubble&rdquo; of personalized search results. DuckDuckGo distinguishes itself from other search engines by not profiling its users and by deliberately showing all users the same search results for a given search term. DuckDuckGo also emphasizes getting information from the best sources rather than the most sources&hellip;.</p></blockquote>
 
@@ -181,15 +181,15 @@
 
 <p>A query that seems mistyped will ask you if you want to correct it. Search speed is comparable to Google, I&rsquo;ve noticed no difference.</p>
 
-<p>Looking at the result of your query, you get your search results middle-aligned. <strong>Middle. Aligned</strong> I know you probably don&rsquo;t think that&rsquo;s a big deal, but go do a Google search right now. It&rsquo;s left-aligned. Same with <a href="http://larry-price.com//bing.com">Bing</a>. Do you see what&rsquo;s on the right half of your monitor? <strong>Nothing.</strong> When running a Google search with my 22&#8221; monitor (~19&#8221; of horizontal space), there are 13&#8221; of wasted space. About 9&#8221; on Bing.</p>
+<p>Looking at the result of your query, you get your search results middle-aligned. <strong>Middle. Aligned</strong> I know you probably don&rsquo;t think that&rsquo;s a big deal, but go do a Google search right now. It&rsquo;s left-aligned. Same with <a href="//bing.com">Bing</a>. Do you see what&rsquo;s on the right half of your monitor? <strong>Nothing.</strong> When running a Google search with my 22&#8221; monitor (~19&#8221; of horizontal space), there are 13&#8221; of wasted space. About 9&#8221; on Bing.</p>
 
 <p>So, you&rsquo;ve just done a search on DuckDuckGo. Now you can use the Up/Down arrows on your keyboard to navigate the search results. Pressing Enter takes you to the website. I vaguely remember that Google used to allow this, but it seems to have disappeared from the default search results.</p>
 
 <p>Don&rsquo;t like being able to see the combined search results of 50+ search engines? !Bang syntax is the answer.</p>
 
-<p>What is !bang syntax? Let&rsquo;s say you&rsquo;re me and you&rsquo;re looking for over-the range microwaves. I type into my DuckDuckGo search <code>microwaves !a</code> and DuckDuckGo takes me straight to <a href="http://larry-price.com//amazon.com">Amazon</a>, showing me search results for all those sweet, sweet microwaves. <code>!g</code> takes you to Google, <code>!w</code> takes you to Wikipedia, <code>!gi</code> takes you to Google Images, <code>!yt</code> takes you to Youtube, <code>!lowes</code> takes you to the Lowe&rsquo;s search results, <code>!gog</code> takes you to Good Ol&#8217; Games, and <a href="http://larry-price.com//duckduckgo.com/bang.html">on and on and on and on and on</a>.</p>
+<p>What is !bang syntax? Let&rsquo;s say you&rsquo;re me and you&rsquo;re looking for over-the range microwaves. I type into my DuckDuckGo search <code>microwaves !a</code> and DuckDuckGo takes me straight to <a href="//amazon.com">Amazon</a>, showing me search results for all those sweet, sweet microwaves. <code>!g</code> takes you to Google, <code>!w</code> takes you to Wikipedia, <code>!gi</code> takes you to Google Images, <code>!yt</code> takes you to Youtube, <code>!lowes</code> takes you to the Lowe&rsquo;s search results, <code>!gog</code> takes you to Good Ol&#8217; Games, and <a href="//duckduckgo.com/bang.html">on and on and on and on and on</a>.</p>
 
-<p>There are <a href="http://larry-price.com//duckduckgo.com/goodies">100s of other goodies</a> as well. Do math using an &ldquo;=&rdquo; sign, like &ldquo;=128*256&rdquo;. Find &ldquo;Hello, World&rdquo; examples by searching for &ldquo;hello world perl&rdquo; or &ldquo;hello world clojure&rdquo;. Do a Twitter hashtag search to find out what &ldquo;#yolo&rdquo; means. Currency conversions. Unit conversions. Convert between timezones.</p>
+<p>There are <a href="//duckduckgo.com/goodies">100s of other goodies</a> as well. Do math using an &ldquo;=&rdquo; sign, like &ldquo;=128*256&rdquo;. Find &ldquo;Hello, World&rdquo; examples by searching for &ldquo;hello world perl&rdquo; or &ldquo;hello world clojure&rdquo;. Do a Twitter hashtag search to find out what &ldquo;#yolo&rdquo; means. Currency conversions. Unit conversions. Convert between timezones.</p>
 
 <p>Okay, enough shameless plugging for my favorite search engine. Give it a chance. Let those Google servers cool down for a few microseconds, they won&rsquo;t mind.</p>
 ]]></content>
@@ -200,11 +200,11 @@
     <link href="http://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/"/>
     <updated>2014-02-22T16:46:00-05:00</updated>
     <id>http://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0</id>
-    <content type="html"><![CDATA[<p><a href="http://larry-price.com//ruby-lang.org/en/news/2013/12/25/ruby-2-1-0-is-released/">Ruby 2.1.0 went stable</a> a few months ago, and <a href="http://larry-price.com//ruby-lang.org/en/news/2014/01/10/ruby-1-9-3-will-end-on-2015/">Ruby 1.9.3 support</a> will end in a just over a year.</p>
+    <content type="html"><![CDATA[<p><a href="//ruby-lang.org/en/news/2013/12/25/ruby-2-1-0-is-released/">Ruby 2.1.0 went stable</a> a few months ago, and <a href="//ruby-lang.org/en/news/2014/01/10/ruby-1-9-3-will-end-on-2015/">Ruby 1.9.3 support</a> will end in a just over a year.</p>
 
 <p>You know what that means: Warplanes in the sky falling to the ground, dogs and cats getting along like old pals, and people wandering aimlessly through the streets trying to remember the last time they saw a green build.</p>
 
-<p>Believe it or not, all of these things can be prevented. Once upon a time, I wrote about <a href="http://larry-price.com/blog/2013/10/08/rvm-quick-start/">configuring and using rvm</a> to control individual ruby environments for each of your projects. If it&rsquo;s been a while since you installed your copy of <a href="http://larry-price.com//rvm.io/">rvm</a>, you might have some trouble installing and using newer version of ruby. Lucky for us, those clever rvm developers made it easy to get around this.</p>
+<p>Believe it or not, all of these things can be prevented. Once upon a time, I wrote about <a href="http://larry-price.com/blog/2013/10/08/rvm-quick-start/">configuring and using rvm</a> to control individual ruby environments for each of your projects. If it&rsquo;s been a while since you installed your copy of <a href="//rvm.io/">rvm</a>, you might have some trouble installing and using newer version of ruby. Lucky for us, those clever rvm developers made it easy to get around this.</p>
 
 <p>In my case, I want to upgrade a project to use <code>ruby 2.1.0</code>. The first time I tried to run <code>rvm install ruby-2.1.0</code>, I ended up installing <code>ruby-2.1.0-preview1</code>. I realized that I had installed rvm on this machine around October 2013, and <code>ruby 2.1.0</code> was released in December 2013, so rvm had no idea that <code>ruby 2.1.0</code> was stable. Updating rvm (in the root of the project directory):</p>
 
@@ -246,13 +246,27 @@
 <figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm use ruby-2.1.0
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rm .ruby-version .ruby-gemset
+</span><span class='line'><span class="nv">$ </span>rvm 2.1.0@projNeedingRuby210 --create --ruby-version
+</span><span class='line'>ruby-2.1.0 - <span class="c">#gemset created /home/lrp/.rvm/gems/ruby-2.1.0@projNeedingRuby210</span>
+</span><span class='line'>ruby-2.1.0 - <span class="c">#generating projNeedingRuby210 wrappers.</span>
+</span><span class='line'><span class="nv">$ </span>rvm gemset copy 2.0.0-p247@projNeedingRuby210 2.1.0@projNeedingRuby210
+</span><span class='line'>Copying gemset from 2.0.0-p247@projNeedingRuby210 to 2.1.0@projNeedingRuby210
+</span><span class='line'>Generating gemset wrappers ruby-2.1.0@projNeedingRuby210.
+</span><span class='line'>Making gemset 2.1.0@projNeedingRuby210 pristine.
 </span><span class='line'><span class="nv">$ </span>which ruby
 </span><span class='line'>/home/lrp/.rvm/rubies/ruby-2.1.0/bin/ruby
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Alright! Crisis averted. If you&rsquo;re using <a href="http://larry-price.com//bundler.io/">bundler</a> with this project, be sure to change your ruby version (usually located near the top of the <code>Gemfile</code>).</p>
+<p>Alright! Crisis averted. If you&rsquo;re using <a href="//bundler.io/">bundler</a> with this project, be sure to change your ruby version (usually located near the top of the <code>Gemfile</code>).</p>
 
 <p>What about setting up a new project using <code>ruby 2.1.0</code>? Easy! Switch to the project directory and:</p>
 
@@ -270,13 +284,13 @@
     <link href="http://larry-price.com/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/"/>
     <updated>2014-02-13T17:55:00-05:00</updated>
     <id>http://larry-price.com/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https</id>
-    <content type="html"><![CDATA[<p>While working on SEP Labs&#8217; <a href="http://larry-price.com//h2w.cc">Health2Wealth</a> app, I got my first taste of setting up a website to use secure connections. I&rsquo;ve been using the browser extension <a href="http://larry-price.com//www.eff.org/https-everywhere">HTTPS Everywhere</a> for quite some time now, so all of the web pages that I visit attempt to using <code>HTTPS</code>instead of the standard <code>HTTP</code>. When I inadvertently started testing our app with <code>HTTPS</code>, things got a little weird.</p>
+    <content type="html"><![CDATA[<p>While working on SEP Labs&#8217; <a href="//h2w.cc">Health2Wealth</a> app, I got my first taste of setting up a website to use secure connections. I&rsquo;ve been using the browser extension <a href="//www.eff.org/https-everywhere">HTTPS Everywhere</a> for quite some time now, so all of the web pages that I visit attempt to using <code>HTTPS</code>instead of the standard <code>HTTP</code>. When I inadvertently started testing our app with <code>HTTPS</code>, things got a little weird.</p>
 
-<p>My machine was able to open most of a page, but it wouldn&rsquo;t load some of the graphics or javascript we had embedded in the page. I was the only one able to reproduce it, so we chalked it up to a wonky machine. Then I suddenly remembered that I was using HTTPS Everywhere. I found the area in FireFox that warns you about insecure connections and found that our page was only <em>partially</em> loading on my browser because some of the content was insecure. From there I enabled an option to reveal the insecure elements, which forced my page to load everything correctly. So now we needed to find what was insecure about our page. I trekked through the codebase and found that some of our graphs and links were hard-coded to use <code>HTTP</code>. My initial thought was just to force them to use <code>HTTPS</code>, which is <a href="http://larry-price.com//lists.w3.org/Archives/Public/ietf-http-wg/2013OctDec/0625.html">almost certainly the impending standard</a>. With a quick search, I found that there exists a <strong>real</strong> solution to this problem.</p>
+<p>My machine was able to open most of a page, but it wouldn&rsquo;t load some of the graphics or javascript we had embedded in the page. I was the only one able to reproduce it, so we chalked it up to a wonky machine. Then I suddenly remembered that I was using HTTPS Everywhere. I found the area in FireFox that warns you about insecure connections and found that our page was only <em>partially</em> loading on my browser because some of the content was insecure. From there I enabled an option to reveal the insecure elements, which forced my page to load everything correctly. So now we needed to find what was insecure about our page. I trekked through the codebase and found that some of our graphs and links were hard-coded to use <code>HTTP</code>. My initial thought was just to force them to use <code>HTTPS</code>, which is <a href="//lists.w3.org/Archives/Public/ietf-http-wg/2013OctDec/0625.html">almost certainly the impending standard</a>. With a quick search, I found that there exists a <strong>real</strong> solution to this problem.</p>
 
-<p>Let&rsquo;s say I have a very normal web application, so I want to include <a href="http://larry-price.com//jquery.com">jQuery</a> embedded in my page. I initially copy-paste <code>&lt;script src='http://code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code> right into my <code>&lt;head&gt;</code> node, which normally seems fine. Unfortunately, this is where issues arise. I&rsquo;m now forcing the user to make a connection which may or may not be secure to fetch data from an insecure page.</p>
+<p>Let&rsquo;s say I have a very normal web application, so I want to include <a href="//jquery.com">jQuery</a> embedded in my page. I initially copy-paste <code>&lt;script src='http://code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code> right into my <code>&lt;head&gt;</code> node, which normally seems fine. Unfortunately, this is where issues arise. I&rsquo;m now forcing the user to make a connection which may or may not be secure to fetch data from an insecure page.</p>
 
-<p>By removing the <code>http:</code> from the <code>http://</code>, the issue of deciding whether to fetch the file using <code>HTTP</code> or <code>HTTPS</code> is left to the web browser. So my script include becomes <code>&lt;script src='http://larry-price.com//code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code> This also works for links, images, and web fonts. In fact, every link included in this post uses the same principal, where I leave the protocol out of what becomes the <code>href</code> tag.</p>
+<p>By removing the <code>http:</code> from the <code>http://</code>, the issue of deciding whether to fetch the file using <code>HTTP</code> or <code>HTTPS</code> is left to the web browser. So my script include becomes <code>&lt;script src='//code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code>. This also works for links, images, and web fonts. In fact, every link included in this post uses the same principal, where I leave the protocol out of what becomes the <code>href</code> tag.</p>
 ]]></content>
   </entry>
   
@@ -285,11 +299,11 @@
     <link href="http://larry-price.com/blog/2014/02/12/custom-domain-with-github-pages/"/>
     <updated>2014-02-12T21:30:00-05:00</updated>
     <id>http://larry-price.com/blog/2014/02/12/custom-domain-with-github-pages</id>
-    <content type="html"><![CDATA[<p>As of today, I&rsquo;m the proud owner of <a href="http://larry-price.com//larry-price.com">larry-price.com</a>. On the recommendation from a friend, I used <a href="http://larry-price.com//domainmonster.com">domainmonster.com</a> for it&rsquo;s cost effectiveness and usable toolset. I wanted to link my Github Pages blog (this blog!) to my new site. In case I ever want to do this again, I&rsquo;ve provided myself (and you!) with a step-by-step guide below. Note that Github <a href="http://larry-price.com//help.github.com/articles/setting-up-a-custom-domain-with-pages">has a page that explains how to do this</a>, but there&rsquo;s some fluff and ordering issues that turned me off from using those instructions as any more than a reference.</p>
+    <content type="html"><![CDATA[<p>As of today, I&rsquo;m the proud owner of <a href="//larry-price.com">larry-price.com</a>. On the recommendation from a friend, I used <a href="//domainmonster.com">domainmonster.com</a> for it&rsquo;s cost effectiveness and usable toolset. I wanted to link my Github Pages blog (this blog!) to my new site. In case I ever want to do this again, I&rsquo;ve provided myself (and you!) with a step-by-step guide below. Note that Github <a href="//help.github.com/articles/setting-up-a-custom-domain-with-pages">has a page that explains how to do this</a>, but there&rsquo;s some fluff and ordering issues that turned me off from using those instructions as any more than a reference.</p>
 
 <h4>Step 0: Buy your domain</h4>
 
-<p>All sites where you can purchase domains have the same domains available, but at different prices. From the sites I perused, <a href="http://larry-price.com//godaddy.com">GoDaddy</a> had the best search for domain names, suggesting different variations on the searched domain name. I found that <a href="http://larry-price.com//domainmonster.com">domainmonster.com</a> had the ugliest UI but the best prices. <a href="http://larry-price.com//hover.com">Hover.com</a> looked really modern and had moderate prices. Shop around and spend money.</p>
+<p>All sites where you can purchase domains have the same domains available, but at different prices. From the sites I perused, <a href="//godaddy.com">GoDaddy</a> had the best search for domain names, suggesting different variations on the searched domain name. I found that <a href="//domainmonster.com">domainmonster.com</a> had the ugliest UI but the best prices. <a href="//hover.com">Hover.com</a> looked really modern and had moderate prices. Shop around and spend money.</p>
 
 <h4>Step 0.5: Exercise restraint</h4>
 
@@ -343,7 +357,7 @@
 
 <p>Push that to Github and wait 0 to 10 minutes for Github to refresh your page.</p>
 
-<p>Note: If you&rsquo;re one of the few, the proud using the brilliant <a href="http://larry-price.com//octopress.org/">Octopress</a> to generate your blog, you want to make sure to add the <code>CNAME</code> file to the root of your <code>source/</code> directory. That way, when you call <code>deploy</code> your <code>CNAME</code> file will end up in the root of your <code>_deploy</code> directory.</p>
+<p>Note: If you&rsquo;re one of the few, the proud using the brilliant <a href="//octopress.org/">Octopress</a> to generate your blog, you want to make sure to add the <code>CNAME</code> file to the root of your <code>source/</code> directory. That way, when you call <code>deploy</code> your <code>CNAME</code> file will end up in the root of your <code>_deploy</code> directory.</p>
 
 <h4>Step 4: Behold</h4>
 

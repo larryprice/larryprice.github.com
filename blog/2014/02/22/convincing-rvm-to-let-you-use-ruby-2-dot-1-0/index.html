@@ -155,7 +155,21 @@
 <figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm use ruby-2.1.0
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rm .ruby-version .ruby-gemset
+</span><span class='line'><span class="nv">$ </span>rvm 2.1.0@projNeedingRuby210 --create --ruby-version
+</span><span class='line'>ruby-2.1.0 - <span class="c">#gemset created /home/lrp/.rvm/gems/ruby-2.1.0@projNeedingRuby210</span>
+</span><span class='line'>ruby-2.1.0 - <span class="c">#generating projNeedingRuby210 wrappers.</span>
+</span><span class='line'><span class="nv">$ </span>rvm gemset copy 2.0.0-p247@projNeedingRuby210 2.1.0@projNeedingRuby210
+</span><span class='line'>Copying gemset from 2.0.0-p247@projNeedingRuby210 to 2.1.0@projNeedingRuby210
+</span><span class='line'>Generating gemset wrappers ruby-2.1.0@projNeedingRuby210.
+</span><span class='line'>Making gemset 2.1.0@projNeedingRuby210 pristine.
 </span><span class='line'><span class="nv">$ </span>which ruby
 </span><span class='line'>/home/lrp/.rvm/rubies/ruby-2.1.0/bin/ruby
 </span></code></pre></td></tr></table></div></figure>
