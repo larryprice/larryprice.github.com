@@ -6,7 +6,7 @@ url: http://larry-price.com
 title: Larry Price
 subtitle: And The Endless Cup Of Coffee
 author: Larry Price
-simple_search: http://google.com/search
+simple_search: https://google.com/search
 description: Blog for a professional and hobbyist coder from <a href="http://sep.com">SEP</a>.
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
@@ -70,11 +70,7 @@ github_skip_forks: false
 
 # Twitter
 twitter_user: larryrprice
-twitter_tweet_count: 5
-twitter_show_replies: true
-twitter_follow_button: true
-twitter_show_follower_count: false
-twitter_tweet_button: false
+twitter_tweet_button: true
 
 # Google +1
 google_plus_one: true
