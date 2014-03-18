@@ -1,0 +1,341 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>SEP Startup Weekend: Ollert - Larry Price</title>
+  <meta name="author" content="Larry Price">
+
+  
+  <meta name="description" content="Last weekend was SEP&rsquo;s 6th Semi-Annual Startup Weekend. For those unfamiliar, software developers pitch ideas Friday evening and developers &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://larry-price.com/blog/2014/03/17/sep-startup-weekend-ollert">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Larry Price" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Montserrat+Alternates|Marcellus' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35669093-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner" style="background:url(/images/coffee-stain.png) top right no-repeat; background-size: auto 100%;"><hgroup>
+  <h1><a href="/">Larry Price</a></h1>
+  
+    <h2>And The Endless Cup Of Coffee</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:larry-price.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/books">Books</a></li>
+  <li><a href="/blog/projects">Projects</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">SEP Startup Weekend: Ollert</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-17T20:07:38-04:00" pubdate data-updated="true">Mar 17<span>th</span>, 2014</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://larry-price.com">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Last weekend was <a href="//sep.com">SEP</a>&rsquo;s 6th Semi-Annual <a href="//sep.com/labs/startupweekend/">Startup Weekend</a>. For those unfamiliar, software developers pitch ideas Friday evening and developers volunteer their time to come up with a <a href="//en.wikipedia.org/wiki/Minimum_viable_product">minimum viable product</a> in the next 48 hours. Free beer is the only thing that makes such a weekend possible.</p>
+
+<p>I&rsquo;ve been before and participated in other people&rsquo;s projects and it&rsquo;s always a blast. However, this weekend was different: I had an idea to pitch. Although the idea went through many names, the core concept remained the same:</p>
+
+<blockquote><p>To tell Trello users what their boards say about the past and the future through unique visuals.</p></blockquote>
+
+<p><a href="//trello.com">Trello</a> is a collaborative workflow management tool that does a wonderful job of showing you the present. There is currently no way on Trello to see your past history or compare yesterday&rsquo;s weather. This simplicity is part of the beauty of Trello, but also an opportunity.</p>
+
+<p>My idea was to create a web application where a user could quickly and easily connect with Trello and view information he or she had never seen previously. I would offer a trial service requiring no login that would allow access to all this data, given that the user puts up with authenticating with Trello every time he or she visits the site. There would be a free membership, which would allow the user to &ldquo;permanantly&rdquo; connect to Trello. To monetize, I wanted to offer a paid membership, where the user would be given the ability to compare &ldquo;historical&rdquo; Trello data by selecting begin and end dates for the Trello data that is analyzed.</p>
+
+<p><a href="//ollert.herokuapp.com">Ollert</a> is the result of this Startup Weekend idea. A live version of Ollert can be found at <a href="//ollert.herokuapp.com">ollert.herokuapp.com</a>.</p>
+
+<p>I worked on <a href="//ollert.herokuapp.com">Ollert</a> with 5 other great developers, and we got a spectacular amount of work done given that we only spent a single weekend programming. We were able to direct users to connect with Trello, let them select a board, and then generate and display 12 different statistics and analyses. We also implemented Sign Up/Login.</p>
+
+<p>We worked on <a href="//ollert.herokuapp.com">Ollert</a> to the last minute, so not everything got in. We never implemented the paid member feature and we didn&rsquo;t get in all the analytics we wanted. We also had some great ideas come out while we were working on <a href="//ollert.herokuapp.com">Ollert</a> that didn&rsquo;t make it into the application, such as filtering chart types and selecting favorites.</p>
+
+<p>Overall, my teammates and I had a great time and we are confident that we&rsquo;ve created something useful.</p>
+
+<p>My current intention is to do several more blog posts about <a href="//ollert.herokuapp.com">Ollert</a> including Connecting to the Trello API, Using ruby-trello, Using sqlite on Heroku, What I Should Have Had Ready Before Asking People To Work For Me, and The Future of Ollert.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Larry Price</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-17T20:07:38-04:00" pubdate data-updated="true">Mar 17<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ollert/'>ollert</a>, <a class='category' href='/blog/categories/trello/'>trello</a>, <a class='category' href='/blog/categories/web/'>web</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://larry-price.com/blog/2014/03/17/sep-startup-weekend-ollert/" data-via="larryrprice" data-counturl="http://larry-price.com/blog/2014/03/17/sep-startup-weekend-ollert/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="small"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you/" title="Previous Post: Using x-editable to do in-line editing for you">&laquo; Using x-editable to do in-line editing for you</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <span style="display: block; text-align: center;">
+    <a href="https://github.com/larryprice" title="Github"><img src="/images/icon_github.png" class="social-media-icon" /></a>
+    <a href="https://bitbucket.org/larryprice" title="Bitbucket"><img src="/images/icon_bitbucket.png" class="social-media-icon" /></a>
+    <a href="https://twitter.com/larryrprice" title="Twitter"><img src="/images/icon_twitter.png" class="social-media-icon" /></a>
+    <a href="https://www.linkedin.com/pub/larry-price/3a/630/47b" title="LinkedIn"><img src="/images/icon_linkedin.png" class="social-media-icon" /></a>
+  </span>
+</section>
+<section>
+  <h1>void* Larry</h1>
+  <p>I'm a codeslinger debugging from the mean streets of Indiana. Welcome to my blog, where I'll tell the tales of wondrous things I discover in the digital jungle.</p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/17/sep-startup-weekend-ollert/">SEP Startup Weekend: Ollert</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you/">Using X-editable to Do In-line Editing for You</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/22/let-me-be-a-billboard-for-duckduckgo-for-a-few-minutes/">Let Me Be a Billboard for DuckDuckGo for a Few Minutes</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/">Convincing Rvm to Let You Use Ruby 2.1.0</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/">Letting the Browser Decide Betwen HTTP and HTTPS</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Tag Cloud</h1>
+    <span id="tag-cloud"><a href='/blog/categories/c-plus-plus' style='font-size: 115.0%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.0%'>capybara</a> <a href='/blog/categories/cucumber' style='font-size: 115.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 125.0%'>database</a> <a href='/blog/categories/foreman' style='font-size: 105.0%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 105.0%'>foss</a> <a href='/blog/categories/gmock' style='font-size: 105.0%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 110.0%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 105.0%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 105.0%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 105.0%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.0%'>heroku</a> <a href='/blog/categories/internet' style='font-size: 105.0%'>internet</a> <a href='/blog/categories/linux' style='font-size: 120.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 110.0%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 115.0%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 105.0%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 105.0%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 105.0%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 110.0%'>nosql</a> <a href='/blog/categories/ollert' style='font-size: 105.0%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 120.0%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 105.0%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 105.0%'>qt</a> <a href='/blog/categories/rails' style='font-size: 105.0%'>rails</a> <a href='/blog/categories/retro' style='font-size: 110.0%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 110.0%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 150.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 115.0%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 105.0%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 140.0%'>sep-blog-battle</a> <a href='/blog/categories/sinatra' style='font-size: 120.0%'>sinatra</a> <a href='/blog/categories/tdd' style='font-size: 105.0%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 110.0%'>testing</a> <a href='/blog/categories/trello' style='font-size: 105.0%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 105.0%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 105.0%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 105.0%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 135.0%'>write-ups</a> </span>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/larryprice">@larryprice</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'larryprice',
+            count: 5,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  <center>
+	  Copyright &copy; 2014 - Larry Price -
+	  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span><br/>
+	  Note: Views and opinions expressed belong solely to the author and do not represent the views of the any other person or company.
+	</center>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'larryprice';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://larry-price.com/blog/2014/03/17/sep-startup-weekend-ollert/';
+        var disqus_url = 'http://larry-price.com/blog/2014/03/17/sep-startup-weekend-ollert/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

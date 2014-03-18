@@ -4,7 +4,7 @@
   <title><![CDATA[Category: web | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/web/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-02-24T22:30:21-05:00</updated>
+  <updated>2014-03-17T20:47:40-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,33 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[SEP Startup Weekend: Ollert]]></title>
+    <link href="http://larry-price.com/blog/2014/03/17/sep-startup-weekend-ollert/"/>
+    <updated>2014-03-17T20:07:38-04:00</updated>
+    <id>http://larry-price.com/blog/2014/03/17/sep-startup-weekend-ollert</id>
+    <content type="html"><![CDATA[<p>Last weekend was <a href="//sep.com">SEP</a>&rsquo;s 6th Semi-Annual <a href="//sep.com/labs/startupweekend/">Startup Weekend</a>. For those unfamiliar, software developers pitch ideas Friday evening and developers volunteer their time to come up with a <a href="//en.wikipedia.org/wiki/Minimum_viable_product">minimum viable product</a> in the next 48 hours. Free beer is the only thing that makes such a weekend possible.</p>
+
+<p>I&rsquo;ve been before and participated in other people&rsquo;s projects and it&rsquo;s always a blast. However, this weekend was different: I had an idea to pitch. Although the idea went through many names, the core concept remained the same:</p>
+
+<blockquote><p>To tell Trello users what their boards say about the past and the future through unique visuals.</p></blockquote>
+
+<p><a href="//trello.com">Trello</a> is a collaborative workflow management tool that does a wonderful job of showing you the present. There is currently no way on Trello to see your past history or compare yesterday&rsquo;s weather. This simplicity is part of the beauty of Trello, but also an opportunity.</p>
+
+<p>My idea was to create a web application where a user could quickly and easily connect with Trello and view information he or she had never seen previously. I would offer a trial service requiring no login that would allow access to all this data, given that the user puts up with authenticating with Trello every time he or she visits the site. There would be a free membership, which would allow the user to &ldquo;permanantly&rdquo; connect to Trello. To monetize, I wanted to offer a paid membership, where the user would be given the ability to compare &ldquo;historical&rdquo; Trello data by selecting begin and end dates for the Trello data that is analyzed.</p>
+
+<p><a href="//ollert.herokuapp.com">Ollert</a> is the result of this Startup Weekend idea. A live version of Ollert can be found at <a href="//ollert.herokuapp.com">ollert.herokuapp.com</a>.</p>
+
+<p>I worked on <a href="//ollert.herokuapp.com">Ollert</a> with 5 other great developers, and we got a spectacular amount of work done given that we only spent a single weekend programming. We were able to direct users to connect with Trello, let them select a board, and then generate and display 12 different statistics and analyses. We also implemented Sign Up/Login.</p>
+
+<p>We worked on <a href="//ollert.herokuapp.com">Ollert</a> to the last minute, so not everything got in. We never implemented the paid member feature and we didn&rsquo;t get in all the analytics we wanted. We also had some great ideas come out while we were working on <a href="//ollert.herokuapp.com">Ollert</a> that didn&rsquo;t make it into the application, such as filtering chart types and selecting favorites.</p>
+
+<p>Overall, my teammates and I had a great time and we are confident that we&rsquo;ve created something useful.</p>
+
+<p>My current intention is to do several more blog posts about <a href="//ollert.herokuapp.com">Ollert</a> including Connecting to the Trello API, Using ruby-trello, Using sqlite on Heroku, What I Should Have Had Ready Before Asking People To Work For Me, and The Future of Ollert.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Using x-editable to do in-line editing for you]]></title>
@@ -336,63 +363,6 @@ type Page struct {</p>
 </code></p>
 
 <p>And that completes the extra exercises for Google&rsquo;s <em>Writing Web Applications</em> tutorial. Hopefully one day this helps someone who gets stuck.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Using Foreman to Create an Upstart Service]]></title>
-    <link href="http://larry-price.com/blog/2013/08/31/using-foreman-to-create-an-upstart-service/"/>
-    <updated>2013-08-31T17:05:00-04:00</updated>
-    <id>http://larry-price.com/blog/2013/08/31/using-foreman-to-create-an-upstart-service</id>
-    <content type="html"><![CDATA[<p>I just finished my first attempt at deploying a web app to run automatically in the background on a friend&rsquo;s server. Pretty easy, really. The first thing I did was install <a href="https://github.com/ddollar/foreman">foreman</a>. Assuming you have ruby and rubygems installed:</p>
-
-<p><code>bash
-$ sudo gem install foreman
-</code></p>
-
-<p>Next I needed to give foreman the commands to start my app. I created a file in the root of my project directory called &lsquo;Procfile&rsquo; and gave it the steps I would run to start my app manually. For the sake of simplicity, let&rsquo;s say I run my app pretty barebones:</p>
-
-<p><code>bash Procfile
-web: bundle exec rackup
-</code></p>
-
-<p>Now when I run <code>foreman start</code>, foreman will use <a href="http://bundler.io/">Bundler</a> to execute rackup with the correct gems in my Gemfile. Now exporting upstart config files is pretty easy.</p>
-
-<p><code>bash
-$ sudo foreman export upstart --app=MyApp --user=root /etc/init
-</code></p>
-
-<p>That command creates the .conf files needed for upstart to control the service called &lsquo;MyApp&rsquo; as the user &lsquo;root.&rsquo; It puts all the .conf files in <code>/etc/init</code> (which is where Ubuntu puts such things) and will create a default log directory in <code>/var/log/MyApp</code>. Now I can control my service by running <code>service MyApp start</code>, <code>service MyApp stop</code>, <code>service MyApp restart</code>, and <code>service MyApp status</code>. Hooray for me.</p>
-
-<p>But I need to run my app in two ways: in dev mode on a local port with my dev database, and I need to run it in production mode using port 80 and the production database. I&rsquo;ve also heard that using <a href="https://en.wikipedia.org/wiki/WEBrick">webrick</a> (the default server installed with rackup) is great for develpment, but I should be using something else for my production server. So I made some config files for foreman:</p>
-
-<p><code>bash development.env
-RACK_ENV=development
-PORT=9292
-SERVER=rackup
-</code></p>
-
-<p><code>bash production.env
-RACK_ENV=production
-PORT=80
-SERVER=unicorn
-</code></p>
-
-<p>And I change my Procfile to:</p>
-
-<p><code>bash Procfile
-web: bundle exec $SERVER -p $PORT -E $RACK_ENV
-</code></p>
-
-<p>Ridiculously configured. Now when I run <code>foreman start</code>, it will error out. I need to specify my environment file:</p>
-
-<p><code>bash
-$ foreman start -e production.env
-</code></p>
-
-<p>Now foreman will use Bundler to startup the server specified in <code>$SERVER</code>, run the app on port <code>$PORT</code> (-p), and will pass through the environment listed as <code>$RACK_ENV</code> to my application (-E), allowing my app to do whatever configuration it does given the current environment. Power to the people.</p>
-
-<p><a href="http://michaelvanrooijen.com/articles/2011/06/08-managing-and-monitoring-your-ruby-application-with-foreman-and-upstart/">I found that this guy</a> does a lot more complicated stuff with Foreman, if you need more.</p>
 ]]></content>
   </entry>
   

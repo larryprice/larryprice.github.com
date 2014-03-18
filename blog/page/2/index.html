@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="A golang web app tutorial I did some work with Google Go recently and had the chance to follow their great tutorial Writing Web Applications. The &hellip;">
+  <meta name="description" content="As of today, I&rsquo;m the proud owner of larry-price.com. On the recommendation from a friend, I used domainmonster.com for it&rsquo;s cost &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -61,7 +61,7 @@
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://google.com/search" method="get">
   <fieldset role="search">
     <input type="hidden" name="q" value="site:larry-price.com" />
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
@@ -80,6 +80,111 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/02/12/custom-domain-with-github-pages/">Custom Domain With Github Pages</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-12T21:30:00-05:00" pubdate data-updated="true">Feb 12<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/02/12/custom-domain-with-github-pages/#disqus_thread"
+             data-disqus-identifier="http://larry-price.com/blog/2014/02/12/custom-domain-with-github-pages/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As of today, I&rsquo;m the proud owner of <a href="//larry-price.com">larry-price.com</a>. On the recommendation from a friend, I used <a href="//domainmonster.com">domainmonster.com</a> for it&rsquo;s cost effectiveness and usable toolset. I wanted to link my Github Pages blog (this blog!) to my new site. In case I ever want to do this again, I&rsquo;ve provided myself (and you!) with a step-by-step guide below. Note that Github <a href="//help.github.com/articles/setting-up-a-custom-domain-with-pages">has a page that explains how to do this</a>, but there&rsquo;s some fluff and ordering issues that turned me off from using those instructions as any more than a reference.</p>
+
+<h4>Step 0: Buy your domain</h4>
+
+<p>All sites where you can purchase domains have the same domains available, but at different prices. From the sites I perused, <a href="//godaddy.com">GoDaddy</a> had the best search for domain names, suggesting different variations on the searched domain name. I found that <a href="//domainmonster.com">domainmonster.com</a> had the ugliest UI but the best prices. <a href="//hover.com">Hover.com</a> looked really modern and had moderate prices. Shop around and spend money.</p>
+
+<h4>Step 0.5: Exercise restraint</h4>
+
+<p>At this point in the process, <strong>don&rsquo;t go to your site</strong>.</p>
+
+<p>My guess is you already have. If you don&rsquo;t have the ability to go back in time, don&rsquo;t sweat it, just know that you probably won&rsquo;t be able to verify the fruits of your labor for a few hours.</p>
+
+<h4>Step 1: Setting up an &lsquo;A Record&rsquo;</h4>
+
+<p>Find the ip address where your site is currently hosted. For me (replace URL with your own):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>nslookup larryprice.github.io
+</span><span class='line'>Server:   127.0.1.1
+</span><span class='line'>Address:  127.0.1.1#53
+</span><span class='line'>
+</span><span class='line'>Non-authoritative answer:
+</span><span class='line'>Name: larryprice.github.io
+</span><span class='line'>Address: 199.27.74.133
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You should be able to &ldquo;manage&rdquo; your domain on your domain provider&rsquo;s website. In the &ldquo;management&rdquo; area, you should be able to find a section about &ldquo;DNS&rdquo;. Find something labeled &ldquo;A records.&rdquo; There will likely already be one or two entries here &ndash; one for the IP address of your new domain and one with the IP address of your domain with &ldquo;www.&rdquo; prepended.</p>
+
+<p>Modify the entry (or entries) with the IP address found using <code>nslookup</code> (&ldquo;199.27.74.133&rdquo; from the example above). Save your site settings.</p>
+
+<h4>Step 2: Mucking with the &ldquo;www&rdquo; instance</h4>
+
+<p>While we&rsquo;re modifying these settings, we might as well move the &lsquo;www&rsquo; case out of the &ldquo;A records&rdquo;. Go ahead and delete it.</p>
+
+<p>Look for something named &ldquo;CNAME records&rdquo;, or figure out how to add records in general. We&rsquo;re going to add a CNAME record where the &ldquo;Alias&rdquo; is &ldquo;www&rdquo; and the &ldquo;Address&rdquo; is your site&rsquo;s name. In my case, my &ldquo;Alias&rdquo; field is &ldquo;www&rdquo; and my &ldquo;Address&rdquo; field is &ldquo;larry-price.com&rdquo;. Add the record and cross your fingers for success.</p>
+
+<h4>Step 3: Telling Github Pages what to do</h4>
+
+<p>Alhtough Github Pages is magical in its own right, it doesn&rsquo;t know what to do when receiving a request from the &ldquo;A record&rdquo; we created in Step 2 without further instruction.</p>
+
+<p>If you&rsquo;re using Github Pages for a user page, we are going to make this change on the <code>master</code> branch. If this is a project page, do it on the <code>gh-pages</code> branch.</p>
+
+<p>All we have to do is put our new domain into a file in the root folder called <code>CNAME</code>. Let&rsquo;s do it in one fell swoop of the command line.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;larry-price.com&quot;</span> &gt; CNAME
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Push that to Github and wait 0 to 10 minutes for Github to refresh your page.</p>
+
+<p>Note: If you&rsquo;re one of the few, the proud using the brilliant <a href="//octopress.org/">Octopress</a> to generate your blog, you want to make sure to add the <code>CNAME</code> file to the root of your <code>source/</code> directory. That way, when you call <code>deploy</code> your <code>CNAME</code> file will end up in the root of your <code>_deploy</code> directory.</p>
+
+<h4>Step 4: Behold</h4>
+
+<p>Check your Github repository&rsquo;s &ldquo;Settings&rdquo; section. In the &ldquo;GitHub Pages&rdquo; section, you should now see something along the lines of &ldquo;Your site is published at <a href="http://larry-price.com">http://larry-price.com</a>&rdquo;. Go, young one, and visit your new site; and behold the glory you have brought to your family.</p>
+
+<p>I&rsquo;ll note that this is the point where not obeying Step 0.5 will cause issues. Once your internets knows that your page hit a certain DNS, it takes a few hours to refresh. In my case it only took about 2 hours, but it may take between 12 and 48 hours to refresh. A workaround to see if everything is working is to pull out your smart phone and use your carrier&rsquo;s network to check your new site, since that area of the internets is probably still untainted. (All of this paragraph is a simplified thought process on how DNS works, considering that&rsquo;s the level I understand it.)</p>
+
+<p>Now fly, my children, and spread yourself over the internet with dozens of silly domain names!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -586,125 +691,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/11/22/hooks-in-cucumber-cpp/">Hooks in Cucumber-cpp</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-11-22T20:40:00-05:00" pubdate data-updated="true">Nov 22<span>nd</span>, 2013</time>
-        
-           | <a href="/blog/2013/11/22/hooks-in-cucumber-cpp/#disqus_thread"
-             data-disqus-identifier="http://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>A few months ago <a href="/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">I blogged about tags</a> in <a href="https://github.com/cucumber/cucumber-cpp">cucumber-c++</a>. The scenario I presented involved using tags to call a <code>BEFORE</code> hook before the first scenario and an <code>AFTER</code> hook after the last scenario. The code looked a little bit like this:</p>
-
-<figure class='code'><figcaption><span>DoStuff.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="nt">@first</span><span class="nf"></span>
-</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Do it my way</span>
-</span><span class='line'><span class="nf">  ...</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">Scenario: Don&#39;t do it</span>
-</span><span class='line'><span class="nf">  ...</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">@last</span>
-</span><span class='line'><span class="nf">Scenario: Do it your way</span>
-</span><span class='line'><span class="nf">  ...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>DoStuff_StepDefinitions.cpp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="n">BEFORE</span><span class="p">(</span><span class="s">&quot;@first&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;This is the first step!&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">AFTER</span><span class="p">(</span><span class="s">&quot;@last&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;This is the last step!&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The scnenario labeled <code>@first</code> would call the corresponding <code>BEFORE</code> macro and the <code>@last</code> scenario would call the <code>AFTER</code> macro. If I didn&rsquo;t have tags in place, the macros would have both been invoked before/after each scenario. Macros for <code>BEFORE_STEP</code> and <code>AROUND_STEP</code> are also available; <code>BEFORE_STEP</code> allows you to tag individual steps and <code>AROUND_STEP</code> acts as a before/after for individual steps.</p>
-
-<p>This was a workaround. What I really wanted to do was to not use tags, and instead unconditionally perform an action before the first scenario was run and after the last scenario is complete. Since cucumber-cpp is open source, I decided to implement that a few weeks ago (<a href="https://github.com/cucumber/cucumber-cpp/commit/26e11d0248edf32a8bac17df9d2d4ceb135ed502">see changeset</a>). Now the above example becomes:</p>
-
-<figure class='code'><figcaption><span>DoStuff.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Scenario:</span><span class="nf"> Do it my way</span>
-</span><span class='line'><span class="nf">  ...</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">Scenario: Don&#39;t do it</span>
-</span><span class='line'><span class="nf">  ...</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">Scenario: Do it your way</span>
-</span><span class='line'><span class="nf">  ...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>DoStuff_StepDefinitions.cpp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="n">BEFORE_ALL</span><span class="p">()</span> <span class="p">{</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;This is the first step!&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">AFTER_ALL</span><span class="p">()</span> <span class="p">{</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;This is the last step!&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This is the same behavior as the first example, except I don&rsquo;t have to force my fellow developers to move tags around when they add/remove scenarios. Also now my fellow developers can stop asking me why I was using tags and why when they added a scenario they couldn&rsquo;t get the tests to pass.</p>
-
-<p>The moral of the story is that you should go implement that feature you want to see in your favorite open source project.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -734,6 +720,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/17/sep-startup-weekend-ollert/">SEP Startup Weekend: Ollert</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you/">Using X-editable to Do In-line Editing for You</a>
       </li>
     
@@ -749,15 +739,11 @@
         <a href="/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/">Letting the Browser Decide Betwen HTTP and HTTPS</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/02/12/custom-domain-with-github-pages/">Custom Domain With Github Pages</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/c-plus-plus' style='font-size: 115.0%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.0%'>capybara</a> <a href='/blog/categories/cucumber' style='font-size: 115.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 125.0%'>database</a> <a href='/blog/categories/foreman' style='font-size: 105.0%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 105.0%'>foss</a> <a href='/blog/categories/gmock' style='font-size: 105.0%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 110.0%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 105.0%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 105.0%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 105.0%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.0%'>heroku</a> <a href='/blog/categories/internet' style='font-size: 105.0%'>internet</a> <a href='/blog/categories/linux' style='font-size: 120.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 110.0%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 115.0%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 105.0%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 105.0%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 105.0%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 110.0%'>nosql</a> <a href='/blog/categories/pokephile' style='font-size: 120.0%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 105.0%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 105.0%'>qt</a> <a href='/blog/categories/rails' style='font-size: 105.0%'>rails</a> <a href='/blog/categories/retro' style='font-size: 110.0%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 110.0%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 150.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 115.0%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 105.0%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 140.0%'>sep-blog-battle</a> <a href='/blog/categories/sinatra' style='font-size: 120.0%'>sinatra</a> <a href='/blog/categories/tdd' style='font-size: 105.0%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 110.0%'>testing</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 105.0%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 105.0%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 105.0%'>upstart</a> <a href='/blog/categories/web' style='font-size: 135.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 135.0%'>write-ups</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/c-plus-plus' style='font-size: 115.0%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.0%'>capybara</a> <a href='/blog/categories/cucumber' style='font-size: 115.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 125.0%'>database</a> <a href='/blog/categories/foreman' style='font-size: 105.0%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 105.0%'>foss</a> <a href='/blog/categories/gmock' style='font-size: 105.0%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 110.0%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 105.0%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 105.0%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 105.0%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.0%'>heroku</a> <a href='/blog/categories/internet' style='font-size: 105.0%'>internet</a> <a href='/blog/categories/linux' style='font-size: 120.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 110.0%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 115.0%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 105.0%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 105.0%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 105.0%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 110.0%'>nosql</a> <a href='/blog/categories/ollert' style='font-size: 105.0%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 120.0%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 105.0%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 105.0%'>qt</a> <a href='/blog/categories/rails' style='font-size: 105.0%'>rails</a> <a href='/blog/categories/retro' style='font-size: 110.0%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 110.0%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 150.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 115.0%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 105.0%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 140.0%'>sep-blog-battle</a> <a href='/blog/categories/sinatra' style='font-size: 120.0%'>sinatra</a> <a href='/blog/categories/tdd' style='font-size: 105.0%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 110.0%'>testing</a> <a href='/blog/categories/trello' style='font-size: 105.0%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 105.0%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 105.0%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 105.0%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 135.0%'>write-ups</a> </span>
 </section>
 
 <section>
