@@ -6,13 +6,13 @@ comments: true
 categories: trello javascript html web ollert
 ---
 
-[Trello](//trello.com) has a [pretty sweet API](//trello.com/docs/), which we use extensively in our Trello-analysis app [Ollert](//ollert.herokuapp.com). Initially connecting to the Trello API took us a few hours, so I"d like to make a record of how we managed to connect.
+[Trello](//trello.com) has a [pretty sweet API](//trello.com/docs/), which we use extensively in our Trello-analysis app [Ollert](//ollert.herokuapp.com). Initially connecting to the Trello API took us a few hours, so I'd like to make a record of how we managed to connect.
 
 Making a connection to Trello requires two hashcodes: an application key and a Trello member token. You can generate and view your application key by visiting [https://trello.com/1/appKey/generate](//trello.com/1/appKey/generate).
 
-The member token is something we need to get from the user. There are two ways to get a user"s member token: through fragments and through a __postMessage__. You can also request different levels of access (read, write, read+write), and different expiration periods (such as 1 day, 30 days, or never) for member tokens. For the remainder of this writing, I"ll be accessing a read-only member token that never expires.
+The member token is something we need to get from the user. There are two ways to get a user's member token: through fragments and through a __postMessage__. You can also request different levels of access (read, write, read+write), and different expiration periods (such as 1 day, 30 days, or never) for member tokens. For the remainder of this writing, I'll be accessing a read-only member token that never expires.
 
-We didn"t have a lot of luck with fragments, but the concept is simple enough. You have the user click a link that probably says "Connect With Trello" which is similar to:
+We didn't have a lot of luck with fragments, but the concept is simple enough. You have the user click a link that probably says "Connect With Trello" which is similar to:
 
 `https://trello.com/1/authorize?key=applicationkey&name=applicationname&expiration=never&response_type=token`
 
@@ -29,7 +29,7 @@ function AuthenticateTrello() {
     type: "popup",
     interactive: true,
     expiration: "never",
-    persist: false,
+    persist: true,
     success: function () { onAuthorizeSuccessful(); },
     scope: { write: false, read: true },
   });
@@ -43,6 +43,6 @@ function onAuthorizeSuccessful() {
   Connect With Trello
 ```
 
-When the user clicks the link, we have Trello set to activate a "popup" that will ask them to "Allow" or "Deny" our app from accessing their data. When the user allows us access, the popup closes and we hit the "onAuthorizeSuccessful" method. In my method, I simply redirect them to the `/auth` route with `token` manually added to the params list. One of the interesting options listed above is the "persist" option, which tells Trello whether it should be partially responsible for remembering your token. By telling it not to persist, the user will be presented with the popup every time. 
+When the user clicks the link, we have Trello set to activate a "popup" that will ask them to "Allow" or "Deny" our app from accessing their data. When the user allows us access, the popup closes and we hit the "onAuthorizeSuccessful" method. In my method, I simply redirect them to the `/auth` route with `token` manually added to the params list. One of the interesting options listed above is the "persist" option, which tells Trello whether it should prompt the user for his or her token every time. By telling Trello to persist, the user will only be presented with the popup when he or she needs to reauthenticate.
 
 You can learn more about member tokens from [https://trello.com/docs/gettingstarted/authorize.html](//trello.com/docs/gettingstarted/authorize.html).
