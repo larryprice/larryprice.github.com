@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="A few months ago I blogged about tags in cucumber-c++. The scenario I presented involved using tags to call a BEFORE hook before the first scenario &hellip;">
+  <meta name="description" content="Your users put a lot of faith in you. They put up with your terrible design, your horrible taste in color scheme, and your ability to take up over &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,197 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/12/12/tell-your-users-when-you-fail/">Tell Your Users When You Fail</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-12T19:41:00-05:00" pubdate data-updated="true">Dec 12<span>th</span>, 2013</time>
+        
+           | <a href="/blog/2013/12/12/tell-your-users-when-you-fail/#disqus_thread"
+             data-disqus-identifier="http://larry-price.com/blog/2013/12/12/tell-your-users-when-you-fail/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Your users put a lot of faith in you. They put up with your terrible design, your horrible taste in color scheme, and your ability to take up over 100% of their computer&rsquo;s memory. With that in mind, don&rsquo;t these poor people deserve a little bit of honesty?</p>
+
+<p>I came across some code recently that irked me. This code asks for a handle to a database abstraction class and then runs a query on it. It looks kinda like this:</p>
+
+<figure class='code'><figcaption><span>settings.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">changeSettings</span><span class="p">(</span><span class="n">newSettings</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">db</span> <span class="o">=</span> <span class="n">dbFactory</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;settings.db&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">if</span> <span class="o">!</span><span class="n">db</span><span class="o">.</span><span class="n">nil?</span>
+</span><span class='line'>    <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">buildSaveQuery</span><span class="p">(</span><span class="n">newSettings</span><span class="p">))</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>How nice that <code>changeSettings</code> doesn&rsquo;t try to play with a <code>nil</code> database, right? But what about the user&rsquo;s data? It wasn&rsquo;t saved. And no one knows. <em>Not even you</em>. Now, maybe the user will happily continue what he&rsquo;s doing until he notices that his new settings aren&rsquo;t quite right. So he goes back to them again. Same result. Repeat ad infinitum.</p>
+
+<p>How I would initially approach this is to add an <code>else</code> statement that launches a dialog giving some useful data to the user. Whatever you do, for the love of code, DO NOT tell the user that you had database problems. For most applications, the user will have no idea what that means. It might look something like this:</p>
+
+<figure class='code'><figcaption><span>settings.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">changeSettings</span><span class="p">(</span><span class="n">newSettings</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">db</span> <span class="o">=</span> <span class="n">dbFactory</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;settings.db&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">if</span> <span class="o">!</span><span class="n">db</span><span class="o">.</span><span class="n">nil?</span>
+</span><span class='line'>    <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">buildSaveQuery</span><span class="p">(</span><span class="n">newSettings</span><span class="p">))</span>
+</span><span class='line'>  <span class="k">else</span>
+</span><span class='line'>    <span class="n">showDialog</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Save Failed!&quot;</span><span class="p">,</span>
+</span><span class='line'>               <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;I&#39;m sorry, but your data could not be saved.&quot;</span> <span class="o">+</span>
+</span><span class='line'>                   <span class="s2">&quot;Press &#39;Try Again&#39; to give it another go.&quot;</span> <span class="o">+</span>
+</span><span class='line'>                   <span class="s2">&quot;If the problem persists, restart the application&quot;</span> <span class="o">+</span>
+</span><span class='line'>                   <span class="s2">&quot; or contact system support.&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is not a bad solution. But what about all the other places in the code I get the database from the factory? I&rsquo;d have to update those as well. It would be better to be able to code the factory to launch a similar error dialog whenever this happens. Even better, let me hand the factory a reference to an appropriate dialog whenever I call <code>dbFactory.get</code>.</p>
+
+<p>Another much more frightening possibility is to skip the <code>nil</code> check. Can you guarantee that <code>dbFactory.get</code> will never be <code>nil</code>? In that case, this option is actually pretty good.</p>
+
+<p>Even if that&rsquo;s not a guarantee you can make, it may still be a valid solution. <a href="http://www.artima.com/intv/defenseP.html">Crash early before you do too much damage</a>. Now, if there&rsquo;s some kind of crash-handler or global exception-catcher in your application, then you can catch the impending crash and tell the user the application needs to be restarted&hellip; And the app probably needs to be restarted anyway! There&rsquo;s no need to keep running after you&rsquo;ve reached some horrible error state that needs to be addressed.</p>
+
+<p>Just do <em>something</em>! Your users (especially if that happens to include me) will appreciate your honesty, even if it&rsquo;s so brutal that they have to restart the application.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/12/10/login-shell-not-sourcing-bashrc/">Login Shell Not Sourcing .bashrc: A Brief Lesson in Dot-files</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-10T19:45:00-05:00" pubdate data-updated="true">Dec 10<span>th</span>, 2013</time>
+        
+           | <a href="/blog/2013/12/10/login-shell-not-sourcing-bashrc/#disqus_thread"
+             data-disqus-identifier="http://larry-price.com/blog/2013/12/10/login-shell-not-sourcing-bashrc/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have a confession: I&rsquo;ve been avoiding using <a href="https://rvm.io/">rvm</a> for the past few weeks for stupid reasons.</p>
+
+<p>When using <code>rvm</code> with <code>gnome-terminal</code>, I have to tell <code>gnome-terminal</code> to run as a login shell so that <code>/etc/profile</code> is sourced. The login shell is then supposed to source <code>$HOME/profile</code>, which is then supposed to source <code>$HOME/.bashrc</code>. Installing <code>rvm</code> results in me editing my <code>.bash_profile</code> to add the following line:</p>
+
+<figure class='code'><figcaption><span>.bash_profile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[[</span> -s <span class="s2">&quot;$HOME/.rvm/scripts/rvm&quot;</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="s2">&quot;$HOME/.rvm/scripts/rvm&quot;</span> <span class="c"># Load RVM into a shell session *as a function*</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>All my <code>rvm</code> environments seem to work, so this is a success, right?</p>
+
+<p>Well, I type the good ol&#8217; <code>ls</code> command and I notice that all my colors are missing. I notice that the terminal title no longer reads the present working directory, but instead greets me with a disinterested &ldquo;Terminal.&rdquo; What happened?</p>
+
+<p>Eventually I realized that this was a problem caused by not sourcing my <code>.bashrc</code>. Where did I go wrong?</p>
+
+<p>The login shell sources <code>$HOME/.profile</code> UNLESS <code>$HOME/.bash_profile</code> exists, in which case it only sources the latter. So what are the contents of my <code>$HOME/.profile</code>?</p>
+
+<figure class='code'><figcaption><span>.profile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># ~/.profile: executed by the command interpreter for login shells.</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># [cut for brevity]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># if running bash</span>
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> -n <span class="s2">&quot;$BASH_VERSION&quot;</span> <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'>    <span class="c"># include .bashrc if it exists</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">[</span> -f <span class="s2">&quot;$HOME/.bashrc&quot;</span> <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'>      . <span class="s2">&quot;$HOME/.bashrc&quot;</span>
+</span><span class='line'>    <span class="k">fi</span>
+</span><span class='line'><span class="k">fi</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># [cut for brevity]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Aha! The sneaky dot-file actually sources <code>$HOME/.bashrc</code>, and my shiny new <code>$HOME/.bash_profile</code> doesn&rsquo;t. I fixed this by sourcing <code>$HOME/.profile</code> in <code>$HOME/.bash_profile</code>.</p>
+
+<figure class='code'><figcaption><span>.bash_profile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span> -f <span class="s2">&quot;$HOME/.profile&quot;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="s2">&quot;$HOME/.profile&quot;</span>
+</span><span class='line'><span class="o">[[</span> -s <span class="s2">&quot;$HOME/.rvm/scripts/rvm&quot;</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="s2">&quot;$HOME/.rvm/scripts/rvm&quot;</span> <span class="c"># Load RVM into a shell session *as a function*</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For the memory-impaired: <code>.bash_profile</code> sources <code>.profile</code> sources <code>.bashrc</code>.</p>
+
+<p>Re-open <code>gnome-terminal</code> to find my colors are fixed, my title is correct, and <code>rvm</code> plays the right notes. The world is at peace once again, and I don&rsquo;t have to avoid using <code>rvm</code>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -364,193 +555,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/">Installing GTest and GMock Libs in Ubuntu 13.04</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-13T11:02:00-04:00" pubdate data-updated="true">Oct 13<span>th</span>, 2013</time>
-        
-           | <a href="/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/#disqus_thread"
-             data-disqus-identifier="http://larry-price.com/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I started trying to work on an open-source project and found that I needed to install <a href="https://code.google.com/p/googletest/">googletest</a> and <a href="https://code.google.com/p/googlemock/">googlemock</a> on my home machine. Seemed easy enough, I found a package called <code>google-mock</code> in the <a href="http://packages.ubuntu.com/raring/google-mock">Raring</a> repositories which depends on a package called <code>libgtest-dev</code>. So I install it:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install -y google-mock
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And the CMake file I was running before tells me that I have gmock, but I&rsquo;m still missing gtest. What&rsquo;s going on here?</p>
-
-<p>Well, there was a changeset applied in Ubuntu 12.04 (Precise) with the following text (<a href="http://www.ubuntuupdates.org/package/core/precise/universe/base/gtest">source</a>):</p>
-
-<blockquote><p>  Stop distributing static library (although still build it, to ensure gtest
-  works). Upstream recommends against shipping the libary at all, just the
-  source. (See: <a href="http://code.google.com/p/googletest/wiki/FAQ">http://code.google.com/p/googletest/wiki/FAQ</a>)
-  The Debian maintainer plans to do this also (see BTS: 639795); do it in
-  Ubuntu now to fulfil MIR requirements.</p>
-
-<p>&mdash; Christopher James Halse Rogers Thu, 08 Mar 2012 17:45:29 +1100</p></blockquote>
-
-<p>What does that mean? That means we get to build and &ldquo;install&rdquo; the gtest libs ourselves. The source is conveniently installed in <code>/usr/src</code> after installing <code>libgtest-dev</code> (which we automatically got when we installed <code>google-mock</code>).</p>
-
-<figure class='code'><figcaption><span>Installing gtest libs</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install -y cmake --quiet
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> /usr/src/gtest
-</span><span class='line'><span class="nv">$ </span>sudo cmake -E make_directory build
-</span><span class='line'><span class="nv">$ </span>sudo cmake -E chdir build cmake .. &gt;&gt; /dev/null
-</span><span class='line'><span class="nv">$ </span>sudo cmake --build build &gt;&gt; /dev/null
-</span><span class='line'><span class="nv">$ </span>ls build/libgtest*
-</span><span class='line'>build/libgtest.a  build/libgtest_main.a
-</span><span class='line'><span class="nv">$ </span>sudo cp build/libgtest* /usr/local/lib/
-</span><span class='line'><span class="nv">$ </span>sudo rm -rf build
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The <code>&gt;&gt; /dev/null</code> can be dropped if you would like to see the output of these commands when successful, any error text will still show up with this redirect in place. I like to move all my personally-compiled libraries (and includes) to <code>/usr/local</code>, but you could just as easily copy them over to <code>/usr/lib</code>. All of this could also be done in <code>/tmp</code> if you&rsquo;re so inclined.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/08/rvm-quick-start/">RVM Quick Start</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-08T22:10:00-04:00" pubdate data-updated="true">Oct 8<span>th</span>, 2013</time>
-        
-           | <a href="/blog/2013/10/08/rvm-quick-start/#disqus_thread"
-             data-disqus-identifier="http://larry-price.com/blog/2013/10/08/rvm-quick-start/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>When I was working on a few different projects at once, I started running into issues where my Ruby gem versions would start to mismatch. How did I fix that issue? Naively. I adjusted the versions as necessary so my gems were always the same version. That was&hellip; pretty dumb. To make up for my past ignorance, I&rsquo;ve been exploring ways to manage my Ruby versions and my gems intelligently. Enter <a href="https://rvm.io/">RVM</a>.</p>
-
-<p>RVM is a simple tool to solve just problems. And it works pretty well. I hit some kinks along the way, but my installation pleases me well enough. Getting RVM is not for the faint of heart. Maybe there are better ways to do it, but the website says to execute the following:</p>
-
-<figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; curl -L https://get.rvm.io | bash -s stable
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This command uses curl to fetch the data that lives at <code>https://get.rvm.io</code>, which happens to be a big bash script. It executes the bash script with the args <code>-s stable</code>. &lsquo;Stable&rsquo; means the latest stable release of RVM. I could just as easily give it &lsquo;dev&rsquo; and get the latest developer release instead, but I really don&rsquo;t want that. So that command does a lot of stuff and may give you some further instructions to run before you can continue. Use that big head of yours and follow the instructions. You may also need to restart a terminal to get RVM to be recognized as a command. Since I was using <code>gnome-terminal</code>, I had to follow these <a href="https://rvm.io/integration/gnome-terminal">instructions</a>.</p>
-
-<p>Now I want RVM to know about some Ruby versions. For a full list of possible Ruby versions to install, run <code>rvm list known</code>. I just want 1.9.3. I found that I needed to do this even though I had 1.9.3 installed on my system previously.</p>
-
-<figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; rvm install ruby-1.9.3
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In Ubuntu 13.04, this command installs ruby-1.9.3 in <code>~/.rvm/rubies/ruby-1.9.3-p448/bin/ruby</code>. I&rsquo;ve found that this also sets my default Ruby to the RVM version of Ruby, which I don&rsquo;t want. To verify and undo this, I executed the following commands outside of my project directory.</p>
-
-<figure class='code'><figcaption><span>/home/lrp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; which ruby
-</span><span class='line'>/home/lrp/.rvm/rubies/ruby-1.9.3-p448/bin/ruby
-</span><span class='line'>&gt; <span class="nb">echo</span> <span class="s2">&quot;D&#39;oh&quot;</span>
-</span><span class='line'>D<span class="err">&#39;</span>oh
-</span><span class='line'>&gt; rvm use system
-</span><span class='line'>Now using system ruby.
-</span><span class='line'>&gt; which ruby
-</span><span class='line'>/usr/bin/ruby
-</span><span class='line'>&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now that that&rsquo;s settled, I want to tell RVM to use the local version of Ruby for my project and to install any gems in a special location.</p>
-
-<figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; rvm 1.9.3@my-project --create --ruby-version
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This creates a gemset and ruby-version file (<code>.ruby-gemset</code> and <code>.ruby-version</code> files) using the Ruby installation 1.9.3 created above. I specifiy to use <code>--ruby-version</code> instead of <code>--rvmrc</code> because RVM told me that I should. After some research, the <code>.ruby-version</code> file is used by several other tools, so this will keep my potential number of config files low. Now I check that all my Ruby versions are okay.</p>
-
-<figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; which ruby
-</span><span class='line'>/home/lrp/.rvm/rubies/ruby-1.9.3-p448/bin/ruby
-</span><span class='line'>&gt; <span class="nb">cd</span> ..
-</span><span class='line'>&gt; which ruby
-</span><span class='line'>/usr/bin/ruby
-</span><span class='line'>&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>When in my project directory, all the gems I install will be installed to my specified gemset, which means they are no longer cluttering my global gemspace, even when I install them using Bundler. It also means that I can use ruby-1.9.3 for this project and 2.0 for another project with minimal mental overhead. This makes me a happy developer.</p>
-
-<p>I only glazed over the installation process and documentation for RVM. Go to <a href="https://rvm.io/">the web site</a> for more.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -580,6 +584,14 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/20/using-the-trello-api-in-ruby/">Using the Trello API in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/18/connecting-to-the-trello-api/">Connecting to the Trello API</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/03/17/sep-startup-weekend-ollert/">SEP Startup Weekend: Ollert</a>
       </li>
     
@@ -591,19 +603,11 @@
         <a href="/blog/2014/02/22/let-me-be-a-billboard-for-duckduckgo-for-a-few-minutes/">Let Me Be a Billboard for DuckDuckGo for a Few Minutes</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/">Convincing Rvm to Let You Use Ruby 2.1.0</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/">Letting the Browser Decide Betwen HTTP and HTTPS</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/c-plus-plus' style='font-size: 115.0%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.0%'>capybara</a> <a href='/blog/categories/cucumber' style='font-size: 115.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 125.0%'>database</a> <a href='/blog/categories/foreman' style='font-size: 105.0%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 105.0%'>foss</a> <a href='/blog/categories/gmock' style='font-size: 105.0%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 110.0%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 105.0%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 105.0%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 105.0%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.0%'>heroku</a> <a href='/blog/categories/internet' style='font-size: 105.0%'>internet</a> <a href='/blog/categories/linux' style='font-size: 120.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 110.0%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 115.0%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 105.0%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 105.0%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 105.0%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 110.0%'>nosql</a> <a href='/blog/categories/ollert' style='font-size: 105.0%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 120.0%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 105.0%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 105.0%'>qt</a> <a href='/blog/categories/rails' style='font-size: 105.0%'>rails</a> <a href='/blog/categories/retro' style='font-size: 110.0%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 110.0%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 150.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 115.0%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 105.0%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 140.0%'>sep-blog-battle</a> <a href='/blog/categories/sinatra' style='font-size: 120.0%'>sinatra</a> <a href='/blog/categories/tdd' style='font-size: 105.0%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 110.0%'>testing</a> <a href='/blog/categories/trello' style='font-size: 105.0%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 105.0%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 105.0%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 105.0%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 135.0%'>write-ups</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/c-plus-plus' style='font-size: 115.0%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.0%'>capybara</a> <a href='/blog/categories/cucumber' style='font-size: 115.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 125.0%'>database</a> <a href='/blog/categories/foreman' style='font-size: 105.0%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 105.0%'>foss</a> <a href='/blog/categories/gmock' style='font-size: 105.0%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 110.0%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 105.0%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 105.0%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 105.0%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.0%'>heroku</a> <a href='/blog/categories/html' style='font-size: 105.0%'>html</a> <a href='/blog/categories/internet' style='font-size: 105.0%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 105.0%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 120.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 110.0%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 115.0%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 105.0%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 105.0%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 105.0%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 110.0%'>nosql</a> <a href='/blog/categories/ollert' style='font-size: 115.0%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 120.0%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 105.0%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 105.0%'>qt</a> <a href='/blog/categories/rails' style='font-size: 105.0%'>rails</a> <a href='/blog/categories/retro' style='font-size: 110.0%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 110.0%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 155.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 115.0%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 105.0%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 140.0%'>sep-blog-battle</a> <a href='/blog/categories/sinatra' style='font-size: 120.0%'>sinatra</a> <a href='/blog/categories/tdd' style='font-size: 105.0%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 110.0%'>testing</a> <a href='/blog/categories/trello' style='font-size: 115.0%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 105.0%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 105.0%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 105.0%'>upstart</a> <a href='/blog/categories/web' style='font-size: 145.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 135.0%'>write-ups</a> </span>
 </section>
 
 <section>
