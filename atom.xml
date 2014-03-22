@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="http://larry-price.com/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-03-20T20:16:47-04:00</updated>
+  <updated>2014-03-22T14:56:48-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,33 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Made to Stick]]></title>
+    <link href="http://larry-price.com/blog/2014/03/22/made-to-stick/"/>
+    <updated>2014-03-22T14:31:02-04:00</updated>
+    <id>http://larry-price.com/blog/2014/03/22/made-to-stick</id>
+    <content type="html"><![CDATA[<blockquote><p>Knowledge curses us, if we find it hard to imagine what it was like not to know it. And it becomes difficult to share our knowledge with others because we can&rsquo;t readily re-create our listener&rsquo;s state of mind.</p></blockquote>
+
+<h3>The Gist</h3>
+
+<p><a href="http://www.amazon.com/gp/product/1400064287/ref=as_li_qf_sp_asin_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1400064287&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Made to Stick</em> by brothers Chip Heath and Dan Heath</a> tries to uncover why some ideas capture our imagination while others fall into the abyss, never to be seen again.</p>
+
+<h3>My opinion</h3>
+
+<p>I really enjoyed this book. I tend to read very technical books, so this was a nice change of pace. I coincidentally was reading this book while coming up with a &lsquo;pitch&rsquo; for my recent SEP Startup Weekend project, <a href="//ollert.herokuapp.com">Ollert</a>.</p>
+
+<p><em>Made to Stick</em> lays out examples of really good and really mediocre descriptions of ideas. The authors then use the concepts discussed within the book to improve these ideas or discuss why they are effective. Whenever I hear people explaining real-world ideas, I start to think about the concepts laid out in this book. I&rsquo;d like to be able to use these concepts to communicate my own ideas more effectively, but I have thus far found it to be easier said than done.</p>
+
+<p>The book is not terribly long. This allowed me to connect all the concepts and better critique the numerous examples.</p>
+
+<p>Although I did enjoy the book, a few of the sections came off a little bit like a self-help program. The concepts described in the book are &lsquo;Simplicity&rsquo;, &lsquo;Unexpectedness&rsquo;, &lsquo;Concreteness&rsquo;, &lsquo;Credibility&rsquo;, &lsquo;Emotional&rsquo;, and &lsquo;Stories&rsquo;, which &ldquo;just happen&rdquo; to spell out <em>most</em> of the word &ldquo;success.&rdquo; This silly feel-goodery acronym makes the cynical side of me cringe.</p>
+
+<h3>Who Would Like This</h3>
+
+<p>Anyone trying to communicate a new idea to someone else could benefit from this book. On a broader scope, this book can benefit your communication patterns in general. This is particularly helpful for professionals, who may have a difficulty expressing their ideas without getting too deep in the technicalities.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Using the Trello API in Ruby]]></title>
@@ -1400,77 +1427,6 @@
 <p>Now foreman will use Bundler to startup the server specified in <code>$SERVER</code>, run the app on port <code>$PORT</code> (-p), and will pass through the environment listed as <code>$RACK_ENV</code> to my application (-E), allowing my app to do whatever configuration it does given the current environment. Power to the people.</p>
 
 <p><a href="http://michaelvanrooijen.com/articles/2011/06/08-managing-and-monitoring-your-ruby-application-with-foreman-and-upstart/">I found that this guy</a> does a lot more complicated stuff with Foreman, if you need more.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[On the Futility of Man and Trying to Divide a Sinatra App Into Separate Controllers]]></title>
-    <link href="http://larry-price.com/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/"/>
-    <updated>2013-08-26T22:35:00-04:00</updated>
-    <id>http://larry-price.com/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers</id>
-    <content type="html"><![CDATA[<p>Oh, <a href="http://www.sinatrarb.com/">Sinatra</a>. You&rsquo;re oh-so-very dear to me. You made it so easy for me to write my <a href="http://capitalpunishment.herokuapp.com">first</a> <a href="http://pokephile.herokuapp.com">web</a> apps. All I had to do was write a couple routes and throw together a few HTML-like files and I had a web app. I used pattern matching to reduce the web-facing code for <a href="https://github.com/larryprice/CapitalPunishment">Capital Punishment</a> from ~500 lines of code to &lt;100 lines of code. You are perfect for writing small-time web applications.</p>
-
-<p>But what about large web applications? What about a web app that has normal users and admin users, makes lots of database reads and writes (my previous apps only did reads from a user-facing perspective), and has to be able to show the history of everything, forever, to the authorized users who request it?</p>
-
-<p>You see, Sinatra is kind of an <a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">MVC framework</a>, but not exactly. In Sinatra, you have Views (your HTML inter-mixed with Ruby code in your desired DSL) and you have Controllers (each of your routes). When a database is involved, you can use something like <a href="https://github.com/bmizerany/sinatra-activerecord">ActiveRecord</a> or <a href="http://mongoid.org/en/mongoid/index.html">Mongoid</a> or <a href="http://datamapper.org/">DataMapper</a> and you have yourself Models.</p>
-
-<p>So every route is kind of a Controller. Every. Route. In Capital Punishment, there were once 8 routes (there are now 7). In the project I&rsquo;ve been working on recently, there are currently 56 routes. 56 routes in the language described above means I kind of have 56 controllers.</p>
-
-<p>That&rsquo;s been pretty overwhelming, especially since the traditional way of creating routes in Sinatra is to shove them all in the same file. There are a few ways I could think of to address this. The way we chose six months ago (for better or worse) was found <a href="http://stackoverflow.com/questions/5877000/what-is-a-controller-in-sinatra">on StackOverflow</a>, and involves creating a bunch of different files where you shove all related routes. So you get this situation:</p>
-
-<figure class='code'><figcaption><span>app.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">App</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">require_relative</span> <span class="s1">&#39;controllers/helpers&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">Dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">__FILE__</span><span class="p">)</span><span class="si">}</span><span class="s2">/controllers/*.rb&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">file</span><span class="o">|</span>
-</span><span class='line'>  <span class="nb">require</span> <span class="n">file</span><span class="o">.</span><span class="n">chomp</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">extname</span><span class="p">(</span><span class="n">file</span><span class="p">))</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">App</span>
-</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/&#39;</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">erb</span> <span class="ss">:home</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>controllers/reports_controller.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">App</span>
-</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/reports/user_bills&#39;</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">erb</span> <span class="ss">:user_bills_report</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And so on and so forth. This works fine for a while, but we&rsquo;ve ended up with 13 &ldquo;controller&rdquo; files, many of which are not trivial. This also makes the App class quite large since its controllers handle most of the logic for the app. This also doesn&rsquo;t enforce any kind of URL-naming logic, so if a developer is working hard (s)he may create both <code>/reports/user_bills</code> and <code>user_info_reports</code> without realizing the inconsistency (s)he just injected into the system.</p>
-
-<p>In hindsight, this method is not perfect. I think that the Rails method of individual controllers is significantly better for large apps. Some people have been using other methods for trying to make Sinatra more MVC, such as <a href="https://github.com/jorrizza/sinatra-mvc">sinatra-mvc</a>. To be frank, sinatra-mvc pretty much does the same thing we&rsquo;ve done, but with more structure.</p>
-
-<p>I think what I&rsquo;ve learned is that you should use a tool for its intended purpose. Sinatra was written to quickly create web apps in Ruby with minimal effort. Once you have more than 10-15 routes, you should reconsider whether your app can still be called &ldquo;minimal effort.&rdquo; Sinatra may fly you to the moon, but you&rsquo;re unlikely to see what spring is like on Jupiter or Mars.</p>
 ]]></content>
   </entry>
   

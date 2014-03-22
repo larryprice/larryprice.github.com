@@ -4,7 +4,7 @@
   <title><![CDATA[Category: write-ups | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/write-ups/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-03-20T20:16:47-04:00</updated>
+  <updated>2014-03-22T14:56:48-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,33 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Made to Stick]]></title>
+    <link href="http://larry-price.com/blog/2014/03/22/made-to-stick/"/>
+    <updated>2014-03-22T14:31:02-04:00</updated>
+    <id>http://larry-price.com/blog/2014/03/22/made-to-stick</id>
+    <content type="html"><![CDATA[<blockquote><p>Knowledge curses us, if we find it hard to imagine what it was like not to know it. And it becomes difficult to share our knowledge with others because we can&rsquo;t readily re-create our listener&rsquo;s state of mind.</p></blockquote>
+
+<h3>The Gist</h3>
+
+<p><a href="http://www.amazon.com/gp/product/1400064287/ref=as_li_qf_sp_asin_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1400064287&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Made to Stick</em> by brothers Chip Heath and Dan Heath</a> tries to uncover why some ideas capture our imagination while others fall into the abyss, never to be seen again.</p>
+
+<h3>My opinion</h3>
+
+<p>I really enjoyed this book. I tend to read very technical books, so this was a nice change of pace. I coincidentally was reading this book while coming up with a &lsquo;pitch&rsquo; for my recent SEP Startup Weekend project, <a href="//ollert.herokuapp.com">Ollert</a>.</p>
+
+<p><em>Made to Stick</em> lays out examples of really good and really mediocre descriptions of ideas. The authors then use the concepts discussed within the book to improve these ideas or discuss why they are effective. Whenever I hear people explaining real-world ideas, I start to think about the concepts laid out in this book. I&rsquo;d like to be able to use these concepts to communicate my own ideas more effectively, but I have thus far found it to be easier said than done.</p>
+
+<p>The book is not terribly long. This allowed me to connect all the concepts and better critique the numerous examples.</p>
+
+<p>Although I did enjoy the book, a few of the sections came off a little bit like a self-help program. The concepts described in the book are &lsquo;Simplicity&rsquo;, &lsquo;Unexpectedness&rsquo;, &lsquo;Concreteness&rsquo;, &lsquo;Credibility&rsquo;, &lsquo;Emotional&rsquo;, and &lsquo;Stories&rsquo;, which &ldquo;just happen&rdquo; to spell out <em>most</em> of the word &ldquo;success.&rdquo; This silly feel-goodery acronym makes the cynical side of me cringe.</p>
+
+<h3>Who Would Like This</h3>
+
+<p>Anyone trying to communicate a new idea to someone else could benefit from this book. On a broader scope, this book can benefit your communication patterns in general. This is particularly helpful for professionals, who may have a difficulty expressing their ideas without getting too deep in the technicalities.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The Pragmatic Programmer]]></title>
@@ -135,39 +162,6 @@ tinkering, improving, planting flower beds.</p>
 <h3>Who Would Like This</h3>
 
 <p>This book would be nice required reading for students. Given the length and technical depth, it&rsquo;s practically a textbook. Developers a few years out of university would still enjoy this text, but some topics are so obvious or overdone that many readers may start skipping chapters. If a developer knew of precisely the area he or she wanted to improve, then said developer could likely benefit from perusing a chapter of this book covering that topic.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Who Moved My Cheese?: An Amazing Way to Deal with Change in Your Work and in Your Life]]></title>
-    <link href="http://larry-price.com/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life/"/>
-    <updated>2012-11-27T20:47:00-05:00</updated>
-    <id>http://larry-price.com/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life</id>
-    <content type="html"><![CDATA[<p><img src="http://dontstepinthepoop.com/wp-content/uploads/2010/01/cheese.jpg" style="border: 0" width="130px" title="Who Moved My Cheese?" alt="Cover for Who Moved My Cheese?" /><br/>
-<a href="http://www.amazon.com/gp/product/0399144463/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0399144463&amp;linkCode=as2&amp;tag=larpriandthee-20"><strong>Who Moved My Cheese?: An Amazing Way to Deal with Change in Your Work and in Your Life</strong></a><br/>
-<strong>Spencer Johnson</strong></p>
-
-<hr />
-
-<h3>The Gist</h3>
-
-<p><em>Who Moved My Cheese?</em> is a book about being prepared to lose your job. The book was written during times of rapid economic growth caused by the <a href="http://en.wikipedia.org/wiki/Dot-com_boom">dot-com bubble</a>, which resulted in many companies emerging out of the primordial ooze and then falling back down into the tarpit after an extremely short time on the market. The author uses a cute analogy about cheese to convey that success is fleeting, and each day could be the day a company will shut down.</p>
-
-<h3>My Feelings</h3>
-
-<p>This is another book I read during summer 2012 and wrote a mediocre write-up regarding. This write-up is fresh and in my new write-up style.</p>
-
-<p>The authors of this book want to help people realize that their job is a gift, not a privilage. Just because a company is doing well this quarter does not imply that it will still be in business next quarter. During the time period this book was written in, this was especially true. The theory of companies during the late &lsquo;90s was to spend as much money as possible to gather as many customers as possible disregarding profits in the short-term (read: <a href="http://www.paulgraham.com/start.html">Get Large or Get Lost</a>). Of course, this kind of mentality did not fit all businesses, and many companies which looked like they would be the future leaders of the American economy were quickly forgotten by the mid-2000s (see: <a href="http://en.wikipedia.org/wiki/Pets.com">Pets.com</a>).</p>
-
-<p>The authors want employees to stop fearing change, and to accept it as a normal part of life. Sometimes companies falter, and oftentimes there&rsquo;s nothing an individual can do about it. In doing so, sometimes old friends are left behind while an individual moves on in search of bigger and better things. Sometimes it takes a long time to find those bigger and better things, but every time it&rsquo;s worth it due to the thrill of confronting your fears and exploring something new.</p>
-
-<p>The use of a &ldquo;maze&rdquo; with two tiny people and two anthropomorphic mice is strange and feels purposefully forced. The authors wanted to make a memorable anecdote, and they succeeded with their strange analogy. Having said that, several times I was confused by the names of the four characters as they were very similar and nonsensical. Because of this, I had to reread some sections after referencing the first page of the book to determine who was who.</p>
-
-<p>The primary author appended &ldquo;MD&rdquo; to his name on the front cover. Similarly, the &ldquo;secondary&rdquo; author appended a &ldquo;PhD&rdquo; to his name on the front cover. This bothered me as it is an obvious ploy to make people value the opinions held within the book more highly because they are written by &ldquo;doctors.&rdquo;</p>
-
-<h3>Who Would Like This</h3>
-
-<p>This is a book that tries to prepare people for the worst and to teach them not to just give up when the future looks grim. It could be an interesting book for anyone, especially after several years of an economic boom caused by a new technology. A person who is very content in their current position at a company could also benefit from this book, as it may give them some incentive to seek out change.</p>
 ]]></content>
   </entry>
   
