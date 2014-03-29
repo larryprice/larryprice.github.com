@@ -1,0 +1,33 @@
+---
+layout: post
+title: "Rework"
+date: 2014-03-26 21:00:33 -0400
+comments: true
+categories: write-ups
+---
+
+> You want to get into the rhythm of making choices. When you get in that flow of making decision after decision, you build momentum and boost morale. Decisions are progress. Each one you make is a brick in your foundation. You can't build on top of "We'll decide later," but you _can_ build on top of "Done."
+
+> Excerpt from "Decisions are Progress" in _Rework_
+
+###The Gist
+
+[_Rework_ by Jason Fried and David Heinemeier Hansson](http://www.amazon.com/gp/product/0307463745/ref=as_li_qf_sp_asin_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0307463745&linkCode=as2&tag=larpriandthee-20) is a business advice book for keeping small, focused teams without all the cruft of business.
+
+###My Opinion
+
+_Rework_ is my kind of book. It's best described as business advice for hippy programmers. It's amazing that this book describes the business practices of a real company that's modestly successful.
+
+Speaking of the authors of this book, they're the guys who made [Ruby on Rails](//rubyonrails.org/), which gives them street cred as far as I'm concerned.
+
+This is a book of proverbs. Ignore the real world. Start a business, not a startup. Build half a product, not a half-assed product. Meetings are toxic. Hire managers of one. ASAP is po:son.
+
+When you look at it, this advice is not insightful: it's obvious. It just also happens to be against how modern-day companies work. And maybe this advice isn't useful for everyone; once a company stops following these rules, it seems difficult to change. The smaller and newer the company, the easier it is to avoid the issues introduced with bigger businesses.
+
+This book talks about ideas being cheap. Implementing the idea is where all the work lies. Have an idea? Start working on it now. Find time. Go to bed an hour later. Watch an hour less of TV. Your idea is meaningless unless you actually follow through.
+
+There's also good advice within this book for people who are pressured to overwork. Avoid workaholics: overworking hurts the decision-making processes, so people who are working more hours are just spending more hours making worse decisions. When employees work long hours, other employees are also influenced to work longer hours. More poeple making worse decisions? Count me out. Hire people with outside lives who go home at 5: busy people have to manage their time, and will thus find more efficient ways to accomplish their work.
+
+### Who Would Like This
+
+Interested in starting a company? In making managerial changes within your current company? In making changes to the way you work? Reading this book can help you realize that you don't need all the modern-day business cruft to make your business a success.
