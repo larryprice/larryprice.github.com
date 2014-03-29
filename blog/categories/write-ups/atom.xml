@@ -4,7 +4,7 @@
   <title><![CDATA[Category: write-ups | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/write-ups/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-03-24T20:50:29-04:00</updated>
+  <updated>2014-03-29T11:55:14-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,39 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rework]]></title>
+    <link href="http://larry-price.com/blog/2014/03/26/rework/"/>
+    <updated>2014-03-26T21:00:33-04:00</updated>
+    <id>http://larry-price.com/blog/2014/03/26/rework</id>
+    <content type="html"><![CDATA[<blockquote><p>You want to get into the rhythm of making choices. When you get in that flow of making decision after decision, you build momentum and boost morale. Decisions are progress. Each one you make is a brick in your foundation. You can&rsquo;t build on top of &ldquo;We&rsquo;ll decide later,&rdquo; but you <em>can</em> build on top of &ldquo;Done.&rdquo;</p>
+
+<p>Excerpt from &ldquo;Decisions are Progress&rdquo; in <em>Rework</em></p></blockquote>
+
+<h3>The Gist</h3>
+
+<p><a href="http://www.amazon.com/gp/product/0307463745/ref=as_li_qf_sp_asin_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0307463745&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Rework</em> by Jason Fried and David Heinemeier Hansson</a> is a business advice book for keeping small, focused teams without all the cruft of business.</p>
+
+<h3>My Opinion</h3>
+
+<p><em>Rework</em> is my kind of book. It&rsquo;s best described as business advice for hippy programmers. It&rsquo;s amazing that this book describes the business practices of a real company that&rsquo;s modestly successful.</p>
+
+<p>Speaking of the authors of this book, they&rsquo;re the guys who made <a href="//rubyonrails.org/">Ruby on Rails</a>, which gives them street cred as far as I&rsquo;m concerned.</p>
+
+<p>This is a book of proverbs. Ignore the real world. Start a business, not a startup. Build half a product, not a half-assed product. Meetings are toxic. Hire managers of one. ASAP is po:son.</p>
+
+<p>When you look at it, this advice is not insightful: it&rsquo;s obvious. It just also happens to be against how modern-day companies work. And maybe this advice isn&rsquo;t useful for everyone; once a company stops following these rules, it seems difficult to change. The smaller and newer the company, the easier it is to avoid the issues introduced with bigger businesses.</p>
+
+<p>This book talks about ideas being cheap. Implementing the idea is where all the work lies. Have an idea? Start working on it now. Find time. Go to bed an hour later. Watch an hour less of TV. Your idea is meaningless unless you actually follow through.</p>
+
+<p>There&rsquo;s also good advice within this book for people who are pressured to overwork. Avoid workaholics: overworking hurts the decision-making processes, so people who are working more hours are just spending more hours making worse decisions. When employees work long hours, other employees are also influenced to work longer hours. More poeple making worse decisions? Count me out. Hire people with outside lives who go home at 5: busy people have to manage their time, and will thus find more efficient ways to accomplish their work.</p>
+
+<h3>Who Would Like This</h3>
+
+<p>Interested in starting a company? In making managerial changes within your current company? In making changes to the way you work? Reading this book can help you realize that you don&rsquo;t need all the modern-day business cruft to make your business a success.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Made to Stick]]></title>
@@ -127,41 +160,6 @@ tinkering, improving, planting flower beds.</p>
 <p>I believe that programmers are the main audience for this book, and I am a programmer who loved reading it. Spolsky does not talk down to the reader, nor does he dumb down the nitty-gritty technical blog posts.</p>
 
 <p>Programmers who intend to become managers may get added benefit from this book, as Spolsky discusses some interesting recruiting techniques and ways to deal with programmers. My company uses some of Spolsky&rsquo;s advice when hiring engineers (quite a bit of it, thinking back to my interview), and we&rsquo;ve been hiring only the best and brightest cowboys in the Midwest for years.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Code Complete Second Edition]]></title>
-    <link href="http://larry-price.com/blog/2013/02/19/code-complete-second-edition/"/>
-    <updated>2013-02-19T22:38:00-05:00</updated>
-    <id>http://larry-price.com/blog/2013/02/19/code-complete-second-edition</id>
-    <content type="html"><![CDATA[<blockquote><p>Design is a process of carefully planning small mistakes in order to avoid making big ones.
-&mdash; Steve McConnell</p></blockquote>
-
-<h3>The Gist</h3>
-
-<p><em><a href="http://www.amazon.com/gp/product/0735619670/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0735619670&amp;linkCode=as2&amp;tag=larpriandthee-20">Code Complete Second Edition</a></em> by Steve McConnell is the ultimate programmer&rsquo;s handbook, though certainly not a pocket guide considering its massive 850+ page size. This book contains a seemingly endless amount of information regarding the state of programming circa 2004. Topics range from extremely technical, such as making code readable above making it clever, to office politics, such as dealing with non-technical managers.</p>
-
-<h3>My Opinion</h3>
-
-<p>McConnell has written an encyclopedia for software development. In doing so, the book sometimes suffers from the &ldquo;wide as an ocean, shallow as a puddle&rdquo; complex. Nonetheless, the book holds an incredible amount of information that I found refreshing to see in print.</p>
-
-<p>The use of the term &ldquo;construction&rdquo; to refer to coding throughout the book is an apt analogy for McConnell&rsquo;s views on the world of software development. Before beginning construction, a team should have a plan. Construction requires a solid base. While constructing a project, individuals should ensure that anyone else could look at their part of the project and figure out what&rsquo;s happening. Working with a partner often improves quality. People doing construction should test their work to ensure the integrity of their product. Redoing lower levels causes a lot of pain. The team is unlikely to hit the original due date. Etc, etc.</p>
-
-<p>Many things in this book go directly against what I was taught in at university. McConnell recites a quote several times in the book:</p>
-
-<blockquote><p>Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.
-&mdash; Brian Kernighan</p></blockquote>
-
-<p>At university, we&rsquo;re taught all the secrets of writing clever code: pointer manipulation, recursion, inappropriate variable reuse, and others. We were also never taught to plan ahead (&hellip;besides flowcharts, which were never required) or test, both of which McConnell highly recommends as necessary steps in software development. It&rsquo;s no wonder my programs took so long to debug! Of course, I&rsquo;ve learned to perform these tasks naturally while working as a Real Life Programmer. Reading this book is likely more helpful than taking the first few semesters of programming at university.</p>
-
-<p>A small issue I had was a wishy-washy attitude towards comments. In one chapter, McConnell describes having minimal comments in a code and keeping it mostly self-documenting. He then goes on to show all kinds of different, horrifying comments and justifies why they are sometimes okay.</p>
-
-<p>This is where I will note that <em>Code Complete Second Edition</em> is a book published by <a href="http://en.wikipedia.org/wiki/Microsoft_Press">Microsoft Press</a>. I was often surprised by McConnell&rsquo;s adamance that Visual Basic is the most popular programming language at the time of publishing. Even circa 2004 (the year this book was published), the <a href="http://www.tiobe.com/index.php/content/paperinfo/tpci/index.html">Tiobe index</a> shows VB behind Java, C, and C++. The <a href="https://sites.google.com/site/pydatalog/pypl/PyPL-PopularitY-of-Programming-Language">PyPl index</a> also shows VB behind Java, PHP, C, and C++ in 2004. For the record, VB is a silly language.</p>
-
-<h3>Who Would Like This</h3>
-
-<p>This book would be nice required reading for students. Given the length and technical depth, it&rsquo;s practically a textbook. Developers a few years out of university would still enjoy this text, but some topics are so obvious or overdone that many readers may start skipping chapters. If a developer knew of precisely the area he or she wanted to improve, then said developer could likely benefit from perusing a chapter of this book covering that topic.</p>
 ]]></content>
   </entry>
   

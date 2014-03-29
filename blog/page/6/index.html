@@ -9,8 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="We&rsquo;re programmers. Programmers are, in their hearts, architects, and the
-first thing they want to do when they get to a site is to bulldoze the &hellip;">
+  <meta name="description" content="As a user, my data&rsquo;s LastModifiedDate should not be updated when I Export it, and it should be in UTC. That&rsquo;s the gist of the story I was &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +80,110 @@ first thing they want to do when they get to a site is to bulldoze the &hellip;"
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1/">The Trouble With Time Zones (Aka Learn From My Mistakes Part 1)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-07T22:00:00-04:00" pubdate data-updated="true">Aug 7<span>th</span>, 2013</time>
+        
+           | <a href="/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1/#disqus_thread"
+             data-disqus-identifier="http://larry-price.com/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p>As a user, my data&rsquo;s LastModifiedDate should not be updated when I Export it, and it should be in UTC.</p></blockquote>
+
+<p>That&rsquo;s the gist of the story I was tasked with a few weeks ago. Seemed easy enough: just set the &ldquo;LastModifiedDate&rdquo; field of each XML node to the LastModifiedDate pulled from the database converted to UTC. I can do the development and write up some Cucumber tests in an hour, two hours tops. Find a few small caveats along the way, get it out of development and through code review by the next morning. Push it to the mainline and watch the build go green. All done, dust off my hands and move on to something else.</p>
+
+<p>When has anything ever been that simple? Certainly not in the fantastical world of software development! About ten minutes after the build server confirmed a successful build of my code on the tip of our main branch, a face popped up over the cube wall. &ldquo;Hey, why&rsquo;d you break the build?&rdquo; My teammate was having trouble running my LastModifiedDate tests. All of his time comparisons were off by an hour. My computer (and the build server) were in one time zone; his was in another. I immediately realized the exact lines of the code that weren&rsquo;t dealing with time zones. We agreed to let the code remain on the build server instead of backing it out since the build server was green, and I created/tested/pushed a couple of patches to fix the problem. Green build on the build server. Green build amongst all my time-disabled peers. The next morning I had a panic attack in the shower thinking about how some of my test data could be affected by the switch to UTC. I rushed into work early and put in another patch, this one slightly changing the format of some of my test data. After doing this, I realized that what I had done was completely unnecessary and decided I should probably get my blood pressure checked.</p>
+
+<p>Then: silence. I was satisfied I&rsquo;d seen the end of my time zone issues which I&rsquo;d spent nearly as much time patching as I had developing the initial solution. Two weeks pass. Monday morning there&rsquo;s an email from another country in my inbox, &ldquo;This test was written that only works in American time zones! Who is fixing this?&rdquo; After quite a few emails and chats I found that their main branch had merged in a version of our main branch between my original solution and my patch. The developer agreed to be patient until his team could start using the newer version of our branch. Four hours later I get another email from developers on another continent. I sent them the patches I made previously compressed into one to keep them working.</p>
+
+<p>Was this a small mistake? On a project with a small, local team the answer is definitely yes. This project in particular involves a large number of developers who don&rsquo;t all test in the same time zone and who work on a number of different branches that feed into each other in weekly chunks. Despite that, I think this error could have gone greatly unnoticed had I simply backed out the original changes and pushed the patches and original solution together. My confidence (hubris?) really bit me on this one. Initially only a single developer seemed to be affected by my oversight; fate selected a build between my original solution and my patches to push to the other branches to make sure more people noticed my mistake.</p>
+
+<p><strong>In hindsight</strong>, The Right Thing to Do was to assume fault and back out immediately. One developer having build issues is still one more than should have been affected. Here&rsquo;s hoping this bit o&#8217; hindsight today leads to better foresight tomorrow.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/16/effective-c-plus-plus/">Effective C++</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-16T22:11:00-04:00" pubdate data-updated="true">Jul 16<span>th</span>, 2013</time>
+        
+           | <a href="/blog/2013/07/16/effective-c-plus-plus/#disqus_thread"
+             data-disqus-identifier="http://larry-price.com/blog/2013/07/16/effective-c-plus-plus/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>The Gist</h3>
+
+<p><a href="http://www.amazon.com/gp/product/0321334876/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0321334876&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Effective C++</em></a> is a list of ways to write not-your-average-bear C++ code. The author, <a href="http://www.aristeia.com/">Scott Meyers</a>, outlines 8 specific topics for improving code, and a few more miscellaneous tips.</p>
+
+<h3>My Opinion</h3>
+
+<p>Lots of good can come from reading this book. I borrowed it from a more-experienced co-worker and noticed many of the interesting coding standards this co-worker used came directly from this book. And I agree with it. I&rsquo;ve been actively trying to follow the lessons learned in this book from the moment I picked it up.</p>
+
+<p>I learned C++ the hard way: I was thrown into an internship where I didn&rsquo;t really have enough skills to contribute to the project, and my &ldquo;boss&rdquo; didn&rsquo;t really have anywhere to put me. So I was handed a book, pointed to <a href="http://www.cplusplus.com/">this wonderous website</a>, and I wrote some little helper apps for the project. I wasn&rsquo;t taught anything about form or any of that formal business. Then I took a C++ class in college, and never bothered to learn any of the coding standards because I had enough previous knowledge to get by my own way (and appear to be really good while doing it).</p>
+
+<p>So this book showed me a lot of the why certain things in C++ are the way they are. It explained to me that a copy constructor is called every time you pass an object directly through a function, and how assignment operators are used whenever an equals sign appears. It told me why my destructors need to be virtual. It explained a lot about smart_ptr and auto_ptr that I never thought to think about.</p>
+
+<p>Admittedly, there are parts of the book that are hard to follow. I consider Chapter 7 (Templates and Generic Programming) and Chapter 8 (Customizing new and delete) to be extremely technical chapters not meant for the faint of heart, and the lessons learned in these chapters are not necessarily useful in day-to-day programming. Chapter 9 is simply called Miscellany, and it delivers no new information for improving one&rsquo;s C++ skills.</p>
+
+<h3>Who Would Like This</h3>
+
+<p>C++ Programmers should have this book (at least the first 6 chapters) crammed down their throats and into their squishy pink brains. After learning all the &ldquo;basic&rdquo; concepts of C++, the lessons this book teaches in design and the nature of C++ should be taken into consideration.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -399,112 +502,6 @@ tinkering, improving, planting flower beds.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/04/01/whats-still-possible/">What&#8217;s Still Possible</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-01T22:35:00-04:00" pubdate data-updated="true">Apr 1<span>st</span>, 2013</time>
-        
-           | <a href="/blog/2013/04/01/whats-still-possible/#disqus_thread"
-             data-disqus-identifier="http://larry-price.com/blog/2013/04/01/whats-still-possible/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>If every Miss America candidate had her way, there would be peace on Earth and all the hungry mouths would be fed. While Earthlings enjoy violence and controlling others too much to achieve world peace, I have a proposal to help feed those around the world who don&rsquo;t have enough to eat.</p>
-
-<p>It&rsquo;s not an ad campaign. I&rsquo;m not going to send random people a nickle in the mail and then tell them that they could use that nickle to feed a starving child. I&rsquo;m certainly not going to change any of my eating habits. I happen to know a huge source of food that we underutilize. My plan is to kill two birds with one stone. Well, preferably something like 3 million birds with however many stones it takes.</p>
-
-<p>I&rsquo;m talking, of course, about the terrible tyranny of the <a href="http://en.wikipedia.org/wiki/Canada_Goose">Canadian Goose</a>. A little history:</p>
-
-<p>Our ancestors domesticated Canadian Geese in ancient times and used these waterfowl for various acts of labor, including pulling tugboats down the Mississippi, plowing the great Canadian rice paddies, and keeping our elderly company during their final days of life. The young goslings flapped gingerly in the meadows pollinating the wildflowers, apple trees, and various other meadow-related objects. Much to our delight, some of our beloved geese bretheren became sentient, and started selling us medical insurance while performing a spot-on <a href="http://en.wikipedia.org/wiki/Gilbert_Gottfried">Gilbert Gottfried</a> impression.</p>
-
-<p>False. I must apologize for fooling you in this way sweet, sweet reader, but everything you read in the last paragraph was neither true nor fact. In reality, Canadian Geese serve no purpose. Canadian Geese were created accidentally during the Manhatten Project while one of the lab techs from the local university was trying to combine nuclear fission and the bubonic plague to get back at his ex-girlfriend for cheating on him. He quickly became bored of this task when she stopped responding to his texts, and thusly tossed the waste from his experiments in the river. The rest, of course, is history.</p>
-
-<p>Now here we are. There are well over <a href="http://www.ducks.org/hunting/waterfowl-id/canada-goose">3 million Canadian Geese nationwide</a>, which is decidedly more than anyone finds pleasant. These geese are no longer afraid of humans, so they tend not to run away from us. In fact, we have spoiled the birds so much that some geese will actually approach humans demanding a bite of stale bread. If no bread gift is offered, the foul fowl will emit a frightening hissing noise, raise its wings, and chase off the poor human. Any sidewalk near a pond quickly becomes covered in goose byproducts during the breeding season, which might as well be year-round. I, for one, think that the geese have gone too far. They ruin our picnics, our walks in the park, our egg-stealing competitions, and our feather-collecting scavenger hunts. It&rsquo;s time for the final showdown: Man versus Goose.</p>
-
-<p>Time to tie in the beginning and the parts where I raved like a lunatic: We hunt the geese, and we feed them to people. &lsquo;Nuff said.</p>
-
-<p>People already hunt geese, of course, but it&rsquo;s clearly not enough. Not to mention that these hunters currently just leave the gooseflesh in the woods where lower animals reap the rewards. I propose we extend goose season year-round, and provide free boxes to encourage hunters to package the gooseflesh and send it to the needy in other countries. We&rsquo;ll poison our waterways to take out as many geese as possible, and we will make a wondrous soup for whomever needs it.</p>
-
-<p>It&rsquo;s still possible to feed the hungry. But we need to <em>focus</em> in order to do it. Man versus Goose is not the solution. It&rsquo;s a demonstration of getting distracted from the original cause. The next time someone tries to get you riled up about feeding the hungry through some crazy scheme, remember that there&rsquo;s no better way than addressing the problem directly. It&rsquo;s still possible to do good in this world if you can avoid the crazy.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/25/pvreryvre-of-fyne-coddes/">Blog Battle: Pvreryvre of Fyne Coddes</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-25T22:09:00-04:00" pubdate data-updated="true">Mar 25<span>th</span>, 2013</time>
-        
-           | <a href="/blog/2013/03/25/pvreryvre-of-fyne-coddes/#disqus_thread"
-             data-disqus-identifier="http://larry-price.com/blog/2013/03/25/pvreryvre-of-fyne-coddes/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Ice pellets bounced off my head as I walked myself home late one night. The air was dreadfully cold, so I swooped into one of Carmel&rsquo;s seedy side alleys to take a shotcut. Out of the shadows crept a man wearing a long trenchcoat and thick-rimmed glasses. Hunched over, he brushed his unkempt hair out of his eyes. His coffee-stained breath rushed from beneath his pencil moustache as he asked, &ldquo;Can I interest you in any of these fine iPhone apps?&rdquo; I tried to cautiously back away. &ldquo;How would you like a real BaZynga game, only ninety-nine cents, it&rsquo;s called Perturbed Birds with Pals?&rdquo; I was briefly distracted by sirens in the distance; by the time I returned my glance to the man&rsquo;s last position he had disappeared, my virtual wallet was empty, and my phone was filled with bloatware and repetitive &lsquo;Ville-style games.</p>
-
-<p>There are more KLOCs in this world than there have been McDonald&rsquo;s hamburgers sold. How do the good programmers differentiate themselves from the common street peddlers? How do companies convince you to pay $2.99 for their app when a clone is released less than a week later for free?</p>
-
-<p>The answer? Maybe they don&rsquo;t. Maybe a comparison can be made between software companies and pharamceutical companies.</p>
-
-<p>Big Pharmaceutical companies spend many years researching, developing, and testing drugs to treat the common cold, arthritis, bad cholesterol, or even to sedate your energetic children. These drugs spend several years on the market where patents on the drug are valid, meaning that only the company that invented the drug can legally sell it. After the patent protections expire (approx 7-12 years), any big, small, or mom &amp; pop drug manufacturer is legally allowed to &ldquo;clone&rdquo; this drug and make what&rsquo;s called a &ldquo;generic.&rdquo; Generics are sold at a fraction of the cost of the original drug. At this point, no one wants to give Big Pharma $20 for 6 tablets to cure their heartburn when they could pay $5 for a year&rsquo;s supply of generics.</p>
-
-<p>Software companies tend to spend somewhere between 12 weeks and 12 months developing apps that will be consumed by the general population. If the company just released an Android or iOS app, then the product will stay relevant somewhere between 2 weeks and 2 years. After that time, the app will either no longer have market value or will need to be revamped to please the modern consumer. Within a short number of days or weeks, there is a high probability that surly software pirates will begin to copy your app and put it on the market for free. At this point, no one wants to give your company $4.99 for an endless runner when they could just as easily find a copy for free. Of course, app developers can submit complaints and get the pirated app taken down, but more and more will crop up as time goes on, and eventually it won&rsquo;t be worth the trouble to get the doppelgangers removed.</p>
-
-<p>For both industries, a company comes up with a novel idea and presents it to the world. People who like that product can start associating the brand name with other products. After recognizing the brand, a person may start to trust that company and look for other products associated with the brand. That company will become known as a purveyor of fine wares.</p>
-
-<p>So here we stand, reader. Make code that you can be proud of; not for getting tens of thousands of downloads, but for scrawling your good name on the white boards of the world in Sharpie. The customers will keep coming back as long as you&rsquo;ve got the cure for what ails them.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/7/">&larr; Older</a>
@@ -534,6 +531,14 @@ tinkering, improving, planting flower beds.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/29/using-sqlite-on-heroku/">Using Sqlite on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/26/rework/">Rework</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/03/24/sticky-footer-with-twitter-bootstrap/">Sticky Footer With Twitter Bootstrap</a>
       </li>
     
@@ -545,19 +550,11 @@ tinkering, improving, planting flower beds.</p>
         <a href="/blog/2014/03/20/using-the-trello-api-in-ruby/">Using the Trello API in Ruby</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/03/18/connecting-to-the-trello-api/">Connecting to the Trello API</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/03/17/sep-startup-weekend-ollert/">SEP Startup Weekend: Ollert</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/c-plus-plus' style='font-size: 115.0%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.0%'>capybara</a> <a href='/blog/categories/css' style='font-size: 105.0%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 115.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 125.0%'>database</a> <a href='/blog/categories/foreman' style='font-size: 105.0%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 105.0%'>foss</a> <a href='/blog/categories/gmock' style='font-size: 105.0%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 110.0%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 105.0%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 105.0%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 105.0%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.0%'>heroku</a> <a href='/blog/categories/html' style='font-size: 110.0%'>html</a> <a href='/blog/categories/internet' style='font-size: 105.0%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 105.0%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 120.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 110.0%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 115.0%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 105.0%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 105.0%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 105.0%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 110.0%'>nosql</a> <a href='/blog/categories/ollert' style='font-size: 120.0%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 120.0%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 105.0%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 105.0%'>qt</a> <a href='/blog/categories/rails' style='font-size: 105.0%'>rails</a> <a href='/blog/categories/retro' style='font-size: 110.0%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 110.0%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 155.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 115.0%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 105.0%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 140.0%'>sep-blog-battle</a> <a href='/blog/categories/sinatra' style='font-size: 120.0%'>sinatra</a> <a href='/blog/categories/tdd' style='font-size: 105.0%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 110.0%'>testing</a> <a href='/blog/categories/trello' style='font-size: 115.0%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 110.0%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 105.0%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 105.0%'>upstart</a> <a href='/blog/categories/web' style='font-size: 145.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 140.0%'>write-ups</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/c-plus-plus' style='font-size: 115.0%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.0%'>capybara</a> <a href='/blog/categories/css' style='font-size: 105.0%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 115.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 125.0%'>database</a> <a href='/blog/categories/foreman' style='font-size: 105.0%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 105.0%'>foss</a> <a href='/blog/categories/gmock' style='font-size: 105.0%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 110.0%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 105.0%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 105.0%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 105.0%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 110.0%'>heroku</a> <a href='/blog/categories/html' style='font-size: 110.0%'>html</a> <a href='/blog/categories/internet' style='font-size: 105.0%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 105.0%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 120.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 110.0%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 115.0%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 105.0%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 105.0%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 105.0%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 110.0%'>nosql</a> <a href='/blog/categories/ollert' style='font-size: 125.0%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 120.0%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 105.0%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 105.0%'>qt</a> <a href='/blog/categories/rails' style='font-size: 105.0%'>rails</a> <a href='/blog/categories/retro' style='font-size: 110.0%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 110.0%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 160.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 115.0%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 105.0%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 140.0%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 105.0%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 125.0%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 105.0%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 105.0%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 110.0%'>testing</a> <a href='/blog/categories/trello' style='font-size: 115.0%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 110.0%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 105.0%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 105.0%'>upstart</a> <a href='/blog/categories/web' style='font-size: 145.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 145.0%'>write-ups</a> </span>
 </section>
 
 <section>

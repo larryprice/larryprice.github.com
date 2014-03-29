@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-03-24T20:50:29-04:00</updated>
+  <updated>2014-03-29T11:55:14-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,81 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Using sqlite on Heroku]]></title>
+    <link href="http://larry-price.com/blog/2014/03/29/using-sqlite-on-heroku/"/>
+    <updated>2014-03-29T11:16:06-04:00</updated>
+    <id>http://larry-price.com/blog/2014/03/29/using-sqlite-on-heroku</id>
+    <content type="html"><![CDATA[<p>Or rather, &ldquo;Not Using sqlite on Heroku.&rdquo;</p>
+
+<p><a href="//heroku.com">Heroku</a> does not support <a href="//sqlite.org">sqlite</a>. That doesn&rsquo;t mean we have to stop using sqlite in development, but it does mean we need to put in some workarounds to support our deployment environment. The rest of this article will use <a href="//ruby-lang.org">ruby</a> and <a href="//sinatrarb.com">Sinatra</a>.</p>
+
+<p>Assuming you have a heroku app deployed and you have sqlite already working locally, this only takes a few steps. First we need to add a SQL database to our heroku app. From the project directory, we&rsquo;ll add the <a href="//addons.heroku.com/heroku-postgresql">heroku-postgresql</a> addon to our app.</p>
+
+<p><code>bash
+$ heroku addons:add heroku-postgresql:dev
+</code></p>
+
+<p>The <code>dev</code> piece of this command tells heroku we want the small, free database. This database supports up to 10,000 rows and has a 99.5% uptime. Best of all: it&rsquo;s free. Other options have you pay $9/mo for 10,000,000 rows or $50+ for Unlimited usage. I recommend you start small.</p>
+
+<p>Hopefully you got some success statements after adding heroku-postgresql. They should have included some new environment variables, which are links to your new Postgres database. Record these; we&rsquo;ll use them a little later.</p>
+
+<p>Now we need to set up the back-end to be able to access a Postgres database when necessary. Hopefully you&rsquo;re using a decent abstraction library in your app that can access any SQL database. For ruby, I find <a href="//www.sequel.rubyforge.org/">Sequel</a> to be sufficient.</p>
+
+<p>In our Gemfile, we&rsquo;ve probably already included the sqlite gem for use in our local environment. We can go ahead and move that into a <code>development</code> block, and we need to add the <code>pg</code> gem to either <code>production</code> or the global block.</p>
+
+<p>``` ruby Gemfile
+source &ldquo;<a href="https://rubygems.org">https://rubygems.org</a>&rdquo;</p>
+
+<p>ruby &lsquo;2.1.0&rsquo;</p>
+
+<p>gem &lsquo;bundler&rsquo;
+gem &lsquo;rake&rsquo;
+gem &lsquo;sinatra&rsquo;
+gem &lsquo;haml&rsquo;
+gem &lsquo;sequel&rsquo;</p>
+
+<p>group :production do
+  gem &lsquo;pg&rsquo;
+end</p>
+
+<p>group :development do
+  gem &lsquo;sqlite3&rsquo;
+end
+```</p>
+
+<p>Heroku sets <code>ENV['RACK_ENV']</code> to &ldquo;production&rdquo; for us, which means that the pg gem should get picked up the next time we deploy. Now we need to tell our app which database to use in which situation.</p>
+
+<p>One of the easiest places to make this decision is in Sinatra&rsquo;s <code>configure</code> block. I keep my local db in an environment variable called <code>LOCAL_DATABASE_URL</code>. This is where you use the environment variable heroku set for you when you set up your Postgres database; mine was called <code>HEROKU_POSTGRESQL_MAROON_URL</code>.</p>
+
+<p>``` ruby web.rb
+class App &lt; Sinatra::Base
+  configure :production do</p>
+
+<pre><code>Sequel.connect ENV['HEROKU_POSTGRESQL_MAROON_URL']
+</code></pre>
+
+<p>  end</p>
+
+<p>  configure :development do</p>
+
+<pre><code>Sequel.connect ENV['LOCAL_DATABASE_URL']
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>This works because the default environment is &ldquo;development.&rdquo; Test locally, and then we can deploy.</p>
+
+<p><code>bash
+$ git push heroku master
+</code></p>
+
+<p>And enjoy.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Using the Trello API in Ruby]]></title>
@@ -343,63 +418,6 @@ which ruby
 <p>When in my project directory, all the gems I install will be installed to my specified gemset, which means they are no longer cluttering my global gemspace, even when I install them using Bundler. It also means that I can use ruby-1.9.3 for this project and 2.0 for another project with minimal mental overhead. This makes me a happy developer.</p>
 
 <p>I only glazed over the installation process and documentation for RVM. Go to <a href="https://rvm.io/">the web site</a> for more.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Using Foreman to Create an Upstart Service]]></title>
-    <link href="http://larry-price.com/blog/2013/08/31/using-foreman-to-create-an-upstart-service/"/>
-    <updated>2013-08-31T17:05:00-04:00</updated>
-    <id>http://larry-price.com/blog/2013/08/31/using-foreman-to-create-an-upstart-service</id>
-    <content type="html"><![CDATA[<p>I just finished my first attempt at deploying a web app to run automatically in the background on a friend&rsquo;s server. Pretty easy, really. The first thing I did was install <a href="https://github.com/ddollar/foreman">foreman</a>. Assuming you have ruby and rubygems installed:</p>
-
-<p><code>bash
-$ sudo gem install foreman
-</code></p>
-
-<p>Next I needed to give foreman the commands to start my app. I created a file in the root of my project directory called &lsquo;Procfile&rsquo; and gave it the steps I would run to start my app manually. For the sake of simplicity, let&rsquo;s say I run my app pretty barebones:</p>
-
-<p><code>bash Procfile
-web: bundle exec rackup
-</code></p>
-
-<p>Now when I run <code>foreman start</code>, foreman will use <a href="http://bundler.io/">Bundler</a> to execute rackup with the correct gems in my Gemfile. Now exporting upstart config files is pretty easy.</p>
-
-<p><code>bash
-$ sudo foreman export upstart --app=MyApp --user=root /etc/init
-</code></p>
-
-<p>That command creates the .conf files needed for upstart to control the service called &lsquo;MyApp&rsquo; as the user &lsquo;root.&rsquo; It puts all the .conf files in <code>/etc/init</code> (which is where Ubuntu puts such things) and will create a default log directory in <code>/var/log/MyApp</code>. Now I can control my service by running <code>service MyApp start</code>, <code>service MyApp stop</code>, <code>service MyApp restart</code>, and <code>service MyApp status</code>. Hooray for me.</p>
-
-<p>But I need to run my app in two ways: in dev mode on a local port with my dev database, and I need to run it in production mode using port 80 and the production database. I&rsquo;ve also heard that using <a href="https://en.wikipedia.org/wiki/WEBrick">webrick</a> (the default server installed with rackup) is great for develpment, but I should be using something else for my production server. So I made some config files for foreman:</p>
-
-<p><code>bash development.env
-RACK_ENV=development
-PORT=9292
-SERVER=rackup
-</code></p>
-
-<p><code>bash production.env
-RACK_ENV=production
-PORT=80
-SERVER=unicorn
-</code></p>
-
-<p>And I change my Procfile to:</p>
-
-<p><code>bash Procfile
-web: bundle exec $SERVER -p $PORT -E $RACK_ENV
-</code></p>
-
-<p>Ridiculously configured. Now when I run <code>foreman start</code>, it will error out. I need to specify my environment file:</p>
-
-<p><code>bash
-$ foreman start -e production.env
-</code></p>
-
-<p>Now foreman will use Bundler to startup the server specified in <code>$SERVER</code>, run the app on port <code>$PORT</code> (-p), and will pass through the environment listed as <code>$RACK_ENV</code> to my application (-E), allowing my app to do whatever configuration it does given the current environment. Power to the people.</p>
-
-<p><a href="http://michaelvanrooijen.com/articles/2011/06/08-managing-and-monitoring-your-ruby-application-with-foreman-and-upstart/">I found that this guy</a> does a lot more complicated stuff with Foreman, if you need more.</p>
 ]]></content>
   </entry>
   
