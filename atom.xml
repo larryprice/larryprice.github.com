@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="http://larry-price.com/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-03-29T11:55:14-04:00</updated>
+  <updated>2014-04-04T22:09:03-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,35 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[The Lean Startup]]></title>
+    <link href="http://larry-price.com/blog/2014/04/04/the-lean-startup/"/>
+    <updated>2014-04-04T21:22:02-04:00</updated>
+    <id>http://larry-price.com/blog/2014/04/04/the-lean-startup</id>
+    <content type="html"><![CDATA[<blockquote><p>If you cannot fail, you cannot learn.</p></blockquote>
+
+<h3>The Gist</h3>
+
+<p><a href="http://ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&amp;Operation=GetAdHtml&amp;ID=OneJS&amp;OneJS=1&amp;source=ac&amp;ref=qf_sp_asin_til&amp;ad_type=product_link&amp;tracking_id=larpriandthee-20&amp;marketplace=amazon&amp;region=US&amp;placement=0307887898&amp;asins=0307887898&amp;show_border=true&amp;link_opens_in_new_window=true&amp;MarketPlace=US"><em>The Lean Startup</em></a> by Eric Ries explains how Lean methodlogies are not only meaningful for startups, but can also be used to create innovation within large organizations.</p>
+
+<h3>What I Think</h3>
+
+<p>If I had a nickel for every time the word &ldquo;entrepreneur&rdquo; showed up in this book&hellip;</p>
+
+<p>Besides that, this book is highly insightful with many great examples of companies, small and large, that have built great products using Lean processes.</p>
+
+<p>Part of what makes this book readable is the credibility of the author, a founder of several startups who has seen failure and success. I wasn&rsquo;t convinced that I would enjoy this book until I read Eric&rsquo;s story about IMVU&rsquo;s initial failures and how those failures were overcome. I won&rsquo;t spoil too much for anyone currently reading the book, but IMVU does eventually figure out what customers want, thanks in no small part to rethinking the way that the company develops software.</p>
+
+<p>The majority of this book focuses on creating a minimal viable product. Creating an MVP is difficult from a developer&rsquo;s perspective, and the author touches on this quite a bit. Developers don&rsquo;t like to release products that may contain bugs or may not contain all the &ldquo;essential&rdquo; features, but an MVP is not about feature-completeness, it&rsquo;s about getting the product to users as quickly as possible to accelerate the &ldquo;build-measure-learn&rdquo; process.</p>
+
+<p>Once again, I&rsquo;d like to stress that the real-world experiences described in this book are what makes it so convincing. Stories about IMVU, Intuit, and Toyota makes these concepts seem obtainable for a company of any size.</p>
+
+<h3>Who Should Read This</h3>
+
+<p>You should read this if you&rsquo;re not sure how to get your company thinking about Lean processes. You should also read this if you want to eliminate waste on your project and learn how to get the most out of customer feedback. Open mind required to teach old dogs new tricks.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Using Sqlite on Heroku]]></title>
@@ -1423,57 +1452,6 @@
 
 
 <p>Data copied, tests working again. Take that, Nokia; no matter how difficult you make your build-processing tool, I&rsquo;ll figure out how to contort it to my whims.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Installing GTest and GMock Libs in Ubuntu 13.04]]></title>
-    <link href="http://larry-price.com/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/"/>
-    <updated>2013-10-13T11:02:00-04:00</updated>
-    <id>http://larry-price.com/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04</id>
-    <content type="html"><![CDATA[<p>I started trying to work on an open-source project and found that I needed to install <a href="https://code.google.com/p/googletest/">googletest</a> and <a href="https://code.google.com/p/googlemock/">googlemock</a> on my home machine. Seemed easy enough, I found a package called <code>google-mock</code> in the <a href="http://packages.ubuntu.com/raring/google-mock">Raring</a> repositories which depends on a package called <code>libgtest-dev</code>. So I install it:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install -y google-mock
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And the CMake file I was running before tells me that I have gmock, but I&rsquo;m still missing gtest. What&rsquo;s going on here?</p>
-
-<p>Well, there was a changeset applied in Ubuntu 12.04 (Precise) with the following text (<a href="http://www.ubuntuupdates.org/package/core/precise/universe/base/gtest">source</a>):</p>
-
-<blockquote><p>  Stop distributing static library (although still build it, to ensure gtest
-  works). Upstream recommends against shipping the libary at all, just the
-  source. (See: <a href="http://code.google.com/p/googletest/wiki/FAQ">http://code.google.com/p/googletest/wiki/FAQ</a>)
-  The Debian maintainer plans to do this also (see BTS: 639795); do it in
-  Ubuntu now to fulfil MIR requirements.</p>
-
-<p>&mdash; Christopher James Halse Rogers Thu, 08 Mar 2012 17:45:29 +1100</p></blockquote>
-
-<p>What does that mean? That means we get to build and &ldquo;install&rdquo; the gtest libs ourselves. The source is conveniently installed in <code>/usr/src</code> after installing <code>libgtest-dev</code> (which we automatically got when we installed <code>google-mock</code>).</p>
-
-<figure class='code'><figcaption><span>Installing gtest libs</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install -y cmake --quiet
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> /usr/src/gtest
-</span><span class='line'><span class="nv">$ </span>sudo cmake -E make_directory build
-</span><span class='line'><span class="nv">$ </span>sudo cmake -E chdir build cmake .. &gt;&gt; /dev/null
-</span><span class='line'><span class="nv">$ </span>sudo cmake --build build &gt;&gt; /dev/null
-</span><span class='line'><span class="nv">$ </span>ls build/libgtest*
-</span><span class='line'>build/libgtest.a  build/libgtest_main.a
-</span><span class='line'><span class="nv">$ </span>sudo cp build/libgtest* /usr/local/lib/
-</span><span class='line'><span class="nv">$ </span>sudo rm -rf build
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The <code>&gt;&gt; /dev/null</code> can be dropped if you would like to see the output of these commands when successful, any error text will still show up with this redirect in place. I like to move all my personally-compiled libraries (and includes) to <code>/usr/local</code>, but you could just as easily copy them over to <code>/usr/lib</code>. All of this could also be done in <code>/tmp</code> if you&rsquo;re so inclined.</p>
 ]]></content>
   </entry>
   
