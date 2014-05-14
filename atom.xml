@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="http://larry-price.com/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-04-04T22:09:03-04:00</updated>
+  <updated>2014-05-13T22:30:32-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,299 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Better Testing in Go With Gocheck]]></title>
+    <link href="http://larry-price.com/blog/2014/05/13/better-testing-in-go-with-gocheck/"/>
+    <updated>2014-05-13T21:14:39-04:00</updated>
+    <id>http://larry-price.com/blog/2014/05/13/better-testing-in-go-with-gocheck</id>
+    <content type="html"><![CDATA[<p>As a quick reminder, <a href="//golang.org/">golang</a> is a really fun programming language to use. It even includes <a href="//golang.org/doc/code.html#Testing">testing out of the box</a>! Unfortunately, this out-of-the-box testing framework isn&rsquo;t all that great. It lacks the syntactic sugar of mature frameworks like <a href="//rspec.info">rspec</a> or <a href="//code.google.com/p/googletest/">gtest</a>.</p>
+
+<p>Of course, there are alternatives. I found an open-source library (licensed with Simplified BSD) called <a href="//labix.org/gocheck">gocheck</a>.</p>
+
+<p>Gocheck, how do I love thee? Let me count the ways:</p>
+
+<ul>
+<li>Test fixtures</li>
+<li>Improved assertions</li>
+<li>Improved test output</li>
+<li>Sugar-coated syntax</li>
+<li>Test skipping</li>
+<li>Oh my</li>
+</ul>
+
+
+<p>As usual, it&rsquo;s time to guide you through a contrived example. Start by installing the package:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>go get gopkg.in/check.v1
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Let&rsquo;s see, what should we make&hellip; how about a tip calculating library? We should start by testing, because we&rsquo;re obsessed with TDD.</p>
+
+<p>Test #1: Returns 0 for free meal</p>
+
+<figure class='code'><figcaption><span>calculator_test.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">cheapskate</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="p">(</span>
+</span><span class='line'>  <span class="s">&quot;testing&quot;</span>
+</span><span class='line'>  <span class="p">.</span> <span class="s">&quot;gopkg.in/check.v1&quot;</span>
+</span><span class='line'><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Hook up gocheck into the &quot;go test&quot; runner.</span>
+</span><span class='line'><span class="kd">func</span> <span class="nx">Test</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span> <span class="nx">TestingT</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">type</span> <span class="nx">MySuite</span> <span class="kd">struct</span><span class="p">{}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">Suite</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">MySuite</span><span class="p">{})</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">MySuite</span><span class="p">)</span> <span class="nx">TestReturns0ForFreeMeal</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">C</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">c</span><span class="p">.</span><span class="nx">Assert</span><span class="p">(</span><span class="nx">calculateTip</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span> <span class="nx">Equals</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Not quite as obvious as the internal testing framework. First we hook up gocheck into the &ldquo;go test&rdquo; runner. Then we create a test suite; ours is empty for now and called <code>MySuite</code>. We call <code>Suite</code> to intialize the test runner with our custom suite. We then write our first test to assert that calculating the tip returns a value equal to 0. All tests must be prefixed with the word &ldquo;Test&rdquo;. Now I&rsquo;ll write the implementation:</p>
+
+<figure class='code'><figcaption><span>calculator.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">cheapskate</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="nx">calculateTip</span><span class="p">(</span><span class="nx">bill</span> <span class="kt">float64</span><span class="p">)</span> <span class="kt">float64</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="mf">0.0</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Running the tests&hellip;</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>go <span class="nb">test</span>
+</span><span class='line'>OK: 1 passed
+</span><span class='line'>PASS
+</span><span class='line'>ok    _/home/lrp/Projects/2014/gocheck-quick  0.003s
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Woohoo! All passed. What happens if we write a failing test?</p>
+
+<figure class='code'><figcaption><span>calculator_test.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="o">...</span>
+</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">MySuite</span><span class="p">)</span> <span class="nx">TestReturns15PercentByDefault</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">C</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">c</span><span class="p">.</span><span class="nx">Assert</span><span class="p">(</span><span class="nx">calculateTip</span><span class="p">(</span><span class="mf">100.0</span><span class="p">),</span> <span class="nx">Equals</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Results:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>lrp@cilantro:~/Projects/2014/gocheck-quick<span class="nv">$ </span>go <span class="nb">test</span>
+</span><span class='line'>
+</span><span class='line'>----------------------------------------------------------------------
+</span><span class='line'>FAIL: calculator_test.go:19: MySuite.TestReturns15PercentByDefault
+</span><span class='line'>
+</span><span class='line'>calculator_test.go:20:
+</span><span class='line'>    c.Assert<span class="o">(</span>calculateTip<span class="o">(</span>100.0<span class="o">)</span>, Equals, 15.0<span class="o">)</span>
+</span><span class='line'>... obtained <span class="nv">float64</span> <span class="o">=</span> 0
+</span><span class='line'>... expected <span class="nv">float64</span> <span class="o">=</span> 15
+</span><span class='line'>
+</span><span class='line'>OOPS: 1 passed, 1 FAILED
+</span><span class='line'>--- FAIL: Test <span class="o">(</span>0.00 seconds<span class="o">)</span>
+</span><span class='line'>FAIL
+</span><span class='line'><span class="nb">exit </span>status 1
+</span><span class='line'>FAIL  _/home/lrp/Projects/2014/gocheck-quick  0.003s
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A nasty failure that one. I&rsquo;ll fix it and continue:</p>
+
+<figure class='code'><figcaption><span>calculator.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">cheapskate</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="nx">calculateTip</span><span class="p">(</span><span class="nx">bill</span> <span class="kt">float64</span><span class="p">)</span> <span class="kt">float64</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="mf">.15</span> <span class="o">*</span> <span class="nx">bill</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I want to create a Setup method for my entire suite. I&rsquo;ll store some silly information there for information&rsquo;s sake. The minBill and maxBill variables will only be set when I first load the suite.</p>
+
+<figure class='code'><figcaption><span>calculator_test.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">cheapskate</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="p">(</span>
+</span><span class='line'>  <span class="s">&quot;testing&quot;</span>
+</span><span class='line'>  <span class="p">.</span> <span class="s">&quot;gopkg.in/check.v1&quot;</span>
+</span><span class='line'><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Hook up gocheck into the &quot;go test&quot; runner.</span>
+</span><span class='line'><span class="kd">func</span> <span class="nx">Test</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span> <span class="nx">TestingT</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">type</span> <span class="nx">MySuite</span> <span class="kd">struct</span><span class="p">{</span>
+</span><span class='line'>  <span class="nx">minBill</span> <span class="kt">float64</span>
+</span><span class='line'>  <span class="nx">maxBill</span> <span class="kt">float64</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">MySuite</span><span class="p">)</span> <span class="nx">SetUpSuite</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">C</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">s</span><span class="p">.</span><span class="nx">minBill</span> <span class="p">=</span> <span class="mi">0</span>
+</span><span class='line'>  <span class="nx">s</span><span class="p">.</span><span class="nx">maxBill</span> <span class="p">=</span> <span class="mi">100</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">Suite</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">MySuite</span><span class="p">{})</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">MySuite</span><span class="p">)</span> <span class="nx">TestReturns0ForFreeMeal</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">C</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">c</span><span class="p">.</span><span class="nx">Assert</span><span class="p">(</span><span class="nx">calculateTip</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">minBill</span><span class="p">),</span> <span class="nx">Equals</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">MySuite</span><span class="p">)</span> <span class="nx">TestReturns15PercentByDefault</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">C</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">c</span><span class="p">.</span><span class="nx">Assert</span><span class="p">(</span><span class="nx">calculateTip</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">maxBill</span><span class="p">),</span> <span class="nx">Equals</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>What if I wanted to set some information at the start of each test? I&rsquo;ll log the current test number on the suite, updating it every time I run a test:</p>
+
+<figure class='code'><figcaption><span>calculator_test.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">cheapskate</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="p">(</span>
+</span><span class='line'>  <span class="s">&quot;testing&quot;</span>
+</span><span class='line'>  <span class="p">.</span> <span class="s">&quot;gopkg.in/check.v1&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="s">&quot;fmt&quot;</span>
+</span><span class='line'><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Hook up gocheck into the &quot;go test&quot; runner.</span>
+</span><span class='line'><span class="kd">func</span> <span class="nx">Test</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span> <span class="nx">TestingT</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">type</span> <span class="nx">MySuite</span> <span class="kd">struct</span><span class="p">{</span>
+</span><span class='line'>  <span class="nx">testNumber</span> <span class="kt">int</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">MySuite</span><span class="p">)</span> <span class="nx">SetUpTest</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">C</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">testNumber</span><span class="p">)</span>
+</span><span class='line'>  <span class="nx">s</span><span class="p">.</span><span class="nx">testNumber</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Result:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>go <span class="nb">test</span>
+</span><span class='line'>0
+</span><span class='line'>1
+</span><span class='line'>OK: 2 passed
+</span><span class='line'>PASS
+</span><span class='line'>ok    _/home/lrp/Projects/2014/gocheck-quick  0.004s
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can create tear down methods for suites and tests in the same manner, replacing the appropriate words above.</p>
+
+<p>There&rsquo;s loads of other cool stuff gocheck can do, I&rsquo;ve barely scratched the surface with what little experience I&rsquo;ve had using it. Like any testing framework, I&rsquo;m sure it has its advantages and disadvantages, but it sure beats the pants off the off-the-shelf framework Google includes with golang.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The Lean Startup]]></title>
@@ -1365,93 +1658,6 @@
 <p>It&rsquo;s all so easy. It&rsquo;s right at your fingertips. A proficient programmer these days has to also be a proficient &ldquo;Googler.&rdquo; However, a programmer&rsquo;s job description is not &ldquo;copies all code from the internet.&rdquo; Although the odds are high that someone has had a problem very similar to yours, you need to be able to take that code as an example and adapt it to your current situation. If that weren&rsquo;t the case, I think we&rsquo;d be losing our jobs to high school kids pretty quickly.</p>
 
 <p>So at the end of the day, make sure to be thankful to your search engine. Buy it flowers, make it dinner, rub its feet; just let it know how much you appreciate all the hard work it does for you when you do nothing but ask it silly questions all day.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Copy Data Using Qmake]]></title>
-    <link href="http://larry-price.com/blog/2013/11/14/copy-data-using-qmake/"/>
-    <updated>2013-11-14T21:24:00-05:00</updated>
-    <id>http://larry-price.com/blog/2013/11/14/copy-data-using-qmake</id>
-    <content type="html"><![CDATA[<p>I&rsquo;ll take things that should be really easy but are in fact impossible for $1000, Mr Trebek.</p>
-
-<p>I have a <a href="https://qt-project.org/wiki/Qt_5.0">Qt</a> desktop app that uses <a href="https://qt-project.org/doc/qt-4.8/qmake-manual.html">qmake</a>. I have tests. I have test data that I need to copy to my build directory. Not only that, but I want to copy a whole directory recursively. In Linux <em>and</em> Windows. You must be thinking to yourself, &lsquo;There&rsquo;s no way that&rsquo;s possible, leave me out of your crazy plans!&rsquo; Well to that I say nay. Nay indeed.</p>
-
-<p>I originally copied my test data using the <code>INSTALLS</code> variable. My data folder is just a directory sitting in the test source called &ldquo;TestData.&rdquo; This solution is fantastic because it works cross-platform.</p>
-
-<figure class='code'><figcaption><span>MyBAProjectTest.pro</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='make'><span class='line'><span class="nv">install_it.path</span> <span class="o">=</span> <span class="nv">$$</span><span class="o">{</span>OUT_PWD<span class="o">}</span>
-</span><span class='line'><span class="nv">install_it.files</span> <span class="o">+=</span> TestData/
-</span><span class='line'>
-</span><span class='line'><span class="nv">INSTALLS</span> <span class="o">+=</span> install_it
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>However, this means that if I ever have a clean directory, I have to run <code>make install</code> to install my test data. What a pain! Why bother! Why even write tests when life is this unjust!</p>
-
-<p>BUT WAIT! After combing the depths of the internets for much of the evening, I was able to find many halfway solutions to my original problem. The concept is to add commands to the <code>QMAKE_POST_LINK</code> variable.</p>
-
-<p>For Linux, I use <code>cp</code>:</p>
-
-<figure class='code'><figcaption><span>MyBAProjectTest.pro</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='make'><span class='line'><span class="nv">QMAKE_POST_LINK</span> <span class="o">+=</span> <span class="nv">$$</span>quote<span class="o">(</span>cp -rf <span class="nv">$$</span><span class="o">{</span>PWD<span class="o">}</span>/TestData <span class="nv">$$</span><span class="o">{</span>OUT_PWD<span class="o">})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>For Windows, I use <code>xcopy</code>:</p>
-
-<figure class='code'><figcaption><span>MyBAProjectTest.pro</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='make'><span class='line'><span class="nv">PWD_WIN</span> <span class="o">=</span> <span class="nv">$$</span><span class="o">{</span>PWD<span class="o">}</span>
-</span><span class='line'><span class="err">PWD_WIN</span> <span class="err">~=</span> <span class="err">s,/,\\,g</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">QMAKE_POST_LINK</span> <span class="o">+=</span> <span class="nv">$$</span>quote<span class="o">(</span>mkdir DestFolder<span class="o">)</span>
-</span><span class='line'><span class="nv">QMAKE_POST_LINK</span> <span class="o">+=</span> <span class="nv">$$</span>quote<span class="o">(</span>xcopy <span class="nv">$$</span><span class="o">{</span>PWD_WIN<span class="o">}</span><span class="se">\\</span>TestData <span class="nv">$$</span><span class="o">{</span>OUT_PWD_WIN<span class="o">}</span><span class="se">\\</span>TestData /E<span class="o">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I also want that directory to be deleted when I run <code>make clean</code>. Cleaning up just means adding some commands to the <code>QMAKE_CLEAN</code> directive. I also want to run the appropriate commands whether I&rsquo;m on Unix or Windows without having to modify my <code>.pro</code> file. Wrapping the previous commands in what I call an &ldquo;OS-space&rdquo; will cause those commands to only run in the specified operating system.</p>
-
-<figure class='code'><figcaption><span>MyBAProjectTest.pro</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='make'><span class='line'><span class="err">win32</span> <span class="err">{</span>
-</span><span class='line'>    <span class="nv">PWD_WIN</span> <span class="o">=</span> <span class="nv">$$</span><span class="o">{</span>PWD<span class="o">}</span>
-</span><span class='line'>    PWD_WIN ~<span class="o">=</span> s,/,<span class="se">\\</span>,g
-</span><span class='line'>
-</span><span class='line'>    QMAKE_POST_LINK +<span class="o">=</span> <span class="nv">$$</span>quote<span class="o">(</span>mkdir DestFolder<span class="o">)</span>
-</span><span class='line'>    QMAKE_POST_LINK +<span class="o">=</span> <span class="nv">$$</span>quote<span class="o">(</span>xcopy <span class="nv">$$</span><span class="o">{</span>PWD_WIN<span class="o">}</span><span class="se">\\</span>TestData <span class="nv">$$</span><span class="o">{</span>OUT_PWD_WIN<span class="o">}</span><span class="se">\\</span>TestData /E<span class="o">)</span>
-</span><span class='line'>
-</span><span class='line'>    QMAKE_CLEAN +<span class="o">=</span> /s /f /q TestData <span class="o">&amp;&amp;</span> rd /s /q TestData
-</span><span class='line'><span class="err">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="err">unix</span> <span class="err">{</span>
-</span><span class='line'>    <span class="nv">QMAKE_POST_LINK</span> <span class="o">+=</span> <span class="nv">$$</span>quote<span class="o">(</span>cp -rf <span class="nv">$$</span><span class="o">{</span>PWD<span class="o">}</span>/TestData <span class="nv">$$</span><span class="o">{</span>OUT_PWD<span class="o">})</span>
-</span><span class='line'>
-</span><span class='line'>    QMAKE_CLEAN +<span class="o">=</span> -r TestData
-</span><span class='line'><span class="err">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Data copied, tests working again. Take that, Nokia; no matter how difficult you make your build-processing tool, I&rsquo;ll figure out how to contort it to my whims.</p>
 ]]></content>
   </entry>
   

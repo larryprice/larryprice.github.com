@@ -4,7 +4,7 @@
   <title><![CDATA[Category: testing | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/testing/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-04-04T22:09:03-04:00</updated>
+  <updated>2014-05-13T22:30:32-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,196 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Better testing in Go with gocheck]]></title>
+    <link href="http://larry-price.com/blog/2014/05/13/better-testing-in-go-with-gocheck/"/>
+    <updated>2014-05-13T21:14:39-04:00</updated>
+    <id>http://larry-price.com/blog/2014/05/13/better-testing-in-go-with-gocheck</id>
+    <content type="html"><![CDATA[<p>As a quick reminder, <a href="//golang.org/">golang</a> is a really fun programming language to use. It even includes <a href="//golang.org/doc/code.html#Testing">testing out of the box</a>! Unfortunately, this out-of-the-box testing framework isn&rsquo;t all that great. It lacks the syntactic sugar of mature frameworks like <a href="//rspec.info">rspec</a> or <a href="//code.google.com/p/googletest/">gtest</a>.</p>
+
+<p>Of course, there are alternatives. I found an open-source library (licensed with Simplified BSD) called <a href="//labix.org/gocheck">gocheck</a>.</p>
+
+<p>Gocheck, how do I love thee? Let me count the ways:</p>
+
+<ul>
+<li>Test fixtures</li>
+<li>Improved assertions</li>
+<li>Improved test output</li>
+<li>Sugar-coated syntax</li>
+<li>Test skipping</li>
+<li>Oh my</li>
+</ul>
+
+
+<p>As usual, it&rsquo;s time to guide you through a contrived example. Start by installing the package:</p>
+
+<p><code>bash
+$ go get gopkg.in/check.v1
+</code></p>
+
+<p>Let&rsquo;s see, what should we make&hellip; how about a tip calculating library? We should start by testing, because we&rsquo;re obsessed with TDD.</p>
+
+<p>Test #1: Returns 0 for free meal</p>
+
+<p>``` go calculator_test.go
+package cheapskate</p>
+
+<p>import (
+  &ldquo;testing&rdquo;
+  . &ldquo;gopkg.in/check.v1&rdquo;
+)</p>
+
+<p>// Hook up gocheck into the &ldquo;go test&rdquo; runner.
+func Test(t *testing.T) { TestingT(t) }</p>
+
+<p>type MySuite struct{}</p>
+
+<p>var _ = Suite(&amp;MySuite{})</p>
+
+<p>func (s <em>MySuite) TestReturns0ForFreeMeal(c </em>C) {
+  c.Assert(calculateTip(0.0), Equals, 0.0)
+}
+```</p>
+
+<p>Not quite as obvious as the internal testing framework. First we hook up gocheck into the &ldquo;go test&rdquo; runner. Then we create a test suite; ours is empty for now and called <code>MySuite</code>. We call <code>Suite</code> to intialize the test runner with our custom suite. We then write our first test to assert that calculating the tip returns a value equal to 0. All tests must be prefixed with the word &ldquo;Test&rdquo;. Now I&rsquo;ll write the implementation:</p>
+
+<p>``` go calculator.go
+package cheapskate</p>
+
+<p>func calculateTip(bill float64) float64 {
+  return 0.0
+}
+```</p>
+
+<p>Running the tests&hellip;</p>
+
+<p><code>bash
+$ go test
+OK: 1 passed
+PASS
+ok    _/home/lrp/Projects/2014/gocheck-quick  0.003s
+</code></p>
+
+<p>Woohoo! All passed. What happens if we write a failing test?</p>
+
+<p><code>go calculator_test.go
+...
+func (s *MySuite) TestReturns15PercentByDefault(c *C) {
+  c.Assert(calculateTip(100.0), Equals, 15.0)
+}
+</code></p>
+
+<p>Results:</p>
+
+<p>``` bash
+lrp@cilantro:~/Projects/2014/gocheck-quick$ go test</p>
+
+<hr />
+
+<p>FAIL: calculator_test.go:19: MySuite.TestReturns15PercentByDefault</p>
+
+<p>calculator_test.go:20:</p>
+
+<pre><code>c.Assert(calculateTip(100.0), Equals, 15.0)
+</code></pre>
+
+<p>&hellip; obtained float64 = 0
+&hellip; expected float64 = 15</p>
+
+<p>OOPS: 1 passed, 1 FAILED
+&mdash;&ndash; FAIL: Test (0.00 seconds)
+FAIL
+exit status 1
+FAIL  _/home/lrp/Projects/2014/gocheck-quick  0.003s
+```</p>
+
+<p>A nasty failure that one. I&rsquo;ll fix it and continue:</p>
+
+<p>``` go calculator.go
+package cheapskate</p>
+
+<p>func calculateTip(bill float64) float64 {
+  return .15 * bill
+}
+```</p>
+
+<p>I want to create a Setup method for my entire suite. I&rsquo;ll store some silly information there for information&rsquo;s sake. The minBill and maxBill variables will only be set when I first load the suite.</p>
+
+<p>``` go calculator_test.go
+package cheapskate</p>
+
+<p>import (
+  &ldquo;testing&rdquo;
+  . &ldquo;gopkg.in/check.v1&rdquo;
+)</p>
+
+<p>// Hook up gocheck into the &ldquo;go test&rdquo; runner.
+func Test(t *testing.T) { TestingT(t) }</p>
+
+<p>type MySuite struct{
+  minBill float64
+  maxBill float64
+}</p>
+
+<p>func (s <em>MySuite) SetUpSuite(c </em>C) {
+  s.minBill = 0
+  s.maxBill = 100
+}</p>
+
+<p>var _ = Suite(&amp;MySuite{})</p>
+
+<p>func (s <em>MySuite) TestReturns0ForFreeMeal(c </em>C) {
+  c.Assert(calculateTip(s.minBill), Equals, 0.0)
+}</p>
+
+<p>func (s <em>MySuite) TestReturns15PercentByDefault(c </em>C) {
+  c.Assert(calculateTip(s.maxBill), Equals, 15.0)
+}
+```</p>
+
+<p>What if I wanted to set some information at the start of each test? I&rsquo;ll log the current test number on the suite, updating it every time I run a test:</p>
+
+<p>``` go calculator_test.go
+package cheapskate</p>
+
+<p>import (
+  &ldquo;testing&rdquo;
+  . &ldquo;gopkg.in/check.v1&rdquo;</p>
+
+<p>  &ldquo;fmt&rdquo;
+)</p>
+
+<p>// Hook up gocheck into the &ldquo;go test&rdquo; runner.
+func Test(t *testing.T) { TestingT(t) }</p>
+
+<p>type MySuite struct{
+  testNumber int
+}</p>
+
+<p>func (s <em>MySuite) SetUpTest(c </em>C) {
+  fmt.Println(s.testNumber)
+  s.testNumber += 1
+}
+&hellip;
+```</p>
+
+<p>Result:</p>
+
+<p><code>bash
+$ go test
+0
+1
+OK: 2 passed
+PASS
+ok    _/home/lrp/Projects/2014/gocheck-quick  0.004s
+</code></p>
+
+<p>You can create tear down methods for suites and tests in the same manner, replacing the appropriate words above.</p>
+
+<p>There&rsquo;s loads of other cool stuff gocheck can do, I&rsquo;ve barely scratched the surface with what little experience I&rsquo;ve had using it. Like any testing framework, I&rsquo;m sure it has its advantages and disadvantages, but it sure beats the pants off the off-the-shelf framework Google includes with golang.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Hooks in cucumber-cpp]]></title>
