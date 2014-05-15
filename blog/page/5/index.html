@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="I&rsquo;ll take things that should be really easy but are in fact impossible for $1000, Mr Trebek. I have a Qt desktop app that uses qmake. I have &hellip;">
+  <meta name="description" content="To whom do I owe any programming success I may have in a given day? My education? My wonderful peers? The shriveled wad of grey goo in my head? None &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,53 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/17/sep-blog-battle-tools-of-the-trade/">SEP Blog Battle: Tools of the Trade</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-17T20:59:00-05:00" pubdate data-updated="true">Nov 17<span>th</span>, 2013</time>
+        
+           | <a href="/blog/2013/11/17/sep-blog-battle-tools-of-the-trade/#disqus_thread"
+             data-disqus-identifier="http://larry-price.com/blog/2013/11/17/sep-blog-battle-tools-of-the-trade/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>To whom do I owe any programming success I may have in a given day? My education? My wonderful peers? The shriveled wad of grey goo in my head? None of the above.</p>
+
+<p>My search engine. <a href="https://duckduckgo.com">DuckDuckGo</a>. <a href="https://encrypted.google.com">Google</a>. <a href="https://wikipedia.org">Wikipedia</a>. Hardly a problem exists that can&rsquo;t be assisted in some way by a quick search.</p>
+
+<p>How do I use Google Go (<a href="http://golang.org/doc/effective_go.html">answer</a>)? How do I use tags in <a href="https://github.com/cucumber/cucumber-cpp">cucumber-cpp</a> (<a href="http://larryprice.github.io/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">answer</a>)? How do I brush my teeth without toothpaste (<a href="http://www.wikihow.com/Brush-Teeth-Without-Toothpaste">answer</a>? What&rsquo;s the deal with airline food (<a href="http://youtu.be/n0E7EaRLmSI">answer</a>)?</p>
+
+<p>It&rsquo;s all so easy. It&rsquo;s right at your fingertips. A proficient programmer these days has to also be a proficient &ldquo;Googler.&rdquo; However, a programmer&rsquo;s job description is not &ldquo;copies all code from the internet.&rdquo; Although the odds are high that someone has had a problem very similar to yours, you need to be able to take that code as an example and adapt it to your current situation. If that weren&rsquo;t the case, I think we&rsquo;d be losing our jobs to high school kids pretty quickly.</p>
+
+<p>So at the end of the day, make sure to be thankful to your search engine. Buy it flowers, make it dinner, rub its feet; just let it know how much you appreciate all the hard work it does for you when you do nothing but ask it silly questions all day.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -444,106 +491,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/08/31/using-foreman-to-create-an-upstart-service/">Using Foreman to Create an Upstart Service</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-31T17:05:00-04:00" pubdate data-updated="true">Aug 31<span>st</span>, 2013</time>
-        
-           | <a href="/blog/2013/08/31/using-foreman-to-create-an-upstart-service/#disqus_thread"
-             data-disqus-identifier="http://larry-price.com/blog/2013/08/31/using-foreman-to-create-an-upstart-service/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I just finished my first attempt at deploying a web app to run automatically in the background on a friend&rsquo;s server. Pretty easy, really. The first thing I did was install <a href="https://github.com/ddollar/foreman">foreman</a>. Assuming you have ruby and rubygems installed:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo gem install foreman
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Next I needed to give foreman the commands to start my app. I created a file in the root of my project directory called &lsquo;Procfile&rsquo; and gave it the steps I would run to start my app manually. For the sake of simplicity, let&rsquo;s say I run my app pretty barebones:</p>
-
-<figure class='code'><figcaption><span>Procfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>web: bundle <span class="nb">exec </span>rackup
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now when I run <code>foreman start</code>, foreman will use <a href="http://bundler.io/">Bundler</a> to execute rackup with the correct gems in my Gemfile. Now exporting upstart config files is pretty easy.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo foreman <span class="nb">export </span>upstart --app<span class="o">=</span>MyApp --user<span class="o">=</span>root /etc/init
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>That command creates the .conf files needed for upstart to control the service called &lsquo;MyApp&rsquo; as the user &lsquo;root.&rsquo; It puts all the .conf files in <code>/etc/init</code> (which is where Ubuntu puts such things) and will create a default log directory in <code>/var/log/MyApp</code>. Now I can control my service by running <code>service MyApp start</code>, <code>service MyApp stop</code>, <code>service MyApp restart</code>, and <code>service MyApp status</code>. Hooray for me.</p>
-
-<p>But I need to run my app in two ways: in dev mode on a local port with my dev database, and I need to run it in production mode using port 80 and the production database. I&rsquo;ve also heard that using <a href="https://en.wikipedia.org/wiki/WEBrick">webrick</a> (the default server installed with rackup) is great for develpment, but I should be using something else for my production server. So I made some config files for foreman:</p>
-
-<figure class='code'><figcaption><span>development.env</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">RACK_ENV</span><span class="o">=</span>development
-</span><span class='line'><span class="nv">PORT</span><span class="o">=</span>9292
-</span><span class='line'><span class="nv">SERVER</span><span class="o">=</span>rackup
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>production.env</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">RACK_ENV</span><span class="o">=</span>production
-</span><span class='line'><span class="nv">PORT</span><span class="o">=</span>80
-</span><span class='line'><span class="nv">SERVER</span><span class="o">=</span>unicorn
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And I change my Procfile to:</p>
-
-<figure class='code'><figcaption><span>Procfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>web: bundle <span class="nb">exec</span> <span class="nv">$SERVER</span> -p <span class="nv">$PORT</span> -E <span class="nv">$RACK_ENV</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Ridiculously configured. Now when I run <code>foreman start</code>, it will error out. I need to specify my environment file:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>foreman start -e production.env
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now foreman will use Bundler to startup the server specified in <code>$SERVER</code>, run the app on port <code>$PORT</code> (-p), and will pass through the environment listed as <code>$RACK_ENV</code> to my application (-E), allowing my app to do whatever configuration it does given the current environment. Power to the people.</p>
-
-<p><a href="http://michaelvanrooijen.com/articles/2011/06/08-managing-and-monitoring-your-ruby-application-with-foreman-and-upstart/">I found that this guy</a> does a lot more complicated stuff with Foreman, if you need more.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -573,6 +520,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/05/14/takeaways-from-agileindy-2014/">Takeaways From AgileIndy 2014</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/05/13/better-testing-in-go-with-gocheck/">Better Testing in Go With Gocheck</a>
       </li>
     
@@ -588,15 +539,11 @@
         <a href="/blog/2014/03/26/rework/">Rework</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/03/24/sticky-footer-with-twitter-bootstrap/">Sticky Footer With Twitter Bootstrap</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/c-plus-plus' style='font-size: 115.0%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.0%'>capybara</a> <a href='/blog/categories/css' style='font-size: 105.0%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 115.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 125.0%'>database</a> <a href='/blog/categories/foreman' style='font-size: 105.0%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 105.0%'>foss</a> <a href='/blog/categories/gmock' style='font-size: 105.0%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 115.0%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 105.0%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 105.0%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 105.0%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 110.0%'>heroku</a> <a href='/blog/categories/html' style='font-size: 110.0%'>html</a> <a href='/blog/categories/internet' style='font-size: 105.0%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 105.0%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 120.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 110.0%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 115.0%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 105.0%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 105.0%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 105.0%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 110.0%'>nosql</a> <a href='/blog/categories/ollert' style='font-size: 125.0%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 120.0%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 105.0%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 105.0%'>qt</a> <a href='/blog/categories/rails' style='font-size: 105.0%'>rails</a> <a href='/blog/categories/retro' style='font-size: 110.0%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 110.0%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 160.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 115.0%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 105.0%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 140.0%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 105.0%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 125.0%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 105.0%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 105.0%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 115.0%'>testing</a> <a href='/blog/categories/trello' style='font-size: 115.0%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 110.0%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 105.0%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 105.0%'>upstart</a> <a href='/blog/categories/web' style='font-size: 145.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 145.0%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 105.0%'>writeups</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 104.61538461538461%'>agile</a> <a href='/blog/categories/c-plus-plus' style='font-size: 113.84615384615384%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 104.61538461538461%'>capybara</a> <a href='/blog/categories/css' style='font-size: 104.61538461538461%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 113.84615384615384%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 123.07692307692308%'>database</a> <a href='/blog/categories/foreman' style='font-size: 104.61538461538461%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 104.61538461538461%'>foss</a> <a href='/blog/categories/gmock' style='font-size: 104.61538461538461%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 113.84615384615384%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 104.61538461538461%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 104.61538461538461%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 104.61538461538461%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 109.23076923076923%'>heroku</a> <a href='/blog/categories/html' style='font-size: 109.23076923076923%'>html</a> <a href='/blog/categories/internet' style='font-size: 104.61538461538461%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 104.61538461538461%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 118.46153846153845%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 109.23076923076923%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 113.84615384615384%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 104.61538461538461%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 104.61538461538461%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 104.61538461538461%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 109.23076923076923%'>nosql</a> <a href='/blog/categories/ollert' style='font-size: 123.07692307692308%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 118.46153846153845%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 104.61538461538461%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 104.61538461538461%'>qt</a> <a href='/blog/categories/rails' style='font-size: 104.61538461538461%'>rails</a> <a href='/blog/categories/retro' style='font-size: 113.84615384615384%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 109.23076923076923%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 155.3846153846154%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 113.84615384615384%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 104.61538461538461%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 136.9230769230769%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 104.61538461538461%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 123.07692307692308%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 104.61538461538461%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 104.61538461538461%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 113.84615384615384%'>testing</a> <a href='/blog/categories/trello' style='font-size: 113.84615384615384%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 109.23076923076923%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 104.61538461538461%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 104.61538461538461%'>upstart</a> <a href='/blog/categories/web' style='font-size: 141.53846153846155%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 141.53846153846155%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 104.61538461538461%'>writeups</a> </span>
 </section>
 
 <section>
