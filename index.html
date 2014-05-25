@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="The AgileIndy Conference 2014 has come and gone. I wasn&rsquo;t sure what to expect, since it was my first conference, but I came out of it feeling &hellip;">
+  <meta name="description" content="We use git on my current project, and we used to always use remote branches. After doubling the number of developers touching the repo, we found that &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,93 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/05/25/git-out-the-way-rebase-workflow/">Git Out the Way - Rebase Workflow</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-25T15:44:55-04:00" pubdate data-updated="true">May 25<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/05/25/git-out-the-way-rebase-workflow/#disqus_thread"
+             data-disqus-identifier="http://larry-price.com/blog/2014/05/25/git-out-the-way-rebase-workflow/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>We use <a href="http://www.git-scm.com/">git</a> on my current project, and we used to always use remote branches. After doubling the number of developers touching the repo, we found that remote feature branches led to merge conflicts, stale branches, and hidden code. We&rsquo;ve switched away from using remote feature branches, favoring instead to commit directly to <code>origin/master</code>, making remote feature branches the exception. We do this using a simple method called <code>rebase</code>.</p>
+
+<p>What does it mean to <code>rebase</code>?</p>
+
+<p>When you rebase your local changes onto another branch, your changes become the head of that branch. For instance, say I start working off remote branch <code>master</code>, specifically changeset <code>M2</code>. I then make some changes and commit locally, which I&rsquo;ll note as changeset <code>L</code>. While I was making my changes, some other developer pushed to remote branch <code>master</code>, resulting in changeset <code>M3</code>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>M1 -&gt; M2 -&gt; M3
+</span><span class='line'>        \
+</span><span class='line'>         -&gt;L</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is where <code>rebase</code> comes in. I want to rebase my local commit on top of <code>M3</code>, which will make it the new head of <code>master</code>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git rebase origin/master</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>M1 -&gt; M2 -&gt; M3 -&gt; L</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now I can keep working locally. Until I push my local <code>master</code> to <code>origin</code>, every time I <code>rebase</code> will cause all of my commits to rebase on the head of <code>master</code>.</p>
+
+<p>I like to keep as close to <code>origin/master</code> as possible since we have a fairly active repository. If I want to make sure I have the bleeding edge of <code>master</code>, sometimes I don&rsquo;t have my local changes in working order when I want to rebase. Some people like to stash and unstash local changes, but that takes too much effort for me. I prefer just to use <code>git commit --amend</code> to constantly update the last changes I committed. You can only amend to an unpushed local commit, otherwise you&rsquo;d be changing history remotely (which is bad). Using the <code>amend</code> flag allows me to keep one solid local changeset around until I&rsquo;m comfortable with pushing it to <code>origin</code>. Also note that using <code>amend</code> also allows you to change the commit message of the last commit.</p>
+
+<p>What happens when you need to use a remote branch?</p>
+
+<p>Git&rsquo;s best-kept secret is <code>merge --squash</code>, a wonderful flag that gives you all the benefits of a <code>rebase</code> (linear history, fewer changesets), without all the hassle of a big fat rebase merge (rebasing infrequently can lead to merges that will haunt you in your sleep).</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git branch
+</span><span class='line'>* local-branch
+</span><span class='line'>master
+</span><span class='line'>$ git merge master
+</span><span class='line'>$ git checkout master
+</span><span class='line'>$ git merge local-branch --squash</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will give you a single changeset on the head of <code>master</code> containing all the changes you made in <code>local-branch</code>, including resolution of merge conflicts. <code>merge --squash</code> has eased a lot of the headaches my team had when stuck doing rebase merges previously.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -681,69 +768,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/03/26/rework/">Rework</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-26T21:00:33-04:00" pubdate data-updated="true">Mar 26<span>th</span>, 2014</time>
-        
-           | <a href="/blog/2014/03/26/rework/#disqus_thread"
-             data-disqus-identifier="http://larry-price.com/blog/2014/03/26/rework/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p>You want to get into the rhythm of making choices. When you get in that flow of making decision after decision, you build momentum and boost morale. Decisions are progress. Each one you make is a brick in your foundation. You can&rsquo;t build on top of &ldquo;We&rsquo;ll decide later,&rdquo; but you <em>can</em> build on top of &ldquo;Done.&rdquo;</p>
-
-<p>Excerpt from &ldquo;Decisions are Progress&rdquo; in <em>Rework</em></p></blockquote>
-
-<h3>The Gist</h3>
-
-<p><a href="http://www.amazon.com/gp/product/0307463745/ref=as_li_qf_sp_asin_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0307463745&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Rework</em> by Jason Fried and David Heinemeier Hansson</a> is a business advice book for keeping small, focused teams without all the cruft of business.</p>
-
-<h3>My Opinion</h3>
-
-<p><em>Rework</em> is my kind of book. It&rsquo;s best described as business advice for hippy programmers. It&rsquo;s amazing that this book describes the business practices of a real company that&rsquo;s modestly successful.</p>
-
-<p>Speaking of the authors of this book, they&rsquo;re the guys who made <a href="//rubyonrails.org/">Ruby on Rails</a>, which gives them street cred as far as I&rsquo;m concerned.</p>
-
-<p>This is a book of proverbs. Ignore the real world. Start a business, not a startup. Build half a product, not a half-assed product. Meetings are toxic. Hire managers of one. ASAP is po:son.</p>
-
-<p>When you look at it, this advice is not insightful: it&rsquo;s obvious. It just also happens to be against how modern-day companies work. And maybe this advice isn&rsquo;t useful for everyone; once a company stops following these rules, it seems difficult to change. The smaller and newer the company, the easier it is to avoid the issues introduced with bigger businesses.</p>
-
-<p>This book talks about ideas being cheap. Implementing the idea is where all the work lies. Have an idea? Start working on it now. Find time. Go to bed an hour later. Watch an hour less of TV. Your idea is meaningless unless you actually follow through.</p>
-
-<p>There&rsquo;s also good advice within this book for people who are pressured to overwork. Avoid workaholics: overworking hurts the decision-making processes, so people who are working more hours are just spending more hours making worse decisions. When employees work long hours, other employees are also influenced to work longer hours. More poeple making worse decisions? Count me out. Hire people with outside lives who go home at 5: busy people have to manage their time, and will thus find more efficient ways to accomplish their work.</p>
-
-<h3>Who Would Like This</h3>
-
-<p>Interested in starting a company? In making managerial changes within your current company? In making changes to the way you work? Reading this book can help you realize that you don&rsquo;t need all the modern-day business cruft to make your business a success.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -771,6 +795,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/05/25/git-out-the-way-rebase-workflow/">Git Out the Way - Rebase Workflow</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/05/14/takeaways-from-agileindy-2014/">Takeaways From AgileIndy 2014</a>
       </li>
     
@@ -786,15 +814,11 @@
         <a href="/blog/2014/03/29/using-sqlite-on-heroku/">Using Sqlite on Heroku</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/03/26/rework/">Rework</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 104.61538461538461%'>agile</a> <a href='/blog/categories/c-plus-plus' style='font-size: 113.84615384615384%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 104.61538461538461%'>capybara</a> <a href='/blog/categories/css' style='font-size: 104.61538461538461%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 113.84615384615384%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 123.07692307692308%'>database</a> <a href='/blog/categories/foreman' style='font-size: 104.61538461538461%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 104.61538461538461%'>foss</a> <a href='/blog/categories/gmock' style='font-size: 104.61538461538461%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 113.84615384615384%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 104.61538461538461%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 104.61538461538461%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 104.61538461538461%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 109.23076923076923%'>heroku</a> <a href='/blog/categories/html' style='font-size: 109.23076923076923%'>html</a> <a href='/blog/categories/internet' style='font-size: 104.61538461538461%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 104.61538461538461%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 118.46153846153845%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 109.23076923076923%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 113.84615384615384%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 104.61538461538461%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 104.61538461538461%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 104.61538461538461%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 109.23076923076923%'>nosql</a> <a href='/blog/categories/ollert' style='font-size: 123.07692307692308%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 118.46153846153845%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 104.61538461538461%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 104.61538461538461%'>qt</a> <a href='/blog/categories/rails' style='font-size: 104.61538461538461%'>rails</a> <a href='/blog/categories/retro' style='font-size: 113.84615384615384%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 109.23076923076923%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 155.3846153846154%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 113.84615384615384%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 104.61538461538461%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 136.9230769230769%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 104.61538461538461%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 123.07692307692308%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 104.61538461538461%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 104.61538461538461%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 113.84615384615384%'>testing</a> <a href='/blog/categories/trello' style='font-size: 113.84615384615384%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 109.23076923076923%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 104.61538461538461%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 104.61538461538461%'>upstart</a> <a href='/blog/categories/web' style='font-size: 141.53846153846155%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 141.53846153846155%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 104.61538461538461%'>writeups</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 104.61538461538461%'>agile</a> <a href='/blog/categories/c-plus-plus' style='font-size: 113.84615384615384%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 104.61538461538461%'>capybara</a> <a href='/blog/categories/css' style='font-size: 104.61538461538461%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 113.84615384615384%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 123.07692307692308%'>database</a> <a href='/blog/categories/foreman' style='font-size: 104.61538461538461%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 104.61538461538461%'>foss</a> <a href='/blog/categories/git' style='font-size: 104.61538461538461%'>git</a> <a href='/blog/categories/gmock' style='font-size: 104.61538461538461%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 113.84615384615384%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 104.61538461538461%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 104.61538461538461%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 104.61538461538461%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 109.23076923076923%'>heroku</a> <a href='/blog/categories/html' style='font-size: 109.23076923076923%'>html</a> <a href='/blog/categories/internet' style='font-size: 104.61538461538461%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 104.61538461538461%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 118.46153846153845%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 109.23076923076923%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 113.84615384615384%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 104.61538461538461%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 104.61538461538461%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 104.61538461538461%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 109.23076923076923%'>nosql</a> <a href='/blog/categories/ollert' style='font-size: 123.07692307692308%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 118.46153846153845%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 104.61538461538461%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 104.61538461538461%'>qt</a> <a href='/blog/categories/rails' style='font-size: 104.61538461538461%'>rails</a> <a href='/blog/categories/retro' style='font-size: 113.84615384615384%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 109.23076923076923%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 155.3846153846154%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 113.84615384615384%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 104.61538461538461%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 136.9230769230769%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 104.61538461538461%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 123.07692307692308%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 104.61538461538461%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 104.61538461538461%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 113.84615384615384%'>testing</a> <a href='/blog/categories/trello' style='font-size: 113.84615384615384%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 109.23076923076923%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 104.61538461538461%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 104.61538461538461%'>upstart</a> <a href='/blog/categories/web' style='font-size: 141.53846153846155%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 141.53846153846155%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 104.61538461538461%'>writeups</a> </span>
 </section>
 
 <section>
