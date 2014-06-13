@@ -4,7 +4,7 @@
   <title><![CDATA[Category: testing | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/testing/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-05-25T16:43:47-04:00</updated>
+  <updated>2014-06-12T20:31:44-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,307 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Jasmine - A Whole New World of Javascript Testing]]></title>
+    <link href="http://larry-price.com/blog/2014/06/04/jasmine-a-whole-new-world-of-javascript-testing/"/>
+    <updated>2014-06-04T06:19:43-04:00</updated>
+    <id>http://larry-price.com/blog/2014/06/04/jasmine-a-whole-new-world-of-javascript-testing</id>
+    <content type="html"><![CDATA[<p><a href="https://jasmine.github.io/">Jasmine</a>: a headless Javascript testing library written entirely in Javascript. With similarities to <a href="http://rspec.info">rspec</a>, I&rsquo;ve quickly grown attached to this framework and have been looking for opportunties to discuss it. <a href="https://jasmine.github.io/2.0/introduction.html">Version 2.0</a> was recently released, so I&rsquo;ll be focusing on the standalone 2.0 concepts. To get started, download and uncompress <a href="https://github.com/pivotal/jasmine/tree/master/dist">the standalone distribution</a>.</p>
+
+<p>The uncompressed directory structure will have three subdirectories: <code>spec</code>, <code>src</code>, and <code>lib</code>. <code>lib</code> contains all the Jasmine source code. <code>src</code> contains some sample Javascript class that is tested by test files contained in <code>spec</code>. Outside of the subdirectories is the special file <code>SpecRunner.html</code>. This file is how we will run our tests.</p>
+
+<p>Let&rsquo;s start a new pizza place.</p>
+
+<p>We&rsquo;ll need Pizza. A Pizza will need several things: size, style, toppings, and price. We&rsquo;ll have a few styles available, but also allow our guests to request additional toppings. We&rsquo;ll also set the price based on the size and number of toppings. Create the files <code>src/pizza.js</code> and <code>spec/PizzaSpec.js</code> and add them to <code>SpecRunner.html</code>.</p>
+
+<p>We&rsquo;ll start by being able to get the styles from Pizza.</p>
+
+<p>``` js spec/PizzaSpec.js
+describe(&ldquo;Pizza&rdquo;, function() {
+  var pizza;</p>
+
+<p>  beforeEach(function() {</p>
+
+<pre><code>pizza = new Pizza();
+</code></pre>
+
+<p>  });</p>
+
+<p>  it(&ldquo;should give a choice of styles&rdquo;, function() {</p>
+
+<pre><code>expect(pizza.getStyles()).toContain("meat lovers");
+expect(pizza.getStyles()).toContain("veg head");
+expect(pizza.getStyles()).toContain("supreme");
+</code></pre>
+
+<p>  });
+});
+```</p>
+
+<p>The syntax is just lovely: We use <code>describe</code> to set visual context, <code>beforeEach</code> to perform a task before each spec, and <code>it</code> to encapsulate a test. The results of running <code>SpecRunner.html</code> in my browser:</p>
+
+<p><code>
+Pizza should give a choice of styles
+  TypeError: pizza.getStyles is not a function in file:///home/lrp/docs/jasmine/spec/PizzaSpec.js (line 9)
+</code></p>
+
+<p>Fixing it:</p>
+
+<p>``` js src/pizza.js
+function Pizza() {
+  this.getStyles = function() {</p>
+
+<pre><code>return ["meat lovers", "veg head", "supreme"];
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>And the results:</p>
+
+<p>```
+Pizza</p>
+
+<pre><code>should give a choice of styles
+</code></pre>
+
+<p>```</p>
+
+<p>Let&rsquo;s set the toppings:</p>
+
+<p>``` js spec/PizzaSpec.js
+describe(&ldquo;Pizza&rdquo;, function() {
+  // &hellip;</p>
+
+<p>  describe(&ldquo;toppings&rdquo;, function() {</p>
+
+<pre><code>it("should have no toppings when no style and no extras given", function() {
+  pizza.initialize();
+  expect(pizza.getToppings().length).toBe(0);
+});
+
+it("should have only extras when no style and extras given", function() {
+  var extras = ["pineapple", "edamame", "cheeseburger"]
+  pizza.initialize(null, null, extras);
+
+  expect(pizza.getToppings().length).toBe(extras.length);
+  for (var i = 0; i &lt; extras.length; i++) {
+    expect(pizza.getToppings()).toContain(extras[i]);
+  }
+});
+
+it("should have special toppings when given style and extras", function() {
+  var extras = ["pineapple", "edamame", "cheeseburger"];
+  pizza.initialize(null, "veg head", extras);
+
+  expect(pizza.getToppings().length).toBe(7);
+});
+
+it("should have special toppings when given style", function() {
+  var extras = ["pineapple", "edamame", "cheeseburger"];
+  pizza.initialize(null, "veg head");
+
+  expect(pizza.getToppings().length).toBe(4);
+});
+</code></pre>
+
+<p>  });
+});
+```</p>
+
+<p>For these tests, I nested a describe block to give better context to what I&rsquo;m testing. Fixing the tests:</p>
+
+<p>``` js src/pizza.js
+function Pizza() {
+  // &hellip;</p>
+
+<p>  var size, toppings;</p>
+
+<p>  function findToppings(style, extras) {</p>
+
+<pre><code>toppings = extras ? extras : [];
+
+switch (style) {
+  case ("meat lovers"):
+    toppings.push("ham", "pepperoni", "bacon", "sausage");
+    break;
+  case ("veg head"):
+    toppings.push("onion", "tomato", "pepper", "olive");
+    break;
+  case ("supreme"):
+    toppings.push("pepperoni", "onion", "sausage", "olive");
+    break;
+}
+</code></pre>
+
+<p>  }</p>
+
+<p>  this.getToppings = function() {</p>
+
+<pre><code>return toppings;
+</code></pre>
+
+<p>  };</p>
+
+<p>  this.initialize = function(pizzaSize, style, extras) {</p>
+
+<pre><code>size = pizzaSize;
+findToppings(style, extras);
+</code></pre>
+
+<p>  };
+}
+```</p>
+
+<p>And finally, I&rsquo;ll deal with the cost. I&rsquo;ll come out of scope of the nested <code>describe</code> and nest another <code>describe</code>.</p>
+
+<p>``` js spec/PizzaSpec.js
+describe(&ldquo;Pizza&rdquo;, function() {
+  // &hellip;</p>
+
+<p>  describe(&ldquo;cost&rdquo;, function() {</p>
+
+<pre><code>it("is detemined by size and number of toppings", function() {
+  pizza.initialize(10, "supreme");
+  expect(pizza.getToppings().length).toBe(4);
+  expect(pizza.getCost()).toBe(7.00);
+});
+
+it("is detemined by size and number of toppings including extras", function() {
+  pizza.initialize(18, "meat lovers", ["gyros", "panchetta"]);
+  expect(pizza.getToppings().length).toBe(6);
+  expect(pizza.getCost()).toBe(12.00);
+});
+</code></pre>
+
+<p>  });
+});
+```</p>
+
+<p>To fix this test, I&rsquo;ll use my handy-dandy pizza-cost forumla:</p>
+
+<p>``` js src/pizza.js
+function Pizza() {
+ // &hellip;</p>
+
+<p>  this.getCost = function() {</p>
+
+<pre><code>return size/2 + toppings.length * .5;
+</code></pre>
+
+<p>  }</p>
+
+<p>  // &hellip;
+}
+```</p>
+
+<p>This is great and all, but a bit simple. What if we wanted to make an ajax call? Fortunately, I can fit that into this example using <a href="http://onlinepizza.se/api/">Online Pizza</a>, the pizza API. Unfortuantely, the API is kind of garbage, but that doesn&rsquo;t make this example any more meaningless. You can <a href="https://github.com/pivotal/jasmine-ajax/raw/master/lib/mock-ajax.js">download jasmine-ajax on Github</a>, and stick it in your <code>spec/</code> directory and add it to <code>SpecRunner.html</code>. At this point I need to include <a href="">jquery</a> as well.</p>
+
+<p>In order to intercept ajax calls, I&rsquo;ll <code>install</code> the ajax mocker in the <code>beforeEach</code> and uninstall it in an <code>afterEach</code>. Then I write my test, which verifies that the ajax call occurred and returns a response.</p>
+
+<p>``` js spec/PizzaSpec.js
+beforeEach(function() {
+  jasmine.Ajax.install();</p>
+
+<p>  pizza = new Pizza();
+});</p>
+
+<p>afterEach(function() {
+  jasmine.Ajax.uninstall();
+});</p>
+
+<p>describe(&ldquo;sendOrder&rdquo;, function() {
+  it(&ldquo;returns false for bad pizza&rdquo;, function() {</p>
+
+<pre><code>pizza.sendOrder();
+
+expect(jasmine.Ajax.requests.mostRecent().url).toBe("http://onlinepizza.se/api/rest?order.send");
+
+jasmine.Ajax.requests.mostRecent().response({
+  status: "500",
+  contentType: "text/plain",
+  responseText: "Invalid pizza"
+});
+
+expect(pizza.orderSent()).toBe(false);
+</code></pre>
+
+<p>  });</p>
+
+<p>  it(&ldquo;returns true for good pizza&rdquo;, function() {</p>
+
+<pre><code>pizza.sendOrder();
+
+expect(jasmine.Ajax.requests.mostRecent().url).toBe("http://onlinepizza.se/api/rest?order.send");
+
+jasmine.Ajax.requests.mostRecent().response({
+  status: "200",
+  contentType: "text/plain",
+  responseText: "OK"
+});
+
+expect(pizza.orderSent()).toBe(true);
+</code></pre>
+
+<p>  });
+});
+```</p>
+
+<p>To get this to work, I add some logic to the <code>Pizza</code> class to set some state based on what the ajax call returns.</p>
+
+<p>``` js src/pizza.js
+var orderSuccess;</p>
+
+<p>this.sendOrder = function() {
+  orderSuccess = null;</p>
+
+<p>  $.ajax({</p>
+
+<pre><code>type: "POST",
+url: "http://onlinepizza.se/api/rest?order.send",
+success: function() {
+  orderSuccess = true;
+},
+error: function() {
+  orderSuccess = false;
+}
+</code></pre>
+
+<p>  });
+}</p>
+
+<p>this.orderSent = function() {
+  return orderSuccess;
+}
+```</p>
+
+<p>Ajax calls tested. By installing Jasmine&rsquo;s ajax mock, all of the ajax calls were intercepted and were not sent to the server at Online Pizza. Any ajax calls that may have been fired by the <code>Pizza</code> class but were not addressed in the spec are ignored. The final test results look something like this:</p>
+
+<p>```
+Pizza</p>
+
+<pre><code>sendOrder
+    returns false for bad pizza
+    returns true for good pizza
+styles
+    should give a choice of styles
+toppings
+    should have no toppings when no style and no extras given
+    should have only extras when no style and extras given
+    should have special toppings when given style and extras
+    should have special toppings when given style
+cost
+    is detemined by size and number of toppings
+    is detemined by size and number of toppings including extras
+</code></pre>
+
+<p>```</p>
+
+<p>Full sample code <a href="https://github.com/larryprice/jasmine-pizza">available on Github</a>. There&rsquo;s a lot of other interesting things Jasmine can do that I&rsquo;m still learning about. If applicable, I&rsquo;ll try to create a blog post for advanced Jasmine usage in the future.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Better testing in Go with gocheck]]></title>

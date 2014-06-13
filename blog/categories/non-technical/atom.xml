@@ -4,7 +4,7 @@
   <title><![CDATA[Category: non-technical | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/non-technical/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-05-25T16:43:47-04:00</updated>
+  <updated>2014-06-12T20:31:44-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,55 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Lessons Learned during the Conception of Ollert]]></title>
+    <link href="http://larry-price.com/blog/2014/06/12/lessons-learned-during-the-conception-of-ollert/"/>
+    <updated>2014-06-12T20:32:00-04:00</updated>
+    <id>http://larry-price.com/blog/2014/06/12/lessons-learned-during-the-conception-of-ollert</id>
+    <content type="html"><![CDATA[<p>During <a href="http://sep.com">SEP&rsquo;s</a> previous <a href="http://sep.com/labs/">startup weekend</a>, I pitched an idea for a <a href="http://trello.com">Trello</a> Analysis Tool called <a href="https://ollertapp.com">Ollert</a>. In less than three days, a team of 6 built a minimal viable product (MVP) and put it live on the internet. In a little over three months, I have slowly guided Ollert through the legal department, obtained a real domain with security, and fixed a few bugs along the way. I&rsquo;ve learned a thing or two about seeing a hackathon project to fruition that I&rsquo;d like to get in writing.</p>
+
+<h3>1. You Can Never Be Too Prepared</h3>
+
+<p>Before Startup Weekend, I spent days refining my idea and coming up with a cute little proof of concept. I even laid out work items for my developers to work on. When I finally discovered a clever name, I thought my preparation was over.</p>
+
+<p>I was wrong.</p>
+
+<p>Although I requested 5 developers to help me build Ollert, my plans only allowed for two developers to work simultaneously. I didn&rsquo;t realize how hard it would be to keep everyone busy all the time, especially my less-experienced engineers.</p>
+
+<p>Although I did proof-of-concept my idea before we started, I failed to proof-of-concept the more dynamic capabilities a multi-user web application needs to provide. This mistake cost another developer and I the first night of the weekend, plus a bit of the next morning.</p>
+
+<p>Don&rsquo;t even get me started about environment setup. Although I run <a href="http://www.ubuntu.com">Ubuntu</a> natively and had all my developer tools ready before we started work Friday night, the rest of my team were users of That Other Operating System. I should have created a virtual machine with everything all set up, burned it to several USB drives, and let my developers set up VirtualBox without my intervention.</p>
+
+<h3>2. Talk to Legal</h3>
+
+<p>Why do I care about legal? Isn&rsquo;t this my responsibility anyway?</p>
+
+<p>As it turns out, putting a startup weekend project live on the internet before the weekend is over is really cool from a team perspective, but terrifying from a legal perspective. With our MVP, I wasn&rsquo;t using SSL to encrypt user data. I didn&rsquo;t consider how Fog Creek would react once they realized our name is their name backwards. I even had the chutzpah to stick my company&rsquo;s logo in my site&rsquo;s footer.</p>
+
+<p>A quick discussion with management will prepare both sides for the &ldquo;grand reveal&rdquo; if the project makes it to launch. Personally, I&rsquo;d like to see some level of legal counsel in the Startup Weekend &ldquo;pre-pitch&rdquo; session to get feedback before implementation.</p>
+
+<h3>3. Listen</h3>
+
+<p>The second day, one of my developers mentioned using endpoints in the application, and I rejected this idea on the basis that it was too complicated. On the dawn of the final day, we realized that we needed to use his approach or the application would be unusable. This required us to do a lot of rework that could have been avoided. I often think about what other ideas might have been suggested by my team that I may have accidentally ignored.</p>
+
+<h3>4. Easy Tasks</h3>
+
+<p>My assumption going into Startup Weekend was that my team would all be familiar enough with the technology to be able to &ldquo;jump right in&rdquo; or follow along with someone who could. This was a bad assumption.</p>
+
+<p>It&rsquo;s easy to find tasks that <em>I</em> can do. It&rsquo;s much more difficult to find tasks that <em>anyone</em> could do. What are the less-involved tasks on your current project that a less-experienced developer could work on until they&rsquo;re ready to tackle something bigger? Can they set up the database, or the tests? Can you find a guide for them to follow to do these things? If not, you&rsquo;ll have people on your team who don&rsquo;t feel involved but desperately want to help.</p>
+
+<h3>5. Start Small</h3>
+
+<p>Ollert is a pretty big idea, especially for a three-day project. I had high hopes of making it even bigger until the dawn of the final day. I wanted to include some sort of payment system to prove that we would be able to charge people when they sign up without actually charging them. This &ldquo;feature&rdquo; of fake payment has no place in a real product, and would have been misleading at best. We had dozens of ideas for statistics and charts to make it into the website that just weren&rsquo;t that useful.</p>
+
+<p>Limiting scope might have allowed us to come up with a more polished MVP; I walked away the final evening wishing I had left out sign up/in in favor of giving the application more sex appeal.</p>
+
+<h3>Conclusion</h3>
+
+<p>Starting a project is hard. It&rsquo;s even more difficult when you have to delegate most of the work to other people. Startup Weekend is a manger and a mortuary, seeing the birth of many ideas and the death of most. I hope to take this experience and make an even better new product next Startup Weekend.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Takeaways From AgileIndy 2014]]></title>
@@ -187,31 +236,6 @@ end
 <p>Sure, there may be an occasional senior engineer who thinks that the program should be implemented his or her way, and will make you throw out anything you write that has any deviation from The Plan (which never quite made it out of their heads and into any documentation). Usually you can satiate that senior engineer by listening to them and nodding your head for a few minutes. There&rsquo;s a reason that engineer carries so much weight on the project, so they&rsquo;ll probably be making a valid point while you nod your head and they&rsquo;ll respect you for agreeing with them, even though you secretly wish you could just keep doing it the way you originally planned.</p>
 
 <p>Don&rsquo;t cry over spilled milk. No one&rsquo;s actually questioning your coding competency when they change the plan. The odds are in your favor that the plan changed in the best interest of the project, and whatever code is being thrown out is likely a necessary casualty to benefit the system as a whole. Remember that most of the code you write is used, at least for a little while, so try not to dwell on the code that isn&rsquo;t.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[What's Still Possible]]></title>
-    <link href="http://larry-price.com/blog/2013/04/01/whats-still-possible/"/>
-    <updated>2013-04-01T22:35:00-04:00</updated>
-    <id>http://larry-price.com/blog/2013/04/01/whats-still-possible</id>
-    <content type="html"><![CDATA[<p>If every Miss America candidate had her way, there would be peace on Earth and all the hungry mouths would be fed. While Earthlings enjoy violence and controlling others too much to achieve world peace, I have a proposal to help feed those around the world who don&rsquo;t have enough to eat.</p>
-
-<p>It&rsquo;s not an ad campaign. I&rsquo;m not going to send random people a nickle in the mail and then tell them that they could use that nickle to feed a starving child. I&rsquo;m certainly not going to change any of my eating habits. I happen to know a huge source of food that we underutilize. My plan is to kill two birds with one stone. Well, preferably something like 3 million birds with however many stones it takes.</p>
-
-<p>I&rsquo;m talking, of course, about the terrible tyranny of the <a href="http://en.wikipedia.org/wiki/Canada_Goose">Canadian Goose</a>. A little history:</p>
-
-<p>Our ancestors domesticated Canadian Geese in ancient times and used these waterfowl for various acts of labor, including pulling tugboats down the Mississippi, plowing the great Canadian rice paddies, and keeping our elderly company during their final days of life. The young goslings flapped gingerly in the meadows pollinating the wildflowers, apple trees, and various other meadow-related objects. Much to our delight, some of our beloved geese bretheren became sentient, and started selling us medical insurance while performing a spot-on <a href="http://en.wikipedia.org/wiki/Gilbert_Gottfried">Gilbert Gottfried</a> impression.</p>
-
-<p>False. I must apologize for fooling you in this way sweet, sweet reader, but everything you read in the last paragraph was neither true nor fact. In reality, Canadian Geese serve no purpose. Canadian Geese were created accidentally during the Manhatten Project while one of the lab techs from the local university was trying to combine nuclear fission and the bubonic plague to get back at his ex-girlfriend for cheating on him. He quickly became bored of this task when she stopped responding to his texts, and thusly tossed the waste from his experiments in the river. The rest, of course, is history.</p>
-
-<p>Now here we are. There are well over <a href="http://www.ducks.org/hunting/waterfowl-id/canada-goose">3 million Canadian Geese nationwide</a>, which is decidedly more than anyone finds pleasant. These geese are no longer afraid of humans, so they tend not to run away from us. In fact, we have spoiled the birds so much that some geese will actually approach humans demanding a bite of stale bread. If no bread gift is offered, the foul fowl will emit a frightening hissing noise, raise its wings, and chase off the poor human. Any sidewalk near a pond quickly becomes covered in goose byproducts during the breeding season, which might as well be year-round. I, for one, think that the geese have gone too far. They ruin our picnics, our walks in the park, our egg-stealing competitions, and our feather-collecting scavenger hunts. It&rsquo;s time for the final showdown: Man versus Goose.</p>
-
-<p>Time to tie in the beginning and the parts where I raved like a lunatic: We hunt the geese, and we feed them to people. &lsquo;Nuff said.</p>
-
-<p>People already hunt geese, of course, but it&rsquo;s clearly not enough. Not to mention that these hunters currently just leave the gooseflesh in the woods where lower animals reap the rewards. I propose we extend goose season year-round, and provide free boxes to encourage hunters to package the gooseflesh and send it to the needy in other countries. We&rsquo;ll poison our waterways to take out as many geese as possible, and we will make a wondrous soup for whomever needs it.</p>
-
-<p>It&rsquo;s still possible to feed the hungry. But we need to <em>focus</em> in order to do it. Man versus Goose is not the solution. It&rsquo;s a demonstration of getting distracted from the original cause. The next time someone tries to get you riled up about feeding the hungry through some crazy scheme, remember that there&rsquo;s no better way than addressing the problem directly. It&rsquo;s still possible to do good in this world if you can avoid the crazy.</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="http://larry-price.com/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-05-25T16:43:47-04:00</updated>
+  <updated>2014-06-12T20:31:44-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,499 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Lessons Learned During the Conception of Ollert]]></title>
+    <link href="http://larry-price.com/blog/2014/06/12/lessons-learned-during-the-conception-of-ollert/"/>
+    <updated>2014-06-12T20:32:00-04:00</updated>
+    <id>http://larry-price.com/blog/2014/06/12/lessons-learned-during-the-conception-of-ollert</id>
+    <content type="html"><![CDATA[<p>During <a href="http://sep.com">SEP&rsquo;s</a> previous <a href="http://sep.com/labs/">startup weekend</a>, I pitched an idea for a <a href="http://trello.com">Trello</a> Analysis Tool called <a href="https://ollertapp.com">Ollert</a>. In less than three days, a team of 6 built a minimal viable product (MVP) and put it live on the internet. In a little over three months, I have slowly guided Ollert through the legal department, obtained a real domain with security, and fixed a few bugs along the way. I&rsquo;ve learned a thing or two about seeing a hackathon project to fruition that I&rsquo;d like to get in writing.</p>
+
+<h3>1. You Can Never Be Too Prepared</h3>
+
+<p>Before Startup Weekend, I spent days refining my idea and coming up with a cute little proof of concept. I even laid out work items for my developers to work on. When I finally discovered a clever name, I thought my preparation was over.</p>
+
+<p>I was wrong.</p>
+
+<p>Although I requested 5 developers to help me build Ollert, my plans only allowed for two developers to work simultaneously. I didn&rsquo;t realize how hard it would be to keep everyone busy all the time, especially my less-experienced engineers.</p>
+
+<p>Although I did proof-of-concept my idea before we started, I failed to proof-of-concept the more dynamic capabilities a multi-user web application needs to provide. This mistake cost another developer and I the first night of the weekend, plus a bit of the next morning.</p>
+
+<p>Don&rsquo;t even get me started about environment setup. Although I run <a href="http://www.ubuntu.com">Ubuntu</a> natively and had all my developer tools ready before we started work Friday night, the rest of my team were users of That Other Operating System. I should have created a virtual machine with everything all set up, burned it to several USB drives, and let my developers set up VirtualBox without my intervention.</p>
+
+<h3>2. Talk to Legal</h3>
+
+<p>Why do I care about legal? Isn&rsquo;t this my responsibility anyway?</p>
+
+<p>As it turns out, putting a startup weekend project live on the internet before the weekend is over is really cool from a team perspective, but terrifying from a legal perspective. With our MVP, I wasn&rsquo;t using SSL to encrypt user data. I didn&rsquo;t consider how Fog Creek would react once they realized our name is their name backwards. I even had the chutzpah to stick my company&rsquo;s logo in my site&rsquo;s footer.</p>
+
+<p>A quick discussion with management will prepare both sides for the &ldquo;grand reveal&rdquo; if the project makes it to launch. Personally, I&rsquo;d like to see some level of legal counsel in the Startup Weekend &ldquo;pre-pitch&rdquo; session to get feedback before implementation.</p>
+
+<h3>3. Listen</h3>
+
+<p>The second day, one of my developers mentioned using endpoints in the application, and I rejected this idea on the basis that it was too complicated. On the dawn of the final day, we realized that we needed to use his approach or the application would be unusable. This required us to do a lot of rework that could have been avoided. I often think about what other ideas might have been suggested by my team that I may have accidentally ignored.</p>
+
+<h3>4. Easy Tasks</h3>
+
+<p>My assumption going into Startup Weekend was that my team would all be familiar enough with the technology to be able to &ldquo;jump right in&rdquo; or follow along with someone who could. This was a bad assumption.</p>
+
+<p>It&rsquo;s easy to find tasks that <em>I</em> can do. It&rsquo;s much more difficult to find tasks that <em>anyone</em> could do. What are the less-involved tasks on your current project that a less-experienced developer could work on until they&rsquo;re ready to tackle something bigger? Can they set up the database, or the tests? Can you find a guide for them to follow to do these things? If not, you&rsquo;ll have people on your team who don&rsquo;t feel involved but desperately want to help.</p>
+
+<h3>5. Start Small</h3>
+
+<p>Ollert is a pretty big idea, especially for a three-day project. I had high hopes of making it even bigger until the dawn of the final day. I wanted to include some sort of payment system to prove that we would be able to charge people when they sign up without actually charging them. This &ldquo;feature&rdquo; of fake payment has no place in a real product, and would have been misleading at best. We had dozens of ideas for statistics and charts to make it into the website that just weren&rsquo;t that useful.</p>
+
+<p>Limiting scope might have allowed us to come up with a more polished MVP; I walked away the final evening wishing I had left out sign up/in in favor of giving the application more sex appeal.</p>
+
+<h3>Conclusion</h3>
+
+<p>Starting a project is hard. It&rsquo;s even more difficult when you have to delegate most of the work to other people. Startup Weekend is a manger and a mortuary, seeing the birth of many ideas and the death of most. I hope to take this experience and make an even better new product next Startup Weekend.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Jasmine - a Whole New World of Javascript Testing]]></title>
+    <link href="http://larry-price.com/blog/2014/06/04/jasmine-a-whole-new-world-of-javascript-testing/"/>
+    <updated>2014-06-04T06:19:43-04:00</updated>
+    <id>http://larry-price.com/blog/2014/06/04/jasmine-a-whole-new-world-of-javascript-testing</id>
+    <content type="html"><![CDATA[<p><a href="https://jasmine.github.io/">Jasmine</a>: a headless Javascript testing library written entirely in Javascript. With similarities to <a href="http://rspec.info">rspec</a>, I&rsquo;ve quickly grown attached to this framework and have been looking for opportunties to discuss it. <a href="https://jasmine.github.io/2.0/introduction.html">Version 2.0</a> was recently released, so I&rsquo;ll be focusing on the standalone 2.0 concepts. To get started, download and uncompress <a href="https://github.com/pivotal/jasmine/tree/master/dist">the standalone distribution</a>.</p>
+
+<p>The uncompressed directory structure will have three subdirectories: <code>spec</code>, <code>src</code>, and <code>lib</code>. <code>lib</code> contains all the Jasmine source code. <code>src</code> contains some sample Javascript class that is tested by test files contained in <code>spec</code>. Outside of the subdirectories is the special file <code>SpecRunner.html</code>. This file is how we will run our tests.</p>
+
+<p>Let&rsquo;s start a new pizza place.</p>
+
+<p>We&rsquo;ll need Pizza. A Pizza will need several things: size, style, toppings, and price. We&rsquo;ll have a few styles available, but also allow our guests to request additional toppings. We&rsquo;ll also set the price based on the size and number of toppings. Create the files <code>src/pizza.js</code> and <code>spec/PizzaSpec.js</code> and add them to <code>SpecRunner.html</code>.</p>
+
+<p>We&rsquo;ll start by being able to get the styles from Pizza.</p>
+
+<figure class='code'><figcaption><span>spec/PizzaSpec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s2">&quot;Pizza&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">pizza</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">beforeEach</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">pizza</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Pizza</span><span class="p">();</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;should give a choice of styles&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getStyles</span><span class="p">()).</span><span class="nx">toContain</span><span class="p">(</span><span class="s2">&quot;meat lovers&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getStyles</span><span class="p">()).</span><span class="nx">toContain</span><span class="p">(</span><span class="s2">&quot;veg head&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getStyles</span><span class="p">()).</span><span class="nx">toContain</span><span class="p">(</span><span class="s2">&quot;supreme&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The syntax is just lovely: We use <code>describe</code> to set visual context, <code>beforeEach</code> to perform a task before each spec, and <code>it</code> to encapsulate a test. The results of running <code>SpecRunner.html</code> in my browser:</p>
+
+<figure class='code'><figcaption><span>spec/PizzaSpec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Pizza</span> <span class="nx">should</span> <span class="nx">give</span> <span class="nx">a</span> <span class="nx">choice</span> <span class="nx">of</span> <span class="nx">styles</span>
+</span><span class='line'>  <span class="nx">TypeError</span><span class="o">:</span> <span class="nx">pizza</span><span class="p">.</span><span class="nx">getStyles</span> <span class="nx">is</span> <span class="nx">not</span> <span class="nx">a</span> <span class="kd">function</span> <span class="k">in</span> <span class="nx">file</span><span class="o">:</span><span class="c1">///home/lrp/docs/jasmine/spec/PizzaSpec.js (line 9)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Fixing it:</p>
+
+<figure class='code'><figcaption><span>src/pizza.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">Pizza</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">getStyles</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;meat lovers&quot;</span><span class="p">,</span> <span class="s2">&quot;veg head&quot;</span><span class="p">,</span> <span class="s2">&quot;supreme&quot;</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And the results:</p>
+
+<figure class='code'><figcaption><span>src/pizza.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Pizza</span>
+</span><span class='line'>    <span class="nx">should</span> <span class="nx">give</span> <span class="nx">a</span> <span class="nx">choice</span> <span class="nx">of</span> <span class="nx">styles</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Let&rsquo;s set the toppings:</p>
+
+<figure class='code'><figcaption><span>spec/PizzaSpec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s2">&quot;Pizza&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// ...</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">describe</span><span class="p">(</span><span class="s2">&quot;toppings&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;should have no toppings when no style and no extras given&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">pizza</span><span class="p">.</span><span class="nx">initialize</span><span class="p">();</span>
+</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">().</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;should have only extras when no style and extras given&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">extras</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;pineapple&quot;</span><span class="p">,</span> <span class="s2">&quot;edamame&quot;</span><span class="p">,</span> <span class="s2">&quot;cheeseburger&quot;</span><span class="p">]</span>
+</span><span class='line'>      <span class="nx">pizza</span><span class="p">.</span><span class="nx">initialize</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">extras</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">().</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="nx">extras</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+</span><span class='line'>      <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">extras</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">()).</span><span class="nx">toContain</span><span class="p">(</span><span class="nx">extras</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;should have special toppings when given style and extras&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">extras</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;pineapple&quot;</span><span class="p">,</span> <span class="s2">&quot;edamame&quot;</span><span class="p">,</span> <span class="s2">&quot;cheeseburger&quot;</span><span class="p">];</span>
+</span><span class='line'>      <span class="nx">pizza</span><span class="p">.</span><span class="nx">initialize</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="s2">&quot;veg head&quot;</span><span class="p">,</span> <span class="nx">extras</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">().</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;should have special toppings when given style&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">extras</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;pineapple&quot;</span><span class="p">,</span> <span class="s2">&quot;edamame&quot;</span><span class="p">,</span> <span class="s2">&quot;cheeseburger&quot;</span><span class="p">];</span>
+</span><span class='line'>      <span class="nx">pizza</span><span class="p">.</span><span class="nx">initialize</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="s2">&quot;veg head&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">().</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For these tests, I nested a describe block to give better context to what I&rsquo;m testing. Fixing the tests:</p>
+
+<figure class='code'><figcaption><span>src/pizza.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">Pizza</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// ...</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">size</span><span class="p">,</span> <span class="nx">toppings</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">function</span> <span class="nx">findToppings</span><span class="p">(</span><span class="nx">style</span><span class="p">,</span> <span class="nx">extras</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">toppings</span> <span class="o">=</span> <span class="nx">extras</span> <span class="o">?</span> <span class="nx">extras</span> <span class="o">:</span> <span class="p">[];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">switch</span> <span class="p">(</span><span class="nx">style</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">case</span> <span class="p">(</span><span class="s2">&quot;meat lovers&quot;</span><span class="p">)</span><span class="o">:</span>
+</span><span class='line'>        <span class="nx">toppings</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">&quot;ham&quot;</span><span class="p">,</span> <span class="s2">&quot;pepperoni&quot;</span><span class="p">,</span> <span class="s2">&quot;bacon&quot;</span><span class="p">,</span> <span class="s2">&quot;sausage&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">case</span> <span class="p">(</span><span class="s2">&quot;veg head&quot;</span><span class="p">)</span><span class="o">:</span>
+</span><span class='line'>        <span class="nx">toppings</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">&quot;onion&quot;</span><span class="p">,</span> <span class="s2">&quot;tomato&quot;</span><span class="p">,</span> <span class="s2">&quot;pepper&quot;</span><span class="p">,</span> <span class="s2">&quot;olive&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">case</span> <span class="p">(</span><span class="s2">&quot;supreme&quot;</span><span class="p">)</span><span class="o">:</span>
+</span><span class='line'>        <span class="nx">toppings</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">&quot;pepperoni&quot;</span><span class="p">,</span> <span class="s2">&quot;onion&quot;</span><span class="p">,</span> <span class="s2">&quot;sausage&quot;</span><span class="p">,</span> <span class="s2">&quot;olive&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">getToppings</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">toppings</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">initialize</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">pizzaSize</span><span class="p">,</span> <span class="nx">style</span><span class="p">,</span> <span class="nx">extras</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">size</span> <span class="o">=</span> <span class="nx">pizzaSize</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">findToppings</span><span class="p">(</span><span class="nx">style</span><span class="p">,</span> <span class="nx">extras</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And finally, I&rsquo;ll deal with the cost. I&rsquo;ll come out of scope of the nested <code>describe</code> and nest another <code>describe</code>.</p>
+
+<figure class='code'><figcaption><span>spec/PizzaSpec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s2">&quot;Pizza&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// ...</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">describe</span><span class="p">(</span><span class="s2">&quot;cost&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;is detemined by size and number of toppings&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">pizza</span><span class="p">.</span><span class="nx">initialize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;supreme&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">().</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getCost</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="mf">7.00</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;is detemined by size and number of toppings including extras&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">pizza</span><span class="p">.</span><span class="nx">initialize</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="s2">&quot;meat lovers&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;gyros&quot;</span><span class="p">,</span> <span class="s2">&quot;panchetta&quot;</span><span class="p">]);</span>
+</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">().</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getCost</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="mf">12.00</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To fix this test, I&rsquo;ll use my handy-dandy pizza-cost forumla:</p>
+
+<figure class='code'><figcaption><span>src/pizza.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">Pizza</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'> <span class="c1">// ...</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">getCost</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">size</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="nx">toppings</span><span class="p">.</span><span class="nx">length</span> <span class="o">*</span> <span class="p">.</span><span class="mi">5</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// ...</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is great and all, but a bit simple. What if we wanted to make an ajax call? Fortunately, I can fit that into this example using <a href="http://onlinepizza.se/api/">Online Pizza</a>, the pizza API. Unfortuantely, the API is kind of garbage, but that doesn&rsquo;t make this example any more meaningless. You can <a href="https://github.com/pivotal/jasmine-ajax/raw/master/lib/mock-ajax.js">download jasmine-ajax on Github</a>, and stick it in your <code>spec/</code> directory and add it to <code>SpecRunner.html</code>. At this point I need to include <a href="">jquery</a> as well.</p>
+
+<p>In order to intercept ajax calls, I&rsquo;ll <code>install</code> the ajax mocker in the <code>beforeEach</code> and uninstall it in an <code>afterEach</code>. Then I write my test, which verifies that the ajax call occurred and returns a response.</p>
+
+<figure class='code'><figcaption><span>spec/PizzaSpec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">beforeEach</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">jasmine</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">install</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">pizza</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Pizza</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">afterEach</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">jasmine</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">uninstall</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s2">&quot;sendOrder&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;returns false for bad pizza&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">pizza</span><span class="p">.</span><span class="nx">sendOrder</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">expect</span><span class="p">(</span><span class="nx">jasmine</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">requests</span><span class="p">.</span><span class="nx">mostRecent</span><span class="p">().</span><span class="nx">url</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s2">&quot;http://onlinepizza.se/api/rest?order.send&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">jasmine</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">requests</span><span class="p">.</span><span class="nx">mostRecent</span><span class="p">().</span><span class="nx">response</span><span class="p">({</span>
+</span><span class='line'>      <span class="nx">status</span><span class="o">:</span> <span class="s2">&quot;500&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">contentType</span><span class="o">:</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">responseText</span><span class="o">:</span> <span class="s2">&quot;Invalid pizza&quot;</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">orderSent</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;returns true for good pizza&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">pizza</span><span class="p">.</span><span class="nx">sendOrder</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">expect</span><span class="p">(</span><span class="nx">jasmine</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">requests</span><span class="p">.</span><span class="nx">mostRecent</span><span class="p">().</span><span class="nx">url</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s2">&quot;http://onlinepizza.se/api/rest?order.send&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">jasmine</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">requests</span><span class="p">.</span><span class="nx">mostRecent</span><span class="p">().</span><span class="nx">response</span><span class="p">({</span>
+</span><span class='line'>      <span class="nx">status</span><span class="o">:</span> <span class="s2">&quot;200&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">contentType</span><span class="o">:</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">responseText</span><span class="o">:</span> <span class="s2">&quot;OK&quot;</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">orderSent</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To get this to work, I add some logic to the <code>Pizza</code> class to set some state based on what the ajax call returns.</p>
+
+<figure class='code'><figcaption><span>src/pizza.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">orderSuccess</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">this</span><span class="p">.</span><span class="nx">sendOrder</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">orderSuccess</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">url</span><span class="o">:</span> <span class="s2">&quot;http://onlinepizza.se/api/rest?order.send&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">success</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">orderSuccess</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">error</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">orderSuccess</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">this</span><span class="p">.</span><span class="nx">orderSent</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">orderSuccess</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ajax calls tested. By installing Jasmine&rsquo;s ajax mock, all of the ajax calls were intercepted and were not sent to the server at Online Pizza. Any ajax calls that may have been fired by the <code>Pizza</code> class but were not addressed in the spec are ignored. The final test results look something like this:</p>
+
+<figure class='code'><figcaption><span>src/pizza.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Pizza</span>
+</span><span class='line'>    <span class="nx">sendOrder</span>
+</span><span class='line'>        <span class="nx">returns</span> <span class="kc">false</span> <span class="k">for</span> <span class="nx">bad</span> <span class="nx">pizza</span>
+</span><span class='line'>        <span class="nx">returns</span> <span class="kc">true</span> <span class="k">for</span> <span class="nx">good</span> <span class="nx">pizza</span>
+</span><span class='line'>    <span class="nx">styles</span>
+</span><span class='line'>        <span class="nx">should</span> <span class="nx">give</span> <span class="nx">a</span> <span class="nx">choice</span> <span class="nx">of</span> <span class="nx">styles</span>
+</span><span class='line'>    <span class="nx">toppings</span>
+</span><span class='line'>        <span class="nx">should</span> <span class="nx">have</span> <span class="nx">no</span> <span class="nx">toppings</span> <span class="nx">when</span> <span class="nx">no</span> <span class="nx">style</span> <span class="nx">and</span> <span class="nx">no</span> <span class="nx">extras</span> <span class="nx">given</span>
+</span><span class='line'>        <span class="nx">should</span> <span class="nx">have</span> <span class="nx">only</span> <span class="nx">extras</span> <span class="nx">when</span> <span class="nx">no</span> <span class="nx">style</span> <span class="nx">and</span> <span class="nx">extras</span> <span class="nx">given</span>
+</span><span class='line'>        <span class="nx">should</span> <span class="nx">have</span> <span class="nx">special</span> <span class="nx">toppings</span> <span class="nx">when</span> <span class="nx">given</span> <span class="nx">style</span> <span class="nx">and</span> <span class="nx">extras</span>
+</span><span class='line'>        <span class="nx">should</span> <span class="nx">have</span> <span class="nx">special</span> <span class="nx">toppings</span> <span class="nx">when</span> <span class="nx">given</span> <span class="nx">style</span>
+</span><span class='line'>    <span class="nx">cost</span>
+</span><span class='line'>        <span class="nx">is</span> <span class="nx">detemined</span> <span class="nx">by</span> <span class="nx">size</span> <span class="nx">and</span> <span class="nx">number</span> <span class="nx">of</span> <span class="nx">toppings</span>
+</span><span class='line'>        <span class="nx">is</span> <span class="nx">detemined</span> <span class="nx">by</span> <span class="nx">size</span> <span class="nx">and</span> <span class="nx">number</span> <span class="nx">of</span> <span class="nx">toppings</span> <span class="nx">including</span> <span class="nx">extras</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Full sample code <a href="https://github.com/larryprice/jasmine-pizza">available on Github</a>. There&rsquo;s a lot of other interesting things Jasmine can do that I&rsquo;m still learning about. If applicable, I&rsquo;ll try to create a blog post for advanced Jasmine usage in the future.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Git Out the Way - Rebase Workflow]]></title>
@@ -1539,137 +2032,6 @@
 <p>Installing is not necessary every time I want to test that my code compiles; running <code>go build</code> in the source directory will create a local executable that can be executed for incremental testing.</p>
 
 <p>If you&rsquo;re interested in learning golang, I would recommend doing the <a href="http://tour.golang.org/">go tour</a>. It goes way beyond a trivial hello world program and gives you some insight into many coplex go concepts (I even posted <a href="https://gist.github.com/larryprice/7647808">my solutions as a gist</a>, if you&rsquo;re interested).</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Tell Your Users When You Fail]]></title>
-    <link href="http://larry-price.com/blog/2013/12/12/tell-your-users-when-you-fail/"/>
-    <updated>2013-12-12T19:41:00-05:00</updated>
-    <id>http://larry-price.com/blog/2013/12/12/tell-your-users-when-you-fail</id>
-    <content type="html"><![CDATA[<p>Your users put a lot of faith in you. They put up with your terrible design, your horrible taste in color scheme, and your ability to take up over 100% of their computer&rsquo;s memory. With that in mind, don&rsquo;t these poor people deserve a little bit of honesty?</p>
-
-<p>I came across some code recently that irked me. This code asks for a handle to a database abstraction class and then runs a query on it. It looks kinda like this:</p>
-
-<figure class='code'><figcaption><span>settings.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">changeSettings</span><span class="p">(</span><span class="n">newSettings</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">db</span> <span class="o">=</span> <span class="n">dbFactory</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;settings.db&quot;</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">if</span> <span class="o">!</span><span class="n">db</span><span class="o">.</span><span class="n">nil?</span>
-</span><span class='line'>    <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">buildSaveQuery</span><span class="p">(</span><span class="n">newSettings</span><span class="p">))</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>How nice that <code>changeSettings</code> doesn&rsquo;t try to play with a <code>nil</code> database, right? But what about the user&rsquo;s data? It wasn&rsquo;t saved. And no one knows. <em>Not even you</em>. Now, maybe the user will happily continue what he&rsquo;s doing until he notices that his new settings aren&rsquo;t quite right. So he goes back to them again. Same result. Repeat ad infinitum.</p>
-
-<p>How I would initially approach this is to add an <code>else</code> statement that launches a dialog giving some useful data to the user. Whatever you do, for the love of code, DO NOT tell the user that you had database problems. For most applications, the user will have no idea what that means. It might look something like this:</p>
-
-<figure class='code'><figcaption><span>settings.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">changeSettings</span><span class="p">(</span><span class="n">newSettings</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">db</span> <span class="o">=</span> <span class="n">dbFactory</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;settings.db&quot;</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">if</span> <span class="o">!</span><span class="n">db</span><span class="o">.</span><span class="n">nil?</span>
-</span><span class='line'>    <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">buildSaveQuery</span><span class="p">(</span><span class="n">newSettings</span><span class="p">))</span>
-</span><span class='line'>  <span class="k">else</span>
-</span><span class='line'>    <span class="n">showDialog</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Save Failed!&quot;</span><span class="p">,</span>
-</span><span class='line'>               <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;I&#39;m sorry, but your data could not be saved.&quot;</span> <span class="o">+</span>
-</span><span class='line'>                   <span class="s2">&quot;Press &#39;Try Again&#39; to give it another go.&quot;</span> <span class="o">+</span>
-</span><span class='line'>                   <span class="s2">&quot;If the problem persists, restart the application&quot;</span> <span class="o">+</span>
-</span><span class='line'>                   <span class="s2">&quot; or contact system support.&quot;</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This is not a bad solution. But what about all the other places in the code I get the database from the factory? I&rsquo;d have to update those as well. It would be better to be able to code the factory to launch a similar error dialog whenever this happens. Even better, let me hand the factory a reference to an appropriate dialog whenever I call <code>dbFactory.get</code>.</p>
-
-<p>Another much more frightening possibility is to skip the <code>nil</code> check. Can you guarantee that <code>dbFactory.get</code> will never be <code>nil</code>? In that case, this option is actually pretty good.</p>
-
-<p>Even if that&rsquo;s not a guarantee you can make, it may still be a valid solution. <a href="http://www.artima.com/intv/defenseP.html">Crash early before you do too much damage</a>. Now, if there&rsquo;s some kind of crash-handler or global exception-catcher in your application, then you can catch the impending crash and tell the user the application needs to be restarted&hellip; And the app probably needs to be restarted anyway! There&rsquo;s no need to keep running after you&rsquo;ve reached some horrible error state that needs to be addressed.</p>
-
-<p>Just do <em>something</em>! Your users (especially if that happens to include me) will appreciate your honesty, even if it&rsquo;s so brutal that they have to restart the application.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Login Shell Not Sourcing .bashrc: A Brief Lesson in Dot-files]]></title>
-    <link href="http://larry-price.com/blog/2013/12/10/login-shell-not-sourcing-bashrc/"/>
-    <updated>2013-12-10T19:45:00-05:00</updated>
-    <id>http://larry-price.com/blog/2013/12/10/login-shell-not-sourcing-bashrc</id>
-    <content type="html"><![CDATA[<p>I have a confession: I&rsquo;ve been avoiding using <a href="https://rvm.io/">rvm</a> for the past few weeks for stupid reasons.</p>
-
-<p>When using <code>rvm</code> with <code>gnome-terminal</code>, I have to tell <code>gnome-terminal</code> to run as a login shell so that <code>/etc/profile</code> is sourced. The login shell is then supposed to source <code>$HOME/profile</code>, which is then supposed to source <code>$HOME/.bashrc</code>. Installing <code>rvm</code> results in me editing my <code>.bash_profile</code> to add the following line:</p>
-
-<figure class='code'><figcaption><span>.bash_profile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[[</span> -s <span class="s2">&quot;$HOME/.rvm/scripts/rvm&quot;</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="s2">&quot;$HOME/.rvm/scripts/rvm&quot;</span> <span class="c"># Load RVM into a shell session *as a function*</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>All my <code>rvm</code> environments seem to work, so this is a success, right?</p>
-
-<p>Well, I type the good ol&#8217; <code>ls</code> command and I notice that all my colors are missing. I notice that the terminal title no longer reads the present working directory, but instead greets me with a disinterested &ldquo;Terminal.&rdquo; What happened?</p>
-
-<p>Eventually I realized that this was a problem caused by not sourcing my <code>.bashrc</code>. Where did I go wrong?</p>
-
-<p>The login shell sources <code>$HOME/.profile</code> UNLESS <code>$HOME/.bash_profile</code> exists, in which case it only sources the latter. So what are the contents of my <code>$HOME/.profile</code>?</p>
-
-<figure class='code'><figcaption><span>.profile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># ~/.profile: executed by the command interpreter for login shells.</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># [cut for brevity]</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># if running bash</span>
-</span><span class='line'><span class="k">if</span> <span class="o">[</span> -n <span class="s2">&quot;$BASH_VERSION&quot;</span> <span class="o">]</span>; <span class="k">then</span>
-</span><span class='line'>    <span class="c"># include .bashrc if it exists</span>
-</span><span class='line'>    <span class="k">if</span> <span class="o">[</span> -f <span class="s2">&quot;$HOME/.bashrc&quot;</span> <span class="o">]</span>; <span class="k">then</span>
-</span><span class='line'>      . <span class="s2">&quot;$HOME/.bashrc&quot;</span>
-</span><span class='line'>    <span class="k">fi</span>
-</span><span class='line'><span class="k">fi</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># [cut for brevity]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Aha! The sneaky dot-file actually sources <code>$HOME/.bashrc</code>, and my shiny new <code>$HOME/.bash_profile</code> doesn&rsquo;t. I fixed this by sourcing <code>$HOME/.profile</code> in <code>$HOME/.bash_profile</code>.</p>
-
-<figure class='code'><figcaption><span>.bash_profile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span> -f <span class="s2">&quot;$HOME/.profile&quot;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="s2">&quot;$HOME/.profile&quot;</span>
-</span><span class='line'><span class="o">[[</span> -s <span class="s2">&quot;$HOME/.rvm/scripts/rvm&quot;</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="s2">&quot;$HOME/.rvm/scripts/rvm&quot;</span> <span class="c"># Load RVM into a shell session *as a function*</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>For the memory-impaired: <code>.bash_profile</code> sources <code>.profile</code> sources <code>.bashrc</code>.</p>
-
-<p>Re-open <code>gnome-terminal</code> to find my colors are fixed, my title is correct, and <code>rvm</code> plays the right notes. The world is at peace once again, and I don&rsquo;t have to avoid using <code>rvm</code>.</p>
 ]]></content>
   </entry>
   

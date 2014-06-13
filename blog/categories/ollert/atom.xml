@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ollert | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/ollert/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-05-25T16:43:47-04:00</updated>
+  <updated>2014-06-12T20:31:44-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,55 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Lessons Learned during the Conception of Ollert]]></title>
+    <link href="http://larry-price.com/blog/2014/06/12/lessons-learned-during-the-conception-of-ollert/"/>
+    <updated>2014-06-12T20:32:00-04:00</updated>
+    <id>http://larry-price.com/blog/2014/06/12/lessons-learned-during-the-conception-of-ollert</id>
+    <content type="html"><![CDATA[<p>During <a href="http://sep.com">SEP&rsquo;s</a> previous <a href="http://sep.com/labs/">startup weekend</a>, I pitched an idea for a <a href="http://trello.com">Trello</a> Analysis Tool called <a href="https://ollertapp.com">Ollert</a>. In less than three days, a team of 6 built a minimal viable product (MVP) and put it live on the internet. In a little over three months, I have slowly guided Ollert through the legal department, obtained a real domain with security, and fixed a few bugs along the way. I&rsquo;ve learned a thing or two about seeing a hackathon project to fruition that I&rsquo;d like to get in writing.</p>
+
+<h3>1. You Can Never Be Too Prepared</h3>
+
+<p>Before Startup Weekend, I spent days refining my idea and coming up with a cute little proof of concept. I even laid out work items for my developers to work on. When I finally discovered a clever name, I thought my preparation was over.</p>
+
+<p>I was wrong.</p>
+
+<p>Although I requested 5 developers to help me build Ollert, my plans only allowed for two developers to work simultaneously. I didn&rsquo;t realize how hard it would be to keep everyone busy all the time, especially my less-experienced engineers.</p>
+
+<p>Although I did proof-of-concept my idea before we started, I failed to proof-of-concept the more dynamic capabilities a multi-user web application needs to provide. This mistake cost another developer and I the first night of the weekend, plus a bit of the next morning.</p>
+
+<p>Don&rsquo;t even get me started about environment setup. Although I run <a href="http://www.ubuntu.com">Ubuntu</a> natively and had all my developer tools ready before we started work Friday night, the rest of my team were users of That Other Operating System. I should have created a virtual machine with everything all set up, burned it to several USB drives, and let my developers set up VirtualBox without my intervention.</p>
+
+<h3>2. Talk to Legal</h3>
+
+<p>Why do I care about legal? Isn&rsquo;t this my responsibility anyway?</p>
+
+<p>As it turns out, putting a startup weekend project live on the internet before the weekend is over is really cool from a team perspective, but terrifying from a legal perspective. With our MVP, I wasn&rsquo;t using SSL to encrypt user data. I didn&rsquo;t consider how Fog Creek would react once they realized our name is their name backwards. I even had the chutzpah to stick my company&rsquo;s logo in my site&rsquo;s footer.</p>
+
+<p>A quick discussion with management will prepare both sides for the &ldquo;grand reveal&rdquo; if the project makes it to launch. Personally, I&rsquo;d like to see some level of legal counsel in the Startup Weekend &ldquo;pre-pitch&rdquo; session to get feedback before implementation.</p>
+
+<h3>3. Listen</h3>
+
+<p>The second day, one of my developers mentioned using endpoints in the application, and I rejected this idea on the basis that it was too complicated. On the dawn of the final day, we realized that we needed to use his approach or the application would be unusable. This required us to do a lot of rework that could have been avoided. I often think about what other ideas might have been suggested by my team that I may have accidentally ignored.</p>
+
+<h3>4. Easy Tasks</h3>
+
+<p>My assumption going into Startup Weekend was that my team would all be familiar enough with the technology to be able to &ldquo;jump right in&rdquo; or follow along with someone who could. This was a bad assumption.</p>
+
+<p>It&rsquo;s easy to find tasks that <em>I</em> can do. It&rsquo;s much more difficult to find tasks that <em>anyone</em> could do. What are the less-involved tasks on your current project that a less-experienced developer could work on until they&rsquo;re ready to tackle something bigger? Can they set up the database, or the tests? Can you find a guide for them to follow to do these things? If not, you&rsquo;ll have people on your team who don&rsquo;t feel involved but desperately want to help.</p>
+
+<h3>5. Start Small</h3>
+
+<p>Ollert is a pretty big idea, especially for a three-day project. I had high hopes of making it even bigger until the dawn of the final day. I wanted to include some sort of payment system to prove that we would be able to charge people when they sign up without actually charging them. This &ldquo;feature&rdquo; of fake payment has no place in a real product, and would have been misleading at best. We had dozens of ideas for statistics and charts to make it into the website that just weren&rsquo;t that useful.</p>
+
+<p>Limiting scope might have allowed us to come up with a more polished MVP; I walked away the final evening wishing I had left out sign up/in in favor of giving the application more sex appeal.</p>
+
+<h3>Conclusion</h3>
+
+<p>Starting a project is hard. It&rsquo;s even more difficult when you have to delegate most of the work to other people. Startup Weekend is a manger and a mortuary, seeing the birth of many ideas and the death of most. I hope to take this experience and make an even better new product next Startup Weekend.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Using sqlite on Heroku]]></title>
@@ -294,33 +343,6 @@ function onAuthorizeSuccessful() {
 <p>When the user clicks the link, we have Trello set to activate a &ldquo;popup&rdquo; that will ask them to &ldquo;Allow&rdquo; or &ldquo;Deny&rdquo; our app from accessing their data. When the user allows us access, the popup closes and we hit the &ldquo;onAuthorizeSuccessful&rdquo; method. In my method, I simply redirect them to the <code>/auth</code> route with <code>token</code> manually added to the params list. One of the interesting options listed above is the &ldquo;persist&rdquo; option, which tells Trello whether it should prompt the user for his or her token every time. By telling Trello to persist, the user will only be presented with the popup when he or she needs to reauthenticate.</p>
 
 <p>You can learn more about member tokens from <a href="//trello.com/docs/gettingstarted/authorize.html">https://trello.com/docs/gettingstarted/authorize.html</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[SEP Startup Weekend: Ollert]]></title>
-    <link href="http://larry-price.com/blog/2014/03/17/sep-startup-weekend-ollert/"/>
-    <updated>2014-03-17T20:07:38-04:00</updated>
-    <id>http://larry-price.com/blog/2014/03/17/sep-startup-weekend-ollert</id>
-    <content type="html"><![CDATA[<p>Last weekend was <a href="//sep.com">SEP</a>&rsquo;s 6th Semi-Annual <a href="//sep.com/labs/startupweekend/">Startup Weekend</a>. For those unfamiliar, software developers pitch ideas Friday evening and developers volunteer their time to come up with a <a href="//en.wikipedia.org/wiki/Minimum_viable_product">minimum viable product</a> in the next 48 hours. Free beer is the only thing that makes such a weekend possible.</p>
-
-<p>I&rsquo;ve been before and participated in other people&rsquo;s projects and it&rsquo;s always a blast. However, this weekend was different: I had an idea to pitch. Although the idea went through many names, the core concept remained the same:</p>
-
-<blockquote><p>To tell Trello users what their boards say about the past and the future through unique visuals.</p></blockquote>
-
-<p><a href="//trello.com">Trello</a> is a collaborative workflow management tool that does a wonderful job of showing you the present. There is currently no way on Trello to see your past history or compare yesterday&rsquo;s weather. This simplicity is part of the beauty of Trello, but also an opportunity.</p>
-
-<p>My idea was to create a web application where a user could quickly and easily connect with Trello and view information he or she had never seen previously. I would offer a trial service requiring no login that would allow access to all this data, given that the user puts up with authenticating with Trello every time he or she visits the site. There would be a free membership, which would allow the user to &ldquo;permanantly&rdquo; connect to Trello. To monetize, I wanted to offer a paid membership, where the user would be given the ability to compare &ldquo;historical&rdquo; Trello data by selecting begin and end dates for the Trello data that is analyzed.</p>
-
-<p><a href="//ollert.herokuapp.com">Ollert</a> is the result of this Startup Weekend idea. A live version of Ollert can be found at <a href="//ollert.herokuapp.com">ollert.herokuapp.com</a>.</p>
-
-<p>I worked on <a href="//ollert.herokuapp.com">Ollert</a> with 5 other great developers, and we got a spectacular amount of work done given that we only spent a single weekend programming. We were able to direct users to connect with Trello, let them select a board, and then generate and display 12 different statistics and analyses. We also implemented Sign Up/Login.</p>
-
-<p>We worked on <a href="//ollert.herokuapp.com">Ollert</a> to the last minute, so not everything got in. We never implemented the paid member feature and we didn&rsquo;t get in all the analytics we wanted. We also had some great ideas come out while we were working on <a href="//ollert.herokuapp.com">Ollert</a> that didn&rsquo;t make it into the application, such as filtering chart types and selecting favorites.</p>
-
-<p>Overall, my teammates and I had a great time and we are confident that we&rsquo;ve created something useful.</p>
-
-<p>My current intention is to do several more blog posts about <a href="//ollert.herokuapp.com">Ollert</a> including Connecting to the Trello API, Using ruby-trello, Using sqlite on Heroku, What I Should Have Had Ready Before Asking People To Work For Me, and The Future of Ollert.</p>
 ]]></content>
   </entry>
   
