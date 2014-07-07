@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Letting the Browser Decide Betwen HTTP and HTTPS - Larry Price</title>
+  <title>Deauthorizing Token With the Trello Client - Larry Price</title>
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="While working on SEP Labs&#8217; Health2Wealth app, I got my first taste of setting up a website to use secure connections. I&rsquo;ve been using the &hellip;">
+  <meta name="description" content="In my application, a user can connect to Trello without logging in. Whenever this &ldquo;anonymous&rdquo; user hits the landing page, I attempt to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://larry-price.com/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https">
+  <link rel="canonical" href="http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Larry Price" type="application/atom+xml">
@@ -83,7 +83,7 @@
   
   <header>
     
-      <h1 class="entry-title">Letting the Browser Decide Betwen HTTP and HTTPS</h1>
+      <h1 class="entry-title">Deauthorizing Token With the Trello Client</h1>
     
     
       <p class="meta">
@@ -99,7 +99,7 @@
   
 
 
-<time datetime="2014-02-13T17:55:00-05:00" pubdate data-updated="true">Feb 13<span>th</span>, 2014</time>
+<time datetime="2014-07-07T05:59:13-04:00" pubdate data-updated="true">Jul 7<span>th</span>, 2014</time>
         
            | <a href="#disqus_thread"
              data-disqus-identifier="http://larry-price.com">Comments</a>
@@ -109,13 +109,90 @@
   </header>
 
 
-<div class="entry-content"><p>While working on SEP Labs&#8217; <a href="//h2w.cc">Health2Wealth</a> app, I got my first taste of setting up a website to use secure connections. I&rsquo;ve been using the browser extension <a href="//www.eff.org/https-everywhere">HTTPS Everywhere</a> for quite some time now, so all of the web pages that I visit attempt to using <code>HTTPS</code>instead of the standard <code>HTTP</code>. When I inadvertently started testing our app with <code>HTTPS</code>, things got a little weird.</p>
+<div class="entry-content"><p>In my <a href="https://ollertapp.com">application</a>, a user can connect to Trello without logging in. Whenever this &ldquo;anonymous&rdquo; user hits the landing page, I attempt to force the <a href="https://trello.com/docs/gettingstarted/clientjs.html">Trello client</a> to authorize the user again. By doing this, the user can return to the landing page whenever he or she likes to switch usernames. My authorize code looks like this:</p>
 
-<p>My machine was able to open most of a page, but it wouldn&rsquo;t load some of the graphics or javascript we had embedded in the page. I was the only one able to reproduce it, so we chalked it up to a wonky machine. Then I suddenly remembered that I was using HTTPS Everywhere. I found the area in FireFox that warns you about insecure connections and found that our page was only <em>partially</em> loading on my browser because some of the content was insecure. From there I enabled an option to reveal the insecure elements, which forced my page to load everything correctly. So now we needed to find what was insecure about our page. I trekked through the codebase and found that some of our graphs and links were hard-coded to use <code>HTTP</code>. My initial thought was just to force them to use <code>HTTPS</code>, which is <a href="//lists.w3.org/Archives/Public/ietf-http-wg/2013OctDec/0625.html">almost certainly the impending standard</a>. With a quick search, I found that there exists a <strong>real</strong> solution to this problem.</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">AuthenticateTrelloAlways</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">Trello</span><span class="p">.</span><span class="nx">authorize</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Ollert&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;popup&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">interactive</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">expiration</span><span class="o">:</span> <span class="s2">&quot;1hour&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">persist</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">success</span><span class="o">:</span> <span class="nx">onAuthorizeSuccessful</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">scope</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>Let&rsquo;s say I have a very normal web application, so I want to include <a href="//jquery.com">jQuery</a> embedded in my page. I initially copy-paste <code>&lt;script src='http://code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code> right into my <code>&lt;head&gt;</code> node, which normally seems fine. Unfortunately, this is where issues arise. I&rsquo;m now forcing the user to make a connection which may or may not be secure to fetch data from an insecure page.</p>
 
-<p>By removing the <code>http:</code> from the <code>http://</code>, the issue of deciding whether to fetch the file using <code>HTTP</code> or <code>HTTPS</code> is left to the web browser. So my script include becomes <code>&lt;script src='//code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code>. This also works for links, images, and web fonts. In fact, every link included in this post uses the same principal, where I leave the protocol out of what becomes the <code>href</code> tag.</p>
+<p>This works oh-so-wonderfully in Chrome and Firefox, but, even during the hackathon which spawned <a href="https://ollertapp.com">Ollert</a>, we noticed that IE10/11 were causing some unexpected issues. Authorization would work the first time the user hit the landing page, but on subsequent visits telling Trello to Allow or Deny access resulted in the popup showing a white screen and never calling my callback function. Closing and reopening IE would allow me to authorize once, presumably until the &ldquo;1hour&rdquo; that I requested the original token for expired. I also verified this problem existed in IE9.</p>
+
+<p>After several hours tweeting obscenities about IE, I stumbled upon the answer while browsing the source code for Trello&rsquo;s <a href="https://trello.com/1/client.coffee">client.coffee</a>. About one third of the way through the code, I found this function:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">#</span> <span class="nx">Clear</span> <span class="nx">any</span> <span class="nx">existing</span> <span class="nx">authorization</span>
+</span><span class='line'><span class="nx">deauthorize</span><span class="o">:</span> <span class="o">-&gt;</span>
+</span><span class='line'>  <span class="nx">token</span> <span class="o">=</span> <span class="kc">null</span>
+</span><span class='line'>  <span class="nx">writeStorage</span><span class="p">(</span><span class="s2">&quot;token&quot;</span><span class="p">,</span> <span class="nx">token</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">return</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>All this code does is unset the class variable <code>token</code> and unset the local store variable of the same name. So I changed my <code>AuthenticateTrelloAlways()</code> method:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">AuthenticateTrelloAlways</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">Trello</span><span class="p">.</span><span class="nx">deauthorize</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">Trello</span><span class="p">.</span><span class="nx">authorize</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Ollert&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;popup&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">interactive</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">expiration</span><span class="o">:</span> <span class="s2">&quot;1hour&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">persist</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">success</span><span class="o">:</span> <span class="nx">onAuthorizeSuccessful</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">scope</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Voilà. Why does this only happen in IE? I was originally going to blame the local store, but, since I was able to reproduce the defect in IE9 (no HTML5), I no longer believe that to be the case. I&rsquo;m currently resigned to chalk it up as IE just being IE.</p>
 </div>
 
 
@@ -138,12 +215,12 @@
   
 
 
-<time datetime="2014-02-13T17:55:00-05:00" pubdate data-updated="true">Feb 13<span>th</span>, 2014</time>
+<time datetime="2014-07-07T05:59:13-04:00" pubdate data-updated="true">Jul 7<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/web/'>web</a>
+    <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/ollert/'>ollert</a>, <a class='category' href='/blog/categories/trello/'>trello</a>, <a class='category' href='/blog/categories/web/'>web</a>
   
 </span>
 
@@ -152,7 +229,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://larry-price.com/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/" data-via="larryrprice" data-counturl="http://larry-price.com/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client/" data-via="larryrprice" data-counturl="http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="small"></div>
@@ -165,10 +242,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/02/12/custom-domain-with-github-pages/" title="Previous Post: Custom Domain with Github Pages">&laquo; Custom Domain with Github Pages</a>
+        <a class="basic-alignment left" href="/blog/2014/06/12/lessons-learned-during-the-conception-of-ollert/" title="Previous Post: Lessons Learned during the Conception of Ollert">&laquo; Lessons Learned during the Conception of Ollert</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/" title="Next Post: Convincing rvm to let you use ruby 2.1.0">Convincing rvm to let you use ruby 2.1.0 &raquo;</a>
       
     </p>
   </footer>
@@ -279,8 +354,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://larry-price.com/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/';
-        var disqus_url = 'http://larry-price.com/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/';
+        var disqus_identifier = 'http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client/';
+        var disqus_url = 'http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client/';
         var disqus_script = 'embed.js';
       
     (function () {

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: web | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/web/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-06-12T20:31:44-04:00</updated>
+  <updated>2014-07-07T06:23:27-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,73 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Deauthorizing Token with the Trello Client]]></title>
+    <link href="http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client/"/>
+    <updated>2014-07-07T05:59:13-04:00</updated>
+    <id>http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client</id>
+    <content type="html"><![CDATA[<p>In my <a href="https://ollertapp.com">application</a>, a user can connect to Trello without logging in. Whenever this &ldquo;anonymous&rdquo; user hits the landing page, I attempt to force the <a href="https://trello.com/docs/gettingstarted/clientjs.html">Trello client</a> to authorize the user again. By doing this, the user can return to the landing page whenever he or she likes to switch usernames. My authorize code looks like this:</p>
+
+<p>``` javascript
+function AuthenticateTrelloAlways() {
+  Trello.authorize({</p>
+
+<pre><code>name: "Ollert",
+type: "popup",
+interactive: true,
+expiration: "1hour",
+persist: false,
+success: onAuthorizeSuccessful,
+scope: {
+  read: true
+},
+</code></pre>
+
+<p>  });
+}
+```</p>
+
+<p>This works oh-so-wonderfully in Chrome and Firefox, but, even during the hackathon which spawned <a href="https://ollertapp.com">Ollert</a>, we noticed that IE10/11 were causing some unexpected issues. Authorization would work the first time the user hit the landing page, but on subsequent visits telling Trello to Allow or Deny access resulted in the popup showing a white screen and never calling my callback function. Closing and reopening IE would allow me to authorize once, presumably until the &ldquo;1hour&rdquo; that I requested the original token for expired. I also verified this problem existed in IE9.</p>
+
+<p>After several hours tweeting obscenities about IE, I stumbled upon the answer while browsing the source code for Trello&rsquo;s <a href="https://trello.com/1/client.coffee">client.coffee</a>. About one third of the way through the code, I found this function:</p>
+
+<p>``` javascript</p>
+
+<h1>Clear any existing authorization</h1>
+
+<p>deauthorize: &ndash;>
+  token = null
+  writeStorage(&ldquo;token&rdquo;, token)
+  return
+```</p>
+
+<p>All this code does is unset the class variable <code>token</code> and unset the local store variable of the same name. So I changed my <code>AuthenticateTrelloAlways()</code> method:</p>
+
+<p>``` javascript
+function AuthenticateTrelloAlways() {
+  Trello.deauthorize();</p>
+
+<p>  Trello.authorize({</p>
+
+<pre><code>name: "Ollert",
+type: "popup",
+interactive: true,
+expiration: "1hour",
+persist: false,
+success: onAuthorizeSuccessful,
+scope: {
+  read: true
+},
+</code></pre>
+
+<p>  });
+}
+```</p>
+
+<p>Voilà. Why does this only happen in IE? I was originally going to blame the local store, but, since I was able to reproduce the defect in IE9 (no HTML5), I no longer believe that to be the case. I&rsquo;m currently resigned to chalk it up as IE just being IE.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Connecting to the Trello API]]></title>
@@ -216,73 +283,6 @@ end
 <p>Let&rsquo;s say I have a very normal web application, so I want to include <a href="//jquery.com">jQuery</a> embedded in my page. I initially copy-paste <code>&lt;script src='http://code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code> right into my <code>&lt;head&gt;</code> node, which normally seems fine. Unfortunately, this is where issues arise. I&rsquo;m now forcing the user to make a connection which may or may not be secure to fetch data from an insecure page.</p>
 
 <p>By removing the <code>http:</code> from the <code>http://</code>, the issue of deciding whether to fetch the file using <code>HTTP</code> or <code>HTTPS</code> is left to the web browser. So my script include becomes <code>&lt;script src='//code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code>. This also works for links, images, and web fonts. In fact, every link included in this post uses the same principal, where I leave the protocol out of what becomes the <code>href</code> tag.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Custom Domain with Github Pages]]></title>
-    <link href="http://larry-price.com/blog/2014/02/12/custom-domain-with-github-pages/"/>
-    <updated>2014-02-12T21:30:00-05:00</updated>
-    <id>http://larry-price.com/blog/2014/02/12/custom-domain-with-github-pages</id>
-    <content type="html"><![CDATA[<p>As of today, I&rsquo;m the proud owner of <a href="//larry-price.com">larry-price.com</a>. On the recommendation from a friend, I used <a href="//domainmonster.com">domainmonster.com</a> for it&rsquo;s cost effectiveness and usable toolset. I wanted to link my Github Pages blog (this blog!) to my new site. In case I ever want to do this again, I&rsquo;ve provided myself (and you!) with a step-by-step guide below. Note that Github <a href="//help.github.com/articles/setting-up-a-custom-domain-with-pages">has a page that explains how to do this</a>, but there&rsquo;s some fluff and ordering issues that turned me off from using those instructions as any more than a reference.</p>
-
-<h4>Step 0: Buy your domain</h4>
-
-<p>All sites where you can purchase domains have the same domains available, but at different prices. From the sites I perused, <a href="//godaddy.com">GoDaddy</a> had the best search for domain names, suggesting different variations on the searched domain name. I found that <a href="//domainmonster.com">domainmonster.com</a> had the ugliest UI but the best prices. <a href="//hover.com">Hover.com</a> looked really modern and had moderate prices. Shop around and spend money.</p>
-
-<h4>Step 0.5: Exercise restraint</h4>
-
-<p>At this point in the process, <strong>don&rsquo;t go to your site</strong>.</p>
-
-<p>My guess is you already have. If you don&rsquo;t have the ability to go back in time, don&rsquo;t sweat it, just know that you probably won&rsquo;t be able to verify the fruits of your labor for a few hours.</p>
-
-<h4>Step 1: Setting up an &lsquo;A Record&rsquo;</h4>
-
-<p>Find the ip address where your site is currently hosted. For me (replace URL with your own):</p>
-
-<p>``` bash
-$ nslookup larryprice.github.io
-Server:   127.0.1.1
-Address:  127.0.1.1#53</p>
-
-<p>Non-authoritative answer:
-Name: larryprice.github.io
-Address: 199.27.74.133
-```</p>
-
-<p>You should be able to &ldquo;manage&rdquo; your domain on your domain provider&rsquo;s website. In the &ldquo;management&rdquo; area, you should be able to find a section about &ldquo;DNS&rdquo;. Find something labeled &ldquo;A records.&rdquo; There will likely already be one or two entries here &ndash; one for the IP address of your new domain and one with the IP address of your domain with &ldquo;www.&rdquo; prepended.</p>
-
-<p>Modify the entry (or entries) with the IP address found using <code>nslookup</code> (&ldquo;199.27.74.133&rdquo; from the example above). Save your site settings.</p>
-
-<h4>Step 2: Mucking with the &ldquo;www&rdquo; instance</h4>
-
-<p>While we&rsquo;re modifying these settings, we might as well move the &lsquo;www&rsquo; case out of the &ldquo;A records&rdquo;. Go ahead and delete it.</p>
-
-<p>Look for something named &ldquo;CNAME records&rdquo;, or figure out how to add records in general. We&rsquo;re going to add a CNAME record where the &ldquo;Alias&rdquo; is &ldquo;www&rdquo; and the &ldquo;Address&rdquo; is your site&rsquo;s name. In my case, my &ldquo;Alias&rdquo; field is &ldquo;www&rdquo; and my &ldquo;Address&rdquo; field is &ldquo;larry-price.com&rdquo;. Add the record and cross your fingers for success.</p>
-
-<h4>Step 3: Telling Github Pages what to do</h4>
-
-<p>Alhtough Github Pages is magical in its own right, it doesn&rsquo;t know what to do when receiving a request from the &ldquo;A record&rdquo; we created in Step 2 without further instruction.</p>
-
-<p>If you&rsquo;re using Github Pages for a user page, we are going to make this change on the <code>master</code> branch. If this is a project page, do it on the <code>gh-pages</code> branch.</p>
-
-<p>All we have to do is put our new domain into a file in the root folder called <code>CNAME</code>. Let&rsquo;s do it in one fell swoop of the command line.</p>
-
-<p><code>bash
-$ echo "larry-price.com" &gt; CNAME
-</code></p>
-
-<p>Push that to Github and wait 0 to 10 minutes for Github to refresh your page.</p>
-
-<p>Note: If you&rsquo;re one of the few, the proud using the brilliant <a href="//octopress.org/">Octopress</a> to generate your blog, you want to make sure to add the <code>CNAME</code> file to the root of your <code>source/</code> directory. That way, when you call <code>deploy</code> your <code>CNAME</code> file will end up in the root of your <code>_deploy</code> directory.</p>
-
-<h4>Step 4: Behold</h4>
-
-<p>Check your Github repository&rsquo;s &ldquo;Settings&rdquo; section. In the &ldquo;GitHub Pages&rdquo; section, you should now see something along the lines of &ldquo;Your site is published at <a href="http://larry-price.com">http://larry-price.com</a>&rdquo;. Go, young one, and visit your new site; and behold the glory you have brought to your family.</p>
-
-<p>I&rsquo;ll note that this is the point where not obeying Step 0.5 will cause issues. Once your internets knows that your page hit a certain DNS, it takes a few hours to refresh. In my case it only took about 2 hours, but it may take between 12 and 48 hours to refresh. A workaround to see if everything is working is to pull out your smart phone and use your carrier&rsquo;s network to check your new site, since that area of the internets is probably still untainted. (All of this paragraph is a simplified thought process on how DNS works, considering that&rsquo;s the level I understand it.)</p>
-
-<p>Now fly, my children, and spread yourself over the internet with dozens of silly domain names!</p>
 ]]></content>
   </entry>
   

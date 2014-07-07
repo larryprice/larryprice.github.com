@@ -4,7 +4,7 @@
   <title><![CDATA[Category: trello | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/trello/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-06-12T20:31:44-04:00</updated>
+  <updated>2014-07-07T06:23:27-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,73 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Deauthorizing Token with the Trello Client]]></title>
+    <link href="http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client/"/>
+    <updated>2014-07-07T05:59:13-04:00</updated>
+    <id>http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client</id>
+    <content type="html"><![CDATA[<p>In my <a href="https://ollertapp.com">application</a>, a user can connect to Trello without logging in. Whenever this &ldquo;anonymous&rdquo; user hits the landing page, I attempt to force the <a href="https://trello.com/docs/gettingstarted/clientjs.html">Trello client</a> to authorize the user again. By doing this, the user can return to the landing page whenever he or she likes to switch usernames. My authorize code looks like this:</p>
+
+<p>``` javascript
+function AuthenticateTrelloAlways() {
+  Trello.authorize({</p>
+
+<pre><code>name: "Ollert",
+type: "popup",
+interactive: true,
+expiration: "1hour",
+persist: false,
+success: onAuthorizeSuccessful,
+scope: {
+  read: true
+},
+</code></pre>
+
+<p>  });
+}
+```</p>
+
+<p>This works oh-so-wonderfully in Chrome and Firefox, but, even during the hackathon which spawned <a href="https://ollertapp.com">Ollert</a>, we noticed that IE10/11 were causing some unexpected issues. Authorization would work the first time the user hit the landing page, but on subsequent visits telling Trello to Allow or Deny access resulted in the popup showing a white screen and never calling my callback function. Closing and reopening IE would allow me to authorize once, presumably until the &ldquo;1hour&rdquo; that I requested the original token for expired. I also verified this problem existed in IE9.</p>
+
+<p>After several hours tweeting obscenities about IE, I stumbled upon the answer while browsing the source code for Trello&rsquo;s <a href="https://trello.com/1/client.coffee">client.coffee</a>. About one third of the way through the code, I found this function:</p>
+
+<p>``` javascript</p>
+
+<h1>Clear any existing authorization</h1>
+
+<p>deauthorize: &ndash;>
+  token = null
+  writeStorage(&ldquo;token&rdquo;, token)
+  return
+```</p>
+
+<p>All this code does is unset the class variable <code>token</code> and unset the local store variable of the same name. So I changed my <code>AuthenticateTrelloAlways()</code> method:</p>
+
+<p>``` javascript
+function AuthenticateTrelloAlways() {
+  Trello.deauthorize();</p>
+
+<p>  Trello.authorize({</p>
+
+<pre><code>name: "Ollert",
+type: "popup",
+interactive: true,
+expiration: "1hour",
+persist: false,
+success: onAuthorizeSuccessful,
+scope: {
+  read: true
+},
+</code></pre>
+
+<p>  });
+}
+```</p>
+
+<p>Voilà. Why does this only happen in IE? I was originally going to blame the local store, but, since I was able to reproduce the defect in IE9 (no HTML5), I no longer believe that to be the case. I&rsquo;m currently resigned to chalk it up as IE just being IE.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Using the Trello API in Ruby]]></title>

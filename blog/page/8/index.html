@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="Your code is being sent to the dump. Don&rsquo;t take it personally. Your code isn&rsquo;t bad. It&rsquo;s just garbage. Maybe your code wasn&rsquo;t &hellip;">
+  <meta name="description" content="The project I&rsquo;m working on is slowly adding Cucumber acceptance tests to our massive code base in order to replace aging Robot tests. One would &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,202 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">Tags in C++ Cucumber Tests</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-15T22:10:00-04:00" pubdate data-updated="true">Apr 15<span>th</span>, 2013</time>
+        
+           | <a href="/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/#disqus_thread"
+             data-disqus-identifier="http://larry-price.com/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The project I&rsquo;m working on is slowly adding <a href="https://github.com/cucumber/cucumber-cpp">Cucumber</a> acceptance tests to our massive code base in order to replace aging <a href="https://code.google.com/p/robotframework/">Robot tests</a>. One would think that getting developers on our team to use Cucumber would be east, since it uses <a href="https://code.google.com/p/googletest/">googletest</a> and <a href="https://code.google.com/p/googlemock/">googlemock</a> which we use for our unit tests. Unfortunately, very few people on the team have been motivated to write integration tests using the new framework, so I have very few people to go to when I have problems writing my own integration tests.</p>
+
+<p>The area of the code I deal with uses <a href="http://www.mono-project.com/Embedding_Mono">embedded mono</a> to communicate with some C# libraries that we share with other applications. This means we have unmanaged memory which talks with managed memory. This has caused us more headaches than I care to remember. One such problem is that we have a static object that we only want to create and destroy once. So I write my first Cucumber test:</p>
+
+<figure class='code'><figcaption><span>DoStuff.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Do that thing that we have to do</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Do it my way</span>
+</span><span class='line'><span class="k">  Given </span><span class="nf">I have done step </span><span class="s">1</span><span class="nf"></span>
+</span><span class='line'><span class="nf">  </span><span class="k">When </span><span class="nf">I do step </span><span class="s">2</span><span class="nf"></span>
+</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">I should see results</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>DoStuff_StepDefinitions.cpp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="cp">#include &lt;cucumber-cpp/defs.hpp&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;gtest/gtest.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;mono/jit/jit.h&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">const</span> <span class="n">QString</span> <span class="n">DOMAIN_NAME</span> <span class="o">=</span> <span class="s">&quot;bridge&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Context</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="c1">// The static Mono object</span>
+</span><span class='line'>  <span class="k">static</span> <span class="n">MonoDomain</span> <span class="o">*</span><span class="n">Domain</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BEFORE</span><span class="p">()</span> <span class="p">{</span> <span class="n">Context</span><span class="o">::</span><span class="n">Domain</span> <span class="o">=</span> <span class="n">mono_jit_init</span><span class="p">(</span><span class="n">DOMAIN_NAME</span><span class="p">);</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">AFTER</span><span class="p">()</span> <span class="p">{</span> <span class="n">mono_jit_cleanup</span><span class="p">(</span><span class="n">Context</span><span class="o">::</span><span class="n">Domain</span><span class="p">);</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">GIVEN</span><span class="p">(</span><span class="s">&quot;^I have done step 1$&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">WHEN</span><span class="p">(</span><span class="s">&quot;^I do step 2$&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">THEN</span><span class="p">(</span><span class="s">&quot;^I should see results$&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Before my scenario starts, the <code>BEFORE()</code> function is called and my MonoDomain object is created. When the scenario ends, my <code>AFTER()</code> statement is called and the objects in my MonoDomain are cleaned up. Now, I add a second scenario.</p>
+
+<figure class='code'><figcaption><span>DoStuff.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Do that thing that we have to do</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Do it my way</span>
+</span><span class='line'><span class="nf">  ...</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">Scenario: Do it your way</span>
+</span><span class='line'><span class="nf">  ...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now I run my Cucumber test, and Mono explodes. Why? Because the <code>BEFORE()</code> and <code>AFTER()</code> functions are not <em>before all</em> and <em>after all</em>, but <em>before each</em> and <em>after each</em>.</p>
+
+<p>So what should we do? Move the function calls in the <code>BEFORE()</code> and <code>AFTER()</code> statements into the constructor and destructor of the Context class?</p>
+
+<p>Same problem. Are there <code>BEFORE_ALL()</code> and <code>AFTER_ALL()</code> macros? No.</p>
+
+<p>I began to panic. I asked the person who taught me how to write Cucumber tests in C++. Our idea was to create the MonoDomain during what I knew would be the first step, and delete it after what I knew would be the last step. Oh, the horror! That would mean not being able to reuse those steps, not to mention moving the creation/destruction code around anytime I wanted to add new steps or change the order of my previous steps. We also thought about making specific steps and sticking them at the front of the first scenario and at the end of the last scenario. This still meant that the lay developer would have to recognize these first and last steps from the others. I asked my local senior engineer, and his advice was to create separate Cucumber tests for each scenario I intended to create. My plan was to write 6 scenarios in the long-term for this feature, and I really didn&rsquo;t want to turn these very similar tests with beautifully reusable steps into 6 features.</p>
+
+<p>Then it hit me: Cucumber is open source. I found the source <a href="https://github.com/cucumber/cucumber-cpp">on Github</a> and started looking through <a href="https://github.com/cucumber/cucumber-cpp/tree/master/examples/">the example code</a>. It was there that I discovered <a href="https://github.com/cucumber/cucumber-cpp/tree/master/examples/FeatureShowcase/tag">tags</a>. Tags were the solution to my problem.</p>
+
+<figure class='code'><figcaption><span>DoStuff.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Do that thing that we have to do</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">@first</span>
+</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Do it my way</span>
+</span><span class='line'><span class="nf">  ...</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">@last</span>
+</span><span class='line'><span class="nf">Scenario: Do it your way</span>
+</span><span class='line'><span class="nf">  ...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using tags, I could label my scenarios with meaningful <code>@first</code> and <code>@last</code> tags to signify the beginning and end of my tests. The trick is to then add the required tags to my <code>BEFORE()</code> and <code>AFTER()</code> macro as such:</p>
+
+<figure class='code'><figcaption><span>DoStuff_StepDefinitions.cpp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="cp">#include &lt;cucumber-cpp/defs.hpp&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;gtest/gtest.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;mono/jit/jit.h&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">const</span> <span class="n">QString</span> <span class="n">DOMAIN_NAME</span> <span class="o">=</span> <span class="s">&quot;bridge&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Context</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="c1">// The static Mono object</span>
+</span><span class='line'>  <span class="k">static</span> <span class="n">MonoDomain</span> <span class="o">*</span><span class="n">Domain</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BEFORE</span><span class="p">(</span><span class="s">&quot;@first&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">Context</span><span class="o">::</span><span class="n">Domain</span> <span class="o">=</span> <span class="n">mono_jit_init</span><span class="p">(</span><span class="n">DOMAIN_NAME</span><span class="p">);</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">AFTER</span><span class="p">(</span><span class="s">&quot;@last&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">mono_jit_cleanup</span><span class="p">(</span><span class="n">Context</span><span class="o">::</span><span class="n">Domain</span><span class="p">);</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// ...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now my MonoDomain is only created <em>before</em> the scenario labeled <code>@first</code> and <em>after</em> the scenario labeled <code>@last</code>. Obviously, this isn&rsquo;t the cleanest fix imaginable, but it was the cleanest fix <em>available</em>. Whenever someone wants to add a new step to this test, they need to remember to move the <code>@last</code> tag to their scenario. However, I have the hope that it will be pretty obvious that the second scenario is no longer &ldquo;last&rdquo; when there is a third scenario following the &ldquo;last&rdquo; scenario. Anyway, it leaves me happy enough, since now my tests don&rsquo;t explode and I&rsquo;m able to reuse ~50% of the steps I had already written for the first scenario. I added a third scenario later on and 9 out of the 10 steps in the scenario were reused from the first and second scenario.</p>
+
+<p>There are lots of other cool things you can do with Cucumber tags, like having multiple tags on objects. All tags that match <code>@first</code> will do one thing, but tags that match <code>@first</code> and <code>@second</code> can have multiple <code>BEFORE()</code> or <code>AFTER()</code> clauses.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -307,290 +503,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo/">Pushing an Application to Heroku That Uses Ruby and Mongo</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-01-20T11:55:00-05:00" pubdate data-updated="true">Jan 20<span>th</span>, 2013</time>
-        
-           | <a href="/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo/#disqus_thread"
-             data-disqus-identifier="http://larry-price.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><em>This is Part 3 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="/blog/categories/pokephile">Pokephile category</a>. Part 4 of this series details moving from a development environment to a production environment using <a href="http://heroku.com/">Heroku</a>. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>, and the final product can be found <a href="http://pokephile.herokuapp.com">here</a>.</em></p>
-
-<p><a href="http://heroku.com/">Heroku</a> is a hosting service for different types of web applications. The best thing about Heroku is it&rsquo;s free, you get a decent subdomain for your application, and there&rsquo;s no spam email. Go ahead and <a href="http://api.heroku.com/signup">sign up</a> if you don&rsquo;t already have an account.</p>
-
-<p>Now we need the Heroku Toolbelt. I&rsquo;ll illustrate for Ubuntu 12.10, but there&rsquo;s also <a href="https://toolbelt.heroku.com/">documentation for installing on any OS</a>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The toolbelt installs some Heroku-specific applications in addition to ensuring you have Foreman and <a href="http://git-scm.com/">Git</a> on your system. Now it&rsquo;s time to tell the Heroku Toolbelt who we are.</p>
-
-<figure class='code'><figcaption><span>Step 3 - Modified Excerpt from the Heroku Getting Started guide</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>heroku login
-</span><span class='line'>Enter your Heroku credentials.
-</span><span class='line'>Email: larry@example.com
-</span><span class='line'>Password:
-</span><span class='line'>Could not find an existing public key.
-</span><span class='line'>Would you like to generate one? <span class="o">[</span>Yn<span class="o">]</span>
-</span><span class='line'>Generating new SSH public key.
-</span><span class='line'>Uploading ssh public key /home/larry/.ssh/id_rsa.pub
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In order for Heroku to figure out what ruby gems are needed to run your application, you need to specify a Gemfile. It&rsquo;s wise to specify a specific version of Ruby, and it&rsquo;s also a good idea to keep the gems&#8217; versions close to the state you developed with. For the <a href="/blog/categories/pokephile">Pokephile</a> application created in this series, this is my Gemfile:</p>
-
-<figure class='code'><figcaption><span>project/Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">source</span> <span class="ss">:rubygems</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">ruby</span> <span class="s1">&#39;1.9.3&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;sinatra&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt;1.3.2&#39;</span>
-</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;haml&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt;3.1.6&#39;</span>
-</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;mongoid&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt;3.0.14&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">group</span> <span class="ss">:development</span><span class="p">,</span> <span class="ss">:test</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capybara&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt;2.0.1&#39;</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;rspec&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt;2.11.0&#39;</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;nokogiri&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt;1.5.5&#39;</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>First I specify a source for my gems: &lsquo;rubygems&rsquo; defaults to &ldquo;<a href="http://rubygems.org">http://rubygems.org</a>&rdquo; and hasn&rsquo;t failed me yet. Next I specify that I want to use Ruby 1.9.3, a necessity because Mongoid 3.x doesn&rsquo;t work correctly with 1.9.2. The versions of the first three gems were chosen by typing the following in the command line to determine which version I had installed on my machine:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>gem query | grep <span class="s1">&#39;sinatra\|haml\|mongoid&#39;</span>
-</span><span class='line'>haml <span class="o">(</span>3.1.7, 3.1.6<span class="o">)</span>
-</span><span class='line'>mongoid <span class="o">(</span>3.0.17, 3.0.15, 3.0.14<span class="o">)</span>
-</span><span class='line'>sinatra <span class="o">(</span>1.3.3, 1.3.2<span class="o">)</span>
-</span><span class='line'>sinatra-contrib <span class="o">(</span>1.3.2<span class="o">)</span>
-</span><span class='line'>sinatra-reloader <span class="o">(</span>1.0<span class="o">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The &lsquo;~>&rsquo; operator tells Bundler to use greater-than-equal but stop before next highest version. So, for Sinatra &lsquo;~>1.3.2&rsquo; means that Bundler will accept anything greater-than-or-equal-to &lsquo;1.3.2&rsquo; and less than &lsquo;1.4.0.&rsquo; I tend to rely on the &lsquo;~>&rsquo; operator so I can be sure no APIs are changed in my gems.</p>
-
-<p>The next block is a conditional checking in which environment the gems are being installed. This defaults to :development if none is specified. I put the gems used for testing in this block since they&rsquo;re not needed to run the application, but a developer/tester would need these to run the tests.</p>
-
-<p>For this Gemfile to be meaningful, we need to use a program called <a href="http://gembundler.com/">Bundler</a> to &ldquo;bundle&rdquo; the gems and their dependencies in a Gemfile.lock file.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">pwd</span>
-</span><span class='line'>project/
-</span><span class='line'><span class="nv">$ </span>sudo apt-get install bundler
-</span><span class='line'>...
-</span><span class='line'><span class="nv">$ </span>bundle install
-</span><span class='line'>...
-</span><span class='line'>Your bundle is <span class="nb">complete</span>! Use <span class="sb">`</span>bundle show <span class="o">[</span>gemname<span class="o">]</span><span class="sb">`</span> to see where a bundled gem is installed.
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Running bundler will create a Gemfile.lock file and make sure your system has the specified gems. If some gems are missing or need new versions to be installed, bundler will ask the user for their password to get the required gems.</p>
-
-<p>The next step for setting things up is to set up Git. If your application is already using Git, you only need to commit all files to verify that the Gemfile and Gemfile.lock make it into the repository.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">cd </span>project/
-</span><span class='line'><span class="nv">$ </span>git init
-</span><span class='line'><span class="nv">$ </span>git add .
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;Initial commit.&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now we create a Heroku project and give it a meaningful name. If you can&rsquo;t think of a meaningful name, use &lsquo;heroku create&rsquo; and Heroku will come up with something for you.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>heroku create meaningful-name
-</span><span class='line'>Creating meaningful-name... <span class="k">done</span>, stack is cedar
-</span><span class='line'>http://meaningful-name.herokuapp.com/ | git@heroku.com:meaningful-name.git
-</span><span class='line'>Git remote heroku added
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We&rsquo;re almost there. Because we included accessing Mongo databases in our application, we have to take care of that on the web. The easiest way to do that is using a Heroku Add-on. At this time, there are two major Heroku Add-ons for Mongo databases: <a href="https://addons.heroku.com/mongolab">MongoLab</a> and <a href="https://addons.heroku.com/mongohq">MongoHQ</a>. Both services have a starter service for $0/month, which is pretty awesome in my opinion. I flipped a coin and picked MongoLab for this application. Adding the add-on to our project:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>heroku addons:add mongolab:starter
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you haven&rsquo;t already, Heroku will ask you to &ldquo;verify your account&rdquo; before continuing. This means that you have to put in some credit card information. Note that you will not be charged, I guess Heroku just wants some indication that you might eventually pay for something. After you put in your credit card information, you may need to run the above command again.</p>
-
-<p>Now that MongoLab is set up on the server-side, we need to tell Mongoid how to connect to that server. The following command will give you the environment variable needed to connect to the server:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>heroku config | grep MONGOLAB_URI
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now we update our mongoid.yml file to use that string:</p>
-
-<figure class='code'><figcaption><span>project/mongoid.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">sessions</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">default</span><span class="p-Indicator">:</span>
-</span><span class='line'>      <span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">dev</span>
-</span><span class='line'>      <span class="l-Scalar-Plain">hosts</span><span class="p-Indicator">:</span>
-</span><span class='line'>        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">localhost</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">options</span><span class="p-Indicator">:</span>
-</span><span class='line'>
-</span><span class='line'><span class="l-Scalar-Plain">test</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">sessions</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">default</span><span class="p-Indicator">:</span>
-</span><span class='line'>      <span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">test</span>
-</span><span class='line'>      <span class="l-Scalar-Plain">hosts</span><span class="p-Indicator">:</span>
-</span><span class='line'>        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">localhost</span>
-</span><span class='line'>
-</span><span class='line'><span class="l-Scalar-Plain">production</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">sessions</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">default</span><span class="p-Indicator">:</span>
-</span><span class='line'>      <span class="l-Scalar-Plain">uri</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">&lt;%= ENV[&#39;MONGOLAB_URI&#39;] %&gt;</span>
-</span><span class='line'>      <span class="l-Scalar-Plain">options</span><span class="p-Indicator">:</span>
-</span><span class='line'>        <span class="l-Scalar-Plain">skip_version_check</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
-</span><span class='line'>        <span class="l-Scalar-Plain">safe</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Because of the way my application works, I want to prepopulate the database with some Pokemon.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">export </span><span class="nv">MONGOLAB_URI</span><span class="o">=</span><span class="sb">`</span>heroku config | grep MONGOLAB_URI | cut -c 15-<span class="sb">`</span>
-</span><span class='line'><span class="nv">$ </span><span class="nb">pwd</span>
-</span><span class='line'>project/
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>tools/populate
-</span><span class='line'><span class="nv">$ </span>irb
-</span><span class='line'>&gt;&gt; require <span class="s1">&#39;./populater&#39;</span>
-</span><span class='line'><span class="nb">true</span>
-</span><span class='line'>&gt;&gt; require <span class="s1">&#39;mongoid&#39;</span>
-</span><span class='line'><span class="nb">true</span>
-</span><span class='line'>&gt;&gt; Mongoid.load! <span class="s1">&#39;../../mongoid.yml&#39;</span>, :production
-</span><span class='line'><span class="o">{</span><span class="s2">&quot;sessions&quot;</span><span class="o">=</span>&gt;<span class="o">{</span><span class="s2">&quot;default&quot;</span><span class="o">=</span>&gt;<span class="o">{</span><span class="s2">&quot;uri&quot;</span><span class="o">=</span>&gt;nil, <span class="s2">&quot;options&quot;</span><span class="o">=</span>&gt;<span class="o">{</span><span class="s2">&quot;skip_version_check&quot;</span><span class="o">=</span>&gt;true, <span class="s2">&quot;safe&quot;</span><span class="o">=</span>&gt;true<span class="o">}}}}</span>
-</span><span class='line'>&gt;&gt; Populater.new.add_pokemon 1000
-</span><span class='line'>nil
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>With the production database populated, we need to set an environment variable in our production application defining the environment.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>heroku config:add <span class="nv">MONGOID_ENV</span><span class="o">=</span>production
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now that we&rsquo;ve made changes to the mongoid.yml file, we should commit again and push to Heroku.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git commit -a -m <span class="s2">&quot;Updating mongoid.yml file for production&quot;</span>
-</span><span class='line'>...
-</span><span class='line'><span class="nv">$ </span>git push heroku master
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And that&rsquo;s it! Check your Heroku URL to make sure everything looks okay and call it a day, or make some upgrades as I did for my <a href="http://pokephile.herokuapp.com">personal version of this project</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/9/">&larr; Older</a>
@@ -620,6 +532,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">Deauthorizing Token With the Trello Client</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/06/12/lessons-learned-during-the-conception-of-ollert/">Lessons Learned During the Conception of Ollert</a>
       </li>
     
@@ -635,15 +551,11 @@
         <a href="/blog/2014/05/14/takeaways-from-agileindy-2014/">Takeaways From AgileIndy 2014</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/05/13/better-testing-in-go-with-gocheck/">Better Testing in Go With Gocheck</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 104.28571428571429%'>agile</a> <a href='/blog/categories/c-plus-plus' style='font-size: 112.85714285714286%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 104.28571428571429%'>capybara</a> <a href='/blog/categories/css' style='font-size: 104.28571428571429%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 112.85714285714286%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 121.42857142857143%'>database</a> <a href='/blog/categories/foreman' style='font-size: 104.28571428571429%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 104.28571428571429%'>foss</a> <a href='/blog/categories/git' style='font-size: 104.28571428571429%'>git</a> <a href='/blog/categories/gmock' style='font-size: 104.28571428571429%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 112.85714285714286%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 104.28571428571429%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 104.28571428571429%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 104.28571428571429%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 108.57142857142857%'>heroku</a> <a href='/blog/categories/html' style='font-size: 108.57142857142857%'>html</a> <a href='/blog/categories/internet' style='font-size: 104.28571428571429%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 108.57142857142857%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 117.14285714285714%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 108.57142857142857%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 112.85714285714286%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 104.28571428571429%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 104.28571428571429%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 104.28571428571429%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 108.57142857142857%'>nosql</a> <a href='/blog/categories/ollert' style='font-size: 125.71428571428572%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 117.14285714285714%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 104.28571428571429%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 104.28571428571429%'>qt</a> <a href='/blog/categories/rails' style='font-size: 104.28571428571429%'>rails</a> <a href='/blog/categories/retro' style='font-size: 112.85714285714286%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 108.57142857142857%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 151.42857142857144%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 112.85714285714286%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 104.28571428571429%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 134.28571428571428%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 104.28571428571429%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 121.42857142857143%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 104.28571428571429%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 104.28571428571429%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 117.14285714285714%'>testing</a> <a href='/blog/categories/trello' style='font-size: 112.85714285714286%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 108.57142857142857%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 104.28571428571429%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 104.28571428571429%'>upstart</a> <a href='/blog/categories/web' style='font-size: 138.57142857142856%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 138.57142857142856%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 104.28571428571429%'>writeups</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 104.28571428571429%'>agile</a> <a href='/blog/categories/c-plus-plus' style='font-size: 112.85714285714286%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 104.28571428571429%'>capybara</a> <a href='/blog/categories/css' style='font-size: 104.28571428571429%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 112.85714285714286%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 121.42857142857143%'>database</a> <a href='/blog/categories/foreman' style='font-size: 104.28571428571429%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 104.28571428571429%'>foss</a> <a href='/blog/categories/git' style='font-size: 104.28571428571429%'>git</a> <a href='/blog/categories/gmock' style='font-size: 104.28571428571429%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 112.85714285714286%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 104.28571428571429%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 104.28571428571429%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 104.28571428571429%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 108.57142857142857%'>heroku</a> <a href='/blog/categories/html' style='font-size: 108.57142857142857%'>html</a> <a href='/blog/categories/internet' style='font-size: 104.28571428571429%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 112.85714285714286%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 117.14285714285714%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 108.57142857142857%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 112.85714285714286%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 104.28571428571429%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 104.28571428571429%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 104.28571428571429%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 108.57142857142857%'>nosql</a> <a href='/blog/categories/ollert' style='font-size: 130.0%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 117.14285714285714%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 104.28571428571429%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 104.28571428571429%'>qt</a> <a href='/blog/categories/rails' style='font-size: 104.28571428571429%'>rails</a> <a href='/blog/categories/retro' style='font-size: 112.85714285714286%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 108.57142857142857%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 151.42857142857144%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 112.85714285714286%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 104.28571428571429%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 134.28571428571428%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 104.28571428571429%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 121.42857142857143%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 104.28571428571429%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 104.28571428571429%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 117.14285714285714%'>testing</a> <a href='/blog/categories/trello' style='font-size: 117.14285714285714%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 108.57142857142857%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 104.28571428571429%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 104.28571428571429%'>upstart</a> <a href='/blog/categories/web' style='font-size: 142.85714285714286%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 138.57142857142856%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 104.28571428571429%'>writeups</a> </span>
 </section>
 
 <section>

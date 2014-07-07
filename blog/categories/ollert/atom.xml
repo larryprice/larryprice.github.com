@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ollert | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/ollert/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-06-12T20:31:44-04:00</updated>
+  <updated>2014-07-07T06:23:27-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,73 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Deauthorizing Token with the Trello Client]]></title>
+    <link href="http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client/"/>
+    <updated>2014-07-07T05:59:13-04:00</updated>
+    <id>http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client</id>
+    <content type="html"><![CDATA[<p>In my <a href="https://ollertapp.com">application</a>, a user can connect to Trello without logging in. Whenever this &ldquo;anonymous&rdquo; user hits the landing page, I attempt to force the <a href="https://trello.com/docs/gettingstarted/clientjs.html">Trello client</a> to authorize the user again. By doing this, the user can return to the landing page whenever he or she likes to switch usernames. My authorize code looks like this:</p>
+
+<p>``` javascript
+function AuthenticateTrelloAlways() {
+  Trello.authorize({</p>
+
+<pre><code>name: "Ollert",
+type: "popup",
+interactive: true,
+expiration: "1hour",
+persist: false,
+success: onAuthorizeSuccessful,
+scope: {
+  read: true
+},
+</code></pre>
+
+<p>  });
+}
+```</p>
+
+<p>This works oh-so-wonderfully in Chrome and Firefox, but, even during the hackathon which spawned <a href="https://ollertapp.com">Ollert</a>, we noticed that IE10/11 were causing some unexpected issues. Authorization would work the first time the user hit the landing page, but on subsequent visits telling Trello to Allow or Deny access resulted in the popup showing a white screen and never calling my callback function. Closing and reopening IE would allow me to authorize once, presumably until the &ldquo;1hour&rdquo; that I requested the original token for expired. I also verified this problem existed in IE9.</p>
+
+<p>After several hours tweeting obscenities about IE, I stumbled upon the answer while browsing the source code for Trello&rsquo;s <a href="https://trello.com/1/client.coffee">client.coffee</a>. About one third of the way through the code, I found this function:</p>
+
+<p>``` javascript</p>
+
+<h1>Clear any existing authorization</h1>
+
+<p>deauthorize: &ndash;>
+  token = null
+  writeStorage(&ldquo;token&rdquo;, token)
+  return
+```</p>
+
+<p>All this code does is unset the class variable <code>token</code> and unset the local store variable of the same name. So I changed my <code>AuthenticateTrelloAlways()</code> method:</p>
+
+<p>``` javascript
+function AuthenticateTrelloAlways() {
+  Trello.deauthorize();</p>
+
+<p>  Trello.authorize({</p>
+
+<pre><code>name: "Ollert",
+type: "popup",
+interactive: true,
+expiration: "1hour",
+persist: false,
+success: onAuthorizeSuccessful,
+scope: {
+  read: true
+},
+</code></pre>
+
+<p>  });
+}
+```</p>
+
+<p>Voilà. Why does this only happen in IE? I was originally going to blame the local store, but, since I was able to reproduce the defect in IE9 (no HTML5), I no longer believe that to be the case. I&rsquo;m currently resigned to chalk it up as IE just being IE.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Lessons Learned during the Conception of Ollert]]></title>
@@ -292,57 +359,6 @@ end
 ```</p>
 
 <p>Now, as your friend and teacher, I command you to use this knowledge to go <a href="//ollert.herokuapp.com">do cool stuff</a> with Trello!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Connecting to the Trello API]]></title>
-    <link href="http://larry-price.com/blog/2014/03/18/connecting-to-the-trello-api/"/>
-    <updated>2014-03-18T20:00:11-04:00</updated>
-    <id>http://larry-price.com/blog/2014/03/18/connecting-to-the-trello-api</id>
-    <content type="html"><![CDATA[<p><a href="//trello.com">Trello</a> has a <a href="//trello.com/docs/">pretty sweet API</a>, which we use extensively in our Trello-analysis app <a href="//ollert.herokuapp.com">Ollert</a>. Initially connecting to the Trello API took us a few hours, so I&rsquo;d like to make a record of how we managed to connect.</p>
-
-<p>Making a connection to Trello requires two hashcodes: an application key and a Trello member token. You can generate and view your application key by visiting <a href="//trello.com/1/appKey/generate">https://trello.com/1/appKey/generate</a>.</p>
-
-<p>The member token is something we need to get from the user. There are two ways to get a user&rsquo;s member token: through fragments and through a <strong>postMessage</strong>. You can also request different levels of access (read, write, read+write), and different expiration periods (such as 1 day, 30 days, or never) for member tokens. For the remainder of this writing, I&rsquo;ll be accessing a read-only member token that never expires.</p>
-
-<p>We didn&rsquo;t have a lot of luck with fragments, but the concept is simple enough. You have the user click a link that probably says &ldquo;Connect With Trello&rdquo; which is similar to:</p>
-
-<p><code>https://trello.com/1/authorize?key=applicationkey&amp;name=applicationname&amp;expiration=never&amp;response_type=token</code></p>
-
-<p>At this point, the user is redirected to Trello and given the opportunity to Allow or Deny your application access. Once allowed, the user sees a static Trello page with their member token in plain text. Somehow you"re supposed to convey to them that they should copy this token and paste it back to you. This has clear drawbacks in usability.</p>
-
-<p>Using the <strong>postMessage</strong> method of accessing a member token was significantly more fruitful. Trello provides a Javascript file named <a href="https://trello.com/docs/gettingstarted/clientjs.html">client.js</a> that does most of the legwork for you. An example:</p>
-
-<p>``` haml
-%script{src: &ldquo;//api.trello.com/1/client.js?key=applicationkey&rdquo;}</p>
-
-<p>function AuthenticateTrello() {
-  Trello.authorize({</p>
-
-<pre><code>name: "YourApplication",
-type: "popup",
-interactive: true,
-expiration: "never",
-persist: true,
-success: function () { onAuthorizeSuccessful(); },
-scope: { write: false, read: true },
-</code></pre>
-
-<p>  });
-}
-function onAuthorizeSuccessful() {
-  var token = Trello.token();
-  window.location.replace(&ldquo;/auth?token=&rdquo; + token);
-}</p>
-
-<p>%a{href: &ldquo;javascript:void(0)&rdquo;, onClick: &ldquo;AuthenticateTrello()&rdquo;}
-  Connect With Trello
-```</p>
-
-<p>When the user clicks the link, we have Trello set to activate a &ldquo;popup&rdquo; that will ask them to &ldquo;Allow&rdquo; or &ldquo;Deny&rdquo; our app from accessing their data. When the user allows us access, the popup closes and we hit the &ldquo;onAuthorizeSuccessful&rdquo; method. In my method, I simply redirect them to the <code>/auth</code> route with <code>token</code> manually added to the params list. One of the interesting options listed above is the &ldquo;persist&rdquo; option, which tells Trello whether it should prompt the user for his or her token every time. By telling Trello to persist, the user will only be presented with the popup when he or she needs to reauthenticate.</p>
-
-<p>You can learn more about member tokens from <a href="//trello.com/docs/gettingstarted/authorize.html">https://trello.com/docs/gettingstarted/authorize.html</a>.</p>
 ]]></content>
   </entry>
   
