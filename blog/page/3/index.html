@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="Knowledge curses us, if we find it hard to imagine what it was like not to know it. And it becomes difficult to share our knowledge with others &hellip;">
+  <meta name="description" content="You want to get into the rhythm of making choices. When you get in that flow of making decision after decision, you build momentum and boost morale. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,191 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/03/26/rework/">Rework</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-26T21:00:33-04:00" pubdate data-updated="true">Mar 26<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/03/26/rework/#disqus_thread"
+             data-disqus-identifier="http://larry-price.com/blog/2014/03/26/rework/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p>You want to get into the rhythm of making choices. When you get in that flow of making decision after decision, you build momentum and boost morale. Decisions are progress. Each one you make is a brick in your foundation. You can&rsquo;t build on top of &ldquo;We&rsquo;ll decide later,&rdquo; but you <em>can</em> build on top of &ldquo;Done.&rdquo;</p>
+
+<p>Excerpt from &ldquo;Decisions are Progress&rdquo; in <em>Rework</em></p></blockquote>
+
+<h3>The Gist</h3>
+
+<p><a href="http://www.amazon.com/gp/product/0307463745/ref=as_li_qf_sp_asin_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0307463745&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Rework</em> by Jason Fried and David Heinemeier Hansson</a> is a business advice book for keeping small, focused teams without all the cruft of business.</p>
+
+<h3>My Opinion</h3>
+
+<p><em>Rework</em> is my kind of book. It&rsquo;s best described as business advice for hippy programmers. It&rsquo;s amazing that this book describes the business practices of a real company that&rsquo;s modestly successful.</p>
+
+<p>Speaking of the authors of this book, they&rsquo;re the guys who made <a href="//rubyonrails.org/">Ruby on Rails</a>, which gives them street cred as far as I&rsquo;m concerned.</p>
+
+<p>This is a book of proverbs. Ignore the real world. Start a business, not a startup. Build half a product, not a half-assed product. Meetings are toxic. Hire managers of one. ASAP is po:son.</p>
+
+<p>When you look at it, this advice is not insightful: it&rsquo;s obvious. It just also happens to be against how modern-day companies work. And maybe this advice isn&rsquo;t useful for everyone; once a company stops following these rules, it seems difficult to change. The smaller and newer the company, the easier it is to avoid the issues introduced with bigger businesses.</p>
+
+<p>This book talks about ideas being cheap. Implementing the idea is where all the work lies. Have an idea? Start working on it now. Find time. Go to bed an hour later. Watch an hour less of TV. Your idea is meaningless unless you actually follow through.</p>
+
+<p>There&rsquo;s also good advice within this book for people who are pressured to overwork. Avoid workaholics: overworking hurts the decision-making processes, so people who are working more hours are just spending more hours making worse decisions. When employees work long hours, other employees are also influenced to work longer hours. More poeple making worse decisions? Count me out. Hire people with outside lives who go home at 5: busy people have to manage their time, and will thus find more efficient ways to accomplish their work.</p>
+
+<h3>Who Would Like This</h3>
+
+<p>Interested in starting a company? In making managerial changes within your current company? In making changes to the way you work? Reading this book can help you realize that you don&rsquo;t need all the modern-day business cruft to make your business a success.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/03/24/sticky-footer-with-twitter-bootstrap/">Sticky Footer With Twitter Bootstrap</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-24T20:12:50-04:00" pubdate data-updated="true">Mar 24<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/03/24/sticky-footer-with-twitter-bootstrap/#disqus_thread"
+             data-disqus-identifier="http://larry-price.com/blog/2014/03/24/sticky-footer-with-twitter-bootstrap/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Sometimes CSS is a total pain.</p>
+
+<p>We encountered a major CSS problem while working on our incredible startup weekend project <a href="//ollert.herokuapp.com">Ollert</a>. We had created a footer that we wanted below all of our content. We threw together some quick HTML and got a footer below all of the main content, and it looked really good when our main content filled up the entire screen.</p>
+
+<p>What about when there was very little data on the screen? Well, then the footer just floated in the middle of the page, staring at us like some kind of psychotic hummingbird, waiting to slice you up when you&rsquo;re not looking. We searched online and found lots of different solutions; None of them worked. The footer just floated there, taunting us; Telling us to cry home to mommy. So we gave up on the prospect for the rest of the afternoon.</p>
+
+<p>A few days after startup weekend, I found the real solution from the good folks at <a href="//getbootstrap.com/2.3.2/examples/sticky-footer.html">Twitter Bootstrap</a> themselves. It&rsquo;s pretty simple, really. Hooray for the internet!</p>
+
+<p>Below is the HTML to create this effect with all the CSS styles embedded. Marked up with plenty of comments.</p>
+
+<figure class='code'><figcaption><span>index.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="cp">&lt;!DOCTYPE html&gt;</span>
+</span><span class='line'><span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">&quot;en&quot;</span> <span class="na">style=</span><span class="s">&quot;height: 100%;&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;head&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/head&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;body</span> <span class="na">style=</span><span class="s">&quot;height: 100%;&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;wrap&quot;</span> <span class="na">style=</span><span class="s">&quot;min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -50px;&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="c">&lt;!-- All your content goes inside wrap. --&gt;</span>
+</span><span class='line'>      <span class="c">&lt;!-- The bottom margin must be negative the footer min-height --&gt;</span>
+</span><span class='line'>      <span class="c">&lt;!-- Footer min-height is set to 50px in this case --&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;container&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;row&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;h1&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>            All Your Content
+</span><span class='line'>          <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;row&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>          All your content will go inside the &#39;wrap&#39; div.
+</span><span class='line'>        <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;push&quot;</span> <span class="na">style=</span><span class="s">&quot;min-height: 50px;&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="c">&lt;!-- This push node should be inside wrap and empty --&gt;</span>
+</span><span class='line'>        <span class="c">&lt;!-- Min-height is equal to the min-height of the footer --&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/body&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;footer&quot;</span> <span class="na">style=</span><span class="s">&quot;min-height: 50px;&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="c">&lt;!-- Some sweet footer content --&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;container&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;small&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        Zowee, I&#39;ve got a footer stuck to the bottom!
+</span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Div tag ids such as &ldquo;wrap&rdquo;, &ldquo;push&rdquo;, and &ldquo;footer&rdquo; can be whatever you want. The height of the footer can be adjusted to fit whatever content you want; I found that using <code>min-height</code> instead of <code>height</code> allowed my content to resize appropriately when wrapped. Styles should definitely be moved to a css file.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -401,240 +586,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/03/17/sep-startup-weekend-ollert/">SEP Startup Weekend: Ollert</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-17T20:07:38-04:00" pubdate data-updated="true">Mar 17<span>th</span>, 2014</time>
-        
-           | <a href="/blog/2014/03/17/sep-startup-weekend-ollert/#disqus_thread"
-             data-disqus-identifier="http://larry-price.com/blog/2014/03/17/sep-startup-weekend-ollert/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Last weekend was <a href="//sep.com">SEP</a>&rsquo;s 6th Semi-Annual <a href="//sep.com/labs/startupweekend/">Startup Weekend</a>. For those unfamiliar, software developers pitch ideas Friday evening and developers volunteer their time to come up with a <a href="//en.wikipedia.org/wiki/Minimum_viable_product">minimum viable product</a> in the next 48 hours. Free beer is the only thing that makes such a weekend possible.</p>
-
-<p>I&rsquo;ve been before and participated in other people&rsquo;s projects and it&rsquo;s always a blast. However, this weekend was different: I had an idea to pitch. Although the idea went through many names, the core concept remained the same:</p>
-
-<blockquote><p>To tell Trello users what their boards say about the past and the future through unique visuals.</p></blockquote>
-
-<p><a href="//trello.com">Trello</a> is a collaborative workflow management tool that does a wonderful job of showing you the present. There is currently no way on Trello to see your past history or compare yesterday&rsquo;s weather. This simplicity is part of the beauty of Trello, but also an opportunity.</p>
-
-<p>My idea was to create a web application where a user could quickly and easily connect with Trello and view information he or she had never seen previously. I would offer a trial service requiring no login that would allow access to all this data, given that the user puts up with authenticating with Trello every time he or she visits the site. There would be a free membership, which would allow the user to &ldquo;permanantly&rdquo; connect to Trello. To monetize, I wanted to offer a paid membership, where the user would be given the ability to compare &ldquo;historical&rdquo; Trello data by selecting begin and end dates for the Trello data that is analyzed.</p>
-
-<p><a href="//ollert.herokuapp.com">Ollert</a> is the result of this Startup Weekend idea. A live version of Ollert can be found at <a href="//ollert.herokuapp.com">ollert.herokuapp.com</a>.</p>
-
-<p>I worked on <a href="//ollert.herokuapp.com">Ollert</a> with 5 other great developers, and we got a spectacular amount of work done given that we only spent a single weekend programming. We were able to direct users to connect with Trello, let them select a board, and then generate and display 12 different statistics and analyses. We also implemented Sign Up/Login.</p>
-
-<p>We worked on <a href="//ollert.herokuapp.com">Ollert</a> to the last minute, so not everything got in. We never implemented the paid member feature and we didn&rsquo;t get in all the analytics we wanted. We also had some great ideas come out while we were working on <a href="//ollert.herokuapp.com">Ollert</a> that didn&rsquo;t make it into the application, such as filtering chart types and selecting favorites.</p>
-
-<p>Overall, my teammates and I had a great time and we are confident that we&rsquo;ve created something useful.</p>
-
-<p>My current intention is to do several more blog posts about <a href="//ollert.herokuapp.com">Ollert</a> including Connecting to the Trello API, Using ruby-trello, Using sqlite on Heroku, What I Should Have Had Ready Before Asking People To Work For Me, and The Future of Ollert.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you/">Using X-editable to Do In-line Editing for You</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-22T19:15:00-05:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2014</time>
-        
-           | <a href="/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you/#disqus_thread"
-             data-disqus-identifier="http://larry-price.com/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>In-line editing is traditionally difficult. Taking a static HTML node and turning it into an editable text field and then sending that data off somewhere is a little bit more Javascript than I like to write. My team and I came up against a very difficult UX problem which I spent over a week trying to understand. After building and discussing several solutions, we eventually decided to narrow the scope of what the user should be able to change. We would present the user with a table where one of the columns would be editable.</p>
-
-<p>Rather than showing a table with the third column always as a field for text entry, I used the Javascript library <a href="//vitalets.github.io/x-editable/">X-editable</a>. X-editable allows me to display my editable item as a link. When the user clicks the item, the link turns into a text field with a Save/Cancel button (and a &lsquo;clear&rsquo; button as a bonus). The &lsquo;Save&rsquo; button submits an AJAX &lsquo;POST&rsquo; or &lsquo;PUTS&rsquo;, where we are then allowed to validate and save the data. The &lsquo;Cancel&rsquo; button turns the text field back into a link with the original value.</p>
-
-<p>Hooray, someone else has already done the hard work for us! So, what I want to do is dynamically generate a table with objects and allow the user to edit one of the columns. In my case, only the end column is editable, but I could just as easily spread this availability to all my columns. I&rsquo;m using all my favorite tools to create this page, specifically <a href="//ruby-lang.org/en/">ruby</a>, <a href="//sinatrarb.com">Sinatra</a>, <a href="//getbootstrap.com">Twitter Bootstrap</a>, and <a href="//haml.info">HAML</a>.</p>
-
-<p>X-editable has implementations using Bootstrap, jQuery UI, and jQuery. Since I&rsquo;m already using Bootstrap in my app, I&rsquo;m going to go with that version. Note that there are Bootstrap 2 and Bootstrap 3 builds of X-editable, and I&rsquo;m using the Bootstrap 3 variety.</p>
-
-<p>First I include the necessary files at the top of my HAML document.</p>
-
-<figure class='code'><figcaption><span>/views/manage_data.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nt">%script</span><span class="p">{</span><span class="ss">src</span><span class="p">:</span> <span class="s2">&quot;//code.jquery.com/jquery.js&quot;</span><span class="p">}</span>
-</span><span class='line'><span class="nt">%script</span><span class="p">{</span><span class="ss">src</span><span class="p">:</span> <span class="s2">&quot;//getbootstrap.com/dist/js/bootstrap.min.js&quot;</span><span class="p">}</span>
-</span><span class='line'><span class="nt">%link</span><span class="p">{</span><span class="ss">href</span><span class="p">:</span> <span class="s2">&quot;//getbootstrap.com/dist/css/bootstrap.min.css&quot;</span><span class="p">,</span> <span class="ss">rel</span><span class="p">:</span> <span class="s2">&quot;stylesheet&quot;</span><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nt">%link</span><span class="p">{</span><span class="ss">href</span><span class="p">:</span> <span class="s2">&quot;//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css&quot;</span><span class="p">,</span> <span class="ss">rel</span><span class="p">:</span> <span class="s2">&quot;stylesheet&quot;</span><span class="p">}</span>
-</span><span class='line'><span class="nt">%script</span><span class="p">{</span><span class="ss">src</span><span class="p">:</span> <span class="s2">&quot;//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js&quot;</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I&rsquo;m going to dumb my page down so I only have to show the important parts. I&rsquo;m going to create a table from an array of hashes called <code>@options</code>. Each hash has two important fields for this table: Points and Dollars. I will iterate over <code>@options</code>, displaying the <code>points</code> field as plain text and the <code>dollars</code> field as an X-editable link. Each hash also has a <code>value</code> field containing the primary key for the object to be edited.</p>
-
-<figure class='code'><figcaption><span>/views/manage_data.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nc">.container</span>
-</span><span class='line'>  <span class="nc">.row</span>
-</span><span class='line'>    <span class="nc">.col-md-6</span>
-</span><span class='line'>      <span class="nt">%table</span><span class="p">{</span><span class="nb">id</span><span class="p">:</span> <span class="s2">&quot;edit_points_goal&quot;</span><span class="p">,</span> <span class="ss">class</span><span class="p">:</span> <span class="s2">&quot;table table-responsive table-hover table-bordered&quot;</span><span class="p">}</span>
-</span><span class='line'>        <span class="nt">%thead</span>
-</span><span class='line'>          <span class="nt">%tr</span>
-</span><span class='line'>            <span class="nt">%th</span><span class="p">{</span><span class="ss">width</span><span class="p">:</span> <span class="s2">&quot;35%&quot;</span><span class="p">}</span>
-</span><span class='line'>              Points
-</span><span class='line'>            <span class="nt">%th</span><span class="p">{</span><span class="ss">width</span><span class="p">:</span> <span class="s2">&quot;65%&quot;</span><span class="p">}</span>
-</span><span class='line'>              Dollars
-</span><span class='line'>        <span class="nt">%tbody</span>
-</span><span class='line'>          <span class="p">-</span> <span class="vi">@options</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">option</span><span class="o">|</span>
-</span><span class='line'>            <span class="nt">%tr</span>
-</span><span class='line'>              <span class="nt">%td</span><span class="p">{</span><span class="ss">style</span><span class="p">:</span> <span class="s2">&quot;height: 45px; padding: 4px 8px; vertical-align: middle;&quot;</span><span class="p">}</span>
-</span><span class='line'>                <span class="si">#{</span><span class="n">option</span><span class="o">[</span><span class="ss">:points</span><span class="o">]</span><span class="si">}</span>
-</span><span class='line'>              <span class="nt">%td</span><span class="p">{</span><span class="ss">style</span><span class="p">:</span> <span class="s2">&quot;height: 45px; padding: 4px 8px; vertical-align: middle;&quot;</span><span class="p">}</span>
-</span><span class='line'>                <span class="nt">%a</span><span class="p">{</span><span class="ss">href</span><span class="p">:</span><span class="s2">&quot;javascript:void(0)&quot;</span><span class="p">,</span> <span class="s2">&quot;data-type&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;data-pk&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">option</span><span class="o">[</span><span class="ss">:value</span><span class="o">]</span><span class="si">}</span>&quot;, &quot;data-url&quot;=&gt;&quot;/update&quot;, &quot;data-title&quot;=&gt;&quot;Enter dollar amount&quot;}
-</span><span class='line'>                  <span class="si">#{</span><span class="n">option</span><span class="o">[</span><span class="ss">:dollars</span><span class="o">]</span><span class="si">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The important part is the <code>a</code> tag:</p>
-
-<ul>
-<li><code>href</code> goes nowhere.</li>
-<li><code>data-type</code> tells X-editable how it will edit the presented data. According to the docs, types include text, textarea, select, date, checklist and more.</li>
-<li><code>data-pk</code> is the primary key of our data in the database. In my case, that comes to me stored in the <code>value</code> field of the option hash.</li>
-<li><code>data-url</code> is the <code>post</code> method that will be used to interpret the data.</li>
-<li><code>data-title</code> is used to tell the user what to do.</li>
-</ul>
-
-
-<p>Our code won&rsquo;t do anything yet seeing as it&rsquo;s not connected. We need some Javascript to do that. I put the Javascript at the top of my file, underneath the included files. The first thing we need to do is tell X-editable what type of editing we&rsquo;ll be doing. The options are in-line editing or a pop-up. I want the in-line editing in this case. The second thing I want to do is to set the <code>editable</code> attribute on the appropriate DOM objects. Since I&rsquo;m using an array, I found the easiest way to do this was to start at the table&rsquo;s id (edit_points_goal) and trace down to the <code>a</code> tag.</p>
-
-<figure class='code'><figcaption><span>/views/manage_data.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nd">:javascript</span>
-</span><span class='line'>  <span class="nd">$.fn.editable.defaults.mode = &#39;inline&#39;;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nd">$(document).ready(function() {</span>
-</span><span class='line'>    <span class="nd">if (</span><span class="si">#{</span><span class="n">vm</span><span class="o">.</span><span class="n">editable</span><span class="si">}</span><span class="nd">) {</span>
-</span><span class='line'>      <span class="nd">$(&#39;#edit_points_goal tbody tr td a&#39;).editable();</span>
-</span><span class='line'>    <span class="nd">}</span>
-</span><span class='line'>  <span class="nd">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now we need to deal with the <code>post</code> request. If you&rsquo;re really impatient to see things work, you should be able to see your in-line editable code in action, but the <code>post</code> call will fail with a &ldquo;NoMethodError.&rdquo;</p>
-
-<p>Our <code>post</code> is going to be really simple. We verify that we have a non-negative integer and we either save and return 200 or we return 400 with an appropriate message. Our table in this example is just called <code>Data</code>, and we use <code>find</code> to get a value out of the database.</p>
-
-<figure class='code'><figcaption><span>web.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">post</span> <span class="s2">&quot;/update&quot;</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">data</span> <span class="o">=</span> <span class="no">Data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="n">params</span><span class="o">[</span><span class="s2">&quot;pk&quot;</span><span class="o">]</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">unless</span> <span class="n">params</span><span class="o">[</span><span class="s2">&quot;value&quot;</span><span class="o">].</span><span class="n">match</span><span class="p">(</span><span class="sr">/[^0-9]/</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">data</span> <span class="o">=</span> <span class="n">params</span><span class="o">[</span><span class="s2">&quot;value&quot;</span><span class="o">].</span><span class="n">to_i</span>
-</span><span class='line'>    <span class="n">data</span><span class="o">.</span><span class="n">save</span>
-</span><span class='line'>    <span class="k">return</span> <span class="mi">200</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">return</span> <span class="p">{</span><span class="mi">400</span><span class="p">,</span> <span class="o">[]</span><span class="p">,</span> <span class="s2">&quot;Please enter a valid non-negative number&quot;</span><span class="p">}</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Things should be working now. When you enter good data and click the &lsquo;Ok&rsquo; button, our <code>post</code> will be called and the text field will turn back into a link. When you enter bad data, you should see our error message below the text field box.</p>
-
-<p>Issues I encountered:</p>
-
-<ul>
-<li>Table column width shifting &ndash; Fixed by setting the widths explicitly, as seen above (35% and 65%).</li>
-<li>Table height shifting &ndash; Fixed by setting the style of the <code>td</code> as seen above to give a larger height, more padding, and aligning the inner objects explicitly. I would recommend moving this definition to a <code>.css</code> or <code>.scss</code> file.</li>
-<li>&ldquo;NoMethodError&rdquo; after clicking Go &ndash; Unfortunately, if you made any coding errors in your route, you won&rsquo;t be able to see the Sinatra error page but will instead you&rsquo;ll be presented with a giant wall of HTML below the text box. Try to parse this error, but if you struggle to find out what went wrong you can always substitute a form-post method in place of the <code>a</code> tag, which may allow you to more easily figure out the problem.</li>
-</ul>
-
-
-<p>The <a href="//vitalets.github.io/x-editable/docs.html">X-editable docs</a> are extremely helpful for beginners. There is even more detail on the X-editable site, including editing multiple items, editing dates, and using a pop-up to edit the data.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -664,6 +615,14 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber/">Testing Automated Emails With Email-spec in Cucumber</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/">Sending Emails With Pony and Sendgrid</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">Deauthorizing Token With the Trello Client</a>
       </li>
     
@@ -675,19 +634,11 @@
         <a href="/blog/2014/06/04/jasmine-a-whole-new-world-of-javascript-testing/">Jasmine - a Whole New World of Javascript Testing</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/05/25/git-out-the-way-rebase-workflow/">Git Out the Way - Rebase Workflow</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/05/14/takeaways-from-agileindy-2014/">Takeaways From AgileIndy 2014</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 104.28571428571429%'>agile</a> <a href='/blog/categories/c-plus-plus' style='font-size: 112.85714285714286%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 104.28571428571429%'>capybara</a> <a href='/blog/categories/css' style='font-size: 104.28571428571429%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 112.85714285714286%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 121.42857142857143%'>database</a> <a href='/blog/categories/foreman' style='font-size: 104.28571428571429%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 104.28571428571429%'>foss</a> <a href='/blog/categories/git' style='font-size: 104.28571428571429%'>git</a> <a href='/blog/categories/gmock' style='font-size: 104.28571428571429%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 112.85714285714286%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 104.28571428571429%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 104.28571428571429%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 104.28571428571429%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 108.57142857142857%'>heroku</a> <a href='/blog/categories/html' style='font-size: 108.57142857142857%'>html</a> <a href='/blog/categories/internet' style='font-size: 104.28571428571429%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 112.85714285714286%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 117.14285714285714%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 108.57142857142857%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 112.85714285714286%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 104.28571428571429%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 104.28571428571429%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 104.28571428571429%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 108.57142857142857%'>nosql</a> <a href='/blog/categories/ollert' style='font-size: 130.0%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 117.14285714285714%'>pokephile</a> <a href='/blog/categories/qmake' style='font-size: 104.28571428571429%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 104.28571428571429%'>qt</a> <a href='/blog/categories/rails' style='font-size: 104.28571428571429%'>rails</a> <a href='/blog/categories/retro' style='font-size: 112.85714285714286%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 108.57142857142857%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 151.42857142857144%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 112.85714285714286%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 104.28571428571429%'>satire</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 134.28571428571428%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 104.28571428571429%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 121.42857142857143%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 104.28571428571429%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 104.28571428571429%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 117.14285714285714%'>testing</a> <a href='/blog/categories/trello' style='font-size: 117.14285714285714%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 108.57142857142857%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 104.28571428571429%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 104.28571428571429%'>upstart</a> <a href='/blog/categories/web' style='font-size: 142.85714285714286%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 138.57142857142856%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 104.28571428571429%'>writeups</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 104.28571428571429%'>agile</a> <a href='/blog/categories/c-plus-plus' style='font-size: 112.85714285714286%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 104.28571428571429%'>capybara</a> <a href='/blog/categories/css' style='font-size: 104.28571428571429%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 112.85714285714286%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 121.42857142857143%'>database</a> <a href='/blog/categories/foreman' style='font-size: 104.28571428571429%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 104.28571428571429%'>foss</a> <a href='/blog/categories/git' style='font-size: 104.28571428571429%'>git</a> <a href='/blog/categories/gmock' style='font-size: 104.28571428571429%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 112.85714285714286%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 104.28571428571429%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 104.28571428571429%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 104.28571428571429%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 112.85714285714286%'>heroku</a> <a href='/blog/categories/html' style='font-size: 108.57142857142857%'>html</a> <a href='/blog/categories/internet' style='font-size: 104.28571428571429%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 112.85714285714286%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 117.14285714285714%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 108.57142857142857%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 112.85714285714286%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 104.28571428571429%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 104.28571428571429%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 104.28571428571429%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 108.57142857142857%'>nosql</a> <a href='/blog/categories/ollert' style='font-size: 134.28571428571428%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 117.14285714285714%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 104.28571428571429%'>pony</a> <a href='/blog/categories/qmake' style='font-size: 104.28571428571429%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 104.28571428571429%'>qt</a> <a href='/blog/categories/rails' style='font-size: 104.28571428571429%'>rails</a> <a href='/blog/categories/retro' style='font-size: 112.85714285714286%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 108.57142857142857%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 160.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 112.85714285714286%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 104.28571428571429%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 104.28571428571429%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 134.28571428571428%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 104.28571428571429%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 130.0%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 104.28571428571429%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 104.28571428571429%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 117.14285714285714%'>testing</a> <a href='/blog/categories/trello' style='font-size: 117.14285714285714%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 108.57142857142857%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 104.28571428571429%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 104.28571428571429%'>upstart</a> <a href='/blog/categories/web' style='font-size: 151.42857142857144%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 138.57142857142856%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 104.28571428571429%'>writeups</a> </span>
 </section>
 
 <section>

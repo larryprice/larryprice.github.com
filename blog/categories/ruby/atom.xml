@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-07-07T06:23:27-04:00</updated>
+  <updated>2014-07-12T08:18:42-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,257 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Testing automated emails with email-spec in Cucumber]]></title>
+    <link href="http://larry-price.com/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber/"/>
+    <updated>2014-07-12T07:36:33-04:00</updated>
+    <id>http://larry-price.com/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber</id>
+    <content type="html"><![CDATA[<p>Now that <a href="/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">I send emails using Pony</a>, I want to be able to verify that the emails are being generated correctly. I also don&rsquo;t want to send real emails and have my tests check an inbox somewhere. I found a couple of solutions to do this, including <a href="https://github.com/johnmendonca/pony-test">pony-test</a> and <a href="https://github.com/bmabey/email-spec">email-spec</a>. Although pony-test fits my needs perfectly, the last commit was December 27, 2011 (2.5 years ago at the time of this post), and thus was using an outdated version of <a href="https://github.com/jnicklas/capybara">capybara</a> which I was unwilling to use. Fortunately, pony-spec is mostly just a fork of email-spec with all the non-Pony components ripped out.</p>
+
+<p>I&rsquo;m going to be using Cucumber to test my emails, but email-spec also boasts compatibility with rspec and Turnip. To get started:</p>
+
+<p><code>bash
+$ gem install email-spec
+</code></p>
+
+<p>The developers of email-spec were kind enough to give us some free step definitions. If I was using rails, I could just type <code>rails generate email_spec:steps</code>, but since I&rsquo;m using Sinatra I opted just to copy-paste the file into my <code>step_definitions/</code> directory. You can find <code>email_steps.rb</code> <a href="https://raw.githubusercontent.com/bmabey/email-spec/master/lib/generators/email_spec/steps/templates/email_steps.rb">on Github</a>.</p>
+
+<p>In <a href="/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">my last post about small horses and emails</a>, I used the following code to send a confirmation email on signup:</p>
+
+<p>``` ruby web.rb</p>
+
+<h1>&hellip;</h1>
+
+<p>post &lsquo;/signup&rsquo; do
+  user = User.create! params</p>
+
+<p>  url = &ldquo;#{request.base_url}/account/reset/#{user.generate_verification_hash}&rdquo;
+  Pony.mail(</p>
+
+<pre><code>to: user.email,
+from: "MyApp Help Desk &lt;noreply@myapp.com&gt;",
+subject: "MyApp Account Verification",
+body: "A request has been made to verify your MyApp account (https://myapp.com)." +
+      "If you made this request, go to " + url + ". If you did not make this request, ignore this email.",
+html_body: haml(
+  :verify_account_email,
+  layout: false,
+  locals: {
+    email: user.email,
+    date: DateTime.now.strftime("%H:%M:%S%P %B %d, %Y"),
+    ip: request.ip,
+    url: url
+  }
+)
+</code></pre>
+
+<p>  )
+end</p>
+
+<h1>&hellip;</h1>
+
+<p>```</p>
+
+<p>``` haml /views/verify_account_email.haml
+%p
+  Hello!
+%p
+  An account verification has been requested for your new <a href="https://myapp.com">MyApp</a> account.</p>
+
+<p>%ul
+  %li</p>
+
+<pre><code>Username: #{locals[:email]}
+</code></pre>
+
+<p>  %li</p>
+
+<pre><code>Time: #{locals[:date]}
+</code></pre>
+
+<p>  %li</p>
+
+<pre><code>IP address: #{locals[:ip]}
+</code></pre>
+
+<p>%p
+  If you made this request, click the link below or copy-paste the following URL into your browser to verify your account:</p>
+
+<p>%p
+  %a{href: &ldquo;#{locals[:url]}&rdquo;, alt: &ldquo;Verify&rdquo;, title: &ldquo;Click to verify account&rdquo;}</p>
+
+<pre><code>#{locals[:url]}
+</code></pre>
+
+<p>%p
+  If you did not request this new account, please ignore this email.</p>
+
+<p>%p
+  Sincerely,
+  %br
+  Team MyApp</p>
+
+<p>%p
+  This email account is not monitored and will not receive replies. For more information, contact <a href="mailto:connect@myapp.com"><a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#111;&#x3a;&#x63;&#111;&#110;&#110;&#x65;&#x63;&#116;&#64;&#x6d;&#121;&#x61;&#112;&#x70;&#x2e;&#x63;&#x6f;&#109;">&#x63;&#111;&#x6e;&#110;&#x65;&#99;&#116;&#64;&#109;&#121;&#x61;&#112;&#x70;&#46;&#x63;&#x6f;&#109;</a></a>.
+```</p>
+
+<p>Given the pre-defined steps from email-spec, testing that this email gets sent is a breeze. Adding a scenario to my feature file:</p>
+
+<p>``` cucumber features/SignupConfirmation.feature
+Feature: Signup Confirmation
+  As a new user
+  When I sign up
+  I should receive a confirmation email</p>
+
+<p>Background:
+  Given a clear email queue
+  When I go to the signup page
+  And I fill in &ldquo;email&rdquo; with &ldquo;<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#112;&#x72;&#x65;&#x7a;&#64;&#119;&#x68;&#x69;&#116;&#101;&#104;&#x6f;&#117;&#115;&#101;&#x2e;&#x67;&#x6f;&#x76;">&#112;&#114;&#101;&#x7a;&#64;&#x77;&#x68;&#105;&#116;&#x65;&#x68;&#111;&#x75;&#x73;&#x65;&#46;&#x67;&#111;&#118;</a>&rdquo;
+  And I fill in &ldquo;password&rdquo; with &ldquo;bunnies&rdquo;
+  And I press &ldquo;Sign Up&rdquo;
+  Then &ldquo;<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#112;&#114;&#101;&#x7a;&#x40;&#119;&#x68;&#x69;&#x74;&#101;&#104;&#111;&#117;&#115;&#101;&#46;&#x67;&#x6f;&#x76;">&#112;&#114;&#101;&#122;&#64;&#x77;&#x68;&#105;&#116;&#x65;&#x68;&#111;&#x75;&#x73;&#101;&#46;&#103;&#x6f;&#118;</a>&rdquo; should receive an email</p>
+
+<p>Scenario: Receives email with correct contents
+  When &ldquo;<a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#111;&#58;&#x70;&#114;&#x65;&#122;&#x40;&#x77;&#104;&#105;&#116;&#101;&#x68;&#x6f;&#x75;&#115;&#101;&#46;&#103;&#x6f;&#118;">&#112;&#x72;&#101;&#x7a;&#x40;&#119;&#104;&#x69;&#x74;&#x65;&#104;&#x6f;&#117;&#115;&#101;&#46;&#103;&#111;&#x76;</a>&rdquo; opens the email
+  Then they should see the email delivered from &ldquo;MyApp Help Desk <a href="&#109;&#97;&#x69;&#x6c;&#x74;&#111;&#x3a;&#x6e;&#x6f;&#x72;&#101;&#x70;&#108;&#x79;&#x40;&#x6d;&#x79;&#x61;&#x70;&#112;&#x2e;&#99;&#111;&#109;">&#110;&#x6f;&#x72;&#x65;&#x70;&#x6c;&#121;&#x40;&#x6d;&#x79;&#97;&#112;&#112;&#46;&#x63;&#x6f;&#x6d;</a>&rdquo;
+  And they should see &ldquo;MyApp Account Verification&rdquo; in the email subject
+  And they should see &ldquo;Username: <a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x70;&#114;&#101;&#122;&#x40;&#119;&#104;&#x69;&#x74;&#x65;&#104;&#111;&#117;&#115;&#x65;&#x2e;&#103;&#111;&#x76;">&#112;&#114;&#101;&#x7a;&#x40;&#x77;&#x68;&#x69;&#116;&#101;&#104;&#x6f;&#x75;&#115;&#x65;&#x2e;&#x67;&#111;&#118;</a>&rdquo; in the email body
+  And they should see &ldquo;An account verification has been requested&rdquo;
+```</p>
+
+<p>That&rsquo;s it. Now we know that an email like the one above will be sent during signup. What we can&rsquo;t test here is that our SMTP server (or equivalent) is working, so in reality I&rsquo;m only testing that the email will attempt to send that looks like the one I test against.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Sending emails with Pony and Sendgrid]]></title>
+    <link href="http://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/"/>
+    <updated>2014-07-08T05:53:26-04:00</updated>
+    <id>http://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid</id>
+    <content type="html"><![CDATA[<p>It&rsquo;s incredible how easy it is to send emails through a web application, there&rsquo;s no wonder we get so much spam. Assuming we have a <a href="http://ruby-lang.org">ruby</a> app using <a href="http://sinatrarb.com">Sinatra</a>, <a href="http://adam.herokuapp.com/past/2008/11/2/pony_the_express_way_to_send_email_from_ruby/">Pony</a> is one of the easiest ways to get started with your own spam empire.</p>
+
+<p>Installation is, as always, trivial with ruby. Install the gem with <code>gem install pony</code> or add <code>gem pony</code> to your <code>Gemfile</code> and run <code>bundle install</code>.</p>
+
+<p>I like to configure Pony in my application&rsquo;s <code>configure</code> block. I could also add it to my <code>config.ru</code>, but I like to keep that file as tiny as posible to avoid having configuration code all over the place.</p>
+
+<p>``` ruby web.rb</p>
+
+<h1>&hellip;</h1>
+
+<p>require &lsquo;pony&rsquo;
+require &lsquo;sinatra/base&rsquo;</p>
+
+<p>class Application &lt; Sinatra::Base
+  configure do</p>
+
+<pre><code># ...
+
+Pony.options = {
+  :via =&gt; :smtp,
+  :via_options =&gt; {
+    :address =&gt; 'smtp.sendgrid.net',
+    :port =&gt; '587',
+    :domain =&gt; 'myapp.com',
+    :user_name =&gt; ENV['SENDGRID_USERNAME'],
+    :password =&gt; ENV['SENDGRID_PASSWORD'],
+    :authentication =&gt; :plain,
+    :enable_starttls_auto =&gt; true
+  }
+}
+</code></pre>
+
+<p>  end</p>
+
+<p>  # &hellip;
+end
+```</p>
+
+<p>This block tells Pony to use the <a href="http://sendgrid.com/">SendGrid</a> server to send mail, use the &ldquo;myapp.com&rdquo; HELO domain, and dig up the username and password fields from my environment.</p>
+
+<p>If you&rsquo;re using <a href="https://heroku.com">Heroku</a> to host your application, you can <a href="https://addons.heroku.com/sendgrid">sign up for a SendGrid account through your Heroku app</a>, which gives you instant access to your SendGrid account. The <code>username</code> and <code>password</code> field you need to fill in your environment are automatically populated in your Heroku config, which you can view by running <code>heroku config</code> for your application. The free account gets you up to 200 emails a day.</p>
+
+<p>Since I might have multiple developers working in my source code and testing the email-sending functionality, I have all the developers <a href="https://sendgrid.com/user/signup">sign up for their own free SendGrid account</a>. This should help to alleviate some of the email volume from any particular account while developing. After signing up, it took my account nearly 4 hours to be &ldquo;provisioned&rdquo; (see: approved) by the SendGrid team. Once you&rsquo;re approved you can start sending emails using your developer account credentials. I stick my username/password in my local <code>.env</code> file (another reason to make sure you&rsquo;re not storing your environment on your server or in your git repo).</p>
+
+<p>So let&rsquo;s actually send an email. Let&rsquo;s create a route that sends an email to verify a new user account; I&rsquo;ll take some liberties by saying we have a <code>User</code> model defined already that generates a signup verification hash. I can tell pony to send a plaintext body through the <code>body</code> option and an HTML body through the <code>html_body</code> option.</p>
+
+<p>``` ruby web.rb</p>
+
+<h1>&hellip;</h1>
+
+<p>post &lsquo;/signup&rsquo; do
+  user = User.create! params</p>
+
+<p>  url = &ldquo;#{request.base_url}/account/reset/#{user.generate_verification_hash}&rdquo;
+  Pony.mail(</p>
+
+<pre><code>to: user.email,
+from: "MyApp Help Desk &lt;noreply@myapp.com&gt;",
+subject: "MyApp Account Verification",
+body: "A request has been made to verify your MyApp account (https://myapp.com)." +
+      "If you made this request, go to " + url + ". If you did not make this request, ignore this email.",
+html_body: haml(
+  :verify_account_email,
+  layout: false,
+  locals: {
+    email: user.email,
+    date: DateTime.now.strftime("%H:%M:%S%P %B %d, %Y"),
+    ip: request.ip,
+    url: url
+  }
+)
+</code></pre>
+
+<p>  )
+end
+```</p>
+
+<p>``` haml views/verify_account_email.rb
+%p
+  Hello!
+%p
+  An account verification has been requested for your new <a href="https://myapp.com">MyApp</a> account.</p>
+
+<p>%ul
+  %li</p>
+
+<pre><code>Username: #{locals[:email]}
+</code></pre>
+
+<p>  %li</p>
+
+<pre><code>Time: #{locals[:date]}
+</code></pre>
+
+<p>  %li</p>
+
+<pre><code>IP address: #{locals[:ip]}
+</code></pre>
+
+<p>%p
+  If you made this request, click the link below or copy-paste the following URL into your browser to verify your account:</p>
+
+<p>%p
+  %a{href: &ldquo;#{locals[:url]}&rdquo;, alt: &ldquo;Verify&rdquo;, title: &ldquo;Click to verify account&rdquo;}</p>
+
+<pre><code>#{locals[:url]}
+</code></pre>
+
+<p>%p
+  If you did not request this new account, please ignore this email.</p>
+
+<p>%p
+  Sincerely,
+  %br
+  Team MyApp</p>
+
+<p>%p
+  This email account is not monitored and will not receive replies. For more information, contact <a href="mailto:connect@myapp.com"><a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#x63;&#x6f;&#110;&#x6e;&#x65;&#99;&#x74;&#x40;&#x6d;&#x79;&#x61;&#112;&#112;&#x2e;&#99;&#111;&#109;">&#99;&#111;&#110;&#x6e;&#101;&#99;&#x74;&#x40;&#x6d;&#x79;&#97;&#x70;&#x70;&#46;&#x63;&#111;&#109;</a></a>.
+```</p>
+
+<p>When you have a user hit this route, an email will be sent to the user with the given subject, to, from, and body fields using the configuration parameters given in the previous <code>configure</code> block. Fast, easy, and, best of all, no <code>sendmail</code> configuration.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Using sqlite on Heroku]]></title>
@@ -289,135 +540,6 @@ end
 
 
 <p>The <a href="//vitalets.github.io/x-editable/docs.html">X-editable docs</a> are extremely helpful for beginners. There is even more detail on the X-editable site, including editing multiple items, editing dates, and using a pop-up to edit the data.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Convincing rvm to let you use ruby 2.1.0]]></title>
-    <link href="http://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/"/>
-    <updated>2014-02-22T16:46:00-05:00</updated>
-    <id>http://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0</id>
-    <content type="html"><![CDATA[<p><a href="//ruby-lang.org/en/news/2013/12/25/ruby-2-1-0-is-released/">Ruby 2.1.0 went stable</a> a few months ago, and <a href="//ruby-lang.org/en/news/2014/01/10/ruby-1-9-3-will-end-on-2015/">Ruby 1.9.3 support</a> will end in a just over a year.</p>
-
-<p>You know what that means: Warplanes in the sky falling to the ground, dogs and cats getting along like old pals, and people wandering aimlessly through the streets trying to remember the last time they saw a green build.</p>
-
-<p>Believe it or not, all of these things can be prevented. Once upon a time, I wrote about <a href="/blog/2013/10/08/rvm-quick-start/">configuring and using rvm</a> to control individual ruby environments for each of your projects. If it&rsquo;s been a while since you installed your copy of <a href="//rvm.io/">rvm</a>, you might have some trouble installing and using newer version of ruby. Lucky for us, those clever rvm developers made it easy to get around this.</p>
-
-<p>In my case, I want to upgrade a project to use <code>ruby 2.1.0</code>. The first time I tried to run <code>rvm install ruby-2.1.0</code>, I ended up installing <code>ruby-2.1.0-preview1</code>. I realized that I had installed rvm on this machine around October 2013, and <code>ruby 2.1.0</code> was released in December 2013, so rvm had no idea that <code>ruby 2.1.0</code> was stable. Updating rvm (in the root of the project directory):</p>
-
-<p><code>bash /home/lrp/Projects/2014/projNeedingRuby210
-$ rvm get stable
-</code></p>
-
-<p>There will be some amount of text on the screen if your system needs to be updated. Note that you must be connected to the internet if you want rvm to update. Now we do the install of our brand new ruby:</p>
-
-<p><code>bash /home/lrp/Projects/2014/projNeedingRuby210
-$ rvm install ruby-2.1.0
-</code></p>
-
-<p>Again, text on the screen from fetching of data from the internet. But hopefully you see something that tells you the operation was successful. You can also verify which rubies you have installed using the <code>list</code> command:</p>
-
-<p>``` bash /home/lrp/Projects/2014/projNeedingRuby210
-$ rvm list rubies
-   ruby-1.9.3-p448 [ x86_64 ]
-=> ruby-2.0.0-p247 [ x86_64 ]
- * ruby-2.1.0 [ x86_64 ]</p>
-
-<h1>=> &ndash; current</h1>
-
-<h1>=* &ndash; current &amp;&amp; default</h1>
-
-<h1>* &ndash; default</h1>
-
-<p>```</p>
-
-<p>Now we tell our current project to use <code>ruby 2.1.0</code>:</p>
-
-<p><code>bash /home/lrp/Projects/2014/projNeedingRuby210
-$ rm .ruby-version .ruby-gemset
-$ rvm 2.1.0@projNeedingRuby210 --create --ruby-version
-ruby-2.1.0 - #gemset created /home/lrp/.rvm/gems/ruby-2.1.0@projNeedingRuby210
-ruby-2.1.0 - #generating projNeedingRuby210 wrappers.
-$ rvm gemset copy 2.0.0-p247@projNeedingRuby210 2.1.0@projNeedingRuby210
-Copying gemset from 2.0.0-p247@projNeedingRuby210 to 2.1.0@projNeedingRuby210
-Generating gemset wrappers ruby-2.1.0@projNeedingRuby210.
-Making gemset 2.1.0@projNeedingRuby210 pristine.
-$ which ruby
-/home/lrp/.rvm/rubies/ruby-2.1.0/bin/ruby
-</code></p>
-
-<p>Alright! Crisis averted. If you&rsquo;re using <a href="//bundler.io/">bundler</a> with this project, be sure to change your ruby version (usually located near the top of the <code>Gemfile</code>).</p>
-
-<p>What about setting up a new project using <code>ruby 2.1.0</code>? Easy! Switch to the project directory and:</p>
-
-<p><code>bash /home/lrp/Projects/2014/newRubyProject
-$ rvm 2.1.0@newRubyProject --create --ruby-version
-</code></p>
-
-<p>Oh, rvm, you make life <em>too</em> easy sometimes.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[RVM Quick Start]]></title>
-    <link href="http://larry-price.com/blog/2013/10/08/rvm-quick-start/"/>
-    <updated>2013-10-08T22:10:00-04:00</updated>
-    <id>http://larry-price.com/blog/2013/10/08/rvm-quick-start</id>
-    <content type="html"><![CDATA[<p>When I was working on a few different projects at once, I started running into issues where my Ruby gem versions would start to mismatch. How did I fix that issue? Naively. I adjusted the versions as necessary so my gems were always the same version. That was&hellip; pretty dumb. To make up for my past ignorance, I&rsquo;ve been exploring ways to manage my Ruby versions and my gems intelligently. Enter <a href="https://rvm.io/">RVM</a>.</p>
-
-<p>RVM is a simple tool to solve just problems. And it works pretty well. I hit some kinks along the way, but my installation pleases me well enough. Getting RVM is not for the faint of heart. Maybe there are better ways to do it, but the website says to execute the following:</p>
-
-<p>``` bash /home/lrp/my_project</p>
-
-<blockquote><p>curl -L <a href="https://get.rvm.io">https://get.rvm.io</a> | bash -s stable
-```</p></blockquote>
-
-<p>This command uses curl to fetch the data that lives at <code>https://get.rvm.io</code>, which happens to be a big bash script. It executes the bash script with the args <code>-s stable</code>. &lsquo;Stable&rsquo; means the latest stable release of RVM. I could just as easily give it &lsquo;dev&rsquo; and get the latest developer release instead, but I really don&rsquo;t want that. So that command does a lot of stuff and may give you some further instructions to run before you can continue. Use that big head of yours and follow the instructions. You may also need to restart a terminal to get RVM to be recognized as a command. Since I was using <code>gnome-terminal</code>, I had to follow these <a href="https://rvm.io/integration/gnome-terminal">instructions</a>.</p>
-
-<p>Now I want RVM to know about some Ruby versions. For a full list of possible Ruby versions to install, run <code>rvm list known</code>. I just want 1.9.3. I found that I needed to do this even though I had 1.9.3 installed on my system previously.</p>
-
-<p>``` bash /home/lrp/my_project</p>
-
-<blockquote><p>rvm install ruby-1.9.3
-```</p></blockquote>
-
-<p>In Ubuntu 13.04, this command installs ruby-1.9.3 in <code>~/.rvm/rubies/ruby-1.9.3-p448/bin/ruby</code>. I&rsquo;ve found that this also sets my default Ruby to the RVM version of Ruby, which I don&rsquo;t want. To verify and undo this, I executed the following commands outside of my project directory.</p>
-
-<p>``` bash /home/lrp</p>
-
-<blockquote><p>which ruby
-/home/lrp/.rvm/rubies/ruby-1.9.3-p448/bin/ruby
-echo &ldquo;D'oh&rdquo;
-D'oh
-rvm use system
-Now using system ruby.
-which ruby
-/usr/bin/ruby</p>
-
-<p>```</p></blockquote>
-
-<p>Now that that&rsquo;s settled, I want to tell RVM to use the local version of Ruby for my project and to install any gems in a special location.</p>
-
-<p>``` bash /home/lrp/my_project</p>
-
-<blockquote><p>rvm 1.9.3@my-project &mdash;create &mdash;ruby-version
-```</p></blockquote>
-
-<p>This creates a gemset and ruby-version file (<code>.ruby-gemset</code> and <code>.ruby-version</code> files) using the Ruby installation 1.9.3 created above. I specifiy to use <code>--ruby-version</code> instead of <code>--rvmrc</code> because RVM told me that I should. After some research, the <code>.ruby-version</code> file is used by several other tools, so this will keep my potential number of config files low. Now I check that all my Ruby versions are okay.</p>
-
-<p>``` bash /home/lrp/my_project</p>
-
-<blockquote><p>which ruby
-/home/lrp/.rvm/rubies/ruby-1.9.3-p448/bin/ruby
-cd ..
-which ruby
-/usr/bin/ruby</p>
-
-<p>```</p></blockquote>
-
-<p>When in my project directory, all the gems I install will be installed to my specified gemset, which means they are no longer cluttering my global gemspace, even when I install them using Bundler. It also means that I can use ruby-1.9.3 for this project and 2.0 for another project with minimal mental overhead. This makes me a happy developer.</p>
-
-<p>I only glazed over the installation process and documentation for RVM. Go to <a href="https://rvm.io/">the web site</a> for more.</p>
 ]]></content>
   </entry>
   

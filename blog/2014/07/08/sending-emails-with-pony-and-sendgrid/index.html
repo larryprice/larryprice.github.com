@@ -1,0 +1,506 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Sending Emails With Pony and Sendgrid - Larry Price</title>
+  <meta name="author" content="Larry Price">
+
+  
+  <meta name="description" content="It&rsquo;s incredible how easy it is to send emails through a web application, there&rsquo;s no wonder we get so much spam. Assuming we have a ruby &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Larry Price" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Montserrat+Alternates|Marcellus' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35669093-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner" style="background:url(/images/coffee-stain.png) top right no-repeat; background-size: auto 100%;"><hgroup>
+  <h1><a href="/">Larry Price</a></h1>
+  
+    <h2>And The Endless Cup Of Coffee</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:larry-price.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/books">Books</a></li>
+  <li><a href="/blog/projects">Projects</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Sending Emails With Pony and Sendgrid</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-08T05:53:26-04:00" pubdate data-updated="true">Jul 8<span>th</span>, 2014</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://larry-price.com">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>It&rsquo;s incredible how easy it is to send emails through a web application, there&rsquo;s no wonder we get so much spam. Assuming we have a <a href="http://ruby-lang.org">ruby</a> app using <a href="http://sinatrarb.com">Sinatra</a>, <a href="http://adam.herokuapp.com/past/2008/11/2/pony_the_express_way_to_send_email_from_ruby/">Pony</a> is one of the easiest ways to get started with your own spam empire.</p>
+
+<p>Installation is, as always, trivial with ruby. Install the gem with <code>gem install pony</code> or add <code>gem pony</code> to your <code>Gemfile</code> and run <code>bundle install</code>.</p>
+
+<p>I like to configure Pony in my application&rsquo;s <code>configure</code> block. I could also add it to my <code>config.ru</code>, but I like to keep that file as tiny as posible to avoid having configuration code all over the place.</p>
+
+<figure class='code'><figcaption><span>web.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># ...</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;pony&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Application</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">configure</span> <span class="k">do</span>
+</span><span class='line'>    <span class="c1"># ...</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="no">Pony</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>      <span class="ss">:via</span> <span class="o">=&gt;</span> <span class="ss">:smtp</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">:via_options</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>        <span class="ss">:address</span> <span class="o">=&gt;</span> <span class="s1">&#39;smtp.sendgrid.net&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:port</span> <span class="o">=&gt;</span> <span class="s1">&#39;587&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:domain</span> <span class="o">=&gt;</span> <span class="s1">&#39;myapp.com&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:user_name</span> <span class="o">=&gt;</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;SENDGRID_USERNAME&#39;</span><span class="o">]</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:password</span> <span class="o">=&gt;</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;SENDGRID_PASSWORD&#39;</span><span class="o">]</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:authentication</span> <span class="o">=&gt;</span> <span class="ss">:plain</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:enable_starttls_auto</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This block tells Pony to use the <a href="http://sendgrid.com/">SendGrid</a> server to send mail, use the &ldquo;myapp.com&rdquo; HELO domain, and dig up the username and password fields from my environment.</p>
+
+<p>If you&rsquo;re using <a href="https://heroku.com">Heroku</a> to host your application, you can <a href="https://addons.heroku.com/sendgrid">sign up for a SendGrid account through your Heroku app</a>, which gives you instant access to your SendGrid account. The <code>username</code> and <code>password</code> field you need to fill in your environment are automatically populated in your Heroku config, which you can view by running <code>heroku config</code> for your application. The free account gets you up to 200 emails a day.</p>
+
+<p>Since I might have multiple developers working in my source code and testing the email-sending functionality, I have all the developers <a href="https://sendgrid.com/user/signup">sign up for their own free SendGrid account</a>. This should help to alleviate some of the email volume from any particular account while developing. After signing up, it took my account nearly 4 hours to be &ldquo;provisioned&rdquo; (see: approved) by the SendGrid team. Once you&rsquo;re approved you can start sending emails using your developer account credentials. I stick my username/password in my local <code>.env</code> file (another reason to make sure you&rsquo;re not storing your environment on your server or in your git repo).</p>
+
+<p>So let&rsquo;s actually send an email. Let&rsquo;s create a route that sends an email to verify a new user account; I&rsquo;ll take some liberties by saying we have a <code>User</code> model defined already that generates a signup verification hash. I can tell pony to send a plaintext body through the <code>body</code> option and an HTML body through the <code>html_body</code> option.</p>
+
+<figure class='code'><figcaption><span>web.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># ...</span>
+</span><span class='line'><span class="n">post</span> <span class="s1">&#39;/signup&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create!</span> <span class="n">params</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">request</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/account/reset/</span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">generate_verification_hash</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="no">Pony</span><span class="o">.</span><span class="n">mail</span><span class="p">(</span>
+</span><span class='line'>    <span class="ss">to</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">from</span><span class="p">:</span> <span class="s2">&quot;MyApp Help Desk &lt;noreply@myapp.com&gt;&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">subject</span><span class="p">:</span> <span class="s2">&quot;MyApp Account Verification&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">body</span><span class="p">:</span> <span class="s2">&quot;A request has been made to verify your MyApp account (https://myapp.com).&quot;</span> <span class="o">+</span>
+</span><span class='line'>          <span class="s2">&quot;If you made this request, go to &quot;</span> <span class="o">+</span> <span class="n">url</span> <span class="o">+</span> <span class="s2">&quot;. If you did not make this request, ignore this email.&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">html_body</span><span class="p">:</span> <span class="n">haml</span><span class="p">(</span>
+</span><span class='line'>      <span class="ss">:verify_account_email</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">layout</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">locals</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="ss">email</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">date</span><span class="p">:</span> <span class="no">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S%P %B %d, %Y&quot;</span><span class="p">),</span>
+</span><span class='line'>        <span class="ss">ip</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">ip</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">url</span><span class="p">:</span> <span class="n">url</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>  <span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>views/verify_account_email.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  Hello!
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  An account verification has been requested for your new &lt;a href=&quot;https://myapp.com&quot;&gt;MyApp&lt;/a&gt; account.
+</span><span class='line'>
+</span><span class='line'><span class="nt">%ul</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    Username: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:email</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    Time: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:date</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    IP address: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:ip</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  If you made this request, click the link below or copy-paste the following URL into your browser to verify your account:
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  <span class="nt">%a</span><span class="p">{</span><span class="ss">href</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:url</span><span class="o">]</span><span class="si">}</span>&quot;, alt: &quot;Verify&quot;, title: &quot;Click to verify account&quot;}
+</span><span class='line'>    <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:url</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  If you did not request this new account, please ignore this email.
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  Sincerely,
+</span><span class='line'>  <span class="nt">%br</span>
+</span><span class='line'>  Team MyApp
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  This email account is not monitored and will not receive replies. For more information, contact &lt;a href=&quot;mailto:connect@myapp.com&quot;&gt;connect@myapp.com&lt;/a&gt;.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When you have a user hit this route, an email will be sent to the user with the given subject, to, from, and body fields using the configuration parameters given in the previous <code>configure</code> block. Fast, easy, and, best of all, no <code>sendmail</code> configuration.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Larry Price</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-08T05:53:26-04:00" pubdate data-updated="true">Jul 8<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/heroku/'>heroku</a>, <a class='category' href='/blog/categories/pony/'>pony</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>, <a class='category' href='/blog/categories/sendgrid/'>sendgrid</a>, <a class='category' href='/blog/categories/sinatra/'>sinatra</a>, <a class='category' href='/blog/categories/web/'>web</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/" data-via="larryrprice" data-counturl="http://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="small"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/07/07/deauthorizing-token-with-the-trello-client/" title="Previous Post: Deauthorizing Token with the Trello Client">&laquo; Deauthorizing Token with the Trello Client</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber/" title="Next Post: Testing automated emails with email-spec in Cucumber">Testing automated emails with email-spec in Cucumber &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <span style="display: block; text-align: center;">
+    <a href="https://github.com/larryprice" title="Github"><img src="/images/icon_github.png" class="social-media-icon" /></a>
+    <a href="https://bitbucket.org/larryprice" title="Bitbucket"><img src="/images/icon_bitbucket.png" class="social-media-icon" /></a>
+    <a href="https://twitter.com/larryrprice" title="Twitter"><img src="/images/icon_twitter.png" class="social-media-icon" /></a>
+    <a href="https://www.linkedin.com/pub/larry-price/3a/630/47b" title="LinkedIn"><img src="/images/icon_linkedin.png" class="social-media-icon" /></a>
+  </span>
+</section>
+<section>
+  <h1>void* Larry</h1>
+  <p>I'm a codeslinger debugging from the mean streets of Indiana. Welcome to my blog, where I'll tell the tales of wondrous things I discover in the digital jungle.</p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber/">Testing Automated Emails With Email-spec in Cucumber</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/">Sending Emails With Pony and Sendgrid</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">Deauthorizing Token With the Trello Client</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/12/lessons-learned-during-the-conception-of-ollert/">Lessons Learned During the Conception of Ollert</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/04/jasmine-a-whole-new-world-of-javascript-testing/">Jasmine - a Whole New World of Javascript Testing</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Tag Cloud</h1>
+    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 104.28571428571429%'>agile</a> <a href='/blog/categories/c-plus-plus' style='font-size: 112.85714285714286%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 104.28571428571429%'>capybara</a> <a href='/blog/categories/css' style='font-size: 104.28571428571429%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 112.85714285714286%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 121.42857142857143%'>database</a> <a href='/blog/categories/foreman' style='font-size: 104.28571428571429%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 104.28571428571429%'>foss</a> <a href='/blog/categories/git' style='font-size: 104.28571428571429%'>git</a> <a href='/blog/categories/gmock' style='font-size: 104.28571428571429%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 112.85714285714286%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 104.28571428571429%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 104.28571428571429%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 104.28571428571429%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 112.85714285714286%'>heroku</a> <a href='/blog/categories/html' style='font-size: 108.57142857142857%'>html</a> <a href='/blog/categories/internet' style='font-size: 104.28571428571429%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 112.85714285714286%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 117.14285714285714%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 108.57142857142857%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 112.85714285714286%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 104.28571428571429%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 104.28571428571429%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 104.28571428571429%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 108.57142857142857%'>nosql</a> <a href='/blog/categories/ollert' style='font-size: 134.28571428571428%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 117.14285714285714%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 104.28571428571429%'>pony</a> <a href='/blog/categories/qmake' style='font-size: 104.28571428571429%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 104.28571428571429%'>qt</a> <a href='/blog/categories/rails' style='font-size: 104.28571428571429%'>rails</a> <a href='/blog/categories/retro' style='font-size: 112.85714285714286%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 108.57142857142857%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 160.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 112.85714285714286%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 104.28571428571429%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 104.28571428571429%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 134.28571428571428%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 104.28571428571429%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 130.0%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 104.28571428571429%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 104.28571428571429%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 117.14285714285714%'>testing</a> <a href='/blog/categories/trello' style='font-size: 117.14285714285714%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 108.57142857142857%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 104.28571428571429%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 104.28571428571429%'>upstart</a> <a href='/blog/categories/web' style='font-size: 151.42857142857144%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 138.57142857142856%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 104.28571428571429%'>writeups</a> </span>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/larryprice">@larryprice</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'larryprice',
+            count: 5,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  <center>
+	  Copyright &copy; 2014 - Larry Price -
+	  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span><br/>
+	  Note: Views and opinions expressed belong solely to the author and do not represent the views of the any other person or company.
+	</center>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'larryprice';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/';
+        var disqus_url = 'http://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

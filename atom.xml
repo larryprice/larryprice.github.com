@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="http://larry-price.com/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-07-07T06:23:27-04:00</updated>
+  <updated>2014-07-12T08:18:42-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,377 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Testing Automated Emails With Email-spec in Cucumber]]></title>
+    <link href="http://larry-price.com/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber/"/>
+    <updated>2014-07-12T07:36:33-04:00</updated>
+    <id>http://larry-price.com/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber</id>
+    <content type="html"><![CDATA[<p>Now that <a href="http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">I send emails using Pony</a>, I want to be able to verify that the emails are being generated correctly. I also don&rsquo;t want to send real emails and have my tests check an inbox somewhere. I found a couple of solutions to do this, including <a href="https://github.com/johnmendonca/pony-test">pony-test</a> and <a href="https://github.com/bmabey/email-spec">email-spec</a>. Although pony-test fits my needs perfectly, the last commit was December 27, 2011 (2.5 years ago at the time of this post), and thus was using an outdated version of <a href="https://github.com/jnicklas/capybara">capybara</a> which I was unwilling to use. Fortunately, pony-spec is mostly just a fork of email-spec with all the non-Pony components ripped out.</p>
+
+<p>I&rsquo;m going to be using Cucumber to test my emails, but email-spec also boasts compatibility with rspec and Turnip. To get started:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>gem install email-spec
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The developers of email-spec were kind enough to give us some free step definitions. If I was using rails, I could just type <code>rails generate email_spec:steps</code>, but since I&rsquo;m using Sinatra I opted just to copy-paste the file into my <code>step_definitions/</code> directory. You can find <code>email_steps.rb</code> <a href="https://raw.githubusercontent.com/bmabey/email-spec/master/lib/generators/email_spec/steps/templates/email_steps.rb">on Github</a>.</p>
+
+<p>In <a href="http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">my last post about small horses and emails</a>, I used the following code to send a confirmation email on signup:</p>
+
+<figure class='code'><figcaption><span>web.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># ...</span>
+</span><span class='line'><span class="n">post</span> <span class="s1">&#39;/signup&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create!</span> <span class="n">params</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">request</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/account/reset/</span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">generate_verification_hash</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="no">Pony</span><span class="o">.</span><span class="n">mail</span><span class="p">(</span>
+</span><span class='line'>    <span class="ss">to</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">from</span><span class="p">:</span> <span class="s2">&quot;MyApp Help Desk &lt;noreply@myapp.com&gt;&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">subject</span><span class="p">:</span> <span class="s2">&quot;MyApp Account Verification&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">body</span><span class="p">:</span> <span class="s2">&quot;A request has been made to verify your MyApp account (https://myapp.com).&quot;</span> <span class="o">+</span>
+</span><span class='line'>          <span class="s2">&quot;If you made this request, go to &quot;</span> <span class="o">+</span> <span class="n">url</span> <span class="o">+</span> <span class="s2">&quot;. If you did not make this request, ignore this email.&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">html_body</span><span class="p">:</span> <span class="n">haml</span><span class="p">(</span>
+</span><span class='line'>      <span class="ss">:verify_account_email</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">layout</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">locals</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="ss">email</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">date</span><span class="p">:</span> <span class="no">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S%P %B %d, %Y&quot;</span><span class="p">),</span>
+</span><span class='line'>        <span class="ss">ip</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">ip</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">url</span><span class="p">:</span> <span class="n">url</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>  <span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="c1"># ...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>/views/verify_account_email.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  Hello!
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  An account verification has been requested for your new &lt;a href=&quot;https://myapp.com&quot;&gt;MyApp&lt;/a&gt; account.
+</span><span class='line'>
+</span><span class='line'><span class="nt">%ul</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    Username: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:email</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    Time: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:date</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    IP address: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:ip</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  If you made this request, click the link below or copy-paste the following URL into your browser to verify your account:
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  <span class="nt">%a</span><span class="p">{</span><span class="ss">href</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:url</span><span class="o">]</span><span class="si">}</span>&quot;, alt: &quot;Verify&quot;, title: &quot;Click to verify account&quot;}
+</span><span class='line'>    <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:url</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  If you did not request this new account, please ignore this email.
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  Sincerely,
+</span><span class='line'>  <span class="nt">%br</span>
+</span><span class='line'>  Team MyApp
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  This email account is not monitored and will not receive replies. For more information, contact &lt;a href=&quot;mailto:connect@myapp.com&quot;&gt;connect@myapp.com&lt;/a&gt;.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Given the pre-defined steps from email-spec, testing that this email gets sent is a breeze. Adding a scenario to my feature file:</p>
+
+<figure class='code'><figcaption><span>features/SignupConfirmation.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Signup Confirmation</span>
+</span><span class='line'><span class="nf">  As a new user</span>
+</span><span class='line'><span class="nf">  When I sign up</span>
+</span><span class='line'><span class="nf">  I should receive a confirmation email</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">Background:</span><span class="nf"></span>
+</span><span class='line'><span class="k">  Given </span><span class="nf">a clear email queue</span>
+</span><span class='line'><span class="nf">  </span><span class="k">When </span><span class="nf">I go to the signup page</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I fill in &quot;</span><span class="s">email</span><span class="nf">&quot; with &quot;</span><span class="s">prez@whitehouse.gov</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I fill in &quot;</span><span class="s">password</span><span class="nf">&quot; with &quot;</span><span class="s">bunnies</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I press &quot;</span><span class="s">Sign Up</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">&quot;</span><span class="s">prez@whitehouse.gov</span><span class="nf">&quot; should receive an email</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Receives email with correct contents</span>
+</span><span class='line'><span class="k">  When </span><span class="nf">&quot;</span><span class="s">prez@whitehouse.gov</span><span class="nf">&quot; opens the email</span>
+</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">they should see the email delivered from &quot;</span><span class="s">MyApp Help Desk </span><span class="nv">&lt;noreply@myapp.com&gt;</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">they should see &quot;</span><span class="s">MyApp Account Verification</span><span class="nf">&quot; in the email subject</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">they should see &quot;</span><span class="s">Username: prez@whitehouse.gov</span><span class="nf">&quot; in the email body</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">they should see &quot;</span><span class="s">An account verification has been requested</span><span class="nf">&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That&rsquo;s it. Now we know that an email like the one above will be sent during signup. What we can&rsquo;t test here is that our SMTP server (or equivalent) is working, so in reality I&rsquo;m only testing that the email will attempt to send that looks like the one I test against.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Sending Emails With Pony and Sendgrid]]></title>
+    <link href="http://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/"/>
+    <updated>2014-07-08T05:53:26-04:00</updated>
+    <id>http://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid</id>
+    <content type="html"><![CDATA[<p>It&rsquo;s incredible how easy it is to send emails through a web application, there&rsquo;s no wonder we get so much spam. Assuming we have a <a href="http://ruby-lang.org">ruby</a> app using <a href="http://sinatrarb.com">Sinatra</a>, <a href="http://adam.herokuapp.com/past/2008/11/2/pony_the_express_way_to_send_email_from_ruby/">Pony</a> is one of the easiest ways to get started with your own spam empire.</p>
+
+<p>Installation is, as always, trivial with ruby. Install the gem with <code>gem install pony</code> or add <code>gem pony</code> to your <code>Gemfile</code> and run <code>bundle install</code>.</p>
+
+<p>I like to configure Pony in my application&rsquo;s <code>configure</code> block. I could also add it to my <code>config.ru</code>, but I like to keep that file as tiny as posible to avoid having configuration code all over the place.</p>
+
+<figure class='code'><figcaption><span>web.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># ...</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;pony&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Application</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">configure</span> <span class="k">do</span>
+</span><span class='line'>    <span class="c1"># ...</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="no">Pony</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>      <span class="ss">:via</span> <span class="o">=&gt;</span> <span class="ss">:smtp</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">:via_options</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>        <span class="ss">:address</span> <span class="o">=&gt;</span> <span class="s1">&#39;smtp.sendgrid.net&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:port</span> <span class="o">=&gt;</span> <span class="s1">&#39;587&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:domain</span> <span class="o">=&gt;</span> <span class="s1">&#39;myapp.com&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:user_name</span> <span class="o">=&gt;</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;SENDGRID_USERNAME&#39;</span><span class="o">]</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:password</span> <span class="o">=&gt;</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;SENDGRID_PASSWORD&#39;</span><span class="o">]</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:authentication</span> <span class="o">=&gt;</span> <span class="ss">:plain</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:enable_starttls_auto</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This block tells Pony to use the <a href="http://sendgrid.com/">SendGrid</a> server to send mail, use the &ldquo;myapp.com&rdquo; HELO domain, and dig up the username and password fields from my environment.</p>
+
+<p>If you&rsquo;re using <a href="https://heroku.com">Heroku</a> to host your application, you can <a href="https://addons.heroku.com/sendgrid">sign up for a SendGrid account through your Heroku app</a>, which gives you instant access to your SendGrid account. The <code>username</code> and <code>password</code> field you need to fill in your environment are automatically populated in your Heroku config, which you can view by running <code>heroku config</code> for your application. The free account gets you up to 200 emails a day.</p>
+
+<p>Since I might have multiple developers working in my source code and testing the email-sending functionality, I have all the developers <a href="https://sendgrid.com/user/signup">sign up for their own free SendGrid account</a>. This should help to alleviate some of the email volume from any particular account while developing. After signing up, it took my account nearly 4 hours to be &ldquo;provisioned&rdquo; (see: approved) by the SendGrid team. Once you&rsquo;re approved you can start sending emails using your developer account credentials. I stick my username/password in my local <code>.env</code> file (another reason to make sure you&rsquo;re not storing your environment on your server or in your git repo).</p>
+
+<p>So let&rsquo;s actually send an email. Let&rsquo;s create a route that sends an email to verify a new user account; I&rsquo;ll take some liberties by saying we have a <code>User</code> model defined already that generates a signup verification hash. I can tell pony to send a plaintext body through the <code>body</code> option and an HTML body through the <code>html_body</code> option.</p>
+
+<figure class='code'><figcaption><span>web.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># ...</span>
+</span><span class='line'><span class="n">post</span> <span class="s1">&#39;/signup&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create!</span> <span class="n">params</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">request</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/account/reset/</span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">generate_verification_hash</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="no">Pony</span><span class="o">.</span><span class="n">mail</span><span class="p">(</span>
+</span><span class='line'>    <span class="ss">to</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">from</span><span class="p">:</span> <span class="s2">&quot;MyApp Help Desk &lt;noreply@myapp.com&gt;&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">subject</span><span class="p">:</span> <span class="s2">&quot;MyApp Account Verification&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">body</span><span class="p">:</span> <span class="s2">&quot;A request has been made to verify your MyApp account (https://myapp.com).&quot;</span> <span class="o">+</span>
+</span><span class='line'>          <span class="s2">&quot;If you made this request, go to &quot;</span> <span class="o">+</span> <span class="n">url</span> <span class="o">+</span> <span class="s2">&quot;. If you did not make this request, ignore this email.&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">html_body</span><span class="p">:</span> <span class="n">haml</span><span class="p">(</span>
+</span><span class='line'>      <span class="ss">:verify_account_email</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">layout</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">locals</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="ss">email</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">date</span><span class="p">:</span> <span class="no">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S%P %B %d, %Y&quot;</span><span class="p">),</span>
+</span><span class='line'>        <span class="ss">ip</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">ip</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">url</span><span class="p">:</span> <span class="n">url</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>  <span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>views/verify_account_email.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  Hello!
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  An account verification has been requested for your new &lt;a href=&quot;https://myapp.com&quot;&gt;MyApp&lt;/a&gt; account.
+</span><span class='line'>
+</span><span class='line'><span class="nt">%ul</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    Username: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:email</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    Time: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:date</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    IP address: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:ip</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  If you made this request, click the link below or copy-paste the following URL into your browser to verify your account:
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  <span class="nt">%a</span><span class="p">{</span><span class="ss">href</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:url</span><span class="o">]</span><span class="si">}</span>&quot;, alt: &quot;Verify&quot;, title: &quot;Click to verify account&quot;}
+</span><span class='line'>    <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:url</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  If you did not request this new account, please ignore this email.
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  Sincerely,
+</span><span class='line'>  <span class="nt">%br</span>
+</span><span class='line'>  Team MyApp
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  This email account is not monitored and will not receive replies. For more information, contact &lt;a href=&quot;mailto:connect@myapp.com&quot;&gt;connect@myapp.com&lt;/a&gt;.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When you have a user hit this route, an email will be sent to the user with the given subject, to, from, and body fields using the configuration parameters given in the previous <code>configure</code> block. Fast, easy, and, best of all, no <code>sendmail</code> configuration.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Deauthorizing Token With the Trello Client]]></title>
@@ -1795,255 +2166,6 @@
 <p>Let&rsquo;s say I have a very normal web application, so I want to include <a href="//jquery.com">jQuery</a> embedded in my page. I initially copy-paste <code>&lt;script src='http://code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code> right into my <code>&lt;head&gt;</code> node, which normally seems fine. Unfortunately, this is where issues arise. I&rsquo;m now forcing the user to make a connection which may or may not be secure to fetch data from an insecure page.</p>
 
 <p>By removing the <code>http:</code> from the <code>http://</code>, the issue of deciding whether to fetch the file using <code>HTTP</code> or <code>HTTPS</code> is left to the web browser. So my script include becomes <code>&lt;script src='//code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code>. This also works for links, images, and web fonts. In fact, every link included in this post uses the same principal, where I leave the protocol out of what becomes the <code>href</code> tag.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Custom Domain With Github Pages]]></title>
-    <link href="http://larry-price.com/blog/2014/02/12/custom-domain-with-github-pages/"/>
-    <updated>2014-02-12T21:30:00-05:00</updated>
-    <id>http://larry-price.com/blog/2014/02/12/custom-domain-with-github-pages</id>
-    <content type="html"><![CDATA[<p>As of today, I&rsquo;m the proud owner of <a href="//larry-price.com">larry-price.com</a>. On the recommendation from a friend, I used <a href="//domainmonster.com">domainmonster.com</a> for it&rsquo;s cost effectiveness and usable toolset. I wanted to link my Github Pages blog (this blog!) to my new site. In case I ever want to do this again, I&rsquo;ve provided myself (and you!) with a step-by-step guide below. Note that Github <a href="//help.github.com/articles/setting-up-a-custom-domain-with-pages">has a page that explains how to do this</a>, but there&rsquo;s some fluff and ordering issues that turned me off from using those instructions as any more than a reference.</p>
-
-<h4>Step 0: Buy your domain</h4>
-
-<p>All sites where you can purchase domains have the same domains available, but at different prices. From the sites I perused, <a href="//godaddy.com">GoDaddy</a> had the best search for domain names, suggesting different variations on the searched domain name. I found that <a href="//domainmonster.com">domainmonster.com</a> had the ugliest UI but the best prices. <a href="//hover.com">Hover.com</a> looked really modern and had moderate prices. Shop around and spend money.</p>
-
-<h4>Step 0.5: Exercise restraint</h4>
-
-<p>At this point in the process, <strong>don&rsquo;t go to your site</strong>.</p>
-
-<p>My guess is you already have. If you don&rsquo;t have the ability to go back in time, don&rsquo;t sweat it, just know that you probably won&rsquo;t be able to verify the fruits of your labor for a few hours.</p>
-
-<h4>Step 1: Setting up an &lsquo;A Record&rsquo;</h4>
-
-<p>Find the ip address where your site is currently hosted. For me (replace URL with your own):</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>nslookup larryprice.github.io
-</span><span class='line'>Server:   127.0.1.1
-</span><span class='line'>Address:  127.0.1.1#53
-</span><span class='line'>
-</span><span class='line'>Non-authoritative answer:
-</span><span class='line'>Name: larryprice.github.io
-</span><span class='line'>Address: 199.27.74.133
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You should be able to &ldquo;manage&rdquo; your domain on your domain provider&rsquo;s website. In the &ldquo;management&rdquo; area, you should be able to find a section about &ldquo;DNS&rdquo;. Find something labeled &ldquo;A records.&rdquo; There will likely already be one or two entries here &ndash; one for the IP address of your new domain and one with the IP address of your domain with &ldquo;www.&rdquo; prepended.</p>
-
-<p>Modify the entry (or entries) with the IP address found using <code>nslookup</code> (&ldquo;199.27.74.133&rdquo; from the example above). Save your site settings.</p>
-
-<h4>Step 2: Mucking with the &ldquo;www&rdquo; instance</h4>
-
-<p>While we&rsquo;re modifying these settings, we might as well move the &lsquo;www&rsquo; case out of the &ldquo;A records&rdquo;. Go ahead and delete it.</p>
-
-<p>Look for something named &ldquo;CNAME records&rdquo;, or figure out how to add records in general. We&rsquo;re going to add a CNAME record where the &ldquo;Alias&rdquo; is &ldquo;www&rdquo; and the &ldquo;Address&rdquo; is your site&rsquo;s name. In my case, my &ldquo;Alias&rdquo; field is &ldquo;www&rdquo; and my &ldquo;Address&rdquo; field is &ldquo;larry-price.com&rdquo;. Add the record and cross your fingers for success.</p>
-
-<h4>Step 3: Telling Github Pages what to do</h4>
-
-<p>Alhtough Github Pages is magical in its own right, it doesn&rsquo;t know what to do when receiving a request from the &ldquo;A record&rdquo; we created in Step 2 without further instruction.</p>
-
-<p>If you&rsquo;re using Github Pages for a user page, we are going to make this change on the <code>master</code> branch. If this is a project page, do it on the <code>gh-pages</code> branch.</p>
-
-<p>All we have to do is put our new domain into a file in the root folder called <code>CNAME</code>. Let&rsquo;s do it in one fell swoop of the command line.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;larry-price.com&quot;</span> &gt; CNAME
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Push that to Github and wait 0 to 10 minutes for Github to refresh your page.</p>
-
-<p>Note: If you&rsquo;re one of the few, the proud using the brilliant <a href="//octopress.org/">Octopress</a> to generate your blog, you want to make sure to add the <code>CNAME</code> file to the root of your <code>source/</code> directory. That way, when you call <code>deploy</code> your <code>CNAME</code> file will end up in the root of your <code>_deploy</code> directory.</p>
-
-<h4>Step 4: Behold</h4>
-
-<p>Check your Github repository&rsquo;s &ldquo;Settings&rdquo; section. In the &ldquo;GitHub Pages&rdquo; section, you should now see something along the lines of &ldquo;Your site is published at <a href="http://larry-price.com">http://larry-price.com</a>&rdquo;. Go, young one, and visit your new site; and behold the glory you have brought to your family.</p>
-
-<p>I&rsquo;ll note that this is the point where not obeying Step 0.5 will cause issues. Once your internets knows that your page hit a certain DNS, it takes a few hours to refresh. In my case it only took about 2 hours, but it may take between 12 and 48 hours to refresh. A workaround to see if everything is working is to pull out your smart phone and use your carrier&rsquo;s network to check your new site, since that area of the internets is probably still untainted. (All of this paragraph is a simplified thought process on how DNS works, considering that&rsquo;s the level I understand it.)</p>
-
-<p>Now fly, my children, and spread yourself over the internet with dozens of silly domain names!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Finishing the Google Go Writing Web Applications Tutorial]]></title>
-    <link href="http://larry-price.com/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial/"/>
-    <updated>2014-01-07T22:45:03-05:00</updated>
-    <id>http://larry-price.com/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial</id>
-    <content type="html"><![CDATA[<h3>A golang web app tutorial</h3>
-
-<p>I did some work with <a href="http://golang.org/">Google Go</a> recently and had the chance to follow their great tutorial <em><a href="http://golang.org/doc/articles/wiki/">Writing Web Applications</a></em>. The tutorial is pretty simple: use the Go http library to create a very simple wiki-style site. I like this tutorial a lot because there&rsquo;s not too much hand-holding, but they do eventually hand you the <a href="http://golang.org/doc/articles/wiki/final.go">final code listing</a>. Then the good people at Google give you the tall task of completing the following &lsquo;Other tasks&rsquo; without solutions:</p>
-
-<ul>
-<li>Store templates in tmpl/ and page data in data/.</li>
-<li>Add a handler to make the web root redirect to /view/FrontPage.</li>
-<li>Spruce up the page templates by making them valid HTML and adding some CSS rules.</li>
-<li>Implement inter-page linking by converting instances of [PageName] to
-&lt;a href=&ldquo;/view/PageName&rdquo;>PageName&lt;/a>. (hint: you could use regexp.ReplaceAllFunc to do this)</li>
-</ul>
-
-
-<p>This is what I&rsquo;d like to go over. I scoured the web and didn&rsquo;t have much luck finding solutions to these issues. That would be okay if they were all trivial, but the final step is not straightforward. I&rsquo;m going to assume you&rsquo;ve already gone over the tutorial. You can see <a href="https://github.com/larryprice/gowiki/">my repository on Github</a>, and I have included links to the appropriate commits in the code sections of this blog post.</p>
-
-<h4>Store templates in tmpl/ and page data in data/</h4>
-
-<p>The tutorial originally has the developer store all pages in the project directory. Every time a user made a new wiki page, a new file would creep into the project directory. All HTML templates were also stored in the project directory.</p>
-
-<p>Moving templates is quite trivial. In the global scope:</p>
-
-<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/9994d11b5275bc5faee911e5db2c994bc91052e2'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gd">-var templates = template.Must(template.ParseFiles(&quot;edit.html&quot;, &quot;view.html&quot;))</span>
-</span><span class='line'><span class="gi">+var templates = template.Must(template.ParseFiles(&quot;tmpl/edit.html&quot;, &quot;tmpl/view.html&quot;))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I found moving the page data to <code>data/</code> was a little trickier, especially if the directory didn&rsquo;t already exist. You may not have the same issue, but I remedied this by creating the directory if it doesn&rsquo;t exist. My <code>save</code> function differences:</p>
-
-<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/e86a707d37b802b2d59b8ef261b3fdcab46d5870'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='diff'><span class='line'>func (p *Page) save() error {
-</span><span class='line'><span class="gd">-    filename := p.Title + &quot;.txt&quot;</span>
-</span><span class='line'><span class="gd">-    return ioutil.WriteFile(filename, p.Body, 0600)</span>
-</span><span class='line'><span class="gi">+  os.Mkdir(&quot;data&quot;, 0777)</span>
-</span><span class='line'><span class="gi">+  filename := &quot;data/&quot; + p.Title + &quot;.txt&quot;</span>
-</span><span class='line'><span class="gi">+  return ioutil.WriteFile(filename, p.Body, 0600)</span>
-</span><span class='line'>}
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Add a handler to make the web root redirect to /view/FrontPage</h4>
-
-<p>All we&rsquo;re going to do is create a simple handler called <code>rootHandler</code> that redirects to a new page called <code>FrontPage</code>. We then add it in the <code>main</code> function. The tutorial had us wrap out handlers in a function call to take some special actions, but that wrapper would mess up our handler in its current form. So I just <code>Redirect</code> to the <code>view</code> handler, which will then decide whether to view or create the FrontPage.</p>
-
-<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/e41fccc2d244a3b0d62d600d94897a076c87d53d'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gi">+ func rootHandler(w http.ResponseWriter, r *http.Request) {</span>
-</span><span class='line'><span class="gi">+   http.Redirect(w, r, &quot;/view/FrontPage&quot;, http.StatusFound)</span>
-</span><span class='line'><span class="gi">+ }</span>
-</span><span class='line'>
-</span><span class='line'>...
-</span><span class='line'>
-</span><span class='line'>func main() {
-</span><span class='line'><span class="gi">+  http.HandleFunc(&quot;/&quot;, rootHandler)</span>
-</span><span class='line'>  http.HandleFunc(&quot;/view/&quot;, makeHandler(viewHandler))
-</span><span class='line'>  http.HandleFunc(&quot;/edit/&quot;, makeHandler(editHandler))
-</span><span class='line'>  http.HandleFunc(&quot;/save/&quot;, makeHandler(saveHandler))
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Spruce up the page templates by making them valid HTML and adding some CSS rules.</h4>
-
-<p>I took my old <code>.html</code> files and put them through <a href="http://validator.w3.org/#validate_by_input">a validator</a>. Making them valid only involved adding <code>DOCTYPE</code>, <code>html</code>, and <code>head</code> tags. The <code>head</code> tag needed <code>meta</code>, and <code>title</code> tags and we were valid. I&rsquo;ve shown <code>view.html</code> below.</p>
-
-<figure class='code'><figcaption><span>view.html</span><a href='https://github.com/larryprice/gowiki/commit/771b4ecc8a550ee438720dc5c3d3f47954a1e4ff'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gi">+&lt;!DOCTYPE html&gt;</span>
-</span><span class='line'><span class="gi">+&lt;html&gt;</span>
-</span><span class='line'><span class="gi">+&lt;head&gt;</span>
-</span><span class='line'><span class="gi">+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;&gt;</span>
-</span><span class='line'><span class="gi">+&lt;title&gt;Wiki made using Golang&lt;/title&gt;</span>
-</span><span class='line'><span class="gi">+&lt;/head&gt;</span>
-</span><span class='line'> &lt;h1&gt;&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'> &lt;p&gt;[&lt;a href=&quot;/edit/&quot;&gt;edit&lt;/a&gt;]&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'> &lt;div&gt;&lt;/div&gt;
-</span><span class='line'><span class="gi">+&lt;/html&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Implement inter-page linking by converting instances of [PageName]</h4>
-
-<p>Converting [PageName] to a hyperlink was a bit more complicated than expected. I originally just tried to run the string through <code>ReplaceAllFunc</code> and replace all instance of [PageName] with an equivalent hyperlink. This does not work because we use Go&rsquo;s <code>ExecuteTemplate</code> method to render our template. <code>ExecuteTemplate</code> escapes any HTML that we give it to prevent us from displaying unwanted HTML. Getting around this was the fun part, because I want the benefit of escaped HTML while still having the ability to substitute my own HTML.</p>
-
-<p>As it turns out, <code>ExecuteTemplate</code> will not escape variables of the type <code>template.HTML</code>. So I added another variable onto the <code>Page</code> struct called <code>DisplayBody</code>.</p>
-
-<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='diff'><span class='line'>type Page struct {
-</span><span class='line'>     Title string
-</span><span class='line'>     Body  []byte
-</span><span class='line'><span class="gi">+    DisplayBody template.HTML</span>
-</span><span class='line'>}
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Next, I create a regular expression to find instances of [PageName] and I put the defintion above the <code>main</code> method.</p>
-
-<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gi">+var linkRegexp = regexp.MustCompile(&quot;\\[([a-zA-Z0-9]+)\\]&quot;)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In my <code>viewHandler</code>, I escape <code>Body</code> and then set <code>DisplayBody</code> to that escaped string with the links substituted.</p>
-
-<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gi">+  escapedBody := []byte(template.HTMLEscapeString(string(p.Body)))</span>
-</span><span class='line'><span class="gi">+</span>
-</span><span class='line'><span class="gi">+  p.DisplayBody = template.HTML(linkRegexp.ReplaceAllFunc(escapedBody, func(str []byte) []byte {</span>
-</span><span class='line'><span class="gi">+      matched := linkRegexp.FindStringSubmatch(string(str))</span>
-</span><span class='line'><span class="gi">+      out := []byte(&quot;&lt;a href=\&quot;/view/&quot;+matched[1]+&quot;\&quot;&gt;&quot;+matched[1]+&quot;&lt;/a&gt;&quot;)</span>
-</span><span class='line'><span class="gi">+      return out</span>
-</span><span class='line'><span class="gi">+    }))</span>
-</span><span class='line'>  renderTemplate(w, &quot;view&quot;, p)
-</span><span class='line'>}
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To finish up, I modify the <code>view.html</code> to show <code>DisplayBody</code>. I don&rsquo;t use <code>printf</code>, because that would turn <code>DisplayBody</code> back into a <code>string</code> and <code>ExecuteTemplate</code> would escape it.</p>
-
-<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gd">-&lt;div&gt;&lt;/div&gt;</span>
-</span><span class='line'><span class="gi">+&lt;div&gt;&lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And that completes the extra exercises for Google&rsquo;s <em>Writing Web Applications</em> tutorial. Hopefully one day this helps someone who gets stuck.</p>
 ]]></content>
   </entry>
   
