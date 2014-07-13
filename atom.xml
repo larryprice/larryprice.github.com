@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="http://larry-price.com/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-07-12T08:18:42-04:00</updated>
+  <updated>2014-07-13T17:16:07-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Ollert - Reveal the Data Behind Your Trello Boards]]></title>
+    <link href="http://larry-price.com/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards/"/>
+    <updated>2014-07-13T17:15:00-04:00</updated>
+    <id>http://larry-price.com/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards</id>
+    <content type="html"><![CDATA[<p>Introducing <a href="https://ollertapp.com">Ollert</a>, a tool to show you what your <a href="//trello.com">Trello</a> boards can&rsquo;t tell you on their own.</p>
+
+<p>Trello does a great job of telling you about the here and now of your Trello boards; who&rsquo;s working on what task and what is the current state of a task. But what if I want to know about the state of the whole project? How many work items have we finished in the past sprint, iteration, or duration of the project? He who does not understand the past is destined to repeat his mistakes ad nauseum.</p>
+
+<p>Ollert is a tool with these ideas in mind. Authorize Ollert access to your Trello account, select the board you would like to learn more about, and see all the battle scars your board has experienced throughout the duration of the project.</p>
+
+<p>Learn about your velocity through a Cumulative Flow Diagram. View your work in progress with a WIP chart. See which labels your team uses most frequently with our label chart. See information about your cards and lists from a historical perspective.</p>
+
+<p><a href="https://ollertapp.com/signup">Create an account</a> with Ollert to show your support. Users who sign up for an Ollert account will have their Trello authorization saved, saving the hassle of authorizing with Trello every time the user visits the site. An Ollert account is perfect for any user who views board progress frequently, or for creating a continuous display on an office monitor.</p>
+
+<p>Since Ollert&rsquo;s initial release <a href="http://larry-price.com/blog/2014/03/17/sep-startup-weekend-ollert/">several months ago</a>, Ollert now boasts over 4000% faster load times, increased data security using SSL and encrypted cookies, and a more consistent Trello connection experience in all modern web browsers.</p>
+
+<p>Discover Ollert now at <a href="https://ollertapp.com">ollertapp.com</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Testing Automated Emails With Email-spec in Cucumber]]></title>
@@ -2151,21 +2172,6 @@
 
 
 <p>Oh, rvm, you make life <em>too</em> easy sometimes.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Letting the Browser Decide Betwen HTTP and HTTPS]]></title>
-    <link href="http://larry-price.com/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/"/>
-    <updated>2014-02-13T17:55:00-05:00</updated>
-    <id>http://larry-price.com/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https</id>
-    <content type="html"><![CDATA[<p>While working on SEP Labs&#8217; <a href="//h2w.cc">Health2Wealth</a> app, I got my first taste of setting up a website to use secure connections. I&rsquo;ve been using the browser extension <a href="//www.eff.org/https-everywhere">HTTPS Everywhere</a> for quite some time now, so all of the web pages that I visit attempt to using <code>HTTPS</code>instead of the standard <code>HTTP</code>. When I inadvertently started testing our app with <code>HTTPS</code>, things got a little weird.</p>
-
-<p>My machine was able to open most of a page, but it wouldn&rsquo;t load some of the graphics or javascript we had embedded in the page. I was the only one able to reproduce it, so we chalked it up to a wonky machine. Then I suddenly remembered that I was using HTTPS Everywhere. I found the area in FireFox that warns you about insecure connections and found that our page was only <em>partially</em> loading on my browser because some of the content was insecure. From there I enabled an option to reveal the insecure elements, which forced my page to load everything correctly. So now we needed to find what was insecure about our page. I trekked through the codebase and found that some of our graphs and links were hard-coded to use <code>HTTP</code>. My initial thought was just to force them to use <code>HTTPS</code>, which is <a href="//lists.w3.org/Archives/Public/ietf-http-wg/2013OctDec/0625.html">almost certainly the impending standard</a>. With a quick search, I found that there exists a <strong>real</strong> solution to this problem.</p>
-
-<p>Let&rsquo;s say I have a very normal web application, so I want to include <a href="//jquery.com">jQuery</a> embedded in my page. I initially copy-paste <code>&lt;script src='http://code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code> right into my <code>&lt;head&gt;</code> node, which normally seems fine. Unfortunately, this is where issues arise. I&rsquo;m now forcing the user to make a connection which may or may not be secure to fetch data from an insecure page.</p>
-
-<p>By removing the <code>http:</code> from the <code>http://</code>, the issue of deciding whether to fetch the file using <code>HTTP</code> or <code>HTTPS</code> is left to the web browser. So my script include becomes <code>&lt;script src='//code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code>. This also works for links, images, and web fonts. In fact, every link included in this post uses the same principal, where I leave the protocol out of what becomes the <code>href</code> tag.</p>
 ]]></content>
   </entry>
   

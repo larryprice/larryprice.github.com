@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="You want to get into the rhythm of making choices. When you get in that flow of making decision after decision, you build momentum and boost morale. &hellip;">
+  <meta name="description" content="Or rather, &ldquo;Not Using sqlite on Heroku.&rdquo; Heroku does not support sqlite. That doesn&rsquo;t mean we have to stop using sqlite in &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,133 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/03/29/using-sqlite-on-heroku/">Using Sqlite on Heroku</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-29T11:16:06-04:00" pubdate data-updated="true">Mar 29<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/03/29/using-sqlite-on-heroku/#disqus_thread"
+             data-disqus-identifier="http://larry-price.com/blog/2014/03/29/using-sqlite-on-heroku/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Or rather, &ldquo;Not Using sqlite on Heroku.&rdquo;</p>
+
+<p><a href="//heroku.com">Heroku</a> does not support <a href="//sqlite.org">sqlite</a>. That doesn&rsquo;t mean we have to stop using sqlite in development, but it does mean we need to put in some workarounds to support our deployment environment. The rest of this article will use <a href="//ruby-lang.org">ruby</a> and <a href="//sinatrarb.com">Sinatra</a>.</p>
+
+<p>Assuming you have a heroku app deployed and you have sqlite already working locally, this only takes a few steps. First we need to add a SQL database to our heroku app. From the project directory, we&rsquo;ll add the <a href="//addons.heroku.com/heroku-postgresql">heroku-postgresql</a> addon to our app.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>heroku addons:add heroku-postgresql:dev
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>dev</code> piece of this command tells heroku we want the small, free database. This database supports up to 10,000 rows and has a 99.5% uptime. Best of all: it&rsquo;s free. Other options have you pay $9/mo for 10,000,000 rows or $50+ for Unlimited usage. I recommend you start small.</p>
+
+<p>Hopefully you got some success statements after adding heroku-postgresql. They should have included some new environment variables, which are links to your new Postgres database. Record these; we&rsquo;ll use them a little later.</p>
+
+<p>Now we need to set up the back-end to be able to access a Postgres database when necessary. Hopefully you&rsquo;re using a decent abstraction library in your app that can access any SQL database. For ruby, I find <a href="//www.sequel.rubyforge.org/">Sequel</a> to be sufficient.</p>
+
+<p>In our Gemfile, we&rsquo;ve probably already included the sqlite gem for use in our local environment. We can go ahead and move that into a <code>development</code> block, and we need to add the <code>pg</code> gem to either <code>production</code> or the global block.</p>
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">source</span> <span class="s2">&quot;https://rubygems.org&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">ruby</span> <span class="s1">&#39;2.1.0&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;bundler&#39;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;rake&#39;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;sinatra&#39;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;haml&#39;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;sequel&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">group</span> <span class="ss">:production</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;pg&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">group</span> <span class="ss">:development</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;sqlite3&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Heroku sets <code>ENV['RACK_ENV']</code> to &ldquo;production&rdquo; for us, which means that the pg gem should get picked up the next time we deploy. Now we need to tell our app which database to use in which situation.</p>
+
+<p>One of the easiest places to make this decision is in Sinatra&rsquo;s <code>configure</code> block. I keep my local db in an environment variable called <code>LOCAL_DATABASE_URL</code>. This is where you use the environment variable heroku set for you when you set up your Postgres database; mine was called <code>HEROKU_POSTGRESQL_MAROON_URL</code>.</p>
+
+<figure class='code'><figcaption><span>web.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">App</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">configure</span> <span class="ss">:production</span> <span class="k">do</span>
+</span><span class='line'>    <span class="no">Sequel</span><span class="o">.</span><span class="n">connect</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;HEROKU_POSTGRESQL_MAROON_URL&#39;</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">configure</span> <span class="ss">:development</span> <span class="k">do</span>
+</span><span class='line'>    <span class="no">Sequel</span><span class="o">.</span><span class="n">connect</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;LOCAL_DATABASE_URL&#39;</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This works because the default environment is &ldquo;development.&rdquo; Test locally, and then we can deploy.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git push heroku master
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And enjoy.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -488,104 +615,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/03/18/connecting-to-the-trello-api/">Connecting to the Trello API</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-18T20:00:11-04:00" pubdate data-updated="true">Mar 18<span>th</span>, 2014</time>
-        
-           | <a href="/blog/2014/03/18/connecting-to-the-trello-api/#disqus_thread"
-             data-disqus-identifier="http://larry-price.com/blog/2014/03/18/connecting-to-the-trello-api/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="//trello.com">Trello</a> has a <a href="//trello.com/docs/">pretty sweet API</a>, which we use extensively in our Trello-analysis app <a href="//ollert.herokuapp.com">Ollert</a>. Initially connecting to the Trello API took us a few hours, so I&rsquo;d like to make a record of how we managed to connect.</p>
-
-<p>Making a connection to Trello requires two hashcodes: an application key and a Trello member token. You can generate and view your application key by visiting <a href="//trello.com/1/appKey/generate">https://trello.com/1/appKey/generate</a>.</p>
-
-<p>The member token is something we need to get from the user. There are two ways to get a user&rsquo;s member token: through fragments and through a <strong>postMessage</strong>. You can also request different levels of access (read, write, read+write), and different expiration periods (such as 1 day, 30 days, or never) for member tokens. For the remainder of this writing, I&rsquo;ll be accessing a read-only member token that never expires.</p>
-
-<p>We didn&rsquo;t have a lot of luck with fragments, but the concept is simple enough. You have the user click a link that probably says &ldquo;Connect With Trello&rdquo; which is similar to:</p>
-
-<p><code>https://trello.com/1/authorize?key=applicationkey&amp;name=applicationname&amp;expiration=never&amp;response_type=token</code></p>
-
-<p>At this point, the user is redirected to Trello and given the opportunity to Allow or Deny your application access. Once allowed, the user sees a static Trello page with their member token in plain text. Somehow you&#8221;re supposed to convey to them that they should copy this token and paste it back to you. This has clear drawbacks in usability.</p>
-
-<p>Using the <strong>postMessage</strong> method of accessing a member token was significantly more fruitful. Trello provides a Javascript file named <a href="https://trello.com/docs/gettingstarted/clientjs.html">client.js</a> that does most of the legwork for you. An example:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nt">%script</span><span class="p">{</span><span class="ss">src</span><span class="p">:</span> <span class="s2">&quot;//api.trello.com/1/client.js?key=applicationkey&quot;</span><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>function AuthenticateTrello() {
-</span><span class='line'>  Trello.authorize({
-</span><span class='line'>    name: &quot;YourApplication&quot;,
-</span><span class='line'>    type: &quot;popup&quot;,
-</span><span class='line'>    interactive: true,
-</span><span class='line'>    expiration: &quot;never&quot;,
-</span><span class='line'>    persist: true,
-</span><span class='line'>    success: function () { onAuthorizeSuccessful(); },
-</span><span class='line'>    scope: { write: false, read: true },
-</span><span class='line'>  });
-</span><span class='line'>}
-</span><span class='line'>function onAuthorizeSuccessful() {
-</span><span class='line'>  var token = Trello.token();
-</span><span class='line'>  window.location.replace(&quot;/auth?token=&quot; + token);
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'><span class="nt">%a</span><span class="p">{</span><span class="ss">href</span><span class="p">:</span> <span class="s2">&quot;javascript:void(0)&quot;</span><span class="p">,</span> <span class="ss">onClick</span><span class="p">:</span> <span class="s2">&quot;AuthenticateTrello()&quot;</span><span class="p">}</span>
-</span><span class='line'>  Connect With Trello
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>When the user clicks the link, we have Trello set to activate a &ldquo;popup&rdquo; that will ask them to &ldquo;Allow&rdquo; or &ldquo;Deny&rdquo; our app from accessing their data. When the user allows us access, the popup closes and we hit the &ldquo;onAuthorizeSuccessful&rdquo; method. In my method, I simply redirect them to the <code>/auth</code> route with <code>token</code> manually added to the params list. One of the interesting options listed above is the &ldquo;persist&rdquo; option, which tells Trello whether it should prompt the user for his or her token every time. By telling Trello to persist, the user will only be presented with the popup when he or she needs to reauthenticate.</p>
-
-<p>You can learn more about member tokens from <a href="//trello.com/docs/gettingstarted/authorize.html">https://trello.com/docs/gettingstarted/authorize.html</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -615,6 +644,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards/">Ollert - Reveal the Data Behind Your Trello Boards</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber/">Testing Automated Emails With Email-spec in Cucumber</a>
       </li>
     
@@ -630,15 +663,11 @@
         <a href="/blog/2014/06/12/lessons-learned-during-the-conception-of-ollert/">Lessons Learned During the Conception of Ollert</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/06/04/jasmine-a-whole-new-world-of-javascript-testing/">Jasmine - a Whole New World of Javascript Testing</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 104.28571428571429%'>agile</a> <a href='/blog/categories/c-plus-plus' style='font-size: 112.85714285714286%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 104.28571428571429%'>capybara</a> <a href='/blog/categories/css' style='font-size: 104.28571428571429%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 112.85714285714286%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 121.42857142857143%'>database</a> <a href='/blog/categories/foreman' style='font-size: 104.28571428571429%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 104.28571428571429%'>foss</a> <a href='/blog/categories/git' style='font-size: 104.28571428571429%'>git</a> <a href='/blog/categories/gmock' style='font-size: 104.28571428571429%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 112.85714285714286%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 104.28571428571429%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 104.28571428571429%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 104.28571428571429%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 112.85714285714286%'>heroku</a> <a href='/blog/categories/html' style='font-size: 108.57142857142857%'>html</a> <a href='/blog/categories/internet' style='font-size: 104.28571428571429%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 112.85714285714286%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 117.14285714285714%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 108.57142857142857%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 112.85714285714286%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 104.28571428571429%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 104.28571428571429%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 104.28571428571429%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 108.57142857142857%'>nosql</a> <a href='/blog/categories/ollert' style='font-size: 134.28571428571428%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 117.14285714285714%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 104.28571428571429%'>pony</a> <a href='/blog/categories/qmake' style='font-size: 104.28571428571429%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 104.28571428571429%'>qt</a> <a href='/blog/categories/rails' style='font-size: 104.28571428571429%'>rails</a> <a href='/blog/categories/retro' style='font-size: 112.85714285714286%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 108.57142857142857%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 160.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 112.85714285714286%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 104.28571428571429%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 104.28571428571429%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 134.28571428571428%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 104.28571428571429%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 130.0%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 104.28571428571429%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 104.28571428571429%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 117.14285714285714%'>testing</a> <a href='/blog/categories/trello' style='font-size: 117.14285714285714%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 108.57142857142857%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 104.28571428571429%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 104.28571428571429%'>upstart</a> <a href='/blog/categories/web' style='font-size: 151.42857142857144%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 138.57142857142856%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 104.28571428571429%'>writeups</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 104.0%'>agile</a> <a href='/blog/categories/c-plus-plus' style='font-size: 112.0%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 104.0%'>capybara</a> <a href='/blog/categories/css' style='font-size: 104.0%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 112.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 120.0%'>database</a> <a href='/blog/categories/foreman' style='font-size: 104.0%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 104.0%'>foss</a> <a href='/blog/categories/git' style='font-size: 104.0%'>git</a> <a href='/blog/categories/gmock' style='font-size: 104.0%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 112.0%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 104.0%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 104.0%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 104.0%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 112.0%'>heroku</a> <a href='/blog/categories/html' style='font-size: 108.0%'>html</a> <a href='/blog/categories/internet' style='font-size: 104.0%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 112.0%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 116.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 108.0%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 112.0%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 104.0%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 104.0%'>mvc</a> <a href='/blog/categories/nokogiri' style='font-size: 104.0%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 108.0%'>nosql</a> <a href='/blog/categories/ollert' style='font-size: 136.0%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 116.0%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 104.0%'>pony</a> <a href='/blog/categories/qmake' style='font-size: 104.0%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 104.0%'>qt</a> <a href='/blog/categories/rails' style='font-size: 104.0%'>rails</a> <a href='/blog/categories/retro' style='font-size: 112.0%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 108.0%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 156.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 112.0%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 104.0%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 104.0%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 132.0%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 104.0%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 128.0%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 104.0%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 104.0%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 116.0%'>testing</a> <a href='/blog/categories/trello' style='font-size: 120.0%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 108.0%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 104.0%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 104.0%'>upstart</a> <a href='/blog/categories/web' style='font-size: 148.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 136.0%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 104.0%'>writeups</a> </span>
 </section>
 
 <section>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ollert | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/ollert/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-07-12T08:18:42-04:00</updated>
+  <updated>2014-07-13T17:16:07-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Ollert - Reveal The Data Behind Your Trello Boards]]></title>
+    <link href="http://larry-price.com/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards/"/>
+    <updated>2014-07-13T17:15:00-04:00</updated>
+    <id>http://larry-price.com/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards</id>
+    <content type="html"><![CDATA[<p>Introducing <a href="https://ollertapp.com">Ollert</a>, a tool to show you what your <a href="//trello.com">Trello</a> boards can&rsquo;t tell you on their own.</p>
+
+<p>Trello does a great job of telling you about the here and now of your Trello boards; who&rsquo;s working on what task and what is the current state of a task. But what if I want to know about the state of the whole project? How many work items have we finished in the past sprint, iteration, or duration of the project? He who does not understand the past is destined to repeat his mistakes ad nauseum.</p>
+
+<p>Ollert is a tool with these ideas in mind. Authorize Ollert access to your Trello account, select the board you would like to learn more about, and see all the battle scars your board has experienced throughout the duration of the project.</p>
+
+<p>Learn about your velocity through a Cumulative Flow Diagram. View your work in progress with a WIP chart. See which labels your team uses most frequently with our label chart. See information about your cards and lists from a historical perspective.</p>
+
+<p><a href="https://ollertapp.com/signup">Create an account</a> with Ollert to show your support. Users who sign up for an Ollert account will have their Trello authorization saved, saving the hassle of authorizing with Trello every time the user visits the site. An Ollert account is perfect for any user who views board progress frequently, or for creating a continuous display on an office monitor.</p>
+
+<p>Since Ollert&rsquo;s initial release <a href="/blog/2014/03/17/sep-startup-weekend-ollert/">several months ago</a>, Ollert now boasts over 4000% faster load times, increased data security using SSL and encrypted cookies, and a more consistent Trello connection experience in all modern web browsers.</p>
+
+<p>Discover Ollert now at <a href="https://ollertapp.com">ollertapp.com</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Testing automated emails with email-spec in Cucumber]]></title>
@@ -104,7 +125,7 @@ end</p>
   Team MyApp</p>
 
 <p>%p
-  This email account is not monitored and will not receive replies. For more information, contact <a href="mailto:connect@myapp.com"><a href="&#x6d;&#x61;&#105;&#108;&#x74;&#x6f;&#58;&#x63;&#x6f;&#x6e;&#110;&#101;&#x63;&#x74;&#64;&#x6d;&#121;&#x61;&#x70;&#112;&#46;&#x63;&#111;&#109;">&#x63;&#111;&#x6e;&#x6e;&#x65;&#x63;&#x74;&#64;&#x6d;&#x79;&#97;&#112;&#112;&#46;&#x63;&#x6f;&#109;</a></a>.
+  This email account is not monitored and will not receive replies. For more information, contact <a href="mailto:connect@myapp.com"><a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x63;&#x6f;&#110;&#x6e;&#x65;&#99;&#x74;&#x40;&#109;&#x79;&#97;&#x70;&#112;&#x2e;&#x63;&#x6f;&#x6d;">&#99;&#111;&#x6e;&#110;&#x65;&#99;&#116;&#64;&#109;&#121;&#97;&#x70;&#x70;&#x2e;&#99;&#x6f;&#109;</a></a>.
 ```</p>
 
 <p>Given the pre-defined steps from email-spec, testing that this email gets sent is a breeze. Adding a scenario to my feature file:</p>
@@ -118,16 +139,16 @@ Feature: Signup Confirmation
 <p>Background:
   Given a clear email queue
   When I go to the signup page
-  And I fill in &ldquo;email&rdquo; with &ldquo;<a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#111;&#58;&#112;&#114;&#101;&#x7a;&#x40;&#x77;&#x68;&#105;&#x74;&#101;&#x68;&#111;&#x75;&#115;&#x65;&#46;&#103;&#x6f;&#118;">&#112;&#114;&#101;&#122;&#64;&#x77;&#x68;&#x69;&#116;&#x65;&#104;&#111;&#x75;&#115;&#x65;&#46;&#x67;&#111;&#x76;</a>&rdquo;
+  And I fill in &ldquo;email&rdquo; with &ldquo;<a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#111;&#58;&#112;&#x72;&#101;&#x7a;&#x40;&#x77;&#104;&#x69;&#x74;&#x65;&#x68;&#111;&#x75;&#x73;&#x65;&#46;&#x67;&#x6f;&#x76;">&#x70;&#114;&#x65;&#122;&#64;&#119;&#104;&#105;&#x74;&#101;&#x68;&#x6f;&#117;&#115;&#101;&#x2e;&#x67;&#x6f;&#x76;</a>&rdquo;
   And I fill in &ldquo;password&rdquo; with &ldquo;bunnies&rdquo;
   And I press &ldquo;Sign Up&rdquo;
-  Then &ldquo;<a href="&#109;&#x61;&#x69;&#x6c;&#116;&#x6f;&#58;&#x70;&#x72;&#101;&#122;&#64;&#119;&#104;&#105;&#116;&#101;&#x68;&#111;&#117;&#x73;&#x65;&#46;&#103;&#111;&#118;">&#x70;&#x72;&#x65;&#x7a;&#64;&#x77;&#104;&#105;&#x74;&#101;&#x68;&#x6f;&#x75;&#115;&#x65;&#46;&#103;&#x6f;&#118;</a>&rdquo; should receive an email</p>
+  Then &ldquo;<a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#112;&#114;&#101;&#x7a;&#x40;&#x77;&#104;&#105;&#x74;&#101;&#x68;&#x6f;&#x75;&#115;&#x65;&#46;&#103;&#x6f;&#118;">&#112;&#114;&#101;&#x7a;&#64;&#119;&#104;&#x69;&#116;&#101;&#x68;&#111;&#117;&#115;&#101;&#46;&#x67;&#x6f;&#118;</a>&rdquo; should receive an email</p>
 
 <p>Scenario: Receives email with correct contents
-  When &ldquo;<a href="&#109;&#97;&#x69;&#108;&#116;&#x6f;&#x3a;&#x70;&#x72;&#x65;&#x7a;&#x40;&#119;&#104;&#105;&#x74;&#x65;&#104;&#111;&#x75;&#x73;&#101;&#46;&#103;&#111;&#118;">&#x70;&#114;&#x65;&#122;&#64;&#x77;&#104;&#x69;&#x74;&#101;&#104;&#x6f;&#x75;&#x73;&#101;&#x2e;&#103;&#x6f;&#x76;</a>&rdquo; opens the email
-  Then they should see the email delivered from &ldquo;MyApp Help Desk <a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#x6e;&#x6f;&#114;&#x65;&#112;&#x6c;&#x79;&#x40;&#x6d;&#x79;&#97;&#112;&#x70;&#46;&#99;&#x6f;&#x6d;">&#110;&#x6f;&#x72;&#x65;&#x70;&#108;&#121;&#64;&#x6d;&#x79;&#x61;&#x70;&#112;&#x2e;&#99;&#111;&#x6d;</a>&rdquo;
+  When &ldquo;<a href="&#109;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x70;&#x72;&#x65;&#x7a;&#64;&#x77;&#x68;&#105;&#x74;&#x65;&#104;&#x6f;&#117;&#115;&#x65;&#46;&#x67;&#111;&#118;">&#x70;&#114;&#x65;&#x7a;&#64;&#x77;&#x68;&#105;&#116;&#x65;&#104;&#111;&#x75;&#x73;&#x65;&#46;&#x67;&#x6f;&#x76;</a>&rdquo; opens the email
+  Then they should see the email delivered from &ldquo;MyApp Help Desk <a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#58;&#x6e;&#x6f;&#x72;&#x65;&#x70;&#x6c;&#x79;&#x40;&#109;&#x79;&#97;&#x70;&#x70;&#x2e;&#x63;&#x6f;&#x6d;">&#110;&#x6f;&#114;&#101;&#112;&#x6c;&#x79;&#64;&#x6d;&#121;&#97;&#x70;&#112;&#46;&#99;&#x6f;&#109;</a>&rdquo;
   And they should see &ldquo;MyApp Account Verification&rdquo; in the email subject
-  And they should see &ldquo;Username: <a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#58;&#x70;&#114;&#x65;&#x7a;&#64;&#119;&#104;&#105;&#x74;&#101;&#x68;&#x6f;&#117;&#115;&#x65;&#x2e;&#x67;&#x6f;&#x76;">&#x70;&#114;&#x65;&#x7a;&#64;&#x77;&#x68;&#105;&#x74;&#101;&#104;&#x6f;&#117;&#115;&#101;&#x2e;&#x67;&#x6f;&#118;</a>&rdquo; in the email body
+  And they should see &ldquo;Username: <a href="&#x6d;&#x61;&#x69;&#108;&#116;&#x6f;&#x3a;&#112;&#114;&#101;&#x7a;&#x40;&#119;&#104;&#x69;&#x74;&#x65;&#x68;&#x6f;&#117;&#x73;&#x65;&#46;&#x67;&#x6f;&#x76;">&#x70;&#114;&#x65;&#x7a;&#64;&#119;&#104;&#x69;&#116;&#101;&#104;&#x6f;&#117;&#115;&#x65;&#46;&#103;&#x6f;&#118;</a>&rdquo; in the email body
   And they should see &ldquo;An account verification has been requested&rdquo;
 ```</p>
 
@@ -323,73 +344,6 @@ $ git push heroku master
 </code></p>
 
 <p>And enjoy.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Sticky footer with Twitter Bootstrap]]></title>
-    <link href="http://larry-price.com/blog/2014/03/24/sticky-footer-with-twitter-bootstrap/"/>
-    <updated>2014-03-24T20:12:50-04:00</updated>
-    <id>http://larry-price.com/blog/2014/03/24/sticky-footer-with-twitter-bootstrap</id>
-    <content type="html"><![CDATA[<p>Sometimes CSS is a total pain.</p>
-
-<p>We encountered a major CSS problem while working on our incredible startup weekend project <a href="//ollert.herokuapp.com">Ollert</a>. We had created a footer that we wanted below all of our content. We threw together some quick HTML and got a footer below all of the main content, and it looked really good when our main content filled up the entire screen.</p>
-
-<p>What about when there was very little data on the screen? Well, then the footer just floated in the middle of the page, staring at us like some kind of psychotic hummingbird, waiting to slice you up when you&rsquo;re not looking. We searched online and found lots of different solutions; None of them worked. The footer just floated there, taunting us; Telling us to cry home to mommy. So we gave up on the prospect for the rest of the afternoon.</p>
-
-<p>A few days after startup weekend, I found the real solution from the good folks at <a href="//getbootstrap.com/2.3.2/examples/sticky-footer.html">Twitter Bootstrap</a> themselves. It&rsquo;s pretty simple, really. Hooray for the internet!</p>
-
-<p>Below is the HTML to create this effect with all the CSS styles embedded. Marked up with plenty of comments.</p>
-
-<p>``` html index.html
-&lt;!DOCTYPE html>
-<html lang="en" style="height: 100%;">
-  <head></p>
-
-<pre><code>&lt;link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"&gt;
-</code></pre>
-
-<p>  </head>
-  <body style="height: 100%;"></p>
-
-<pre><code>&lt;div id="wrap" style="min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -50px;"&gt;
-  &lt;!-- All your content goes inside wrap. --&gt;
-  &lt;!-- The bottom margin must be negative the footer min-height --&gt;
-  &lt;!-- Footer min-height is set to 50px in this case --&gt;
-  &lt;div class="container"&gt;
-    &lt;div class="row"&gt;
-      &lt;div class="h1"&gt;
-        All Your Content
-      &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class="row"&gt;
-      All your content will go inside the 'wrap' div.
-    &lt;/div&gt;
-  &lt;/div&gt;
-  &lt;div id="push" style="min-height: 50px;"&gt;
-    &lt;!-- This push node should be inside wrap and empty --&gt;
-    &lt;!-- Min-height is equal to the min-height of the footer --&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-</code></pre>
-
-<p>  </body>
-  <div id="footer" style="min-height: 50px;"></p>
-
-<pre><code>&lt;!-- Some sweet footer content --&gt;
-&lt;div class="container"&gt;
-  &lt;div class="small"&gt;
-    Zowee, I've got a footer stuck to the bottom!
-  &lt;/div&gt;
-&lt;/div&gt;
-</code></pre>
-
-<p>  </div>
-</html></p>
-
-<p>```</p>
-
-<p>Div tag ids such as &ldquo;wrap&rdquo;, &ldquo;push&rdquo;, and &ldquo;footer&rdquo; can be whatever you want. The height of the footer can be adjusted to fit whatever content you want; I found that using <code>min-height</code> instead of <code>height</code> allowed my content to resize appropriately when wrapped. Styles should definitely be moved to a css file.</p>
 ]]></content>
   </entry>
   

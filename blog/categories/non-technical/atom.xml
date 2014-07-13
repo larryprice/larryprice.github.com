@@ -4,7 +4,7 @@
   <title><![CDATA[Category: non-technical | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/non-technical/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-07-12T08:18:42-04:00</updated>
+  <updated>2014-07-13T17:16:07-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Ollert - Reveal The Data Behind Your Trello Boards]]></title>
+    <link href="http://larry-price.com/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards/"/>
+    <updated>2014-07-13T17:15:00-04:00</updated>
+    <id>http://larry-price.com/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards</id>
+    <content type="html"><![CDATA[<p>Introducing <a href="https://ollertapp.com">Ollert</a>, a tool to show you what your <a href="//trello.com">Trello</a> boards can&rsquo;t tell you on their own.</p>
+
+<p>Trello does a great job of telling you about the here and now of your Trello boards; who&rsquo;s working on what task and what is the current state of a task. But what if I want to know about the state of the whole project? How many work items have we finished in the past sprint, iteration, or duration of the project? He who does not understand the past is destined to repeat his mistakes ad nauseum.</p>
+
+<p>Ollert is a tool with these ideas in mind. Authorize Ollert access to your Trello account, select the board you would like to learn more about, and see all the battle scars your board has experienced throughout the duration of the project.</p>
+
+<p>Learn about your velocity through a Cumulative Flow Diagram. View your work in progress with a WIP chart. See which labels your team uses most frequently with our label chart. See information about your cards and lists from a historical perspective.</p>
+
+<p><a href="https://ollertapp.com/signup">Create an account</a> with Ollert to show your support. Users who sign up for an Ollert account will have their Trello authorization saved, saving the hassle of authorizing with Trello every time the user visits the site. An Ollert account is perfect for any user who views board progress frequently, or for creating a continuous display on an office monitor.</p>
+
+<p>Since Ollert&rsquo;s initial release <a href="/blog/2014/03/17/sep-startup-weekend-ollert/">several months ago</a>, Ollert now boasts over 4000% faster load times, increased data security using SSL and encrypted cookies, and a more consistent Trello connection experience in all modern web browsers.</p>
+
+<p>Discover Ollert now at <a href="https://ollertapp.com">ollertapp.com</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Lessons Learned during the Conception of Ollert]]></title>
@@ -211,31 +232,6 @@ end
 <p>Even if that&rsquo;s not a guarantee you can make, it may still be a valid solution. <a href="http://www.artima.com/intv/defenseP.html">Crash early before you do too much damage</a>. Now, if there&rsquo;s some kind of crash-handler or global exception-catcher in your application, then you can catch the impending crash and tell the user the application needs to be restarted&hellip; And the app probably needs to be restarted anyway! There&rsquo;s no need to keep running after you&rsquo;ve reached some horrible error state that needs to be addressed.</p>
 
 <p>Just do <em>something</em>! Your users (especially if that happens to include me) will appreciate your honesty, even if it&rsquo;s so brutal that they have to restart the application.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Changing Plans]]></title>
-    <link href="http://larry-price.com/blog/2013/04/09/changing-plans/"/>
-    <updated>2013-04-09T21:45:00-04:00</updated>
-    <id>http://larry-price.com/blog/2013/04/09/changing-plans</id>
-    <content type="html"><![CDATA[<p>Your code is being sent to the dump.</p>
-
-<p>Don&rsquo;t take it personally. Your code isn&rsquo;t <em>bad</em>. It&rsquo;s just <em>garbage</em>.</p>
-
-<p>Maybe your code wasn&rsquo;t written the way they wanted you to write it. Or maybe they realized that they had already written this code three months ago. Or maybe the customer suddenly decided that they don&rsquo;t need their smartphone to emit fragrances based on the text message they just received.</p>
-
-<p>The &ldquo;why&rdquo; doesn&rsquo;t matter. Plans changed. Your unused code isn&rsquo;t aging well and it&rsquo;s starting to stink up the place, so just do us all a favor and get it outta here!</p>
-
-<p>As developers, we <em>always</em> take this kind of thing personally. Our code is an extension of ourselves. When we feel good, we write code that&rsquo;s clean and concise. When we feel meh, our code is unimaginative and takes longer to write. When we feel bad, we litter the code with variables that don&rsquo;t do anything and then name them after our managers.</p>
-
-<p>But it&rsquo;s not personal, is it? Management doesn&rsquo;t sit in their mansion each evening, sipping a gin martini while adjusting their toupee, thinking about how worthless you are and how to properly punish you while continuing to pay you. Management has better things to think about, like ditching the toupee in favor of hair plugs or Rogaine or whatever hair fad is popular that day.</p>
-
-<p>Plans change. You can lament your loss of three days of &ldquo;ingenious&rdquo; code that will never see the light of day, but management will be equally depressed about the hundreds (thousands?) of dollars lost paying you to work on something that&rsquo;s not production-worthy. You may feel cheated in the short-term, but hopefully you can get something positive out of this change of plan. Maybe your second attempt at the code will jive better with the base architecture, or maybe you&rsquo;ll be able to extract the functionality you need out of another component and limit code duplication, or maybe you&rsquo;ll be able to deliver a different feature that the customer can actually use.</p>
-
-<p>Sure, there may be an occasional senior engineer who thinks that the program should be implemented his or her way, and will make you throw out anything you write that has any deviation from The Plan (which never quite made it out of their heads and into any documentation). Usually you can satiate that senior engineer by listening to them and nodding your head for a few minutes. There&rsquo;s a reason that engineer carries so much weight on the project, so they&rsquo;ll probably be making a valid point while you nod your head and they&rsquo;ll respect you for agreeing with them, even though you secretly wish you could just keep doing it the way you originally planned.</p>
-
-<p>Don&rsquo;t cry over spilled milk. No one&rsquo;s actually questioning your coding competency when they change the plan. The odds are in your favor that the plan changed in the best interest of the project, and whatever code is being thrown out is likely a necessary casualty to benefit the system as a whole. Remember that most of the code you write is used, at least for a little while, so try not to dwell on the code that isn&rsquo;t.</p>
 ]]></content>
   </entry>
   
