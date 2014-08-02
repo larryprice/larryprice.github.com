@@ -6,7 +6,7 @@ comments: true
 categories: javascript testing
 ---
 
-[Jasmine](https://jasmine.github.io/): a headless Javascript testing library written entirely in Javascript. With similarities to [rspec](http://rspec.info), I've quickly grown attached to this framework and have been looking for opportunties to discuss it. [Version 2.0](https://jasmine.github.io/2.0/introduction.html) was recently released, so I'll be focusing on the standalone 2.0 concepts. To get started, download and uncompress [the standalone distribution](https://github.com/pivotal/jasmine/tree/master/dist).
+[Jasmine](https://jasmine.github.io/): a headless Javascript testing library written entirely in Javascript. With similarities to [rspec](http://rspec.info), I've quickly grown attached to this framework and have been looking for opportunities to discuss it. [Version 2.0](https://jasmine.github.io/2.0/introduction.html) was recently released, so I'll be focusing on the standalone 2.0 concepts. To get started, download and uncompress [the standalone distribution](https://github.com/pivotal/jasmine/tree/master/dist).
 
 The uncompressed directory structure will have three subdirectories: `spec`, `src`, and `lib`. `lib` contains all the Jasmine source code. `src` contains some sample Javascript class that is tested by test files contained in `spec`. Outside of the subdirectories is the special file `SpecRunner.html`. This file is how we will run our tests.
 
@@ -137,13 +137,13 @@ describe("Pizza", function() {
   // ...
 
   describe("cost", function() {
-    it("is detemined by size and number of toppings", function() {
+    it("is determined by size and number of toppings", function() {
       pizza.initialize(10, "supreme");
       expect(pizza.getToppings().length).toBe(4);
       expect(pizza.getCost()).toBe(7.00);
     });
 
-    it("is detemined by size and number of toppings including extras", function() {
+    it("is determined by size and number of toppings including extras", function() {
       pizza.initialize(18, "meat lovers", ["gyros", "panchetta"]);
       expect(pizza.getToppings().length).toBe(6);
       expect(pizza.getCost()).toBe(12.00);
@@ -152,7 +152,7 @@ describe("Pizza", function() {
 });
 ```
 
-To fix this test, I'll use my handy-dandy pizza-cost forumla:
+To fix this test, I'll use my handy-dandy pizza-cost formula:
 
 ``` js src/pizza.js
 function Pizza() {
@@ -252,8 +252,8 @@ Pizza
         should have special toppings when given style and extras
         should have special toppings when given style
     cost
-        is detemined by size and number of toppings
-        is detemined by size and number of toppings including extras
+        is determined by size and number of toppings
+        is determined by size and number of toppings including extras
 ```
 
 Full sample code [available on Github](https://github.com/larryprice/jasmine-pizza). There's a lot of other interesting things Jasmine can do that I'm still learning about. If applicable, I'll try to create a blog post for advanced Jasmine usage in the future.
