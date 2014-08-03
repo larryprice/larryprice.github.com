@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="http://larry-price.com/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-07-13T17:16:07-04:00</updated>
+  <updated>2014-08-02T20:32:12-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,55 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Use NVM to Manage Your NodeJS Install]]></title>
+    <link href="http://larry-price.com/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install/"/>
+    <updated>2014-08-02T20:00:57-04:00</updated>
+    <id>http://larry-price.com/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been trying to get into <a href="http://nodejs.org/">NodeJS</a>, and so my immediate thought is that I want to be able to install different versions for different projects, a la <a href="https://rvm.io">rvm</a> for <a href="https://ruby-lang.org">ruby</a>. Fortunately, this already exists.</p>
+
+<p><a href="https://github.com/creationix/nvm">NVM</a> gives me the equivalent functionality of rvm but for NodeJS, making all my dreams come true. Here&rsquo;s how I installed it on my Linux boxes:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>curl https://raw.githubusercontent.com/creationix/nvm/v0.12.2/install.sh | bash
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>Note: This URL will get you nvm version 0.12.2. This link may not be valid in the future, where you come from. Check out the <a href="https://github.com/creationix/nvm">github repo</a> for any newer versions. If you&rsquo;re brave, trusting, or just really naïve, you can even change <code>v0.12.2</code> above to <code>master</code> to get the bleeding edge install.</em></p>
+
+<p>The above line of code will download the files, install nvm in your home directory, and update your profile to include nvm&rsquo;s current Node version in your path. NVM autocomplete isn&rsquo;t in place by default, but we can enable it by adding the following to the end of our .bash_profile:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[[</span> -r <span class="nv">$NVM_DIR</span>/bash_completion <span class="o">]]</span> <span class="o">&amp;&amp;</span> . <span class="nv">$NVM_DIR</span>/bash_completion
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now it&rsquo;s time to actually install us some Node! You can use <code>nvm ls-remote</code> to list the versions of Node currently available for download. At the time of this writing, the most recent version is <strong>v0.11.13</strong>. Installing is easy (and quick):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>nvm install 0.11.13
+</span><span class='line'>...
+</span><span class='line'><span class="nv">$ </span>nvm use 0.11.13
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Since this is the only Node on my system, I&rsquo;d like to set it as the default.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>nvm <span class="nb">alias </span>default 0.11.13
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>What if I&rsquo;m <code>cd</code>ing out of control and I don&rsquo;t know what Node version I need in my current directory? Create a file called <code>.nvmrc</code> in the directory containing the version number you want nvm to use and then type <code>node use</code> ENTER; Now you&rsquo;re using the version of Node you meant to. This also prevents people from using the wrong versions of Node to try to run your code, which would of course be a catastrophe.</p>
+
+<p>PLUS nvm installs the right version of npm whenever you install Node, so there&rsquo;s no need to worry about dealing with your base npm not working with different versions of Node.</p>
+
+<p>Thank <a href="https://en.wikipedia.org/wiki/Free_and_Open_Source_Software">FOSS</a> for nvm. Maybe one day soon I&rsquo;ll do useful things in Node an tell you about them.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Ollert - Reveal the Data Behind Your Trello Boards]]></title>
@@ -551,7 +600,7 @@
     <link href="http://larry-price.com/blog/2014/06/04/jasmine-a-whole-new-world-of-javascript-testing/"/>
     <updated>2014-06-04T06:19:43-04:00</updated>
     <id>http://larry-price.com/blog/2014/06/04/jasmine-a-whole-new-world-of-javascript-testing</id>
-    <content type="html"><![CDATA[<p><a href="https://jasmine.github.io/">Jasmine</a>: a headless Javascript testing library written entirely in Javascript. With similarities to <a href="http://rspec.info">rspec</a>, I&rsquo;ve quickly grown attached to this framework and have been looking for opportunties to discuss it. <a href="https://jasmine.github.io/2.0/introduction.html">Version 2.0</a> was recently released, so I&rsquo;ll be focusing on the standalone 2.0 concepts. To get started, download and uncompress <a href="https://github.com/pivotal/jasmine/tree/master/dist">the standalone distribution</a>.</p>
+    <content type="html"><![CDATA[<p><a href="https://jasmine.github.io/">Jasmine</a>: a headless Javascript testing library written entirely in Javascript. With similarities to <a href="http://rspec.info">rspec</a>, I&rsquo;ve quickly grown attached to this framework and have been looking for opportunities to discuss it. <a href="https://jasmine.github.io/2.0/introduction.html">Version 2.0</a> was recently released, so I&rsquo;ll be focusing on the standalone 2.0 concepts. To get started, download and uncompress <a href="https://github.com/pivotal/jasmine/tree/master/dist">the standalone distribution</a>.</p>
 
 <p>The uncompressed directory structure will have three subdirectories: <code>spec</code>, <code>src</code>, and <code>lib</code>. <code>lib</code> contains all the Jasmine source code. <code>src</code> contains some sample Javascript class that is tested by test files contained in <code>spec</code>. Outside of the subdirectories is the special file <code>SpecRunner.html</code>. This file is how we will run our tests.</p>
 
@@ -784,13 +833,13 @@
 </span><span class='line'>  <span class="c1">// ...</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="nx">describe</span><span class="p">(</span><span class="s2">&quot;cost&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;is detemined by size and number of toppings&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;is determined by size and number of toppings&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 </span><span class='line'>      <span class="nx">pizza</span><span class="p">.</span><span class="nx">initialize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;supreme&quot;</span><span class="p">);</span>
 </span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">().</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
 </span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getCost</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="mf">7.00</span><span class="p">);</span>
 </span><span class='line'>    <span class="p">});</span>
 </span><span class='line'>
-</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;is detemined by size and number of toppings including extras&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;is determined by size and number of toppings including extras&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 </span><span class='line'>      <span class="nx">pizza</span><span class="p">.</span><span class="nx">initialize</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="s2">&quot;meat lovers&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;gyros&quot;</span><span class="p">,</span> <span class="s2">&quot;panchetta&quot;</span><span class="p">]);</span>
 </span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">().</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>
 </span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getCost</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="mf">12.00</span><span class="p">);</span>
@@ -800,7 +849,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>To fix this test, I&rsquo;ll use my handy-dandy pizza-cost forumla:</p>
+<p>To fix this test, I&rsquo;ll use my handy-dandy pizza-cost formula:</p>
 
 <figure class='code'><figcaption><span>src/pizza.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -981,8 +1030,8 @@
 </span><span class='line'>        <span class="nx">should</span> <span class="nx">have</span> <span class="nx">special</span> <span class="nx">toppings</span> <span class="nx">when</span> <span class="nx">given</span> <span class="nx">style</span> <span class="nx">and</span> <span class="nx">extras</span>
 </span><span class='line'>        <span class="nx">should</span> <span class="nx">have</span> <span class="nx">special</span> <span class="nx">toppings</span> <span class="nx">when</span> <span class="nx">given</span> <span class="nx">style</span>
 </span><span class='line'>    <span class="nx">cost</span>
-</span><span class='line'>        <span class="nx">is</span> <span class="nx">detemined</span> <span class="nx">by</span> <span class="nx">size</span> <span class="nx">and</span> <span class="nx">number</span> <span class="nx">of</span> <span class="nx">toppings</span>
-</span><span class='line'>        <span class="nx">is</span> <span class="nx">detemined</span> <span class="nx">by</span> <span class="nx">size</span> <span class="nx">and</span> <span class="nx">number</span> <span class="nx">of</span> <span class="nx">toppings</span> <span class="nx">including</span> <span class="nx">extras</span>
+</span><span class='line'>        <span class="nx">is</span> <span class="nx">determined</span> <span class="nx">by</span> <span class="nx">size</span> <span class="nx">and</span> <span class="nx">number</span> <span class="nx">of</span> <span class="nx">toppings</span>
+</span><span class='line'>        <span class="nx">is</span> <span class="nx">determined</span> <span class="nx">by</span> <span class="nx">size</span> <span class="nx">and</span> <span class="nx">number</span> <span class="nx">of</span> <span class="nx">toppings</span> <span class="nx">including</span> <span class="nx">extras</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -2088,90 +2137,6 @@
 <p>There are <a href="//duckduckgo.com/goodies">100s of other goodies</a> as well. Do math using an &ldquo;=&rdquo; sign, like &ldquo;=128*256&rdquo;. Find &ldquo;Hello, World&rdquo; examples by searching for &ldquo;hello world perl&rdquo; or &ldquo;hello world clojure&rdquo;. Do a Twitter hashtag search to find out what &ldquo;#yolo&rdquo; means. Currency conversions. Unit conversions. Convert between timezones.</p>
 
 <p>Okay, enough shameless plugging for my favorite search engine. Give it a chance. Let those Google servers cool down for a few microseconds, they won&rsquo;t mind.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Convincing Rvm to Let You Use Ruby 2.1.0]]></title>
-    <link href="http://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/"/>
-    <updated>2014-02-22T16:46:00-05:00</updated>
-    <id>http://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0</id>
-    <content type="html"><![CDATA[<p><a href="//ruby-lang.org/en/news/2013/12/25/ruby-2-1-0-is-released/">Ruby 2.1.0 went stable</a> a few months ago, and <a href="//ruby-lang.org/en/news/2014/01/10/ruby-1-9-3-will-end-on-2015/">Ruby 1.9.3 support</a> will end in a just over a year.</p>
-
-<p>You know what that means: Warplanes in the sky falling to the ground, dogs and cats getting along like old pals, and people wandering aimlessly through the streets trying to remember the last time they saw a green build.</p>
-
-<p>Believe it or not, all of these things can be prevented. Once upon a time, I wrote about <a href="http://larry-price.com/blog/2013/10/08/rvm-quick-start/">configuring and using rvm</a> to control individual ruby environments for each of your projects. If it&rsquo;s been a while since you installed your copy of <a href="//rvm.io/">rvm</a>, you might have some trouble installing and using newer version of ruby. Lucky for us, those clever rvm developers made it easy to get around this.</p>
-
-<p>In my case, I want to upgrade a project to use <code>ruby 2.1.0</code>. The first time I tried to run <code>rvm install ruby-2.1.0</code>, I ended up installing <code>ruby-2.1.0-preview1</code>. I realized that I had installed rvm on this machine around October 2013, and <code>ruby 2.1.0</code> was released in December 2013, so rvm had no idea that <code>ruby 2.1.0</code> was stable. Updating rvm (in the root of the project directory):</p>
-
-<figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm get stable
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There will be some amount of text on the screen if your system needs to be updated. Note that you must be connected to the internet if you want rvm to update. Now we do the install of our brand new ruby:</p>
-
-<figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm install ruby-2.1.0
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Again, text on the screen from fetching of data from the internet. But hopefully you see something that tells you the operation was successful. You can also verify which rubies you have installed using the <code>list</code> command:</p>
-
-<figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm list rubies
-</span><span class='line'>   ruby-1.9.3-p448 <span class="o">[</span> x86_64 <span class="o">]</span>
-</span><span class='line'><span class="o">=</span>&gt; ruby-2.0.0-p247 <span class="o">[</span> x86_64 <span class="o">]</span>
-</span><span class='line'> * ruby-2.1.0 <span class="o">[</span> x86_64 <span class="o">]</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># =&gt; - current</span>
-</span><span class='line'><span class="c"># =* - current &amp;&amp; default</span>
-</span><span class='line'><span class="c">#  * - default</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now we tell our current project to use <code>ruby 2.1.0</code>:</p>
-
-<figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rm .ruby-version .ruby-gemset
-</span><span class='line'><span class="nv">$ </span>rvm 2.1.0@projNeedingRuby210 --create --ruby-version
-</span><span class='line'>ruby-2.1.0 - <span class="c">#gemset created /home/lrp/.rvm/gems/ruby-2.1.0@projNeedingRuby210</span>
-</span><span class='line'>ruby-2.1.0 - <span class="c">#generating projNeedingRuby210 wrappers.</span>
-</span><span class='line'><span class="nv">$ </span>rvm gemset copy 2.0.0-p247@projNeedingRuby210 2.1.0@projNeedingRuby210
-</span><span class='line'>Copying gemset from 2.0.0-p247@projNeedingRuby210 to 2.1.0@projNeedingRuby210
-</span><span class='line'>Generating gemset wrappers ruby-2.1.0@projNeedingRuby210.
-</span><span class='line'>Making gemset 2.1.0@projNeedingRuby210 pristine.
-</span><span class='line'><span class="nv">$ </span>which ruby
-</span><span class='line'>/home/lrp/.rvm/rubies/ruby-2.1.0/bin/ruby
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Alright! Crisis averted. If you&rsquo;re using <a href="//bundler.io/">bundler</a> with this project, be sure to change your ruby version (usually located near the top of the <code>Gemfile</code>).</p>
-
-<p>What about setting up a new project using <code>ruby 2.1.0</code>? Easy! Switch to the project directory and:</p>
-
-<figure class='code'><figcaption><span>/home/lrp/Projects/2014/newRubyProject</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm 2.1.0@newRubyProject --create --ruby-version
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Oh, rvm, you make life <em>too</em> easy sometimes.</p>
 ]]></content>
   </entry>
   

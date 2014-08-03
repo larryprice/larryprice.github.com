@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sendgrid | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/sendgrid/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-07-13T17:16:07-04:00</updated>
+  <updated>2014-08-02T20:32:12-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -135,7 +135,7 @@ end
   Team MyApp</p>
 
 <p>%p
-  This email account is not monitored and will not receive replies. For more information, contact <a href="mailto:connect@myapp.com"><a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x63;&#x6f;&#x6e;&#110;&#x65;&#99;&#116;&#x40;&#109;&#x79;&#x61;&#x70;&#112;&#x2e;&#x63;&#x6f;&#x6d;">&#99;&#x6f;&#x6e;&#110;&#x65;&#x63;&#116;&#64;&#x6d;&#121;&#97;&#112;&#x70;&#x2e;&#x63;&#111;&#109;</a></a>.
+  This email account is not monitored and will not receive replies. For more information, contact <a href="mailto:connect@myapp.com"><a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#99;&#111;&#x6e;&#110;&#x65;&#99;&#116;&#x40;&#109;&#121;&#97;&#x70;&#x70;&#46;&#99;&#x6f;&#x6d;">&#99;&#x6f;&#x6e;&#110;&#101;&#99;&#116;&#64;&#x6d;&#x79;&#x61;&#112;&#112;&#46;&#99;&#111;&#x6d;</a></a>.
 ```</p>
 
 <p>When you have a user hit this route, an email will be sent to the user with the given subject, to, from, and body fields using the configuration parameters given in the previous <code>configure</code> block. Fast, easy, and, best of all, no <code>sendmail</code> configuration.</p>
