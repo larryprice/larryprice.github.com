@@ -4,7 +4,7 @@
   <title><![CDATA[Category: nvm | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/nvm/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-02T20:32:12-04:00</updated>
+  <updated>2014-08-09T08:51:32-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -22,31 +22,27 @@
 
 <p><a href="https://github.com/creationix/nvm">NVM</a> gives me the equivalent functionality of rvm but for NodeJS, making all my dreams come true. Here&rsquo;s how I installed it on my Linux boxes:</p>
 
-<p><code>bash
-$ curl https://raw.githubusercontent.com/creationix/nvm/v0.12.2/install.sh | bash
-</code></p>
+<pre><code class="bash">$ curl https://raw.githubusercontent.com/creationix/nvm/v0.12.2/install.sh | bash
+</code></pre>
 
 <p><em>Note: This URL will get you nvm version 0.12.2. This link may not be valid in the future, where you come from. Check out the <a href="https://github.com/creationix/nvm">github repo</a> for any newer versions. If you&rsquo;re brave, trusting, or just really naïve, you can even change <code>v0.12.2</code> above to <code>master</code> to get the bleeding edge install.</em></p>
 
 <p>The above line of code will download the files, install nvm in your home directory, and update your profile to include nvm&rsquo;s current Node version in your path. NVM autocomplete isn&rsquo;t in place by default, but we can enable it by adding the following to the end of our .bash_profile:</p>
 
-<p><code>bash
-[[ -r $NVM_DIR/bash_completion ]] &amp;&amp; . $NVM_DIR/bash_completion
-</code></p>
+<pre><code class="bash">[[ -r $NVM_DIR/bash_completion ]] &amp;&amp; . $NVM_DIR/bash_completion
+</code></pre>
 
 <p>Now it&rsquo;s time to actually install us some Node! You can use <code>nvm ls-remote</code> to list the versions of Node currently available for download. At the time of this writing, the most recent version is <strong>v0.11.13</strong>. Installing is easy (and quick):</p>
 
-<p><code>bash
-$ nvm install 0.11.13
+<pre><code class="bash">$ nvm install 0.11.13
 ...
 $ nvm use 0.11.13
-</code></p>
+</code></pre>
 
 <p>Since this is the only Node on my system, I&rsquo;d like to set it as the default.</p>
 
-<p><code>bash
-$ nvm alias default 0.11.13
-</code></p>
+<pre><code class="bash">$ nvm alias default 0.11.13
+</code></pre>
 
 <p>What if I&rsquo;m <code>cd</code>ing out of control and I don&rsquo;t know what Node version I need in my current directory? Create a file called <code>.nvmrc</code> in the directory containing the version number you want nvm to use and then type <code>node use</code> ENTER; Now you&rsquo;re using the version of Node you meant to. This also prevents people from using the wrong versions of Node to try to run your code, which would of course be a catastrophe.</p>
 

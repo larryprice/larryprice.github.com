@@ -4,7 +4,7 @@
   <title><![CDATA[Category: non-technical | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/non-technical/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-02T20:32:12-04:00</updated>
+  <updated>2014-08-09T08:51:32-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -108,7 +108,7 @@
 <h3>The Dude</h3>
 
 <blockquote><p>We&rsquo;ve got hard problems to solve, we don&rsquo;t need aphorisms, we don&rsquo;t need truisms.
-&mdash; David Hussman</p></blockquote>
+&ndash; David Hussman</p></blockquote>
 
 <p>The event started out with the self-proclaimed &ldquo;Dude,&rdquo; <a href="//devjam.com/">David Hussman of DevJam</a>. I&rsquo;ve previously had some training involving Mr Hussman at <a href="//sep.com">SEP</a>, during which we had trouble explaining our relationship with Agile: gargantuan project, lots of devs, massive codebase, hour-long builds, and an immature implementation of the so-called Scalable Agile Framework. I thought I knew what to expect during this talk, but I was delightfully mistaken. Everything Hussman said during his keynote fit with the conversations I&rsquo;ve been having with my current teammates.</p>
 
@@ -155,7 +155,7 @@
 
 <p>I don&rsquo;t use <a href="//google.com">Lord Google</a> as my default search engine. Instead I use <a href="//duckduckgo.com">DuckDuckGo</a>. From <a href="//en.wikipedia.org/wiki/Duck_Duck_Go">Wikipedia</a>:</p>
 
-<blockquote><p>DuckDuckGo is an Internet search engine that emphasizes protecting searchers' privacy and avoiding the &ldquo;filter bubble&rdquo; of personalized search results. DuckDuckGo distinguishes itself from other search engines by not profiling its users and by deliberately showing all users the same search results for a given search term. DuckDuckGo also emphasizes getting information from the best sources rather than the most sources&hellip;.</p></blockquote>
+<blockquote><p>DuckDuckGo is an Internet search engine that emphasizes protecting searchers&#8217; privacy and avoiding the &ldquo;filter bubble&rdquo; of personalized search results. DuckDuckGo distinguishes itself from other search engines by not profiling its users and by deliberately showing all users the same search results for a given search term. DuckDuckGo also emphasizes getting information from the best sources rather than the most sources&hellip;.</p></blockquote>
 
 <p>The gist is that DuckDuckGo does not personalize your search results based on demographics or search history. It doesn&rsquo;t store your IP address and it doesn&rsquo;t log your information. You cannot &ldquo;log in&rdquo; to the DuckDuckGo website.</p>
 
@@ -165,13 +165,13 @@
 
 <p>A query that seems mistyped will ask you if you want to correct it. Search speed is comparable to Google, I&rsquo;ve noticed no difference.</p>
 
-<p>Looking at the result of your query, you get your search results middle-aligned. <strong>Middle. Aligned</strong> I know you probably don&rsquo;t think that&rsquo;s a big deal, but go do a Google search right now. It&rsquo;s left-aligned. Same with <a href="//bing.com">Bing</a>. Do you see what&rsquo;s on the right half of your monitor? <strong>Nothing.</strong> When running a Google search with my 22" monitor (~19" of horizontal space), there are 13" of wasted space. About 9" on Bing.</p>
+<p>Looking at the result of your query, you get your search results middle-aligned. <strong>Middle. Aligned</strong> I know you probably don&rsquo;t think that&rsquo;s a big deal, but go do a Google search right now. It&rsquo;s left-aligned. Same with <a href="//bing.com">Bing</a>. Do you see what&rsquo;s on the right half of your monitor? <strong>Nothing.</strong> When running a Google search with my 22&#8221; monitor (~19&#8221; of horizontal space), there are 13&#8221; of wasted space. About 9&#8221; on Bing.</p>
 
 <p>So, you&rsquo;ve just done a search on DuckDuckGo. Now you can use the Up/Down arrows on your keyboard to navigate the search results. Pressing Enter takes you to the website. I vaguely remember that Google used to allow this, but it seems to have disappeared from the default search results.</p>
 
 <p>Don&rsquo;t like being able to see the combined search results of 50+ search engines? !Bang syntax is the answer.</p>
 
-<p>What is !bang syntax? Let&rsquo;s say you&rsquo;re me and you&rsquo;re looking for over-the range microwaves. I type into my DuckDuckGo search <code>microwaves !a</code> and DuckDuckGo takes me straight to <a href="//amazon.com">Amazon</a>, showing me search results for all those sweet, sweet microwaves. <code>!g</code> takes you to Google, <code>!w</code> takes you to Wikipedia, <code>!gi</code> takes you to Google Images, <code>!yt</code> takes you to Youtube, <code>!lowes</code> takes you to the Lowe&rsquo;s search results, <code>!gog</code> takes you to Good Ol' Games, and <a href="//duckduckgo.com/bang.html">on and on and on and on and on</a>.</p>
+<p>What is !bang syntax? Let&rsquo;s say you&rsquo;re me and you&rsquo;re looking for over-the range microwaves. I type into my DuckDuckGo search <code>microwaves !a</code> and DuckDuckGo takes me straight to <a href="//amazon.com">Amazon</a>, showing me search results for all those sweet, sweet microwaves. <code>!g</code> takes you to Google, <code>!w</code> takes you to Wikipedia, <code>!gi</code> takes you to Google Images, <code>!yt</code> takes you to Youtube, <code>!lowes</code> takes you to the Lowe&rsquo;s search results, <code>!gog</code> takes you to Good Ol&#8217; Games, and <a href="//duckduckgo.com/bang.html">on and on and on and on and on</a>.</p>
 
 <p>There are <a href="//duckduckgo.com/goodies">100s of other goodies</a> as well. Do math using an &ldquo;=&rdquo; sign, like &ldquo;=128*256&rdquo;. Find &ldquo;Hello, World&rdquo; examples by searching for &ldquo;hello world perl&rdquo; or &ldquo;hello world clojure&rdquo;. Do a Twitter hashtag search to find out what &ldquo;#yolo&rdquo; means. Currency conversions. Unit conversions. Convert between timezones.</p>
 
@@ -188,42 +188,31 @@
 
 <p>I came across some code recently that irked me. This code asks for a handle to a database abstraction class and then runs a query on it. It looks kinda like this:</p>
 
-<p>``` ruby settings.rb
-def changeSettings(newSettings)
-  db = dbFactory.get(&ldquo;settings.db&rdquo;)
-  if !db.nil?</p>
-
-<pre><code>db.execute(buildSaveQuery(newSettings))
-</code></pre>
-
-<p>  end
+<pre><code class="ruby settings.rb">def changeSettings(newSettings)
+  db = dbFactory.get("settings.db")
+  if !db.nil?
+    db.execute(buildSaveQuery(newSettings))
+  end
 end
-```</p>
+</code></pre>
 
 <p>How nice that <code>changeSettings</code> doesn&rsquo;t try to play with a <code>nil</code> database, right? But what about the user&rsquo;s data? It wasn&rsquo;t saved. And no one knows. <em>Not even you</em>. Now, maybe the user will happily continue what he&rsquo;s doing until he notices that his new settings aren&rsquo;t quite right. So he goes back to them again. Same result. Repeat ad infinitum.</p>
 
 <p>How I would initially approach this is to add an <code>else</code> statement that launches a dialog giving some useful data to the user. Whatever you do, for the love of code, DO NOT tell the user that you had database problems. For most applications, the user will have no idea what that means. It might look something like this:</p>
 
-<p>``` ruby settings.rb
-def changeSettings(newSettings)
-  db = dbFactory.get(&ldquo;settings.db&rdquo;)
-  if !db.nil?</p>
-
-<pre><code>db.execute(buildSaveQuery(newSettings))
-</code></pre>
-
-<p>  else</p>
-
-<pre><code>showDialog(title="Save Failed!",
-           msg="I'm sorry, but your data could not be saved." +
-               "Press 'Try Again' to give it another go." +
-               "If the problem persists, restart the application" +
-               " or contact system support.")
-</code></pre>
-
-<p>  end
+<pre><code class="ruby settings.rb">def changeSettings(newSettings)
+  db = dbFactory.get("settings.db")
+  if !db.nil?
+    db.execute(buildSaveQuery(newSettings))
+  else
+    showDialog(title="Save Failed!",
+               msg="I'm sorry, but your data could not be saved." +
+                   "Press 'Try Again' to give it another go." +
+                   "If the problem persists, restart the application" +
+                   " or contact system support.")
+  end
 end
-```</p>
+</code></pre>
 
 <p>This is not a bad solution. But what about all the other places in the code I get the database from the factory? I&rsquo;d have to update those as well. It would be better to be able to code the factory to launch a similar error dialog whenever this happens. Even better, let me hand the factory a reference to an appropriate dialog whenever I call <code>dbFactory.get</code>.</p>
 

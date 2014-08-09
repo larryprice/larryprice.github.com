@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mvc | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/mvc/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-02T20:32:12-04:00</updated>
+  <updated>2014-08-09T08:51:32-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -28,37 +28,29 @@
 
 <p>That&rsquo;s been pretty overwhelming, especially since the traditional way of creating routes in Sinatra is to shove them all in the same file. There are a few ways I could think of to address this. The way we chose six months ago (for better or worse) was found <a href="http://stackoverflow.com/questions/5877000/what-is-a-controller-in-sinatra">on StackOverflow</a>, and involves creating a bunch of different files where you shove all related routes. So you get this situation:</p>
 
-<p>``` ruby app.rb
-class App &lt; Sinatra::Base
-end</p>
+<pre><code class="ruby app.rb">class App &lt; Sinatra::Base
+end
 
-<p>require_relative &lsquo;controllers/helpers&rsquo;</p>
+require_relative 'controllers/helpers'
 
-<p>Dir.glob(&ldquo;#{File.dirname(<strong>FILE</strong>)}/controllers/*.rb&rdquo;).each do |file|
+Dir.glob("#{File.dirname(__FILE__)}/controllers/*.rb").each do |file|
   require file.chomp(File.extname(file))
-end</p>
-
-<p>class App
-  get &lsquo;/&rsquo; do</p>
-
-<pre><code>erb :home
-</code></pre>
-
-<p>  end
 end
-```</p>
 
-<p>``` ruby controllers/reports_controller.rb
 class App
-  get &lsquo;/reports/user_bills&rsquo; do</p>
-
-<pre><code>erb :user_bills_report
+  get '/' do
+    erb :home
+  end
+end
 </code></pre>
 
-<p>  end
-  &hellip;
+<pre><code class="ruby controllers/reports_controller.rb">class App
+  get '/reports/user_bills' do
+    erb :user_bills_report
+  end
+  ...
 end
-```</p>
+</code></pre>
 
 <p>And so on and so forth. This works fine for a while, but we&rsquo;ve ended up with 13 &ldquo;controller&rdquo; files, many of which are not trivial. This also makes the App class quite large since its controllers handle most of the logic for the app. This also doesn&rsquo;t enforce any kind of URL-naming logic, so if a developer is working hard (s)he may create both <code>/reports/user_bills</code> and <code>user_info_reports</code> without realizing the inconsistency (s)he just injected into the system.</p>
 

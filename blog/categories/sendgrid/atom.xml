@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sendgrid | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/sendgrid/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-02T20:32:12-04:00</updated>
+  <updated>2014-08-09T08:51:32-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -24,37 +24,32 @@
 
 <p>I like to configure Pony in my application&rsquo;s <code>configure</code> block. I could also add it to my <code>config.ru</code>, but I like to keep that file as tiny as posible to avoid having configuration code all over the place.</p>
 
-<p>``` ruby web.rb</p>
+<pre><code class="ruby web.rb"># ...
 
-<h1>&hellip;</h1>
+require 'pony'
+require 'sinatra/base'
 
-<p>require &lsquo;pony&rsquo;
-require &lsquo;sinatra/base&rsquo;</p>
+class Application &lt; Sinatra::Base
+  configure do
+    # ...
 
-<p>class Application &lt; Sinatra::Base
-  configure do</p>
+    Pony.options = {
+      :via =&gt; :smtp,
+      :via_options =&gt; {
+        :address =&gt; 'smtp.sendgrid.net',
+        :port =&gt; '587',
+        :domain =&gt; 'myapp.com',
+        :user_name =&gt; ENV['SENDGRID_USERNAME'],
+        :password =&gt; ENV['SENDGRID_PASSWORD'],
+        :authentication =&gt; :plain,
+        :enable_starttls_auto =&gt; true
+      }
+    }
+  end
 
-<pre><code># ...
-
-Pony.options = {
-  :via =&gt; :smtp,
-  :via_options =&gt; {
-    :address =&gt; 'smtp.sendgrid.net',
-    :port =&gt; '587',
-    :domain =&gt; 'myapp.com',
-    :user_name =&gt; ENV['SENDGRID_USERNAME'],
-    :password =&gt; ENV['SENDGRID_PASSWORD'],
-    :authentication =&gt; :plain,
-    :enable_starttls_auto =&gt; true
-  }
-}
-</code></pre>
-
-<p>  end</p>
-
-<p>  # &hellip;
+  # ...
 end
-```</p>
+</code></pre>
 
 <p>This block tells Pony to use the <a href="http://sendgrid.com/">SendGrid</a> server to send mail, use the &ldquo;myapp.com&rdquo; HELO domain, and dig up the username and password fields from my environment.</p>
 
@@ -64,79 +59,62 @@ end
 
 <p>So let&rsquo;s actually send an email. Let&rsquo;s create a route that sends an email to verify a new user account; I&rsquo;ll take some liberties by saying we have a <code>User</code> model defined already that generates a signup verification hash. I can tell pony to send a plaintext body through the <code>body</code> option and an HTML body through the <code>html_body</code> option.</p>
 
-<p>``` ruby web.rb</p>
+<pre><code class="ruby web.rb"># ...
+post '/signup' do
+  user = User.create! params
 
-<h1>&hellip;</h1>
-
-<p>post &lsquo;/signup&rsquo; do
-  user = User.create! params</p>
-
-<p>  url = &ldquo;#{request.base_url}/account/reset/#{user.generate_verification_hash}&rdquo;
-  Pony.mail(</p>
-
-<pre><code>to: user.email,
-from: "MyApp Help Desk &lt;noreply@myapp.com&gt;",
-subject: "MyApp Account Verification",
-body: "A request has been made to verify your MyApp account (https://myapp.com)." +
-      "If you made this request, go to " + url + ". If you did not make this request, ignore this email.",
-html_body: haml(
-  :verify_account_email,
-  layout: false,
-  locals: {
-    email: user.email,
-    date: DateTime.now.strftime("%H:%M:%S%P %B %d, %Y"),
-    ip: request.ip,
-    url: url
-  }
-)
+  url = "#{request.base_url}/account/reset/#{user.generate_verification_hash}"
+  Pony.mail(
+    to: user.email,
+    from: "MyApp Help Desk &lt;noreply@myapp.com&gt;",
+    subject: "MyApp Account Verification",
+    body: "A request has been made to verify your MyApp account (https://myapp.com)." +
+          "If you made this request, go to " + url + ". If you did not make this request, ignore this email.",
+    html_body: haml(
+      :verify_account_email,
+      layout: false,
+      locals: {
+        email: user.email,
+        date: DateTime.now.strftime("%H:%M:%S%P %B %d, %Y"),
+        ip: request.ip,
+        url: url
+      }
+    )
+  )
+end
 </code></pre>
 
-<p>  )
-end
-```</p>
-
-<p>``` haml views/verify_account_email.rb
-%p
+<pre><code class="haml views/verify_account_email.rb">%p
   Hello!
 %p
-  An account verification has been requested for your new <a href="https://myapp.com">MyApp</a> account.</p>
+  An account verification has been requested for your new &lt;a href="https://myapp.com"&gt;MyApp&lt;/a&gt; account.
 
-<p>%ul
-  %li</p>
+%ul
+  %li
+    Username: #{locals[:email]}
+  %li
+    Time: #{locals[:date]}
+  %li
+    IP address: #{locals[:ip]}
 
-<pre><code>Username: #{locals[:email]}
-</code></pre>
+%p
+  If you made this request, click the link below or copy-paste the following URL into your browser to verify your account:
 
-<p>  %li</p>
+%p
+  %a{href: "#{locals[:url]}", alt: "Verify", title: "Click to verify account"}
+    #{locals[:url]}
 
-<pre><code>Time: #{locals[:date]}
-</code></pre>
+%p
+  If you did not request this new account, please ignore this email.
 
-<p>  %li</p>
-
-<pre><code>IP address: #{locals[:ip]}
-</code></pre>
-
-<p>%p
-  If you made this request, click the link below or copy-paste the following URL into your browser to verify your account:</p>
-
-<p>%p
-  %a{href: &ldquo;#{locals[:url]}&rdquo;, alt: &ldquo;Verify&rdquo;, title: &ldquo;Click to verify account&rdquo;}</p>
-
-<pre><code>#{locals[:url]}
-</code></pre>
-
-<p>%p
-  If you did not request this new account, please ignore this email.</p>
-
-<p>%p
+%p
   Sincerely,
   %br
-  Team MyApp</p>
+  Team MyApp
 
-<p>%p
-  This email account is not monitored and will not receive replies. For more information, contact <a href="mailto:connect@myapp.com"><a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#99;&#111;&#x6e;&#110;&#x65;&#99;&#116;&#x40;&#109;&#121;&#97;&#x70;&#x70;&#46;&#99;&#x6f;&#x6d;">&#99;&#x6f;&#x6e;&#110;&#101;&#99;&#116;&#64;&#x6d;&#x79;&#x61;&#112;&#112;&#46;&#99;&#111;&#x6d;</a></a>.
-```</p>
+%p
+  This email account is not monitored and will not receive replies. For more information, contact &lt;a href="mailto:connect@myapp.com"&gt;connect@myapp.com&lt;/a&gt;.
+</code></pre>
 
 <p>When you have a user hit this route, an email will be sent to the user with the given subject, to, from, and body fields using the configuration parameters given in the previous <code>configure</code> block. Fast, easy, and, best of all, no <code>sendmail</code> configuration.</p>
 ]]></content>

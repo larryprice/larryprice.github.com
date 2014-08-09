@@ -4,7 +4,7 @@
   <title><![CDATA[Category: heroku | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/heroku/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-02T20:32:12-04:00</updated>
+  <updated>2014-08-09T08:51:32-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -24,37 +24,32 @@
 
 <p>I like to configure Pony in my application&rsquo;s <code>configure</code> block. I could also add it to my <code>config.ru</code>, but I like to keep that file as tiny as posible to avoid having configuration code all over the place.</p>
 
-<p>``` ruby web.rb</p>
+<pre><code class="ruby web.rb"># ...
 
-<h1>&hellip;</h1>
+require 'pony'
+require 'sinatra/base'
 
-<p>require &lsquo;pony&rsquo;
-require &lsquo;sinatra/base&rsquo;</p>
+class Application &lt; Sinatra::Base
+  configure do
+    # ...
 
-<p>class Application &lt; Sinatra::Base
-  configure do</p>
+    Pony.options = {
+      :via =&gt; :smtp,
+      :via_options =&gt; {
+        :address =&gt; 'smtp.sendgrid.net',
+        :port =&gt; '587',
+        :domain =&gt; 'myapp.com',
+        :user_name =&gt; ENV['SENDGRID_USERNAME'],
+        :password =&gt; ENV['SENDGRID_PASSWORD'],
+        :authentication =&gt; :plain,
+        :enable_starttls_auto =&gt; true
+      }
+    }
+  end
 
-<pre><code># ...
-
-Pony.options = {
-  :via =&gt; :smtp,
-  :via_options =&gt; {
-    :address =&gt; 'smtp.sendgrid.net',
-    :port =&gt; '587',
-    :domain =&gt; 'myapp.com',
-    :user_name =&gt; ENV['SENDGRID_USERNAME'],
-    :password =&gt; ENV['SENDGRID_PASSWORD'],
-    :authentication =&gt; :plain,
-    :enable_starttls_auto =&gt; true
-  }
-}
-</code></pre>
-
-<p>  end</p>
-
-<p>  # &hellip;
+  # ...
 end
-```</p>
+</code></pre>
 
 <p>This block tells Pony to use the <a href="http://sendgrid.com/">SendGrid</a> server to send mail, use the &ldquo;myapp.com&rdquo; HELO domain, and dig up the username and password fields from my environment.</p>
 
@@ -64,79 +59,62 @@ end
 
 <p>So let&rsquo;s actually send an email. Let&rsquo;s create a route that sends an email to verify a new user account; I&rsquo;ll take some liberties by saying we have a <code>User</code> model defined already that generates a signup verification hash. I can tell pony to send a plaintext body through the <code>body</code> option and an HTML body through the <code>html_body</code> option.</p>
 
-<p>``` ruby web.rb</p>
+<pre><code class="ruby web.rb"># ...
+post '/signup' do
+  user = User.create! params
 
-<h1>&hellip;</h1>
-
-<p>post &lsquo;/signup&rsquo; do
-  user = User.create! params</p>
-
-<p>  url = &ldquo;#{request.base_url}/account/reset/#{user.generate_verification_hash}&rdquo;
-  Pony.mail(</p>
-
-<pre><code>to: user.email,
-from: "MyApp Help Desk &lt;noreply@myapp.com&gt;",
-subject: "MyApp Account Verification",
-body: "A request has been made to verify your MyApp account (https://myapp.com)." +
-      "If you made this request, go to " + url + ". If you did not make this request, ignore this email.",
-html_body: haml(
-  :verify_account_email,
-  layout: false,
-  locals: {
-    email: user.email,
-    date: DateTime.now.strftime("%H:%M:%S%P %B %d, %Y"),
-    ip: request.ip,
-    url: url
-  }
-)
+  url = "#{request.base_url}/account/reset/#{user.generate_verification_hash}"
+  Pony.mail(
+    to: user.email,
+    from: "MyApp Help Desk &lt;noreply@myapp.com&gt;",
+    subject: "MyApp Account Verification",
+    body: "A request has been made to verify your MyApp account (https://myapp.com)." +
+          "If you made this request, go to " + url + ". If you did not make this request, ignore this email.",
+    html_body: haml(
+      :verify_account_email,
+      layout: false,
+      locals: {
+        email: user.email,
+        date: DateTime.now.strftime("%H:%M:%S%P %B %d, %Y"),
+        ip: request.ip,
+        url: url
+      }
+    )
+  )
+end
 </code></pre>
 
-<p>  )
-end
-```</p>
-
-<p>``` haml views/verify_account_email.rb
-%p
+<pre><code class="haml views/verify_account_email.rb">%p
   Hello!
 %p
-  An account verification has been requested for your new <a href="https://myapp.com">MyApp</a> account.</p>
+  An account verification has been requested for your new &lt;a href="https://myapp.com"&gt;MyApp&lt;/a&gt; account.
 
-<p>%ul
-  %li</p>
+%ul
+  %li
+    Username: #{locals[:email]}
+  %li
+    Time: #{locals[:date]}
+  %li
+    IP address: #{locals[:ip]}
 
-<pre><code>Username: #{locals[:email]}
-</code></pre>
+%p
+  If you made this request, click the link below or copy-paste the following URL into your browser to verify your account:
 
-<p>  %li</p>
+%p
+  %a{href: "#{locals[:url]}", alt: "Verify", title: "Click to verify account"}
+    #{locals[:url]}
 
-<pre><code>Time: #{locals[:date]}
-</code></pre>
+%p
+  If you did not request this new account, please ignore this email.
 
-<p>  %li</p>
-
-<pre><code>IP address: #{locals[:ip]}
-</code></pre>
-
-<p>%p
-  If you made this request, click the link below or copy-paste the following URL into your browser to verify your account:</p>
-
-<p>%p
-  %a{href: &ldquo;#{locals[:url]}&rdquo;, alt: &ldquo;Verify&rdquo;, title: &ldquo;Click to verify account&rdquo;}</p>
-
-<pre><code>#{locals[:url]}
-</code></pre>
-
-<p>%p
-  If you did not request this new account, please ignore this email.</p>
-
-<p>%p
+%p
   Sincerely,
   %br
-  Team MyApp</p>
+  Team MyApp
 
-<p>%p
-  This email account is not monitored and will not receive replies. For more information, contact <a href="mailto:connect@myapp.com"><a href="&#109;&#x61;&#x69;&#108;&#x74;&#111;&#x3a;&#99;&#111;&#110;&#110;&#x65;&#x63;&#116;&#64;&#109;&#x79;&#x61;&#x70;&#112;&#46;&#x63;&#x6f;&#109;">&#99;&#x6f;&#110;&#110;&#x65;&#x63;&#116;&#x40;&#109;&#x79;&#97;&#x70;&#x70;&#x2e;&#x63;&#x6f;&#109;</a></a>.
-```</p>
+%p
+  This email account is not monitored and will not receive replies. For more information, contact &lt;a href="mailto:connect@myapp.com"&gt;connect@myapp.com&lt;/a&gt;.
+</code></pre>
 
 <p>When you have a user hit this route, an email will be sent to the user with the given subject, to, from, and body fields using the configuration parameters given in the previous <code>configure</code> block. Fast, easy, and, best of all, no <code>sendmail</code> configuration.</p>
 ]]></content>
@@ -153,9 +131,8 @@ end
 
 <p>Assuming you have a heroku app deployed and you have sqlite already working locally, this only takes a few steps. First we need to add a SQL database to our heroku app. From the project directory, we&rsquo;ll add the <a href="//addons.heroku.com/heroku-postgresql">heroku-postgresql</a> addon to our app.</p>
 
-<p><code>bash
-$ heroku addons:add heroku-postgresql:dev
-</code></p>
+<pre><code class="bash">$ heroku addons:add heroku-postgresql:dev
+</code></pre>
 
 <p>The <code>dev</code> piece of this command tells heroku we want the small, free database. This database supports up to 10,000 rows and has a 99.5% uptime. Best of all: it&rsquo;s free. Other options have you pay $9/mo for 10,000,000 rows or $50+ for Unlimited usage. I recommend you start small.</p>
 
@@ -165,53 +142,44 @@ $ heroku addons:add heroku-postgresql:dev
 
 <p>In our Gemfile, we&rsquo;ve probably already included the sqlite gem for use in our local environment. We can go ahead and move that into a <code>development</code> block, and we need to add the <code>pg</code> gem to either <code>production</code> or the global block.</p>
 
-<p>``` ruby Gemfile
-source &ldquo;<a href="https://rubygems.org">https://rubygems.org</a>&rdquo;</p>
+<pre><code class="ruby Gemfile">source "https://rubygems.org"
 
-<p>ruby &lsquo;2.1.0&rsquo;</p>
+ruby '2.1.0'
 
-<p>gem &lsquo;bundler&rsquo;
-gem &lsquo;rake&rsquo;
-gem &lsquo;sinatra&rsquo;
-gem &lsquo;haml&rsquo;
-gem &lsquo;sequel&rsquo;</p>
+gem 'bundler'
+gem 'rake'
+gem 'sinatra'
+gem 'haml'
+gem 'sequel'
 
-<p>group :production do
-  gem &lsquo;pg&rsquo;
-end</p>
-
-<p>group :development do
-  gem &lsquo;sqlite3&rsquo;
+group :production do
+  gem 'pg'
 end
-```</p>
+
+group :development do
+  gem 'sqlite3'
+end
+</code></pre>
 
 <p>Heroku sets <code>ENV['RACK_ENV']</code> to &ldquo;production&rdquo; for us, which means that the pg gem should get picked up the next time we deploy. Now we need to tell our app which database to use in which situation.</p>
 
 <p>One of the easiest places to make this decision is in Sinatra&rsquo;s <code>configure</code> block. I keep my local db in an environment variable called <code>LOCAL_DATABASE_URL</code>. This is where you use the environment variable heroku set for you when you set up your Postgres database; mine was called <code>HEROKU_POSTGRESQL_MAROON_URL</code>.</p>
 
-<p>``` ruby web.rb
-class App &lt; Sinatra::Base
-  configure :production do</p>
+<pre><code class="ruby web.rb">class App &lt; Sinatra::Base
+  configure :production do
+    Sequel.connect ENV['HEROKU_POSTGRESQL_MAROON_URL']
+  end
 
-<pre><code>Sequel.connect ENV['HEROKU_POSTGRESQL_MAROON_URL']
-</code></pre>
-
-<p>  end</p>
-
-<p>  configure :development do</p>
-
-<pre><code>Sequel.connect ENV['LOCAL_DATABASE_URL']
-</code></pre>
-
-<p>  end
+  configure :development do
+    Sequel.connect ENV['LOCAL_DATABASE_URL']
+  end
 end
-```</p>
+</code></pre>
 
 <p>This works because the default environment is &ldquo;development.&rdquo; Test locally, and then we can deploy.</p>
 
-<p><code>bash
-$ git push heroku master
-</code></p>
+<pre><code class="bash">$ git push heroku master
+</code></pre>
 
 <p>And enjoy.</p>
 ]]></content>
@@ -228,54 +196,47 @@ $ git push heroku master
 
 <p>Now we need the Heroku Toolbelt. I&rsquo;ll illustrate for Ubuntu 12.10, but there&rsquo;s also <a href="https://toolbelt.heroku.com/">documentation for installing on any OS</a>.</p>
 
-<p><code>bash
-$ wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
-</code></p>
+<pre><code class="bash">$ wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+</code></pre>
 
 <p>The toolbelt installs some Heroku-specific applications in addition to ensuring you have Foreman and <a href="http://git-scm.com/">Git</a> on your system. Now it&rsquo;s time to tell the Heroku Toolbelt who we are.</p>
 
-<p><code>bash Step 3 - Modified Excerpt from the Heroku Getting Started guide
-$ heroku login
+<pre><code class="bash Step 3 - Modified Excerpt from the Heroku Getting Started guide">$ heroku login
 Enter your Heroku credentials.
 Email: larry@example.com
-Password:
+Password: 
 Could not find an existing public key.
-Would you like to generate one? [Yn]
+Would you like to generate one? [Yn] 
 Generating new SSH public key.
 Uploading ssh public key /home/larry/.ssh/id_rsa.pub
-</code></p>
-
-<p>In order for Heroku to figure out what ruby gems are needed to run your application, you need to specify a Gemfile. It&rsquo;s wise to specify a specific version of Ruby, and it&rsquo;s also a good idea to keep the gems' versions close to the state you developed with. For the <a href="/blog/categories/pokephile">Pokephile</a> application created in this series, this is my Gemfile:</p>
-
-<p>``` ruby project/Gemfile
-source :rubygems</p>
-
-<p>ruby &lsquo;1.9.3&rsquo;</p>
-
-<p>gem &lsquo;sinatra&rsquo;, &lsquo;~>1.3.2&rsquo;
-gem &lsquo;haml&rsquo;, &lsquo;~>3.1.6&rsquo;
-gem &lsquo;mongoid&rsquo;, &lsquo;~>3.0.14&rsquo;</p>
-
-<p>group :development, :test do</p>
-
-<pre><code>gem 'capybara', '~&gt;2.0.1'
-gem 'rspec', '~&gt;2.11.0'
-gem 'nokogiri', '~&gt;1.5.5'
 </code></pre>
 
-<p>end
-```</p>
+<p>In order for Heroku to figure out what ruby gems are needed to run your application, you need to specify a Gemfile. It&rsquo;s wise to specify a specific version of Ruby, and it&rsquo;s also a good idea to keep the gems&#8217; versions close to the state you developed with. For the <a href="/blog/categories/pokephile">Pokephile</a> application created in this series, this is my Gemfile:</p>
+
+<pre><code class="ruby project/Gemfile">source :rubygems
+
+ruby '1.9.3'
+
+gem 'sinatra', '~&gt;1.3.2'
+gem 'haml', '~&gt;3.1.6'
+gem 'mongoid', '~&gt;3.0.14'
+
+group :development, :test do
+    gem 'capybara', '~&gt;2.0.1'
+    gem 'rspec', '~&gt;2.11.0'
+    gem 'nokogiri', '~&gt;1.5.5'
+end
+</code></pre>
 
 <p>First I specify a source for my gems: &lsquo;rubygems&rsquo; defaults to &ldquo;<a href="http://rubygems.org">http://rubygems.org</a>&rdquo; and hasn&rsquo;t failed me yet. Next I specify that I want to use Ruby 1.9.3, a necessity because Mongoid 3.x doesn&rsquo;t work correctly with 1.9.2. The versions of the first three gems were chosen by typing the following in the command line to determine which version I had installed on my machine:</p>
 
-<p><code>bash
-$ gem query | grep 'sinatra\|haml\|mongoid'
+<pre><code class="bash">$ gem query | grep 'sinatra\|haml\|mongoid'
 haml (3.1.7, 3.1.6)
 mongoid (3.0.17, 3.0.15, 3.0.14)
 sinatra (1.3.3, 1.3.2)
 sinatra-contrib (1.3.2)
 sinatra-reloader (1.0)
-</code></p>
+</code></pre>
 
 <p>The &lsquo;~>&rsquo; operator tells Bundler to use greater-than-equal but stop before next highest version. So, for Sinatra &lsquo;~>1.3.2&rsquo; means that Bundler will accept anything greater-than-or-equal-to &lsquo;1.3.2&rsquo; and less than &lsquo;1.4.0.&rsquo; I tend to rely on the &lsquo;~>&rsquo; operator so I can be sure no APIs are changed in my gems.</p>
 
@@ -283,117 +244,99 @@ sinatra-reloader (1.0)
 
 <p>For this Gemfile to be meaningful, we need to use a program called <a href="http://gembundler.com/">Bundler</a> to &ldquo;bundle&rdquo; the gems and their dependencies in a Gemfile.lock file.</p>
 
-<p><code>bash
-$ pwd
+<pre><code class="bash">$ pwd
 project/
 $ sudo apt-get install bundler
 ...
 $ bundle install
 ...
 Your bundle is complete! Use `bundle show [gemname]` to see where a bundled gem is installed.
-</code></p>
+</code></pre>
 
 <p>Running bundler will create a Gemfile.lock file and make sure your system has the specified gems. If some gems are missing or need new versions to be installed, bundler will ask the user for their password to get the required gems.</p>
 
 <p>The next step for setting things up is to set up Git. If your application is already using Git, you only need to commit all files to verify that the Gemfile and Gemfile.lock make it into the repository.</p>
 
-<p><code>bash
-$ cd project/
+<pre><code class="bash">$ cd project/
 $ git init
 $ git add .
 $ git commit -m "Initial commit."
-</code></p>
+</code></pre>
 
 <p>Now we create a Heroku project and give it a meaningful name. If you can&rsquo;t think of a meaningful name, use &lsquo;heroku create&rsquo; and Heroku will come up with something for you.</p>
 
-<p><code>bash
-$ heroku create meaningful-name
+<pre><code class="bash">$ heroku create meaningful-name
 Creating meaningful-name... done, stack is cedar
 http://meaningful-name.herokuapp.com/ | git@heroku.com:meaningful-name.git
 Git remote heroku added
-</code></p>
+</code></pre>
 
 <p>We&rsquo;re almost there. Because we included accessing Mongo databases in our application, we have to take care of that on the web. The easiest way to do that is using a Heroku Add-on. At this time, there are two major Heroku Add-ons for Mongo databases: <a href="https://addons.heroku.com/mongolab">MongoLab</a> and <a href="https://addons.heroku.com/mongohq">MongoHQ</a>. Both services have a starter service for $0/month, which is pretty awesome in my opinion. I flipped a coin and picked MongoLab for this application. Adding the add-on to our project:</p>
 
-<p><code>bash
-$ heroku addons:add mongolab:starter
-</code></p>
+<pre><code class="bash">$ heroku addons:add mongolab:starter
+</code></pre>
 
 <p>If you haven&rsquo;t already, Heroku will ask you to &ldquo;verify your account&rdquo; before continuing. This means that you have to put in some credit card information. Note that you will not be charged, I guess Heroku just wants some indication that you might eventually pay for something. After you put in your credit card information, you may need to run the above command again.</p>
 
 <p>Now that MongoLab is set up on the server-side, we need to tell Mongoid how to connect to that server. The following command will give you the environment variable needed to connect to the server:</p>
 
-<p><code>bash
-$ heroku config | grep MONGOLAB_URI
-</code></p>
+<pre><code class="bash">$ heroku config | grep MONGOLAB_URI
+</code></pre>
 
 <p>Now we update our mongoid.yml file to use that string:</p>
 
-<p>``` yml project/mongoid.yml
-development:
-  sessions:</p>
-
-<pre><code>default:
-  database: dev
-  hosts:
-    - localhost
-</code></pre>
-
-<p>  options:</p>
-
-<p>test:
-  sessions:</p>
-
-<pre><code>default:
-  database: test
-  hosts:
-    - localhost
-</code></pre>
-
-<p>production:
-  sessions:</p>
-
-<pre><code>default:
-  uri: &lt;%= ENV['MONGOLAB_URI'] %&gt;
+<pre><code class="yml project/mongoid.yml">development:
+  sessions:
+    default:
+      database: dev
+      hosts:
+        - localhost
   options:
-    skip_version_check: true
-    safe: true
-</code></pre>
 
-<p>```</p>
+test:
+  sessions:
+    default:
+      database: test
+      hosts:
+        - localhost
+
+production:
+  sessions:
+    default:
+      uri: &lt;%= ENV['MONGOLAB_URI'] %&gt;
+      options:
+        skip_version_check: true
+        safe: true
+</code></pre>
 
 <p>Because of the way my application works, I want to prepopulate the database with some Pokemon.</p>
 
-<p><code>`` bash
-$ export MONGOLAB_URI=</code>heroku config | grep MONGOLAB_URI | cut -c 15-`
+<pre><code class="bash">$ export MONGOLAB_URI=`heroku config | grep MONGOLAB_URI | cut -c 15-`
 $ pwd
 project/
 $ cd tools/populate
-$ irb</p>
-
-<blockquote><blockquote><p>require &lsquo;./populater&rsquo;
+$ irb
+&gt;&gt; require './populater'
 true
-require &lsquo;mongoid&rsquo;
+&gt;&gt; require 'mongoid'
 true
-Mongoid.load! &lsquo;../../mongoid.yml&rsquo;, :production
-{&ldquo;sessions&rdquo;=>{&ldquo;default&rdquo;=>{&ldquo;uri&rdquo;=>nil, &ldquo;options&rdquo;=>{&ldquo;skip_version_check&rdquo;=>true, &ldquo;safe&rdquo;=>true}}}}
-Populater.new.add_pokemon 1000
+&gt;&gt; Mongoid.load! '../../mongoid.yml', :production
+{"sessions"=&gt;{"default"=&gt;{"uri"=&gt;nil, "options"=&gt;{"skip_version_check"=&gt;true, "safe"=&gt;true}}}}
+&gt;&gt; Populater.new.add_pokemon 1000
 nil
-```</p></blockquote></blockquote>
+</code></pre>
 
 <p>With the production database populated, we need to set an environment variable in our production application defining the environment.</p>
 
-<p><code>bash
-$ heroku config:add MONGOID_ENV=production
-</code></p>
+<pre><code class="bash">$ heroku config:add MONGOID_ENV=production
+</code></pre>
 
 <p>Now that we&rsquo;ve made changes to the mongoid.yml file, we should commit again and push to Heroku.</p>
 
-<p><code>bash
-$ git commit -a -m "Updating mongoid.yml file for production"
+<pre><code class="bash">$ git commit -a -m "Updating mongoid.yml file for production"
 ...
 $ git push heroku master
-</code></p>
+</code></pre>
 
 <p>And that&rsquo;s it! Check your Heroku URL to make sure everything looks okay and call it a day, or make some upgrades as I did for my <a href="http://pokephile.herokuapp.com">personal version of this project</a>.</p>
 ]]></content>

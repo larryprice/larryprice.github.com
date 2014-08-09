@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="During SEP&rsquo;s previous startup weekend, I pitched an idea for a Trello Analysis Tool called Ollert. In less than three days, a team of 6 built a &hellip;">
+  <meta name="description" content="It&rsquo;s incredible how easy it is to send emails through a web application, there&rsquo;s no wonder we get so much spam. Assuming we have a ruby &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://larry-price.com/blog/page/2">
+  <link rel="canonical" href="http://larry-price.com/posts/2">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Larry Price" type="application/atom+xml">
@@ -86,6 +86,348 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/">Sending Emails With Pony and Sendgrid</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-08T05:53:26-04:00" pubdate data-updated="true">Jul 8<sup>th</sup>, 2014</time>
+        
+           | <a href="/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/#disqus_thread"
+             data-disqus-identifier="http://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>It&rsquo;s incredible how easy it is to send emails through a web application, there&rsquo;s no wonder we get so much spam. Assuming we have a <a href="http://ruby-lang.org">ruby</a> app using <a href="http://sinatrarb.com">Sinatra</a>, <a href="http://adam.herokuapp.com/past/2008/11/2/pony_the_express_way_to_send_email_from_ruby/">Pony</a> is one of the easiest ways to get started with your own spam empire.</p>
+
+<p>Installation is, as always, trivial with ruby. Install the gem with <code>gem install pony</code> or add <code>gem pony</code> to your <code>Gemfile</code> and run <code>bundle install</code>.</p>
+
+<p>I like to configure Pony in my application&rsquo;s <code>configure</code> block. I could also add it to my <code>config.ru</code>, but I like to keep that file as tiny as posible to avoid having configuration code all over the place.</p>
+
+<figure class='code'><figcaption><span>web.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># ...</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;pony&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Application</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">configure</span> <span class="k">do</span>
+</span><span class='line'>    <span class="c1"># ...</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="no">Pony</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>      <span class="ss">:via</span> <span class="o">=&gt;</span> <span class="ss">:smtp</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">:via_options</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>        <span class="ss">:address</span> <span class="o">=&gt;</span> <span class="s1">&#39;smtp.sendgrid.net&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:port</span> <span class="o">=&gt;</span> <span class="s1">&#39;587&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:domain</span> <span class="o">=&gt;</span> <span class="s1">&#39;myapp.com&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:user_name</span> <span class="o">=&gt;</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;SENDGRID_USERNAME&#39;</span><span class="o">]</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:password</span> <span class="o">=&gt;</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;SENDGRID_PASSWORD&#39;</span><span class="o">]</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:authentication</span> <span class="o">=&gt;</span> <span class="ss">:plain</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:enable_starttls_auto</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This block tells Pony to use the <a href="http://sendgrid.com/">SendGrid</a> server to send mail, use the &ldquo;myapp.com&rdquo; HELO domain, and dig up the username and password fields from my environment.</p>
+
+<p>If you&rsquo;re using <a href="https://heroku.com">Heroku</a> to host your application, you can <a href="https://addons.heroku.com/sendgrid">sign up for a SendGrid account through your Heroku app</a>, which gives you instant access to your SendGrid account. The <code>username</code> and <code>password</code> field you need to fill in your environment are automatically populated in your Heroku config, which you can view by running <code>heroku config</code> for your application. The free account gets you up to 200 emails a day.</p>
+
+<p>Since I might have multiple developers working in my source code and testing the email-sending functionality, I have all the developers <a href="https://sendgrid.com/user/signup">sign up for their own free SendGrid account</a>. This should help to alleviate some of the email volume from any particular account while developing. After signing up, it took my account nearly 4 hours to be &ldquo;provisioned&rdquo; (see: approved) by the SendGrid team. Once you&rsquo;re approved you can start sending emails using your developer account credentials. I stick my username/password in my local <code>.env</code> file (another reason to make sure you&rsquo;re not storing your environment on your server or in your git repo).</p>
+
+<p>So let&rsquo;s actually send an email. Let&rsquo;s create a route that sends an email to verify a new user account; I&rsquo;ll take some liberties by saying we have a <code>User</code> model defined already that generates a signup verification hash. I can tell pony to send a plaintext body through the <code>body</code> option and an HTML body through the <code>html_body</code> option.</p>
+
+<figure class='code'><figcaption><span>web.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># ...</span>
+</span><span class='line'><span class="n">post</span> <span class="s1">&#39;/signup&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create!</span> <span class="n">params</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">request</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/account/reset/</span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">generate_verification_hash</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="no">Pony</span><span class="o">.</span><span class="n">mail</span><span class="p">(</span>
+</span><span class='line'>    <span class="ss">to</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">from</span><span class="p">:</span> <span class="s2">&quot;MyApp Help Desk &lt;noreply@myapp.com&gt;&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">subject</span><span class="p">:</span> <span class="s2">&quot;MyApp Account Verification&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">body</span><span class="p">:</span> <span class="s2">&quot;A request has been made to verify your MyApp account (https://myapp.com).&quot;</span> <span class="o">+</span>
+</span><span class='line'>          <span class="s2">&quot;If you made this request, go to &quot;</span> <span class="o">+</span> <span class="n">url</span> <span class="o">+</span> <span class="s2">&quot;. If you did not make this request, ignore this email.&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">html_body</span><span class="p">:</span> <span class="n">haml</span><span class="p">(</span>
+</span><span class='line'>      <span class="ss">:verify_account_email</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">layout</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">locals</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="ss">email</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">date</span><span class="p">:</span> <span class="no">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S%P %B %d, %Y&quot;</span><span class="p">),</span>
+</span><span class='line'>        <span class="ss">ip</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">ip</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">url</span><span class="p">:</span> <span class="n">url</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>  <span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>views/verify_account_email.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  Hello!
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  An account verification has been requested for your new &lt;a href=&quot;https://myapp.com&quot;&gt;MyApp&lt;/a&gt; account.
+</span><span class='line'>
+</span><span class='line'><span class="nt">%ul</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    Username: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:email</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    Time: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:date</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    IP address: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:ip</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  If you made this request, click the link below or copy-paste the following URL into your browser to verify your account:
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  <span class="nt">%a</span><span class="p">{</span><span class="ss">href</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:url</span><span class="o">]</span><span class="si">}</span>&quot;, alt: &quot;Verify&quot;, title: &quot;Click to verify account&quot;}
+</span><span class='line'>    <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:url</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  If you did not request this new account, please ignore this email.
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  Sincerely,
+</span><span class='line'>  <span class="nt">%br</span>
+</span><span class='line'>  Team MyApp
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  This email account is not monitored and will not receive replies. For more information, contact &lt;a href=&quot;mailto:connect@myapp.com&quot;&gt;connect@myapp.com&lt;/a&gt;.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When you have a user hit this route, an email will be sent to the user with the given subject, to, from, and body fields using the configuration parameters given in the previous <code>configure</code> block. Fast, easy, and, best of all, no <code>sendmail</code> configuration.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">Deauthorizing Token With the Trello Client</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-07T05:59:13-04:00" pubdate data-updated="true">Jul 7<sup>th</sup>, 2014</time>
+        
+           | <a href="/blog/2014/07/07/deauthorizing-token-with-the-trello-client/#disqus_thread"
+             data-disqus-identifier="http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In my <a href="https://ollertapp.com">application</a>, a user can connect to Trello without logging in. Whenever this &ldquo;anonymous&rdquo; user hits the landing page, I attempt to force the <a href="https://trello.com/docs/gettingstarted/clientjs.html">Trello client</a> to authorize the user again. By doing this, the user can return to the landing page whenever he or she likes to switch usernames. My authorize code looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">AuthenticateTrelloAlways</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">Trello</span><span class="p">.</span><span class="nx">authorize</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Ollert&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;popup&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">interactive</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">expiration</span><span class="o">:</span> <span class="s2">&quot;1hour&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">persist</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">success</span><span class="o">:</span> <span class="nx">onAuthorizeSuccessful</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">scope</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This works oh-so-wonderfully in Chrome and Firefox, but, even during the hackathon which spawned <a href="https://ollertapp.com">Ollert</a>, we noticed that IE10/11 were causing some unexpected issues. Authorization would work the first time the user hit the landing page, but on subsequent visits telling Trello to Allow or Deny access resulted in the popup showing a white screen and never calling my callback function. Closing and reopening IE would allow me to authorize once, presumably until the &ldquo;1hour&rdquo; that I requested the original token for expired. I also verified this problem existed in IE9.</p>
+
+<p>After several hours tweeting obscenities about IE, I stumbled upon the answer while browsing the source code for Trello&rsquo;s <a href="https://trello.com/1/client.coffee">client.coffee</a>. About one third of the way through the code, I found this function:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">#</span> <span class="nx">Clear</span> <span class="nx">any</span> <span class="nx">existing</span> <span class="nx">authorization</span>
+</span><span class='line'><span class="nx">deauthorize</span><span class="o">:</span> <span class="o">-&gt;</span>
+</span><span class='line'>  <span class="nx">token</span> <span class="o">=</span> <span class="kc">null</span>
+</span><span class='line'>  <span class="nx">writeStorage</span><span class="p">(</span><span class="s2">&quot;token&quot;</span><span class="p">,</span> <span class="nx">token</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">return</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>All this code does is unset the class variable <code>token</code> and unset the local store variable of the same name. So I changed my <code>AuthenticateTrelloAlways()</code> method:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">AuthenticateTrelloAlways</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">Trello</span><span class="p">.</span><span class="nx">deauthorize</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">Trello</span><span class="p">.</span><span class="nx">authorize</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Ollert&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;popup&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">interactive</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">expiration</span><span class="o">:</span> <span class="s2">&quot;1hour&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">persist</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">success</span><span class="o">:</span> <span class="nx">onAuthorizeSuccessful</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">scope</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Voilà. Why does this only happen in IE? I was originally going to blame the local store, but, since I was able to reproduce the defect in IE9 (no HTML5), I no longer believe that to be the case. I&rsquo;m currently resigned to chalk it up as IE just being IE.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/06/12/lessons-learned-during-the-conception-of-ollert/">Lessons Learned During the Conception of Ollert</a></h1>
     
     
@@ -102,7 +444,7 @@
   
 
 
-<time datetime="2014-06-12T20:32:00-04:00" pubdate data-updated="true">Jun 12<span>th</span>, 2014</time>
+<time datetime="2014-06-12T20:32:00-04:00" pubdate data-updated="true">Jun 12<sup>th</sup>, 2014</time>
         
            | <a href="/blog/2014/06/12/lessons-learned-during-the-conception-of-ollert/#disqus_thread"
              data-disqus-identifier="http://larry-price.com/blog/2014/06/12/lessons-learned-during-the-conception-of-ollert/">Comments</a>
@@ -181,7 +523,7 @@
   
 
 
-<time datetime="2014-06-04T06:19:43-04:00" pubdate data-updated="true">Jun 4<span>th</span>, 2014</time>
+<time datetime="2014-06-04T06:19:43-04:00" pubdate data-updated="true">Jun 4<sup>th</sup>, 2014</time>
         
            | <a href="/blog/2014/06/04/jasmine-a-whole-new-world-of-javascript-testing/#disqus_thread"
              data-disqus-identifier="http://larry-price.com/blog/2014/06/04/jasmine-a-whole-new-world-of-javascript-testing/">Comments</a>
@@ -655,7 +997,7 @@
   
 
 
-<time datetime="2014-05-25T15:44:55-04:00" pubdate data-updated="true">May 25<span>th</span>, 2014</time>
+<time datetime="2014-05-25T15:44:55-04:00" pubdate data-updated="true">May 25<sup>th</sup>, 2014</time>
         
            | <a href="/blog/2014/05/25/git-out-the-way-rebase-workflow/#disqus_thread"
              data-disqus-identifier="http://larry-price.com/blog/2014/05/25/git-out-the-way-rebase-workflow/">Comments</a>
@@ -721,427 +1063,13 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/14/takeaways-from-agileindy-2014/">Takeaways From AgileIndy 2014</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-14T20:59:00-04:00" pubdate data-updated="true">May 14<span>th</span>, 2014</time>
-        
-           | <a href="/blog/2014/05/14/takeaways-from-agileindy-2014/#disqus_thread"
-             data-disqus-identifier="http://larry-price.com/blog/2014/05/14/takeaways-from-agileindy-2014/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="//agileindy.org/conference/">The AgileIndy Conference 2014</a> has come and gone. I wasn&rsquo;t sure what to expect, since it was my first conference, but I came out of it feeling rather positive.</p>
-
-<p>A short list of my favorite things from this year&rsquo;s AgileIndy:</p>
-
-<ul>
-<li>Interesting speakers</li>
-<li>Good food</li>
-<li>Uncomfortable chairs</li>
-<li><a href="//twitter.com/search?q=%23agileindy14&amp;src=hash">#agileindy14</a></li>
-<li>Free booze</li>
-<li>Lots of coffee</li>
-<li>Champion dogs</li>
-</ul>
-
-
-<p>Good times. Personally, I found the first half of the day to be superior to the afternoon. I&rsquo;m not sure if it was the speakers or if I&rsquo;m just a morning person, but I&rsquo;m much more interested in discussing what the morning speakers had to say.</p>
-
-<h3>The Dude</h3>
-
-<blockquote><p>We&rsquo;ve got hard problems to solve, we don&rsquo;t need aphorisms, we don&rsquo;t need truisms.
-&mdash; David Hussman</p></blockquote>
-
-<p>The event started out with the self-proclaimed &ldquo;Dude,&rdquo; <a href="//devjam.com/">David Hussman of DevJam</a>. I&rsquo;ve previously had some training involving Mr Hussman at <a href="//sep.com">SEP</a>, during which we had trouble explaining our relationship with Agile: gargantuan project, lots of devs, massive codebase, hour-long builds, and an immature implementation of the so-called Scalable Agile Framework. I thought I knew what to expect during this talk, but I was delightfully mistaken. Everything Hussman said during his keynote fit with the conversations I&rsquo;ve been having with my current teammates.</p>
-
-<p>Hussman talked about &ldquo;process mass,&rdquo; or the weight that you carry as you gain more and more process on a project. &ldquo;Measure your success by evidence, not by adherence&rdquo; to the process. What good is completing a story if you don&rsquo;t have anything to show for it, or if you don&rsquo;t have the quality to back it up? Hussman discussed scrum, and the ridiculous concept of &ldquo;scrum of scrums,&rdquo; and potentially even a &ldquo;scrum of scrum of scrums.&rdquo; In his own words, &ldquo;At some point you have to have something other than a naming convention.&rdquo; Getting stuff done and feeling satisfied with your work is much more important than being able to audit the lifetime of a story, or what day of the week your team gets the most done, or how many meetings your ScrumMaster goes to.</p>
-
-<p>Speaking of ScrumMasters (and Product Owners and Tech Leads for that matter), the Dude wants us to think critically about these roles. Why are Scrum Masters and Tech Leads in meetings all day? A Tech Lead mosies into standup in the morning just to say, &ldquo;Yesterday I was in meetings all day, today I&rsquo;m in meetings all day, no blockers.&rdquo; &ldquo;Somehow [we&rsquo;ve] bonded the process to the people,&rdquo; using process to hold team members hostage. We&rsquo;ve found ourselves turning Agile into a bloated mess, and we&rsquo;re in need of people to relieve the pressure.</p>
-
-<h3>Estimation</h3>
-
-<p>During the first break-out session, <a href="//vance.com/">Steve Vance</a> talked about estimation, one of my favorite topics to complain about.</p>
-
-<p>We started out by defining terms. Unfortunately, we use the word &ldquo;estimation&rdquo; to mean almost anything, from the very precise to the very vague. We &ldquo;estimate&rdquo; in T-shirt sizes, story points, days, and hours. We all mean something different when we make an estimation; it all boils down to an opinion. &ldquo;The work is going to take what it takes,&rdquo; and everyone has an opinion on how long that is.</p>
-
-<p>I mentioned hours in the above paragraph as a unit of estimation. This is a particular pet peeve of mine: I absolutely despise estimating in hours. What do we even mean when we estimate in hours? Vance says, &ldquo;When I say hours as in this is going to take 3 hours, that does not mean 3 clock hours.&rdquo; So what <em>does</em> an hour mean? My current team uses a tool called TFS, which actually forces you to answer this question. So we &ldquo;estimate&rdquo; that Danny Developer will be able to accomplish 5 hours of work every day. We just turned Danny&rsquo;s day into hours on a clock. Now we &ldquo;estimate&rdquo; that a task will take &ldquo;about a day,&rdquo; which translates into 8 hours. Note that <code>1 task day != 1 Danny Day</code>. We&rsquo;re estimating tasks in these very precise units (real-life hours), and poor Danny will probably just work a 10-hour day to finish the task in &ldquo;1 day,&rdquo; which is what the team estimated the task would take.</p>
-
-<p>T-shirt sizing or story points should be able to alleviate these problems, but we have to be vigilant not to concretely define these terms. Estimates should always be relative to yesterday&rsquo;s weather and not based on real time frames. Once you&rsquo;ve defined a 5-point story as taking exactly 5 days, you&rsquo;ve destroyed the whole system and you might as well start estimating in hours again.</p>
-
-<h3>Anti-fragility</h3>
-
-<p><a href="//salhir.wordpress.com">Si Alhir</a> discussed the principles of &ldquo;anti-fragility&rdquo; during the pre-lunch session. Anti-fragility is a post-Agile concept. That&rsquo;s right: <em>post-Agile</em>. I know you were just getting used to Agile, but it seems that we&rsquo;ve created a monster that&rsquo;s getting harder and harder to control. Teams find themselves saying &ldquo;They&rsquo;re not Agile, we&rsquo;re Agile&rdquo; when describing the pitfalls of other teams.</p>
-
-<p>So what is anti-fragility? It&rsquo;s easier to define in relative terms. Traditional teams are hurt by change and actively resist change; Agile teams embrace change and are able to inspect and adapt to it; Anti-Fragile teams embrace disorder and are able to adapt and evolve to chaos. &ldquo;Fragile teams want tranquility,&rdquo; while anti-fragile teams &ldquo;gain from stress.&rdquo; Anti-fragility involves shifting from focusing on avoiding risk to focusing on overcoming risk.</p>
-
-<p>&ldquo;What have you removed?&rdquo; Si asks, reiterating Hussman from earlier in the day. &ldquo;More rules, more process causes more fragility.&rdquo; As our Agile teams add process, this becomes more evident. &ldquo;Dependency,&rdquo; &ldquo;the line between dev and test&rdquo;, and &ldquo;centralized power&rdquo; all cause fragility. Sprint cycles every 1-2 weeks cause a constant stress, which &ldquo;will kill you, numb you.&rdquo; Anti-fragile teams prefer &ldquo;acute stress with recovery time&rdquo; caused by overcoming risk as it materializes. The so-called ScrumMaster of an Agile team is protecting the team from risk, contributing to the overall fragility of the team.</p>
-
-<p>&ldquo;The most fragile thing in the Agile world is teams,&rdquo; Si insists. &ldquo;Consistent, co-located teams.&rdquo; Teams should be able to be disbanded and created at-will or &ldquo;just in time&rdquo; as the need arises. Teams are created to attack &ldquo;focal points,&rdquo; or areas that need attention right away. This is an especially hard pill to swallow, since many of us like the familial feeling that comes with long-term teams. Not to mention the nightmares of billing if you&rsquo;re a consulting company.</p>
-
-<h3>Conclusion</h3>
-
-<p>There were a few other speakers at the conference, but none hit quite as close to home as the three I&rsquo;ve discussed. Overall a very interesting conference and a very fun experience. I&rsquo;m excited to think about these ideas and I&rsquo;d like to attempt to use some of them to make my teams more efficient and maybe even a little happier. It looks like the general flow is to move away from massive amounts of process, working more like Lean Startup or Anti-fragile teams.</p>
-
-<p>A decade from now, we&rsquo;ll be living in a post-anti-fragile world wondering what on earth we were thinking in this world of rules, definitions, estimations, and process.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/13/better-testing-in-go-with-gocheck/">Better Testing in Go With Gocheck</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-13T21:14:39-04:00" pubdate data-updated="true">May 13<span>th</span>, 2014</time>
-        
-           | <a href="/blog/2014/05/13/better-testing-in-go-with-gocheck/#disqus_thread"
-             data-disqus-identifier="http://larry-price.com/blog/2014/05/13/better-testing-in-go-with-gocheck/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>As a quick reminder, <a href="//golang.org/">golang</a> is a really fun programming language to use. It even includes <a href="//golang.org/doc/code.html#Testing">testing out of the box</a>! Unfortunately, this out-of-the-box testing framework isn&rsquo;t all that great. It lacks the syntactic sugar of mature frameworks like <a href="//rspec.info">rspec</a> or <a href="//code.google.com/p/googletest/">gtest</a>.</p>
-
-<p>Of course, there are alternatives. I found an open-source library (licensed with Simplified BSD) called <a href="//labix.org/gocheck">gocheck</a>.</p>
-
-<p>Gocheck, how do I love thee? Let me count the ways:</p>
-
-<ul>
-<li>Test fixtures</li>
-<li>Improved assertions</li>
-<li>Improved test output</li>
-<li>Sugar-coated syntax</li>
-<li>Test skipping</li>
-<li>Oh my</li>
-</ul>
-
-
-<p>As usual, it&rsquo;s time to guide you through a contrived example. Start by installing the package:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>go get gopkg.in/check.v1
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Let&rsquo;s see, what should we make&hellip; how about a tip calculating library? We should start by testing, because we&rsquo;re obsessed with TDD.</p>
-
-<p>Test #1: Returns 0 for free meal</p>
-
-<figure class='code'><figcaption><span>calculator_test.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">cheapskate</span>
-</span><span class='line'>
-</span><span class='line'><span class="kn">import</span> <span class="p">(</span>
-</span><span class='line'>  <span class="s">&quot;testing&quot;</span>
-</span><span class='line'>  <span class="p">.</span> <span class="s">&quot;gopkg.in/check.v1&quot;</span>
-</span><span class='line'><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// Hook up gocheck into the &quot;go test&quot; runner.</span>
-</span><span class='line'><span class="kd">func</span> <span class="nx">Test</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span> <span class="nx">TestingT</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">type</span> <span class="nx">MySuite</span> <span class="kd">struct</span><span class="p">{}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">var</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">Suite</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">MySuite</span><span class="p">{})</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">MySuite</span><span class="p">)</span> <span class="nx">TestReturns0ForFreeMeal</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">C</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">c</span><span class="p">.</span><span class="nx">Assert</span><span class="p">(</span><span class="nx">calculateTip</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span> <span class="nx">Equals</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Not quite as obvious as the internal testing framework. First we hook up gocheck into the &ldquo;go test&rdquo; runner. Then we create a test suite; ours is empty for now and called <code>MySuite</code>. We call <code>Suite</code> to intialize the test runner with our custom suite. We then write our first test to assert that calculating the tip returns a value equal to 0. All tests must be prefixed with the word &ldquo;Test&rdquo;. Now I&rsquo;ll write the implementation:</p>
-
-<figure class='code'><figcaption><span>calculator.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">cheapskate</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="nx">calculateTip</span><span class="p">(</span><span class="nx">bill</span> <span class="kt">float64</span><span class="p">)</span> <span class="kt">float64</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="mf">0.0</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Running the tests&hellip;</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>go <span class="nb">test</span>
-</span><span class='line'>OK: 1 passed
-</span><span class='line'>PASS
-</span><span class='line'>ok    _/home/lrp/Projects/2014/gocheck-quick  0.003s
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Woohoo! All passed. What happens if we write a failing test?</p>
-
-<figure class='code'><figcaption><span>calculator_test.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="o">...</span>
-</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">MySuite</span><span class="p">)</span> <span class="nx">TestReturns15PercentByDefault</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">C</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">c</span><span class="p">.</span><span class="nx">Assert</span><span class="p">(</span><span class="nx">calculateTip</span><span class="p">(</span><span class="mf">100.0</span><span class="p">),</span> <span class="nx">Equals</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">)</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Results:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>lrp@cilantro:~/Projects/2014/gocheck-quick<span class="nv">$ </span>go <span class="nb">test</span>
-</span><span class='line'>
-</span><span class='line'>----------------------------------------------------------------------
-</span><span class='line'>FAIL: calculator_test.go:19: MySuite.TestReturns15PercentByDefault
-</span><span class='line'>
-</span><span class='line'>calculator_test.go:20:
-</span><span class='line'>    c.Assert<span class="o">(</span>calculateTip<span class="o">(</span>100.0<span class="o">)</span>, Equals, 15.0<span class="o">)</span>
-</span><span class='line'>... obtained <span class="nv">float64</span> <span class="o">=</span> 0
-</span><span class='line'>... expected <span class="nv">float64</span> <span class="o">=</span> 15
-</span><span class='line'>
-</span><span class='line'>OOPS: 1 passed, 1 FAILED
-</span><span class='line'>--- FAIL: Test <span class="o">(</span>0.00 seconds<span class="o">)</span>
-</span><span class='line'>FAIL
-</span><span class='line'><span class="nb">exit </span>status 1
-</span><span class='line'>FAIL  _/home/lrp/Projects/2014/gocheck-quick  0.003s
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>A nasty failure that one. I&rsquo;ll fix it and continue:</p>
-
-<figure class='code'><figcaption><span>calculator.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">cheapskate</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="nx">calculateTip</span><span class="p">(</span><span class="nx">bill</span> <span class="kt">float64</span><span class="p">)</span> <span class="kt">float64</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="mf">.15</span> <span class="o">*</span> <span class="nx">bill</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I want to create a Setup method for my entire suite. I&rsquo;ll store some silly information there for information&rsquo;s sake. The minBill and maxBill variables will only be set when I first load the suite.</p>
-
-<figure class='code'><figcaption><span>calculator_test.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">cheapskate</span>
-</span><span class='line'>
-</span><span class='line'><span class="kn">import</span> <span class="p">(</span>
-</span><span class='line'>  <span class="s">&quot;testing&quot;</span>
-</span><span class='line'>  <span class="p">.</span> <span class="s">&quot;gopkg.in/check.v1&quot;</span>
-</span><span class='line'><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// Hook up gocheck into the &quot;go test&quot; runner.</span>
-</span><span class='line'><span class="kd">func</span> <span class="nx">Test</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span> <span class="nx">TestingT</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">type</span> <span class="nx">MySuite</span> <span class="kd">struct</span><span class="p">{</span>
-</span><span class='line'>  <span class="nx">minBill</span> <span class="kt">float64</span>
-</span><span class='line'>  <span class="nx">maxBill</span> <span class="kt">float64</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">MySuite</span><span class="p">)</span> <span class="nx">SetUpSuite</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">C</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">s</span><span class="p">.</span><span class="nx">minBill</span> <span class="p">=</span> <span class="mi">0</span>
-</span><span class='line'>  <span class="nx">s</span><span class="p">.</span><span class="nx">maxBill</span> <span class="p">=</span> <span class="mi">100</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">var</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">Suite</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">MySuite</span><span class="p">{})</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">MySuite</span><span class="p">)</span> <span class="nx">TestReturns0ForFreeMeal</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">C</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">c</span><span class="p">.</span><span class="nx">Assert</span><span class="p">(</span><span class="nx">calculateTip</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">minBill</span><span class="p">),</span> <span class="nx">Equals</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">MySuite</span><span class="p">)</span> <span class="nx">TestReturns15PercentByDefault</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">C</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">c</span><span class="p">.</span><span class="nx">Assert</span><span class="p">(</span><span class="nx">calculateTip</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">maxBill</span><span class="p">),</span> <span class="nx">Equals</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">)</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>What if I wanted to set some information at the start of each test? I&rsquo;ll log the current test number on the suite, updating it every time I run a test:</p>
-
-<figure class='code'><figcaption><span>calculator_test.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">cheapskate</span>
-</span><span class='line'>
-</span><span class='line'><span class="kn">import</span> <span class="p">(</span>
-</span><span class='line'>  <span class="s">&quot;testing&quot;</span>
-</span><span class='line'>  <span class="p">.</span> <span class="s">&quot;gopkg.in/check.v1&quot;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="s">&quot;fmt&quot;</span>
-</span><span class='line'><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// Hook up gocheck into the &quot;go test&quot; runner.</span>
-</span><span class='line'><span class="kd">func</span> <span class="nx">Test</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span> <span class="nx">TestingT</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">type</span> <span class="nx">MySuite</span> <span class="kd">struct</span><span class="p">{</span>
-</span><span class='line'>  <span class="nx">testNumber</span> <span class="kt">int</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">MySuite</span><span class="p">)</span> <span class="nx">SetUpTest</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">C</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">testNumber</span><span class="p">)</span>
-</span><span class='line'>  <span class="nx">s</span><span class="p">.</span><span class="nx">testNumber</span> <span class="o">+=</span> <span class="mi">1</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="o">...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Result:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>go <span class="nb">test</span>
-</span><span class='line'>0
-</span><span class='line'>1
-</span><span class='line'>OK: 2 passed
-</span><span class='line'>PASS
-</span><span class='line'>ok    _/home/lrp/Projects/2014/gocheck-quick  0.004s
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You can create tear down methods for suites and tests in the same manner, replacing the appropriate words above.</p>
-
-<p>There&rsquo;s loads of other cool stuff gocheck can do, I&rsquo;ve barely scratched the surface with what little experience I&rsquo;ve had using it. Like any testing framework, I&rsquo;m sure it has its advantages and disadvantages, but it sure beats the pants off the off-the-shelf framework Google includes with golang.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
-      <a class="prev" href="/blog/page/3/">&larr; Older</a>
+      <a class="prev" href="3">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
-    <a class="next" href="/">Newer &rarr;</a>
+    <a class="next" href="1">Newer &rarr;</a>
     
   </div>
 </div>
@@ -1164,6 +1092,14 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit/">Testing Through a Trello Connection With Capybara and Webkit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/05/javascript-testing-with-capybara-and-cucumber/">Javascript Testing With Capybara and Cucumber</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install/">Use NVM to Manage Your NodeJS Install</a>
       </li>
     
@@ -1175,19 +1111,11 @@
         <a href="/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber/">Testing Automated Emails With Email-spec in Cucumber</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/">Sending Emails With Pony and Sendgrid</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">Deauthorizing Token With the Trello Client</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 104.0%'>agile</a> <a href='/blog/categories/c-plus-plus' style='font-size: 112.0%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 104.0%'>capybara</a> <a href='/blog/categories/css' style='font-size: 104.0%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 112.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 120.0%'>database</a> <a href='/blog/categories/foreman' style='font-size: 104.0%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 104.0%'>foss</a> <a href='/blog/categories/git' style='font-size: 104.0%'>git</a> <a href='/blog/categories/gmock' style='font-size: 104.0%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 112.0%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 104.0%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 104.0%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 104.0%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 112.0%'>heroku</a> <a href='/blog/categories/html' style='font-size: 108.0%'>html</a> <a href='/blog/categories/internet' style='font-size: 104.0%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 112.0%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 116.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 108.0%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 112.0%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 104.0%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 104.0%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 104.0%'>nodejs</a> <a href='/blog/categories/nokogiri' style='font-size: 104.0%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 108.0%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 104.0%'>nvm</a> <a href='/blog/categories/ollert' style='font-size: 136.0%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 116.0%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 104.0%'>pony</a> <a href='/blog/categories/qmake' style='font-size: 104.0%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 104.0%'>qt</a> <a href='/blog/categories/rails' style='font-size: 104.0%'>rails</a> <a href='/blog/categories/retro' style='font-size: 112.0%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 108.0%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 156.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 112.0%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 104.0%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 104.0%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 132.0%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 104.0%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 128.0%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 104.0%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 104.0%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 116.0%'>testing</a> <a href='/blog/categories/trello' style='font-size: 120.0%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 108.0%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 104.0%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 104.0%'>upstart</a> <a href='/blog/categories/web' style='font-size: 148.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 136.0%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 104.0%'>writeups</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 103.75%'>agile</a> <a href='/blog/categories/c-plus-plus' style='font-size: 111.25%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 111.25%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.75%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 115.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 118.75%'>database</a> <a href='/blog/categories/foreman' style='font-size: 103.75%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.75%'>foss</a> <a href='/blog/categories/git' style='font-size: 103.75%'>git</a> <a href='/blog/categories/gmock' style='font-size: 103.75%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 111.25%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 103.75%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 103.75%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 103.75%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 111.25%'>heroku</a> <a href='/blog/categories/html' style='font-size: 107.5%'>html</a> <a href='/blog/categories/internet' style='font-size: 103.75%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 115.0%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 115.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 107.5%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 111.25%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 103.75%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 103.75%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 103.75%'>nodejs</a> <a href='/blog/categories/nokogiri' style='font-size: 103.75%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 156.25%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 107.5%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 103.75%'>nvm</a> <a href='/blog/categories/ollert' style='font-size: 137.5%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 115.0%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 103.75%'>pony</a> <a href='/blog/categories/qmake' style='font-size: 103.75%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 103.75%'>qt</a> <a href='/blog/categories/rails' style='font-size: 103.75%'>rails</a> <a href='/blog/categories/retro' style='font-size: 111.25%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 107.5%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 160.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 111.25%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 103.75%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 103.75%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 130.0%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 103.75%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 133.75%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 103.75%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 103.75%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 118.75%'>testing</a> <a href='/blog/categories/trello' style='font-size: 122.5%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.5%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 103.75%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 103.75%'>upstart</a> <a href='/blog/categories/web' style='font-size: 145.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 133.75%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 103.75%'>writeups</a> </span>
 </section>
 
 <section>
@@ -1219,7 +1147,22 @@
   <script src="/javascripts/github.js" type="text/javascript"> </script>
 </section>
 
-
+<section>
+  <style>
+    .sidebar-ad { width: 200px; height: 50px; }
+    @media(min-width: 260px) { .sidebar-ad { width: 250px; height: 60px; } }
+    @media(min-width: 280px) { .sidebar-ad { width: 320px; height: 50px; } }
+  </style>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- Sidebar Ad -->
+    <ins class="adsbygoogle sidebar-ad"
+         style="display:inline-block"
+         data-ad-client="ca-pub-6961096698495477"
+         data-ad-slot="8892886941"></ins>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</section>
   
 </aside>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: qt | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/qt/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-02T20:32:12-04:00</updated>
+  <updated>2014-08-09T08:51:32-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -24,12 +24,11 @@
 
 <p>I originally copied my test data using the <code>INSTALLS</code> variable. My data folder is just a directory sitting in the test source called &ldquo;TestData.&rdquo; This solution is fantastic because it works cross-platform.</p>
 
-<p>``` make MyBAProjectTest.pro
-install_it.path = $${OUT_PWD}
-install_it.files += TestData/</p>
+<pre><code class="make MyBAProjectTest.pro">install_it.path = $${OUT_PWD}
+install_it.files += TestData/
 
-<p>INSTALLS += install_it
-```</p>
+INSTALLS += install_it
+</code></pre>
 
 <p>However, this means that if I ever have a clean directory, I have to run <code>make install</code> to install my test data. What a pain! Why bother! Why even write tests when life is this unjust!</p>
 
@@ -37,45 +36,36 @@ install_it.files += TestData/</p>
 
 <p>For Linux, I use <code>cp</code>:</p>
 
-<p><code>make MyBAProjectTest.pro
-QMAKE_POST_LINK += $$quote(cp -rf $${PWD}/TestData $${OUT_PWD})
-</code></p>
+<pre><code class="make MyBAProjectTest.pro">QMAKE_POST_LINK += $$quote(cp -rf $${PWD}/TestData $${OUT_PWD})
+</code></pre>
 
 <p>For Windows, I use <code>xcopy</code>:</p>
 
-<p>``` make MyBAProjectTest.pro
-PWD_WIN = $${PWD}
-PWD_WIN ~= s,/,\,g</p>
-
-<p>QMAKE_POST_LINK += $$quote(mkdir DestFolder)
-QMAKE_POST_LINK += $$quote(xcopy $${PWD_WIN}\TestData $${OUT_PWD_WIN}\TestData /E)
-```</p>
-
-<p>I also want that directory to be deleted when I run <code>make clean</code>. Cleaning up just means adding some commands to the <code>QMAKE_CLEAN</code> directive. I also want to run the appropriate commands whether I&rsquo;m on Unix or Windows without having to modify my <code>.pro</code> file. Wrapping the previous commands in what I call an &ldquo;OS-space&rdquo; will cause those commands to only run in the specified operating system.</p>
-
-<p>``` make MyBAProjectTest.pro
-win32 {</p>
-
-<pre><code>PWD_WIN = $${PWD}
+<pre><code class="make MyBAProjectTest.pro">PWD_WIN = $${PWD}
 PWD_WIN ~= s,/,\\,g
 
 QMAKE_POST_LINK += $$quote(mkdir DestFolder)
 QMAKE_POST_LINK += $$quote(xcopy $${PWD_WIN}\\TestData $${OUT_PWD_WIN}\\TestData /E)
-
-QMAKE_CLEAN += /s /f /q TestData &amp;&amp; rd /s /q TestData
 </code></pre>
 
-<p>}</p>
+<p>I also want that directory to be deleted when I run <code>make clean</code>. Cleaning up just means adding some commands to the <code>QMAKE_CLEAN</code> directive. I also want to run the appropriate commands whether I&rsquo;m on Unix or Windows without having to modify my <code>.pro</code> file. Wrapping the previous commands in what I call an &ldquo;OS-space&rdquo; will cause those commands to only run in the specified operating system.</p>
 
-<p>unix {</p>
+<pre><code class="make MyBAProjectTest.pro">win32 {
+    PWD_WIN = $${PWD}
+    PWD_WIN ~= s,/,\\,g
 
-<pre><code>QMAKE_POST_LINK += $$quote(cp -rf $${PWD}/TestData $${OUT_PWD})
+    QMAKE_POST_LINK += $$quote(mkdir DestFolder)
+    QMAKE_POST_LINK += $$quote(xcopy $${PWD_WIN}\\TestData $${OUT_PWD_WIN}\\TestData /E)
 
-QMAKE_CLEAN += -r TestData
+    QMAKE_CLEAN += /s /f /q TestData &amp;&amp; rd /s /q TestData
+}
+
+unix {
+    QMAKE_POST_LINK += $$quote(cp -rf $${PWD}/TestData $${OUT_PWD})
+
+    QMAKE_CLEAN += -r TestData
+}
 </code></pre>
-
-<p>}
-```</p>
 
 <p>Data copied, tests working again. Take that, Nokia; no matter how difficult you make your build-processing tool, I&rsquo;ll figure out how to contort it to my whims.</p>
 ]]></content>

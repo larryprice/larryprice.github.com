@@ -4,7 +4,7 @@
   <title><![CDATA[Category: retro | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/retro/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-02T20:32:12-04:00</updated>
+  <updated>2014-08-09T08:51:32-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -38,7 +38,7 @@
 <h3>The Dude</h3>
 
 <blockquote><p>We&rsquo;ve got hard problems to solve, we don&rsquo;t need aphorisms, we don&rsquo;t need truisms.
-&mdash; David Hussman</p></blockquote>
+&ndash; David Hussman</p></blockquote>
 
 <p>The event started out with the self-proclaimed &ldquo;Dude,&rdquo; <a href="//devjam.com/">David Hussman of DevJam</a>. I&rsquo;ve previously had some training involving Mr Hussman at <a href="//sep.com">SEP</a>, during which we had trouble explaining our relationship with Agile: gargantuan project, lots of devs, massive codebase, hour-long builds, and an immature implementation of the so-called Scalable Agile Framework. I thought I knew what to expect during this talk, but I was delightfully mistaken. Everything Hussman said during his keynote fit with the conversations I&rsquo;ve been having with my current teammates.</p>
 
@@ -89,37 +89,29 @@
 
 <p>That&rsquo;s been pretty overwhelming, especially since the traditional way of creating routes in Sinatra is to shove them all in the same file. There are a few ways I could think of to address this. The way we chose six months ago (for better or worse) was found <a href="http://stackoverflow.com/questions/5877000/what-is-a-controller-in-sinatra">on StackOverflow</a>, and involves creating a bunch of different files where you shove all related routes. So you get this situation:</p>
 
-<p>``` ruby app.rb
-class App &lt; Sinatra::Base
-end</p>
+<pre><code class="ruby app.rb">class App &lt; Sinatra::Base
+end
 
-<p>require_relative &lsquo;controllers/helpers&rsquo;</p>
+require_relative 'controllers/helpers'
 
-<p>Dir.glob(&ldquo;#{File.dirname(<strong>FILE</strong>)}/controllers/*.rb&rdquo;).each do |file|
+Dir.glob("#{File.dirname(__FILE__)}/controllers/*.rb").each do |file|
   require file.chomp(File.extname(file))
-end</p>
-
-<p>class App
-  get &lsquo;/&rsquo; do</p>
-
-<pre><code>erb :home
-</code></pre>
-
-<p>  end
 end
-```</p>
 
-<p>``` ruby controllers/reports_controller.rb
 class App
-  get &lsquo;/reports/user_bills&rsquo; do</p>
-
-<pre><code>erb :user_bills_report
+  get '/' do
+    erb :home
+  end
+end
 </code></pre>
 
-<p>  end
-  &hellip;
+<pre><code class="ruby controllers/reports_controller.rb">class App
+  get '/reports/user_bills' do
+    erb :user_bills_report
+  end
+  ...
 end
-```</p>
+</code></pre>
 
 <p>And so on and so forth. This works fine for a while, but we&rsquo;ve ended up with 13 &ldquo;controller&rdquo; files, many of which are not trivial. This also makes the App class quite large since its controllers handle most of the logic for the app. This also doesn&rsquo;t enforce any kind of URL-naming logic, so if a developer is working hard (s)he may create both <code>/reports/user_bills</code> and <code>user_info_reports</code> without realizing the inconsistency (s)he just injected into the system.</p>
 
@@ -144,7 +136,7 @@ end
 
 <p>Was this a small mistake? On a project with a small, local team the answer is definitely yes. This project in particular involves a large number of developers who don&rsquo;t all test in the same time zone and who work on a number of different branches that feed into each other in weekly chunks. Despite that, I think this error could have gone greatly unnoticed had I simply backed out the original changes and pushed the patches and original solution together. My confidence (hubris?) really bit me on this one. Initially only a single developer seemed to be affected by my oversight; fate selected a build between my original solution and my patches to push to the other branches to make sure more people noticed my mistake.</p>
 
-<p><strong>In hindsight</strong>, The Right Thing to Do was to assume fault and back out immediately. One developer having build issues is still one more than should have been affected. Here&rsquo;s hoping this bit o' hindsight today leads to better foresight tomorrow.</p>
+<p><strong>In hindsight</strong>, The Right Thing to Do was to assume fault and back out immediately. One developer having build issues is still one more than should have been affected. Here&rsquo;s hoping this bit o&#8217; hindsight today leads to better foresight tomorrow.</p>
 ]]></content>
   </entry>
   

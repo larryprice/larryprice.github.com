@@ -4,7 +4,7 @@
   <title><![CDATA[Category: hacks | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/hacks/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-02T20:32:12-04:00</updated>
+  <updated>2014-08-09T08:51:32-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -30,9 +30,8 @@
 
 <p>I inherited this code and ran it on my dev build with no issues. Upon doing some testing with the staging build, the page crashed. The logs revealed the following (horrible) error:</p>
 
-<p><code>ruby Vague error
-Unicode data in a Unicode-only collation or ntext data cannot be sent to clients using DB-Library (such as ISQL) or ODBC version 3.7 or earlier.
-</code></p>
+<pre><code class="ruby Vague error">Unicode data in a Unicode-only collation or ntext data cannot be sent to clients using DB-Library (such as ISQL) or ODBC version 3.7 or earlier.
+</code></pre>
 
 <p>What does this mean? Well. Beats me. <a href="http://dirk.net/2010/09/18/sql-server-with-freetds-unicode-data-error/">Several</a> <a href="http://stackoverflow.com/questions/5414890/mssql-query-issue-in-php-and-querying-text-data">sources</a> had <a href="http://stackoverflow.com/questions/8705008/tiny-tds-error-on-heroku-connecting-to-sqlserver-db">similar</a> <a href="http://findyourscript.com/index.php/2011/05/20/unicode-data-in-a-unicode-only-collation-or-ntext-data-cannot-be-sent-to-clients-using-db-library/">issues</a> and the ones I liked eventually came to the conclusion that ntext and nvarchar variables in the database were ticking off the host server. <a href="http://msdn.microsoft.com/en-us/library/ms186939.aspx">Apparently</a>, text variables are translated to nvarchar(MAX), where MAX is something like 2GB of data. I hunted through my database and, sure enough, the &lsquo;Narrative&rsquo; column was an nvarchar(MAX).</p>
 
@@ -40,15 +39,11 @@ Unicode data in a Unicode-only collation or ntext data cannot be sent to clients
 
 <p>Based on the mighty power of the internet, I decided that the best thing for me to do was to change the variable in the database from a &ldquo;text&rdquo; to a &ldquo;string&rdquo; with a limit of 8000 (which translates to varchar(8000)) using this migration:</p>
 
-<p>``` ruby Simple migration
-class ChangeNarrativeColumnToVarChar &lt; ActiveRecord::Migration
-  def change</p>
-
-<pre><code>change_column :evaluation, :narrative, :string, :limit =&gt; 8000
+<pre><code class="ruby Simple migration">class ChangeNarrativeColumnToVarChar &lt; ActiveRecord::Migration
+  def change
+    change_column :evaluation, :narrative, :string, :limit =&gt; 8000
+  end
 </code></pre>
-
-<p>  end
-```</p>
 
 <p>I ran through my repro steps and&hellip; Drumroll&hellip; Suspense&hellip; It worked! Or so it appeared. I went to the narrative textbox and put some words in it, saved, and confirmed that everything was great. Then I pushed it to production and heard nothing for two weeks.</p>
 
@@ -66,10 +61,9 @@ class ChangeNarrativeColumnToVarChar &lt; ActiveRecord::Migration
 
 <p>Alright. The fix. Unfortunately, the fix sucks. In my app, I had to get the whole model that contained a narrative. Doing only that, the narrative would be cut short. So then I had to get the narrative again, and this time cast that sucker to a &ldquo;text.&rdquo;</p>
 
-<p><code>ruby &lt; 1337 Hax
-@eval = Evaluation.find(:id =&gt; id)
+<pre><code class="ruby < 1337 Hax">@eval = Evaluation.find(:id =&gt; id)
 @eval.narrative = Evaluation.select("id as id, CAST(narrative as text) as narrative").where(:id =&gt; id).first.narrative
-</code></p>
+</code></pre>
 
 <p>There&rsquo;s a part of me that likes sensible, clean code. This code did not come from that part of me. If you really want, you can do a select and get all the columns of your model, and then case the field in question, but what if your columns change? I didn&rsquo;t want to be responsible for that, especially after I hand this code off to someone else in the coming weeks.</p>
 ]]></content>

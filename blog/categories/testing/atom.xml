@@ -4,7 +4,7 @@
   <title><![CDATA[Category: testing | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/testing/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-02T20:32:12-04:00</updated>
+  <updated>2014-08-09T08:51:32-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,144 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Javascript testing with Capybara and Cucumber]]></title>
+    <link href="http://larry-price.com/blog/2014/08/05/javascript-testing-with-capybara-and-cucumber/"/>
+    <updated>2014-08-05T06:40:40-04:00</updated>
+    <id>http://larry-price.com/blog/2014/08/05/javascript-testing-with-capybara-and-cucumber</id>
+    <content type="html"><![CDATA[<p>In the past, I had written off testing the Javascript in my <a href="http://www.sinatrarb.com/">Sinatra</a> apps as being not worth the pain of setting up. That was pretty naïve of me, as setting up web drivers in <a href="https://github.com/jnicklas/capybara">Capybara</a> is actually pretty easy.</p>
+
+<p>For this post, I assume you already have a capybara-cucumber project set up. If you need help setting up your first tests, consider checking out <a href="/blog/categories/capybara/">some of my other blog posts</a> on the subject.</p>
+
+<h4>Selenium</h4>
+
+<p>Selenium is the default Javascript driver for capybara. To install either run <code>gem install selenium-webdriver</code> or toss <code>selenium-webdriver</code> into your <code>Gemfile</code> and run <code>bundle install</code>.</p>
+
+<p>If you want to run all of your tests with Javascript enabled, you can change the default driver in your <code>env.rb</code> file. For example:</p>
+
+<pre><code class="ruby env.rb">ENV['RACK_ENV'] = 'test'
+
+require_relative '../../../web'
+
+require 'selenium-webdriver'
+require 'capybara/cucumber'
+require 'rspec'
+
+Capybara.app = Ollert
+Capybara.default_wait_time = 10
+
+# run all tests using Javascript
+Capybara.default_driver = :selenium
+
+World do
+  Ollert.new
+  Mongoid.purge!
+end
+</code></pre>
+
+<p>Using Selenium means that your tests will be running using Firefox. Unfortunately, this makes them much, much slower than when you were running the tests using rspec. What I recommend is to limit yourself to only use the Javascript driver when you need to. To accomplish this, we change our <code>env.rb</code> file as such:</p>
+
+<pre><code class="ruby env.rb">ENV['RACK_ENV'] = 'test'
+
+require_relative '../../../web'
+
+require 'selenium-webdriver'
+require 'capybara/cucumber'
+require 'rspec'
+
+Capybara.app = Ollert
+Capybara.default_wait_time = 10
+
+# use the following web driver to run tests
+Capybara.javascript_driver = :selenium
+
+World do
+  Ollert.new
+  Mongoid.purge!
+end
+</code></pre>
+
+<p>And add the <code>@javascript</code> tag to our Cucumber feature files. I&rsquo;ve written <a href="/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">about using tags in the past</a>, and they are incredibly useful. For example:</p>
+
+<pre><code class="cucumber DoStuff.feature">Feature: Do Stuff
+
+Scenario: Nothing happens with Javascript disbaled
+  Given I visit the home page
+  When I click "Where are they?!"
+  Then I should not see "I'm Batman."
+
+@javascript
+Scenario: Correct text is displayed with Javascript enabled
+  Given I visit the home page
+  When I click "Where are they?!"
+  Then I should see "I'm Batman."
+</code></pre>
+
+<p>Assuming there is some Javascript activated by clicking &ldquo;Where are they?!&rdquo; that displays the text &ldquo;I&rsquo;m Batman.&rdquo;, both of the above scenarios will pass. This is because none of the Javascript will run in the first scenario, so the text will not be displayed. In the second scenario, Capybara knows to use the webdriver we set up previously when it sees the <code>@javascript</code> tag.</p>
+
+<h4>Poltergeist</h4>
+
+<p><a href="https://github.com/teampoltergeist/poltergeist">Poltergeist</a> is the first &ldquo;headless&rdquo; web driver I tried. Usage is mostly identical to usage for Selenium, so I&rsquo;ll focus on installation here.</p>
+
+<p>Poltergeist uses <a href="http://phantomjs.org/">PhantomJS</a>, so we need to start by downloading the binary (<a href="https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-i686.tar.bz2">32-bit</a> or <a href="https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-x86_64.tar.bz2">64-bit</a>) and putting it in our path. On my Linux machine, I extracted the contents of the download and copied <code>bin/phantomjs</code> to my <code>/usr/local/bin</code> directory, which I already have in my path. You can also copy it directly to <code>/usr/bin</code> if you like.</p>
+
+<p>On the ruby side, we do that same old song and dance: either do <code>gem install poltergeist</code> or add <code>poltergeist</code> to your <code>Gemfile</code> and run <code>bundle install</code>. Edit your <code>env.rb</code>:</p>
+
+<pre><code class="cucumber env.rb">ENV['RACK_ENV'] = 'test'
+
+require_relative '../../../web'
+
+require 'capybara/poltergeist'
+require 'capybara/cucumber'
+require 'rspec'
+
+Capybara.app = Ollert
+Capybara.default_wait_time = 10
+
+# use the following web driver to run tests
+Capybara.javascript_driver = :poltergeist
+
+World do
+  Ollert.new
+  Mongoid.purge!
+end
+</code></pre>
+
+<p>Now your Javascript tests should be running using the Poltergeist webdriver. Since Poltergeist is truly headless, your tests will run much faster than they did while using Selenium, but you won&rsquo;t be able to see what&rsquo;s going on while your tests run. There are some slight syntactic differences between the way Poltergeist and Selenium handles separate windows, but other than that they are extremely similar.</p>
+
+<h4>Webkit</h4>
+
+<p><a href="https://github.com/thoughtbot/capybara-webkit">Capybara-webkit</a> is where I eventually landed for running my own tests, after having issues accessing other windows with Poltergeist. Capybara-webkit is also headless and relies on <code>QtWebKit</code> to render pages. So, for starters, you&rsquo;re going to have to install <code>qtwebkit</code>. This has a varied degree of difficulty depending on which operating system you&rsquo;re using, but I didn&rsquo;t have too many problems in Ubuntu once I figured out which library I needed. For help, check <a href="https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit">the guide</a>. On my machine:</p>
+
+<pre><code class="bash">$ sudo apt-get install libqtwebkit-dev
+</code></pre>
+
+<p>Once more: either do <code>gem install capybara-webkit</code> or add <code>capybara-webkit</code> to your <code>Gemfile</code> and run <code>bundle install</code>. Edit your <code>env.rb</code>:</p>
+
+<pre><code class="cucumber env.rb">ENV['RACK_ENV'] = 'test'
+
+require_relative '../../../web'
+
+require 'capybara/cucumber'
+require 'capybara/webkit'
+require 'rspec'
+
+Capybara.app = Ollert
+Capybara.default_wait_time = 10
+
+# use the following web driver to run tests
+Capybara.javascript_driver = :webkit
+
+World do
+  Ollert.new
+  Mongoid.purge!
+end
+</code></pre>
+
+<p>Again, you won&rsquo;t be able to see your tests run, but they should be pretty snappy. I was able to use capybara-webkit to tackle some window issues I was having, but (as of this writing) capybara-webkit has not caught up with more modern capybara window-switching syntax. Other than that, the syntax is identical to the other drivers I&rsquo;ve discussed for common cases. If you&rsquo;re running capybara-webkit on a CI server, see <a href="http://blog.55minutes.com/2013/09/running-capybara-webkit-specs-with-jenkins-ci/">this post about using Xvfb</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Jasmine - A Whole New World of Javascript Testing]]></title>
@@ -28,287 +166,234 @@
 
 <p>We&rsquo;ll start by being able to get the styles from Pizza.</p>
 
-<p>``` js spec/PizzaSpec.js
-describe(&ldquo;Pizza&rdquo;, function() {
-  var pizza;</p>
+<pre><code class="js spec/PizzaSpec.js">describe("Pizza", function() {
+  var pizza;
 
-<p>  beforeEach(function() {</p>
+  beforeEach(function() {
+    pizza = new Pizza();
+  });
 
-<pre><code>pizza = new Pizza();
-</code></pre>
-
-<p>  });</p>
-
-<p>  it(&ldquo;should give a choice of styles&rdquo;, function() {</p>
-
-<pre><code>expect(pizza.getStyles()).toContain("meat lovers");
-expect(pizza.getStyles()).toContain("veg head");
-expect(pizza.getStyles()).toContain("supreme");
-</code></pre>
-
-<p>  });
+  it("should give a choice of styles", function() {
+    expect(pizza.getStyles()).toContain("meat lovers");
+    expect(pizza.getStyles()).toContain("veg head");
+    expect(pizza.getStyles()).toContain("supreme");
+  });
 });
-```</p>
+</code></pre>
 
 <p>The syntax is just lovely: We use <code>describe</code> to set visual context, <code>beforeEach</code> to perform a task before each spec, and <code>it</code> to encapsulate a test. The results of running <code>SpecRunner.html</code> in my browser:</p>
 
-<p><code>
-Pizza should give a choice of styles
+<pre><code>Pizza should give a choice of styles
   TypeError: pizza.getStyles is not a function in file:///home/lrp/docs/jasmine/spec/PizzaSpec.js (line 9)
-</code></p>
+</code></pre>
 
 <p>Fixing it:</p>
 
-<p>``` js src/pizza.js
-function Pizza() {
-  this.getStyles = function() {</p>
-
-<pre><code>return ["meat lovers", "veg head", "supreme"];
-</code></pre>
-
-<p>  }
+<pre><code class="js src/pizza.js">function Pizza() {
+  this.getStyles = function() {
+    return ["meat lovers", "veg head", "supreme"];
+  }
 }
-```</p>
+</code></pre>
 
 <p>And the results:</p>
 
-<p>```
-Pizza</p>
-
-<pre><code>should give a choice of styles
+<pre><code>Pizza
+    should give a choice of styles
 </code></pre>
-
-<p>```</p>
 
 <p>Let&rsquo;s set the toppings:</p>
 
-<p>``` js spec/PizzaSpec.js
-describe(&ldquo;Pizza&rdquo;, function() {
-  // &hellip;</p>
+<pre><code class="js spec/PizzaSpec.js">describe("Pizza", function() {
+  // ...
 
-<p>  describe(&ldquo;toppings&rdquo;, function() {</p>
+  describe("toppings", function() {
+    it("should have no toppings when no style and no extras given", function() {
+      pizza.initialize();
+      expect(pizza.getToppings().length).toBe(0);
+    });
 
-<pre><code>it("should have no toppings when no style and no extras given", function() {
-  pizza.initialize();
-  expect(pizza.getToppings().length).toBe(0);
-});
+    it("should have only extras when no style and extras given", function() {
+      var extras = ["pineapple", "edamame", "cheeseburger"]
+      pizza.initialize(null, null, extras);
 
-it("should have only extras when no style and extras given", function() {
-  var extras = ["pineapple", "edamame", "cheeseburger"]
-  pizza.initialize(null, null, extras);
+      expect(pizza.getToppings().length).toBe(extras.length);
+      for (var i = 0; i &lt; extras.length; i++) {
+        expect(pizza.getToppings()).toContain(extras[i]);
+      }
+    });
 
-  expect(pizza.getToppings().length).toBe(extras.length);
-  for (var i = 0; i &lt; extras.length; i++) {
-    expect(pizza.getToppings()).toContain(extras[i]);
-  }
-});
+    it("should have special toppings when given style and extras", function() {
+      var extras = ["pineapple", "edamame", "cheeseburger"];
+      pizza.initialize(null, "veg head", extras);
 
-it("should have special toppings when given style and extras", function() {
-  var extras = ["pineapple", "edamame", "cheeseburger"];
-  pizza.initialize(null, "veg head", extras);
+      expect(pizza.getToppings().length).toBe(7);
+    });
 
-  expect(pizza.getToppings().length).toBe(7);
-});
+    it("should have special toppings when given style", function() {
+      var extras = ["pineapple", "edamame", "cheeseburger"];
+      pizza.initialize(null, "veg head");
 
-it("should have special toppings when given style", function() {
-  var extras = ["pineapple", "edamame", "cheeseburger"];
-  pizza.initialize(null, "veg head");
-
-  expect(pizza.getToppings().length).toBe(4);
+      expect(pizza.getToppings().length).toBe(4);
+    });
+  });
 });
 </code></pre>
-
-<p>  });
-});
-```</p>
 
 <p>For these tests, I nested a describe block to give better context to what I&rsquo;m testing. Fixing the tests:</p>
 
-<p>``` js src/pizza.js
-function Pizza() {
-  // &hellip;</p>
+<pre><code class="js src/pizza.js">function Pizza() {
+  // ...
 
-<p>  var size, toppings;</p>
+  var size, toppings;
 
-<p>  function findToppings(style, extras) {</p>
+  function findToppings(style, extras) {
+    toppings = extras ? extras : [];
 
-<pre><code>toppings = extras ? extras : [];
+    switch (style) {
+      case ("meat lovers"):
+        toppings.push("ham", "pepperoni", "bacon", "sausage");
+        break;
+      case ("veg head"):
+        toppings.push("onion", "tomato", "pepper", "olive");
+        break;
+      case ("supreme"):
+        toppings.push("pepperoni", "onion", "sausage", "olive");
+        break;
+    }
+  }
 
-switch (style) {
-  case ("meat lovers"):
-    toppings.push("ham", "pepperoni", "bacon", "sausage");
-    break;
-  case ("veg head"):
-    toppings.push("onion", "tomato", "pepper", "olive");
-    break;
-  case ("supreme"):
-    toppings.push("pepperoni", "onion", "sausage", "olive");
-    break;
+  this.getToppings = function() {
+    return toppings;
+  };
+
+  this.initialize = function(pizzaSize, style, extras) {
+    size = pizzaSize;
+    findToppings(style, extras);
+  };
 }
 </code></pre>
-
-<p>  }</p>
-
-<p>  this.getToppings = function() {</p>
-
-<pre><code>return toppings;
-</code></pre>
-
-<p>  };</p>
-
-<p>  this.initialize = function(pizzaSize, style, extras) {</p>
-
-<pre><code>size = pizzaSize;
-findToppings(style, extras);
-</code></pre>
-
-<p>  };
-}
-```</p>
 
 <p>And finally, I&rsquo;ll deal with the cost. I&rsquo;ll come out of scope of the nested <code>describe</code> and nest another <code>describe</code>.</p>
 
-<p>``` js spec/PizzaSpec.js
-describe(&ldquo;Pizza&rdquo;, function() {
-  // &hellip;</p>
+<pre><code class="js spec/PizzaSpec.js">describe("Pizza", function() {
+  // ...
 
-<p>  describe(&ldquo;cost&rdquo;, function() {</p>
+  describe("cost", function() {
+    it("is determined by size and number of toppings", function() {
+      pizza.initialize(10, "supreme");
+      expect(pizza.getToppings().length).toBe(4);
+      expect(pizza.getCost()).toBe(7.00);
+    });
 
-<pre><code>it("is determined by size and number of toppings", function() {
-  pizza.initialize(10, "supreme");
-  expect(pizza.getToppings().length).toBe(4);
-  expect(pizza.getCost()).toBe(7.00);
-});
-
-it("is determined by size and number of toppings including extras", function() {
-  pizza.initialize(18, "meat lovers", ["gyros", "panchetta"]);
-  expect(pizza.getToppings().length).toBe(6);
-  expect(pizza.getCost()).toBe(12.00);
+    it("is determined by size and number of toppings including extras", function() {
+      pizza.initialize(18, "meat lovers", ["gyros", "panchetta"]);
+      expect(pizza.getToppings().length).toBe(6);
+      expect(pizza.getCost()).toBe(12.00);
+    });
+  });
 });
 </code></pre>
-
-<p>  });
-});
-```</p>
 
 <p>To fix this test, I&rsquo;ll use my handy-dandy pizza-cost formula:</p>
 
-<p>``` js src/pizza.js
-function Pizza() {
- // &hellip;</p>
+<pre><code class="js src/pizza.js">function Pizza() {
+ // ...
 
-<p>  this.getCost = function() {</p>
+  this.getCost = function() {
+    return size/2 + toppings.length * .5;
+  }
 
-<pre><code>return size/2 + toppings.length * .5;
-</code></pre>
-
-<p>  }</p>
-
-<p>  // &hellip;
+  // ...
 }
-```</p>
+</code></pre>
 
 <p>This is great and all, but a bit simple. What if we wanted to make an ajax call? Fortunately, I can fit that into this example using <a href="http://onlinepizza.se/api/">Online Pizza</a>, the pizza API. Unfortuantely, the API is kind of garbage, but that doesn&rsquo;t make this example any more meaningless. You can <a href="https://github.com/pivotal/jasmine-ajax/raw/master/lib/mock-ajax.js">download jasmine-ajax on Github</a>, and stick it in your <code>spec/</code> directory and add it to <code>SpecRunner.html</code>. At this point I need to include <a href="">jquery</a> as well.</p>
 
 <p>In order to intercept ajax calls, I&rsquo;ll <code>install</code> the ajax mocker in the <code>beforeEach</code> and uninstall it in an <code>afterEach</code>. Then I write my test, which verifies that the ajax call occurred and returns a response.</p>
 
-<p>``` js spec/PizzaSpec.js
-beforeEach(function() {
-  jasmine.Ajax.install();</p>
+<pre><code class="js spec/PizzaSpec.js">beforeEach(function() {
+  jasmine.Ajax.install();
 
-<p>  pizza = new Pizza();
-});</p>
+  pizza = new Pizza();
+});
 
-<p>afterEach(function() {
+afterEach(function() {
   jasmine.Ajax.uninstall();
-});</p>
-
-<p>describe(&ldquo;sendOrder&rdquo;, function() {
-  it(&ldquo;returns false for bad pizza&rdquo;, function() {</p>
-
-<pre><code>pizza.sendOrder();
-
-expect(jasmine.Ajax.requests.mostRecent().url).toBe("http://onlinepizza.se/api/rest?order.send");
-
-jasmine.Ajax.requests.mostRecent().response({
-  status: "500",
-  contentType: "text/plain",
-  responseText: "Invalid pizza"
 });
 
-expect(pizza.orderSent()).toBe(false);
+describe("sendOrder", function() {
+  it("returns false for bad pizza", function() {
+    pizza.sendOrder();
+
+    expect(jasmine.Ajax.requests.mostRecent().url).toBe("http://onlinepizza.se/api/rest?order.send");
+
+    jasmine.Ajax.requests.mostRecent().response({
+      status: "500",
+      contentType: "text/plain",
+      responseText: "Invalid pizza"
+    });
+
+    expect(pizza.orderSent()).toBe(false);
+  });
+
+  it("returns true for good pizza", function() {
+    pizza.sendOrder();
+
+    expect(jasmine.Ajax.requests.mostRecent().url).toBe("http://onlinepizza.se/api/rest?order.send");
+
+    jasmine.Ajax.requests.mostRecent().response({
+      status: "200",
+      contentType: "text/plain",
+      responseText: "OK"
+    });
+
+    expect(pizza.orderSent()).toBe(true);
+  });
+});
 </code></pre>
-
-<p>  });</p>
-
-<p>  it(&ldquo;returns true for good pizza&rdquo;, function() {</p>
-
-<pre><code>pizza.sendOrder();
-
-expect(jasmine.Ajax.requests.mostRecent().url).toBe("http://onlinepizza.se/api/rest?order.send");
-
-jasmine.Ajax.requests.mostRecent().response({
-  status: "200",
-  contentType: "text/plain",
-  responseText: "OK"
-});
-
-expect(pizza.orderSent()).toBe(true);
-</code></pre>
-
-<p>  });
-});
-```</p>
 
 <p>To get this to work, I add some logic to the <code>Pizza</code> class to set some state based on what the ajax call returns.</p>
 
-<p>``` js src/pizza.js
-var orderSuccess;</p>
+<pre><code class="js src/pizza.js">var orderSuccess;
 
-<p>this.sendOrder = function() {
-  orderSuccess = null;</p>
+this.sendOrder = function() {
+  orderSuccess = null;
 
-<p>  $.ajax({</p>
-
-<pre><code>type: "POST",
-url: "http://onlinepizza.se/api/rest?order.send",
-success: function() {
-  orderSuccess = true;
-},
-error: function() {
-  orderSuccess = false;
+  $.ajax({
+    type: "POST",
+    url: "http://onlinepizza.se/api/rest?order.send",
+    success: function() {
+      orderSuccess = true;
+    },
+    error: function() {
+      orderSuccess = false;
+    }
+  });
 }
-</code></pre>
 
-<p>  });
-}</p>
-
-<p>this.orderSent = function() {
+this.orderSent = function() {
   return orderSuccess;
 }
-```</p>
+</code></pre>
 
 <p>Ajax calls tested. By installing Jasmine&rsquo;s ajax mock, all of the ajax calls were intercepted and were not sent to the server at Online Pizza. Any ajax calls that may have been fired by the <code>Pizza</code> class but were not addressed in the spec are ignored. The final test results look something like this:</p>
 
-<p>```
-Pizza</p>
-
-<pre><code>sendOrder
-    returns false for bad pizza
-    returns true for good pizza
-styles
-    should give a choice of styles
-toppings
-    should have no toppings when no style and no extras given
-    should have only extras when no style and extras given
-    should have special toppings when given style and extras
-    should have special toppings when given style
-cost
-    is determined by size and number of toppings
-    is determined by size and number of toppings including extras
+<pre><code>Pizza
+    sendOrder
+        returns false for bad pizza
+        returns true for good pizza
+    styles
+        should give a choice of styles
+    toppings
+        should have no toppings when no style and no extras given
+        should have only extras when no style and extras given
+        should have special toppings when given style and extras
+        should have special toppings when given style
+    cost
+        is determined by size and number of toppings
+        is determined by size and number of toppings including extras
 </code></pre>
-
-<p>```</p>
 
 <p>Full sample code <a href="https://github.com/larryprice/jasmine-pizza">available on Github</a>. There&rsquo;s a lot of other interesting things Jasmine can do that I&rsquo;m still learning about. If applicable, I&rsquo;ll try to create a blog post for advanced Jasmine usage in the future.</p>
 ]]></content>
@@ -337,166 +422,152 @@ cost
 
 <p>As usual, it&rsquo;s time to guide you through a contrived example. Start by installing the package:</p>
 
-<p><code>bash
-$ go get gopkg.in/check.v1
-</code></p>
+<pre><code class="bash">$ go get gopkg.in/check.v1
+</code></pre>
 
 <p>Let&rsquo;s see, what should we make&hellip; how about a tip calculating library? We should start by testing, because we&rsquo;re obsessed with TDD.</p>
 
 <p>Test #1: Returns 0 for free meal</p>
 
-<p>``` go calculator_test.go
-package cheapskate</p>
+<pre><code class="go calculator_test.go">package cheapskate
 
-<p>import (
-  &ldquo;testing&rdquo;
-  . &ldquo;gopkg.in/check.v1&rdquo;
-)</p>
+import (
+  "testing"
+  . "gopkg.in/check.v1"
+)
 
-<p>// Hook up gocheck into the &ldquo;go test&rdquo; runner.
-func Test(t *testing.T) { TestingT(t) }</p>
+// Hook up gocheck into the "go test" runner.
+func Test(t *testing.T) { TestingT(t) }
 
-<p>type MySuite struct{}</p>
+type MySuite struct{}
 
-<p>var _ = Suite(&amp;MySuite{})</p>
+var _ = Suite(&amp;MySuite{})
 
-<p>func (s <em>MySuite) TestReturns0ForFreeMeal(c </em>C) {
+func (s *MySuite) TestReturns0ForFreeMeal(c *C) {
   c.Assert(calculateTip(0.0), Equals, 0.0)
 }
-```</p>
+</code></pre>
 
 <p>Not quite as obvious as the internal testing framework. First we hook up gocheck into the &ldquo;go test&rdquo; runner. Then we create a test suite; ours is empty for now and called <code>MySuite</code>. We call <code>Suite</code> to intialize the test runner with our custom suite. We then write our first test to assert that calculating the tip returns a value equal to 0. All tests must be prefixed with the word &ldquo;Test&rdquo;. Now I&rsquo;ll write the implementation:</p>
 
-<p>``` go calculator.go
-package cheapskate</p>
+<pre><code class="go calculator.go">package cheapskate
 
-<p>func calculateTip(bill float64) float64 {
+func calculateTip(bill float64) float64 {
   return 0.0
 }
-```</p>
+</code></pre>
 
 <p>Running the tests&hellip;</p>
 
-<p><code>bash
-$ go test
+<pre><code class="bash">$ go test
 OK: 1 passed
 PASS
 ok    _/home/lrp/Projects/2014/gocheck-quick  0.003s
-</code></p>
+</code></pre>
 
 <p>Woohoo! All passed. What happens if we write a failing test?</p>
 
-<p><code>go calculator_test.go
-...
+<pre><code class="go calculator_test.go">...
 func (s *MySuite) TestReturns15PercentByDefault(c *C) {
   c.Assert(calculateTip(100.0), Equals, 15.0)
 }
-</code></p>
+</code></pre>
 
 <p>Results:</p>
 
-<p>``` bash
-lrp@cilantro:~/Projects/2014/gocheck-quick$ go test</p>
+<pre><code class="bash">lrp@cilantro:~/Projects/2014/gocheck-quick$ go test
 
-<hr />
+----------------------------------------------------------------------
+FAIL: calculator_test.go:19: MySuite.TestReturns15PercentByDefault
 
-<p>FAIL: calculator_test.go:19: MySuite.TestReturns15PercentByDefault</p>
+calculator_test.go:20:
+    c.Assert(calculateTip(100.0), Equals, 15.0)
+... obtained float64 = 0
+... expected float64 = 15
 
-<p>calculator_test.go:20:</p>
-
-<pre><code>c.Assert(calculateTip(100.0), Equals, 15.0)
-</code></pre>
-
-<p>&hellip; obtained float64 = 0
-&hellip; expected float64 = 15</p>
-
-<p>OOPS: 1 passed, 1 FAILED
-&mdash;&ndash; FAIL: Test (0.00 seconds)
+OOPS: 1 passed, 1 FAILED
+--- FAIL: Test (0.00 seconds)
 FAIL
 exit status 1
 FAIL  _/home/lrp/Projects/2014/gocheck-quick  0.003s
-```</p>
+</code></pre>
 
 <p>A nasty failure that one. I&rsquo;ll fix it and continue:</p>
 
-<p>``` go calculator.go
-package cheapskate</p>
+<pre><code class="go calculator.go">package cheapskate
 
-<p>func calculateTip(bill float64) float64 {
+func calculateTip(bill float64) float64 {
   return .15 * bill
 }
-```</p>
+</code></pre>
 
 <p>I want to create a Setup method for my entire suite. I&rsquo;ll store some silly information there for information&rsquo;s sake. The minBill and maxBill variables will only be set when I first load the suite.</p>
 
-<p>``` go calculator_test.go
-package cheapskate</p>
+<pre><code class="go calculator_test.go">package cheapskate
 
-<p>import (
-  &ldquo;testing&rdquo;
-  . &ldquo;gopkg.in/check.v1&rdquo;
-)</p>
+import (
+  "testing"
+  . "gopkg.in/check.v1"
+)
 
-<p>// Hook up gocheck into the &ldquo;go test&rdquo; runner.
-func Test(t *testing.T) { TestingT(t) }</p>
+// Hook up gocheck into the "go test" runner.
+func Test(t *testing.T) { TestingT(t) }
 
-<p>type MySuite struct{
+type MySuite struct{
   minBill float64
   maxBill float64
-}</p>
+}
 
-<p>func (s <em>MySuite) SetUpSuite(c </em>C) {
+func (s *MySuite) SetUpSuite(c *C) {
   s.minBill = 0
   s.maxBill = 100
-}</p>
+}
 
-<p>var _ = Suite(&amp;MySuite{})</p>
+var _ = Suite(&amp;MySuite{})
 
-<p>func (s <em>MySuite) TestReturns0ForFreeMeal(c </em>C) {
+func (s *MySuite) TestReturns0ForFreeMeal(c *C) {
   c.Assert(calculateTip(s.minBill), Equals, 0.0)
-}</p>
+}
 
-<p>func (s <em>MySuite) TestReturns15PercentByDefault(c </em>C) {
+func (s *MySuite) TestReturns15PercentByDefault(c *C) {
   c.Assert(calculateTip(s.maxBill), Equals, 15.0)
 }
-```</p>
+</code></pre>
 
 <p>What if I wanted to set some information at the start of each test? I&rsquo;ll log the current test number on the suite, updating it every time I run a test:</p>
 
-<p>``` go calculator_test.go
-package cheapskate</p>
+<pre><code class="go calculator_test.go">package cheapskate
 
-<p>import (
-  &ldquo;testing&rdquo;
-  . &ldquo;gopkg.in/check.v1&rdquo;</p>
+import (
+  "testing"
+  . "gopkg.in/check.v1"
 
-<p>  &ldquo;fmt&rdquo;
-)</p>
+  "fmt"
+)
 
-<p>// Hook up gocheck into the &ldquo;go test&rdquo; runner.
-func Test(t *testing.T) { TestingT(t) }</p>
+// Hook up gocheck into the "go test" runner.
+func Test(t *testing.T) { TestingT(t) }
 
-<p>type MySuite struct{
+type MySuite struct{
   testNumber int
-}</p>
+}
 
-<p>func (s <em>MySuite) SetUpTest(c </em>C) {
+func (s *MySuite) SetUpTest(c *C) {
   fmt.Println(s.testNumber)
   s.testNumber += 1
 }
-&hellip;
-```</p>
+...
+</code></pre>
 
 <p>Result:</p>
 
-<p><code>bash
-$ go test
+<pre><code class="bash">$ go test
 0
 1
 OK: 2 passed
 PASS
 ok    _/home/lrp/Projects/2014/gocheck-quick  0.004s
-</code></p>
+</code></pre>
 
 <p>You can create tear down methods for suites and tests in the same manner, replacing the appropriate words above.</p>
 
@@ -511,54 +582,48 @@ ok    _/home/lrp/Projects/2014/gocheck-quick  0.004s
     <id>http://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp</id>
     <content type="html"><![CDATA[<p>A few months ago <a href="/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">I blogged about tags</a> in <a href="https://github.com/cucumber/cucumber-cpp">cucumber-c++</a>. The scenario I presented involved using tags to call a <code>BEFORE</code> hook before the first scenario and an <code>AFTER</code> hook after the last scenario. The code looked a little bit like this:</p>
 
-<p>``` cucumber DoStuff.feature
-@first
+<pre><code class="cucumber DoStuff.feature">@first
 Scenario: Do it my way
-  &hellip;</p>
+  ...
 
-<p>Scenario: Don&rsquo;t do it
-  &hellip;</p>
+Scenario: Don't do it
+  ...
 
-<p>@last
+@last
 Scenario: Do it your way
-  &hellip;
-```</p>
+  ...
+</code></pre>
 
-<p>``` c++ DoStuff_StepDefinitions.cpp</p>
+<pre><code class="c++ DoStuff_StepDefinitions.cpp">
+BEFORE("@first") { cout &lt;&lt; "This is the first step!" &lt;&lt; endl; }
 
-<p>BEFORE(&ldquo;@first&rdquo;) { cout &lt;&lt; &ldquo;This is the first step!&rdquo; &lt;&lt; endl; }</p>
+AFTER("@last") { cout &lt;&lt; "This is the last step!" &lt;&lt; endl; }
 
-<p>AFTER(&ldquo;@last&rdquo;) { cout &lt;&lt; &ldquo;This is the last step!&rdquo; &lt;&lt; endl; }</p>
-
-<p>&hellip;</p>
-
-<p>```</p>
+...
+</code></pre>
 
 <p>The scnenario labeled <code>@first</code> would call the corresponding <code>BEFORE</code> macro and the <code>@last</code> scenario would call the <code>AFTER</code> macro. If I didn&rsquo;t have tags in place, the macros would have both been invoked before/after each scenario. Macros for <code>BEFORE_STEP</code> and <code>AROUND_STEP</code> are also available; <code>BEFORE_STEP</code> allows you to tag individual steps and <code>AROUND_STEP</code> acts as a before/after for individual steps.</p>
 
 <p>This was a workaround. What I really wanted to do was to not use tags, and instead unconditionally perform an action before the first scenario was run and after the last scenario is complete. Since cucumber-cpp is open source, I decided to implement that a few weeks ago (<a href="https://github.com/cucumber/cucumber-cpp/commit/26e11d0248edf32a8bac17df9d2d4ceb135ed502">see changeset</a>). Now the above example becomes:</p>
 
-<p>``` cucumber DoStuff.feature</p>
+<pre><code class="cucumber DoStuff.feature">
+Scenario: Do it my way
+  ...
 
-<p>Scenario: Do it my way
-  &hellip;</p>
+Scenario: Don't do it
+  ...
 
-<p>Scenario: Don&rsquo;t do it
-  &hellip;</p>
+Scenario: Do it your way
+  ...
+</code></pre>
 
-<p>Scenario: Do it your way
-  &hellip;
-```</p>
+<pre><code class="c++ DoStuff_StepDefinitions.cpp">
+BEFORE_ALL() { cout &lt;&lt; "This is the first step!" &lt;&lt; endl; }
 
-<p>``` c++ DoStuff_StepDefinitions.cpp</p>
+AFTER_ALL() { cout &lt;&lt; "This is the last step!" &lt;&lt; endl; }
 
-<p>BEFORE_ALL() { cout &lt;&lt; &ldquo;This is the first step!&rdquo; &lt;&lt; endl; }</p>
-
-<p>AFTER_ALL() { cout &lt;&lt; &ldquo;This is the last step!&rdquo; &lt;&lt; endl; }</p>
-
-<p>&hellip;</p>
-
-<p>```</p>
+...
+</code></pre>
 
 <p>This is the same behavior as the first example, except I don&rsquo;t have to force my fellow developers to move tags around when they add/remove scenarios. Also now my fellow developers can stop asking me why I was using tags and why when they added a scenario they couldn&rsquo;t get the tests to pass.</p>
 
@@ -575,54 +640,47 @@ Scenario: Do it your way
 
 <p>The area of the code I deal with uses <a href="http://www.mono-project.com/Embedding_Mono">embedded mono</a> to communicate with some C# libraries that we share with other applications. This means we have unmanaged memory which talks with managed memory. This has caused us more headaches than I care to remember. One such problem is that we have a static object that we only want to create and destroy once. So I write my first Cucumber test:</p>
 
-<p>``` cucumber DoStuff.feature
-Feature: Do that thing that we have to do</p>
+<pre><code class="cucumber DoStuff.feature">Feature: Do that thing that we have to do
 
-<p>Scenario: Do it my way
+Scenario: Do it my way
   Given I have done step 1
   When I do step 2
   Then I should see results
-```</p>
+</code></pre>
 
-<p>``` c++ DoStuff_StepDefinitions.cpp</p>
+<pre><code class="c++ DoStuff_StepDefinitions.cpp">#include &lt;cucumber-cpp/defs.hpp&gt;
+#include &lt;gtest/gtest.h&gt;
+#include &lt;mono/jit/jit.h&gt;
 
-<h1>include &lt;cucumber-cpp/defs.hpp></h1>
+const QString DOMAIN_NAME = "bridge";
 
-<h1>include &lt;gtest/gtest.h></h1>
-
-<h1>include &lt;mono/jit/jit.h></h1>
-
-<p>const QString DOMAIN_NAME = &ldquo;bridge&rdquo;;</p>
-
-<p>class Context
+class Context
 {
   // The static Mono object
   static MonoDomain *Domain;
-}</p>
+}
 
-<p>BEFORE() { Context::Domain = mono_jit_init(DOMAIN_NAME); }</p>
+BEFORE() { Context::Domain = mono_jit_init(DOMAIN_NAME); }
 
-<p>AFTER() { mono_jit_cleanup(Context::Domain); }</p>
+AFTER() { mono_jit_cleanup(Context::Domain); }
 
-<p>GIVEN(&ldquo;^I have done step 1$&rdquo;) { /<em> &hellip; </em>/ }</p>
+GIVEN("^I have done step 1$") { /* ... */ }
 
-<p>WHEN(&ldquo;^I do step 2$&rdquo;) { /<em> &hellip; </em>/ }</p>
+WHEN("^I do step 2$") { /* ... */ }
 
-<p>THEN(&ldquo;^I should see results$&rdquo;) { /<em> &hellip; </em>/ }</p>
-
-<p>```</p>
+THEN("^I should see results$") { /* ... */ }
+</code></pre>
 
 <p>Before my scenario starts, the <code>BEFORE()</code> function is called and my MonoDomain object is created. When the scenario ends, my <code>AFTER()</code> statement is called and the objects in my MonoDomain are cleaned up. Now, I add a second scenario.</p>
 
-<p>``` cucumber DoStuff.feature
-Feature: Do that thing that we have to do</p>
+<pre><code class="cucumber DoStuff.feature">Feature: Do that thing that we have to do
 
-<p>Scenario: Do it my way
-  &hellip;</p>
+Scenario: Do it my way
+  ...
 
-<p>Scenario: Do it your way
-  &hellip;
-```</p>
+Scenario: Do it your way
+  ...
+</code></pre>
 
 <p>Now I run my Cucumber test, and Mono explodes. Why? Because the <code>BEFORE()</code> and <code>AFTER()</code> functions are not <em>before all</em> and <em>after all</em>, but <em>before each</em> and <em>after each</em>.</p>
 
@@ -634,43 +692,37 @@ Feature: Do that thing that we have to do</p>
 
 <p>Then it hit me: Cucumber is open source. I found the source <a href="https://github.com/cucumber/cucumber-cpp">on Github</a> and started looking through <a href="https://github.com/cucumber/cucumber-cpp/tree/master/examples/">the example code</a>. It was there that I discovered <a href="https://github.com/cucumber/cucumber-cpp/tree/master/examples/FeatureShowcase/tag">tags</a>. Tags were the solution to my problem.</p>
 
-<p>``` cucumber DoStuff.feature
-Feature: Do that thing that we have to do</p>
+<pre><code class="cucumber DoStuff.feature">Feature: Do that thing that we have to do
 
-<p>@first
+@first
 Scenario: Do it my way
-  &hellip;</p>
+  ...
 
-<p>@last
+@last
 Scenario: Do it your way
-  &hellip;
-```</p>
+  ...
+</code></pre>
 
 <p>Using tags, I could label my scenarios with meaningful <code>@first</code> and <code>@last</code> tags to signify the beginning and end of my tests. The trick is to then add the required tags to my <code>BEFORE()</code> and <code>AFTER()</code> macro as such:</p>
 
-<p>``` c++ DoStuff_StepDefinitions.cpp</p>
+<pre><code class="c++ DoStuff_StepDefinitions.cpp">#include &lt;cucumber-cpp/defs.hpp&gt;
+#include &lt;gtest/gtest.h&gt;
+#include &lt;mono/jit/jit.h&gt;
 
-<h1>include &lt;cucumber-cpp/defs.hpp></h1>
+const QString DOMAIN_NAME = "bridge";
 
-<h1>include &lt;gtest/gtest.h></h1>
-
-<h1>include &lt;mono/jit/jit.h></h1>
-
-<p>const QString DOMAIN_NAME = &ldquo;bridge&rdquo;;</p>
-
-<p>class Context
+class Context
 {
   // The static Mono object
   static MonoDomain *Domain;
-}</p>
+}
 
-<p>BEFORE(&ldquo;@first&rdquo;) { Context::Domain = mono_jit_init(DOMAIN_NAME); }</p>
+BEFORE("@first") { Context::Domain = mono_jit_init(DOMAIN_NAME); }
 
-<p>AFTER(&ldquo;@last&rdquo;) { mono_jit_cleanup(Context::Domain); }</p>
+AFTER("@last") { mono_jit_cleanup(Context::Domain); }
 
-<p>// &hellip;</p>
-
-<p>```</p>
+// ...
+</code></pre>
 
 <p>Now my MonoDomain is only created <em>before</em> the scenario labeled <code>@first</code> and <em>after</em> the scenario labeled <code>@last</code>. Obviously, this isn&rsquo;t the cleanest fix imaginable, but it was the cleanest fix <em>available</em>. Whenever someone wants to add a new step to this test, they need to remember to move the <code>@last</code> tag to their scenario. However, I have the hope that it will be pretty obvious that the second scenario is no longer &ldquo;last&rdquo; when there is a third scenario following the &ldquo;last&rdquo; scenario. Anyway, it leaves me happy enough, since now my tests don&rsquo;t explode and I&rsquo;m able to reuse ~50% of the steps I had already written for the first scenario. I added a third scenario later on and 9 out of the 10 steps in the scenario were reused from the first and second scenario.</p>
 

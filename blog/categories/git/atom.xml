@@ -4,7 +4,7 @@
   <title><![CDATA[Category: git | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-02T20:32:12-04:00</updated>
+  <updated>2014-08-09T08:51:32-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -24,24 +24,18 @@
 
 <p>When you rebase your local changes onto another branch, your changes become the head of that branch. For instance, say I start working off remote branch <code>master</code>, specifically changeset <code>M2</code>. I then make some changes and commit locally, which I&rsquo;ll note as changeset <code>L</code>. While I was making my changes, some other developer pushed to remote branch <code>master</code>, resulting in changeset <code>M3</code>.</p>
 
-<p>```
-M1 &ndash;> M2 &ndash;> M3</p>
-
-<pre><code>    \
-     -&gt;L
+<pre><code>M1 -&gt; M2 -&gt; M3
+        \
+         -&gt;L
 </code></pre>
-
-<p>```</p>
 
 <p>This is where <code>rebase</code> comes in. I want to rebase my local commit on top of <code>M3</code>, which will make it the new head of <code>master</code>.</p>
 
-<p><code>
-$ git rebase origin/master
-</code></p>
+<pre><code>$ git rebase origin/master
+</code></pre>
 
-<p><code>
-M1 -&gt; M2 -&gt; M3 -&gt; L
-</code></p>
+<pre><code>M1 -&gt; M2 -&gt; M3 -&gt; L
+</code></pre>
 
 <p>Now I can keep working locally. Until I push my local <code>master</code> to <code>origin</code>, every time I <code>rebase</code> will cause all of my commits to rebase on the head of <code>master</code>.</p>
 
@@ -51,14 +45,13 @@ M1 -&gt; M2 -&gt; M3 -&gt; L
 
 <p>Git&rsquo;s best-kept secret is <code>merge --squash</code>, a wonderful flag that gives you all the benefits of a <code>rebase</code> (linear history, fewer changesets), without all the hassle of a big fat rebase merge (rebasing infrequently can lead to merges that will haunt you in your sleep).</p>
 
-<p><code>
-$ git branch
+<pre><code>$ git branch
 * local-branch
 master
 $ git merge master
 $ git checkout master
 $ git merge local-branch --squash
-</code></p>
+</code></pre>
 
 <p>This will give you a single changeset on the head of <code>master</code> containing all the changes you made in <code>local-branch</code>, including resolution of merge conflicts. <code>merge --squash</code> has eased a lot of the headaches my team had when stuck doing rebase merges previously.</p>
 ]]></content>

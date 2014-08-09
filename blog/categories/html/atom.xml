@@ -4,7 +4,7 @@
   <title><![CDATA[Category: html | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/html/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-02T20:32:12-04:00</updated>
+  <updated>2014-08-09T08:51:32-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -28,53 +28,42 @@
 
 <p>Below is the HTML to create this effect with all the CSS styles embedded. Marked up with plenty of comments.</p>
 
-<p>``` html index.html
-&lt;!DOCTYPE html>
-<html lang="en" style="height: 100%;">
-  <head></p>
-
-<pre><code>&lt;link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"&gt;
-</code></pre>
-
-<p>  </head>
-  <body style="height: 100%;"></p>
-
-<pre><code>&lt;div id="wrap" style="min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -50px;"&gt;
-  &lt;!-- All your content goes inside wrap. --&gt;
-  &lt;!-- The bottom margin must be negative the footer min-height --&gt;
-  &lt;!-- Footer min-height is set to 50px in this case --&gt;
-  &lt;div class="container"&gt;
-    &lt;div class="row"&gt;
-      &lt;div class="h1"&gt;
-        All Your Content
+<pre><code class="html index.html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en" style="height: 100%;"&gt;
+  &lt;head&gt;
+    &lt;link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"&gt;
+  &lt;/head&gt;
+  &lt;body style="height: 100%;"&gt;
+    &lt;div id="wrap" style="min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -50px;"&gt;
+      &lt;!-- All your content goes inside wrap. --&gt;
+      &lt;!-- The bottom margin must be negative the footer min-height --&gt;
+      &lt;!-- Footer min-height is set to 50px in this case --&gt;
+      &lt;div class="container"&gt;
+        &lt;div class="row"&gt;
+          &lt;div class="h1"&gt;
+            All Your Content
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class="row"&gt;
+          All your content will go inside the 'wrap' div.
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div id="push" style="min-height: 50px;"&gt;
+        &lt;!-- This push node should be inside wrap and empty --&gt;
+        &lt;!-- Min-height is equal to the min-height of the footer --&gt;
       &lt;/div&gt;
     &lt;/div&gt;
-    &lt;div class="row"&gt;
-      All your content will go inside the 'wrap' div.
+  &lt;/body&gt;
+  &lt;div id="footer" style="min-height: 50px;"&gt;
+    &lt;!-- Some sweet footer content --&gt;
+    &lt;div class="container"&gt;
+      &lt;div class="small"&gt;
+        Zowee, I've got a footer stuck to the bottom!
+      &lt;/div&gt;
     &lt;/div&gt;
   &lt;/div&gt;
-  &lt;div id="push" style="min-height: 50px;"&gt;
-    &lt;!-- This push node should be inside wrap and empty --&gt;
-    &lt;!-- Min-height is equal to the min-height of the footer --&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
+&lt;/html&gt;
 </code></pre>
-
-<p>  </body>
-  <div id="footer" style="min-height: 50px;"></p>
-
-<pre><code>&lt;!-- Some sweet footer content --&gt;
-&lt;div class="container"&gt;
-  &lt;div class="small"&gt;
-    Zowee, I've got a footer stuck to the bottom!
-  &lt;/div&gt;
-&lt;/div&gt;
-</code></pre>
-
-<p>  </div>
-</html></p>
-
-<p>```</p>
 
 <p>Div tag ids such as &ldquo;wrap&rdquo;, &ldquo;push&rdquo;, and &ldquo;footer&rdquo; can be whatever you want. The height of the footer can be adjusted to fit whatever content you want; I found that using <code>min-height</code> instead of <code>height</code> allowed my content to resize appropriately when wrapped. Styles should definitely be moved to a css file.</p>
 ]]></content>
@@ -95,35 +84,31 @@
 
 <p><code>https://trello.com/1/authorize?key=applicationkey&amp;name=applicationname&amp;expiration=never&amp;response_type=token</code></p>
 
-<p>At this point, the user is redirected to Trello and given the opportunity to Allow or Deny your application access. Once allowed, the user sees a static Trello page with their member token in plain text. Somehow you"re supposed to convey to them that they should copy this token and paste it back to you. This has clear drawbacks in usability.</p>
+<p>At this point, the user is redirected to Trello and given the opportunity to Allow or Deny your application access. Once allowed, the user sees a static Trello page with their member token in plain text. Somehow you&#8221;re supposed to convey to them that they should copy this token and paste it back to you. This has clear drawbacks in usability.</p>
 
 <p>Using the <strong>postMessage</strong> method of accessing a member token was significantly more fruitful. Trello provides a Javascript file named <a href="https://trello.com/docs/gettingstarted/clientjs.html">client.js</a> that does most of the legwork for you. An example:</p>
 
-<p>``` haml
-%script{src: &ldquo;//api.trello.com/1/client.js?key=applicationkey&rdquo;}</p>
+<pre><code class="haml">%script{src: "//api.trello.com/1/client.js?key=applicationkey"}
 
-<p>function AuthenticateTrello() {
-  Trello.authorize({</p>
-
-<pre><code>name: "YourApplication",
-type: "popup",
-interactive: true,
-expiration: "never",
-persist: true,
-success: function () { onAuthorizeSuccessful(); },
-scope: { write: false, read: true },
-</code></pre>
-
-<p>  });
+function AuthenticateTrello() {
+  Trello.authorize({
+    name: "YourApplication",
+    type: "popup",
+    interactive: true,
+    expiration: "never",
+    persist: true,
+    success: function () { onAuthorizeSuccessful(); },
+    scope: { write: false, read: true },
+  });
 }
 function onAuthorizeSuccessful() {
   var token = Trello.token();
-  window.location.replace(&ldquo;/auth?token=&rdquo; + token);
-}</p>
+  window.location.replace("/auth?token=" + token);
+}
 
-<p>%a{href: &ldquo;javascript:void(0)&rdquo;, onClick: &ldquo;AuthenticateTrello()&rdquo;}
+%a{href: "javascript:void(0)", onClick: "AuthenticateTrello()"}
   Connect With Trello
-```</p>
+</code></pre>
 
 <p>When the user clicks the link, we have Trello set to activate a &ldquo;popup&rdquo; that will ask them to &ldquo;Allow&rdquo; or &ldquo;Deny&rdquo; our app from accessing their data. When the user allows us access, the popup closes and we hit the &ldquo;onAuthorizeSuccessful&rdquo; method. In my method, I simply redirect them to the <code>/auth</code> route with <code>token</code> manually added to the params list. One of the interesting options listed above is the &ldquo;persist&rdquo; option, which tells Trello whether it should prompt the user for his or her token every time. By telling Trello to persist, the user will only be presented with the popup when he or she needs to reauthenticate.</p>
 

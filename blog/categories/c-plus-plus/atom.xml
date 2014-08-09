@@ -4,7 +4,7 @@
   <title><![CDATA[Category: c++ | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/c-plus-plus/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-02T20:32:12-04:00</updated>
+  <updated>2014-08-09T08:51:32-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -20,54 +20,48 @@
     <id>http://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp</id>
     <content type="html"><![CDATA[<p>A few months ago <a href="/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">I blogged about tags</a> in <a href="https://github.com/cucumber/cucumber-cpp">cucumber-c++</a>. The scenario I presented involved using tags to call a <code>BEFORE</code> hook before the first scenario and an <code>AFTER</code> hook after the last scenario. The code looked a little bit like this:</p>
 
-<p>``` cucumber DoStuff.feature
-@first
+<pre><code class="cucumber DoStuff.feature">@first
 Scenario: Do it my way
-  &hellip;</p>
+  ...
 
-<p>Scenario: Don&rsquo;t do it
-  &hellip;</p>
+Scenario: Don't do it
+  ...
 
-<p>@last
+@last
 Scenario: Do it your way
-  &hellip;
-```</p>
+  ...
+</code></pre>
 
-<p>``` c++ DoStuff_StepDefinitions.cpp</p>
+<pre><code class="c++ DoStuff_StepDefinitions.cpp">
+BEFORE("@first") { cout &lt;&lt; "This is the first step!" &lt;&lt; endl; }
 
-<p>BEFORE(&ldquo;@first&rdquo;) { cout &lt;&lt; &ldquo;This is the first step!&rdquo; &lt;&lt; endl; }</p>
+AFTER("@last") { cout &lt;&lt; "This is the last step!" &lt;&lt; endl; }
 
-<p>AFTER(&ldquo;@last&rdquo;) { cout &lt;&lt; &ldquo;This is the last step!&rdquo; &lt;&lt; endl; }</p>
-
-<p>&hellip;</p>
-
-<p>```</p>
+...
+</code></pre>
 
 <p>The scnenario labeled <code>@first</code> would call the corresponding <code>BEFORE</code> macro and the <code>@last</code> scenario would call the <code>AFTER</code> macro. If I didn&rsquo;t have tags in place, the macros would have both been invoked before/after each scenario. Macros for <code>BEFORE_STEP</code> and <code>AROUND_STEP</code> are also available; <code>BEFORE_STEP</code> allows you to tag individual steps and <code>AROUND_STEP</code> acts as a before/after for individual steps.</p>
 
 <p>This was a workaround. What I really wanted to do was to not use tags, and instead unconditionally perform an action before the first scenario was run and after the last scenario is complete. Since cucumber-cpp is open source, I decided to implement that a few weeks ago (<a href="https://github.com/cucumber/cucumber-cpp/commit/26e11d0248edf32a8bac17df9d2d4ceb135ed502">see changeset</a>). Now the above example becomes:</p>
 
-<p>``` cucumber DoStuff.feature</p>
+<pre><code class="cucumber DoStuff.feature">
+Scenario: Do it my way
+  ...
 
-<p>Scenario: Do it my way
-  &hellip;</p>
+Scenario: Don't do it
+  ...
 
-<p>Scenario: Don&rsquo;t do it
-  &hellip;</p>
+Scenario: Do it your way
+  ...
+</code></pre>
 
-<p>Scenario: Do it your way
-  &hellip;
-```</p>
+<pre><code class="c++ DoStuff_StepDefinitions.cpp">
+BEFORE_ALL() { cout &lt;&lt; "This is the first step!" &lt;&lt; endl; }
 
-<p>``` c++ DoStuff_StepDefinitions.cpp</p>
+AFTER_ALL() { cout &lt;&lt; "This is the last step!" &lt;&lt; endl; }
 
-<p>BEFORE_ALL() { cout &lt;&lt; &ldquo;This is the first step!&rdquo; &lt;&lt; endl; }</p>
-
-<p>AFTER_ALL() { cout &lt;&lt; &ldquo;This is the last step!&rdquo; &lt;&lt; endl; }</p>
-
-<p>&hellip;</p>
-
-<p>```</p>
+...
+</code></pre>
 
 <p>This is the same behavior as the first example, except I don&rsquo;t have to force my fellow developers to move tags around when they add/remove scenarios. Also now my fellow developers can stop asking me why I was using tags and why when they added a scenario they couldn&rsquo;t get the tests to pass.</p>
 
@@ -86,12 +80,11 @@ Scenario: Do it your way
 
 <p>I originally copied my test data using the <code>INSTALLS</code> variable. My data folder is just a directory sitting in the test source called &ldquo;TestData.&rdquo; This solution is fantastic because it works cross-platform.</p>
 
-<p>``` make MyBAProjectTest.pro
-install_it.path = $${OUT_PWD}
-install_it.files += TestData/</p>
+<pre><code class="make MyBAProjectTest.pro">install_it.path = $${OUT_PWD}
+install_it.files += TestData/
 
-<p>INSTALLS += install_it
-```</p>
+INSTALLS += install_it
+</code></pre>
 
 <p>However, this means that if I ever have a clean directory, I have to run <code>make install</code> to install my test data. What a pain! Why bother! Why even write tests when life is this unjust!</p>
 
@@ -99,45 +92,36 @@ install_it.files += TestData/</p>
 
 <p>For Linux, I use <code>cp</code>:</p>
 
-<p><code>make MyBAProjectTest.pro
-QMAKE_POST_LINK += $$quote(cp -rf $${PWD}/TestData $${OUT_PWD})
-</code></p>
+<pre><code class="make MyBAProjectTest.pro">QMAKE_POST_LINK += $$quote(cp -rf $${PWD}/TestData $${OUT_PWD})
+</code></pre>
 
 <p>For Windows, I use <code>xcopy</code>:</p>
 
-<p>``` make MyBAProjectTest.pro
-PWD_WIN = $${PWD}
-PWD_WIN ~= s,/,\,g</p>
-
-<p>QMAKE_POST_LINK += $$quote(mkdir DestFolder)
-QMAKE_POST_LINK += $$quote(xcopy $${PWD_WIN}\TestData $${OUT_PWD_WIN}\TestData /E)
-```</p>
-
-<p>I also want that directory to be deleted when I run <code>make clean</code>. Cleaning up just means adding some commands to the <code>QMAKE_CLEAN</code> directive. I also want to run the appropriate commands whether I&rsquo;m on Unix or Windows without having to modify my <code>.pro</code> file. Wrapping the previous commands in what I call an &ldquo;OS-space&rdquo; will cause those commands to only run in the specified operating system.</p>
-
-<p>``` make MyBAProjectTest.pro
-win32 {</p>
-
-<pre><code>PWD_WIN = $${PWD}
+<pre><code class="make MyBAProjectTest.pro">PWD_WIN = $${PWD}
 PWD_WIN ~= s,/,\\,g
 
 QMAKE_POST_LINK += $$quote(mkdir DestFolder)
 QMAKE_POST_LINK += $$quote(xcopy $${PWD_WIN}\\TestData $${OUT_PWD_WIN}\\TestData /E)
-
-QMAKE_CLEAN += /s /f /q TestData &amp;&amp; rd /s /q TestData
 </code></pre>
 
-<p>}</p>
+<p>I also want that directory to be deleted when I run <code>make clean</code>. Cleaning up just means adding some commands to the <code>QMAKE_CLEAN</code> directive. I also want to run the appropriate commands whether I&rsquo;m on Unix or Windows without having to modify my <code>.pro</code> file. Wrapping the previous commands in what I call an &ldquo;OS-space&rdquo; will cause those commands to only run in the specified operating system.</p>
 
-<p>unix {</p>
+<pre><code class="make MyBAProjectTest.pro">win32 {
+    PWD_WIN = $${PWD}
+    PWD_WIN ~= s,/,\\,g
 
-<pre><code>QMAKE_POST_LINK += $$quote(cp -rf $${PWD}/TestData $${OUT_PWD})
+    QMAKE_POST_LINK += $$quote(mkdir DestFolder)
+    QMAKE_POST_LINK += $$quote(xcopy $${PWD_WIN}\\TestData $${OUT_PWD_WIN}\\TestData /E)
 
-QMAKE_CLEAN += -r TestData
+    QMAKE_CLEAN += /s /f /q TestData &amp;&amp; rd /s /q TestData
+}
+
+unix {
+    QMAKE_POST_LINK += $$quote(cp -rf $${PWD}/TestData $${OUT_PWD})
+
+    QMAKE_CLEAN += -r TestData
+}
 </code></pre>
-
-<p>}
-```</p>
 
 <p>Data copied, tests working again. Take that, Nokia; no matter how difficult you make your build-processing tool, I&rsquo;ll figure out how to contort it to my whims.</p>
 ]]></content>
@@ -152,54 +136,47 @@ QMAKE_CLEAN += -r TestData
 
 <p>The area of the code I deal with uses <a href="http://www.mono-project.com/Embedding_Mono">embedded mono</a> to communicate with some C# libraries that we share with other applications. This means we have unmanaged memory which talks with managed memory. This has caused us more headaches than I care to remember. One such problem is that we have a static object that we only want to create and destroy once. So I write my first Cucumber test:</p>
 
-<p>``` cucumber DoStuff.feature
-Feature: Do that thing that we have to do</p>
+<pre><code class="cucumber DoStuff.feature">Feature: Do that thing that we have to do
 
-<p>Scenario: Do it my way
+Scenario: Do it my way
   Given I have done step 1
   When I do step 2
   Then I should see results
-```</p>
+</code></pre>
 
-<p>``` c++ DoStuff_StepDefinitions.cpp</p>
+<pre><code class="c++ DoStuff_StepDefinitions.cpp">#include &lt;cucumber-cpp/defs.hpp&gt;
+#include &lt;gtest/gtest.h&gt;
+#include &lt;mono/jit/jit.h&gt;
 
-<h1>include &lt;cucumber-cpp/defs.hpp></h1>
+const QString DOMAIN_NAME = "bridge";
 
-<h1>include &lt;gtest/gtest.h></h1>
-
-<h1>include &lt;mono/jit/jit.h></h1>
-
-<p>const QString DOMAIN_NAME = &ldquo;bridge&rdquo;;</p>
-
-<p>class Context
+class Context
 {
   // The static Mono object
   static MonoDomain *Domain;
-}</p>
+}
 
-<p>BEFORE() { Context::Domain = mono_jit_init(DOMAIN_NAME); }</p>
+BEFORE() { Context::Domain = mono_jit_init(DOMAIN_NAME); }
 
-<p>AFTER() { mono_jit_cleanup(Context::Domain); }</p>
+AFTER() { mono_jit_cleanup(Context::Domain); }
 
-<p>GIVEN(&ldquo;^I have done step 1$&rdquo;) { /<em> &hellip; </em>/ }</p>
+GIVEN("^I have done step 1$") { /* ... */ }
 
-<p>WHEN(&ldquo;^I do step 2$&rdquo;) { /<em> &hellip; </em>/ }</p>
+WHEN("^I do step 2$") { /* ... */ }
 
-<p>THEN(&ldquo;^I should see results$&rdquo;) { /<em> &hellip; </em>/ }</p>
-
-<p>```</p>
+THEN("^I should see results$") { /* ... */ }
+</code></pre>
 
 <p>Before my scenario starts, the <code>BEFORE()</code> function is called and my MonoDomain object is created. When the scenario ends, my <code>AFTER()</code> statement is called and the objects in my MonoDomain are cleaned up. Now, I add a second scenario.</p>
 
-<p>``` cucumber DoStuff.feature
-Feature: Do that thing that we have to do</p>
+<pre><code class="cucumber DoStuff.feature">Feature: Do that thing that we have to do
 
-<p>Scenario: Do it my way
-  &hellip;</p>
+Scenario: Do it my way
+  ...
 
-<p>Scenario: Do it your way
-  &hellip;
-```</p>
+Scenario: Do it your way
+  ...
+</code></pre>
 
 <p>Now I run my Cucumber test, and Mono explodes. Why? Because the <code>BEFORE()</code> and <code>AFTER()</code> functions are not <em>before all</em> and <em>after all</em>, but <em>before each</em> and <em>after each</em>.</p>
 
@@ -211,43 +188,37 @@ Feature: Do that thing that we have to do</p>
 
 <p>Then it hit me: Cucumber is open source. I found the source <a href="https://github.com/cucumber/cucumber-cpp">on Github</a> and started looking through <a href="https://github.com/cucumber/cucumber-cpp/tree/master/examples/">the example code</a>. It was there that I discovered <a href="https://github.com/cucumber/cucumber-cpp/tree/master/examples/FeatureShowcase/tag">tags</a>. Tags were the solution to my problem.</p>
 
-<p>``` cucumber DoStuff.feature
-Feature: Do that thing that we have to do</p>
+<pre><code class="cucumber DoStuff.feature">Feature: Do that thing that we have to do
 
-<p>@first
+@first
 Scenario: Do it my way
-  &hellip;</p>
+  ...
 
-<p>@last
+@last
 Scenario: Do it your way
-  &hellip;
-```</p>
+  ...
+</code></pre>
 
 <p>Using tags, I could label my scenarios with meaningful <code>@first</code> and <code>@last</code> tags to signify the beginning and end of my tests. The trick is to then add the required tags to my <code>BEFORE()</code> and <code>AFTER()</code> macro as such:</p>
 
-<p>``` c++ DoStuff_StepDefinitions.cpp</p>
+<pre><code class="c++ DoStuff_StepDefinitions.cpp">#include &lt;cucumber-cpp/defs.hpp&gt;
+#include &lt;gtest/gtest.h&gt;
+#include &lt;mono/jit/jit.h&gt;
 
-<h1>include &lt;cucumber-cpp/defs.hpp></h1>
+const QString DOMAIN_NAME = "bridge";
 
-<h1>include &lt;gtest/gtest.h></h1>
-
-<h1>include &lt;mono/jit/jit.h></h1>
-
-<p>const QString DOMAIN_NAME = &ldquo;bridge&rdquo;;</p>
-
-<p>class Context
+class Context
 {
   // The static Mono object
   static MonoDomain *Domain;
-}</p>
+}
 
-<p>BEFORE(&ldquo;@first&rdquo;) { Context::Domain = mono_jit_init(DOMAIN_NAME); }</p>
+BEFORE("@first") { Context::Domain = mono_jit_init(DOMAIN_NAME); }
 
-<p>AFTER(&ldquo;@last&rdquo;) { mono_jit_cleanup(Context::Domain); }</p>
+AFTER("@last") { mono_jit_cleanup(Context::Domain); }
 
-<p>// &hellip;</p>
-
-<p>```</p>
+// ...
+</code></pre>
 
 <p>Now my MonoDomain is only created <em>before</em> the scenario labeled <code>@first</code> and <em>after</em> the scenario labeled <code>@last</code>. Obviously, this isn&rsquo;t the cleanest fix imaginable, but it was the cleanest fix <em>available</em>. Whenever someone wants to add a new step to this test, they need to remember to move the <code>@last</code> tag to their scenario. However, I have the hope that it will be pretty obvious that the second scenario is no longer &ldquo;last&rdquo; when there is a third scenario following the &ldquo;last&rdquo; scenario. Anyway, it leaves me happy enough, since now my tests don&rsquo;t explode and I&rsquo;m able to reuse ~50% of the steps I had already written for the first scenario. I added a third scenario later on and 9 out of the 10 steps in the scenario were reused from the first and second scenario.</p>
 

@@ -1,287 +1,377 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
-    <url>
-        <loc>
-            http://larry-price.com/blog/2012/10/19/a-hacky-solution-to-the-unicode-data-in-a-unicode-only-collation-problem/
-        </loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2012/10/24/i-dont-have-time/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2012/10/30/good-idea-bad-idea/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2012/11/08/the-optimistic-programmer/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larry-price.com/blog/2012/11/26/how-linux-works-what-every-superuser-should-know/
-        </loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larry-price.com/blog/2012/11/26/the-passionate-programmer-creating-a-remarkable-career-in-software-development/
-        </loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larry-price.com/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life/
-        </loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larry-price.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/
-        </loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larry-price.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/
-        </loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2013/01/19/testing-a-sinatra-app-with-capybara/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larry-price.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo/
-        </loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2013/02/19/code-complete-second-edition/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2013/03/25/pvreryvre-of-fyne-coddes/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2013/04/01/whats-still-possible/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2013/04/09/changing-plans/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2013/04/28/joel-on-software/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2013/07/16/effective-c-plus-plus/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larry-price.com/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1/
-        </loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2013/08/22/beware-of-group-projects/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larry-price.com/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/
-        </loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larry-price.com/blog/2013/08/31/using-foreman-to-create-an-upstart-service/
-        </loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2013/09/08/the-pragmatic-programmer/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2013/10/08/rvm-quick-start/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larry-price.com/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/
-        </loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2013/11/14/copy-data-using-qmake/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2013/11/17/sep-blog-battle-tools-of-the-trade/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2013/12/10/login-shell-not-sourcing-bashrc/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2013/12/12/tell-your-users-when-you-fail/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larry-price.com/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04/
-        </loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larry-price.com/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial/
-        </loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2014/02/12/custom-domain-with-github-pages/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larry-price.com/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/
-        </loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/
-        </loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larry-price.com/blog/2014/02/22/let-me-be-a-billboard-for-duckduckgo-for-a-few-minutes/
-        </loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larry-price.com/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you/
-        </loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2014/03/17/sep-startup-weekend-ollert/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2014/03/18/connecting-to-the-trello-api/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2014/03/20/using-the-trello-api-in-ruby/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2014/03/22/made-to-stick/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2014/03/24/sticky-footer-with-twitter-bootstrap/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2014/03/26/rework/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2014/03/29/using-sqlite-on-heroku/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2014/04/04/the-lean-startup/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2014/05/13/better-testing-in-go-with-gocheck/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2014/05/14/takeaways-from-agileindy-2014/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2014/05/25/git-out-the-way-rebase-workflow/</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larry-price.com/blog/2014/06/04/jasmine-a-whole-new-world-of-javascript-testing/
-        </loc>
-        <lastmod>2014-08-02T19:59:19-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larry-price.com/blog/2014/06/12/lessons-learned-during-the-conception-of-ollert/
-        </loc>
-        <lastmod>2014-06-12T20:31:31-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client/
-        </loc>
-        <lastmod>2014-07-07T06:22:15-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/</loc>
-        <lastmod>2014-07-12T07:35:28-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larry-price.com/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber/
-        </loc>
-        <lastmod>2014-07-12T08:17:38-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://larry-price.com/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards/
-        </loc>
-        <lastmod>2014-07-13T17:16:01-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install/</loc>
-        <lastmod>2014-08-02T20:31:36-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/archives/</loc>
-        <lastmod>2014-08-02T20:31:36-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/projects/</loc>
-        <lastmod>2014-08-02T20:31:36-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/blog/books/</loc>
-        <lastmod>2014-08-02T20:31:36-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/</loc>
-        <lastmod>2014-08-02T20:31:36-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://larry-price.com/robots.txt</loc>
-        <lastmod>2014-05-25T16:42:44-04:00</lastmod>
-    </url>
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit/</loc>
+    <lastmod>2014-08-07T07:25:11-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/08/05/javascript-testing-with-capybara-and-cucumber/</loc>
+    <lastmod>2014-08-05T06:40:40-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install/</loc>
+    <lastmod>2014-08-02T20:00:57-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards/</loc>
+    <lastmod>2014-07-13T17:15:00-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber/</loc>
+    <lastmod>2014-07-12T07:36:33-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/</loc>
+    <lastmod>2014-07-08T05:53:26-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client/</loc>
+    <lastmod>2014-07-07T05:59:13-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/06/12/lessons-learned-during-the-conception-of-ollert/</loc>
+    <lastmod>2014-06-12T20:32:00-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/06/04/jasmine-a-whole-new-world-of-javascript-testing/</loc>
+    <lastmod>2014-06-04T06:19:43-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/05/25/git-out-the-way-rebase-workflow/</loc>
+    <lastmod>2014-05-25T15:44:55-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/05/14/takeaways-from-agileindy-2014/</loc>
+    <lastmod>2014-05-14T20:59:00-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/05/13/better-testing-in-go-with-gocheck/</loc>
+    <lastmod>2014-05-13T21:14:39-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/04/04/the-lean-startup/</loc>
+    <lastmod>2014-04-04T21:22:02-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/03/29/using-sqlite-on-heroku/</loc>
+    <lastmod>2014-03-29T11:16:06-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/03/26/rework/</loc>
+    <lastmod>2014-03-26T21:00:33-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/03/24/sticky-footer-with-twitter-bootstrap/</loc>
+    <lastmod>2014-03-24T20:12:50-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/03/22/made-to-stick/</loc>
+    <lastmod>2014-03-22T14:31:02-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/03/20/using-the-trello-api-in-ruby/</loc>
+    <lastmod>2014-03-20T19:37:36-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/03/18/connecting-to-the-trello-api/</loc>
+    <lastmod>2014-03-18T20:00:11-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/03/17/sep-startup-weekend-ollert/</loc>
+    <lastmod>2014-03-17T20:07:38-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you/</loc>
+    <lastmod>2014-02-22T19:15:00-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/02/22/let-me-be-a-billboard-for-duckduckgo-for-a-few-minutes/</loc>
+    <lastmod>2014-02-22T17:47:00-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/</loc>
+    <lastmod>2014-02-22T16:46:00-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/</loc>
+    <lastmod>2014-02-13T17:55:00-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/02/12/custom-domain-with-github-pages/</loc>
+    <lastmod>2014-02-12T21:30:00-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial/</loc>
+    <lastmod>2014-01-07T22:45:03-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04/</loc>
+    <lastmod>2013-12-15T18:40:00-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/12/12/tell-your-users-when-you-fail/</loc>
+    <lastmod>2013-12-12T19:41:00-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/12/10/login-shell-not-sourcing-bashrc/</loc>
+    <lastmod>2013-12-10T19:45:00-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp/</loc>
+    <lastmod>2013-11-22T20:40:00-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/11/17/sep-blog-battle-tools-of-the-trade/</loc>
+    <lastmod>2013-11-17T20:59:00-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/11/14/copy-data-using-qmake/</loc>
+    <lastmod>2013-11-14T21:24:00-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/</loc>
+    <lastmod>2013-10-13T11:02:00-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/10/08/rvm-quick-start/</loc>
+    <lastmod>2013-10-08T22:10:00-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/09/08/the-pragmatic-programmer/</loc>
+    <lastmod>2013-09-08T12:00:00-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/08/31/using-foreman-to-create-an-upstart-service/</loc>
+    <lastmod>2013-08-31T17:05:00-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/</loc>
+    <lastmod>2013-08-26T22:35:00-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/08/22/beware-of-group-projects/</loc>
+    <lastmod>2013-08-22T21:22:00-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/08/07/the-trouble-with-time-zones-aka-learn-from-your-mistakes-pt-1/</loc>
+    <lastmod>2013-08-07T22:00:00-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/07/16/effective-c-plus-plus/</loc>
+    <lastmod>2013-07-16T22:11:00-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/04/28/joel-on-software/</loc>
+    <lastmod>2013-04-28T11:38:00-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/</loc>
+    <lastmod>2013-04-15T22:10:00-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/04/09/changing-plans/</loc>
+    <lastmod>2013-04-09T21:45:00-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/04/01/whats-still-possible/</loc>
+    <lastmod>2013-04-01T22:35:00-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/03/25/pvreryvre-of-fyne-coddes/</loc>
+    <lastmod>2013-03-25T22:09:00-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/02/19/code-complete-second-edition/</loc>
+    <lastmod>2013-02-19T22:38:00-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo/</loc>
+    <lastmod>2013-01-20T11:55:00-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/01/19/testing-a-sinatra-app-with-capybara/</loc>
+    <lastmod>2013-01-19T12:20:00-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/</loc>
+    <lastmod>2013-01-05T20:04:00-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/</loc>
+    <lastmod>2013-01-05T16:54:00-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2012/11/27/who-moved-my-cheese-an-amazing-way-to-deal-with-change-in-your-work-and-in-your-life/</loc>
+    <lastmod>2012-11-27T20:47:00-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2012/11/26/the-passionate-programmer-creating-a-remarkable-career-in-software-development/</loc>
+    <lastmod>2012-11-26T22:20:00-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2012/11/26/how-linux-works-what-every-superuser-should-know/</loc>
+    <lastmod>2012-11-26T21:27:00-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2012/11/08/the-optimistic-programmer/</loc>
+    <lastmod>2012-11-08T19:06:00-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2012/10/30/good-idea-bad-idea/</loc>
+    <lastmod>2012-10-30T21:37:00-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2012/10/24/i-dont-have-time/</loc>
+    <lastmod>2012-10-24T22:35:00-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/2012/10/19/a-hacky-solution-to-the-unicode-data-in-a-unicode-only-collation-problem/</loc>
+    <lastmod>2012-10-19T17:23:00-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  
+  <url>
+    <loc>http://larry-price.com/blog/books/</loc>
+    <lastmod>2014-08-09T08:51:32-04:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/projects/</loc>
+    <lastmod>2014-08-09T08:51:32-04:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/blog/archives/</loc>
+    <lastmod>2014-08-09T08:51:32-04:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>http://larry-price.com/</loc>
+    <lastmod>2014-08-09T08:51:32-04:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  
 </urlset>

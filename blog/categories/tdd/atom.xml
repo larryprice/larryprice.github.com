@@ -4,7 +4,7 @@
   <title><![CDATA[Category: tdd | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/tdd/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-02T20:32:12-04:00</updated>
+  <updated>2014-08-09T08:51:32-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -28,17 +28,15 @@
 
 <h3>What about MongoDB and the Ruby driver?</h3>
 
-<p>The first step is to get MongoDB working on your machine. Install MongoDB for your system &mdash; on Ubuntu 12.10 I do this:</p>
+<p>The first step is to get MongoDB working on your machine. Install MongoDB for your system &ndash; on Ubuntu 12.10 I do this:</p>
 
-<p><code>
-sudo apt-get install mongodb mongodb-dev mongodb-clients mongodb-server
-</code></p>
+<pre><code>sudo apt-get install mongodb mongodb-dev mongodb-clients mongodb-server
+</code></pre>
 
 <p>Then we start up the daemon:</p>
 
-<p><code>
-sudo service mongodb start
-</code></p>
+<pre><code>sudo service mongodb start
+</code></pre>
 
 <h3>What&rsquo;s the concept?</h3>
 
@@ -50,339 +48,284 @@ sudo service mongodb start
 
 <p>If you don&rsquo;t have RSpec installed, it&rsquo;s as easy as opening up a shell and:</p>
 
-<p><code>
-$ sudo gem install rspec mongo
-</code></p>
+<pre><code>$ sudo gem install rspec mongo
+</code></pre>
 
 <p>I&rsquo;m going to put the Populater in a tools directory, and I&rsquo;m going to put my spec files in a test/spec directory. The directory structure I want to use is as follows:</p>
 
-<p><code>
-project
+<pre><code>project
 --tools
 ----populate
 ----test
 ------spec
-</code></p>
+</code></pre>
 
 <p>In the &lsquo;tools/test/spec&rsquo; directory, I create &lsquo;populater_spec.rb.&rsquo; We&rsquo;ll write our first test:</p>
 
-<p>``` ruby project/tools/test/spec/populater_spec.rb
-describe Populater do</p>
-
-<pre><code>describe "#new" do
-    it "does not throw when creating instance" do
-        expect {Populater.new}.to_not raise_error
+<pre><code class="ruby project/tools/test/spec/populater_spec.rb">describe Populater do
+    describe "#new" do
+        it "does not throw when creating instance" do
+            expect {Populater.new}.to_not raise_error
+        end
     end
 end
 </code></pre>
-
-<p>end
-```</p>
 
 <p>The syntax for RSpec is mostly pseudo-English, so it&rsquo;s fairly straightforward to follow. The first &lsquo;describe&rsquo; block says that we are describing the Populater class. The second &lsquo;describe&rsquo; block says that we are describing the &lsquo;new&rsquo; method of the &lsquo;Populater&rsquo; class. The inner-most block is our test. We want to make sure that no exception is thrown when we create a new Populater. To run this test, open a terminal and type:</p>
 
-<p><code>bash Running Rspec
-$ pwd
+<pre><code class="bash Running Rspec">$ pwd
 ~/project/tools/test
 $ rspec populater_spec.rb
-</code></p>
+</code></pre>
 
 <p>We get a big fat compile error, obviously due to the fact that there&rsquo;s no such thing as a &lsquo;Populater&rsquo; class. So create the file &lsquo;populater.rb&rsquo; in &lsquo;project/tools/populate&rsquo; and create the class:</p>
 
-<p><code>ruby project/tools/populate/populater.rb
-class Populater
+<pre><code class="ruby project/tools/populate/populater.rb">class Populater
 end
-</code></p>
+</code></pre>
 
 <p>And include the &lsquo;Populater&rsquo; class in our spec file:</p>
 
-<p>``` ruby project/tools/test/spec/populater_spec.rb
-require_relative &lsquo;../../populate/populater&rsquo;</p>
+<pre><code class="ruby project/tools/test/spec/populater_spec.rb">require_relative '../../populate/populater'
 
-<p>describe Populater do</p>
-
-<pre><code>describe "#new" do
-    it "does not throw when creating instance" do
-        expect {Populater.new}.to_not raise_error
+describe Populater do
+    describe "#new" do
+        it "does not throw when creating instance" do
+            expect {Populater.new}.to_not raise_error
+        end
     end
 end
 </code></pre>
-
-<p>end
-```</p>
 
 <p>Now run rspec. Hooray, we&rsquo;re passing all our tests! Let&rsquo;s add another test and some let&rsquo;s have RSpec do a little work before each test.</p>
 
-<p>``` ruby project/tools/test/spec/populater_spec.rb
-require_relative &lsquo;../../populate/populater&rsquo;</p>
+<pre><code class="ruby project/tools/test/spec/populater_spec.rb">require_relative '../../populate/populater'
 
-<p>describe Populater do</p>
-
-<pre><code>before:each do
-    @populater = Populater.new
-end
-
-describe "#new" do
-    it "does not throw when creating instance" do
-        expect {Populater.new}.to_not raise_error
+describe Populater do
+    before:each do
+        @populater = Populater.new
     end
 
-    it "takes no params and returns a Populater instance" do
-        @populater.should be_an_instance_of Populater
+    describe "#new" do
+        it "does not throw when creating instance" do
+            expect {Populater.new}.to_not raise_error
+        end
+
+        it "takes no params and returns a Populater instance" do
+            @populater.should be_an_instance_of Populater
+        end
     end
 end
 </code></pre>
-
-<p>end
-```</p>
 
 <p>The &lsquo;before:each&rsquo; syntax tells RSpec to perform this action before running each test. This way, we don&rsquo;t have to type out &lsquo;Populater.new&rsquo; in each test. When we run RSpec, this test passes. Now let&rsquo;s actually do something meaningful in our new call. We want the Populater to empty all Pokemon from our database as it begins. In order to do this, we need to also tell the Populater what database to use, so we&rsquo;ll refactor slightly to pass in the name of our database to the Populater.</p>
 
-<p>``` ruby project/tools/test/spec/populater_spec.rb
-require_relative &lsquo;../../populate/populater&rsquo;
-require &lsquo;mongo&rsquo;</p>
+<pre><code class="ruby project/tools/test/spec/populater_spec.rb">require_relative '../../populate/populater'
+require 'mongo'
 
-<p>describe Populater do</p>
-
-<pre><code>before:all do
-    @col = Mongo::Connection.new.db('test')["pokemons"]
-end
-before:each do
-    @populater = Populater.new('test')
-end
-
-describe "#new" do
-    it "does not throw when creating instance" do
-        expect {Populater.new('test')}.to_not raise_error
+describe Populater do
+    before:all do
+        @col = Mongo::Connection.new.db('test')["pokemons"]
+    end
+    before:each do
+        @populater = Populater.new('test')
     end
 
-    it "takes one param and returns a Populater instance" do
-        @populater.should be_an_instance_of Populater
-    end
+    describe "#new" do
+        it "does not throw when creating instance" do
+            expect {Populater.new('test')}.to_not raise_error
+        end
 
-    it "empties pokemon collection" do
-        @col.insert({:test =&gt; "hi there"})
-        @col.find.count.should_not eql 0
-        Populater.new('test')
-        @col.find.count.should eql 0
+        it "takes one param and returns a Populater instance" do
+            @populater.should be_an_instance_of Populater
+        end
+
+        it "empties pokemon collection" do
+            @col.insert({:test =&gt; "hi there"})
+            @col.find.count.should_not eql 0
+            Populater.new('test')
+            @col.find.count.should eql 0
+        end
     end
 end
 </code></pre>
-
-<p>end
-```</p>
 
 <p>Similar to the &lsquo;before:each&rsquo; syntax, the &lsquo;before:all&rsquo; syntax runs the statement once. Here we want to get a handle to the &lsquo;pokemons&rsquo; collection from our &lsquo;test&rsquo; database. In our test, we run a &lsquo;find&rsquo; with no arguments on the &lsquo;pokemons&rsquo; collection to query everything in that collection. We also have an &lsquo;insert&rsquo; statement where we insert an arbitrary document into our collection. You&rsquo;ll note later that this garbage document looks nothing like the Pokemon documents we insert, which is just another reason to love document-store databases. We run RSpec and we fail the test. Let&rsquo;s open up &lsquo;populater.rb&rsquo; and fix this.</p>
 
-<p>``` ruby project/tools/populate/populater.rb
-require &lsquo;mongo&rsquo;</p>
+<pre><code class="ruby project/tools/populate/populater.rb">require 'mongo'
 
-<p>class Populater</p>
-
-<pre><code>def initialize(db_name)
-    @col = Mongo::Connection.new.db(db_name)["pokemons"]
-    @col.remove
+class Populater
+    def initialize(db_name)
+        @col = Mongo::Connection.new.db(db_name)["pokemons"]
+        @col.remove
+    end
 end
 </code></pre>
-
-<p>end
-```</p>
 
 <p>Test fixed. We connect to the same database and access the same collection and remove all the old data on intialize. So now we actually want to add Pokemon to the collection. We&rsquo;ll pick up a new &lsquo;describe&rsquo; block for an &lsquo;add_pokemon&rsquo; method. We&rsquo;ll then test that calling it with 0 adds no Pokemon to the collection.</p>
 
-<p>``` ruby project/tools/test/spec/populater_spec.rb
-&hellip;
-describe &ldquo;#add_pokemon&rdquo; do</p>
-
-<pre><code>it "adds 0 pokemon given 0" do
-    @populater.add_pokemon 0
-    @col.find.count.should eql 0
+<pre><code class="ruby project/tools/test/spec/populater_spec.rb">...
+describe "#add_pokemon" do
+    it "adds 0 pokemon given 0" do
+        @populater.add_pokemon 0
+        @col.find.count.should eql 0
+    end
 end
+...
 </code></pre>
-
-<p>end
-&hellip;
-```</p>
 
 <p>When we run our tests, we get a NoMethodError and fail. We create a trivial fix in populater.rb</p>
 
-<p>``` ruby project/tools/populate/populater.rb
-class Populater</p>
+<pre><code class="ruby project/tools/populate/populater.rb">class Populater
+    ...
 
-<pre><code>...
-
-def add_pokemon(num)
+    def add_pokemon(num)
+    end
 end
 </code></pre>
-
-<p>end
-```</p>
 
 <p>And we pass the test, having added 0 Pokemon to our database. Let&rsquo;s do it with 1 now.</p>
 
-<p>``` ruby project/tools/test/spec/populater_spec.rb
-&hellip;
-describe &ldquo;#add_pokemon&rdquo; do</p>
-
-<pre><code>...
-it "adds 1 pokemon given 1" do
-    @populater.add_pokemon 1
-    @col.find.count.should eql 1
+<pre><code class="ruby project/tools/test/spec/populater_spec.rb">...
+describe "#add_pokemon" do
+    ...
+    it "adds 1 pokemon given 1" do
+        @populater.add_pokemon 1
+        @col.find.count.should eql 1
+    end
 end
+...
 </code></pre>
-
-<p>end
-&hellip;
-```</p>
 
 <p>We fail. Another trivial fix:</p>
 
-<p>``` ruby project/tools/populate/populater.rb
-class Populater</p>
+<pre><code class="ruby project/tools/populate/populater.rb">class Populater
+    ...
 
-<pre><code>...
-
-def add_pokemon(num)
-    (0...num).each do |x|
-        @col.insert({number: x})
+    def add_pokemon(num)
+        (0...num).each do |x|
+            @col.insert({number: x})
+        end
     end
 end
 </code></pre>
-
-<p>end
-```</p>
 
 <p>We pass again. We&rsquo;ll also pass when checking for multiple Pokemon:</p>
 
-<p>``` ruby project/tools/test/spec/populater_spec.rb
-&hellip;
-describe &ldquo;#add_pokemon&rdquo; do</p>
-
-<pre><code>...
-it "adds 2 pokemon given 2" do
-    @populater.add_pokemon 2
-    @col.find.count.should eql 2
+<pre><code class="ruby project/tools/test/spec/populater_spec.rb">...
+describe "#add_pokemon" do
+    ...
+    it "adds 2 pokemon given 2" do
+        @populater.add_pokemon 2
+        @col.find.count.should eql 2
+    end
 end
+...
 </code></pre>
-
-<p>end
-&hellip;
-```</p>
 
 <p>But we&rsquo;re missing substance. There&rsquo;s only garbage being shoved in our database. Our TDD methodology breaks down slightly here because we want our database to have dynamic information scraped from a website, and I don&rsquo;t want to hard code any data nor do I want to scrape the same website in my tests and my implementation. So we&rsquo;re going to do a little bit of behind-the-scenes stuff and test that the fields we want are simply not nil. I want each Pokemon to have a number, name, an array of types, and a link to an image:</p>
 
-<p>``` ruby project/tools/test/spec/populater_spec.rb
-&hellip;
-describe &ldquo;#add_pokemon&rdquo; do</p>
-
-<pre><code>...
-it "adds pokemon with a number" do
-    @populater.add_pokemon 1
-    @col.find.count.should eql 1
-    @col.find.first['number'].should_not be_nil
+<pre><code class="ruby project/tools/test/spec/populater_spec.rb">...
+describe "#add_pokemon" do
+    ...
+    it "adds pokemon with a number" do
+        @populater.add_pokemon 1
+        @col.find.count.should eql 1
+        @col.find.first['number'].should_not be_nil
+    end
+    it "adds pokemon with a name" do
+        @populater.add_pokemon 1
+        @col.find.count.should eql 1
+        @col.find.first['name'].should_not be_nil
+    end
+    it "adds pokemon with array of types" do
+        @populater.add_pokemon 1
+        @col.find.count.should eql 1
+        types = @col.find.first['types']
+        types.should_not be_nil
+        types.should be_an_instance_of Array
+        types.should have_at_least(1).items
+        types.should have_at_most(2).items
+    end
+    it "adds pokemon with image link" do
+        @populater.add_pokemon 1
+        @col.find.count.should eql 1
+        image = @col.find.first['image']
+        image.should_not be_nil
+        image.should_not be_empty
+    end
 end
-it "adds pokemon with a name" do
-    @populater.add_pokemon 1
-    @col.find.count.should eql 1
-    @col.find.first['name'].should_not be_nil
-end
-it "adds pokemon with array of types" do
-    @populater.add_pokemon 1
-    @col.find.count.should eql 1
-    types = @col.find.first['types']
-    types.should_not be_nil
-    types.should be_an_instance_of Array
-    types.should have_at_least(1).items
-    types.should have_at_most(2).items
-end
-it "adds pokemon with image link" do
-    @populater.add_pokemon 1
-    @col.find.count.should eql 1
-    image = @col.find.first['image']
-    image.should_not be_nil
-    image.should_not be_empty
-end
+...
 </code></pre>
-
-<p>end
-&hellip;
-```</p>
 
 <p>There are many websites where you can get this kind of data for each Pokemon, but I chose <a href="http://pokemon.wikia.com/wiki/List_of_Pok%C3%A9mon">the Pokemon Wiki</a> for its consistency. In the initializer of the Populater, I open up the URL using Nokogiri so I can access the sweet, creamy data contained within. In my add_pokemon method, I extract this data I want based on the way the table is set up on the website. To continue, we need to install the Nokogiri gem:</p>
 
-<p><code>
-sudo gem install nokogiri
-</code></p>
+<pre><code>sudo gem install nokogiri
+</code></pre>
 
 <p>And now we add the logic to add_pokemon:</p>
 
-<p>``` ruby project/tools/populate/populater.rb
-require &lsquo;mongo&rsquo;
-require &lsquo;nokogiri&rsquo;
-require &lsquo;open-uri&rsquo;</p>
+<pre><code class="ruby project/tools/populate/populater.rb">require 'mongo'
+require 'nokogiri'
+require 'open-uri'
 
-<p>class Populater</p>
+class Populater
+    def initialize(db_name)
+        @col = Mongo::Connection.new.db(db_name)["pokemons"]
+        @col.remove
+        @data = Nokogiri::HTML(open("http://pokemon.wikia.com/wiki/List_of_Pok%C3%A9mon"))
+    end
 
-<pre><code>def initialize(db_name)
-    @col = Mongo::Connection.new.db(db_name)["pokemons"]
-    @col.remove
-    @data = Nokogiri::HTML(open("http://pokemon.wikia.com/wiki/List_of_Pok%C3%A9mon"))
-end
+    def add_pokemon(num_to_add)
+        @data.xpath("//table[@class='wikitable sortable']/tr").each do |row|
+            break if num_to_add &lt;= 0
+            dex_num = row.at_xpath('td/text()').to_s.strip
+            next if dex_num.nil? || dex_num.empty?
+            dex_name = row.at_xpath('td[2]/a/text()').to_s.strip
 
-def add_pokemon(num_to_add)
-    @data.xpath("//table[@class='wikitable sortable']/tr").each do |row|
-        break if num_to_add &lt;= 0
-        dex_num = row.at_xpath('td/text()').to_s.strip
-        next if dex_num.nil? || dex_num.empty?
-        dex_name = row.at_xpath('td[2]/a/text()').to_s.strip
+            unless dex_num == "000"
+                type_1 = row.at_xpath('td[4]/a/span/text()').to_s.strip
+                type_2 = row.at_xpath('td[5]/a/span/text()').to_s.strip || row.at_xpath('td[5]/text()').to_s.strip
+                image_link = "http://img.pokemondb.net/artwork/#{dex_name.downcase}.jpg"
+            else
+                type_1 = row.at_xpath('td[4]/text()').to_s.strip
+                type_2 = row.at_xpath('td[5]/text()').to_s.strip
+                image_link = "images/missingo.png"
+            end
 
-        unless dex_num == "000"
-            type_1 = row.at_xpath('td[4]/a/span/text()').to_s.strip
-            type_2 = row.at_xpath('td[5]/a/span/text()').to_s.strip || row.at_xpath('td[5]/text()').to_s.strip
-            image_link = "http://img.pokemondb.net/artwork/#{dex_name.downcase}.jpg"
-        else
-            type_1 = row.at_xpath('td[4]/text()').to_s.strip
-            type_2 = row.at_xpath('td[5]/text()').to_s.strip
-            image_link = "images/missingo.png"
+            types = Array.new
+            types &lt;&lt; type_1 unless type_1.nil? || type_1.empty?
+            types &lt;&lt; type_2 unless type_2.nil? || type_2.empty?
+
+            @col.insert({:number =&gt; dex_num, :name =&gt; dex_name, :types =&gt; types, :image =&gt; image_link})
+
+            num_to_add -= 1
         end
-
-        types = Array.new
-        types &lt;&lt; type_1 unless type_1.nil? || type_1.empty?
-        types &lt;&lt; type_2 unless type_2.nil? || type_2.empty?
-
-        @col.insert({:number =&gt; dex_num, :name =&gt; dex_name, :types =&gt; types, :image =&gt; image_link})
-
-        num_to_add -= 1
     end
 end
 </code></pre>
-
-<p>end
-```</p>
 
 <p>I&rsquo;ll admit The add_pokemon method is now quite a bit more daunting to interpret. Here&rsquo;s the breakdown of what&rsquo;s going on: Nokogiri finds us the table tag with class of &lsquo;wikitable sortable&rsquo; and we iterate over that. There are two breaking conditions of our loop: we hit the max number of Pokemon as given, or we can&rsquo;t find anymore Pokemon in the table. So we check that we haven&rsquo;t hit our max. Then we find the Pokemon&rsquo;s number in the table after we manually parse the HTML. In the case of this table, the first row is all garbage, so we continue to the next row if we are on the first row.  We then grab the name from the table, which is luckily always in the same place. The branch is for the special case of Pokemon #000 (Missingo), which is set up slightly differently in the table for some reason. We create an empty array and shove our types in it, but we have to be careful because not all Pokemon have two types. We then create a document in the braces and insert it into the collection. The final step is to decrement the loop counter.</p>
 
 <p>Tests pass. We now have a working Populater! Now we can either write a script or open up the irb and populate as necessary and we know that the Populater is functional:</p>
 
-<p>``` ruby Populating Databases
-$ irb</p>
-
-<blockquote><blockquote><p>Dir.pwd
-=> &ldquo;project/tools/populate&rdquo;
-require &lsquo;mongo&rsquo;
-=> true
-col = Mongo::Connection.new.db(&lsquo;dev&rsquo;)[&ldquo;pokemons&rdquo;]
-=> &hellip;
-col.find.count
-=> 0
-require &lsquo;./populater&rsquo;
-=> true
-Populater.new(&lsquo;dev&rsquo;).add_pokemon 152
-=> nil
-col.find.count
-152</p>
-
-<p>```</p></blockquote></blockquote>
+<pre><code class="ruby Populating Databases">$ irb
+&gt;&gt; Dir.pwd
+=&gt; "project/tools/populate"
+&gt;&gt; require 'mongo'
+=&gt; true
+&gt;&gt; col = Mongo::Connection.new.db('dev')["pokemons"]
+=&gt; ...
+&gt;&gt; col.find.count
+=&gt; 0
+&gt;&gt; require './populater'
+=&gt; true
+&gt;&gt; Populater.new('dev').add_pokemon 152
+=&gt; nil
+&gt;&gt; col.find.count
+152
+&gt;&gt;
+</code></pre>
 
 <p>If you want to further familiarize yourself with the MongoDB Ruby driver, you should check out the MongoDB Koans. Unfortunately, the original <a href="https://github.com/tredfern/MongoDB_Koans">MongoDB Koans</a> have not been updated in a while, and so my more recent installations of Ruby and the MongoDB driver didn&rsquo;t work. I found a set of <a href="https://github.com/edgecase/ruby_koans">updated koans</a> which worked with my install of Ruby 1.9.3. However, the updated version also had a couple of annoying issues with deprecations, so I created <a href="https://github.com/larryprice/MongoDB_Koans">my own fork</a> on GitHub with the fixes.</p>
 ]]></content>
