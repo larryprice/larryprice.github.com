@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rvm | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/rvm/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-12T16:57:15-04:00</updated>
+  <updated>2014-08-16T11:03:51-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -20,54 +20,93 @@
     <id>http://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0</id>
     <content type="html"><![CDATA[<p><a href="//ruby-lang.org/en/news/2013/12/25/ruby-2-1-0-is-released/">Ruby 2.1.0 went stable</a> a few months ago, and <a href="//ruby-lang.org/en/news/2014/01/10/ruby-1-9-3-will-end-on-2015/">Ruby 1.9.3 support</a> will end in a just over a year.</p>
 
+
+
+
 <p>You know what that means: Warplanes in the sky falling to the ground, dogs and cats getting along like old pals, and people wandering aimlessly through the streets trying to remember the last time they saw a green build.</p>
 
-<p>Believe it or not, all of these things can be prevented. Once upon a time, I wrote about <a href="/blog/2013/10/08/rvm-quick-start/">configuring and using rvm</a> to control individual ruby environments for each of your projects. If it&rsquo;s been a while since you installed your copy of <a href="//rvm.io/">rvm</a>, you might have some trouble installing and using newer version of ruby. Lucky for us, those clever rvm developers made it easy to get around this.</p>
+
+
+
+<p>Believe it or not, all of these things can be prevented. Once upon a time, I wrote about <a href="http://larry-price.com/blog/2013/10/08/rvm-quick-start/">configuring and using rvm</a> to control individual ruby environments for each of your projects. If it&rsquo;s been a while since you installed your copy of <a href="//rvm.io/">rvm</a>, you might have some trouble installing and using newer version of ruby. Lucky for us, those clever rvm developers made it easy to get around this.</p>
+
+
+
 
 <p>In my case, I want to upgrade a project to use <code>ruby 2.1.0</code>. The first time I tried to run <code>rvm install ruby-2.1.0</code>, I ended up installing <code>ruby-2.1.0-preview1</code>. I realized that I had installed rvm on this machine around October 2013, and <code>ruby 2.1.0</code> was released in December 2013, so rvm had no idea that <code>ruby 2.1.0</code> was stable. Updating rvm (in the root of the project directory):</p>
 
-<pre><code class="bash /home/lrp/Projects/2014/projNeedingRuby210">$ rvm get stable
-</code></pre>
+
+<p><figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm get stable
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>There will be some amount of text on the screen if your system needs to be updated. Note that you must be connected to the internet if you want rvm to update. Now we do the install of our brand new ruby:</p>
 
-<pre><code class="bash /home/lrp/Projects/2014/projNeedingRuby210">$ rvm install ruby-2.1.0
-</code></pre>
+
+<p><figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm install ruby-2.1.0
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Again, text on the screen from fetching of data from the internet. But hopefully you see something that tells you the operation was successful. You can also verify which rubies you have installed using the <code>list</code> command:</p>
 
-<pre><code class="bash /home/lrp/Projects/2014/projNeedingRuby210">$ rvm list rubies
-   ruby-1.9.3-p448 [ x86_64 ]
-=&gt; ruby-2.0.0-p247 [ x86_64 ]
- * ruby-2.1.0 [ x86_64 ]
 
-# =&gt; - current
-# =* - current &amp;&amp; default
-#  * - default
-</code></pre>
+<p><figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm list rubies
+</span><span class='line'>   ruby-1.9.3-p448 <span class="o">[</span> x86_64 <span class="o">]</span>
+</span><span class='line'><span class="o">=</span>&gt; ruby-2.0.0-p247 <span class="o">[</span> x86_64 <span class="o">]</span>
+</span><span class='line'> * ruby-2.1.0 <span class="o">[</span> x86_64 <span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># =&gt; - current</span>
+</span><span class='line'><span class="c"># =* - current &amp;&amp; default</span>
+</span><span class='line'><span class="c">#  * - default</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Now we tell our current project to use <code>ruby 2.1.0</code>:</p>
 
-<pre><code class="bash /home/lrp/Projects/2014/projNeedingRuby210">$ rm .ruby-version .ruby-gemset
-$ rvm 2.1.0@projNeedingRuby210 --create --ruby-version
-ruby-2.1.0 - #gemset created /home/lrp/.rvm/gems/ruby-2.1.0@projNeedingRuby210
-ruby-2.1.0 - #generating projNeedingRuby210 wrappers.
-$ rvm gemset copy 2.0.0-p247@projNeedingRuby210 2.1.0@projNeedingRuby210
-Copying gemset from 2.0.0-p247@projNeedingRuby210 to 2.1.0@projNeedingRuby210
-Generating gemset wrappers ruby-2.1.0@projNeedingRuby210.
-Making gemset 2.1.0@projNeedingRuby210 pristine.
-$ which ruby
-/home/lrp/.rvm/rubies/ruby-2.1.0/bin/ruby
-</code></pre>
+
+<p><figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rm .ruby-version .ruby-gemset
+</span><span class='line'><span class="nv">$ </span>rvm 2.1.0@projNeedingRuby210 &ndash;create &ndash;ruby-version
+</span><span class='line'>ruby-2.1.0 - <span class="c">#gemset created /home/lrp/.rvm/gems/ruby-2.1.0@projNeedingRuby210</span>
+</span><span class='line'>ruby-2.1.0 - <span class="c">#generating projNeedingRuby210 wrappers.</span>
+</span><span class='line'><span class="nv">$ </span>rvm gemset copy 2.0.0-p247@projNeedingRuby210 2.1.0@projNeedingRuby210
+</span><span class='line'>Copying gemset from 2.0.0-p247@projNeedingRuby210 to 2.1.0@projNeedingRuby210
+</span><span class='line'>Generating gemset wrappers ruby-2.1.0@projNeedingRuby210.
+</span><span class='line'>Making gemset 2.1.0@projNeedingRuby210 pristine.
+</span><span class='line'><span class="nv">$ </span>which ruby
+</span><span class='line'>/home/lrp/.rvm/rubies/ruby-2.1.0/bin/ruby
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Alright! Crisis averted. If you&rsquo;re using <a href="//bundler.io/">bundler</a> with this project, be sure to change your ruby version (usually located near the top of the <code>Gemfile</code>).</p>
 
+
+
+
 <p>What about setting up a new project using <code>ruby 2.1.0</code>? Easy! Switch to the project directory and:</p>
 
-<pre><code class="bash /home/lrp/Projects/2014/newRubyProject">$ rvm 2.1.0@newRubyProject --create --ruby-version
-</code></pre>
+
+<p><figure class='code'><figcaption><span>/home/lrp/Projects/2014/newRubyProject</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm 2.1.0@newRubyProject &ndash;create &ndash;ruby-version
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Oh, rvm, you make life <em>too</em> easy sometimes.</p>
+
 ]]></content>
   </entry>
   
@@ -78,43 +117,78 @@ $ which ruby
     <id>http://larry-price.com/blog/2013/12/10/login-shell-not-sourcing-bashrc</id>
     <content type="html"><![CDATA[<p>I have a confession: I&rsquo;ve been avoiding using <a href="https://rvm.io/">rvm</a> for the past few weeks for stupid reasons.</p>
 
+
+
+
 <p>When using <code>rvm</code> with <code>gnome-terminal</code>, I have to tell <code>gnome-terminal</code> to run as a login shell so that <code>/etc/profile</code> is sourced. The login shell is then supposed to source <code>$HOME/profile</code>, which is then supposed to source <code>$HOME/.bashrc</code>. Installing <code>rvm</code> results in me editing my <code>.bash_profile</code> to add the following line:</p>
 
-<pre><code class="bash .bash_profile">[[ -s "$HOME/.rvm/scripts/rvm" ]] &amp;&amp; source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-</code></pre>
+
+<p><figure class='code'><figcaption><span>.bash_profile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[[</span> -s <span class="s2">&quot;$HOME/.rvm/scripts/rvm&quot;</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="s2">&quot;$HOME/.rvm/scripts/rvm&quot;</span> <span class="c"># Load RVM into a shell session <em>as a function</em></span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>All my <code>rvm</code> environments seem to work, so this is a success, right?</p>
 
+
+
+
 <p>Well, I type the good ol&#8217; <code>ls</code> command and I notice that all my colors are missing. I notice that the terminal title no longer reads the present working directory, but instead greets me with a disinterested &ldquo;Terminal.&rdquo; What happened?</p>
+
+
+
 
 <p>Eventually I realized that this was a problem caused by not sourcing my <code>.bashrc</code>. Where did I go wrong?</p>
 
+
+
+
 <p>The login shell sources <code>$HOME/.profile</code> UNLESS <code>$HOME/.bash_profile</code> exists, in which case it only sources the latter. So what are the contents of my <code>$HOME/.profile</code>?</p>
 
-<pre><code class="bash .profile"># ~/.profile: executed by the command interpreter for login shells.
 
-# [cut for brevity]
-
-# if running bash
-if [ -n "$BASH_VERSION" ]; then
-    # include .bashrc if it exists
-    if [ -f "$HOME/.bashrc" ]; then
-      . "$HOME/.bashrc"
-    fi
-fi
-
-# [cut for brevity]
-</code></pre>
+<p><figure class='code'><figcaption><span>.profile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># ~/.profile: executed by the command interpreter for login shells.</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># [cut for brevity]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># if running bash</span>
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> -n <span class="s2">&quot;$BASH_VERSION&quot;</span> <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'>    <span class="c"># include .bashrc if it exists</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">[</span> -f <span class="s2">&quot;$HOME/.bashrc&quot;</span> <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'>      . <span class="s2">&quot;$HOME/.bashrc&quot;</span>
+</span><span class='line'>    <span class="k">fi</span>
+</span><span class='line'><span class="k">fi</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># [cut for brevity]</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Aha! The sneaky dot-file actually sources <code>$HOME/.bashrc</code>, and my shiny new <code>$HOME/.bash_profile</code> doesn&rsquo;t. I fixed this by sourcing <code>$HOME/.profile</code> in <code>$HOME/.bash_profile</code>.</p>
 
-<pre><code class="bash .bash_profile">[ -f "$HOME/.profile" ] &amp;&amp; source "$HOME/.profile"
-[[ -s "$HOME/.rvm/scripts/rvm" ]] &amp;&amp; source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-</code></pre>
+
+<p><figure class='code'><figcaption><span>.bash_profile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span> -f <span class="s2">&quot;$HOME/.profile&quot;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="s2">&quot;$HOME/.profile&quot;</span>
+</span><span class='line'><span class="o">[[</span> -s <span class="s2">&quot;$HOME/.rvm/scripts/rvm&quot;</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="s2">&quot;$HOME/.rvm/scripts/rvm&quot;</span> <span class="c"># Load RVM into a shell session <em>as a function</em></span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>For the memory-impaired: <code>.bash_profile</code> sources <code>.profile</code> sources <code>.bashrc</code>.</p>
 
+
+
+
 <p>Re-open <code>gnome-terminal</code> to find my colors are fixed, my title is correct, and <code>rvm</code> plays the right notes. The world is at peace once again, and I don&rsquo;t have to avoid using <code>rvm</code>.</p>
+
 ]]></content>
   </entry>
   
@@ -125,49 +199,82 @@ fi
     <id>http://larry-price.com/blog/2013/10/08/rvm-quick-start</id>
     <content type="html"><![CDATA[<p>When I was working on a few different projects at once, I started running into issues where my Ruby gem versions would start to mismatch. How did I fix that issue? Naively. I adjusted the versions as necessary so my gems were always the same version. That was&hellip; pretty dumb. To make up for my past ignorance, I&rsquo;ve been exploring ways to manage my Ruby versions and my gems intelligently. Enter <a href="https://rvm.io/">RVM</a>.</p>
 
+
+
+
 <p>RVM is a simple tool to solve just problems. And it works pretty well. I hit some kinks along the way, but my installation pleases me well enough. Getting RVM is not for the faint of heart. Maybe there are better ways to do it, but the website says to execute the following:</p>
 
-<pre><code class="bash /home/lrp/my_project">&gt; curl -L https://get.rvm.io | bash -s stable
-</code></pre>
+
+<p><figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; curl -L <a href="https://get.rvm.io">https://get.rvm.io</a> | bash -s stable
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>This command uses curl to fetch the data that lives at <code>https://get.rvm.io</code>, which happens to be a big bash script. It executes the bash script with the args <code>-s stable</code>. &lsquo;Stable&rsquo; means the latest stable release of RVM. I could just as easily give it &lsquo;dev&rsquo; and get the latest developer release instead, but I really don&rsquo;t want that. So that command does a lot of stuff and may give you some further instructions to run before you can continue. Use that big head of yours and follow the instructions. You may also need to restart a terminal to get RVM to be recognized as a command. Since I was using <code>gnome-terminal</code>, I had to follow these <a href="https://rvm.io/integration/gnome-terminal">instructions</a>.</p>
 
+
+
+
 <p>Now I want RVM to know about some Ruby versions. For a full list of possible Ruby versions to install, run <code>rvm list known</code>. I just want 1.9.3. I found that I needed to do this even though I had 1.9.3 installed on my system previously.</p>
 
-<pre><code class="bash /home/lrp/my_project">&gt; rvm install ruby-1.9.3
-</code></pre>
+
+<p><figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; rvm install ruby-1.9.3
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>In Ubuntu 13.04, this command installs ruby-1.9.3 in <code>~/.rvm/rubies/ruby-1.9.3-p448/bin/ruby</code>. I&rsquo;ve found that this also sets my default Ruby to the RVM version of Ruby, which I don&rsquo;t want. To verify and undo this, I executed the following commands outside of my project directory.</p>
 
-<pre><code class="bash /home/lrp">&gt; which ruby
-/home/lrp/.rvm/rubies/ruby-1.9.3-p448/bin/ruby
-&gt; echo "D'oh"
-D'oh
-&gt; rvm use system
-Now using system ruby.
-&gt; which ruby
-/usr/bin/ruby
-&gt;
-</code></pre>
+
+<p><figure class='code'><figcaption><span>/home/lrp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; which ruby
+</span><span class='line'>/home/lrp/.rvm/rubies/ruby-1.9.3-p448/bin/ruby
+</span><span class='line'>&gt; <span class="nb">echo</span> <span class="s2">&quot;D&#39;oh&quot;</span>
+</span><span class='line'>D<span class="err">&#39;</span>oh
+</span><span class='line'>&gt; rvm use system
+</span><span class='line'>Now using system ruby.
+</span><span class='line'>&gt; which ruby
+</span><span class='line'>/usr/bin/ruby
+</span><span class='line'>&gt;
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Now that that&rsquo;s settled, I want to tell RVM to use the local version of Ruby for my project and to install any gems in a special location.</p>
 
-<pre><code class="bash /home/lrp/my_project">&gt; rvm 1.9.3@my-project --create --ruby-version
-</code></pre>
+
+<p><figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; rvm 1.9.3@my-project &ndash;create &ndash;ruby-version
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>This creates a gemset and ruby-version file (<code>.ruby-gemset</code> and <code>.ruby-version</code> files) using the Ruby installation 1.9.3 created above. I specifiy to use <code>--ruby-version</code> instead of <code>--rvmrc</code> because RVM told me that I should. After some research, the <code>.ruby-version</code> file is used by several other tools, so this will keep my potential number of config files low. Now I check that all my Ruby versions are okay.</p>
 
-<pre><code class="bash /home/lrp/my_project">&gt; which ruby
-/home/lrp/.rvm/rubies/ruby-1.9.3-p448/bin/ruby
-&gt; cd ..
-&gt; which ruby
-/usr/bin/ruby
-&gt;
-</code></pre>
+
+<p><figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; which ruby
+</span><span class='line'>/home/lrp/.rvm/rubies/ruby-1.9.3-p448/bin/ruby
+</span><span class='line'>&gt; <span class="nb">cd</span> ..
+</span><span class='line'>&gt; which ruby
+</span><span class='line'>/usr/bin/ruby
+</span><span class='line'>&gt;
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>When in my project directory, all the gems I install will be installed to my specified gemset, which means they are no longer cluttering my global gemspace, even when I install them using Bundler. It also means that I can use ruby-1.9.3 for this project and 2.0 for another project with minimal mental overhead. This makes me a happy developer.</p>
 
+
+
+
 <p>I only glazed over the installation process and documentation for RVM. Go to <a href="https://rvm.io/">the web site</a> for more.</p>
+
 ]]></content>
   </entry>
   

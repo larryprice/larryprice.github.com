@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sinatra | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/sinatra/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-12T16:57:15-04:00</updated>
+  <updated>2014-08-16T11:03:51-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -20,108 +20,206 @@
     <id>http://larry-price.com/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit</id>
     <content type="html"><![CDATA[<p>During the hardening of <a href="https://ollertapp.com">Ollert</a>, a Trello data analysis tool I wrote, I started writing acceptance tests. I quickly ran into an issue where the meat of my application requires opening pop-up window, signing into Trello, and allowing my application access.</p>
 
+
+
+
 <p>I created a test user on Trello with a few varied boards to allow for proper testing. In doing this, I store the user&rsquo;s login information in my .env file. For the most part, I can use the steps provided in <a href="https://gist.github.com/larryprice/546d6c029bb3074bd84c">this common web_steps.rb</a>.</p>
 
-<pre><code class="cucumber Connecting.feature">Feature: Landing
 
-Background:
-  Given I am on the landing page
-
-@javascript
-Scenario: Deny connecting to Trello
-  Given I follow "Connect to Get Started"
-  And I press "Deny" on the Trello popup
-  Then I should be on the landing page
-
-@javascript
-Scenario: Allow connecting to Trello
-  Given I follow "Connect to Get Started"
-  When I authorize with Trello as the test user
-  Then I should not see "Connecting..."
-  And I should not see "Redirecting..."
-  And I should be on the boards page
-</code></pre>
+<p><figure class='code'><figcaption><span>Connecting.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Landing</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">Background:</span><span class="nf"></span>
+</span><span class='line'><span class="k">  Given </span><span class="nf">I am on the landing page</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">@javascript</span><span class="nf"></span>
+</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Deny connecting to Trello</span>
+</span><span class='line'><span class="k">  Given </span><span class="nf">I follow &quot;</span><span class="s">Connect to Get Started</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I press &quot;</span><span class="s">Deny</span><span class="nf">&quot; on the Trello popup</span>
+</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">I should be on the landing page</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">@javascript</span><span class="nf"></span>
+</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Allow connecting to Trello</span>
+</span><span class='line'><span class="k">  Given </span><span class="nf">I follow &quot;</span><span class="s">Connect to Get Started</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">When </span><span class="nf">I authorize with Trello as the test user</span>
+</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">I should not see &quot;</span><span class="s">Connecting&hellip;</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I should not see &quot;</span><span class="s">Redirecting&hellip;</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I should be on the boards page</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>When the Trello popup appears, we have to specify the window we&rsquo;re going to use. Since I&rsquo;m using <a href="https://github.com/thoughtbot/capybara-webkit">capybara-webkit</a>, I&rsquo;m going to go ahead and do all of my Trello popup activities in one step, which saves me from writing a lot of unnecessary steps.</p>
 
-<pre><code class="ruby trello_popup_steps.rb">When /^I press "(.*?)" on the Trello popup$/ do |button|
-  trello_popup = windows.last
-  page.within_window trello_popup do
-    click_button button
-  end
-end
 
-When /^I authorize with Trello as the test user$/ do
-  trello_popup = windows.last
-  page.within_window trello_popup do
-    click_link "Log in"
-
-    fill_in "user", with: ENV['TEST_USER_TRELLO_USERNAME']
-    fill_in "password", with: ENV['TEST_USER_TRELLO_PASSWORD']
-
-    click_button "Log In"
-    click_button "Allow"
-  end
-end
-</code></pre>
+<p><figure class='code'><figcaption><span>trello_popup_steps.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">When</span> <span class="sr">/^I press &quot;(.*?)&quot; on the Trello popup$/</span> <span class="k">do</span> <span class="o">|</span><span class="n">button</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">trello_popup</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">last</span>
+</span><span class='line'>  <span class="n">page</span><span class="o">.</span><span class="n">within_window</span> <span class="n">trello_popup</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">click_button</span> <span class="n">button</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">When</span> <span class="sr">/^I authorize with Trello as the test user$/</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">trello_popup</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">last</span>
+</span><span class='line'>  <span class="n">page</span><span class="o">.</span><span class="n">within_window</span> <span class="n">trello_popup</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">click_link</span> <span class="s2">&quot;Log in&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fill_in</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="ss">with</span><span class="p">:</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;TEST_USER_TRELLO_USERNAME&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="n">fill_in</span> <span class="s2">&quot;password&quot;</span><span class="p">,</span> <span class="ss">with</span><span class="p">:</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;TEST_USER_TRELLO_PASSWORD&#39;</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">click_button</span> <span class="s2">&quot;Log In&quot;</span>
+</span><span class='line'>    <span class="n">click_button</span> <span class="s2">&quot;Allow&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Straightforward so far. We grab the window handle and we click links, fill in fields, and press buttons within that window.</p>
 
+
+
+
 <p>Note that I&rsquo;m using capybara-webkit, a headless web driver, to run my Javascript. Although the first test (&ldquo;Deny&rdquo;) will pass, the &ldquo;Allow&rdquo; test fails ambiguously. This is because capybara-webkit is not recognized as a supported browser by the Trello popup.</p>
+
+
+
 
 <p>Anecdotally, I contacted Trello support about this and received the following response:</p>
 
+
+
+
 <blockquote><p>Currently it is not possible to test this with a headless browser as you are looking to do without getting the unsupported browser message.</p></blockquote>
+
+
+
 
 <p>So I guess we should just give up, right? &hellip;Or we could manipulate the headers we send to load the Trello popup such that Trello <em>thinks</em> we are Google Chromium.</p>
 
-<pre><code class="cucumber trello_popup_steps.rb">When /^I authorize with Trello as the test user$/ do
-  trello_popup = windows.last
-  page.within_window trello_popup do
-    page.driver.header(
-      "User-Agent",
-      "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/34.0.1847.116 Chrome/34.0.1847.116 Safari/537.36"
-    )
 
-    click_link "Log in"
-
-    fill_in "user", with: ENV['TEST_USER_TRELLO_USERNAME']
-    fill_in "password", with: ENV['TEST_USER_TRELLO_PASSWORD']
-
-    click_button "Log In"
-    click_button "Allow"
-  end
-end
-</code></pre>
+<p><figure class='code'><figcaption><span>trello_popup_steps.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">When </span><span class="nf">/^I authorize with Trello as the test user$/ do</span>
+</span><span class='line'><span class="nf">  trello_popup = windows.last</span>
+</span><span class='line'><span class="nf">  page.within_window trello_popup do</span>
+</span><span class='line'><span class="nf">    page.driver.header(</span>
+</span><span class='line'><span class="nf">      &quot;</span><span class="s">User-Agent</span><span class="nf">&quot;,</span>
+</span><span class='line'><span class="nf">      &quot;</span><span class="s">Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/34.0.1847.116 Chrome/34.0.1847.116 Safari/537.36</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">    )</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">    click_link &quot;</span><span class="s">Log in</span><span class="nf">&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">    fill_in &quot;</span><span class="s">user</span><span class="nf">&quot;, with: ENV[&#39;TEST_USER_TRELLO_USERNAME&#39;]</span>
+</span><span class='line'><span class="nf">    fill_in &quot;</span><span class="s">password</span><span class="nf">&quot;, with: ENV[&#39;TEST_USER_TRELLO_PASSWORD&#39;]</span>
+</span><span class='line'><span class="nf">    </span>
+</span><span class='line'><span class="nf">    click_button &quot;</span><span class="s">Log In</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">    click_button &quot;</span><span class="s">Allow</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  end</span>
+</span><span class='line'><span class="nf">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Fantastic. Now my tests pass. I can&rsquo;t sleep at night, but my tests pass.</p>
 
+
+
+
 <p>Unfortunately, that won&rsquo;t be the case if I add more tests to this <code>.feature</code> file. Hidden somewhere deep in the browser&rsquo;s cache or cookies or somethings, Trello is remembering that we logged in sometimes. Sometimes it even remembers that someone else has logged in. The UI of the Trello popup changes based on whether it thinks you&rsquo;ve already logged in. In order to keep things consistent, I like to add an if-statement to take care of this case.</p>
 
-<pre><code class="cucumber trello_popup_steps.rb">When /^I authorize with Trello as the test user$/ do
-  trello_popup = windows.last
-  page.within_window trello_popup do
-    page.driver.header(
-      "User-Agent",
-      "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/34.0.1847.116 Chrome/34.0.1847.116 Safari/537.36"
-    )
 
-    if page.has_content? "Switch Accounts"
-      click_link "Switch Accounts"
-    else
-      click_link "Log in"
-    end
-
-    fill_in "user", with: ENV['TEST_USER_TRELLO_USERNAME']
-    fill_in "password", with: ENV['TEST_USER_TRELLO_PASSWORD']
-
-    click_button "Log In"
-    click_button "Allow"
-  end
-end
-</code></pre>
+<p><figure class='code'><figcaption><span>trello_popup_steps.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">When </span><span class="nf">/^I authorize with Trello as the test user$/ do</span>
+</span><span class='line'><span class="nf">  trello_popup = windows.last</span>
+</span><span class='line'><span class="nf">  page.within_window trello_popup do</span>
+</span><span class='line'><span class="nf">    page.driver.header(</span>
+</span><span class='line'><span class="nf">      &quot;</span><span class="s">User-Agent</span><span class="nf">&quot;,</span>
+</span><span class='line'><span class="nf">      &quot;</span><span class="s">Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/34.0.1847.116 Chrome/34.0.1847.116 Safari/537.36</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">    )</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">    if page.has_content? &quot;</span><span class="s">Switch Accounts</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">      click_link &quot;</span><span class="s">Switch Accounts</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">    else</span>
+</span><span class='line'><span class="nf">      click_link &quot;</span><span class="s">Log in</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">    end</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">    fill_in &quot;</span><span class="s">user</span><span class="nf">&quot;, with: ENV[&#39;TEST_USER_TRELLO_USERNAME&#39;]</span>
+</span><span class='line'><span class="nf">    fill_in &quot;</span><span class="s">password</span><span class="nf">&quot;, with: ENV[&#39;TEST_USER_TRELLO_PASSWORD&#39;]</span>
+</span><span class='line'><span class="nf">    </span>
+</span><span class='line'><span class="nf">    click_button &quot;</span><span class="s">Log In</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">    click_button &quot;</span><span class="s">Allow</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  end</span>
+</span><span class='line'><span class="nf">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Edge cases addressed. Now I can make connections to Trello and test my application. Be warned, I&rsquo;ve already had these tests break once when Trello updated the UI behind the Trello popup. If Trello ever stops supporting Chromium 34.0, these tests are also likely to stop working. These tests are most useful during development, when we have the potential to break the Trello connection ourselves, and so I think they are well worth the pain of potential future maintenance.</p>
+
 ]]></content>
   </entry>
   
@@ -132,134 +230,256 @@ end
     <id>http://larry-price.com/blog/2014/08/05/javascript-testing-with-capybara-and-cucumber</id>
     <content type="html"><![CDATA[<p>In the past, I had written off testing the Javascript in my <a href="http://www.sinatrarb.com/">Sinatra</a> apps as being not worth the pain of setting up. That was pretty naïve of me, as setting up web drivers in <a href="https://github.com/jnicklas/capybara">Capybara</a> is actually pretty easy.</p>
 
-<p>For this post, I assume you already have a capybara-cucumber project set up. If you need help setting up your first tests, consider checking out <a href="/blog/categories/capybara/">some of my other blog posts</a> on the subject.</p>
+
+
+
+<p>For this post, I assume you already have a capybara-cucumber project set up. If you need help setting up your first tests, consider checking out <a href="http://larry-price.com/blog/categories/capybara/">some of my other blog posts</a> on the subject.</p>
+
+
+
 
 <h4>Selenium</h4>
 
+
+
+
 <p>Selenium is the default Javascript driver for capybara. To install either run <code>gem install selenium-webdriver</code> or toss <code>selenium-webdriver</code> into your <code>Gemfile</code> and run <code>bundle install</code>.</p>
+
+
+
 
 <p>If you want to run all of your tests with Javascript enabled, you can change the default driver in your <code>env.rb</code> file. For example:</p>
 
-<pre><code class="ruby env.rb">ENV['RACK_ENV'] = 'test'
 
-require_relative '../../../web'
-
-require 'selenium-webdriver'
-require 'capybara/cucumber'
-require 'rspec'
-
-Capybara.app = Ollert
-Capybara.default_wait_time = 10
-
-# run all tests using Javascript
-Capybara.default_driver = :selenium
-
-World do
-  Ollert.new
-  Mongoid.purge!
-end
-</code></pre>
+<p><figure class='code'><figcaption><span>env.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;RACK_ENV&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">require_relative</span> <span class="s1">&#39;../../../web&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;selenium-webdriver&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;capybara/cucumber&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;rspec&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="no">Ollert</span>
+</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">default_wait_time</span> <span class="o">=</span> <span class="mi">10</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># run all tests using Javascript</span>
+</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">default_driver</span> <span class="o">=</span> <span class="ss">:selenium</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">World</span> <span class="k">do</span>
+</span><span class='line'>  <span class="no">Ollert</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>  <span class="no">Mongoid</span><span class="o">.</span><span class="n">purge!</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Using Selenium means that your tests will be running using Firefox. Unfortunately, this makes them much, much slower than when you were running the tests using rspec. What I recommend is to limit yourself to only use the Javascript driver when you need to. To accomplish this, we change our <code>env.rb</code> file as such:</p>
 
-<pre><code class="ruby env.rb">ENV['RACK_ENV'] = 'test'
 
-require_relative '../../../web'
+<p><figure class='code'><figcaption><span>env.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;RACK_ENV&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">require_relative</span> <span class="s1">&#39;../../../web&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;selenium-webdriver&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;capybara/cucumber&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;rspec&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="no">Ollert</span>
+</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">default_wait_time</span> <span class="o">=</span> <span class="mi">10</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># use the following web driver to run tests</span>
+</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">javascript_driver</span> <span class="o">=</span> <span class="ss">:selenium</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">World</span> <span class="k">do</span>
+</span><span class='line'>  <span class="no">Ollert</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>  <span class="no">Mongoid</span><span class="o">.</span><span class="n">purge!</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
-require 'selenium-webdriver'
-require 'capybara/cucumber'
-require 'rspec'
+<p>And add the <code>@javascript</code> tag to our Cucumber feature files. I&rsquo;ve written <a href="http://larry-price.com/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">about using tags in the past</a>, and they are incredibly useful. For example:</p>
 
-Capybara.app = Ollert
-Capybara.default_wait_time = 10
 
-# use the following web driver to run tests
-Capybara.javascript_driver = :selenium
-
-World do
-  Ollert.new
-  Mongoid.purge!
-end
-</code></pre>
-
-<p>And add the <code>@javascript</code> tag to our Cucumber feature files. I&rsquo;ve written <a href="/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">about using tags in the past</a>, and they are incredibly useful. For example:</p>
-
-<pre><code class="cucumber DoStuff.feature">Feature: Do Stuff
-
-Scenario: Nothing happens with Javascript disbaled
-  Given I visit the home page
-  When I click "Where are they?!"
-  Then I should not see "I'm Batman."
-
-@javascript
-Scenario: Correct text is displayed with Javascript enabled
-  Given I visit the home page
-  When I click "Where are they?!"
-  Then I should see "I'm Batman."
-</code></pre>
+<p><figure class='code'><figcaption><span>DoStuff.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Do Stuff</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Nothing happens with Javascript disbaled</span>
+</span><span class='line'><span class="k">  Given </span><span class="nf">I visit the home page</span>
+</span><span class='line'><span class="nf">  </span><span class="k">When </span><span class="nf">I click &quot;</span><span class="s">Where are they?!</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">I should not see &quot;</span><span class="s">I&#39;m Batman.</span><span class="nf">&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">@javascript</span><span class="nf"></span>
+</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Correct text is displayed with Javascript enabled</span>
+</span><span class='line'><span class="k">  Given </span><span class="nf">I visit the home page</span>
+</span><span class='line'><span class="nf">  </span><span class="k">When </span><span class="nf">I click &quot;</span><span class="s">Where are they?!</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">I should see &quot;</span><span class="s">I&#39;m Batman.</span><span class="nf">&quot;</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Assuming there is some Javascript activated by clicking &ldquo;Where are they?!&rdquo; that displays the text &ldquo;I&rsquo;m Batman.&rdquo;, both of the above scenarios will pass. This is because none of the Javascript will run in the first scenario, so the text will not be displayed. In the second scenario, Capybara knows to use the webdriver we set up previously when it sees the <code>@javascript</code> tag.</p>
 
+
+
+
 <h4>Poltergeist</h4>
+
+
+
 
 <p><a href="https://github.com/teampoltergeist/poltergeist">Poltergeist</a> is the first &ldquo;headless&rdquo; web driver I tried. Usage is mostly identical to usage for Selenium, so I&rsquo;ll focus on installation here.</p>
 
+
+
+
 <p>Poltergeist uses <a href="http://phantomjs.org/">PhantomJS</a>, so we need to start by downloading the binary (<a href="https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-i686.tar.bz2">32-bit</a> or <a href="https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-x86_64.tar.bz2">64-bit</a>) and putting it in our path. On my Linux machine, I extracted the contents of the download and copied <code>bin/phantomjs</code> to my <code>/usr/local/bin</code> directory, which I already have in my path. You can also copy it directly to <code>/usr/bin</code> if you like.</p>
+
+
+
 
 <p>On the ruby side, we do that same old song and dance: either do <code>gem install poltergeist</code> or add <code>poltergeist</code> to your <code>Gemfile</code> and run <code>bundle install</code>. Edit your <code>env.rb</code>:</p>
 
-<pre><code class="cucumber env.rb">ENV['RACK_ENV'] = 'test'
 
-require_relative '../../../web'
-
-require 'capybara/poltergeist'
-require 'capybara/cucumber'
-require 'rspec'
-
-Capybara.app = Ollert
-Capybara.default_wait_time = 10
-
-# use the following web driver to run tests
-Capybara.javascript_driver = :poltergeist
-
-World do
-  Ollert.new
-  Mongoid.purge!
-end
-</code></pre>
+<p><figure class='code'><figcaption><span>env.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="nf">ENV[&#39;RACK_ENV&#39;] = &#39;test&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">require_relative &#39;../../../web&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">require &#39;capybara/poltergeist&#39;</span>
+</span><span class='line'><span class="nf">require &#39;capybara/cucumber&#39;</span>
+</span><span class='line'><span class="nf">require &#39;rspec&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">Capybara.app = Ollert</span>
+</span><span class='line'><span class="nf">Capybara.default_wait_time = </span><span class="s">10</span><span class="nf"></span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># use the following web driver to run tests</span><span class="nf"></span>
+</span><span class='line'><span class="nf">Capybara.javascript_driver = :poltergeist</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">World do</span>
+</span><span class='line'><span class="nf">  Ollert.new</span>
+</span><span class='line'><span class="nf">  Mongoid.purge!</span>
+</span><span class='line'><span class="nf">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Now your Javascript tests should be running using the Poltergeist webdriver. Since Poltergeist is truly headless, your tests will run much faster than they did while using Selenium, but you won&rsquo;t be able to see what&rsquo;s going on while your tests run. There are some slight syntactic differences between the way Poltergeist and Selenium handles separate windows, but other than that they are extremely similar.</p>
 
+
+
+
 <h4>Webkit</h4>
+
+
+
 
 <p><a href="https://github.com/thoughtbot/capybara-webkit">Capybara-webkit</a> is where I eventually landed for running my own tests, after having issues accessing other windows with Poltergeist. Capybara-webkit is also headless and relies on <code>QtWebKit</code> to render pages. So, for starters, you&rsquo;re going to have to install <code>qtwebkit</code>. This has a varied degree of difficulty depending on which operating system you&rsquo;re using, but I didn&rsquo;t have too many problems in Ubuntu once I figured out which library I needed. For help, check <a href="https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit">the guide</a>. On my machine:</p>
 
-<pre><code class="bash">$ sudo apt-get install libqtwebkit-dev
-</code></pre>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install libqtwebkit-dev
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Once more: either do <code>gem install capybara-webkit</code> or add <code>capybara-webkit</code> to your <code>Gemfile</code> and run <code>bundle install</code>. Edit your <code>env.rb</code>:</p>
 
-<pre><code class="cucumber env.rb">ENV['RACK_ENV'] = 'test'
 
-require_relative '../../../web'
-
-require 'capybara/cucumber'
-require 'capybara/webkit'
-require 'rspec'
-
-Capybara.app = Ollert
-Capybara.default_wait_time = 10
-
-# use the following web driver to run tests
-Capybara.javascript_driver = :webkit
-
-World do
-  Ollert.new
-  Mongoid.purge!
-end
-</code></pre>
+<p><figure class='code'><figcaption><span>env.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="nf">ENV[&#39;RACK_ENV&#39;] = &#39;test&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">require_relative &#39;../../../web&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">require &#39;capybara/cucumber&#39;</span>
+</span><span class='line'><span class="nf">require &#39;capybara/webkit&#39;</span>
+</span><span class='line'><span class="nf">require &#39;rspec&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">Capybara.app = Ollert</span>
+</span><span class='line'><span class="nf">Capybara.default_wait_time = </span><span class="s">10</span><span class="nf"></span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># use the following web driver to run tests</span><span class="nf"></span>
+</span><span class='line'><span class="nf">Capybara.javascript_driver = :webkit</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">World do</span>
+</span><span class='line'><span class="nf">  Ollert.new</span>
+</span><span class='line'><span class="nf">  Mongoid.purge!</span>
+</span><span class='line'><span class="nf">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Again, you won&rsquo;t be able to see your tests run, but they should be pretty snappy. I was able to use capybara-webkit to tackle some window issues I was having, but (as of this writing) capybara-webkit has not caught up with more modern capybara window-switching syntax. Other than that, the syntax is identical to the other drivers I&rsquo;ve discussed for common cases. If you&rsquo;re running capybara-webkit on a CI server, see <a href="http://blog.55minutes.com/2013/09/running-capybara-webkit-specs-with-jenkins-ci/">this post about using Xvfb</a>.</p>
+
 ]]></content>
   </entry>
   
@@ -268,99 +488,183 @@ end
     <link href="http://larry-price.com/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber/"/>
     <updated>2014-07-12T07:36:33-04:00</updated>
     <id>http://larry-price.com/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber</id>
-    <content type="html"><![CDATA[<p>Now that <a href="/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">I send emails using Pony</a>, I want to be able to verify that the emails are being generated correctly. I also don&rsquo;t want to send real emails and have my tests check an inbox somewhere. I found a couple of solutions to do this, including <a href="https://github.com/johnmendonca/pony-test">pony-test</a> and <a href="https://github.com/bmabey/email-spec">email-spec</a>. Although pony-test fits my needs perfectly, the last commit was December 27, 2011 (2.5 years ago at the time of this post), and thus was using an outdated version of <a href="https://github.com/jnicklas/capybara">capybara</a> which I was unwilling to use. Fortunately, pony-spec is mostly just a fork of email-spec with all the non-Pony components ripped out.</p>
+    <content type="html"><![CDATA[<p>Now that <a href="http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">I send emails using Pony</a>, I want to be able to verify that the emails are being generated correctly. I also don&rsquo;t want to send real emails and have my tests check an inbox somewhere. I found a couple of solutions to do this, including <a href="https://github.com/johnmendonca/pony-test">pony-test</a> and <a href="https://github.com/bmabey/email-spec">email-spec</a>. Although pony-test fits my needs perfectly, the last commit was December 27, 2011 (2.5 years ago at the time of this post), and thus was using an outdated version of <a href="https://github.com/jnicklas/capybara">capybara</a> which I was unwilling to use. Fortunately, pony-spec is mostly just a fork of email-spec with all the non-Pony components ripped out.</p>
+
+
+
 
 <p>I&rsquo;m going to be using Cucumber to test my emails, but email-spec also boasts compatibility with rspec and Turnip. To get started:</p>
 
-<pre><code class="bash">$ gem install email-spec
-</code></pre>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>gem install email-spec
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>The developers of email-spec were kind enough to give us some free step definitions. If I was using rails, I could just type <code>rails generate email_spec:steps</code>, but since I&rsquo;m using Sinatra I opted just to copy-paste the file into my <code>step_definitions/</code> directory. You can find <code>email_steps.rb</code> <a href="https://raw.githubusercontent.com/bmabey/email-spec/master/lib/generators/email_spec/steps/templates/email_steps.rb">on Github</a>.</p>
 
-<p>In <a href="/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">my last post about small horses and emails</a>, I used the following code to send a confirmation email on signup:</p>
 
-<pre><code class="ruby web.rb"># ...
-post '/signup' do
-  user = User.create! params
 
-  url = "#{request.base_url}/account/reset/#{user.generate_verification_hash}"
-  Pony.mail(
-    to: user.email,
-    from: "MyApp Help Desk &lt;noreply@myapp.com&gt;",
-    subject: "MyApp Account Verification",
-    body: "A request has been made to verify your MyApp account (https://myapp.com)." +
-          "If you made this request, go to " + url + ". If you did not make this request, ignore this email.",
-    html_body: haml(
-      :verify_account_email,
-      layout: false,
-      locals: {
-        email: user.email,
-        date: DateTime.now.strftime("%H:%M:%S%P %B %d, %Y"),
-        ip: request.ip,
-        url: url
-      }
-    )
-  )
-end
-# ...
-</code></pre>
 
-<pre><code class="haml /views/verify_account_email.haml">%p
-  Hello!
-%p
-  An account verification has been requested for your new &lt;a href="https://myapp.com"&gt;MyApp&lt;/a&gt; account.
+<p>In <a href="http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">my last post about small horses and emails</a>, I used the following code to send a confirmation email on signup:</p>
 
-%ul
-  %li
-    Username: #{locals[:email]}
-  %li
-    Time: #{locals[:date]}
-  %li
-    IP address: #{locals[:ip]}
 
-%p
-  If you made this request, click the link below or copy-paste the following URL into your browser to verify your account:
+<p><figure class='code'><figcaption><span>web.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># &hellip;</span>
+</span><span class='line'><span class="n">post</span> <span class="s1">&#39;/signup&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create!</span> <span class="n">params</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">request</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/account/reset/</span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">generate_verification_hash</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="no">Pony</span><span class="o">.</span><span class="n">mail</span><span class="p">(</span>
+</span><span class='line'>    <span class="ss">to</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">from</span><span class="p">:</span> <span class="s2">&quot;MyApp Help Desk &lt;noreply@myapp.com&gt;&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">subject</span><span class="p">:</span> <span class="s2">&quot;MyApp Account Verification&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">body</span><span class="p">:</span> <span class="s2">&quot;A request has been made to verify your MyApp account (<a href="https://myapp.com">https://myapp.com</a>).&quot;</span> <span class="o">+</span>
+</span><span class='line'>          <span class="s2">&quot;If you made this request, go to &quot;</span> <span class="o">+</span> <span class="n">url</span> <span class="o">+</span> <span class="s2">&quot;. If you did not make this request, ignore this email.&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">html_body</span><span class="p">:</span> <span class="n">haml</span><span class="p">(</span>
+</span><span class='line'>      <span class="ss">:verify_account_email</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">layout</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">locals</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="ss">email</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">date</span><span class="p">:</span> <span class="no">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S%P %B %d, %Y&quot;</span><span class="p">),</span>
+</span><span class='line'>        <span class="ss">ip</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">ip</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">url</span><span class="p">:</span> <span class="n">url</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>  <span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="c1"># &hellip;</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
-%p
-  %a{href: "#{locals[:url]}", alt: "Verify", title: "Click to verify account"}
-    #{locals[:url]}
-
-%p
-  If you did not request this new account, please ignore this email.
-
-%p
-  Sincerely,
-  %br
-  Team MyApp
-
-%p
-  This email account is not monitored and will not receive replies. For more information, contact &lt;a href="mailto:connect@myapp.com"&gt;connect@myapp.com&lt;/a&gt;.
-</code></pre>
+<p><figure class='code'><figcaption><span>/views/verify_account_email.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  Hello!
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  An account verification has been requested for your new &lt;a href=&quot;<a href="https://myapp.com&amp;quot;&amp;gt;MyApp&amp;lt;/a&amp;gt;">https://myapp.com&amp;quot;&amp;gt;MyApp&amp;lt;/a&amp;gt;</a> account.
+</span><span class='line'>
+</span><span class='line'><span class="nt">%ul</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    Username: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:email</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    Time: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:date</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    IP address: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:ip</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  If you made this request, click the link below or copy-paste the following URL into your browser to verify your account:
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  <span class="nt">%a</span><span class="p">{</span><span class="ss">href</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:url</span><span class="o">]</span><span class="si">}</span>&quot;, alt: &quot;Verify&quot;, title: &quot;Click to verify account&quot;}
+</span><span class='line'>    <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:url</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  If you did not request this new account, please ignore this email.
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  Sincerely,
+</span><span class='line'>  <span class="nt">%br</span>
+</span><span class='line'>  Team MyApp
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  This email account is not monitored and will not receive replies. For more information, contact &lt;a href=&quot;<a href="&#109;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#x63;&#111;&#110;&#x6e;&#101;&#x63;&#x74;&#x40;&#109;&#121;&#97;&#x70;&#112;&#46;&#99;&#111;&#109;&#x26;&#113;&#x75;&#x6f;&#x74;&#59;&#x26;&#103;&#x74;&#x3b;&#x63;&#111;&#110;&#x6e;&#x65;&#x63;&#x74;&#64;&#x6d;&#121;&#x61;&#112;&#x70;&#46;&#x63;&#111;&#109;&#x26;&#x6c;&#116;&#x3b;&#47;&#x61;&#38;&#x67;&#116;&#x3b;&#x2e;">&#99;&#111;&#110;&#x6e;&#101;&#x63;&#116;&#64;&#109;&#121;&#97;&#x70;&#112;&#46;&#x63;&#x6f;&#109;&#38;&#113;&#117;&#111;&#x74;&#x3b;&#x26;&#x67;&#116;&#59;&#x63;&#111;&#x6e;&#110;&#x65;&#x63;&#116;&#64;&#x6d;&#x79;&#x61;&#x70;&#x70;&#x2e;&#99;&#111;&#x6d;&#38;&#108;&#x74;&#59;&#47;&#x61;&#38;&#103;&#116;&#x3b;&#46;</a>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Given the pre-defined steps from email-spec, testing that this email gets sent is a breeze. Adding a scenario to my feature file:</p>
 
-<pre><code class="cucumber features/SignupConfirmation.feature">Feature: Signup Confirmation
-  As a new user
-  When I sign up
-  I should receive a confirmation email
 
-Background:
-  Given a clear email queue
-  When I go to the signup page
-  And I fill in "email" with "prez@whitehouse.gov"
-  And I fill in "password" with "bunnies"
-  And I press "Sign Up"
-  Then "prez@whitehouse.gov" should receive an email
-
-Scenario: Receives email with correct contents
-  When "prez@whitehouse.gov" opens the email
-  Then they should see the email delivered from "MyApp Help Desk &lt;noreply@myapp.com&gt;"
-  And they should see "MyApp Account Verification" in the email subject
-  And they should see "Username: prez@whitehouse.gov" in the email body
-  And they should see "An account verification has been requested"
-</code></pre>
+<p><figure class='code'><figcaption><span>features/SignupConfirmation.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Signup Confirmation</span>
+</span><span class='line'><span class="nf">  As a new user</span>
+</span><span class='line'><span class="nf">  When I sign up</span>
+</span><span class='line'><span class="nf">  I should receive a confirmation email</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">Background:</span><span class="nf"></span>
+</span><span class='line'><span class="k">  Given </span><span class="nf">a clear email queue</span>
+</span><span class='line'><span class="nf">  </span><span class="k">When </span><span class="nf">I go to the signup page</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I fill in &quot;</span><span class="s">email</span><span class="nf">&quot; with &quot;</span><span class="s"><a href="&#x6d;&#x61;&#105;&#108;&#116;&#x6f;&#58;&#x70;&#114;&#x65;&#x7a;&#x40;&#119;&#104;&#x69;&#116;&#x65;&#x68;&#111;&#x75;&#x73;&#101;&#46;&#x67;&#x6f;&#x76;">&#x70;&#x72;&#x65;&#x7a;&#x40;&#119;&#104;&#x69;&#x74;&#101;&#104;&#x6f;&#x75;&#115;&#101;&#x2e;&#103;&#x6f;&#x76;</a></span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I fill in &quot;</span><span class="s">password</span><span class="nf">&quot; with &quot;</span><span class="s">bunnies</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I press &quot;</span><span class="s">Sign Up</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">&quot;</span><span class="s"><a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#111;&#x3a;&#112;&#114;&#101;&#x7a;&#x40;&#x77;&#104;&#105;&#116;&#101;&#104;&#x6f;&#x75;&#x73;&#x65;&#46;&#x67;&#x6f;&#118;">&#x70;&#114;&#101;&#122;&#x40;&#x77;&#x68;&#105;&#x74;&#x65;&#104;&#111;&#x75;&#115;&#101;&#46;&#x67;&#111;&#118;</a></span><span class="nf">&quot; should receive an email</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Receives email with correct contents</span>
+</span><span class='line'><span class="k">  When </span><span class="nf">&quot;</span><span class="s"><a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#x70;&#114;&#101;&#122;&#64;&#119;&#104;&#x69;&#116;&#x65;&#104;&#111;&#117;&#115;&#x65;&#46;&#103;&#111;&#x76;">&#x70;&#114;&#101;&#x7a;&#64;&#119;&#x68;&#x69;&#116;&#x65;&#x68;&#x6f;&#117;&#x73;&#101;&#46;&#x67;&#111;&#118;</a></span><span class="nf">&quot; opens the email</span>
+</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">they should see the email delivered from &quot;</span><span class="s">MyApp Help Desk </span><span class="nv">&lt;noreply@myapp.com&gt;</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">they should see &quot;</span><span class="s">MyApp Account Verification</span><span class="nf">&quot; in the email subject</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">they should see &quot;</span><span class="s">Username: <a href="&#109;&#97;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#x70;&#114;&#x65;&#x7a;&#x40;&#119;&#x68;&#x69;&#x74;&#101;&#x68;&#x6f;&#x75;&#x73;&#101;&#46;&#x67;&#111;&#x76;">&#x70;&#114;&#101;&#x7a;&#64;&#x77;&#x68;&#x69;&#116;&#101;&#x68;&#x6f;&#x75;&#x73;&#101;&#x2e;&#103;&#x6f;&#118;</a></span><span class="nf">&quot; in the email body</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">they should see &quot;</span><span class="s">An account verification has been requested</span><span class="nf">&quot;</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>That&rsquo;s it. Now we know that an email like the one above will be sent during signup. What we can&rsquo;t test here is that our SMTP server (or equivalent) is working, so in reality I&rsquo;m only testing that the email will attempt to send that looks like the one I test against.</p>
+
 ]]></content>
   </entry>
   
@@ -371,103 +675,199 @@ Scenario: Receives email with correct contents
     <id>http://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid</id>
     <content type="html"><![CDATA[<p>It&rsquo;s incredible how easy it is to send emails through a web application, there&rsquo;s no wonder we get so much spam. Assuming we have a <a href="http://ruby-lang.org">ruby</a> app using <a href="http://sinatrarb.com">Sinatra</a>, <a href="http://adam.herokuapp.com/past/2008/11/2/pony_the_express_way_to_send_email_from_ruby/">Pony</a> is one of the easiest ways to get started with your own spam empire.</p>
 
+
+
+
 <p>Installation is, as always, trivial with ruby. Install the gem with <code>gem install pony</code> or add <code>gem pony</code> to your <code>Gemfile</code> and run <code>bundle install</code>.</p>
+
+
+
 
 <p>I like to configure Pony in my application&rsquo;s <code>configure</code> block. I could also add it to my <code>config.ru</code>, but I like to keep that file as tiny as posible to avoid having configuration code all over the place.</p>
 
-<pre><code class="ruby web.rb"># ...
 
-require 'pony'
-require 'sinatra/base'
-
-class Application &lt; Sinatra::Base
-  configure do
-    # ...
-
-    Pony.options = {
-      :via =&gt; :smtp,
-      :via_options =&gt; {
-        :address =&gt; 'smtp.sendgrid.net',
-        :port =&gt; '587',
-        :domain =&gt; 'myapp.com',
-        :user_name =&gt; ENV['SENDGRID_USERNAME'],
-        :password =&gt; ENV['SENDGRID_PASSWORD'],
-        :authentication =&gt; :plain,
-        :enable_starttls_auto =&gt; true
-      }
-    }
-  end
-
-  # ...
-end
-</code></pre>
+<p><figure class='code'><figcaption><span>web.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># &hellip;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;pony&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Application</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">configure</span> <span class="k">do</span>
+</span><span class='line'>    <span class="c1"># &hellip;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="no">Pony</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>      <span class="ss">:via</span> <span class="o">=&gt;</span> <span class="ss">:smtp</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">:via_options</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>        <span class="ss">:address</span> <span class="o">=&gt;</span> <span class="s1">&#39;smtp.sendgrid.net&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:port</span> <span class="o">=&gt;</span> <span class="s1">&#39;587&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:domain</span> <span class="o">=&gt;</span> <span class="s1">&#39;myapp.com&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:user_name</span> <span class="o">=&gt;</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;SENDGRID_USERNAME&#39;</span><span class="o">]</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:password</span> <span class="o">=&gt;</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;SENDGRID_PASSWORD&#39;</span><span class="o">]</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:authentication</span> <span class="o">=&gt;</span> <span class="ss">:plain</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:enable_starttls_auto</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># &hellip;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>This block tells Pony to use the <a href="http://sendgrid.com/">SendGrid</a> server to send mail, use the &ldquo;myapp.com&rdquo; HELO domain, and dig up the username and password fields from my environment.</p>
 
+
+
+
 <p>If you&rsquo;re using <a href="https://heroku.com">Heroku</a> to host your application, you can <a href="https://addons.heroku.com/sendgrid">sign up for a SendGrid account through your Heroku app</a>, which gives you instant access to your SendGrid account. The <code>username</code> and <code>password</code> field you need to fill in your environment are automatically populated in your Heroku config, which you can view by running <code>heroku config</code> for your application. The free account gets you up to 200 emails a day.</p>
+
+
+
 
 <p>Since I might have multiple developers working in my source code and testing the email-sending functionality, I have all the developers <a href="https://sendgrid.com/user/signup">sign up for their own free SendGrid account</a>. This should help to alleviate some of the email volume from any particular account while developing. After signing up, it took my account nearly 4 hours to be &ldquo;provisioned&rdquo; (see: approved) by the SendGrid team. Once you&rsquo;re approved you can start sending emails using your developer account credentials. I stick my username/password in my local <code>.env</code> file (another reason to make sure you&rsquo;re not storing your environment on your server or in your git repo).</p>
 
+
+
+
 <p>So let&rsquo;s actually send an email. Let&rsquo;s create a route that sends an email to verify a new user account; I&rsquo;ll take some liberties by saying we have a <code>User</code> model defined already that generates a signup verification hash. I can tell pony to send a plaintext body through the <code>body</code> option and an HTML body through the <code>html_body</code> option.</p>
 
-<pre><code class="ruby web.rb"># ...
-post '/signup' do
-  user = User.create! params
 
-  url = "#{request.base_url}/account/reset/#{user.generate_verification_hash}"
-  Pony.mail(
-    to: user.email,
-    from: "MyApp Help Desk &lt;noreply@myapp.com&gt;",
-    subject: "MyApp Account Verification",
-    body: "A request has been made to verify your MyApp account (https://myapp.com)." +
-          "If you made this request, go to " + url + ". If you did not make this request, ignore this email.",
-    html_body: haml(
-      :verify_account_email,
-      layout: false,
-      locals: {
-        email: user.email,
-        date: DateTime.now.strftime("%H:%M:%S%P %B %d, %Y"),
-        ip: request.ip,
-        url: url
-      }
-    )
-  )
-end
-</code></pre>
+<p><figure class='code'><figcaption><span>web.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># &hellip;</span>
+</span><span class='line'><span class="n">post</span> <span class="s1">&#39;/signup&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create!</span> <span class="n">params</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">request</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/account/reset/</span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">generate_verification_hash</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="no">Pony</span><span class="o">.</span><span class="n">mail</span><span class="p">(</span>
+</span><span class='line'>    <span class="ss">to</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">from</span><span class="p">:</span> <span class="s2">&quot;MyApp Help Desk &lt;noreply@myapp.com&gt;&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">subject</span><span class="p">:</span> <span class="s2">&quot;MyApp Account Verification&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">body</span><span class="p">:</span> <span class="s2">&quot;A request has been made to verify your MyApp account (<a href="https://myapp.com">https://myapp.com</a>).&quot;</span> <span class="o">+</span>
+</span><span class='line'>          <span class="s2">&quot;If you made this request, go to &quot;</span> <span class="o">+</span> <span class="n">url</span> <span class="o">+</span> <span class="s2">&quot;. If you did not make this request, ignore this email.&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">html_body</span><span class="p">:</span> <span class="n">haml</span><span class="p">(</span>
+</span><span class='line'>      <span class="ss">:verify_account_email</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">layout</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">locals</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="ss">email</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">date</span><span class="p">:</span> <span class="no">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S%P %B %d, %Y&quot;</span><span class="p">),</span>
+</span><span class='line'>        <span class="ss">ip</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">ip</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">url</span><span class="p">:</span> <span class="n">url</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>  <span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
-<pre><code class="haml views/verify_account_email.rb">%p
-  Hello!
-%p
-  An account verification has been requested for your new &lt;a href="https://myapp.com"&gt;MyApp&lt;/a&gt; account.
-
-%ul
-  %li
-    Username: #{locals[:email]}
-  %li
-    Time: #{locals[:date]}
-  %li
-    IP address: #{locals[:ip]}
-
-%p
-  If you made this request, click the link below or copy-paste the following URL into your browser to verify your account:
-
-%p
-  %a{href: "#{locals[:url]}", alt: "Verify", title: "Click to verify account"}
-    #{locals[:url]}
-
-%p
-  If you did not request this new account, please ignore this email.
-
-%p
-  Sincerely,
-  %br
-  Team MyApp
-
-%p
-  This email account is not monitored and will not receive replies. For more information, contact &lt;a href="mailto:connect@myapp.com"&gt;connect@myapp.com&lt;/a&gt;.
-</code></pre>
+<p><figure class='code'><figcaption><span>views/verify_account_email.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  Hello!
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  An account verification has been requested for your new &lt;a href=&quot;<a href="https://myapp.com&amp;quot;&amp;gt;MyApp&amp;lt;/a&amp;gt;">https://myapp.com&amp;quot;&amp;gt;MyApp&amp;lt;/a&amp;gt;</a> account.
+</span><span class='line'>
+</span><span class='line'><span class="nt">%ul</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    Username: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:email</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    Time: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:date</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    IP address: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:ip</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  If you made this request, click the link below or copy-paste the following URL into your browser to verify your account:
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  <span class="nt">%a</span><span class="p">{</span><span class="ss">href</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:url</span><span class="o">]</span><span class="si">}</span>&quot;, alt: &quot;Verify&quot;, title: &quot;Click to verify account&quot;}
+</span><span class='line'>    <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:url</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  If you did not request this new account, please ignore this email.
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  Sincerely,
+</span><span class='line'>  <span class="nt">%br</span>
+</span><span class='line'>  Team MyApp
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  This email account is not monitored and will not receive replies. For more information, contact &lt;a href=&quot;<a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#x63;&#x6f;&#x6e;&#x6e;&#101;&#99;&#x74;&#x40;&#x6d;&#x79;&#97;&#x70;&#x70;&#46;&#x63;&#111;&#x6d;&#38;&#x71;&#x75;&#x6f;&#x74;&#59;&#38;&#103;&#x74;&#59;&#x63;&#111;&#110;&#110;&#101;&#x63;&#x74;&#x40;&#109;&#121;&#x61;&#x70;&#x70;&#46;&#x63;&#111;&#x6d;&#x26;&#x6c;&#x74;&#59;&#47;&#97;&#x26;&#x67;&#x74;&#59;&#x2e;">&#99;&#x6f;&#110;&#x6e;&#x65;&#99;&#x74;&#x40;&#x6d;&#x79;&#x61;&#x70;&#x70;&#46;&#99;&#111;&#109;&#x26;&#x71;&#117;&#111;&#116;&#x3b;&#38;&#103;&#116;&#59;&#99;&#x6f;&#110;&#x6e;&#x65;&#x63;&#x74;&#x40;&#109;&#x79;&#97;&#112;&#x70;&#x2e;&#x63;&#111;&#109;&#x26;&#x6c;&#x74;&#x3b;&#47;&#97;&#x26;&#x67;&#116;&#x3b;&#x2e;</a>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>When you have a user hit this route, an email will be sent to the user with the given subject, to, from, and body fields using the configuration parameters given in the previous <code>configure</code> block. Fast, easy, and, best of all, no <code>sendmail</code> configuration.</p>
+
 ]]></content>
   </entry>
   
@@ -478,61 +878,112 @@ end
     <id>http://larry-price.com/blog/2014/03/29/using-sqlite-on-heroku</id>
     <content type="html"><![CDATA[<p>Or rather, &ldquo;Not Using sqlite on Heroku.&rdquo;</p>
 
+
+
+
 <p><a href="//heroku.com">Heroku</a> does not support <a href="//sqlite.org">sqlite</a>. That doesn&rsquo;t mean we have to stop using sqlite in development, but it does mean we need to put in some workarounds to support our deployment environment. The rest of this article will use <a href="//ruby-lang.org">ruby</a> and <a href="//sinatrarb.com">Sinatra</a>.</p>
+
+
+
 
 <p>Assuming you have a heroku app deployed and you have sqlite already working locally, this only takes a few steps. First we need to add a SQL database to our heroku app. From the project directory, we&rsquo;ll add the <a href="//addons.heroku.com/heroku-postgresql">heroku-postgresql</a> addon to our app.</p>
 
-<pre><code class="bash">$ heroku addons:add heroku-postgresql:dev
-</code></pre>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>heroku addons:add heroku-postgresql:dev
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>The <code>dev</code> piece of this command tells heroku we want the small, free database. This database supports up to 10,000 rows and has a 99.5% uptime. Best of all: it&rsquo;s free. Other options have you pay $9/mo for 10,000,000 rows or $50+ for Unlimited usage. I recommend you start small.</p>
 
+
+
+
 <p>Hopefully you got some success statements after adding heroku-postgresql. They should have included some new environment variables, which are links to your new Postgres database. Record these; we&rsquo;ll use them a little later.</p>
+
+
+
 
 <p>Now we need to set up the back-end to be able to access a Postgres database when necessary. Hopefully you&rsquo;re using a decent abstraction library in your app that can access any SQL database. For ruby, I find <a href="//www.sequel.rubyforge.org/">Sequel</a> to be sufficient.</p>
 
+
+
+
 <p>In our Gemfile, we&rsquo;ve probably already included the sqlite gem for use in our local environment. We can go ahead and move that into a <code>development</code> block, and we need to add the <code>pg</code> gem to either <code>production</code> or the global block.</p>
 
-<pre><code class="ruby Gemfile">source "https://rubygems.org"
 
-ruby '2.1.0'
-
-gem 'bundler'
-gem 'rake'
-gem 'sinatra'
-gem 'haml'
-gem 'sequel'
-
-group :production do
-  gem 'pg'
-end
-
-group :development do
-  gem 'sqlite3'
-end
-</code></pre>
+<p><figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">source</span> <span class="s2">&quot;<a href="https://rubygems.org&amp;quot;">https://rubygems.org&amp;quot;</a></span>
+</span><span class='line'>
+</span><span class='line'><span class="n">ruby</span> <span class="s1">&#39;2.1.0&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;bundler&#39;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;rake&#39;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;sinatra&#39;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;haml&#39;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;sequel&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">group</span> <span class="ss">:production</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;pg&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">group</span> <span class="ss">:development</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;sqlite3&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Heroku sets <code>ENV['RACK_ENV']</code> to &ldquo;production&rdquo; for us, which means that the pg gem should get picked up the next time we deploy. Now we need to tell our app which database to use in which situation.</p>
 
+
+
+
 <p>One of the easiest places to make this decision is in Sinatra&rsquo;s <code>configure</code> block. I keep my local db in an environment variable called <code>LOCAL_DATABASE_URL</code>. This is where you use the environment variable heroku set for you when you set up your Postgres database; mine was called <code>HEROKU_POSTGRESQL_MAROON_URL</code>.</p>
 
-<pre><code class="ruby web.rb">class App &lt; Sinatra::Base
-  configure :production do
-    Sequel.connect ENV['HEROKU_POSTGRESQL_MAROON_URL']
-  end
 
-  configure :development do
-    Sequel.connect ENV['LOCAL_DATABASE_URL']
-  end
-end
-</code></pre>
+<p><figure class='code'><figcaption><span>web.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">App</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">configure</span> <span class="ss">:production</span> <span class="k">do</span>
+</span><span class='line'>    <span class="no">Sequel</span><span class="o">.</span><span class="n">connect</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;HEROKU_POSTGRESQL_MAROON_URL&#39;</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">configure</span> <span class="ss">:development</span> <span class="k">do</span>
+</span><span class='line'>    <span class="no">Sequel</span><span class="o">.</span><span class="n">connect</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;LOCAL_DATABASE_URL&#39;</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>This works because the default environment is &ldquo;development.&rdquo; Test locally, and then we can deploy.</p>
 
-<pre><code class="bash">$ git push heroku master
-</code></pre>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git push heroku master
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>And enjoy.</p>
+
 ]]></content>
   </entry>
   

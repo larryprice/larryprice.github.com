@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-12T16:57:15-04:00</updated>
+  <updated>2014-08-16T11:03:51-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -20,54 +20,93 @@
     <id>http://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0</id>
     <content type="html"><![CDATA[<p><a href="//ruby-lang.org/en/news/2013/12/25/ruby-2-1-0-is-released/">Ruby 2.1.0 went stable</a> a few months ago, and <a href="//ruby-lang.org/en/news/2014/01/10/ruby-1-9-3-will-end-on-2015/">Ruby 1.9.3 support</a> will end in a just over a year.</p>
 
+
+
+
 <p>You know what that means: Warplanes in the sky falling to the ground, dogs and cats getting along like old pals, and people wandering aimlessly through the streets trying to remember the last time they saw a green build.</p>
 
-<p>Believe it or not, all of these things can be prevented. Once upon a time, I wrote about <a href="/blog/2013/10/08/rvm-quick-start/">configuring and using rvm</a> to control individual ruby environments for each of your projects. If it&rsquo;s been a while since you installed your copy of <a href="//rvm.io/">rvm</a>, you might have some trouble installing and using newer version of ruby. Lucky for us, those clever rvm developers made it easy to get around this.</p>
+
+
+
+<p>Believe it or not, all of these things can be prevented. Once upon a time, I wrote about <a href="http://larry-price.com/blog/2013/10/08/rvm-quick-start/">configuring and using rvm</a> to control individual ruby environments for each of your projects. If it&rsquo;s been a while since you installed your copy of <a href="//rvm.io/">rvm</a>, you might have some trouble installing and using newer version of ruby. Lucky for us, those clever rvm developers made it easy to get around this.</p>
+
+
+
 
 <p>In my case, I want to upgrade a project to use <code>ruby 2.1.0</code>. The first time I tried to run <code>rvm install ruby-2.1.0</code>, I ended up installing <code>ruby-2.1.0-preview1</code>. I realized that I had installed rvm on this machine around October 2013, and <code>ruby 2.1.0</code> was released in December 2013, so rvm had no idea that <code>ruby 2.1.0</code> was stable. Updating rvm (in the root of the project directory):</p>
 
-<pre><code class="bash /home/lrp/Projects/2014/projNeedingRuby210">$ rvm get stable
-</code></pre>
+
+<p><figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm get stable
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>There will be some amount of text on the screen if your system needs to be updated. Note that you must be connected to the internet if you want rvm to update. Now we do the install of our brand new ruby:</p>
 
-<pre><code class="bash /home/lrp/Projects/2014/projNeedingRuby210">$ rvm install ruby-2.1.0
-</code></pre>
+
+<p><figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm install ruby-2.1.0
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Again, text on the screen from fetching of data from the internet. But hopefully you see something that tells you the operation was successful. You can also verify which rubies you have installed using the <code>list</code> command:</p>
 
-<pre><code class="bash /home/lrp/Projects/2014/projNeedingRuby210">$ rvm list rubies
-   ruby-1.9.3-p448 [ x86_64 ]
-=&gt; ruby-2.0.0-p247 [ x86_64 ]
- * ruby-2.1.0 [ x86_64 ]
 
-# =&gt; - current
-# =* - current &amp;&amp; default
-#  * - default
-</code></pre>
+<p><figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm list rubies
+</span><span class='line'>   ruby-1.9.3-p448 <span class="o">[</span> x86_64 <span class="o">]</span>
+</span><span class='line'><span class="o">=</span>&gt; ruby-2.0.0-p247 <span class="o">[</span> x86_64 <span class="o">]</span>
+</span><span class='line'> * ruby-2.1.0 <span class="o">[</span> x86_64 <span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># =&gt; - current</span>
+</span><span class='line'><span class="c"># =* - current &amp;&amp; default</span>
+</span><span class='line'><span class="c">#  * - default</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Now we tell our current project to use <code>ruby 2.1.0</code>:</p>
 
-<pre><code class="bash /home/lrp/Projects/2014/projNeedingRuby210">$ rm .ruby-version .ruby-gemset
-$ rvm 2.1.0@projNeedingRuby210 --create --ruby-version
-ruby-2.1.0 - #gemset created /home/lrp/.rvm/gems/ruby-2.1.0@projNeedingRuby210
-ruby-2.1.0 - #generating projNeedingRuby210 wrappers.
-$ rvm gemset copy 2.0.0-p247@projNeedingRuby210 2.1.0@projNeedingRuby210
-Copying gemset from 2.0.0-p247@projNeedingRuby210 to 2.1.0@projNeedingRuby210
-Generating gemset wrappers ruby-2.1.0@projNeedingRuby210.
-Making gemset 2.1.0@projNeedingRuby210 pristine.
-$ which ruby
-/home/lrp/.rvm/rubies/ruby-2.1.0/bin/ruby
-</code></pre>
+
+<p><figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rm .ruby-version .ruby-gemset
+</span><span class='line'><span class="nv">$ </span>rvm 2.1.0@projNeedingRuby210 &ndash;create &ndash;ruby-version
+</span><span class='line'>ruby-2.1.0 - <span class="c">#gemset created /home/lrp/.rvm/gems/ruby-2.1.0@projNeedingRuby210</span>
+</span><span class='line'>ruby-2.1.0 - <span class="c">#generating projNeedingRuby210 wrappers.</span>
+</span><span class='line'><span class="nv">$ </span>rvm gemset copy 2.0.0-p247@projNeedingRuby210 2.1.0@projNeedingRuby210
+</span><span class='line'>Copying gemset from 2.0.0-p247@projNeedingRuby210 to 2.1.0@projNeedingRuby210
+</span><span class='line'>Generating gemset wrappers ruby-2.1.0@projNeedingRuby210.
+</span><span class='line'>Making gemset 2.1.0@projNeedingRuby210 pristine.
+</span><span class='line'><span class="nv">$ </span>which ruby
+</span><span class='line'>/home/lrp/.rvm/rubies/ruby-2.1.0/bin/ruby
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Alright! Crisis averted. If you&rsquo;re using <a href="//bundler.io/">bundler</a> with this project, be sure to change your ruby version (usually located near the top of the <code>Gemfile</code>).</p>
 
+
+
+
 <p>What about setting up a new project using <code>ruby 2.1.0</code>? Easy! Switch to the project directory and:</p>
 
-<pre><code class="bash /home/lrp/Projects/2014/newRubyProject">$ rvm 2.1.0@newRubyProject --create --ruby-version
-</code></pre>
+
+<p><figure class='code'><figcaption><span>/home/lrp/Projects/2014/newRubyProject</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm 2.1.0@newRubyProject &ndash;create &ndash;ruby-version
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Oh, rvm, you make life <em>too</em> easy sometimes.</p>
+
 ]]></content>
   </entry>
   
@@ -78,52 +117,89 @@ $ which ruby
     <id>http://larry-price.com/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04</id>
     <content type="html"><![CDATA[<p>Some very light cajoling led me to do some investigation into <a href="http://golang.org/">Google Go</a> (often called <strong>golang</strong> for ease of internet search). This is a brief recounting of how I got up and running on <a href="http://ubuntu.com">Ubuntu</a> (first 12.04 and then 13.10). Luckily, this has been made espcially easy for us with the introduction of a <a href="http://packages.ubuntu.com/precise/golang">golang package in the Ubuntu package repositories</a>. There are also <a href="http://golang.org/doc/install">official installation instructions</a> if you don&rsquo;t like mine.</p>
 
+
+
+
 <p>Open up a terminal and let loose:</p>
 
-<pre><code class="bash">$ sudo apt-get install golang
-</code></pre>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install golang
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>The download is pretty heavy, so this step may take some time. Eventually the installer for <code>golang-go</code> will ask you if you want to &ldquo;Report installation of public packages to Go Dashboard.&rdquo; I&rsquo;ve been choosing &ldquo;No&rdquo; to this question and have no complaints.</p>
 
+
+
+
 <p>Now comes the fun part. Serious Go development relies on having a &ldquo;workspace&rdquo; setup involving a specific directory structure including <code>bin/</code>, <code>pkg/</code>, and <code>src/</code> directories. Google&rsquo;s <a href="http://golang.org/doc/code.html">official set-up page</a> contains more information about these workspaces.</p>
+
+
+
 
 <p>I&rsquo;m not a big fan of putting a visible directory in <code>$HOME</code>, so I opted to make a hidden directory called <code>.go</code>. After creating the directory, the environment variable <code>$GOPATH</code> needs to be set and <code>$PATH</code> needs to be adjusted.</p>
 
-<pre><code class="bash">$ mkdir ~/.go
-$ echo "GOPATH=$HOME/.go" &gt;&gt; ~/.bashrc
-$ echo "export GOPATH" &gt;&gt; ~/.bashrc
-$ echo "PATH=\$PATH:\$GOPATH/bin # Add GOPATH/bin to PATH for scripting" &gt;&gt; ~/.bashrc
-$ source ~/.bashrc
-</code></pre>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mkdir ~/.go
+</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;GOPATH=$HOME/.go&quot;</span> &gt;&gt; ~/.bashrc
+</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;export GOPATH&quot;</span> &gt;&gt; ~/.bashrc
+</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;PATH=\$PATH:\$GOPATH/bin # Add GOPATH/bin to PATH for scripting&quot;</span> &gt;&gt; ~/.bashrc
+</span><span class='line'><span class="nv">$ </span><span class="nb">source</span> ~/.bashrc
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Now I&rsquo;m going to create a go project and add a link to it in the workspace I just created.</p>
 
-<pre><code class="bash">$ mkdir -p $GOPATH/src/github.com/user
-$ mkdir ~/hello-go
-$ ln -s ~/hello-go ~/.go/src/github.com/user/hello-go
-</code></pre>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mkdir -p <span class="nv">$GOPATH</span>/src/github.com/user
+</span><span class='line'><span class="nv">$ </span>mkdir ~/hello-go
+</span><span class='line'><span class="nv">$ </span>ln -s ~/hello-go ~/.go/src/github.com/user/hello-go
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>For some actual test code, I&rsquo;ll add a file in my <code>hello-go/</code> directory called <code>hello.go</code> with the following code:</p>
 
-<pre><code class="go hello.go">package main
 
-import "fmt"
-
-func main() {
-  fmt.Println("Hello world")
-}
-</code></pre>
+<p><figure class='code'><figcaption><span>hello.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">main</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="s">&quot;fmt&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Hello world&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Now I&rsquo;m going to install the binary created from compiling this code into my <code>$GOPATH</code> to verify that my workspace is set up correctly, then I&rsquo;ll run it to behold the fruit of my efforts.</p>
 
-<pre><code class="bash">$ go install github.com/user/hello-go
-$ hello-go
-Hello world
-</code></pre>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>go install github.com/user/hello-go
+</span><span class='line'><span class="nv">$ </span>hello-go
+</span><span class='line'>Hello world
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Installing is not necessary every time I want to test that my code compiles; running <code>go build</code> in the source directory will create a local executable that can be executed for incremental testing.</p>
 
+
+
+
 <p>If you&rsquo;re interested in learning golang, I would recommend doing the <a href="http://tour.golang.org/">go tour</a>. It goes way beyond a trivial hello world program and gives you some insight into many coplex go concepts (I even posted <a href="https://gist.github.com/larryprice/7647808">my solutions as a gist</a>, if you&rsquo;re interested).</p>
+
 ]]></content>
   </entry>
   
@@ -134,43 +210,78 @@ Hello world
     <id>http://larry-price.com/blog/2013/12/10/login-shell-not-sourcing-bashrc</id>
     <content type="html"><![CDATA[<p>I have a confession: I&rsquo;ve been avoiding using <a href="https://rvm.io/">rvm</a> for the past few weeks for stupid reasons.</p>
 
+
+
+
 <p>When using <code>rvm</code> with <code>gnome-terminal</code>, I have to tell <code>gnome-terminal</code> to run as a login shell so that <code>/etc/profile</code> is sourced. The login shell is then supposed to source <code>$HOME/profile</code>, which is then supposed to source <code>$HOME/.bashrc</code>. Installing <code>rvm</code> results in me editing my <code>.bash_profile</code> to add the following line:</p>
 
-<pre><code class="bash .bash_profile">[[ -s "$HOME/.rvm/scripts/rvm" ]] &amp;&amp; source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-</code></pre>
+
+<p><figure class='code'><figcaption><span>.bash_profile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[[</span> -s <span class="s2">&quot;$HOME/.rvm/scripts/rvm&quot;</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="s2">&quot;$HOME/.rvm/scripts/rvm&quot;</span> <span class="c"># Load RVM into a shell session <em>as a function</em></span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>All my <code>rvm</code> environments seem to work, so this is a success, right?</p>
 
+
+
+
 <p>Well, I type the good ol&#8217; <code>ls</code> command and I notice that all my colors are missing. I notice that the terminal title no longer reads the present working directory, but instead greets me with a disinterested &ldquo;Terminal.&rdquo; What happened?</p>
+
+
+
 
 <p>Eventually I realized that this was a problem caused by not sourcing my <code>.bashrc</code>. Where did I go wrong?</p>
 
+
+
+
 <p>The login shell sources <code>$HOME/.profile</code> UNLESS <code>$HOME/.bash_profile</code> exists, in which case it only sources the latter. So what are the contents of my <code>$HOME/.profile</code>?</p>
 
-<pre><code class="bash .profile"># ~/.profile: executed by the command interpreter for login shells.
 
-# [cut for brevity]
-
-# if running bash
-if [ -n "$BASH_VERSION" ]; then
-    # include .bashrc if it exists
-    if [ -f "$HOME/.bashrc" ]; then
-      . "$HOME/.bashrc"
-    fi
-fi
-
-# [cut for brevity]
-</code></pre>
+<p><figure class='code'><figcaption><span>.profile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># ~/.profile: executed by the command interpreter for login shells.</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># [cut for brevity]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># if running bash</span>
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> -n <span class="s2">&quot;$BASH_VERSION&quot;</span> <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'>    <span class="c"># include .bashrc if it exists</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">[</span> -f <span class="s2">&quot;$HOME/.bashrc&quot;</span> <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'>      . <span class="s2">&quot;$HOME/.bashrc&quot;</span>
+</span><span class='line'>    <span class="k">fi</span>
+</span><span class='line'><span class="k">fi</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># [cut for brevity]</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Aha! The sneaky dot-file actually sources <code>$HOME/.bashrc</code>, and my shiny new <code>$HOME/.bash_profile</code> doesn&rsquo;t. I fixed this by sourcing <code>$HOME/.profile</code> in <code>$HOME/.bash_profile</code>.</p>
 
-<pre><code class="bash .bash_profile">[ -f "$HOME/.profile" ] &amp;&amp; source "$HOME/.profile"
-[[ -s "$HOME/.rvm/scripts/rvm" ]] &amp;&amp; source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-</code></pre>
+
+<p><figure class='code'><figcaption><span>.bash_profile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span> -f <span class="s2">&quot;$HOME/.profile&quot;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="s2">&quot;$HOME/.profile&quot;</span>
+</span><span class='line'><span class="o">[[</span> -s <span class="s2">&quot;$HOME/.rvm/scripts/rvm&quot;</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="s2">&quot;$HOME/.rvm/scripts/rvm&quot;</span> <span class="c"># Load RVM into a shell session <em>as a function</em></span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>For the memory-impaired: <code>.bash_profile</code> sources <code>.profile</code> sources <code>.bashrc</code>.</p>
 
+
+
+
 <p>Re-open <code>gnome-terminal</code> to find my colors are fixed, my title is correct, and <code>rvm</code> plays the right notes. The world is at peace once again, and I don&rsquo;t have to avoid using <code>rvm</code>.</p>
+
 ]]></content>
   </entry>
   
@@ -183,23 +294,51 @@ fi
 <a href="http://www.amazon.com/gp/product/1593270356/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1593270356&amp;linkCode=as2&amp;tag=larpriandthee-20"><strong>How Linux Works: Things Every Superuser Should Know</strong></a><br/>
 <strong>Brian Ward</strong></p>
 
+
+
+
 <hr />
+
+
+
 
 <h3>The Gist</h3>
 
+
+
+
 <p>Linux is a complicated operating system which gives its users the freedom to do anything. This book details things that any Linux superuser should be aware of, including printing, networking, scripting, compiling source code, setting up users, and buying hardware.</p>
+
+
+
 
 <h3>My Feelings</h3>
 
+
+
+
 <p>I&rsquo;ve been running <a href="http://ubuntu.com/">Ubuntu</a> as the only operating system on my home computer since the 11.04 Natty Narwhal release in 2011, and I&rsquo;ve been using Ubuntu in varying degrees since 9.04 Lucid Lynx. I&rsquo;ve also recently ported my wife&rsquo;s computer over to Ubuntu after she finally got fed up with Linux. There is a course at Purdue called ECE364 that taught us lots of cool Linux commands which I had forgotten, so I&rsquo;ve been looking for a good refresher. This book helped jog my memory of things like grep, sed, and awk. The book also provided lots of information on things that I&rsquo;d been using for years without really realizing what I was doing.</p>
+
+
+
 
 <p>This book was written in 2004, which was a long time ago in the computing world. In 2004, Ubuntu Linux (<a href="http://www.pcworld.com/article/254516/which_linux_distro_is_fairest_of_them_all_ubuntu_survey_says.html">the most popular personal desktop Linux distribution</a>) was released. Ward makes mentions of setting up network interfaces, firewalls, and printers through the terminal, which are all things that now are either done automatically by most operating systems or at a minimum have a GUI to support setup. Ward also mentions that <a href="http://en.wikipedia.org/wiki/Cathode_ray_tube">CRT monitors</a> are on the cheap, but if you want the best resolution an <a href="http://en.wikipedia.org/wiki/Lcd">LCD monitor</a> is the new cool thang. He talks about <a href="http://en.wikipedia.org/wiki/Pentium">Pentium processors</a>, half gigabytes of DDR, and slow, heavy laptops. Be warned that you won&rsquo;t find anything in this book about 64-bit processors, SSDs, or cloud computing.</p>
 
+
+
+
 <p>Most of the book is still very relevant. As mentioned previously, I got a lot of benefit from reading the section on common commands. The section on setting up dot-files was also extremely useful for me. There was also a lot of interesting information about the Linux filesystem being databases that I had never really thought about before.</p>
+
+
+
 
 <h3>Who Would Like This</h3>
 
+
+
+
 <p>Those new to Linux or those needing a refresher would benefit from scanning this book, at least the interesting sections. This book is not for people looking for bleeding-edge information on their new hardware or software. The reader can get a large amount of information that has aged well and will continue to be relevant for Linux users for years to come.</p>
+
 ]]></content>
   </entry>
   

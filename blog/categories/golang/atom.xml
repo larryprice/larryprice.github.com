@@ -4,7 +4,7 @@
   <title><![CDATA[Category: golang | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/golang/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-12T16:57:15-04:00</updated>
+  <updated>2014-08-16T11:03:51-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -20,9 +20,18 @@
     <id>http://larry-price.com/blog/2014/05/13/better-testing-in-go-with-gocheck</id>
     <content type="html"><![CDATA[<p>As a quick reminder, <a href="//golang.org/">golang</a> is a really fun programming language to use. It even includes <a href="//golang.org/doc/code.html#Testing">testing out of the box</a>! Unfortunately, this out-of-the-box testing framework isn&rsquo;t all that great. It lacks the syntactic sugar of mature frameworks like <a href="//rspec.info">rspec</a> or <a href="//code.google.com/p/googletest/">gtest</a>.</p>
 
+
+
+
 <p>Of course, there are alternatives. I found an open-source library (licensed with Simplified BSD) called <a href="//labix.org/gocheck">gocheck</a>.</p>
 
+
+
+
 <p>Gocheck, how do I love thee? Let me count the ways:</p>
+
+
+
 
 <ul>
 <li>Test fixtures</li>
@@ -34,158 +43,284 @@
 </ul>
 
 
+
+
 <p>As usual, it&rsquo;s time to guide you through a contrived example. Start by installing the package:</p>
 
-<pre><code class="bash">$ go get gopkg.in/check.v1
-</code></pre>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>go get gopkg.in/check.v1
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Let&rsquo;s see, what should we make&hellip; how about a tip calculating library? We should start by testing, because we&rsquo;re obsessed with TDD.</p>
 
+
+
+
 <p>Test #1: Returns 0 for free meal</p>
 
-<pre><code class="go calculator_test.go">package cheapskate
 
-import (
-  "testing"
-  . "gopkg.in/check.v1"
-)
-
-// Hook up gocheck into the "go test" runner.
-func Test(t *testing.T) { TestingT(t) }
-
-type MySuite struct{}
-
-var _ = Suite(&amp;MySuite{})
-
-func (s *MySuite) TestReturns0ForFreeMeal(c *C) {
-  c.Assert(calculateTip(0.0), Equals, 0.0)
-}
-</code></pre>
+<p><figure class='code'><figcaption><span>calculator_test.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">cheapskate</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="p">(</span>
+</span><span class='line'>  <span class="s">&quot;testing&quot;</span>
+</span><span class='line'>  <span class="p">.</span> <span class="s">&quot;gopkg.in/check.v1&quot;</span>
+</span><span class='line'><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Hook up gocheck into the &quot;go test&quot; runner.</span>
+</span><span class='line'><span class="kd">func</span> <span class="nx">Test</span><span class="p">(</span><span class="nx">t</span> <span class="o"><em></span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span> <span class="nx">TestingT</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">type</span> <span class="nx">MySuite</span> <span class="kd">struct</span><span class="p">{}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">Suite</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">MySuite</span><span class="p">{})</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o"></em></span><span class="nx">MySuite</span><span class="p">)</span> <span class="nx">TestReturns0ForFreeMeal</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">C</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">c</span><span class="p">.</span><span class="nx">Assert</span><span class="p">(</span><span class="nx">calculateTip</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span> <span class="nx">Equals</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Not quite as obvious as the internal testing framework. First we hook up gocheck into the &ldquo;go test&rdquo; runner. Then we create a test suite; ours is empty for now and called <code>MySuite</code>. We call <code>Suite</code> to intialize the test runner with our custom suite. We then write our first test to assert that calculating the tip returns a value equal to 0. All tests must be prefixed with the word &ldquo;Test&rdquo;. Now I&rsquo;ll write the implementation:</p>
 
-<pre><code class="go calculator.go">package cheapskate
 
-func calculateTip(bill float64) float64 {
-  return 0.0
-}
-</code></pre>
+<p><figure class='code'><figcaption><span>calculator.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">cheapskate</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="nx">calculateTip</span><span class="p">(</span><span class="nx">bill</span> <span class="kt">float64</span><span class="p">)</span> <span class="kt">float64</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="mf">0.0</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Running the tests&hellip;</p>
 
-<pre><code class="bash">$ go test
-OK: 1 passed
-PASS
-ok    _/home/lrp/Projects/2014/gocheck-quick  0.003s
-</code></pre>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>go <span class="nb">test</span>
+</span><span class='line'>OK: 1 passed
+</span><span class='line'>PASS
+</span><span class='line'>ok    _/home/lrp/Projects/2014/gocheck-quick  0.003s
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Woohoo! All passed. What happens if we write a failing test?</p>
 
-<pre><code class="go calculator_test.go">...
-func (s *MySuite) TestReturns15PercentByDefault(c *C) {
-  c.Assert(calculateTip(100.0), Equals, 15.0)
-}
-</code></pre>
+
+<p><figure class='code'><figcaption><span>calculator_test.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="o">&hellip;</span>
+</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o"><em></span><span class="nx">MySuite</span><span class="p">)</span> <span class="nx">TestReturns15PercentByDefault</span><span class="p">(</span><span class="nx">c</span> <span class="o"></em></span><span class="nx">C</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">c</span><span class="p">.</span><span class="nx">Assert</span><span class="p">(</span><span class="nx">calculateTip</span><span class="p">(</span><span class="mf">100.0</span><span class="p">),</span> <span class="nx">Equals</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Results:</p>
 
-<pre><code class="bash">lrp@cilantro:~/Projects/2014/gocheck-quick$ go test
 
-----------------------------------------------------------------------
-FAIL: calculator_test.go:19: MySuite.TestReturns15PercentByDefault
-
-calculator_test.go:20:
-    c.Assert(calculateTip(100.0), Equals, 15.0)
-... obtained float64 = 0
-... expected float64 = 15
-
-OOPS: 1 passed, 1 FAILED
---- FAIL: Test (0.00 seconds)
-FAIL
-exit status 1
-FAIL  _/home/lrp/Projects/2014/gocheck-quick  0.003s
-</code></pre>
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>lrp@cilantro:~/Projects/2014/gocheck-quick<span class="nv">$ </span>go <span class="nb">test</span>
+</span><span class='line'>
+</span><span class='line'>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-
+</span><span class='line'>FAIL: calculator_test.go:19: MySuite.TestReturns15PercentByDefault
+</span><span class='line'>
+</span><span class='line'>calculator_test.go:20:
+</span><span class='line'>    c.Assert<span class="o">(</span>calculateTip<span class="o">(</span>100.0<span class="o">)</span>, Equals, 15.0<span class="o">)</span>
+</span><span class='line'>&hellip; obtained <span class="nv">float64</span> <span class="o">=</span> 0
+</span><span class='line'>&hellip; expected <span class="nv">float64</span> <span class="o">=</span> 15
+</span><span class='line'>
+</span><span class='line'>OOPS: 1 passed, 1 FAILED
+</span><span class='line'>&mdash; FAIL: Test <span class="o">(</span>0.00 seconds<span class="o">)</span>
+</span><span class='line'>FAIL
+</span><span class='line'><span class="nb">exit </span>status 1
+</span><span class='line'>FAIL  _/home/lrp/Projects/2014/gocheck-quick  0.003s
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>A nasty failure that one. I&rsquo;ll fix it and continue:</p>
 
-<pre><code class="go calculator.go">package cheapskate
 
-func calculateTip(bill float64) float64 {
-  return .15 * bill
-}
-</code></pre>
+<p><figure class='code'><figcaption><span>calculator.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">cheapskate</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="nx">calculateTip</span><span class="p">(</span><span class="nx">bill</span> <span class="kt">float64</span><span class="p">)</span> <span class="kt">float64</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="mf">.15</span> <span class="o">*</span> <span class="nx">bill</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>I want to create a Setup method for my entire suite. I&rsquo;ll store some silly information there for information&rsquo;s sake. The minBill and maxBill variables will only be set when I first load the suite.</p>
 
-<pre><code class="go calculator_test.go">package cheapskate
 
-import (
-  "testing"
-  . "gopkg.in/check.v1"
-)
-
-// Hook up gocheck into the "go test" runner.
-func Test(t *testing.T) { TestingT(t) }
-
-type MySuite struct{
-  minBill float64
-  maxBill float64
-}
-
-func (s *MySuite) SetUpSuite(c *C) {
-  s.minBill = 0
-  s.maxBill = 100
-}
-
-var _ = Suite(&amp;MySuite{})
-
-func (s *MySuite) TestReturns0ForFreeMeal(c *C) {
-  c.Assert(calculateTip(s.minBill), Equals, 0.0)
-}
-
-func (s *MySuite) TestReturns15PercentByDefault(c *C) {
-  c.Assert(calculateTip(s.maxBill), Equals, 15.0)
-}
-</code></pre>
+<p><figure class='code'><figcaption><span>calculator_test.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">cheapskate</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="p">(</span>
+</span><span class='line'>  <span class="s">&quot;testing&quot;</span>
+</span><span class='line'>  <span class="p">.</span> <span class="s">&quot;gopkg.in/check.v1&quot;</span>
+</span><span class='line'><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Hook up gocheck into the &quot;go test&quot; runner.</span>
+</span><span class='line'><span class="kd">func</span> <span class="nx">Test</span><span class="p">(</span><span class="nx">t</span> <span class="o"><em></span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span> <span class="nx">TestingT</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">type</span> <span class="nx">MySuite</span> <span class="kd">struct</span><span class="p">{</span>
+</span><span class='line'>  <span class="nx">minBill</span> <span class="kt">float64</span>
+</span><span class='line'>  <span class="nx">maxBill</span> <span class="kt">float64</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o"></em></span><span class="nx">MySuite</span><span class="p">)</span> <span class="nx">SetUpSuite</span><span class="p">(</span><span class="nx">c</span> <span class="o"><em></span><span class="nx">C</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">s</span><span class="p">.</span><span class="nx">minBill</span> <span class="p">=</span> <span class="mi">0</span>
+</span><span class='line'>  <span class="nx">s</span><span class="p">.</span><span class="nx">maxBill</span> <span class="p">=</span> <span class="mi">100</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">Suite</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">MySuite</span><span class="p">{})</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o"></em></span><span class="nx">MySuite</span><span class="p">)</span> <span class="nx">TestReturns0ForFreeMeal</span><span class="p">(</span><span class="nx">c</span> <span class="o"><em></span><span class="nx">C</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">c</span><span class="p">.</span><span class="nx">Assert</span><span class="p">(</span><span class="nx">calculateTip</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">minBill</span><span class="p">),</span> <span class="nx">Equals</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o"></em></span><span class="nx">MySuite</span><span class="p">)</span> <span class="nx">TestReturns15PercentByDefault</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">C</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">c</span><span class="p">.</span><span class="nx">Assert</span><span class="p">(</span><span class="nx">calculateTip</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">maxBill</span><span class="p">),</span> <span class="nx">Equals</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>What if I wanted to set some information at the start of each test? I&rsquo;ll log the current test number on the suite, updating it every time I run a test:</p>
 
-<pre><code class="go calculator_test.go">package cheapskate
 
-import (
-  "testing"
-  . "gopkg.in/check.v1"
-
-  "fmt"
-)
-
-// Hook up gocheck into the "go test" runner.
-func Test(t *testing.T) { TestingT(t) }
-
-type MySuite struct{
-  testNumber int
-}
-
-func (s *MySuite) SetUpTest(c *C) {
-  fmt.Println(s.testNumber)
-  s.testNumber += 1
-}
-...
-</code></pre>
+<p><figure class='code'><figcaption><span>calculator_test.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">cheapskate</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="p">(</span>
+</span><span class='line'>  <span class="s">&quot;testing&quot;</span>
+</span><span class='line'>  <span class="p">.</span> <span class="s">&quot;gopkg.in/check.v1&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="s">&quot;fmt&quot;</span>
+</span><span class='line'><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Hook up gocheck into the &quot;go test&quot; runner.</span>
+</span><span class='line'><span class="kd">func</span> <span class="nx">Test</span><span class="p">(</span><span class="nx">t</span> <span class="o"><em></span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span> <span class="nx">TestingT</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">type</span> <span class="nx">MySuite</span> <span class="kd">struct</span><span class="p">{</span>
+</span><span class='line'>  <span class="nx">testNumber</span> <span class="kt">int</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o"></em></span><span class="nx">MySuite</span><span class="p">)</span> <span class="nx">SetUpTest</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">C</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">testNumber</span><span class="p">)</span>
+</span><span class='line'>  <span class="nx">s</span><span class="p">.</span><span class="nx">testNumber</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&hellip;</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Result:</p>
 
-<pre><code class="bash">$ go test
-0
-1
-OK: 2 passed
-PASS
-ok    _/home/lrp/Projects/2014/gocheck-quick  0.004s
-</code></pre>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>go <span class="nb">test</span>
+</span><span class='line'>0
+</span><span class='line'>1
+</span><span class='line'>OK: 2 passed
+</span><span class='line'>PASS
+</span><span class='line'>ok    _/home/lrp/Projects/2014/gocheck-quick  0.004s
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>You can create tear down methods for suites and tests in the same manner, replacing the appropriate words above.</p>
 
+
+
+
 <p>There&rsquo;s loads of other cool stuff gocheck can do, I&rsquo;ve barely scratched the surface with what little experience I&rsquo;ve had using it. Like any testing framework, I&rsquo;m sure it has its advantages and disadvantages, but it sure beats the pants off the off-the-shelf framework Google includes with golang.</p>
+
 ]]></content>
   </entry>
   
@@ -196,7 +331,13 @@ ok    _/home/lrp/Projects/2014/gocheck-quick  0.004s
     <id>http://larry-price.com/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial</id>
     <content type="html"><![CDATA[<h3>A golang web app tutorial</h3>
 
+
+
+
 <p>I did some work with <a href="http://golang.org/">Google Go</a> recently and had the chance to follow their great tutorial <em><a href="http://golang.org/doc/articles/wiki/">Writing Web Applications</a></em>. The tutorial is pretty simple: use the Go http library to create a very simple wiki-style site. I like this tutorial a lot because there&rsquo;s not too much hand-holding, but they do eventually hand you the <a href="http://golang.org/doc/articles/wiki/final.go">final code listing</a>. Then the good people at Google give you the tall task of completing the following &lsquo;Other tasks&rsquo; without solutions:</p>
+
+
+
 
 <ul>
 <li>Store templates in tmpl/ and page data in data/.</li>
@@ -207,102 +348,183 @@ ok    _/home/lrp/Projects/2014/gocheck-quick  0.004s
 </ul>
 
 
+
+
 <p>This is what I&rsquo;d like to go over. I scoured the web and didn&rsquo;t have much luck finding solutions to these issues. That would be okay if they were all trivial, but the final step is not straightforward. I&rsquo;m going to assume you&rsquo;ve already gone over the tutorial. You can see <a href="https://github.com/larryprice/gowiki/">my repository on Github</a>, and I have included links to the appropriate commits in the code sections of this blog post.</p>
+
+
+
 
 <h4>Store templates in tmpl/ and page data in data/</h4>
 
+
+
+
 <p>The tutorial originally has the developer store all pages in the project directory. Every time a user made a new wiki page, a new file would creep into the project directory. All HTML templates were also stored in the project directory.</p>
+
+
+
 
 <p>Moving templates is quite trivial. In the global scope:</p>
 
-<pre><code class="diff wiki.go https://github.com/larryprice/gowiki/commit/9994d11b5275bc5faee911e5db2c994bc91052e2">-var templates = template.Must(template.ParseFiles("edit.html", "view.html"))
-+var templates = template.Must(template.ParseFiles("tmpl/edit.html", "tmpl/view.html"))
-</code></pre>
+
+<p><figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/9994d11b5275bc5faee911e5db2c994bc91052e2'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gd">-var templates = template.Must(template.ParseFiles(&quot;edit.html&quot;, &quot;view.html&quot;))</span>
+</span><span class='line'><span class="gi">+var templates = template.Must(template.ParseFiles(&quot;tmpl/edit.html&quot;, &quot;tmpl/view.html&quot;))</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>I found moving the page data to <code>data/</code> was a little trickier, especially if the directory didn&rsquo;t already exist. You may not have the same issue, but I remedied this by creating the directory if it doesn&rsquo;t exist. My <code>save</code> function differences:</p>
 
-<pre><code class="diff wiki.go https://github.com/larryprice/gowiki/commit/e86a707d37b802b2d59b8ef261b3fdcab46d5870">func (p *Page) save() error {
--    filename := p.Title + ".txt"
--    return ioutil.WriteFile(filename, p.Body, 0600)
-+  os.Mkdir("data", 0777)
-+  filename := "data/" + p.Title + ".txt"
-+  return ioutil.WriteFile(filename, p.Body, 0600)
-}
-</code></pre>
+
+<p><figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/e86a707d37b802b2d59b8ef261b3fdcab46d5870'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'>func (p *Page) save() error {
+</span><span class='line'><span class="gd">-    filename := p.Title + &quot;.txt&quot;</span>
+</span><span class='line'><span class="gd">-    return ioutil.WriteFile(filename, p.Body, 0600)</span>
+</span><span class='line'><span class="gi">+  os.Mkdir(&quot;data&quot;, 0777)</span>
+</span><span class='line'><span class="gi">+  filename := &quot;data/&quot; + p.Title + &quot;.txt&quot;</span>
+</span><span class='line'><span class="gi">+  return ioutil.WriteFile(filename, p.Body, 0600)</span>
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure></p>
 
 <h4>Add a handler to make the web root redirect to /view/FrontPage</h4>
 
+
+
+
 <p>All we&rsquo;re going to do is create a simple handler called <code>rootHandler</code> that redirects to a new page called <code>FrontPage</code>. We then add it in the <code>main</code> function. The tutorial had us wrap out handlers in a function call to take some special actions, but that wrapper would mess up our handler in its current form. So I just <code>Redirect</code> to the <code>view</code> handler, which will then decide whether to view or create the FrontPage.</p>
 
-<pre><code class="diff wiki.go https://github.com/larryprice/gowiki/commit/e41fccc2d244a3b0d62d600d94897a076c87d53d">+ func rootHandler(w http.ResponseWriter, r *http.Request) {
-+   http.Redirect(w, r, "/view/FrontPage", http.StatusFound)
-+ }
 
-...
-
-func main() {
-+  http.HandleFunc("/", rootHandler)
-  http.HandleFunc("/view/", makeHandler(viewHandler))
-  http.HandleFunc("/edit/", makeHandler(editHandler))
-  http.HandleFunc("/save/", makeHandler(saveHandler))
-</code></pre>
+<p><figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/e41fccc2d244a3b0d62d600d94897a076c87d53d'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gi">+ func rootHandler(w http.ResponseWriter, r *http.Request) {</span>
+</span><span class='line'><span class="gi">+   http.Redirect(w, r, &quot;/view/FrontPage&quot;, http.StatusFound)</span>
+</span><span class='line'><span class="gi">+ }</span>
+</span><span class='line'>
+</span><span class='line'>&hellip;
+</span><span class='line'>
+</span><span class='line'>func main() {
+</span><span class='line'><span class="gi">+  http.HandleFunc(&quot;/&quot;, rootHandler)</span>
+</span><span class='line'>  http.HandleFunc(&quot;/view/&quot;, makeHandler(viewHandler))
+</span><span class='line'>  http.HandleFunc(&quot;/edit/&quot;, makeHandler(editHandler))
+</span><span class='line'>  http.HandleFunc(&quot;/save/&quot;, makeHandler(saveHandler))
+</span></code></pre></td></tr></table></div></figure></p>
 
 <h4>Spruce up the page templates by making them valid HTML and adding some CSS rules.</h4>
 
+
+
+
 <p>I took my old <code>.html</code> files and put them through <a href="http://validator.w3.org/#validate_by_input">a validator</a>. Making them valid only involved adding <code>DOCTYPE</code>, <code>html</code>, and <code>head</code> tags. The <code>head</code> tag needed <code>meta</code>, and <code>title</code> tags and we were valid. I&rsquo;ve shown <code>view.html</code> below.</p>
 
-<pre><code class="diff view.html https://github.com/larryprice/gowiki/commit/771b4ecc8a550ee438720dc5c3d3f47954a1e4ff">+&lt;!DOCTYPE html&gt;
-+&lt;html&gt;
-+&lt;head&gt;
-+&lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"&gt;
-+&lt;title&gt;Wiki made using Golang&lt;/title&gt;
-+&lt;/head&gt;
- &lt;h1&gt;&lt;/h1&gt;
 
- &lt;p&gt;[&lt;a href="http://larry-price.com/edit/"&gt;edit&lt;/a&gt;]&lt;/p&gt;
-
- &lt;div&gt;&lt;/div&gt;
-+&lt;/html&gt;
-</code></pre>
+<p><figure class='code'><figcaption><span>view.html</span><a href='https://github.com/larryprice/gowiki/commit/771b4ecc8a550ee438720dc5c3d3f47954a1e4ff'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gi">+&lt;!DOCTYPE html&gt;</span>
+</span><span class='line'><span class="gi">+&lt;html&gt;</span>
+</span><span class='line'><span class="gi">+&lt;head&gt;</span>
+</span><span class='line'><span class="gi">+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;&gt;</span>
+</span><span class='line'><span class="gi">+&lt;title&gt;Wiki made using Golang&lt;/title&gt;</span>
+</span><span class='line'><span class="gi">+&lt;/head&gt;</span>
+</span><span class='line'> &lt;h1&gt;&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'> &lt;p&gt;[&lt;a href=&quot;/edit/&quot;&gt;edit&lt;/a&gt;]&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'> &lt;div&gt;&lt;/div&gt;
+</span><span class='line'><span class="gi">+&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <h4>Implement inter-page linking by converting instances of [PageName]</h4>
 
+
+
+
 <p>Converting [PageName] to a hyperlink was a bit more complicated than expected. I originally just tried to run the string through <code>ReplaceAllFunc</code> and replace all instance of [PageName] with an equivalent hyperlink. This does not work because we use Go&rsquo;s <code>ExecuteTemplate</code> method to render our template. <code>ExecuteTemplate</code> escapes any HTML that we give it to prevent us from displaying unwanted HTML. Getting around this was the fun part, because I want the benefit of escaped HTML while still having the ability to substitute my own HTML.</p>
+
+
+
 
 <p>As it turns out, <code>ExecuteTemplate</code> will not escape variables of the type <code>template.HTML</code>. So I added another variable onto the <code>Page</code> struct called <code>DisplayBody</code>.</p>
 
-<pre><code class="diff wiki.go https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288">type Page struct {
-     Title string
-     Body  []byte
-+    DisplayBody template.HTML
-}
-</code></pre>
+
+<p><figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'>type Page struct {
+</span><span class='line'>     Title string
+</span><span class='line'>     Body  []byte
+</span><span class='line'><span class="gi">+    DisplayBody template.HTML</span>
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Next, I create a regular expression to find instances of [PageName] and I put the defintion above the <code>main</code> method.</p>
 
-<pre><code class="diff wiki.go https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288">+var linkRegexp = regexp.MustCompile("\\[([a-zA-Z0-9]+)\\]")
-</code></pre>
+
+<p><figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gi">+var linkRegexp = regexp.MustCompile(&quot;\[([a-zA-Z0-9]+)\]&quot;)</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>In my <code>viewHandler</code>, I escape <code>Body</code> and then set <code>DisplayBody</code> to that escaped string with the links substituted.</p>
 
-<pre><code class="diff wiki.go https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288">+  escapedBody := []byte(template.HTMLEscapeString(string(p.Body)))
-+
-+  p.DisplayBody = template.HTML(linkRegexp.ReplaceAllFunc(escapedBody, func(str []byte) []byte {
-+      matched := linkRegexp.FindStringSubmatch(string(str))
-+      out := []byte("&lt;a href=\"/view/"+matched[1]+"\"&gt;"+matched[1]+"&lt;/a&gt;")
-+      return out
-+    }))
-  renderTemplate(w, "view", p)
-}
-</code></pre>
+
+<p><figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gi">+  escapedBody := []byte(template.HTMLEscapeString(string(p.Body)))</span>
+</span><span class='line'><span class="gi">+</span>
+</span><span class='line'><span class="gi">+  p.DisplayBody = template.HTML(linkRegexp.ReplaceAllFunc(escapedBody, func(str []byte) []byte {</span>
+</span><span class='line'><span class="gi">+      matched := linkRegexp.FindStringSubmatch(string(str))</span>
+</span><span class='line'><span class="gi">+      out := []byte(&quot;&lt;a href=&amp;quot;/view/&quot;+matched[1]+&quot;&amp;quot;&gt;&quot;+matched[1]+&quot;&lt;/a&gt;&quot;)</span>
+</span><span class='line'><span class="gi">+      return out</span>
+</span><span class='line'><span class="gi">+    }))</span>
+</span><span class='line'>  renderTemplate(w, &quot;view&quot;, p)
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>To finish up, I modify the <code>view.html</code> to show <code>DisplayBody</code>. I don&rsquo;t use <code>printf</code>, because that would turn <code>DisplayBody</code> back into a <code>string</code> and <code>ExecuteTemplate</code> would escape it.</p>
 
-<pre><code class="diff wiki.go https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288">-&lt;div&gt;&lt;/div&gt;
-+&lt;div&gt;&lt;/div&gt;
-</code></pre>
+
+<p><figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gd">-&lt;div&gt;&lt;/div&gt;</span>
+</span><span class='line'><span class="gi">+&lt;div&gt;&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>And that completes the extra exercises for Google&rsquo;s <em>Writing Web Applications</em> tutorial. Hopefully one day this helps someone who gets stuck.</p>
+
 ]]></content>
   </entry>
   
@@ -313,52 +535,89 @@ func main() {
     <id>http://larry-price.com/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04</id>
     <content type="html"><![CDATA[<p>Some very light cajoling led me to do some investigation into <a href="http://golang.org/">Google Go</a> (often called <strong>golang</strong> for ease of internet search). This is a brief recounting of how I got up and running on <a href="http://ubuntu.com">Ubuntu</a> (first 12.04 and then 13.10). Luckily, this has been made espcially easy for us with the introduction of a <a href="http://packages.ubuntu.com/precise/golang">golang package in the Ubuntu package repositories</a>. There are also <a href="http://golang.org/doc/install">official installation instructions</a> if you don&rsquo;t like mine.</p>
 
+
+
+
 <p>Open up a terminal and let loose:</p>
 
-<pre><code class="bash">$ sudo apt-get install golang
-</code></pre>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install golang
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>The download is pretty heavy, so this step may take some time. Eventually the installer for <code>golang-go</code> will ask you if you want to &ldquo;Report installation of public packages to Go Dashboard.&rdquo; I&rsquo;ve been choosing &ldquo;No&rdquo; to this question and have no complaints.</p>
 
+
+
+
 <p>Now comes the fun part. Serious Go development relies on having a &ldquo;workspace&rdquo; setup involving a specific directory structure including <code>bin/</code>, <code>pkg/</code>, and <code>src/</code> directories. Google&rsquo;s <a href="http://golang.org/doc/code.html">official set-up page</a> contains more information about these workspaces.</p>
+
+
+
 
 <p>I&rsquo;m not a big fan of putting a visible directory in <code>$HOME</code>, so I opted to make a hidden directory called <code>.go</code>. After creating the directory, the environment variable <code>$GOPATH</code> needs to be set and <code>$PATH</code> needs to be adjusted.</p>
 
-<pre><code class="bash">$ mkdir ~/.go
-$ echo "GOPATH=$HOME/.go" &gt;&gt; ~/.bashrc
-$ echo "export GOPATH" &gt;&gt; ~/.bashrc
-$ echo "PATH=\$PATH:\$GOPATH/bin # Add GOPATH/bin to PATH for scripting" &gt;&gt; ~/.bashrc
-$ source ~/.bashrc
-</code></pre>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mkdir ~/.go
+</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;GOPATH=$HOME/.go&quot;</span> &gt;&gt; ~/.bashrc
+</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;export GOPATH&quot;</span> &gt;&gt; ~/.bashrc
+</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;PATH=\$PATH:\$GOPATH/bin # Add GOPATH/bin to PATH for scripting&quot;</span> &gt;&gt; ~/.bashrc
+</span><span class='line'><span class="nv">$ </span><span class="nb">source</span> ~/.bashrc
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Now I&rsquo;m going to create a go project and add a link to it in the workspace I just created.</p>
 
-<pre><code class="bash">$ mkdir -p $GOPATH/src/github.com/user
-$ mkdir ~/hello-go
-$ ln -s ~/hello-go ~/.go/src/github.com/user/hello-go
-</code></pre>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mkdir -p <span class="nv">$GOPATH</span>/src/github.com/user
+</span><span class='line'><span class="nv">$ </span>mkdir ~/hello-go
+</span><span class='line'><span class="nv">$ </span>ln -s ~/hello-go ~/.go/src/github.com/user/hello-go
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>For some actual test code, I&rsquo;ll add a file in my <code>hello-go/</code> directory called <code>hello.go</code> with the following code:</p>
 
-<pre><code class="go hello.go">package main
 
-import "fmt"
-
-func main() {
-  fmt.Println("Hello world")
-}
-</code></pre>
+<p><figure class='code'><figcaption><span>hello.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">main</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="s">&quot;fmt&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Hello world&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Now I&rsquo;m going to install the binary created from compiling this code into my <code>$GOPATH</code> to verify that my workspace is set up correctly, then I&rsquo;ll run it to behold the fruit of my efforts.</p>
 
-<pre><code class="bash">$ go install github.com/user/hello-go
-$ hello-go
-Hello world
-</code></pre>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>go install github.com/user/hello-go
+</span><span class='line'><span class="nv">$ </span>hello-go
+</span><span class='line'>Hello world
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Installing is not necessary every time I want to test that my code compiles; running <code>go build</code> in the source directory will create a local executable that can be executed for incremental testing.</p>
 
+
+
+
 <p>If you&rsquo;re interested in learning golang, I would recommend doing the <a href="http://tour.golang.org/">go tour</a>. It goes way beyond a trivial hello world program and gives you some insight into many coplex go concepts (I even posted <a href="https://gist.github.com/larryprice/7647808">my solutions as a gist</a>, if you&rsquo;re interested).</p>
+
 ]]></content>
   </entry>
   

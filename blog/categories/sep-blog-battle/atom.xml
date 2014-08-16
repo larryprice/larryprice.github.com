@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sep-blog-battle | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/sep-blog-battle/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-12T16:57:15-04:00</updated>
+  <updated>2014-08-16T11:03:51-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -20,13 +20,26 @@
     <id>http://larry-price.com/blog/2013/11/17/sep-blog-battle-tools-of-the-trade</id>
     <content type="html"><![CDATA[<p>To whom do I owe any programming success I may have in a given day? My education? My wonderful peers? The shriveled wad of grey goo in my head? None of the above.</p>
 
+
+
+
 <p>My search engine. <a href="https://duckduckgo.com">DuckDuckGo</a>. <a href="https://encrypted.google.com">Google</a>. <a href="https://wikipedia.org">Wikipedia</a>. Hardly a problem exists that can&rsquo;t be assisted in some way by a quick search.</p>
+
+
+
 
 <p>How do I use Google Go (<a href="http://golang.org/doc/effective_go.html">answer</a>)? How do I use tags in <a href="https://github.com/cucumber/cucumber-cpp">cucumber-cpp</a> (<a href="http://larryprice.github.io/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">answer</a>)? How do I brush my teeth without toothpaste (<a href="http://www.wikihow.com/Brush-Teeth-Without-Toothpaste">answer</a>? What&rsquo;s the deal with airline food (<a href="http://youtu.be/n0E7EaRLmSI">answer</a>)?</p>
 
+
+
+
 <p>It&rsquo;s all so easy. It&rsquo;s right at your fingertips. A proficient programmer these days has to also be a proficient &ldquo;Googler.&rdquo; However, a programmer&rsquo;s job description is not &ldquo;copies all code from the internet.&rdquo; Although the odds are high that someone has had a problem very similar to yours, you need to be able to take that code as an example and adapt it to your current situation. If that weren&rsquo;t the case, I think we&rsquo;d be losing our jobs to high school kids pretty quickly.</p>
 
+
+
+
 <p>So at the end of the day, make sure to be thankful to your search engine. Buy it flowers, make it dinner, rub its feet; just let it know how much you appreciate all the hard work it does for you when you do nothing but ask it silly questions all day.</p>
+
 ]]></content>
   </entry>
   
@@ -37,51 +50,109 @@
     <id>http://larry-price.com/blog/2013/08/22/beware-of-group-projects</id>
     <content type="html"><![CDATA[<p>Relying on other people is hard. I&rsquo;ve always found it difficult to understand that other people aren&rsquo;t me. Don&rsquo;t get me wrong, working with others can be really rewarding. Maybe &ldquo;Beware of Group Projects&rdquo; is not the best title. More like &ldquo;Be Wary that Working with Others is Not the Same as Working with Yourself.&rdquo; But that&rsquo;s a pretty long title, and reading (like working with others) is hard.</p>
 
+
+
+
 <p>I&rsquo;ve been spending a lot of my spare time collaborating on a project with a small group of other developers. I normally do this kind of thing on my own. I started thinking about the differences in working by myself and collaborating with other devs. Then I decided that it would look good in a list format comparing each circumstance from both sides. I was wrong, but couldn&rsquo;t think of a better way to present it.</p>
 
+
+
+
 <h2>Let&rsquo;s Start a New Project!</h2>
+
+
+
 
 <p><strong>As an Individual</strong>: This project is going to help me! I can use this new technology and I&rsquo;ll learn so much!<br/>
 <strong>As a Group</strong>: This project is going to help our customer! We can use this new technology and everyone will learn so much!</p>
 
+
+
+
 <h2>Let&rsquo;s Work!</h2>
+
+
+
 
 <p><strong>As an Individual</strong>: I&rsquo;ve got 5 minutes, that&rsquo;s enough time to make those adjustments I&rsquo;ve been thinking about&hellip;<br/>
 <strong>As a Group</strong>: We&rsquo;ve got 5 minutes, but once we find a conference room, set up the projector, and update our branch I&rsquo;ll have to go pick up my wife. Pass.</p>
 
+
+
+
 <h2>Let&rsquo;s Not Work</h2>
+
+
+
 
 <p><strong>As an Individual</strong>: I could work, or I could just play Prison Architect all weekend. &hellip;I&rsquo;ll have the happiest inmates this side of Alcatraz by Monday morning!<br/>
 <strong>As a Group</strong>: We&rsquo;ve set aside these times to meet, you should come help! There might be pizza if you stay long enough.</p>
 
+
+
+
 <h2>Knowledge</h2>
+
+
+
 
 <p><strong>As an Individual</strong>: Now I know how to do X.<br/>
 <strong>As a Group</strong>: Now I know how to do X. Now you know how to do X, and you know how to do X, and you know how to do X! I&rsquo;m the Oprah of Knowing X!</p>
 
+
+
+
 <h2>Coding Standards</h2>
+
+
+
 
 <p><strong>As an Individual</strong>: Whoops, I mixed camelCase and under_scores when naming my classes. Oh well.<br/>
 <strong>As a Group</strong>: For the love of Linux Torvalds, how do you not remember to prefix your public member variables with &lsquo;pub_&rsquo; and postfix your private member variables with &lsquo;_private&rsquo;?</p>
 
+
+
+
 <h2>Testing</h2>
+
+
+
 
 <p><strong>As an Individual</strong>: Pfft.<br/>
 <strong>As a Group</strong>: TEST ALL THE THINGS! It&rsquo;s the best way we can guarantee that our code changes don&rsquo;t break existing functionality.</p>
 
+
+
+
 <h2>I&rsquo;m Bored</h2>
+
+
+
 
 <p><strong>As an Individual</strong>: Forget the months of work spent on X, I think I&rsquo;ll work on Y now.<br/>
 <strong>As a Group</strong>: If we finish, we&rsquo;ll have made something useful. Someone needs us this! You&rsquo;ll be happy you kept working on it in a few weeks.</p>
 
+
+
+
 <h2>We&rsquo;re Done!</h2>
+
+
+
 
 <p><strong>As an Individual</strong>: I made an app that let&rsquo;s you draw circles. A job well done, if I do say so myself. I believe I&rsquo;ll have a beer.<br/>
 <strong>As a Group</strong>: We invented the warp drive, but it hits a theoretical limit at approximately 9.5 warp. Beer all around! We start work on version 2.0 next week!</p>
 
+
+
+
 <p>The point is that working with others is not bad. In fact, working with others helps give me a sense of responsibility in what I&rsquo;m working on, and motivates me to continue even when I&rsquo;m in a lull. I&rsquo;ve thrown out so many individual side-projects because I just wasn&rsquo;t motivated, or was no longer convinced of its usefulness. It&rsquo;s also (theoretically) easier to build bigger projects with groups because there are more arms to swing more hammers.</p>
 
+
+
+
 <p>&ldquo;Beware of Group Projects&rdquo; if you don&rsquo;t have time, or if you can&rsquo;t compromise, or if you don&rsquo;t care. Otherwise, just be wary that working with others is not the same as working with yourself.</p>
+
 ]]></content>
   </entry>
   
@@ -92,21 +163,46 @@
     <id>http://larry-price.com/blog/2013/04/09/changing-plans</id>
     <content type="html"><![CDATA[<p>Your code is being sent to the dump.</p>
 
+
+
+
 <p>Don&rsquo;t take it personally. Your code isn&rsquo;t <em>bad</em>. It&rsquo;s just <em>garbage</em>.</p>
+
+
+
 
 <p>Maybe your code wasn&rsquo;t written the way they wanted you to write it. Or maybe they realized that they had already written this code three months ago. Or maybe the customer suddenly decided that they don&rsquo;t need their smartphone to emit fragrances based on the text message they just received.</p>
 
+
+
+
 <p>The &ldquo;why&rdquo; doesn&rsquo;t matter. Plans changed. Your unused code isn&rsquo;t aging well and it&rsquo;s starting to stink up the place, so just do us all a favor and get it outta here!</p>
+
+
+
 
 <p>As developers, we <em>always</em> take this kind of thing personally. Our code is an extension of ourselves. When we feel good, we write code that&rsquo;s clean and concise. When we feel meh, our code is unimaginative and takes longer to write. When we feel bad, we litter the code with variables that don&rsquo;t do anything and then name them after our managers.</p>
 
+
+
+
 <p>But it&rsquo;s not personal, is it? Management doesn&rsquo;t sit in their mansion each evening, sipping a gin martini while adjusting their toupee, thinking about how worthless you are and how to properly punish you while continuing to pay you. Management has better things to think about, like ditching the toupee in favor of hair plugs or Rogaine or whatever hair fad is popular that day.</p>
+
+
+
 
 <p>Plans change. You can lament your loss of three days of &ldquo;ingenious&rdquo; code that will never see the light of day, but management will be equally depressed about the hundreds (thousands?) of dollars lost paying you to work on something that&rsquo;s not production-worthy. You may feel cheated in the short-term, but hopefully you can get something positive out of this change of plan. Maybe your second attempt at the code will jive better with the base architecture, or maybe you&rsquo;ll be able to extract the functionality you need out of another component and limit code duplication, or maybe you&rsquo;ll be able to deliver a different feature that the customer can actually use.</p>
 
+
+
+
 <p>Sure, there may be an occasional senior engineer who thinks that the program should be implemented his or her way, and will make you throw out anything you write that has any deviation from The Plan (which never quite made it out of their heads and into any documentation). Usually you can satiate that senior engineer by listening to them and nodding your head for a few minutes. There&rsquo;s a reason that engineer carries so much weight on the project, so they&rsquo;ll probably be making a valid point while you nod your head and they&rsquo;ll respect you for agreeing with them, even though you secretly wish you could just keep doing it the way you originally planned.</p>
 
+
+
+
 <p>Don&rsquo;t cry over spilled milk. No one&rsquo;s actually questioning your coding competency when they change the plan. The odds are in your favor that the plan changed in the best interest of the project, and whatever code is being thrown out is likely a necessary casualty to benefit the system as a whole. Remember that most of the code you write is used, at least for a little while, so try not to dwell on the code that isn&rsquo;t.</p>
+
 ]]></content>
   </entry>
   
@@ -117,21 +213,46 @@
     <id>http://larry-price.com/blog/2013/04/01/whats-still-possible</id>
     <content type="html"><![CDATA[<p>If every Miss America candidate had her way, there would be peace on Earth and all the hungry mouths would be fed. While Earthlings enjoy violence and controlling others too much to achieve world peace, I have a proposal to help feed those around the world who don&rsquo;t have enough to eat.</p>
 
+
+
+
 <p>It&rsquo;s not an ad campaign. I&rsquo;m not going to send random people a nickle in the mail and then tell them that they could use that nickle to feed a starving child. I&rsquo;m certainly not going to change any of my eating habits. I happen to know a huge source of food that we underutilize. My plan is to kill two birds with one stone. Well, preferably something like 3 million birds with however many stones it takes.</p>
+
+
+
 
 <p>I&rsquo;m talking, of course, about the terrible tyranny of the <a href="http://en.wikipedia.org/wiki/Canada_Goose">Canadian Goose</a>. A little history:</p>
 
+
+
+
 <p>Our ancestors domesticated Canadian Geese in ancient times and used these waterfowl for various acts of labor, including pulling tugboats down the Mississippi, plowing the great Canadian rice paddies, and keeping our elderly company during their final days of life. The young goslings flapped gingerly in the meadows pollinating the wildflowers, apple trees, and various other meadow-related objects. Much to our delight, some of our beloved geese bretheren became sentient, and started selling us medical insurance while performing a spot-on <a href="http://en.wikipedia.org/wiki/Gilbert_Gottfried">Gilbert Gottfried</a> impression.</p>
+
+
+
 
 <p>False. I must apologize for fooling you in this way sweet, sweet reader, but everything you read in the last paragraph was neither true nor fact. In reality, Canadian Geese serve no purpose. Canadian Geese were created accidentally during the Manhatten Project while one of the lab techs from the local university was trying to combine nuclear fission and the bubonic plague to get back at his ex-girlfriend for cheating on him. He quickly became bored of this task when she stopped responding to his texts, and thusly tossed the waste from his experiments in the river. The rest, of course, is history.</p>
 
+
+
+
 <p>Now here we are. There are well over <a href="http://www.ducks.org/hunting/waterfowl-id/canada-goose">3 million Canadian Geese nationwide</a>, which is decidedly more than anyone finds pleasant. These geese are no longer afraid of humans, so they tend not to run away from us. In fact, we have spoiled the birds so much that some geese will actually approach humans demanding a bite of stale bread. If no bread gift is offered, the foul fowl will emit a frightening hissing noise, raise its wings, and chase off the poor human. Any sidewalk near a pond quickly becomes covered in goose byproducts during the breeding season, which might as well be year-round. I, for one, think that the geese have gone too far. They ruin our picnics, our walks in the park, our egg-stealing competitions, and our feather-collecting scavenger hunts. It&rsquo;s time for the final showdown: Man versus Goose.</p>
+
+
+
 
 <p>Time to tie in the beginning and the parts where I raved like a lunatic: We hunt the geese, and we feed them to people. &lsquo;Nuff said.</p>
 
+
+
+
 <p>People already hunt geese, of course, but it&rsquo;s clearly not enough. Not to mention that these hunters currently just leave the gooseflesh in the woods where lower animals reap the rewards. I propose we extend goose season year-round, and provide free boxes to encourage hunters to package the gooseflesh and send it to the needy in other countries. We&rsquo;ll poison our waterways to take out as many geese as possible, and we will make a wondrous soup for whomever needs it.</p>
 
+
+
+
 <p>It&rsquo;s still possible to feed the hungry. But we need to <em>focus</em> in order to do it. Man versus Goose is not the solution. It&rsquo;s a demonstration of getting distracted from the original cause. The next time someone tries to get you riled up about feeding the hungry through some crazy scheme, remember that there&rsquo;s no better way than addressing the problem directly. It&rsquo;s still possible to do good in this world if you can avoid the crazy.</p>
+
 ]]></content>
   </entry>
   
@@ -142,17 +263,36 @@
     <id>http://larry-price.com/blog/2013/03/25/pvreryvre-of-fyne-coddes</id>
     <content type="html"><![CDATA[<p>Ice pellets bounced off my head as I walked myself home late one night. The air was dreadfully cold, so I swooped into one of Carmel&rsquo;s seedy side alleys to take a shotcut. Out of the shadows crept a man wearing a long trenchcoat and thick-rimmed glasses. Hunched over, he brushed his unkempt hair out of his eyes. His coffee-stained breath rushed from beneath his pencil moustache as he asked, &ldquo;Can I interest you in any of these fine iPhone apps?&rdquo; I tried to cautiously back away. &ldquo;How would you like a real BaZynga game, only ninety-nine cents, it&rsquo;s called Perturbed Birds with Pals?&rdquo; I was briefly distracted by sirens in the distance; by the time I returned my glance to the man&rsquo;s last position he had disappeared, my virtual wallet was empty, and my phone was filled with bloatware and repetitive &lsquo;Ville-style games.</p>
 
+
+
+
 <p>There are more KLOCs in this world than there have been McDonald&rsquo;s hamburgers sold. How do the good programmers differentiate themselves from the common street peddlers? How do companies convince you to pay $2.99 for their app when a clone is released less than a week later for free?</p>
+
+
+
 
 <p>The answer? Maybe they don&rsquo;t. Maybe a comparison can be made between software companies and pharamceutical companies.</p>
 
+
+
+
 <p>Big Pharmaceutical companies spend many years researching, developing, and testing drugs to treat the common cold, arthritis, bad cholesterol, or even to sedate your energetic children. These drugs spend several years on the market where patents on the drug are valid, meaning that only the company that invented the drug can legally sell it. After the patent protections expire (approx 7-12 years), any big, small, or mom &amp; pop drug manufacturer is legally allowed to &ldquo;clone&rdquo; this drug and make what&rsquo;s called a &ldquo;generic.&rdquo; Generics are sold at a fraction of the cost of the original drug. At this point, no one wants to give Big Pharma $20 for 6 tablets to cure their heartburn when they could pay $5 for a year&rsquo;s supply of generics.</p>
+
+
+
 
 <p>Software companies tend to spend somewhere between 12 weeks and 12 months developing apps that will be consumed by the general population. If the company just released an Android or iOS app, then the product will stay relevant somewhere between 2 weeks and 2 years. After that time, the app will either no longer have market value or will need to be revamped to please the modern consumer. Within a short number of days or weeks, there is a high probability that surly software pirates will begin to copy your app and put it on the market for free. At this point, no one wants to give your company $4.99 for an endless runner when they could just as easily find a copy for free. Of course, app developers can submit complaints and get the pirated app taken down, but more and more will crop up as time goes on, and eventually it won&rsquo;t be worth the trouble to get the doppelgangers removed.</p>
 
+
+
+
 <p>For both industries, a company comes up with a novel idea and presents it to the world. People who like that product can start associating the brand name with other products. After recognizing the brand, a person may start to trust that company and look for other products associated with the brand. That company will become known as a purveyor of fine wares.</p>
 
+
+
+
 <p>So here we stand, reader. Make code that you can be proud of; not for getting tens of thousands of downloads, but for scrawling your good name on the white boards of the world in Sharpie. The customers will keep coming back as long as you&rsquo;ve got the cure for what ails them.</p>
+
 ]]></content>
   </entry>
   

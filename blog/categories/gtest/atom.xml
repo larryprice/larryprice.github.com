@@ -4,7 +4,7 @@
   <title><![CDATA[Category: gtest | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/gtest/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-12T16:57:15-04:00</updated>
+  <updated>2014-08-16T11:03:51-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -20,12 +20,20 @@
     <id>http://larry-price.com/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04</id>
     <content type="html"><![CDATA[<p>I started trying to work on an open-source project and found that I needed to install <a href="https://code.google.com/p/googletest/">googletest</a> and <a href="https://code.google.com/p/googlemock/">googlemock</a> on my home machine. Seemed easy enough, I found a package called <code>google-mock</code> in the <a href="http://packages.ubuntu.com/raring/google-mock">Raring</a> repositories which depends on a package called <code>libgtest-dev</code>. So I install it:</p>
 
-<pre><code class="bash">$ sudo apt-get install -y google-mock
-</code></pre>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install -y google-mock
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>And the CMake file I was running before tells me that I have gmock, but I&rsquo;m still missing gtest. What&rsquo;s going on here?</p>
 
+
+
+
 <p>Well, there was a changeset applied in Ubuntu 12.04 (Precise) with the following text (<a href="http://www.ubuntuupdates.org/package/core/precise/universe/base/gtest">source</a>):</p>
+
+
+
 
 <blockquote><p>  Stop distributing static library (although still build it, to ensure gtest
   works). Upstream recommends against shipping the libary at all, just the
@@ -35,20 +43,34 @@
 
 <p>&ndash; Christopher James Halse Rogers Thu, 08 Mar 2012 17:45:29 +1100</p></blockquote>
 
+
+
+
 <p>What does that mean? That means we get to build and &ldquo;install&rdquo; the gtest libs ourselves. The source is conveniently installed in <code>/usr/src</code> after installing <code>libgtest-dev</code> (which we automatically got when we installed <code>google-mock</code>).</p>
 
-<pre><code class="bash Installing gtest libs">$ sudo apt-get install -y cmake --quiet
-$ cd /usr/src/gtest
-$ sudo cmake -E make_directory build
-$ sudo cmake -E chdir build cmake .. &gt;&gt; /dev/null
-$ sudo cmake --build build &gt;&gt; /dev/null
-$ ls build/libgtest*
-build/libgtest.a  build/libgtest_main.a
-$ sudo cp build/libgtest* /usr/local/lib/
-$ sudo rm -rf build
-</code></pre>
+
+<p><figure class='code'><figcaption><span>Installing gtest libs</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install -y cmake &ndash;quiet
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> /usr/src/gtest
+</span><span class='line'><span class="nv">$ </span>sudo cmake -E make_directory build
+</span><span class='line'><span class="nv">$ </span>sudo cmake -E chdir build cmake .. &gt;&gt; /dev/null
+</span><span class='line'><span class="nv">$ </span>sudo cmake &ndash;build build &gt;&gt; /dev/null
+</span><span class='line'><span class="nv">$ </span>ls build/libgtest<em>
+</span><span class='line'>build/libgtest.a  build/libgtest_main.a
+</span><span class='line'><span class="nv">$ </span>sudo cp build/libgtest</em> /usr/local/lib/
+</span><span class='line'><span class="nv">$ </span>sudo rm -rf build
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>The <code>&gt;&gt; /dev/null</code> can be dropped if you would like to see the output of these commands when successful, any error text will still show up with this redirect in place. I like to move all my personally-compiled libraries (and includes) to <code>/usr/local</code>, but you could just as easily copy them over to <code>/usr/lib</code>. All of this could also be done in <code>/tmp</code> if you&rsquo;re so inclined.</p>
+
 ]]></content>
   </entry>
   

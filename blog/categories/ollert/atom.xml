@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ollert | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/ollert/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-12T16:57:15-04:00</updated>
+  <updated>2014-08-16T11:03:51-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -20,108 +20,206 @@
     <id>http://larry-price.com/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit</id>
     <content type="html"><![CDATA[<p>During the hardening of <a href="https://ollertapp.com">Ollert</a>, a Trello data analysis tool I wrote, I started writing acceptance tests. I quickly ran into an issue where the meat of my application requires opening pop-up window, signing into Trello, and allowing my application access.</p>
 
+
+
+
 <p>I created a test user on Trello with a few varied boards to allow for proper testing. In doing this, I store the user&rsquo;s login information in my .env file. For the most part, I can use the steps provided in <a href="https://gist.github.com/larryprice/546d6c029bb3074bd84c">this common web_steps.rb</a>.</p>
 
-<pre><code class="cucumber Connecting.feature">Feature: Landing
 
-Background:
-  Given I am on the landing page
-
-@javascript
-Scenario: Deny connecting to Trello
-  Given I follow "Connect to Get Started"
-  And I press "Deny" on the Trello popup
-  Then I should be on the landing page
-
-@javascript
-Scenario: Allow connecting to Trello
-  Given I follow "Connect to Get Started"
-  When I authorize with Trello as the test user
-  Then I should not see "Connecting..."
-  And I should not see "Redirecting..."
-  And I should be on the boards page
-</code></pre>
+<p><figure class='code'><figcaption><span>Connecting.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Landing</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">Background:</span><span class="nf"></span>
+</span><span class='line'><span class="k">  Given </span><span class="nf">I am on the landing page</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">@javascript</span><span class="nf"></span>
+</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Deny connecting to Trello</span>
+</span><span class='line'><span class="k">  Given </span><span class="nf">I follow &quot;</span><span class="s">Connect to Get Started</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I press &quot;</span><span class="s">Deny</span><span class="nf">&quot; on the Trello popup</span>
+</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">I should be on the landing page</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">@javascript</span><span class="nf"></span>
+</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Allow connecting to Trello</span>
+</span><span class='line'><span class="k">  Given </span><span class="nf">I follow &quot;</span><span class="s">Connect to Get Started</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">When </span><span class="nf">I authorize with Trello as the test user</span>
+</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">I should not see &quot;</span><span class="s">Connecting&hellip;</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I should not see &quot;</span><span class="s">Redirecting&hellip;</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I should be on the boards page</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>When the Trello popup appears, we have to specify the window we&rsquo;re going to use. Since I&rsquo;m using <a href="https://github.com/thoughtbot/capybara-webkit">capybara-webkit</a>, I&rsquo;m going to go ahead and do all of my Trello popup activities in one step, which saves me from writing a lot of unnecessary steps.</p>
 
-<pre><code class="ruby trello_popup_steps.rb">When /^I press "(.*?)" on the Trello popup$/ do |button|
-  trello_popup = windows.last
-  page.within_window trello_popup do
-    click_button button
-  end
-end
 
-When /^I authorize with Trello as the test user$/ do
-  trello_popup = windows.last
-  page.within_window trello_popup do
-    click_link "Log in"
-
-    fill_in "user", with: ENV['TEST_USER_TRELLO_USERNAME']
-    fill_in "password", with: ENV['TEST_USER_TRELLO_PASSWORD']
-
-    click_button "Log In"
-    click_button "Allow"
-  end
-end
-</code></pre>
+<p><figure class='code'><figcaption><span>trello_popup_steps.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">When</span> <span class="sr">/^I press &quot;(.*?)&quot; on the Trello popup$/</span> <span class="k">do</span> <span class="o">|</span><span class="n">button</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">trello_popup</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">last</span>
+</span><span class='line'>  <span class="n">page</span><span class="o">.</span><span class="n">within_window</span> <span class="n">trello_popup</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">click_button</span> <span class="n">button</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">When</span> <span class="sr">/^I authorize with Trello as the test user$/</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">trello_popup</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">last</span>
+</span><span class='line'>  <span class="n">page</span><span class="o">.</span><span class="n">within_window</span> <span class="n">trello_popup</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">click_link</span> <span class="s2">&quot;Log in&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fill_in</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="ss">with</span><span class="p">:</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;TEST_USER_TRELLO_USERNAME&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="n">fill_in</span> <span class="s2">&quot;password&quot;</span><span class="p">,</span> <span class="ss">with</span><span class="p">:</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;TEST_USER_TRELLO_PASSWORD&#39;</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">click_button</span> <span class="s2">&quot;Log In&quot;</span>
+</span><span class='line'>    <span class="n">click_button</span> <span class="s2">&quot;Allow&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Straightforward so far. We grab the window handle and we click links, fill in fields, and press buttons within that window.</p>
 
+
+
+
 <p>Note that I&rsquo;m using capybara-webkit, a headless web driver, to run my Javascript. Although the first test (&ldquo;Deny&rdquo;) will pass, the &ldquo;Allow&rdquo; test fails ambiguously. This is because capybara-webkit is not recognized as a supported browser by the Trello popup.</p>
+
+
+
 
 <p>Anecdotally, I contacted Trello support about this and received the following response:</p>
 
+
+
+
 <blockquote><p>Currently it is not possible to test this with a headless browser as you are looking to do without getting the unsupported browser message.</p></blockquote>
+
+
+
 
 <p>So I guess we should just give up, right? &hellip;Or we could manipulate the headers we send to load the Trello popup such that Trello <em>thinks</em> we are Google Chromium.</p>
 
-<pre><code class="cucumber trello_popup_steps.rb">When /^I authorize with Trello as the test user$/ do
-  trello_popup = windows.last
-  page.within_window trello_popup do
-    page.driver.header(
-      "User-Agent",
-      "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/34.0.1847.116 Chrome/34.0.1847.116 Safari/537.36"
-    )
 
-    click_link "Log in"
-
-    fill_in "user", with: ENV['TEST_USER_TRELLO_USERNAME']
-    fill_in "password", with: ENV['TEST_USER_TRELLO_PASSWORD']
-
-    click_button "Log In"
-    click_button "Allow"
-  end
-end
-</code></pre>
+<p><figure class='code'><figcaption><span>trello_popup_steps.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">When </span><span class="nf">/^I authorize with Trello as the test user$/ do</span>
+</span><span class='line'><span class="nf">  trello_popup = windows.last</span>
+</span><span class='line'><span class="nf">  page.within_window trello_popup do</span>
+</span><span class='line'><span class="nf">    page.driver.header(</span>
+</span><span class='line'><span class="nf">      &quot;</span><span class="s">User-Agent</span><span class="nf">&quot;,</span>
+</span><span class='line'><span class="nf">      &quot;</span><span class="s">Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/34.0.1847.116 Chrome/34.0.1847.116 Safari/537.36</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">    )</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">    click_link &quot;</span><span class="s">Log in</span><span class="nf">&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">    fill_in &quot;</span><span class="s">user</span><span class="nf">&quot;, with: ENV[&#39;TEST_USER_TRELLO_USERNAME&#39;]</span>
+</span><span class='line'><span class="nf">    fill_in &quot;</span><span class="s">password</span><span class="nf">&quot;, with: ENV[&#39;TEST_USER_TRELLO_PASSWORD&#39;]</span>
+</span><span class='line'><span class="nf">    </span>
+</span><span class='line'><span class="nf">    click_button &quot;</span><span class="s">Log In</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">    click_button &quot;</span><span class="s">Allow</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  end</span>
+</span><span class='line'><span class="nf">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Fantastic. Now my tests pass. I can&rsquo;t sleep at night, but my tests pass.</p>
 
+
+
+
 <p>Unfortunately, that won&rsquo;t be the case if I add more tests to this <code>.feature</code> file. Hidden somewhere deep in the browser&rsquo;s cache or cookies or somethings, Trello is remembering that we logged in sometimes. Sometimes it even remembers that someone else has logged in. The UI of the Trello popup changes based on whether it thinks you&rsquo;ve already logged in. In order to keep things consistent, I like to add an if-statement to take care of this case.</p>
 
-<pre><code class="cucumber trello_popup_steps.rb">When /^I authorize with Trello as the test user$/ do
-  trello_popup = windows.last
-  page.within_window trello_popup do
-    page.driver.header(
-      "User-Agent",
-      "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/34.0.1847.116 Chrome/34.0.1847.116 Safari/537.36"
-    )
 
-    if page.has_content? "Switch Accounts"
-      click_link "Switch Accounts"
-    else
-      click_link "Log in"
-    end
-
-    fill_in "user", with: ENV['TEST_USER_TRELLO_USERNAME']
-    fill_in "password", with: ENV['TEST_USER_TRELLO_PASSWORD']
-
-    click_button "Log In"
-    click_button "Allow"
-  end
-end
-</code></pre>
+<p><figure class='code'><figcaption><span>trello_popup_steps.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">When </span><span class="nf">/^I authorize with Trello as the test user$/ do</span>
+</span><span class='line'><span class="nf">  trello_popup = windows.last</span>
+</span><span class='line'><span class="nf">  page.within_window trello_popup do</span>
+</span><span class='line'><span class="nf">    page.driver.header(</span>
+</span><span class='line'><span class="nf">      &quot;</span><span class="s">User-Agent</span><span class="nf">&quot;,</span>
+</span><span class='line'><span class="nf">      &quot;</span><span class="s">Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/34.0.1847.116 Chrome/34.0.1847.116 Safari/537.36</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">    )</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">    if page.has_content? &quot;</span><span class="s">Switch Accounts</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">      click_link &quot;</span><span class="s">Switch Accounts</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">    else</span>
+</span><span class='line'><span class="nf">      click_link &quot;</span><span class="s">Log in</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">    end</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">    fill_in &quot;</span><span class="s">user</span><span class="nf">&quot;, with: ENV[&#39;TEST_USER_TRELLO_USERNAME&#39;]</span>
+</span><span class='line'><span class="nf">    fill_in &quot;</span><span class="s">password</span><span class="nf">&quot;, with: ENV[&#39;TEST_USER_TRELLO_PASSWORD&#39;]</span>
+</span><span class='line'><span class="nf">    </span>
+</span><span class='line'><span class="nf">    click_button &quot;</span><span class="s">Log In</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">    click_button &quot;</span><span class="s">Allow</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  end</span>
+</span><span class='line'><span class="nf">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Edge cases addressed. Now I can make connections to Trello and test my application. Be warned, I&rsquo;ve already had these tests break once when Trello updated the UI behind the Trello popup. If Trello ever stops supporting Chromium 34.0, these tests are also likely to stop working. These tests are most useful during development, when we have the potential to break the Trello connection ourselves, and so I think they are well worth the pain of potential future maintenance.</p>
+
 ]]></content>
   </entry>
   
@@ -132,17 +230,36 @@ end
     <id>http://larry-price.com/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards</id>
     <content type="html"><![CDATA[<p>Introducing <a href="https://ollertapp.com">Ollert</a>, a tool to show you what your <a href="//trello.com">Trello</a> boards can&rsquo;t tell you on their own.</p>
 
+
+
+
 <p>Trello does a great job of telling you about the here and now of your Trello boards; who&rsquo;s working on what task and what is the current state of a task. But what if I want to know about the state of the whole project? How many work items have we finished in the past sprint, iteration, or duration of the project? He who does not understand the past is destined to repeat his mistakes ad nauseum.</p>
+
+
+
 
 <p>Ollert is a tool with these ideas in mind. Authorize Ollert access to your Trello account, select the board you would like to learn more about, and see all the battle scars your board has experienced throughout the duration of the project.</p>
 
+
+
+
 <p>Learn about your velocity through a Cumulative Flow Diagram. View your work in progress with a WIP chart. See which labels your team uses most frequently with our label chart. See information about your cards and lists from a historical perspective.</p>
+
+
+
 
 <p><a href="https://ollertapp.com/signup">Create an account</a> with Ollert to show your support. Users who sign up for an Ollert account will have their Trello authorization saved, saving the hassle of authorizing with Trello every time the user visits the site. An Ollert account is perfect for any user who views board progress frequently, or for creating a continuous display on an office monitor.</p>
 
-<p>Since Ollert&rsquo;s initial release <a href="/blog/2014/03/17/sep-startup-weekend-ollert/">several months ago</a>, Ollert now boasts over 4000% faster load times, increased data security using SSL and encrypted cookies, and a more consistent Trello connection experience in all modern web browsers.</p>
+
+
+
+<p>Since Ollert&rsquo;s initial release <a href="http://larry-price.com/blog/2014/03/17/sep-startup-weekend-ollert/">several months ago</a>, Ollert now boasts over 4000% faster load times, increased data security using SSL and encrypted cookies, and a more consistent Trello connection experience in all modern web browsers.</p>
+
+
+
 
 <p>Discover Ollert now at <a href="https://ollertapp.com">ollertapp.com</a>.</p>
+
 ]]></content>
   </entry>
   
@@ -151,99 +268,183 @@ end
     <link href="http://larry-price.com/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber/"/>
     <updated>2014-07-12T07:36:33-04:00</updated>
     <id>http://larry-price.com/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber</id>
-    <content type="html"><![CDATA[<p>Now that <a href="/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">I send emails using Pony</a>, I want to be able to verify that the emails are being generated correctly. I also don&rsquo;t want to send real emails and have my tests check an inbox somewhere. I found a couple of solutions to do this, including <a href="https://github.com/johnmendonca/pony-test">pony-test</a> and <a href="https://github.com/bmabey/email-spec">email-spec</a>. Although pony-test fits my needs perfectly, the last commit was December 27, 2011 (2.5 years ago at the time of this post), and thus was using an outdated version of <a href="https://github.com/jnicklas/capybara">capybara</a> which I was unwilling to use. Fortunately, pony-spec is mostly just a fork of email-spec with all the non-Pony components ripped out.</p>
+    <content type="html"><![CDATA[<p>Now that <a href="http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">I send emails using Pony</a>, I want to be able to verify that the emails are being generated correctly. I also don&rsquo;t want to send real emails and have my tests check an inbox somewhere. I found a couple of solutions to do this, including <a href="https://github.com/johnmendonca/pony-test">pony-test</a> and <a href="https://github.com/bmabey/email-spec">email-spec</a>. Although pony-test fits my needs perfectly, the last commit was December 27, 2011 (2.5 years ago at the time of this post), and thus was using an outdated version of <a href="https://github.com/jnicklas/capybara">capybara</a> which I was unwilling to use. Fortunately, pony-spec is mostly just a fork of email-spec with all the non-Pony components ripped out.</p>
+
+
+
 
 <p>I&rsquo;m going to be using Cucumber to test my emails, but email-spec also boasts compatibility with rspec and Turnip. To get started:</p>
 
-<pre><code class="bash">$ gem install email-spec
-</code></pre>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>gem install email-spec
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>The developers of email-spec were kind enough to give us some free step definitions. If I was using rails, I could just type <code>rails generate email_spec:steps</code>, but since I&rsquo;m using Sinatra I opted just to copy-paste the file into my <code>step_definitions/</code> directory. You can find <code>email_steps.rb</code> <a href="https://raw.githubusercontent.com/bmabey/email-spec/master/lib/generators/email_spec/steps/templates/email_steps.rb">on Github</a>.</p>
 
-<p>In <a href="/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">my last post about small horses and emails</a>, I used the following code to send a confirmation email on signup:</p>
 
-<pre><code class="ruby web.rb"># ...
-post '/signup' do
-  user = User.create! params
 
-  url = "#{request.base_url}/account/reset/#{user.generate_verification_hash}"
-  Pony.mail(
-    to: user.email,
-    from: "MyApp Help Desk &lt;noreply@myapp.com&gt;",
-    subject: "MyApp Account Verification",
-    body: "A request has been made to verify your MyApp account (https://myapp.com)." +
-          "If you made this request, go to " + url + ". If you did not make this request, ignore this email.",
-    html_body: haml(
-      :verify_account_email,
-      layout: false,
-      locals: {
-        email: user.email,
-        date: DateTime.now.strftime("%H:%M:%S%P %B %d, %Y"),
-        ip: request.ip,
-        url: url
-      }
-    )
-  )
-end
-# ...
-</code></pre>
 
-<pre><code class="haml /views/verify_account_email.haml">%p
-  Hello!
-%p
-  An account verification has been requested for your new &lt;a href="https://myapp.com"&gt;MyApp&lt;/a&gt; account.
+<p>In <a href="http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">my last post about small horses and emails</a>, I used the following code to send a confirmation email on signup:</p>
 
-%ul
-  %li
-    Username: #{locals[:email]}
-  %li
-    Time: #{locals[:date]}
-  %li
-    IP address: #{locals[:ip]}
 
-%p
-  If you made this request, click the link below or copy-paste the following URL into your browser to verify your account:
+<p><figure class='code'><figcaption><span>web.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># &hellip;</span>
+</span><span class='line'><span class="n">post</span> <span class="s1">&#39;/signup&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create!</span> <span class="n">params</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">request</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/account/reset/</span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">generate_verification_hash</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="no">Pony</span><span class="o">.</span><span class="n">mail</span><span class="p">(</span>
+</span><span class='line'>    <span class="ss">to</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">from</span><span class="p">:</span> <span class="s2">&quot;MyApp Help Desk &lt;noreply@myapp.com&gt;&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">subject</span><span class="p">:</span> <span class="s2">&quot;MyApp Account Verification&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">body</span><span class="p">:</span> <span class="s2">&quot;A request has been made to verify your MyApp account (<a href="https://myapp.com">https://myapp.com</a>).&quot;</span> <span class="o">+</span>
+</span><span class='line'>          <span class="s2">&quot;If you made this request, go to &quot;</span> <span class="o">+</span> <span class="n">url</span> <span class="o">+</span> <span class="s2">&quot;. If you did not make this request, ignore this email.&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">html_body</span><span class="p">:</span> <span class="n">haml</span><span class="p">(</span>
+</span><span class='line'>      <span class="ss">:verify_account_email</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">layout</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">locals</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="ss">email</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">date</span><span class="p">:</span> <span class="no">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S%P %B %d, %Y&quot;</span><span class="p">),</span>
+</span><span class='line'>        <span class="ss">ip</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">ip</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">url</span><span class="p">:</span> <span class="n">url</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>  <span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="c1"># &hellip;</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
-%p
-  %a{href: "#{locals[:url]}", alt: "Verify", title: "Click to verify account"}
-    #{locals[:url]}
-
-%p
-  If you did not request this new account, please ignore this email.
-
-%p
-  Sincerely,
-  %br
-  Team MyApp
-
-%p
-  This email account is not monitored and will not receive replies. For more information, contact &lt;a href="mailto:connect@myapp.com"&gt;connect@myapp.com&lt;/a&gt;.
-</code></pre>
+<p><figure class='code'><figcaption><span>/views/verify_account_email.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  Hello!
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  An account verification has been requested for your new &lt;a href=&quot;<a href="https://myapp.com&amp;quot;&amp;gt;MyApp&amp;lt;/a&amp;gt;">https://myapp.com&amp;quot;&amp;gt;MyApp&amp;lt;/a&amp;gt;</a> account.
+</span><span class='line'>
+</span><span class='line'><span class="nt">%ul</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    Username: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:email</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    Time: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:date</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    IP address: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:ip</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  If you made this request, click the link below or copy-paste the following URL into your browser to verify your account:
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  <span class="nt">%a</span><span class="p">{</span><span class="ss">href</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:url</span><span class="o">]</span><span class="si">}</span>&quot;, alt: &quot;Verify&quot;, title: &quot;Click to verify account&quot;}
+</span><span class='line'>    <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:url</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  If you did not request this new account, please ignore this email.
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  Sincerely,
+</span><span class='line'>  <span class="nt">%br</span>
+</span><span class='line'>  Team MyApp
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  This email account is not monitored and will not receive replies. For more information, contact &lt;a href=&quot;<a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#99;&#111;&#x6e;&#x6e;&#101;&#x63;&#x74;&#x40;&#109;&#x79;&#97;&#x70;&#x70;&#x2e;&#99;&#x6f;&#x6d;&#x26;&#113;&#x75;&#111;&#x74;&#59;&#x26;&#103;&#116;&#59;&#x63;&#x6f;&#110;&#110;&#x65;&#99;&#x74;&#x40;&#109;&#x79;&#97;&#x70;&#x70;&#46;&#99;&#111;&#x6d;&#x26;&#x6c;&#116;&#59;&#47;&#x61;&#x26;&#x67;&#116;&#x3b;&#46;">&#99;&#x6f;&#x6e;&#x6e;&#101;&#x63;&#x74;&#x40;&#x6d;&#121;&#97;&#x70;&#x70;&#x2e;&#99;&#111;&#x6d;&#38;&#x71;&#117;&#x6f;&#116;&#59;&#x26;&#103;&#x74;&#59;&#x63;&#x6f;&#x6e;&#110;&#x65;&#99;&#x74;&#64;&#109;&#121;&#x61;&#112;&#x70;&#46;&#99;&#111;&#x6d;&#x26;&#108;&#116;&#59;&#x2f;&#x61;&#38;&#103;&#x74;&#x3b;&#46;</a>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Given the pre-defined steps from email-spec, testing that this email gets sent is a breeze. Adding a scenario to my feature file:</p>
 
-<pre><code class="cucumber features/SignupConfirmation.feature">Feature: Signup Confirmation
-  As a new user
-  When I sign up
-  I should receive a confirmation email
 
-Background:
-  Given a clear email queue
-  When I go to the signup page
-  And I fill in "email" with "prez@whitehouse.gov"
-  And I fill in "password" with "bunnies"
-  And I press "Sign Up"
-  Then "prez@whitehouse.gov" should receive an email
-
-Scenario: Receives email with correct contents
-  When "prez@whitehouse.gov" opens the email
-  Then they should see the email delivered from "MyApp Help Desk &lt;noreply@myapp.com&gt;"
-  And they should see "MyApp Account Verification" in the email subject
-  And they should see "Username: prez@whitehouse.gov" in the email body
-  And they should see "An account verification has been requested"
-</code></pre>
+<p><figure class='code'><figcaption><span>features/SignupConfirmation.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Signup Confirmation</span>
+</span><span class='line'><span class="nf">  As a new user</span>
+</span><span class='line'><span class="nf">  When I sign up</span>
+</span><span class='line'><span class="nf">  I should receive a confirmation email</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">Background:</span><span class="nf"></span>
+</span><span class='line'><span class="k">  Given </span><span class="nf">a clear email queue</span>
+</span><span class='line'><span class="nf">  </span><span class="k">When </span><span class="nf">I go to the signup page</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I fill in &quot;</span><span class="s">email</span><span class="nf">&quot; with &quot;</span><span class="s"><a href="&#x6d;&#97;&#105;&#x6c;&#116;&#111;&#x3a;&#x70;&#114;&#101;&#122;&#x40;&#119;&#x68;&#x69;&#x74;&#x65;&#x68;&#x6f;&#x75;&#x73;&#x65;&#x2e;&#x67;&#111;&#118;">&#112;&#x72;&#x65;&#x7a;&#x40;&#119;&#x68;&#x69;&#x74;&#x65;&#x68;&#111;&#x75;&#115;&#101;&#x2e;&#x67;&#111;&#118;</a></span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I fill in &quot;</span><span class="s">password</span><span class="nf">&quot; with &quot;</span><span class="s">bunnies</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I press &quot;</span><span class="s">Sign Up</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">&quot;</span><span class="s"><a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#112;&#114;&#101;&#122;&#64;&#119;&#x68;&#x69;&#x74;&#101;&#x68;&#111;&#117;&#x73;&#101;&#x2e;&#x67;&#x6f;&#x76;">&#112;&#114;&#101;&#122;&#64;&#119;&#104;&#105;&#116;&#101;&#x68;&#111;&#117;&#x73;&#101;&#x2e;&#x67;&#111;&#118;</a></span><span class="nf">&quot; should receive an email</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Receives email with correct contents</span>
+</span><span class='line'><span class="k">  When </span><span class="nf">&quot;</span><span class="s"><a href="&#109;&#x61;&#x69;&#108;&#116;&#x6f;&#x3a;&#112;&#114;&#101;&#x7a;&#64;&#119;&#x68;&#105;&#x74;&#x65;&#x68;&#x6f;&#117;&#x73;&#x65;&#x2e;&#x67;&#111;&#x76;">&#112;&#x72;&#101;&#122;&#x40;&#x77;&#104;&#105;&#x74;&#101;&#x68;&#111;&#117;&#115;&#101;&#x2e;&#103;&#x6f;&#118;</a></span><span class="nf">&quot; opens the email</span>
+</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">they should see the email delivered from &quot;</span><span class="s">MyApp Help Desk </span><span class="nv">&lt;noreply@myapp.com&gt;</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">they should see &quot;</span><span class="s">MyApp Account Verification</span><span class="nf">&quot; in the email subject</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">they should see &quot;</span><span class="s">Username: <a href="&#109;&#97;&#x69;&#x6c;&#x74;&#x6f;&#58;&#112;&#x72;&#101;&#122;&#64;&#119;&#x68;&#105;&#116;&#x65;&#x68;&#111;&#x75;&#115;&#101;&#x2e;&#103;&#111;&#x76;">&#x70;&#x72;&#x65;&#122;&#x40;&#x77;&#104;&#x69;&#x74;&#x65;&#104;&#x6f;&#x75;&#x73;&#x65;&#46;&#x67;&#x6f;&#x76;</a></span><span class="nf">&quot; in the email body</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">they should see &quot;</span><span class="s">An account verification has been requested</span><span class="nf">&quot;</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>That&rsquo;s it. Now we know that an email like the one above will be sent during signup. What we can&rsquo;t test here is that our SMTP server (or equivalent) is working, so in reality I&rsquo;m only testing that the email will attempt to send that looks like the one I test against.</p>
+
 ]]></content>
   </entry>
   
@@ -254,52 +455,92 @@ Scenario: Receives email with correct contents
     <id>http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client</id>
     <content type="html"><![CDATA[<p>In my <a href="https://ollertapp.com">application</a>, a user can connect to Trello without logging in. Whenever this &ldquo;anonymous&rdquo; user hits the landing page, I attempt to force the <a href="https://trello.com/docs/gettingstarted/clientjs.html">Trello client</a> to authorize the user again. By doing this, the user can return to the landing page whenever he or she likes to switch usernames. My authorize code looks like this:</p>
 
-<pre><code class="javascript">function AuthenticateTrelloAlways() {
-  Trello.authorize({
-    name: "Ollert",
-    type: "popup",
-    interactive: true,
-    expiration: "1hour",
-    persist: false,
-    success: onAuthorizeSuccessful,
-    scope: {
-      read: true
-    },
-  });
-}
-</code></pre>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">AuthenticateTrelloAlways</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">Trello</span><span class="p">.</span><span class="nx">authorize</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Ollert&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;popup&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">interactive</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">expiration</span><span class="o">:</span> <span class="s2">&quot;1hour&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">persist</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">success</span><span class="o">:</span> <span class="nx">onAuthorizeSuccessful</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">scope</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>This works oh-so-wonderfully in Chrome and Firefox, but, even during the hackathon which spawned <a href="https://ollertapp.com">Ollert</a>, we noticed that IE10/11 were causing some unexpected issues. Authorization would work the first time the user hit the landing page, but on subsequent visits telling Trello to Allow or Deny access resulted in the popup showing a white screen and never calling my callback function. Closing and reopening IE would allow me to authorize once, presumably until the &ldquo;1hour&rdquo; that I requested the original token for expired. I also verified this problem existed in IE9.</p>
 
+
+
+
 <p>After several hours tweeting obscenities about IE, I stumbled upon the answer while browsing the source code for Trello&rsquo;s <a href="https://trello.com/1/client.coffee">client.coffee</a>. About one third of the way through the code, I found this function:</p>
 
-<pre><code class="javascript"># Clear any existing authorization
-deauthorize: -&gt;
-  token = null
-  writeStorage("token", token)
-  return
-</code></pre>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">#</span> <span class="nx">Clear</span> <span class="nx">any</span> <span class="nx">existing</span> <span class="nx">authorization</span>
+</span><span class='line'><span class="nx">deauthorize</span><span class="o">:</span> <span class="o">-&gt;</span>
+</span><span class='line'>  <span class="nx">token</span> <span class="o">=</span> <span class="kc">null</span>
+</span><span class='line'>  <span class="nx">writeStorage</span><span class="p">(</span><span class="s2">&quot;token&quot;</span><span class="p">,</span> <span class="nx">token</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">return</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>All this code does is unset the class variable <code>token</code> and unset the local store variable of the same name. So I changed my <code>AuthenticateTrelloAlways()</code> method:</p>
 
-<pre><code class="javascript">function AuthenticateTrelloAlways() {
-  Trello.deauthorize();
 
-  Trello.authorize({
-    name: "Ollert",
-    type: "popup",
-    interactive: true,
-    expiration: "1hour",
-    persist: false,
-    success: onAuthorizeSuccessful,
-    scope: {
-      read: true
-    },
-  });
-}
-</code></pre>
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">AuthenticateTrelloAlways</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">Trello</span><span class="p">.</span><span class="nx">deauthorize</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">Trello</span><span class="p">.</span><span class="nx">authorize</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Ollert&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;popup&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">interactive</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">expiration</span><span class="o">:</span> <span class="s2">&quot;1hour&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">persist</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">success</span><span class="o">:</span> <span class="nx">onAuthorizeSuccessful</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">scope</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Voilà. Why does this only happen in IE? I was originally going to blame the local store, but, since I was able to reproduce the defect in IE9 (no HTML5), I no longer believe that to be the case. I&rsquo;m currently resigned to chalk it up as IE just being IE.</p>
+
 ]]></content>
   </entry>
   
@@ -310,45 +551,106 @@ deauthorize: -&gt;
     <id>http://larry-price.com/blog/2014/06/12/lessons-learned-during-the-conception-of-ollert</id>
     <content type="html"><![CDATA[<p>During <a href="http://sep.com">SEP&rsquo;s</a> previous <a href="http://sep.com/labs/">startup weekend</a>, I pitched an idea for a <a href="http://trello.com">Trello</a> Analysis Tool called <a href="https://ollertapp.com">Ollert</a>. In less than three days, a team of 6 built a minimal viable product (MVP) and put it live on the internet. In a little over three months, I have slowly guided Ollert through the legal department, obtained a real domain with security, and fixed a few bugs along the way. I&rsquo;ve learned a thing or two about seeing a hackathon project to fruition that I&rsquo;d like to get in writing.</p>
 
+
+
+
 <h3>1. You Can Never Be Too Prepared</h3>
+
+
+
 
 <p>Before Startup Weekend, I spent days refining my idea and coming up with a cute little proof of concept. I even laid out work items for my developers to work on. When I finally discovered a clever name, I thought my preparation was over.</p>
 
+
+
+
 <p>I was wrong.</p>
+
+
+
 
 <p>Although I requested 5 developers to help me build Ollert, my plans only allowed for two developers to work simultaneously. I didn&rsquo;t realize how hard it would be to keep everyone busy all the time, especially my less-experienced engineers.</p>
 
+
+
+
 <p>Although I did proof-of-concept my idea before we started, I failed to proof-of-concept the more dynamic capabilities a multi-user web application needs to provide. This mistake cost another developer and I the first night of the weekend, plus a bit of the next morning.</p>
+
+
+
 
 <p>Don&rsquo;t even get me started about environment setup. Although I run <a href="http://www.ubuntu.com">Ubuntu</a> natively and had all my developer tools ready before we started work Friday night, the rest of my team were users of That Other Operating System. I should have created a virtual machine with everything all set up, burned it to several USB drives, and let my developers set up VirtualBox without my intervention.</p>
 
+
+
+
 <h3>2. Talk to Legal</h3>
+
+
+
 
 <p>Why do I care about legal? Isn&rsquo;t this my responsibility anyway?</p>
 
+
+
+
 <p>As it turns out, putting a startup weekend project live on the internet before the weekend is over is really cool from a team perspective, but terrifying from a legal perspective. With our MVP, I wasn&rsquo;t using SSL to encrypt user data. I didn&rsquo;t consider how Fog Creek would react once they realized our name is their name backwards. I even had the chutzpah to stick my company&rsquo;s logo in my site&rsquo;s footer.</p>
+
+
+
 
 <p>A quick discussion with management will prepare both sides for the &ldquo;grand reveal&rdquo; if the project makes it to launch. Personally, I&rsquo;d like to see some level of legal counsel in the Startup Weekend &ldquo;pre-pitch&rdquo; session to get feedback before implementation.</p>
 
+
+
+
 <h3>3. Listen</h3>
+
+
+
 
 <p>The second day, one of my developers mentioned using endpoints in the application, and I rejected this idea on the basis that it was too complicated. On the dawn of the final day, we realized that we needed to use his approach or the application would be unusable. This required us to do a lot of rework that could have been avoided. I often think about what other ideas might have been suggested by my team that I may have accidentally ignored.</p>
 
+
+
+
 <h3>4. Easy Tasks</h3>
+
+
+
 
 <p>My assumption going into Startup Weekend was that my team would all be familiar enough with the technology to be able to &ldquo;jump right in&rdquo; or follow along with someone who could. This was a bad assumption.</p>
 
+
+
+
 <p>It&rsquo;s easy to find tasks that <em>I</em> can do. It&rsquo;s much more difficult to find tasks that <em>anyone</em> could do. What are the less-involved tasks on your current project that a less-experienced developer could work on until they&rsquo;re ready to tackle something bigger? Can they set up the database, or the tests? Can you find a guide for them to follow to do these things? If not, you&rsquo;ll have people on your team who don&rsquo;t feel involved but desperately want to help.</p>
+
+
+
 
 <h3>5. Start Small</h3>
 
+
+
+
 <p>Ollert is a pretty big idea, especially for a three-day project. I had high hopes of making it even bigger until the dawn of the final day. I wanted to include some sort of payment system to prove that we would be able to charge people when they sign up without actually charging them. This &ldquo;feature&rdquo; of fake payment has no place in a real product, and would have been misleading at best. We had dozens of ideas for statistics and charts to make it into the website that just weren&rsquo;t that useful.</p>
+
+
+
 
 <p>Limiting scope might have allowed us to come up with a more polished MVP; I walked away the final evening wishing I had left out sign up/in in favor of giving the application more sex appeal.</p>
 
+
+
+
 <h3>Conclusion</h3>
 
+
+
+
 <p>Starting a project is hard. It&rsquo;s even more difficult when you have to delegate most of the work to other people. Startup Weekend is a manger and a mortuary, seeing the birth of many ideas and the death of most. I hope to take this experience and make an even better new product next Startup Weekend.</p>
+
 ]]></content>
   </entry>
   
