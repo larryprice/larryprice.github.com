@@ -4,7 +4,7 @@
   <title><![CDATA[Category: c++ | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/c-plus-plus/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-22T06:42:13-04:00</updated>
+  <updated>2014-08-22T06:46:57-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -18,88 +18,54 @@
     <link href="http://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp/"/>
     <updated>2013-11-22T20:40:00-05:00</updated>
     <id>http://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp</id>
-    <content type="html"><![CDATA[<p>A few months ago <a href="http://larry-price.com/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">I blogged about tags</a> in <a href="https://github.com/cucumber/cucumber-cpp">cucumber-c++</a>. The scenario I presented involved using tags to call a <code>BEFORE</code> hook before the first scenario and an <code>AFTER</code> hook after the last scenario. The code looked a little bit like this:</p>
+    <content type="html"><![CDATA[<p>A few months ago <a href="/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">I blogged about tags</a> in <a href="https://github.com/cucumber/cucumber-cpp">cucumber-c++</a>. The scenario I presented involved using tags to call a <code>BEFORE</code> hook before the first scenario and an <code>AFTER</code> hook after the last scenario. The code looked a little bit like this:</p>
 
+<pre><code class="cucumber DoStuff.feature">@first
+Scenario: Do it my way
+  ...
 
-<p><figure class='code'><figcaption><span>DoStuff.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="nt">@first</span><span class="nf"></span>
-</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Do it my way</span>
-</span><span class='line'><span class="nf">  &hellip;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">Scenario: Don&#39;t do it</span>
-</span><span class='line'><span class="nf">  &hellip;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">@last</span>
-</span><span class='line'><span class="nf">Scenario: Do it your way</span>
-</span><span class='line'><span class="nf">  &hellip;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+Scenario: Don't do it
+  ...
 
-<p><figure class='code'><figcaption><span>DoStuff_StepDefinitions.cpp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="n">BEFORE</span><span class="p">(</span><span class="s">&quot;@first&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;This is the first step!&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">AFTER</span><span class="p">(</span><span class="s">&quot;@last&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;This is the last step!&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">&hellip;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+@last
+Scenario: Do it your way
+  ...
+</code></pre>
+
+<pre><code class="c++ DoStuff_StepDefinitions.cpp">
+BEFORE("@first") { cout &lt;&lt; "This is the first step!" &lt;&lt; endl; }
+
+AFTER("@last") { cout &lt;&lt; "This is the last step!" &lt;&lt; endl; }
+
+...
+</code></pre>
 
 <p>The scnenario labeled <code>@first</code> would call the corresponding <code>BEFORE</code> macro and the <code>@last</code> scenario would call the <code>AFTER</code> macro. If I didn&rsquo;t have tags in place, the macros would have both been invoked before/after each scenario. Macros for <code>BEFORE_STEP</code> and <code>AROUND_STEP</code> are also available; <code>BEFORE_STEP</code> allows you to tag individual steps and <code>AROUND_STEP</code> acts as a before/after for individual steps.</p>
 
-
-
-
 <p>This was a workaround. What I really wanted to do was to not use tags, and instead unconditionally perform an action before the first scenario was run and after the last scenario is complete. Since cucumber-cpp is open source, I decided to implement that a few weeks ago (<a href="https://github.com/cucumber/cucumber-cpp/commit/26e11d0248edf32a8bac17df9d2d4ceb135ed502">see changeset</a>). Now the above example becomes:</p>
 
+<pre><code class="cucumber DoStuff.feature">
+Scenario: Do it my way
+  ...
 
-<p><figure class='code'><figcaption><span>DoStuff.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Scenario:</span><span class="nf"> Do it my way</span>
-</span><span class='line'><span class="nf">  &hellip;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">Scenario: Don&#39;t do it</span>
-</span><span class='line'><span class="nf">  &hellip;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">Scenario: Do it your way</span>
-</span><span class='line'><span class="nf">  &hellip;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+Scenario: Don't do it
+  ...
 
-<p><figure class='code'><figcaption><span>DoStuff_StepDefinitions.cpp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="n">BEFORE_ALL</span><span class="p">()</span> <span class="p">{</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;This is the first step!&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">AFTER_ALL</span><span class="p">()</span> <span class="p">{</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;This is the last step!&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">&hellip;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+Scenario: Do it your way
+  ...
+</code></pre>
+
+<pre><code class="c++ DoStuff_StepDefinitions.cpp">
+BEFORE_ALL() { cout &lt;&lt; "This is the first step!" &lt;&lt; endl; }
+
+AFTER_ALL() { cout &lt;&lt; "This is the last step!" &lt;&lt; endl; }
+
+...
+</code></pre>
 
 <p>This is the same behavior as the first example, except I don&rsquo;t have to force my fellow developers to move tags around when they add/remove scenarios. Also now my fellow developers can stop asking me why I was using tags and why when they added a scenario they couldn&rsquo;t get the tests to pass.</p>
 
-
-
-
 <p>The moral of the story is that you should go implement that feature you want to see in your favorite open source project.</p>
-
 ]]></content>
   </entry>
   
@@ -110,96 +76,54 @@
     <id>http://larry-price.com/blog/2013/11/14/copy-data-using-qmake</id>
     <content type="html"><![CDATA[<p>I&rsquo;ll take things that should be really easy but are in fact impossible for $1000, Mr Trebek.</p>
 
-
-
-
 <p>I have a <a href="https://qt-project.org/wiki/Qt_5.0">Qt</a> desktop app that uses <a href="https://qt-project.org/doc/qt-4.8/qmake-manual.html">qmake</a>. I have tests. I have test data that I need to copy to my build directory. Not only that, but I want to copy a whole directory recursively. In Linux <em>and</em> Windows. You must be thinking to yourself, &lsquo;There&rsquo;s no way that&rsquo;s possible, leave me out of your crazy plans!&rsquo; Well to that I say nay. Nay indeed.</p>
-
-
-
 
 <p>I originally copied my test data using the <code>INSTALLS</code> variable. My data folder is just a directory sitting in the test source called &ldquo;TestData.&rdquo; This solution is fantastic because it works cross-platform.</p>
 
+<pre><code class="make MyBAProjectTest.pro">install_it.path = $${OUT_PWD}
+install_it.files += TestData/
 
-<p><figure class='code'><figcaption><span>MyBAProjectTest.pro</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='make'><span class='line'><span class="nv">install_it.path</span> <span class="o">=</span> <span class="nv">$$</span><span class="o">{</span>OUT_PWD<span class="o">}</span>
-</span><span class='line'><span class="nv">install_it.files</span> <span class="o">+=</span> TestData/
-</span><span class='line'>
-</span><span class='line'><span class="nv">INSTALLS</span> <span class="o">+=</span> install_it
-</span></code></pre></td></tr></table></div></figure></p>
+INSTALLS += install_it
+</code></pre>
 
 <p>However, this means that if I ever have a clean directory, I have to run <code>make install</code> to install my test data. What a pain! Why bother! Why even write tests when life is this unjust!</p>
 
-
-
-
 <p>BUT WAIT! After combing the depths of the internets for much of the evening, I was able to find many halfway solutions to my original problem. The concept is to add commands to the <code>QMAKE_POST_LINK</code> variable.</p>
-
-
-
 
 <p>For Linux, I use <code>cp</code>:</p>
 
-
-<p><figure class='code'><figcaption><span>MyBAProjectTest.pro</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='make'><span class='line'><span class="nv">QMAKE_POST_LINK</span> <span class="o">+=</span> <span class="nv">$$</span>quote<span class="o">(</span>cp -rf <span class="nv">$$</span><span class="o">{</span>PWD<span class="o">}</span>/TestData <span class="nv">$$</span><span class="o">{</span>OUT_PWD<span class="o">})</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="make MyBAProjectTest.pro">QMAKE_POST_LINK += $$quote(cp -rf $${PWD}/TestData $${OUT_PWD})
+</code></pre>
 
 <p>For Windows, I use <code>xcopy</code>:</p>
 
+<pre><code class="make MyBAProjectTest.pro">PWD_WIN = $${PWD}
+PWD_WIN ~= s,/,\\,g
 
-<p><figure class='code'><figcaption><span>MyBAProjectTest.pro</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='make'><span class='line'><span class="nv">PWD_WIN</span> <span class="o">=</span> <span class="nv">$$</span><span class="o">{</span>PWD<span class="o">}</span>
-</span><span class='line'><span class="err">PWD_WIN</span> <span class="err">~=</span> <span class="err">s,/,\,g</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">QMAKE_POST_LINK</span> <span class="o">+=</span> <span class="nv">$$</span>quote<span class="o">(</span>mkdir DestFolder<span class="o">)</span>
-</span><span class='line'><span class="nv">QMAKE_POST_LINK</span> <span class="o">+=</span> <span class="nv">$$</span>quote<span class="o">(</span>xcopy <span class="nv">$$</span><span class="o">{</span>PWD_WIN<span class="o">}</span><span class="se">\</span>TestData <span class="nv">$$</span><span class="o">{</span>OUT_PWD_WIN<span class="o">}</span><span class="se">\</span>TestData /E<span class="o">)</span>
-</span></code></pre></td></tr></table></div></figure></p>
+QMAKE_POST_LINK += $$quote(mkdir DestFolder)
+QMAKE_POST_LINK += $$quote(xcopy $${PWD_WIN}\\TestData $${OUT_PWD_WIN}\\TestData /E)
+</code></pre>
 
 <p>I also want that directory to be deleted when I run <code>make clean</code>. Cleaning up just means adding some commands to the <code>QMAKE_CLEAN</code> directive. I also want to run the appropriate commands whether I&rsquo;m on Unix or Windows without having to modify my <code>.pro</code> file. Wrapping the previous commands in what I call an &ldquo;OS-space&rdquo; will cause those commands to only run in the specified operating system.</p>
 
+<pre><code class="make MyBAProjectTest.pro">win32 {
+    PWD_WIN = $${PWD}
+    PWD_WIN ~= s,/,\\,g
 
-<p><figure class='code'><figcaption><span>MyBAProjectTest.pro</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='make'><span class='line'><span class="err">win32</span> <span class="err">{</span>
-</span><span class='line'>    <span class="nv">PWD_WIN</span> <span class="o">=</span> <span class="nv">$$</span><span class="o">{</span>PWD<span class="o">}</span>
-</span><span class='line'>    PWD_WIN ~<span class="o">=</span> s,/,<span class="se">\</span>,g
-</span><span class='line'>
-</span><span class='line'>    QMAKE_POST_LINK +<span class="o">=</span> <span class="nv">$$</span>quote<span class="o">(</span>mkdir DestFolder<span class="o">)</span>
-</span><span class='line'>    QMAKE_POST_LINK +<span class="o">=</span> <span class="nv">$$</span>quote<span class="o">(</span>xcopy <span class="nv">$$</span><span class="o">{</span>PWD_WIN<span class="o">}</span><span class="se">\</span>TestData <span class="nv">$$</span><span class="o">{</span>OUT_PWD_WIN<span class="o">}</span><span class="se">\</span>TestData /E<span class="o">)</span>
-</span><span class='line'>
-</span><span class='line'>    QMAKE_CLEAN +<span class="o">=</span> /s /f /q TestData <span class="o">&amp;&amp;</span> rd /s /q TestData
-</span><span class='line'><span class="err">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="err">unix</span> <span class="err">{</span>
-</span><span class='line'>    <span class="nv">QMAKE_POST_LINK</span> <span class="o">+=</span> <span class="nv">$$</span>quote<span class="o">(</span>cp -rf <span class="nv">$$</span><span class="o">{</span>PWD<span class="o">}</span>/TestData <span class="nv">$$</span><span class="o">{</span>OUT_PWD<span class="o">})</span>
-</span><span class='line'>
-</span><span class='line'>    QMAKE_CLEAN +<span class="o">=</span> -r TestData
-</span><span class='line'><span class="err">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+    QMAKE_POST_LINK += $$quote(mkdir DestFolder)
+    QMAKE_POST_LINK += $$quote(xcopy $${PWD_WIN}\\TestData $${OUT_PWD_WIN}\\TestData /E)
+
+    QMAKE_CLEAN += /s /f /q TestData &amp;&amp; rd /s /q TestData
+}
+
+unix {
+    QMAKE_POST_LINK += $$quote(cp -rf $${PWD}/TestData $${OUT_PWD})
+
+    QMAKE_CLEAN += -r TestData
+}
+</code></pre>
 
 <p>Data copied, tests working again. Take that, Nokia; no matter how difficult you make your build-processing tool, I&rsquo;ll figure out how to contort it to my whims.</p>
-
 ]]></content>
   </entry>
   
@@ -210,178 +134,95 @@
     <id>http://larry-price.com/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests</id>
     <content type="html"><![CDATA[<p>The project I&rsquo;m working on is slowly adding <a href="https://github.com/cucumber/cucumber-cpp">Cucumber</a> acceptance tests to our massive code base in order to replace aging <a href="https://code.google.com/p/robotframework/">Robot tests</a>. One would think that getting developers on our team to use Cucumber would be east, since it uses <a href="https://code.google.com/p/googletest/">googletest</a> and <a href="https://code.google.com/p/googlemock/">googlemock</a> which we use for our unit tests. Unfortunately, very few people on the team have been motivated to write integration tests using the new framework, so I have very few people to go to when I have problems writing my own integration tests.</p>
 
-
-
-
 <p>The area of the code I deal with uses <a href="http://www.mono-project.com/Embedding_Mono">embedded mono</a> to communicate with some C# libraries that we share with other applications. This means we have unmanaged memory which talks with managed memory. This has caused us more headaches than I care to remember. One such problem is that we have a static object that we only want to create and destroy once. So I write my first Cucumber test:</p>
 
+<pre><code class="cucumber DoStuff.feature">Feature: Do that thing that we have to do
 
-<p><figure class='code'><figcaption><span>DoStuff.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Do that thing that we have to do</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Do it my way</span>
-</span><span class='line'><span class="k">  Given </span><span class="nf">I have done step </span><span class="s">1</span><span class="nf"></span>
-</span><span class='line'><span class="nf">  </span><span class="k">When </span><span class="nf">I do step </span><span class="s">2</span><span class="nf"></span>
-</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">I should see results</span>
-</span></code></pre></td></tr></table></div></figure></p>
+Scenario: Do it my way
+  Given I have done step 1
+  When I do step 2
+  Then I should see results
+</code></pre>
 
-<p><figure class='code'><figcaption><span>DoStuff_StepDefinitions.cpp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="cp">#include &lt;cucumber-cpp/defs.hpp&gt;</span>
-</span><span class='line'><span class="cp">#include &lt;gtest/gtest.h&gt;</span>
-</span><span class='line'><span class="cp">#include &lt;mono/jit/jit.h&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">const</span> <span class="n">QString</span> <span class="n">DOMAIN_NAME</span> <span class="o">=</span> <span class="s">&quot;bridge&quot;</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">Context</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="c1">// The static Mono object</span>
-</span><span class='line'>  <span class="k">static</span> <span class="n">MonoDomain</span> <span class="o"><em></span><span class="n">Domain</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">BEFORE</span><span class="p">()</span> <span class="p">{</span> <span class="n">Context</span><span class="o">::</span><span class="n">Domain</span> <span class="o">=</span> <span class="n">mono_jit_init</span><span class="p">(</span><span class="n">DOMAIN_NAME</span><span class="p">);</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">AFTER</span><span class="p">()</span> <span class="p">{</span> <span class="n">mono_jit_cleanup</span><span class="p">(</span><span class="n">Context</span><span class="o">::</span><span class="n">Domain</span><span class="p">);</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">GIVEN</span><span class="p">(</span><span class="s">&quot;^I have done step 1$&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/</em> &hellip; <em>/</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">WHEN</span><span class="p">(</span><span class="s">&quot;^I do step 2$&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/</em> &hellip; <em>/</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">THEN</span><span class="p">(</span><span class="s">&quot;^I should see results$&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/</em> &hellip; */</span> <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="c++ DoStuff_StepDefinitions.cpp">#include &lt;cucumber-cpp/defs.hpp&gt;
+#include &lt;gtest/gtest.h&gt;
+#include &lt;mono/jit/jit.h&gt;
+
+const QString DOMAIN_NAME = "bridge";
+
+class Context
+{
+  // The static Mono object
+  static MonoDomain *Domain;
+}
+
+BEFORE() { Context::Domain = mono_jit_init(DOMAIN_NAME); }
+
+AFTER() { mono_jit_cleanup(Context::Domain); }
+
+GIVEN("^I have done step 1$") { /* ... */ }
+
+WHEN("^I do step 2$") { /* ... */ }
+
+THEN("^I should see results$") { /* ... */ }
+</code></pre>
 
 <p>Before my scenario starts, the <code>BEFORE()</code> function is called and my MonoDomain object is created. When the scenario ends, my <code>AFTER()</code> statement is called and the objects in my MonoDomain are cleaned up. Now, I add a second scenario.</p>
 
+<pre><code class="cucumber DoStuff.feature">Feature: Do that thing that we have to do
 
-<p><figure class='code'><figcaption><span>DoStuff.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Do that thing that we have to do</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Do it my way</span>
-</span><span class='line'><span class="nf">  &hellip;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">Scenario: Do it your way</span>
-</span><span class='line'><span class="nf">  &hellip;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+Scenario: Do it my way
+  ...
+
+Scenario: Do it your way
+  ...
+</code></pre>
 
 <p>Now I run my Cucumber test, and Mono explodes. Why? Because the <code>BEFORE()</code> and <code>AFTER()</code> functions are not <em>before all</em> and <em>after all</em>, but <em>before each</em> and <em>after each</em>.</p>
 
-
-
-
 <p>So what should we do? Move the function calls in the <code>BEFORE()</code> and <code>AFTER()</code> statements into the constructor and destructor of the Context class?</p>
-
-
-
 
 <p>Same problem. Are there <code>BEFORE_ALL()</code> and <code>AFTER_ALL()</code> macros? No.</p>
 
-
-
-
 <p>I began to panic. I asked the person who taught me how to write Cucumber tests in C++. Our idea was to create the MonoDomain during what I knew would be the first step, and delete it after what I knew would be the last step. Oh, the horror! That would mean not being able to reuse those steps, not to mention moving the creation/destruction code around anytime I wanted to add new steps or change the order of my previous steps. We also thought about making specific steps and sticking them at the front of the first scenario and at the end of the last scenario. This still meant that the lay developer would have to recognize these first and last steps from the others. I asked my local senior engineer, and his advice was to create separate Cucumber tests for each scenario I intended to create. My plan was to write 6 scenarios in the long-term for this feature, and I really didn&rsquo;t want to turn these very similar tests with beautifully reusable steps into 6 features.</p>
-
-
-
 
 <p>Then it hit me: Cucumber is open source. I found the source <a href="https://github.com/cucumber/cucumber-cpp">on Github</a> and started looking through <a href="https://github.com/cucumber/cucumber-cpp/tree/master/examples/">the example code</a>. It was there that I discovered <a href="https://github.com/cucumber/cucumber-cpp/tree/master/examples/FeatureShowcase/tag">tags</a>. Tags were the solution to my problem.</p>
 
+<pre><code class="cucumber DoStuff.feature">Feature: Do that thing that we have to do
 
-<p><figure class='code'><figcaption><span>DoStuff.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Do that thing that we have to do</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">@first</span>
-</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Do it my way</span>
-</span><span class='line'><span class="nf">  &hellip;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">@last</span>
-</span><span class='line'><span class="nf">Scenario: Do it your way</span>
-</span><span class='line'><span class="nf">  &hellip;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+@first
+Scenario: Do it my way
+  ...
+
+@last
+Scenario: Do it your way
+  ...
+</code></pre>
 
 <p>Using tags, I could label my scenarios with meaningful <code>@first</code> and <code>@last</code> tags to signify the beginning and end of my tests. The trick is to then add the required tags to my <code>BEFORE()</code> and <code>AFTER()</code> macro as such:</p>
 
+<pre><code class="c++ DoStuff_StepDefinitions.cpp">#include &lt;cucumber-cpp/defs.hpp&gt;
+#include &lt;gtest/gtest.h&gt;
+#include &lt;mono/jit/jit.h&gt;
 
-<p><figure class='code'><figcaption><span>DoStuff_StepDefinitions.cpp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="cp">#include &lt;cucumber-cpp/defs.hpp&gt;</span>
-</span><span class='line'><span class="cp">#include &lt;gtest/gtest.h&gt;</span>
-</span><span class='line'><span class="cp">#include &lt;mono/jit/jit.h&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">const</span> <span class="n">QString</span> <span class="n">DOMAIN_NAME</span> <span class="o">=</span> <span class="s">&quot;bridge&quot;</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">Context</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="c1">// The static Mono object</span>
-</span><span class='line'>  <span class="k">static</span> <span class="n">MonoDomain</span> <span class="o">*</span><span class="n">Domain</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">BEFORE</span><span class="p">(</span><span class="s">&quot;@first&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">Context</span><span class="o">::</span><span class="n">Domain</span> <span class="o">=</span> <span class="n">mono_jit_init</span><span class="p">(</span><span class="n">DOMAIN_NAME</span><span class="p">);</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">AFTER</span><span class="p">(</span><span class="s">&quot;@last&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">mono_jit_cleanup</span><span class="p">(</span><span class="n">Context</span><span class="o">::</span><span class="n">Domain</span><span class="p">);</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// &hellip;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+const QString DOMAIN_NAME = "bridge";
+
+class Context
+{
+  // The static Mono object
+  static MonoDomain *Domain;
+}
+
+BEFORE("@first") { Context::Domain = mono_jit_init(DOMAIN_NAME); }
+
+AFTER("@last") { mono_jit_cleanup(Context::Domain); }
+
+// ...
+</code></pre>
 
 <p>Now my MonoDomain is only created <em>before</em> the scenario labeled <code>@first</code> and <em>after</em> the scenario labeled <code>@last</code>. Obviously, this isn&rsquo;t the cleanest fix imaginable, but it was the cleanest fix <em>available</em>. Whenever someone wants to add a new step to this test, they need to remember to move the <code>@last</code> tag to their scenario. However, I have the hope that it will be pretty obvious that the second scenario is no longer &ldquo;last&rdquo; when there is a third scenario following the &ldquo;last&rdquo; scenario. Anyway, it leaves me happy enough, since now my tests don&rsquo;t explode and I&rsquo;m able to reuse ~50% of the steps I had already written for the first scenario. I added a third scenario later on and 9 out of the 10 steps in the scenario were reused from the first and second scenario.</p>
 
-
-
-
 <p>There are lots of other cool things you can do with Cucumber tags, like having multiple tags on objects. All tags that match <code>@first</code> will do one thing, but tags that match <code>@first</code> and <code>@second</code> can have multiple <code>BEFORE()</code> or <code>AFTER()</code> clauses.</p>
-
 ]]></content>
   </entry>
   

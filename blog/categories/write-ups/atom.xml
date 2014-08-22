@@ -4,7 +4,7 @@
   <title><![CDATA[Category: write-ups | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/write-ups/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-22T06:42:13-04:00</updated>
+  <updated>2014-08-22T06:46:57-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -22,61 +22,27 @@
 
 <p>Excerpt from &ldquo;Decisions are Progress&rdquo; in <em>Rework</em></p></blockquote>
 
-
-
-
 <h3>The Gist</h3>
-
-
-
 
 <p><a href="http://www.amazon.com/gp/product/0307463745/ref=as_li_qf_sp_asin_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0307463745&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Rework</em> by Jason Fried and David Heinemeier Hansson</a> is a business advice book for keeping small, focused teams without all the cruft of business.</p>
 
-
-
-
 <h3>My Opinion</h3>
-
-
-
 
 <p><em>Rework</em> is my kind of book. It&rsquo;s best described as business advice for hippy programmers. It&rsquo;s amazing that this book describes the business practices of a real company that&rsquo;s modestly successful.</p>
 
-
-
-
 <p>Speaking of the authors of this book, they&rsquo;re the guys who made <a href="//rubyonrails.org/">Ruby on Rails</a>, which gives them street cred as far as I&rsquo;m concerned.</p>
-
-
-
 
 <p>This is a book of proverbs. Ignore the real world. Start a business, not a startup. Build half a product, not a half-assed product. Meetings are toxic. Hire managers of one. ASAP is po:son.</p>
 
-
-
-
 <p>When you look at it, this advice is not insightful: it&rsquo;s obvious. It just also happens to be against how modern-day companies work. And maybe this advice isn&rsquo;t useful for everyone; once a company stops following these rules, it seems difficult to change. The smaller and newer the company, the easier it is to avoid the issues introduced with bigger businesses.</p>
-
-
-
 
 <p>This book talks about ideas being cheap. Implementing the idea is where all the work lies. Have an idea? Start working on it now. Find time. Go to bed an hour later. Watch an hour less of TV. Your idea is meaningless unless you actually follow through.</p>
 
-
-
-
 <p>There&rsquo;s also good advice within this book for people who are pressured to overwork. Avoid workaholics: overworking hurts the decision-making processes, so people who are working more hours are just spending more hours making worse decisions. When employees work long hours, other employees are also influenced to work longer hours. More poeple making worse decisions? Count me out. Hire people with outside lives who go home at 5: busy people have to manage their time, and will thus find more efficient ways to accomplish their work.</p>
-
-
-
 
 <h3>Who Would Like This</h3>
 
-
-
-
 <p>Interested in starting a company? In making managerial changes within your current company? In making changes to the way you work? Reading this book can help you realize that you don&rsquo;t need all the modern-day business cruft to make your business a success.</p>
-
 ]]></content>
   </entry>
   
@@ -87,51 +53,23 @@
     <id>http://larry-price.com/blog/2014/03/22/made-to-stick</id>
     <content type="html"><![CDATA[<blockquote><p>Knowledge curses us, if we find it hard to imagine what it was like not to know it. And it becomes difficult to share our knowledge with others because we can&rsquo;t readily re-create our listener&rsquo;s state of mind.</p></blockquote>
 
-
-
-
 <h3>The Gist</h3>
-
-
-
 
 <p><a href="http://www.amazon.com/gp/product/1400064287/ref=as_li_qf_sp_asin_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1400064287&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Made to Stick</em> by brothers Chip Heath and Dan Heath</a> tries to uncover why some ideas capture our imagination while others fall into the abyss, never to be seen again.</p>
 
-
-
-
 <h3>My opinion</h3>
-
-
-
 
 <p>I really enjoyed this book. I tend to read very technical books, so this was a nice change of pace. I coincidentally was reading this book while coming up with a &lsquo;pitch&rsquo; for my recent SEP Startup Weekend project, <a href="//ollert.herokuapp.com">Ollert</a>.</p>
 
-
-
-
 <p><em>Made to Stick</em> lays out examples of really good and really mediocre descriptions of ideas. The authors then use the concepts discussed within the book to improve these ideas or discuss why they are effective. Whenever I hear people explaining real-world ideas, I start to think about the concepts laid out in this book. I&rsquo;d like to be able to use these concepts to communicate my own ideas more effectively, but I have thus far found it to be easier said than done.</p>
-
-
-
 
 <p>The book is not terribly long. This allowed me to connect all the concepts and better critique the numerous examples.</p>
 
-
-
-
 <p>Although I did enjoy the book, a few of the sections came off a little bit like a self-help program. The concepts described in the book are &lsquo;Simplicity&rsquo;, &lsquo;Unexpectedness&rsquo;, &lsquo;Concreteness&rsquo;, &lsquo;Credibility&rsquo;, &lsquo;Emotional&rsquo;, and &lsquo;Stories&rsquo;, which &ldquo;just happen&rdquo; to spell out <em>most</em> of the word &ldquo;success.&rdquo; This silly feel-goodery acronym makes the cynical side of me cringe.</p>
-
-
-
 
 <h3>Who Would Like This</h3>
 
-
-
-
 <p>Anyone trying to communicate a new idea to someone else could benefit from this book. On a broader scope, this book can benefit your communication patterns in general. This is particularly helpful for professionals, who may have a difficulty expressing their ideas without getting too deep in the technicalities.</p>
-
 ]]></content>
   </entry>
   
@@ -142,56 +80,25 @@
     <id>http://larry-price.com/blog/2013/09/08/the-pragmatic-programmer</id>
     <content type="html"><![CDATA[<blockquote><p>Don&rsquo;t be a slave to history. Don&rsquo;t let existing code dictate future code. All code can be replaced if it is no longer appropriate</p></blockquote>
 
-
-
-
 <h3>The Gist</h3>
-
-
-
 
 <p><a href="http://www.amazon.com/gp/product/020161622X/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=020161622X&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>The Pragmatic Programmer</em></a> written by Andrew Hunt and David Thomas is a book about being an above-average software developer.</p>
 
-
-
-
 <h3>My Opinion</h3>
-
-
-
 
 <p>There are many good concepts in this book. However, I&rsquo;ve been reading a bit much lately and found that most of the topics covered have been rehashed in other books. As it turns out, re-reading this kind of motivational book is less exciting when you&rsquo;ve read similar texts earlier in the year.</p>
 
-
-
-
 <p>I did enjoy the section on Refactoring; there has been some discussion on my current project team of what to do when you see &ldquo;gnarly&rdquo; code. This section reiterates the fact that poorly-written code should be updated. The authors talk about treating code as organic. Refactoring your code as it grows is the same as reevaluating oneself as one grows older. Changing one&rsquo;s hair or clothes, changing what one eats or reads or watches (inputs), or changing a daily routine is just refactoring of your daily life: the person is the same and accomplishes largely the same tasks, but in a slightly different manner.</p>
-
-
-
 
 <p>One tip in this book is &ldquo;Use one editor well.&rdquo; I&rsquo;ve found that I love to use <a href="http://www.sublimetext.com/">Sublime Text</a> for my work in Ruby, Python, and markup languages. Having said that, I find Sublime an inappropriate tool for doing C++ (<a href="https://qt-project.org/wiki/Category:Tools::QtCreator">Qt Creator</a>), Java (<a href="http://eclipse.org/">Eclipse</a> or even <a href="https://netbeans.org/">NetBeans</a>), or anything .NET (duh Visual Studio). Considering my job could involve any programming language, I would revise this tip to &ldquo;Use the right editor for the job, and learn to use it well.&rdquo;</p>
 
-
-
-
 <p>The chapter introductions were largely worthless to me: long-winded summaries of EVERYTHING in the chapter. I eventually trained myself to automatically skip the chapter intros in favor of reading the details. It seems that I could have just as easily gone the other way and gotten away with only reading the intros, but that hardly seems like any fun.</p>
-
-
-
 
 <h3>Who Would Like This</h3>
 
-
-
-
 <p>Fresh-outs should read this book. It&rsquo;s not too long and it&rsquo;s split into manageable chapters. Great for fresh-out book clubs, in which I probably should have participated.</p>
 
-
-
-
-<p>Who would not like this? People who have read books with similar premeses, such as <a href="http://larry-price.com/blog/2013/02/19/code-complete-second-edition/"><em>Code Complete</em></a>, within recent memory.</p>
-
+<p>Who would not like this? People who have read books with similar premeses, such as <a href="/blog/2013/02/19/code-complete-second-edition/"><em>Code Complete</em></a>, within recent memory.</p>
 ]]></content>
   </entry>
   
@@ -202,46 +109,21 @@
     <id>http://larry-price.com/blog/2013/07/16/effective-c-plus-plus</id>
     <content type="html"><![CDATA[<h3>The Gist</h3>
 
-
-
-
 <p><a href="http://www.amazon.com/gp/product/0321334876/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0321334876&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Effective C++</em></a> is a list of ways to write not-your-average-bear C++ code. The author, <a href="http://www.aristeia.com/">Scott Meyers</a>, outlines 8 specific topics for improving code, and a few more miscellaneous tips.</p>
-
-
-
 
 <h3>My Opinion</h3>
 
-
-
-
 <p>Lots of good can come from reading this book. I borrowed it from a more-experienced co-worker and noticed many of the interesting coding standards this co-worker used came directly from this book. And I agree with it. I&rsquo;ve been actively trying to follow the lessons learned in this book from the moment I picked it up.</p>
-
-
-
 
 <p>I learned C++ the hard way: I was thrown into an internship where I didn&rsquo;t really have enough skills to contribute to the project, and my &ldquo;boss&rdquo; didn&rsquo;t really have anywhere to put me. So I was handed a book, pointed to <a href="http://www.cplusplus.com/">this wonderous website</a>, and I wrote some little helper apps for the project. I wasn&rsquo;t taught anything about form or any of that formal business. Then I took a C++ class in college, and never bothered to learn any of the coding standards because I had enough previous knowledge to get by my own way (and appear to be really good while doing it).</p>
 
-
-
-
 <p>So this book showed me a lot of the why certain things in C++ are the way they are. It explained to me that a copy constructor is called every time you pass an object directly through a function, and how assignment operators are used whenever an equals sign appears. It told me why my destructors need to be virtual. It explained a lot about smart_ptr and auto_ptr that I never thought to think about.</p>
-
-
-
 
 <p>Admittedly, there are parts of the book that are hard to follow. I consider Chapter 7 (Templates and Generic Programming) and Chapter 8 (Customizing new and delete) to be extremely technical chapters not meant for the faint of heart, and the lessons learned in these chapters are not necessarily useful in day-to-day programming. Chapter 9 is simply called Miscellany, and it delivers no new information for improving one&rsquo;s C++ skills.</p>
 
-
-
-
 <h3>Who Would Like This</h3>
 
-
-
-
 <p>C++ Programmers should have this book (at least the first 6 chapters) crammed down their throats and into their squishy pink brains. After learning all the &ldquo;basic&rdquo; concepts of C++, the lessons this book teaches in design and the nature of C++ should be taken into consideration.</p>
-
 ]]></content>
   </entry>
   
@@ -257,61 +139,27 @@ tinkering, improving, planting flower beds.</p>
 
 <p>&ndash; Joel Spolsky, &ldquo;Things you Should Never Do, Part I&rdquo;</p></blockquote>
 
-
-
-
 <h3>The Gist</h3>
-
-
-
 
 <p><a href="http://www.amazon.com/gp/product/1590593898/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1590593898&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Joel On Software</em></a> is a collection of blog posts by the great <a href="http://www.joelonsoftware.com/">Joel Spolsky</a>. He has risen to Internet Fame after his experience working for Microsoft and eventually starting his own company. The &ldquo;chapters&rdquo; (blog posts) provide insight into picking a language for your codebase, recruiting engineers, managing programmers, fixing bugs, paper prototyping, and how Microsoft works.</p>
 
-
-
-
 <h3>My Opinion</h3>
-
-
-
 
 <p>Joel Spolsky is a god sent down from Mount Olympus to calmly explain to us why we are sometimes terrible people and then goes on to tell us it&rsquo;s okay and we should learn from our past. I loved this book, especially since I read it at the same time as some really terrible books (namely <a href="http://www.amazon.com/gp/product/0672326140/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0672326140&amp;linkCode=as2&amp;tag=larpriandthee-20">The Inmates are Running the Asylum</a> and <a href="http://www.amazon.com/gp/product/1491017082/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1491017082&amp;linkCode=as2&amp;tag=larpriandthee-20">Enterprise Games</a>; I do not recommend these books).</p>
 
-
-
-
 <p>Spolsky talks a lot about specs in the first part of the book, and at first I thought that he was stating too much of the obvious; but then why don&rsquo;t we do specs in this obvious way? Instead, we resign ourselves to write a tiny portion of the spec, start programming, and then implicitly change the spec while only haphazardly updating our documentation. I&rsquo;ve been on projects before where we would have greatly benefitted from having a solid spec; we knew exactly what needed to be done, because we were rewriting a successful product the company had released several years ago. With an ever-changing spec, we programmed ourselves into a hole, and struggled for at least half a year to claw our way back out. I have to wonder if more pre-planning would have saved us from ourselves.</p>
-
-
-
 
 <p>Spolsky&rsquo;s advice on hiring people is invaluable (<a href="http://www.joelonsoftware.com/articles/GuerrillaInterviewing3.html">The Guerrilla Guide to Interviewing</a>). In fact, I wish that I had read some of these blog posts while I was interviewing. Spolsky says that recruiters should ask &ldquo;impossible questions&rdquo; and not worry about what the answers given are, just that the recruit comes up with something. He says to stop asking trivia questions. He talks about relying on all interviewers equally: if any two interviewers say &ldquo;No&rdquo; to a candidate, the candidate is toast. He talks about asking candidates about projects and looking for passion, which is almost always the sign of a good programmer.</p>
 
-
-
-
 <p>Spolsky talks about the commodity market of software/hardware. To sum it up, the supply of one drives the demand of the other. This section made me think about the current PC market: hardware is cheap <em>and</em> software is cheap. Not only is software cheap, but it&rsquo;s often <em>free</em>. Prices for hardware haven&rsquo;t been going down at nearly the rate it used to, but that seems natural as the price approaches the cost of labor and parts. Most of the hardware innovation right now seems to be aimed at the tiny computers in our pockets (or <a href="http://www.google.com/glass/start/">on our face</a>, soon enough). Google&rsquo;s software makes money by displaying ads using its search engine, so Google has entered the market of making software that is compatible with all kinds of different hardware. Google has played the commodities game like a champ, getting hardware running their software into hundreds of millions of pockets.</p>
-
-
-
 
 <p>Some of the weaker parts of the book are when Spolsky talks about .NET. I&rsquo;m not going to go into detail, but when he wrote these posts, .NET was just entering the market. Spolsky starts by bashing .NET for making all the old Windows API code unusable, but in later blog posts falls hard for .NET and starts thinking about ways to rewrite his entire life in .NET.</p>
 
-
-
-
 <h3>Who Would Like This</h3>
-
-
-
 
 <p>I believe that programmers are the main audience for this book, and I am a programmer who loved reading it. Spolsky does not talk down to the reader, nor does he dumb down the nitty-gritty technical blog posts.</p>
 
-
-
-
 <p>Programmers who intend to become managers may get added benefit from this book, as Spolsky discusses some interesting recruiting techniques and ways to deal with programmers. My company uses some of Spolsky&rsquo;s advice when hiring engineers (quite a bit of it, thinking back to my interview), and we&rsquo;ve been hiring only the best and brightest cowboys in the Midwest for years.</p>
-
 ]]></content>
   </entry>
   

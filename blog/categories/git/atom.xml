@@ -4,7 +4,7 @@
   <title><![CDATA[Category: git | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-22T06:42:13-04:00</updated>
+  <updated>2014-08-22T06:46:57-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -20,66 +20,40 @@
     <id>http://larry-price.com/blog/2014/05/25/git-out-the-way-rebase-workflow</id>
     <content type="html"><![CDATA[<p>We use <a href="http://www.git-scm.com/">git</a> on my current project, and we used to always use remote branches. After doubling the number of developers touching the repo, we found that remote feature branches led to merge conflicts, stale branches, and hidden code. We&rsquo;ve switched away from using remote feature branches, favoring instead to commit directly to <code>origin/master</code>, making remote feature branches the exception. We do this using a simple method called <code>rebase</code>.</p>
 
-
-
-
 <p>What does it mean to <code>rebase</code>?</p>
-
-
-
 
 <p>When you rebase your local changes onto another branch, your changes become the head of that branch. For instance, say I start working off remote branch <code>master</code>, specifically changeset <code>M2</code>. I then make some changes and commit locally, which I&rsquo;ll note as changeset <code>L</code>. While I was making my changes, some other developer pushed to remote branch <code>master</code>, resulting in changeset <code>M3</code>.</p>
 
-
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>M1 -&gt; M2 -&gt; M3
-</span><span class='line'>        \
-</span><span class='line'>         -&gt;L</span></code></pre></td></tr></table></div></figure></p>
+<pre><code>M1 -&gt; M2 -&gt; M3
+        \
+         -&gt;L
+</code></pre>
 
 <p>This is where <code>rebase</code> comes in. I want to rebase my local commit on top of <code>M3</code>, which will make it the new head of <code>master</code>.</p>
 
+<pre><code>$ git rebase origin/master
+</code></pre>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ git rebase origin/master</span></code></pre></td></tr></table></div></figure></p>
-
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>M1 -&gt; M2 -&gt; M3 -&gt; L</span></code></pre></td></tr></table></div></figure></p>
+<pre><code>M1 -&gt; M2 -&gt; M3 -&gt; L
+</code></pre>
 
 <p>Now I can keep working locally. Until I push my local <code>master</code> to <code>origin</code>, every time I <code>rebase</code> will cause all of my commits to rebase on the head of <code>master</code>.</p>
 
-
-
-
 <p>I like to keep as close to <code>origin/master</code> as possible since we have a fairly active repository. If I want to make sure I have the bleeding edge of <code>master</code>, sometimes I don&rsquo;t have my local changes in working order when I want to rebase. Some people like to stash and unstash local changes, but that takes too much effort for me. I prefer just to use <code>git commit --amend</code> to constantly update the last changes I committed. You can only amend to an unpushed local commit, otherwise you&rsquo;d be changing history remotely (which is bad). Using the <code>amend</code> flag allows me to keep one solid local changeset around until I&rsquo;m comfortable with pushing it to <code>origin</code>. Also note that using <code>amend</code> also allows you to change the commit message of the last commit.</p>
-
-
-
 
 <p>What happens when you need to use a remote branch?</p>
 
-
-
-
 <p>Git&rsquo;s best-kept secret is <code>merge --squash</code>, a wonderful flag that gives you all the benefits of a <code>rebase</code> (linear history, fewer changesets), without all the hassle of a big fat rebase merge (rebasing infrequently can lead to merges that will haunt you in your sleep).</p>
 
-
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ git branch
-</span><span class='line'>* local-branch
-</span><span class='line'>master
-</span><span class='line'>$ git merge master
-</span><span class='line'>$ git checkout master
-</span><span class='line'>$ git merge local-branch &ndash;squash</span></code></pre></td></tr></table></div></figure></p>
+<pre><code>$ git branch
+* local-branch
+master
+$ git merge master
+$ git checkout master
+$ git merge local-branch --squash
+</code></pre>
 
 <p>This will give you a single changeset on the head of <code>master</code> containing all the changes you made in <code>local-branch</code>, including resolution of merge conflicts. <code>merge --squash</code> has eased a lot of the headaches my team had when stuck doing rebase merges previously.</p>
-
 ]]></content>
   </entry>
   

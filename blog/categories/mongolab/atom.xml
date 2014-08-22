@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mongolab | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/mongolab/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-22T06:42:13-04:00</updated>
+  <updated>2014-08-22T06:46:57-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -18,271 +18,155 @@
     <link href="http://larry-price.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo/"/>
     <updated>2013-01-20T11:55:00-05:00</updated>
     <id>http://larry-price.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo</id>
-    <content type="html"><![CDATA[<p><em>This is Part 3 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="http://larry-price.com/blog/categories/pokephile">Pokephile category</a>. Part 4 of this series details moving from a development environment to a production environment using <a href="http://heroku.com/">Heroku</a>. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>, and the final product can be found <a href="http://pokephile.herokuapp.com">here</a>.</em></p>
-
-
-
+    <content type="html"><![CDATA[<p><em>This is Part 3 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="/blog/categories/pokephile">Pokephile category</a>. Part 4 of this series details moving from a development environment to a production environment using <a href="http://heroku.com/">Heroku</a>. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>, and the final product can be found <a href="http://pokephile.herokuapp.com">here</a>.</em></p>
 
 <p><a href="http://heroku.com/">Heroku</a> is a hosting service for different types of web applications. The best thing about Heroku is it&rsquo;s free, you get a decent subdomain for your application, and there&rsquo;s no spam email. Go ahead and <a href="http://api.heroku.com/signup">sign up</a> if you don&rsquo;t already have an account.</p>
 
-
-
-
 <p>Now we need the Heroku Toolbelt. I&rsquo;ll illustrate for Ubuntu 12.10, but there&rsquo;s also <a href="https://toolbelt.heroku.com/">documentation for installing on any OS</a>.</p>
 
-
-<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>wget -qO- <a href="https://toolbelt.heroku.com/install-ubuntu.sh">https://toolbelt.heroku.com/install-ubuntu.sh</a> | sh
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="bash">$ wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+</code></pre>
 
 <p>The toolbelt installs some Heroku-specific applications in addition to ensuring you have Foreman and <a href="http://git-scm.com/">Git</a> on your system. Now it&rsquo;s time to tell the Heroku Toolbelt who we are.</p>
 
+<pre><code class="bash Step 3 - Modified Excerpt from the Heroku Getting Started guide">$ heroku login
+Enter your Heroku credentials.
+Email: larry@example.com
+Password: 
+Could not find an existing public key.
+Would you like to generate one? [Yn] 
+Generating new SSH public key.
+Uploading ssh public key /home/larry/.ssh/id_rsa.pub
+</code></pre>
 
-<p><figure class='code'><figcaption><span>Step 3 - Modified Excerpt from the Heroku Getting Started guide</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>heroku login
-</span><span class='line'>Enter your Heroku credentials.
-</span><span class='line'>Email: <a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#x6c;&#97;&#114;&#114;&#121;&#64;&#x65;&#120;&#97;&#x6d;&#112;&#x6c;&#101;&#46;&#99;&#111;&#x6d;">&#108;&#97;&#x72;&#x72;&#x79;&#x40;&#x65;&#x78;&#x61;&#x6d;&#x70;&#x6c;&#x65;&#x2e;&#99;&#x6f;&#109;</a>
-</span><span class='line'>Password:
-</span><span class='line'>Could not find an existing public key.
-</span><span class='line'>Would you like to generate one? <span class="o">[</span>Yn<span class="o">]</span>
-</span><span class='line'>Generating new SSH public key.
-</span><span class='line'>Uploading ssh public key /home/larry/.ssh/id_rsa.pub
-</span></code></pre></td></tr></table></div></figure></p>
+<p>In order for Heroku to figure out what ruby gems are needed to run your application, you need to specify a Gemfile. It&rsquo;s wise to specify a specific version of Ruby, and it&rsquo;s also a good idea to keep the gems&#8217; versions close to the state you developed with. For the <a href="/blog/categories/pokephile">Pokephile</a> application created in this series, this is my Gemfile:</p>
 
-<p>In order for Heroku to figure out what ruby gems are needed to run your application, you need to specify a Gemfile. It&rsquo;s wise to specify a specific version of Ruby, and it&rsquo;s also a good idea to keep the gems&#8217; versions close to the state you developed with. For the <a href="http://larry-price.com/blog/categories/pokephile">Pokephile</a> application created in this series, this is my Gemfile:</p>
+<pre><code class="ruby project/Gemfile">source :rubygems
 
+ruby '1.9.3'
 
-<p><figure class='code'><figcaption><span>project/Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">source</span> <span class="ss">:rubygems</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">ruby</span> <span class="s1">&#39;1.9.3&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;sinatra&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt;1.3.2&#39;</span>
-</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;haml&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt;3.1.6&#39;</span>
-</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;mongoid&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt;3.0.14&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">group</span> <span class="ss">:development</span><span class="p">,</span> <span class="ss">:test</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capybara&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt;2.0.1&#39;</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;rspec&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt;2.11.0&#39;</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;nokogiri&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt;1.5.5&#39;</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></p>
+gem 'sinatra', '~&gt;1.3.2'
+gem 'haml', '~&gt;3.1.6'
+gem 'mongoid', '~&gt;3.0.14'
+
+group :development, :test do
+    gem 'capybara', '~&gt;2.0.1'
+    gem 'rspec', '~&gt;2.11.0'
+    gem 'nokogiri', '~&gt;1.5.5'
+end
+</code></pre>
 
 <p>First I specify a source for my gems: &lsquo;rubygems&rsquo; defaults to &ldquo;<a href="http://rubygems.org">http://rubygems.org</a>&rdquo; and hasn&rsquo;t failed me yet. Next I specify that I want to use Ruby 1.9.3, a necessity because Mongoid 3.x doesn&rsquo;t work correctly with 1.9.2. The versions of the first three gems were chosen by typing the following in the command line to determine which version I had installed on my machine:</p>
 
-
-<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>gem query | grep <span class="s1">&#39;sinatra|haml|mongoid&#39;</span>
-</span><span class='line'>haml <span class="o">(</span>3.1.7, 3.1.6<span class="o">)</span>
-</span><span class='line'>mongoid <span class="o">(</span>3.0.17, 3.0.15, 3.0.14<span class="o">)</span>
-</span><span class='line'>sinatra <span class="o">(</span>1.3.3, 1.3.2<span class="o">)</span>
-</span><span class='line'>sinatra-contrib <span class="o">(</span>1.3.2<span class="o">)</span>
-</span><span class='line'>sinatra-reloader <span class="o">(</span>1.0<span class="o">)</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="bash">$ gem query | grep 'sinatra\|haml\|mongoid'
+haml (3.1.7, 3.1.6)
+mongoid (3.0.17, 3.0.15, 3.0.14)
+sinatra (1.3.3, 1.3.2)
+sinatra-contrib (1.3.2)
+sinatra-reloader (1.0)
+</code></pre>
 
 <p>The &lsquo;~>&rsquo; operator tells Bundler to use greater-than-equal but stop before next highest version. So, for Sinatra &lsquo;~>1.3.2&rsquo; means that Bundler will accept anything greater-than-or-equal-to &lsquo;1.3.2&rsquo; and less than &lsquo;1.4.0.&rsquo; I tend to rely on the &lsquo;~>&rsquo; operator so I can be sure no APIs are changed in my gems.</p>
 
-
-
-
 <p>The next block is a conditional checking in which environment the gems are being installed. This defaults to :development if none is specified. I put the gems used for testing in this block since they&rsquo;re not needed to run the application, but a developer/tester would need these to run the tests.</p>
-
-
-
 
 <p>For this Gemfile to be meaningful, we need to use a program called <a href="http://gembundler.com/">Bundler</a> to &ldquo;bundle&rdquo; the gems and their dependencies in a Gemfile.lock file.</p>
 
-
-<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">pwd</span>
-</span><span class='line'>project/
-</span><span class='line'><span class="nv">$ </span>sudo apt-get install bundler
-</span><span class='line'>&hellip;
-</span><span class='line'><span class="nv">$ </span>bundle install
-</span><span class='line'>&hellip;
-</span><span class='line'>Your bundle is <span class="nb">complete</span>! Use <span class="sb"><code>&lt;/span&gt;bundle show &lt;span class="o"&gt;[&lt;/span&gt;gemname&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="sb"&gt;</code></span> to see where a bundled gem is installed.
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="bash">$ pwd
+project/
+$ sudo apt-get install bundler
+...
+$ bundle install
+...
+Your bundle is complete! Use `bundle show [gemname]` to see where a bundled gem is installed.
+</code></pre>
 
 <p>Running bundler will create a Gemfile.lock file and make sure your system has the specified gems. If some gems are missing or need new versions to be installed, bundler will ask the user for their password to get the required gems.</p>
 
-
-
-
 <p>The next step for setting things up is to set up Git. If your application is already using Git, you only need to commit all files to verify that the Gemfile and Gemfile.lock make it into the repository.</p>
 
-
-<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">cd </span>project/
-</span><span class='line'><span class="nv">$ </span>git init
-</span><span class='line'><span class="nv">$ </span>git add .
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;Initial commit.&quot;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="bash">$ cd project/
+$ git init
+$ git add .
+$ git commit -m "Initial commit."
+</code></pre>
 
 <p>Now we create a Heroku project and give it a meaningful name. If you can&rsquo;t think of a meaningful name, use &lsquo;heroku create&rsquo; and Heroku will come up with something for you.</p>
 
-
-<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>heroku create meaningful-name
-</span><span class='line'>Creating meaningful-name&hellip; <span class="k">done</span>, stack is cedar
-</span><span class='line'><a href="http://meaningful-name.herokuapp.com/">http://meaningful-name.herokuapp.com/</a> | git@heroku.com:meaningful-name.git
-</span><span class='line'>Git remote heroku added
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="bash">$ heroku create meaningful-name
+Creating meaningful-name... done, stack is cedar
+http://meaningful-name.herokuapp.com/ | git@heroku.com:meaningful-name.git
+Git remote heroku added
+</code></pre>
 
 <p>We&rsquo;re almost there. Because we included accessing Mongo databases in our application, we have to take care of that on the web. The easiest way to do that is using a Heroku Add-on. At this time, there are two major Heroku Add-ons for Mongo databases: <a href="https://addons.heroku.com/mongolab">MongoLab</a> and <a href="https://addons.heroku.com/mongohq">MongoHQ</a>. Both services have a starter service for $0/month, which is pretty awesome in my opinion. I flipped a coin and picked MongoLab for this application. Adding the add-on to our project:</p>
 
-
-<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>heroku addons:add mongolab:starter
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="bash">$ heroku addons:add mongolab:starter
+</code></pre>
 
 <p>If you haven&rsquo;t already, Heroku will ask you to &ldquo;verify your account&rdquo; before continuing. This means that you have to put in some credit card information. Note that you will not be charged, I guess Heroku just wants some indication that you might eventually pay for something. After you put in your credit card information, you may need to run the above command again.</p>
 
-
-
-
 <p>Now that MongoLab is set up on the server-side, we need to tell Mongoid how to connect to that server. The following command will give you the environment variable needed to connect to the server:</p>
 
-
-<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>heroku config | grep MONGOLAB_URI
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="bash">$ heroku config | grep MONGOLAB_URI
+</code></pre>
 
 <p>Now we update our mongoid.yml file to use that string:</p>
 
+<pre><code class="yml project/mongoid.yml">development:
+  sessions:
+    default:
+      database: dev
+      hosts:
+        - localhost
+  options:
 
-<p><figure class='code'><figcaption><span>project/mongoid.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">sessions</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">default</span><span class="p-Indicator">:</span>
-</span><span class='line'>      <span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">dev</span>
-</span><span class='line'>      <span class="l-Scalar-Plain">hosts</span><span class="p-Indicator">:</span>
-</span><span class='line'>        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">localhost</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">options</span><span class="p-Indicator">:</span>
-</span><span class='line'>
-</span><span class='line'><span class="l-Scalar-Plain">test</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">sessions</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">default</span><span class="p-Indicator">:</span>
-</span><span class='line'>      <span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">test</span>
-</span><span class='line'>      <span class="l-Scalar-Plain">hosts</span><span class="p-Indicator">:</span>
-</span><span class='line'>        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">localhost</span>
-</span><span class='line'>
-</span><span class='line'><span class="l-Scalar-Plain">production</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">sessions</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">default</span><span class="p-Indicator">:</span>
-</span><span class='line'>      <span class="l-Scalar-Plain">uri</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">&lt;%= ENV[&#39;MONGOLAB_URI&#39;] %&gt;</span>
-</span><span class='line'>      <span class="l-Scalar-Plain">options</span><span class="p-Indicator">:</span>
-</span><span class='line'>        <span class="l-Scalar-Plain">skip_version_check</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
-</span><span class='line'>        <span class="l-Scalar-Plain">safe</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
-</span></code></pre></td></tr></table></div></figure></p>
+test:
+  sessions:
+    default:
+      database: test
+      hosts:
+        - localhost
+
+production:
+  sessions:
+    default:
+      uri: &lt;%= ENV['MONGOLAB_URI'] %&gt;
+      options:
+        skip_version_check: true
+        safe: true
+</code></pre>
 
 <p>Because of the way my application works, I want to prepopulate the database with some Pokemon.</p>
 
-
-<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">export </span><span class="nv">MONGOLAB_URI</span><span class="o">=</span><span class="sb"><code>&lt;/span&gt;heroku config | grep MONGOLAB_URI | cut -c 15-&lt;span class="sb"&gt;</code></span>
-</span><span class='line'><span class="nv">$ </span><span class="nb">pwd</span>
-</span><span class='line'>project/
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>tools/populate
-</span><span class='line'><span class="nv">$ </span>irb
-</span><span class='line'>&gt;&gt; require <span class="s1">&#39;./populater&#39;</span>
-</span><span class='line'><span class="nb">true</span>
-</span><span class='line'>&gt;&gt; require <span class="s1">&#39;mongoid&#39;</span>
-</span><span class='line'><span class="nb">true</span>
-</span><span class='line'>&gt;&gt; Mongoid.load! <span class="s1">&#39;../../mongoid.yml&#39;</span>, :production
-</span><span class='line'><span class="o">{</span><span class="s2">&quot;sessions&quot;</span><span class="o">=</span>&gt;<span class="o">{</span><span class="s2">&quot;default&quot;</span><span class="o">=</span>&gt;<span class="o">{</span><span class="s2">&quot;uri&quot;</span><span class="o">=</span>&gt;nil, <span class="s2">&quot;options&quot;</span><span class="o">=</span>&gt;<span class="o">{</span><span class="s2">&quot;skip_version_check&quot;</span><span class="o">=</span>&gt;true, <span class="s2">&quot;safe&quot;</span><span class="o">=</span>&gt;true<span class="o">}}}}</span>
-</span><span class='line'>&gt;&gt; Populater.new.add_pokemon 1000
-</span><span class='line'>nil
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="bash">$ export MONGOLAB_URI=`heroku config | grep MONGOLAB_URI | cut -c 15-`
+$ pwd
+project/
+$ cd tools/populate
+$ irb
+&gt;&gt; require './populater'
+true
+&gt;&gt; require 'mongoid'
+true
+&gt;&gt; Mongoid.load! '../../mongoid.yml', :production
+{"sessions"=&gt;{"default"=&gt;{"uri"=&gt;nil, "options"=&gt;{"skip_version_check"=&gt;true, "safe"=&gt;true}}}}
+&gt;&gt; Populater.new.add_pokemon 1000
+nil
+</code></pre>
 
 <p>With the production database populated, we need to set an environment variable in our production application defining the environment.</p>
 
-
-<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>heroku config:add <span class="nv">MONGOID_ENV</span><span class="o">=</span>production
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="bash">$ heroku config:add MONGOID_ENV=production
+</code></pre>
 
 <p>Now that we&rsquo;ve made changes to the mongoid.yml file, we should commit again and push to Heroku.</p>
 
-
-<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git commit -a -m <span class="s2">&quot;Updating mongoid.yml file for production&quot;</span>
-</span><span class='line'>&hellip;
-</span><span class='line'><span class="nv">$ </span>git push heroku master
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="bash">$ git commit -a -m "Updating mongoid.yml file for production"
+...
+$ git push heroku master
+</code></pre>
 
 <p>And that&rsquo;s it! Check your Heroku URL to make sure everything looks okay and call it a day, or make some upgrades as I did for my <a href="http://pokephile.herokuapp.com">personal version of this project</a>.</p>
-
 ]]></content>
   </entry>
   

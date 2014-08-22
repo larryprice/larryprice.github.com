@@ -4,7 +4,7 @@
   <title><![CDATA[Category: upstart | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/upstart/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-22T06:42:13-04:00</updated>
+  <updated>2014-08-22T06:46:57-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -20,70 +20,46 @@
     <id>http://larry-price.com/blog/2013/08/31/using-foreman-to-create-an-upstart-service</id>
     <content type="html"><![CDATA[<p>I just finished my first attempt at deploying a web app to run automatically in the background on a friend&rsquo;s server. Pretty easy, really. The first thing I did was install <a href="https://github.com/ddollar/foreman">foreman</a>. Assuming you have ruby and rubygems installed:</p>
 
-
-<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo gem install foreman
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="bash">$ sudo gem install foreman
+</code></pre>
 
 <p>Next I needed to give foreman the commands to start my app. I created a file in the root of my project directory called &lsquo;Procfile&rsquo; and gave it the steps I would run to start my app manually. For the sake of simplicity, let&rsquo;s say I run my app pretty barebones:</p>
 
-
-<p><figure class='code'><figcaption><span>Procfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>web: bundle <span class="nb">exec </span>rackup
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="bash Procfile">web: bundle exec rackup
+</code></pre>
 
 <p>Now when I run <code>foreman start</code>, foreman will use <a href="http://bundler.io/">Bundler</a> to execute rackup with the correct gems in my Gemfile. Now exporting upstart config files is pretty easy.</p>
 
-
-<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo foreman <span class="nb">export </span>upstart &ndash;app<span class="o">=</span>MyApp &ndash;user<span class="o">=</span>root /etc/init
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="bash">$ sudo foreman export upstart --app=MyApp --user=root /etc/init
+</code></pre>
 
 <p>That command creates the .conf files needed for upstart to control the service called &lsquo;MyApp&rsquo; as the user &lsquo;root.&rsquo; It puts all the .conf files in <code>/etc/init</code> (which is where Ubuntu puts such things) and will create a default log directory in <code>/var/log/MyApp</code>. Now I can control my service by running <code>service MyApp start</code>, <code>service MyApp stop</code>, <code>service MyApp restart</code>, and <code>service MyApp status</code>. Hooray for me.</p>
 
-
-
-
 <p>But I need to run my app in two ways: in dev mode on a local port with my dev database, and I need to run it in production mode using port 80 and the production database. I&rsquo;ve also heard that using <a href="https://en.wikipedia.org/wiki/WEBrick">webrick</a> (the default server installed with rackup) is great for develpment, but I should be using something else for my production server. So I made some config files for foreman:</p>
 
+<pre><code class="bash development.env">RACK_ENV=development
+PORT=9292
+SERVER=rackup
+</code></pre>
 
-<p><figure class='code'><figcaption><span>development.env</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">RACK_ENV</span><span class="o">=</span>development
-</span><span class='line'><span class="nv">PORT</span><span class="o">=</span>9292
-</span><span class='line'><span class="nv">SERVER</span><span class="o">=</span>rackup
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p><figure class='code'><figcaption><span>production.env</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">RACK_ENV</span><span class="o">=</span>production
-</span><span class='line'><span class="nv">PORT</span><span class="o">=</span>80
-</span><span class='line'><span class="nv">SERVER</span><span class="o">=</span>unicorn
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="bash production.env">RACK_ENV=production
+PORT=80
+SERVER=unicorn
+</code></pre>
 
 <p>And I change my Procfile to:</p>
 
-
-<p><figure class='code'><figcaption><span>Procfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>web: bundle <span class="nb">exec</span> <span class="nv">$SERVER</span> -p <span class="nv">$PORT</span> -E <span class="nv">$RACK_ENV</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="bash Procfile">web: bundle exec $SERVER -p $PORT -E $RACK_ENV
+</code></pre>
 
 <p>Ridiculously configured. Now when I run <code>foreman start</code>, it will error out. I need to specify my environment file:</p>
 
-
-<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>foreman start -e production.env
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="bash">$ foreman start -e production.env
+</code></pre>
 
 <p>Now foreman will use Bundler to startup the server specified in <code>$SERVER</code>, run the app on port <code>$PORT</code> (-p), and will pass through the environment listed as <code>$RACK_ENV</code> to my application (-E), allowing my app to do whatever configuration it does given the current environment. Power to the people.</p>
 
-
-
-
 <p><a href="http://michaelvanrooijen.com/articles/2011/06/08-managing-and-monitoring-your-ruby-application-with-foreman-and-upstart/">I found that this guy</a> does a lot more complicated stuff with Foreman, if you need more.</p>
-
 ]]></content>
   </entry>
   

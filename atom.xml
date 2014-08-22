@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="http://larry-price.com/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-22T06:42:13-04:00</updated>
+  <updated>2014-08-22T06:46:57-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -70,7 +70,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Since I&rsquo;ve pulled client.js locally, I&rsquo;m no longer sending my developer token when I load the file. I manually set my key when the page loads, but it could just as easily be done in my <code>authorize</code> method above.</p>
+<p>Since I&rsquo;ve pulled client.js locally, I&rsquo;m no longer sending my developer token when I load the file. I manually set my key when the page loads, but this could just as easily be done in my <code>authorize</code> method above.</p>
 
 <figure class='code'><figcaption><span>layout.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: javascript | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-22T06:42:13-04:00</updated>
+  <updated>2014-08-22T06:46:57-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -18,76 +18,45 @@
     <link href="http://larry-price.com/blog/2014/08/22/fixing-some-minor-bugs-in-trellos-client-dot-js/"/>
     <updated>2014-08-22T06:08:21-04:00</updated>
     <id>http://larry-price.com/blog/2014/08/22/fixing-some-minor-bugs-in-trellos-client-dot-js</id>
-    <content type="html"><![CDATA[<p>I&rsquo;m a huge fan of <a href="https://trello.com">Trello</a>, and I recently created an app to analyze Trello data called <a href="https://ollertapp.com">Ollert</a>. Ollert makes heavy use of the <a href="http://trello.com/docs">Trello API</a>. I&rsquo;ve written previously about <a href="http://larry-price.com/blog/2014/03/18/connecting-to-the-trello-api/">using Trello&rsquo;s client.js to connect to the Trello API</a>.</p>
-
-
-
+    <content type="html"><![CDATA[<p>I&rsquo;m a huge fan of <a href="https://trello.com">Trello</a>, and I recently created an app to analyze Trello data called <a href="https://ollertapp.com">Ollert</a>. Ollert makes heavy use of the <a href="http://trello.com/docs">Trello API</a>. I&rsquo;ve written previously about <a href="/blog/2014/03/18/connecting-to-the-trello-api/">using Trello&rsquo;s client.js to connect to the Trello API</a>.</p>
 
 <p>During some ad-hoc testing of opening/closing the Trello authorization popup, I found that clicking &ldquo;Deny&rdquo; on the popup, reopening it, and then clicking &ldquo;Connect&rdquo; resulted in me not being able to connect. I spent some time looking into workarounds and I even contacted Trello support. After studying <a href="https://trello.com/1/client.coffee">client.coffee</a>, I eventually found the problem: the Trello client keeps around an anonymous object called <code>ready</code> that stores some session data. When a user clicks &lsquo;Deny&rsquo;, this <code>ready</code> object remembers. I was able to fix the Deny/Allow issue by pulling down a local copy of client.js and making an interface change to the module:</p>
 
+<pre><code class="javascript client.js">clearReady: function() {
+  ready = {}
+}
+</code></pre>
 
-<p><figure class='code'><figcaption><span>client.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">clearReady</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">ready</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>From <a href="/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">another issue I was having</a>, I already call <code>Trello.deauthorize()</code> before my application attempts to contact Trello, so now I also make a call to <code>Trello.clearReady()</code>. My <code>authorize()</code> function looks like this:</p>
 
-<p>From <a href="http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">another issue I was having</a>, I already call <code>Trello.deauthorize()</code> before my application attempts to contact Trello, so now I also make a call to <code>Trello.clearReady()</code>. My <code>authorize()</code> function looks like this:</p>
+<pre><code class="javascript trello-controller.js">var authorize = function (expires, callback) {
+  Trello.deauthorize();
+  Trello.clearReady();
 
+  Trello.authorize({
+    name: "Ollert",
+    type: "popup",
+    interactive: true,
+    expiration: expires,
+    persist: false,
+    success: callback,
+    scope: {
+      read: true,
+      write: true
+    }
+  });
+}
+</code></pre>
 
-<p><figure class='code'><figcaption><span>trello-controller.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">authorize</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">expires</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">Trello</span><span class="p">.</span><span class="nx">deauthorize</span><span class="p">();</span>
-</span><span class='line'>  <span class="nx">Trello</span><span class="p">.</span><span class="nx">clearReady</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">Trello</span><span class="p">.</span><span class="nx">authorize</span><span class="p">({</span>
-</span><span class='line'>    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Ollert&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;popup&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">interactive</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">expiration</span><span class="o">:</span> <span class="nx">expires</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">persist</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">success</span><span class="o">:</span> <span class="nx">callback</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">scope</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-</span><span class='line'>      <span class="nx">write</span><span class="o">:</span> <span class="kc">true</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">});</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>Since I&rsquo;ve pulled client.js locally, I&rsquo;m no longer sending my developer token when I load the file. I manually set my key when the page loads, but this could just as easily be done in my <code>authorize</code> method above.</p>
 
-<p>Since I&rsquo;ve pulled client.js locally, I&rsquo;m no longer sending my developer token when I load the file. I manually set my key when the page loads, but it could just as easily be done in my <code>authorize</code> method above.</p>
-
-
-<p><figure class='code'><figcaption><span>layout.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">:</span><span class="nx">javascript</span>
-</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">Trello</span><span class="p">.</span><span class="nx">setKey</span><span class="p">(</span><span class="s2">&quot;#{ENV[&#39;PUBLIC_KEY&#39;]}&quot;</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="javascript layout.haml">:javascript
+  $(document).ready(function() {
+    Trello.setKey("#{ENV['PUBLIC_KEY']}")
+  });
+</code></pre>
 
 <p>You can find a copy of my modified client.js <a href="https://gist.github.com/larryprice/1e67ddcd53c686fbc1de">in this Gist</a>.</p>
-
 ]]></content>
   </entry>
   
@@ -98,256 +67,134 @@
     <id>http://larry-price.com/blog/2014/08/05/javascript-testing-with-capybara-and-cucumber</id>
     <content type="html"><![CDATA[<p>In the past, I had written off testing the Javascript in my <a href="http://www.sinatrarb.com/">Sinatra</a> apps as being not worth the pain of setting up. That was pretty naïve of me, as setting up web drivers in <a href="https://github.com/jnicklas/capybara">Capybara</a> is actually pretty easy.</p>
 
-
-
-
-<p>For this post, I assume you already have a capybara-cucumber project set up. If you need help setting up your first tests, consider checking out <a href="http://larry-price.com/blog/categories/capybara/">some of my other blog posts</a> on the subject.</p>
-
-
-
+<p>For this post, I assume you already have a capybara-cucumber project set up. If you need help setting up your first tests, consider checking out <a href="/blog/categories/capybara/">some of my other blog posts</a> on the subject.</p>
 
 <h4>Selenium</h4>
 
-
-
-
 <p>Selenium is the default Javascript driver for capybara. To install either run <code>gem install selenium-webdriver</code> or toss <code>selenium-webdriver</code> into your <code>Gemfile</code> and run <code>bundle install</code>.</p>
-
-
-
 
 <p>If you want to run all of your tests with Javascript enabled, you can change the default driver in your <code>env.rb</code> file. For example:</p>
 
+<pre><code class="ruby env.rb">ENV['RACK_ENV'] = 'test'
 
-<p><figure class='code'><figcaption><span>env.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;RACK_ENV&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">require_relative</span> <span class="s1">&#39;../../../web&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;selenium-webdriver&#39;</span>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;capybara/cucumber&#39;</span>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;rspec&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="no">Ollert</span>
-</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">default_wait_time</span> <span class="o">=</span> <span class="mi">10</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># run all tests using Javascript</span>
-</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">default_driver</span> <span class="o">=</span> <span class="ss">:selenium</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">World</span> <span class="k">do</span>
-</span><span class='line'>  <span class="no">Ollert</span><span class="o">.</span><span class="n">new</span>
-</span><span class='line'>  <span class="no">Mongoid</span><span class="o">.</span><span class="n">purge!</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></p>
+require_relative '../../../web'
+
+require 'selenium-webdriver'
+require 'capybara/cucumber'
+require 'rspec'
+
+Capybara.app = Ollert
+Capybara.default_wait_time = 10
+
+# run all tests using Javascript
+Capybara.default_driver = :selenium
+
+World do
+  Ollert.new
+  Mongoid.purge!
+end
+</code></pre>
 
 <p>Using Selenium means that your tests will be running using Firefox. Unfortunately, this makes them much, much slower than when you were running the tests using rspec. What I recommend is to limit yourself to only use the Javascript driver when you need to. To accomplish this, we change our <code>env.rb</code> file as such:</p>
 
+<pre><code class="ruby env.rb">ENV['RACK_ENV'] = 'test'
 
-<p><figure class='code'><figcaption><span>env.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;RACK_ENV&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">require_relative</span> <span class="s1">&#39;../../../web&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;selenium-webdriver&#39;</span>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;capybara/cucumber&#39;</span>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;rspec&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="no">Ollert</span>
-</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">default_wait_time</span> <span class="o">=</span> <span class="mi">10</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># use the following web driver to run tests</span>
-</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">javascript_driver</span> <span class="o">=</span> <span class="ss">:selenium</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">World</span> <span class="k">do</span>
-</span><span class='line'>  <span class="no">Ollert</span><span class="o">.</span><span class="n">new</span>
-</span><span class='line'>  <span class="no">Mongoid</span><span class="o">.</span><span class="n">purge!</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></p>
+require_relative '../../../web'
 
-<p>And add the <code>@javascript</code> tag to our Cucumber feature files. I&rsquo;ve written <a href="http://larry-price.com/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">about using tags in the past</a>, and they are incredibly useful. For example:</p>
+require 'selenium-webdriver'
+require 'capybara/cucumber'
+require 'rspec'
 
+Capybara.app = Ollert
+Capybara.default_wait_time = 10
 
-<p><figure class='code'><figcaption><span>DoStuff.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Do Stuff</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Nothing happens with Javascript disbaled</span>
-</span><span class='line'><span class="k">  Given </span><span class="nf">I visit the home page</span>
-</span><span class='line'><span class="nf">  </span><span class="k">When </span><span class="nf">I click &quot;</span><span class="s">Where are they?!</span><span class="nf">&quot;</span>
-</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">I should not see &quot;</span><span class="s">I&#39;m Batman.</span><span class="nf">&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nt">@javascript</span><span class="nf"></span>
-</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Correct text is displayed with Javascript enabled</span>
-</span><span class='line'><span class="k">  Given </span><span class="nf">I visit the home page</span>
-</span><span class='line'><span class="nf">  </span><span class="k">When </span><span class="nf">I click &quot;</span><span class="s">Where are they?!</span><span class="nf">&quot;</span>
-</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">I should see &quot;</span><span class="s">I&#39;m Batman.</span><span class="nf">&quot;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+# use the following web driver to run tests
+Capybara.javascript_driver = :selenium
+
+World do
+  Ollert.new
+  Mongoid.purge!
+end
+</code></pre>
+
+<p>And add the <code>@javascript</code> tag to our Cucumber feature files. I&rsquo;ve written <a href="/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">about using tags in the past</a>, and they are incredibly useful. For example:</p>
+
+<pre><code class="cucumber DoStuff.feature">Feature: Do Stuff
+
+Scenario: Nothing happens with Javascript disbaled
+  Given I visit the home page
+  When I click "Where are they?!"
+  Then I should not see "I'm Batman."
+
+@javascript
+Scenario: Correct text is displayed with Javascript enabled
+  Given I visit the home page
+  When I click "Where are they?!"
+  Then I should see "I'm Batman."
+</code></pre>
 
 <p>Assuming there is some Javascript activated by clicking &ldquo;Where are they?!&rdquo; that displays the text &ldquo;I&rsquo;m Batman.&rdquo;, both of the above scenarios will pass. This is because none of the Javascript will run in the first scenario, so the text will not be displayed. In the second scenario, Capybara knows to use the webdriver we set up previously when it sees the <code>@javascript</code> tag.</p>
 
-
-
-
 <h4>Poltergeist</h4>
-
-
-
 
 <p><a href="https://github.com/teampoltergeist/poltergeist">Poltergeist</a> is the first &ldquo;headless&rdquo; web driver I tried. Usage is mostly identical to usage for Selenium, so I&rsquo;ll focus on installation here.</p>
 
-
-
-
 <p>Poltergeist uses <a href="http://phantomjs.org/">PhantomJS</a>, so we need to start by downloading the binary (<a href="https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-i686.tar.bz2">32-bit</a> or <a href="https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-x86_64.tar.bz2">64-bit</a>) and putting it in our path. On my Linux machine, I extracted the contents of the download and copied <code>bin/phantomjs</code> to my <code>/usr/local/bin</code> directory, which I already have in my path. You can also copy it directly to <code>/usr/bin</code> if you like.</p>
-
-
-
 
 <p>On the ruby side, we do that same old song and dance: either do <code>gem install poltergeist</code> or add <code>poltergeist</code> to your <code>Gemfile</code> and run <code>bundle install</code>. Edit your <code>env.rb</code>:</p>
 
+<pre><code class="cucumber env.rb">ENV['RACK_ENV'] = 'test'
 
-<p><figure class='code'><figcaption><span>env.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="nf">ENV[&#39;RACK_ENV&#39;] = &#39;test&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">require_relative &#39;../../../web&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">require &#39;capybara/poltergeist&#39;</span>
-</span><span class='line'><span class="nf">require &#39;capybara/cucumber&#39;</span>
-</span><span class='line'><span class="nf">require &#39;rspec&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">Capybara.app = Ollert</span>
-</span><span class='line'><span class="nf">Capybara.default_wait_time = </span><span class="s">10</span><span class="nf"></span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># use the following web driver to run tests</span><span class="nf"></span>
-</span><span class='line'><span class="nf">Capybara.javascript_driver = :poltergeist</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">World do</span>
-</span><span class='line'><span class="nf">  Ollert.new</span>
-</span><span class='line'><span class="nf">  Mongoid.purge!</span>
-</span><span class='line'><span class="nf">end</span>
-</span></code></pre></td></tr></table></div></figure></p>
+require_relative '../../../web'
+
+require 'capybara/poltergeist'
+require 'capybara/cucumber'
+require 'rspec'
+
+Capybara.app = Ollert
+Capybara.default_wait_time = 10
+
+# use the following web driver to run tests
+Capybara.javascript_driver = :poltergeist
+
+World do
+  Ollert.new
+  Mongoid.purge!
+end
+</code></pre>
 
 <p>Now your Javascript tests should be running using the Poltergeist webdriver. Since Poltergeist is truly headless, your tests will run much faster than they did while using Selenium, but you won&rsquo;t be able to see what&rsquo;s going on while your tests run. There are some slight syntactic differences between the way Poltergeist and Selenium handles separate windows, but other than that they are extremely similar.</p>
 
-
-
-
 <h4>Webkit</h4>
-
-
-
 
 <p><a href="https://github.com/thoughtbot/capybara-webkit">Capybara-webkit</a> is where I eventually landed for running my own tests, after having issues accessing other windows with Poltergeist. Capybara-webkit is also headless and relies on <code>QtWebKit</code> to render pages. So, for starters, you&rsquo;re going to have to install <code>qtwebkit</code>. This has a varied degree of difficulty depending on which operating system you&rsquo;re using, but I didn&rsquo;t have too many problems in Ubuntu once I figured out which library I needed. For help, check <a href="https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit">the guide</a>. On my machine:</p>
 
-
-<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install libqtwebkit-dev
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="bash">$ sudo apt-get install libqtwebkit-dev
+</code></pre>
 
 <p>Once more: either do <code>gem install capybara-webkit</code> or add <code>capybara-webkit</code> to your <code>Gemfile</code> and run <code>bundle install</code>. Edit your <code>env.rb</code>:</p>
 
+<pre><code class="cucumber env.rb">ENV['RACK_ENV'] = 'test'
 
-<p><figure class='code'><figcaption><span>env.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="nf">ENV[&#39;RACK_ENV&#39;] = &#39;test&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">require_relative &#39;../../../web&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">require &#39;capybara/cucumber&#39;</span>
-</span><span class='line'><span class="nf">require &#39;capybara/webkit&#39;</span>
-</span><span class='line'><span class="nf">require &#39;rspec&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">Capybara.app = Ollert</span>
-</span><span class='line'><span class="nf">Capybara.default_wait_time = </span><span class="s">10</span><span class="nf"></span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># use the following web driver to run tests</span><span class="nf"></span>
-</span><span class='line'><span class="nf">Capybara.javascript_driver = :webkit</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">World do</span>
-</span><span class='line'><span class="nf">  Ollert.new</span>
-</span><span class='line'><span class="nf">  Mongoid.purge!</span>
-</span><span class='line'><span class="nf">end</span>
-</span></code></pre></td></tr></table></div></figure></p>
+require_relative '../../../web'
+
+require 'capybara/cucumber'
+require 'capybara/webkit'
+require 'rspec'
+
+Capybara.app = Ollert
+Capybara.default_wait_time = 10
+
+# use the following web driver to run tests
+Capybara.javascript_driver = :webkit
+
+World do
+  Ollert.new
+  Mongoid.purge!
+end
+</code></pre>
 
 <p>Again, you won&rsquo;t be able to see your tests run, but they should be pretty snappy. I was able to use capybara-webkit to tackle some window issues I was having, but (as of this writing) capybara-webkit has not caught up with more modern capybara window-switching syntax. Other than that, the syntax is identical to the other drivers I&rsquo;ve discussed for common cases. If you&rsquo;re running capybara-webkit on a CI server, see <a href="http://blog.55minutes.com/2013/09/running-capybara-webkit-specs-with-jenkins-ci/">this post about using Xvfb</a>.</p>
-
 ]]></content>
   </entry>
   
@@ -358,92 +205,52 @@
     <id>http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client</id>
     <content type="html"><![CDATA[<p>In my <a href="https://ollertapp.com">application</a>, a user can connect to Trello without logging in. Whenever this &ldquo;anonymous&rdquo; user hits the landing page, I attempt to force the <a href="https://trello.com/docs/gettingstarted/clientjs.html">Trello client</a> to authorize the user again. By doing this, the user can return to the landing page whenever he or she likes to switch usernames. My authorize code looks like this:</p>
 
-
-<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">AuthenticateTrelloAlways</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">Trello</span><span class="p">.</span><span class="nx">authorize</span><span class="p">({</span>
-</span><span class='line'>    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Ollert&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;popup&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">interactive</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">expiration</span><span class="o">:</span> <span class="s2">&quot;1hour&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">persist</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">success</span><span class="o">:</span> <span class="nx">onAuthorizeSuccessful</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">scope</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span>
-</span><span class='line'>    <span class="p">},</span>
-</span><span class='line'>  <span class="p">});</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="javascript">function AuthenticateTrelloAlways() {
+  Trello.authorize({
+    name: "Ollert",
+    type: "popup",
+    interactive: true,
+    expiration: "1hour",
+    persist: false,
+    success: onAuthorizeSuccessful,
+    scope: {
+      read: true
+    },
+  });
+}
+</code></pre>
 
 <p>This works oh-so-wonderfully in Chrome and Firefox, but, even during the hackathon which spawned <a href="https://ollertapp.com">Ollert</a>, we noticed that IE10/11 were causing some unexpected issues. Authorization would work the first time the user hit the landing page, but on subsequent visits telling Trello to Allow or Deny access resulted in the popup showing a white screen and never calling my callback function. Closing and reopening IE would allow me to authorize once, presumably until the &ldquo;1hour&rdquo; that I requested the original token for expired. I also verified this problem existed in IE9.</p>
 
-
-
-
 <p>After several hours tweeting obscenities about IE, I stumbled upon the answer while browsing the source code for Trello&rsquo;s <a href="https://trello.com/1/client.coffee">client.coffee</a>. About one third of the way through the code, I found this function:</p>
 
-
-<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">#</span> <span class="nx">Clear</span> <span class="nx">any</span> <span class="nx">existing</span> <span class="nx">authorization</span>
-</span><span class='line'><span class="nx">deauthorize</span><span class="o">:</span> <span class="o">-&gt;</span>
-</span><span class='line'>  <span class="nx">token</span> <span class="o">=</span> <span class="kc">null</span>
-</span><span class='line'>  <span class="nx">writeStorage</span><span class="p">(</span><span class="s2">&quot;token&quot;</span><span class="p">,</span> <span class="nx">token</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">return</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="javascript"># Clear any existing authorization
+deauthorize: -&gt;
+  token = null
+  writeStorage("token", token)
+  return
+</code></pre>
 
 <p>All this code does is unset the class variable <code>token</code> and unset the local store variable of the same name. So I changed my <code>AuthenticateTrelloAlways()</code> method:</p>
 
+<pre><code class="javascript">function AuthenticateTrelloAlways() {
+  Trello.deauthorize();
 
-<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">AuthenticateTrelloAlways</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">Trello</span><span class="p">.</span><span class="nx">deauthorize</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">Trello</span><span class="p">.</span><span class="nx">authorize</span><span class="p">({</span>
-</span><span class='line'>    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Ollert&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;popup&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">interactive</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">expiration</span><span class="o">:</span> <span class="s2">&quot;1hour&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">persist</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">success</span><span class="o">:</span> <span class="nx">onAuthorizeSuccessful</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">scope</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span>
-</span><span class='line'>    <span class="p">},</span>
-</span><span class='line'>  <span class="p">});</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+  Trello.authorize({
+    name: "Ollert",
+    type: "popup",
+    interactive: true,
+    expiration: "1hour",
+    persist: false,
+    success: onAuthorizeSuccessful,
+    scope: {
+      read: true
+    },
+  });
+}
+</code></pre>
 
 <p>Voilà. Why does this only happen in IE? I was originally going to blame the local store, but, since I was able to reproduce the defect in IE9 (no HTML5), I no longer believe that to be the case. I&rsquo;m currently resigned to chalk it up as IE just being IE.</p>
-
 ]]></content>
   </entry>
   
@@ -454,456 +261,244 @@
     <id>http://larry-price.com/blog/2014/06/04/jasmine-a-whole-new-world-of-javascript-testing</id>
     <content type="html"><![CDATA[<p><a href="https://jasmine.github.io/">Jasmine</a>: a headless Javascript testing library written entirely in Javascript. With similarities to <a href="http://rspec.info">rspec</a>, I&rsquo;ve quickly grown attached to this framework and have been looking for opportunities to discuss it. <a href="https://jasmine.github.io/2.0/introduction.html">Version 2.0</a> was recently released, so I&rsquo;ll be focusing on the standalone 2.0 concepts. To get started, download and uncompress <a href="https://github.com/pivotal/jasmine/tree/master/dist">the standalone distribution</a>.</p>
 
-
-
-
 <p>The uncompressed directory structure will have three subdirectories: <code>spec</code>, <code>src</code>, and <code>lib</code>. <code>lib</code> contains all the Jasmine source code. <code>src</code> contains some sample Javascript class that is tested by test files contained in <code>spec</code>. Outside of the subdirectories is the special file <code>SpecRunner.html</code>. This file is how we will run our tests.</p>
-
-
-
 
 <p>Let&rsquo;s start a new pizza place.</p>
 
-
-
-
 <p>We&rsquo;ll need Pizza. A Pizza will need several things: size, style, toppings, and price. We&rsquo;ll have a few styles available, but also allow our guests to request additional toppings. We&rsquo;ll also set the price based on the size and number of toppings. Create the files <code>src/pizza.js</code> and <code>spec/PizzaSpec.js</code> and add them to <code>SpecRunner.html</code>.</p>
-
-
-
 
 <p>We&rsquo;ll start by being able to get the styles from Pizza.</p>
 
+<pre><code class="js spec/PizzaSpec.js">describe("Pizza", function() {
+  var pizza;
 
-<p><figure class='code'><figcaption><span>spec/PizzaSpec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s2">&quot;Pizza&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">pizza</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">beforeEach</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">pizza</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Pizza</span><span class="p">();</span>
-</span><span class='line'>  <span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;should give a choice of styles&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getStyles</span><span class="p">()).</span><span class="nx">toContain</span><span class="p">(</span><span class="s2">&quot;meat lovers&quot;</span><span class="p">);</span>
-</span><span class='line'>    <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getStyles</span><span class="p">()).</span><span class="nx">toContain</span><span class="p">(</span><span class="s2">&quot;veg head&quot;</span><span class="p">);</span>
-</span><span class='line'>    <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getStyles</span><span class="p">()).</span><span class="nx">toContain</span><span class="p">(</span><span class="s2">&quot;supreme&quot;</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">});</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure></p>
+  beforeEach(function() {
+    pizza = new Pizza();
+  });
+
+  it("should give a choice of styles", function() {
+    expect(pizza.getStyles()).toContain("meat lovers");
+    expect(pizza.getStyles()).toContain("veg head");
+    expect(pizza.getStyles()).toContain("supreme");
+  });
+});
+</code></pre>
 
 <p>The syntax is just lovely: We use <code>describe</code> to set visual context, <code>beforeEach</code> to perform a task before each spec, and <code>it</code> to encapsulate a test. The results of running <code>SpecRunner.html</code> in my browser:</p>
 
-
-<p><figure class='code'><figcaption><span>spec/PizzaSpec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Pizza</span> <span class="nx">should</span> <span class="nx">give</span> <span class="nx">a</span> <span class="nx">choice</span> <span class="nx">of</span> <span class="nx">styles</span>
-</span><span class='line'>  <span class="nx">TypeError</span><span class="o">:</span> <span class="nx">pizza</span><span class="p">.</span><span class="nx">getStyles</span> <span class="nx">is</span> <span class="nx">not</span> <span class="nx">a</span> <span class="kd">function</span> <span class="k">in</span> <span class="nx">file</span><span class="o">:</span><span class="c1">///home/lrp/docs/jasmine/spec/PizzaSpec.js (line 9)</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code>Pizza should give a choice of styles
+  TypeError: pizza.getStyles is not a function in file:///home/lrp/docs/jasmine/spec/PizzaSpec.js (line 9)
+</code></pre>
 
 <p>Fixing it:</p>
 
-
-<p><figure class='code'><figcaption><span>src/pizza.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">Pizza</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">getStyles</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;meat lovers&quot;</span><span class="p">,</span> <span class="s2">&quot;veg head&quot;</span><span class="p">,</span> <span class="s2">&quot;supreme&quot;</span><span class="p">];</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="js src/pizza.js">function Pizza() {
+  this.getStyles = function() {
+    return ["meat lovers", "veg head", "supreme"];
+  }
+}
+</code></pre>
 
 <p>And the results:</p>
 
-
-<p><figure class='code'><figcaption><span>src/pizza.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Pizza</span>
-</span><span class='line'>    <span class="nx">should</span> <span class="nx">give</span> <span class="nx">a</span> <span class="nx">choice</span> <span class="nx">of</span> <span class="nx">styles</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code>Pizza
+    should give a choice of styles
+</code></pre>
 
 <p>Let&rsquo;s set the toppings:</p>
 
+<pre><code class="js spec/PizzaSpec.js">describe("Pizza", function() {
+  // ...
 
-<p><figure class='code'><figcaption><span>spec/PizzaSpec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s2">&quot;Pizza&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="c1">// &hellip;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">describe</span><span class="p">(</span><span class="s2">&quot;toppings&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;should have no toppings when no style and no extras given&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">pizza</span><span class="p">.</span><span class="nx">initialize</span><span class="p">();</span>
-</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">().</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;should have only extras when no style and extras given&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="kd">var</span> <span class="nx">extras</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;pineapple&quot;</span><span class="p">,</span> <span class="s2">&quot;edamame&quot;</span><span class="p">,</span> <span class="s2">&quot;cheeseburger&quot;</span><span class="p">]</span>
-</span><span class='line'>      <span class="nx">pizza</span><span class="p">.</span><span class="nx">initialize</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">extras</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">().</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="nx">extras</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
-</span><span class='line'>      <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">extras</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">()).</span><span class="nx">toContain</span><span class="p">(</span><span class="nx">extras</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;should have special toppings when given style and extras&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="kd">var</span> <span class="nx">extras</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;pineapple&quot;</span><span class="p">,</span> <span class="s2">&quot;edamame&quot;</span><span class="p">,</span> <span class="s2">&quot;cheeseburger&quot;</span><span class="p">];</span>
-</span><span class='line'>      <span class="nx">pizza</span><span class="p">.</span><span class="nx">initialize</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="s2">&quot;veg head&quot;</span><span class="p">,</span> <span class="nx">extras</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">().</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;should have special toppings when given style&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="kd">var</span> <span class="nx">extras</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;pineapple&quot;</span><span class="p">,</span> <span class="s2">&quot;edamame&quot;</span><span class="p">,</span> <span class="s2">&quot;cheeseburger&quot;</span><span class="p">];</span>
-</span><span class='line'>      <span class="nx">pizza</span><span class="p">.</span><span class="nx">initialize</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="s2">&quot;veg head&quot;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">().</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>  <span class="p">});</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure></p>
+  describe("toppings", function() {
+    it("should have no toppings when no style and no extras given", function() {
+      pizza.initialize();
+      expect(pizza.getToppings().length).toBe(0);
+    });
+
+    it("should have only extras when no style and extras given", function() {
+      var extras = ["pineapple", "edamame", "cheeseburger"]
+      pizza.initialize(null, null, extras);
+
+      expect(pizza.getToppings().length).toBe(extras.length);
+      for (var i = 0; i &lt; extras.length; i++) {
+        expect(pizza.getToppings()).toContain(extras[i]);
+      }
+    });
+
+    it("should have special toppings when given style and extras", function() {
+      var extras = ["pineapple", "edamame", "cheeseburger"];
+      pizza.initialize(null, "veg head", extras);
+
+      expect(pizza.getToppings().length).toBe(7);
+    });
+
+    it("should have special toppings when given style", function() {
+      var extras = ["pineapple", "edamame", "cheeseburger"];
+      pizza.initialize(null, "veg head");
+
+      expect(pizza.getToppings().length).toBe(4);
+    });
+  });
+});
+</code></pre>
 
 <p>For these tests, I nested a describe block to give better context to what I&rsquo;m testing. Fixing the tests:</p>
 
+<pre><code class="js src/pizza.js">function Pizza() {
+  // ...
 
-<p><figure class='code'><figcaption><span>src/pizza.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">Pizza</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="c1">// &hellip;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">size</span><span class="p">,</span> <span class="nx">toppings</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kd">function</span> <span class="nx">findToppings</span><span class="p">(</span><span class="nx">style</span><span class="p">,</span> <span class="nx">extras</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">toppings</span> <span class="o">=</span> <span class="nx">extras</span> <span class="o">?</span> <span class="nx">extras</span> <span class="o">:</span> <span class="p">[];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">switch</span> <span class="p">(</span><span class="nx">style</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">case</span> <span class="p">(</span><span class="s2">&quot;meat lovers&quot;</span><span class="p">)</span><span class="o">:</span>
-</span><span class='line'>        <span class="nx">toppings</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">&quot;ham&quot;</span><span class="p">,</span> <span class="s2">&quot;pepperoni&quot;</span><span class="p">,</span> <span class="s2">&quot;bacon&quot;</span><span class="p">,</span> <span class="s2">&quot;sausage&quot;</span><span class="p">);</span>
-</span><span class='line'>        <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>      <span class="k">case</span> <span class="p">(</span><span class="s2">&quot;veg head&quot;</span><span class="p">)</span><span class="o">:</span>
-</span><span class='line'>        <span class="nx">toppings</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">&quot;onion&quot;</span><span class="p">,</span> <span class="s2">&quot;tomato&quot;</span><span class="p">,</span> <span class="s2">&quot;pepper&quot;</span><span class="p">,</span> <span class="s2">&quot;olive&quot;</span><span class="p">);</span>
-</span><span class='line'>        <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>      <span class="k">case</span> <span class="p">(</span><span class="s2">&quot;supreme&quot;</span><span class="p">)</span><span class="o">:</span>
-</span><span class='line'>        <span class="nx">toppings</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">&quot;pepperoni&quot;</span><span class="p">,</span> <span class="s2">&quot;onion&quot;</span><span class="p">,</span> <span class="s2">&quot;sausage&quot;</span><span class="p">,</span> <span class="s2">&quot;olive&quot;</span><span class="p">);</span>
-</span><span class='line'>        <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">getToppings</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nx">toppings</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">initialize</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">pizzaSize</span><span class="p">,</span> <span class="nx">style</span><span class="p">,</span> <span class="nx">extras</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">size</span> <span class="o">=</span> <span class="nx">pizzaSize</span><span class="p">;</span>
-</span><span class='line'>    <span class="nx">findToppings</span><span class="p">(</span><span class="nx">style</span><span class="p">,</span> <span class="nx">extras</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">};</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+  var size, toppings;
+
+  function findToppings(style, extras) {
+    toppings = extras ? extras : [];
+
+    switch (style) {
+      case ("meat lovers"):
+        toppings.push("ham", "pepperoni", "bacon", "sausage");
+        break;
+      case ("veg head"):
+        toppings.push("onion", "tomato", "pepper", "olive");
+        break;
+      case ("supreme"):
+        toppings.push("pepperoni", "onion", "sausage", "olive");
+        break;
+    }
+  }
+
+  this.getToppings = function() {
+    return toppings;
+  };
+
+  this.initialize = function(pizzaSize, style, extras) {
+    size = pizzaSize;
+    findToppings(style, extras);
+  };
+}
+</code></pre>
 
 <p>And finally, I&rsquo;ll deal with the cost. I&rsquo;ll come out of scope of the nested <code>describe</code> and nest another <code>describe</code>.</p>
 
+<pre><code class="js spec/PizzaSpec.js">describe("Pizza", function() {
+  // ...
 
-<p><figure class='code'><figcaption><span>spec/PizzaSpec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s2">&quot;Pizza&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="c1">// &hellip;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">describe</span><span class="p">(</span><span class="s2">&quot;cost&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;is determined by size and number of toppings&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">pizza</span><span class="p">.</span><span class="nx">initialize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;supreme&quot;</span><span class="p">);</span>
-</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">().</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
-</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getCost</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="mf">7.00</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;is determined by size and number of toppings including extras&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">pizza</span><span class="p">.</span><span class="nx">initialize</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="s2">&quot;meat lovers&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;gyros&quot;</span><span class="p">,</span> <span class="s2">&quot;panchetta&quot;</span><span class="p">]);</span>
-</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">().</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>
-</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getCost</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="mf">12.00</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>  <span class="p">});</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure></p>
+  describe("cost", function() {
+    it("is determined by size and number of toppings", function() {
+      pizza.initialize(10, "supreme");
+      expect(pizza.getToppings().length).toBe(4);
+      expect(pizza.getCost()).toBe(7.00);
+    });
+
+    it("is determined by size and number of toppings including extras", function() {
+      pizza.initialize(18, "meat lovers", ["gyros", "panchetta"]);
+      expect(pizza.getToppings().length).toBe(6);
+      expect(pizza.getCost()).toBe(12.00);
+    });
+  });
+});
+</code></pre>
 
 <p>To fix this test, I&rsquo;ll use my handy-dandy pizza-cost formula:</p>
 
+<pre><code class="js src/pizza.js">function Pizza() {
+ // ...
 
-<p><figure class='code'><figcaption><span>src/pizza.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">Pizza</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'> <span class="c1">// &hellip;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">getCost</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nx">size</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="nx">toppings</span><span class="p">.</span><span class="nx">length</span> <span class="o">*</span> <span class="p">.</span><span class="mi">5</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// &hellip;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+  this.getCost = function() {
+    return size/2 + toppings.length * .5;
+  }
+
+  // ...
+}
+</code></pre>
 
 <p>This is great and all, but a bit simple. What if we wanted to make an ajax call? Fortunately, I can fit that into this example using <a href="http://onlinepizza.se/api/">Online Pizza</a>, the pizza API. Unfortuantely, the API is kind of garbage, but that doesn&rsquo;t make this example any more meaningless. You can <a href="https://github.com/pivotal/jasmine-ajax/raw/master/lib/mock-ajax.js">download jasmine-ajax on Github</a>, and stick it in your <code>spec/</code> directory and add it to <code>SpecRunner.html</code>. At this point I need to include <a href="">jquery</a> as well.</p>
 
-
-
-
 <p>In order to intercept ajax calls, I&rsquo;ll <code>install</code> the ajax mocker in the <code>beforeEach</code> and uninstall it in an <code>afterEach</code>. Then I write my test, which verifies that the ajax call occurred and returns a response.</p>
 
+<pre><code class="js spec/PizzaSpec.js">beforeEach(function() {
+  jasmine.Ajax.install();
 
-<p><figure class='code'><figcaption><span>spec/PizzaSpec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">beforeEach</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">jasmine</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">install</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">pizza</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Pizza</span><span class="p">();</span>
-</span><span class='line'><span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">afterEach</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">jasmine</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">uninstall</span><span class="p">();</span>
-</span><span class='line'><span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s2">&quot;sendOrder&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;returns false for bad pizza&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">pizza</span><span class="p">.</span><span class="nx">sendOrder</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nx">expect</span><span class="p">(</span><span class="nx">jasmine</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">requests</span><span class="p">.</span><span class="nx">mostRecent</span><span class="p">().</span><span class="nx">url</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s2">&quot;<a href="http://onlinepizza.se/api/rest?order.send&amp;quot;">http://onlinepizza.se/api/rest?order.send&amp;quot;</a></span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nx">jasmine</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">requests</span><span class="p">.</span><span class="nx">mostRecent</span><span class="p">().</span><span class="nx">response</span><span class="p">({</span>
-</span><span class='line'>      <span class="nx">status</span><span class="o">:</span> <span class="s2">&quot;500&quot;</span><span class="p">,</span>
-</span><span class='line'>      <span class="nx">contentType</span><span class="o">:</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">,</span>
-</span><span class='line'>      <span class="nx">responseText</span><span class="o">:</span> <span class="s2">&quot;Invalid pizza&quot;</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">orderSent</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;returns true for good pizza&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">pizza</span><span class="p">.</span><span class="nx">sendOrder</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nx">expect</span><span class="p">(</span><span class="nx">jasmine</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">requests</span><span class="p">.</span><span class="nx">mostRecent</span><span class="p">().</span><span class="nx">url</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s2">&quot;<a href="http://onlinepizza.se/api/rest?order.send&amp;quot;">http://onlinepizza.se/api/rest?order.send&amp;quot;</a></span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nx">jasmine</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">requests</span><span class="p">.</span><span class="nx">mostRecent</span><span class="p">().</span><span class="nx">response</span><span class="p">({</span>
-</span><span class='line'>      <span class="nx">status</span><span class="o">:</span> <span class="s2">&quot;200&quot;</span><span class="p">,</span>
-</span><span class='line'>      <span class="nx">contentType</span><span class="o">:</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">,</span>
-</span><span class='line'>      <span class="nx">responseText</span><span class="o">:</span> <span class="s2">&quot;OK&quot;</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">orderSent</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">});</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure></p>
+  pizza = new Pizza();
+});
+
+afterEach(function() {
+  jasmine.Ajax.uninstall();
+});
+
+describe("sendOrder", function() {
+  it("returns false for bad pizza", function() {
+    pizza.sendOrder();
+
+    expect(jasmine.Ajax.requests.mostRecent().url).toBe("http://onlinepizza.se/api/rest?order.send");
+
+    jasmine.Ajax.requests.mostRecent().response({
+      status: "500",
+      contentType: "text/plain",
+      responseText: "Invalid pizza"
+    });
+
+    expect(pizza.orderSent()).toBe(false);
+  });
+
+  it("returns true for good pizza", function() {
+    pizza.sendOrder();
+
+    expect(jasmine.Ajax.requests.mostRecent().url).toBe("http://onlinepizza.se/api/rest?order.send");
+
+    jasmine.Ajax.requests.mostRecent().response({
+      status: "200",
+      contentType: "text/plain",
+      responseText: "OK"
+    });
+
+    expect(pizza.orderSent()).toBe(true);
+  });
+});
+</code></pre>
 
 <p>To get this to work, I add some logic to the <code>Pizza</code> class to set some state based on what the ajax call returns.</p>
 
+<pre><code class="js src/pizza.js">var orderSuccess;
 
-<p><figure class='code'><figcaption><span>src/pizza.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">orderSuccess</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">this</span><span class="p">.</span><span class="nx">sendOrder</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">orderSuccess</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
-</span><span class='line'>    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">url</span><span class="o">:</span> <span class="s2">&quot;<a href="http://onlinepizza.se/api/rest?order.send&amp;quot;">http://onlinepizza.se/api/rest?order.send&amp;quot;</a></span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">success</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">orderSuccess</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">},</span>
-</span><span class='line'>    <span class="nx">error</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">orderSuccess</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">});</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">this</span><span class="p">.</span><span class="nx">orderSent</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">orderSuccess</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+this.sendOrder = function() {
+  orderSuccess = null;
+
+  $.ajax({
+    type: "POST",
+    url: "http://onlinepizza.se/api/rest?order.send",
+    success: function() {
+      orderSuccess = true;
+    },
+    error: function() {
+      orderSuccess = false;
+    }
+  });
+}
+
+this.orderSent = function() {
+  return orderSuccess;
+}
+</code></pre>
 
 <p>Ajax calls tested. By installing Jasmine&rsquo;s ajax mock, all of the ajax calls were intercepted and were not sent to the server at Online Pizza. Any ajax calls that may have been fired by the <code>Pizza</code> class but were not addressed in the spec are ignored. The final test results look something like this:</p>
 
-
-<p><figure class='code'><figcaption><span>src/pizza.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Pizza</span>
-</span><span class='line'>    <span class="nx">sendOrder</span>
-</span><span class='line'>        <span class="nx">returns</span> <span class="kc">false</span> <span class="k">for</span> <span class="nx">bad</span> <span class="nx">pizza</span>
-</span><span class='line'>        <span class="nx">returns</span> <span class="kc">true</span> <span class="k">for</span> <span class="nx">good</span> <span class="nx">pizza</span>
-</span><span class='line'>    <span class="nx">styles</span>
-</span><span class='line'>        <span class="nx">should</span> <span class="nx">give</span> <span class="nx">a</span> <span class="nx">choice</span> <span class="nx">of</span> <span class="nx">styles</span>
-</span><span class='line'>    <span class="nx">toppings</span>
-</span><span class='line'>        <span class="nx">should</span> <span class="nx">have</span> <span class="nx">no</span> <span class="nx">toppings</span> <span class="nx">when</span> <span class="nx">no</span> <span class="nx">style</span> <span class="nx">and</span> <span class="nx">no</span> <span class="nx">extras</span> <span class="nx">given</span>
-</span><span class='line'>        <span class="nx">should</span> <span class="nx">have</span> <span class="nx">only</span> <span class="nx">extras</span> <span class="nx">when</span> <span class="nx">no</span> <span class="nx">style</span> <span class="nx">and</span> <span class="nx">extras</span> <span class="nx">given</span>
-</span><span class='line'>        <span class="nx">should</span> <span class="nx">have</span> <span class="nx">special</span> <span class="nx">toppings</span> <span class="nx">when</span> <span class="nx">given</span> <span class="nx">style</span> <span class="nx">and</span> <span class="nx">extras</span>
-</span><span class='line'>        <span class="nx">should</span> <span class="nx">have</span> <span class="nx">special</span> <span class="nx">toppings</span> <span class="nx">when</span> <span class="nx">given</span> <span class="nx">style</span>
-</span><span class='line'>    <span class="nx">cost</span>
-</span><span class='line'>        <span class="nx">is</span> <span class="nx">determined</span> <span class="nx">by</span> <span class="nx">size</span> <span class="nx">and</span> <span class="nx">number</span> <span class="nx">of</span> <span class="nx">toppings</span>
-</span><span class='line'>        <span class="nx">is</span> <span class="nx">determined</span> <span class="nx">by</span> <span class="nx">size</span> <span class="nx">and</span> <span class="nx">number</span> <span class="nx">of</span> <span class="nx">toppings</span> <span class="nx">including</span> <span class="nx">extras</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code>Pizza
+    sendOrder
+        returns false for bad pizza
+        returns true for good pizza
+    styles
+        should give a choice of styles
+    toppings
+        should have no toppings when no style and no extras given
+        should have only extras when no style and extras given
+        should have special toppings when given style and extras
+        should have special toppings when given style
+    cost
+        is determined by size and number of toppings
+        is determined by size and number of toppings including extras
+</code></pre>
 
 <p>Full sample code <a href="https://github.com/larryprice/jasmine-pizza">available on Github</a>. There&rsquo;s a lot of other interesting things Jasmine can do that I&rsquo;m still learning about. If applicable, I&rsquo;ll try to create a blog post for advanced Jasmine usage in the future.</p>
-
 ]]></content>
   </entry>
   
@@ -914,86 +509,43 @@
     <id>http://larry-price.com/blog/2014/03/18/connecting-to-the-trello-api</id>
     <content type="html"><![CDATA[<p><a href="//trello.com">Trello</a> has a <a href="//trello.com/docs/">pretty sweet API</a>, which we use extensively in our Trello-analysis app <a href="//ollert.herokuapp.com">Ollert</a>. Initially connecting to the Trello API took us a few hours, so I&rsquo;d like to make a record of how we managed to connect.</p>
 
-
-
-
 <p>Making a connection to Trello requires two hashcodes: an application key and a Trello member token. You can generate and view your application key by visiting <a href="//trello.com/1/appKey/generate">https://trello.com/1/appKey/generate</a>.</p>
-
-
-
 
 <p>The member token is something we need to get from the user. There are two ways to get a user&rsquo;s member token: through fragments and through a <strong>postMessage</strong>. You can also request different levels of access (read, write, read+write), and different expiration periods (such as 1 day, 30 days, or never) for member tokens. For the remainder of this writing, I&rsquo;ll be accessing a read-only member token that never expires.</p>
 
-
-
-
 <p>We didn&rsquo;t have a lot of luck with fragments, but the concept is simple enough. You have the user click a link that probably says &ldquo;Connect With Trello&rdquo; which is similar to:</p>
-
-
-
 
 <p><code>https://trello.com/1/authorize?key=applicationkey&amp;name=applicationname&amp;expiration=never&amp;response_type=token</code></p>
 
-
-
-
 <p>At this point, the user is redirected to Trello and given the opportunity to Allow or Deny your application access. Once allowed, the user sees a static Trello page with their member token in plain text. Somehow you&#8221;re supposed to convey to them that they should copy this token and paste it back to you. This has clear drawbacks in usability.</p>
-
-
-
 
 <p>Using the <strong>postMessage</strong> method of accessing a member token was significantly more fruitful. Trello provides a Javascript file named <a href="https://trello.com/docs/gettingstarted/clientjs.html">client.js</a> that does most of the legwork for you. An example:</p>
 
+<pre><code class="haml">%script{src: "//api.trello.com/1/client.js?key=applicationkey"}
 
-<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nt">%script</span><span class="p">{</span><span class="ss">src</span><span class="p">:</span> <span class="s2">&quot;//api.trello.com/1/client.js?key=applicationkey&quot;</span><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>function AuthenticateTrello() {
-</span><span class='line'>  Trello.authorize({
-</span><span class='line'>    name: &quot;YourApplication&quot;,
-</span><span class='line'>    type: &quot;popup&quot;,
-</span><span class='line'>    interactive: true,
-</span><span class='line'>    expiration: &quot;never&quot;,
-</span><span class='line'>    persist: true,
-</span><span class='line'>    success: function () { onAuthorizeSuccessful(); },
-</span><span class='line'>    scope: { write: false, read: true },
-</span><span class='line'>  });
-</span><span class='line'>}
-</span><span class='line'>function onAuthorizeSuccessful() {
-</span><span class='line'>  var token = Trello.token();
-</span><span class='line'>  window.location.replace(&quot;/auth?token=&quot; + token);
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'><span class="nt">%a</span><span class="p">{</span><span class="ss">href</span><span class="p">:</span> <span class="s2">&quot;javascript:void(0)&quot;</span><span class="p">,</span> <span class="ss">onClick</span><span class="p">:</span> <span class="s2">&quot;AuthenticateTrello()&quot;</span><span class="p">}</span>
-</span><span class='line'>  Connect With Trello
-</span></code></pre></td></tr></table></div></figure></p>
+function AuthenticateTrello() {
+  Trello.authorize({
+    name: "YourApplication",
+    type: "popup",
+    interactive: true,
+    expiration: "never",
+    persist: true,
+    success: function () { onAuthorizeSuccessful(); },
+    scope: { write: false, read: true },
+  });
+}
+function onAuthorizeSuccessful() {
+  var token = Trello.token();
+  window.location.replace("/auth?token=" + token);
+}
+
+%a{href: "javascript:void(0)", onClick: "AuthenticateTrello()"}
+  Connect With Trello
+</code></pre>
 
 <p>When the user clicks the link, we have Trello set to activate a &ldquo;popup&rdquo; that will ask them to &ldquo;Allow&rdquo; or &ldquo;Deny&rdquo; our app from accessing their data. When the user allows us access, the popup closes and we hit the &ldquo;onAuthorizeSuccessful&rdquo; method. In my method, I simply redirect them to the <code>/auth</code> route with <code>token</code> manually added to the params list. One of the interesting options listed above is the &ldquo;persist&rdquo; option, which tells Trello whether it should prompt the user for his or her token every time. By telling Trello to persist, the user will only be presented with the popup when he or she needs to reauthenticate.</p>
 
-
-
-
 <p>You can learn more about member tokens from <a href="//trello.com/docs/gettingstarted/authorize.html">https://trello.com/docs/gettingstarted/authorize.html</a>.</p>
-
 ]]></content>
   </entry>
   

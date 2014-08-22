@@ -4,7 +4,7 @@
   <title><![CDATA[Category: css | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/css/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-22T06:42:13-04:00</updated>
+  <updated>2014-08-22T06:46:57-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -20,101 +20,52 @@
     <id>http://larry-price.com/blog/2014/03/24/sticky-footer-with-twitter-bootstrap</id>
     <content type="html"><![CDATA[<p>Sometimes CSS is a total pain.</p>
 
-
-
-
 <p>We encountered a major CSS problem while working on our incredible startup weekend project <a href="//ollert.herokuapp.com">Ollert</a>. We had created a footer that we wanted below all of our content. We threw together some quick HTML and got a footer below all of the main content, and it looked really good when our main content filled up the entire screen.</p>
-
-
-
 
 <p>What about when there was very little data on the screen? Well, then the footer just floated in the middle of the page, staring at us like some kind of psychotic hummingbird, waiting to slice you up when you&rsquo;re not looking. We searched online and found lots of different solutions; None of them worked. The footer just floated there, taunting us; Telling us to cry home to mommy. So we gave up on the prospect for the rest of the afternoon.</p>
 
-
-
-
 <p>A few days after startup weekend, I found the real solution from the good folks at <a href="//getbootstrap.com/2.3.2/examples/sticky-footer.html">Twitter Bootstrap</a> themselves. It&rsquo;s pretty simple, really. Hooray for the internet!</p>
-
-
-
 
 <p>Below is the HTML to create this effect with all the CSS styles embedded. Marked up with plenty of comments.</p>
 
-
-<p><figure class='code'><figcaption><span>index.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="cp">&lt;!DOCTYPE html&gt;</span>
-</span><span class='line'><span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">&quot;en&quot;</span> <span class="na">style=</span><span class="s">&quot;height: 100%;&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;head&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;<a href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css&amp;quot;">http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css&amp;quot;</a></span><span class="nt">&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/head&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;body</span> <span class="na">style=</span><span class="s">&quot;height: 100%;&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;wrap&quot;</span> <span class="na">style=</span><span class="s">&quot;min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -50px;&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>      <span class="c">&lt;!&ndash; All your content goes inside wrap. &ndash;&gt;</span>
-</span><span class='line'>      <span class="c">&lt;!&ndash; The bottom margin must be negative the footer min-height &ndash;&gt;</span>
-</span><span class='line'>      <span class="c">&lt;!&ndash; Footer min-height is set to 50px in this case &ndash;&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;container&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;row&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>          <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;h1&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>            All Your Content
-</span><span class='line'>          <span class="nt">&lt;/div&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;/div&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;row&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>          All your content will go inside the &#39;wrap&#39; div.
-</span><span class='line'>        <span class="nt">&lt;/div&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;push&quot;</span> <span class="na">style=</span><span class="s">&quot;min-height: 50px;&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>        <span class="c">&lt;!&ndash; This push node should be inside wrap and empty &ndash;&gt;</span>
-</span><span class='line'>        <span class="c">&lt;!&ndash; Min-height is equal to the min-height of the footer &ndash;&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/body&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;footer&quot;</span> <span class="na">style=</span><span class="s">&quot;min-height: 50px;&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="c">&lt;!&ndash; Some sweet footer content &ndash;&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;container&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;small&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>        Zowee, I&#39;ve got a footer stuck to the bottom!
-</span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
-</span><span class='line'><span class="nt">&lt;/html&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<pre><code class="html index.html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en" style="height: 100%;"&gt;
+  &lt;head&gt;
+    &lt;link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"&gt;
+  &lt;/head&gt;
+  &lt;body style="height: 100%;"&gt;
+    &lt;div id="wrap" style="min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -50px;"&gt;
+      &lt;!-- All your content goes inside wrap. --&gt;
+      &lt;!-- The bottom margin must be negative the footer min-height --&gt;
+      &lt;!-- Footer min-height is set to 50px in this case --&gt;
+      &lt;div class="container"&gt;
+        &lt;div class="row"&gt;
+          &lt;div class="h1"&gt;
+            All Your Content
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class="row"&gt;
+          All your content will go inside the 'wrap' div.
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div id="push" style="min-height: 50px;"&gt;
+        &lt;!-- This push node should be inside wrap and empty --&gt;
+        &lt;!-- Min-height is equal to the min-height of the footer --&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/body&gt;
+  &lt;div id="footer" style="min-height: 50px;"&gt;
+    &lt;!-- Some sweet footer content --&gt;
+    &lt;div class="container"&gt;
+      &lt;div class="small"&gt;
+        Zowee, I've got a footer stuck to the bottom!
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/html&gt;
+</code></pre>
 
 <p>Div tag ids such as &ldquo;wrap&rdquo;, &ldquo;push&rdquo;, and &ldquo;footer&rdquo; can be whatever you want. The height of the footer can be adjusted to fit whatever content you want; I found that using <code>min-height</code> instead of <code>height</code> allowed my content to resize appropriately when wrapped. Styles should definitely be moved to a css file.</p>
-
 ]]></content>
   </entry>
   
