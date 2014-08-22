@@ -4,7 +4,7 @@
   <title><![CDATA[Category: trello | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/trello/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-16T11:03:51-04:00</updated>
+  <updated>2014-08-22T06:42:13-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,84 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Hotfixing a Bug in Trello's client.js]]></title>
+    <link href="http://larry-price.com/blog/2014/08/22/fixing-some-minor-bugs-in-trellos-client-dot-js/"/>
+    <updated>2014-08-22T06:08:21-04:00</updated>
+    <id>http://larry-price.com/blog/2014/08/22/fixing-some-minor-bugs-in-trellos-client-dot-js</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m a huge fan of <a href="https://trello.com">Trello</a>, and I recently created an app to analyze Trello data called <a href="https://ollertapp.com">Ollert</a>. Ollert makes heavy use of the <a href="http://trello.com/docs">Trello API</a>. I&rsquo;ve written previously about <a href="http://larry-price.com/blog/2014/03/18/connecting-to-the-trello-api/">using Trello&rsquo;s client.js to connect to the Trello API</a>.</p>
+
+
+
+
+<p>During some ad-hoc testing of opening/closing the Trello authorization popup, I found that clicking &ldquo;Deny&rdquo; on the popup, reopening it, and then clicking &ldquo;Connect&rdquo; resulted in me not being able to connect. I spent some time looking into workarounds and I even contacted Trello support. After studying <a href="https://trello.com/1/client.coffee">client.coffee</a>, I eventually found the problem: the Trello client keeps around an anonymous object called <code>ready</code> that stores some session data. When a user clicks &lsquo;Deny&rsquo;, this <code>ready</code> object remembers. I was able to fix the Deny/Allow issue by pulling down a local copy of client.js and making an interface change to the module:</p>
+
+
+<p><figure class='code'><figcaption><span>client.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">clearReady</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">ready</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>From <a href="http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">another issue I was having</a>, I already call <code>Trello.deauthorize()</code> before my application attempts to contact Trello, so now I also make a call to <code>Trello.clearReady()</code>. My <code>authorize()</code> function looks like this:</p>
+
+
+<p><figure class='code'><figcaption><span>trello-controller.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">authorize</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">expires</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">Trello</span><span class="p">.</span><span class="nx">deauthorize</span><span class="p">();</span>
+</span><span class='line'>  <span class="nx">Trello</span><span class="p">.</span><span class="nx">clearReady</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">Trello</span><span class="p">.</span><span class="nx">authorize</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Ollert&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;popup&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">interactive</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">expiration</span><span class="o">:</span> <span class="nx">expires</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">persist</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">success</span><span class="o">:</span> <span class="nx">callback</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">scope</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">write</span><span class="o">:</span> <span class="kc">true</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>Since I&rsquo;ve pulled client.js locally, I&rsquo;m no longer sending my developer token when I load the file. I manually set my key when the page loads, but it could just as easily be done in my <code>authorize</code> method above.</p>
+
+
+<p><figure class='code'><figcaption><span>layout.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">:</span><span class="nx">javascript</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">Trello</span><span class="p">.</span><span class="nx">setKey</span><span class="p">(</span><span class="s2">&quot;#{ENV[&#39;PUBLIC_KEY&#39;]}&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>You can find a copy of my modified client.js <a href="https://gist.github.com/larryprice/1e67ddcd53c686fbc1de">in this Gist</a>.</p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Testing through a Trello connection with Capybara and Webkit]]></title>
@@ -494,96 +572,6 @@
 </span></code></pre></td></tr></table></div></figure></p>
 
 <p>Now, as your friend and teacher, I command you to use this knowledge to go <a href="//ollert.herokuapp.com">do cool stuff</a> with Trello!</p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Connecting to the Trello API]]></title>
-    <link href="http://larry-price.com/blog/2014/03/18/connecting-to-the-trello-api/"/>
-    <updated>2014-03-18T20:00:11-04:00</updated>
-    <id>http://larry-price.com/blog/2014/03/18/connecting-to-the-trello-api</id>
-    <content type="html"><![CDATA[<p><a href="//trello.com">Trello</a> has a <a href="//trello.com/docs/">pretty sweet API</a>, which we use extensively in our Trello-analysis app <a href="//ollert.herokuapp.com">Ollert</a>. Initially connecting to the Trello API took us a few hours, so I&rsquo;d like to make a record of how we managed to connect.</p>
-
-
-
-
-<p>Making a connection to Trello requires two hashcodes: an application key and a Trello member token. You can generate and view your application key by visiting <a href="//trello.com/1/appKey/generate">https://trello.com/1/appKey/generate</a>.</p>
-
-
-
-
-<p>The member token is something we need to get from the user. There are two ways to get a user&rsquo;s member token: through fragments and through a <strong>postMessage</strong>. You can also request different levels of access (read, write, read+write), and different expiration periods (such as 1 day, 30 days, or never) for member tokens. For the remainder of this writing, I&rsquo;ll be accessing a read-only member token that never expires.</p>
-
-
-
-
-<p>We didn&rsquo;t have a lot of luck with fragments, but the concept is simple enough. You have the user click a link that probably says &ldquo;Connect With Trello&rdquo; which is similar to:</p>
-
-
-
-
-<p><code>https://trello.com/1/authorize?key=applicationkey&amp;name=applicationname&amp;expiration=never&amp;response_type=token</code></p>
-
-
-
-
-<p>At this point, the user is redirected to Trello and given the opportunity to Allow or Deny your application access. Once allowed, the user sees a static Trello page with their member token in plain text. Somehow you&#8221;re supposed to convey to them that they should copy this token and paste it back to you. This has clear drawbacks in usability.</p>
-
-
-
-
-<p>Using the <strong>postMessage</strong> method of accessing a member token was significantly more fruitful. Trello provides a Javascript file named <a href="https://trello.com/docs/gettingstarted/clientjs.html">client.js</a> that does most of the legwork for you. An example:</p>
-
-
-<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nt">%script</span><span class="p">{</span><span class="ss">src</span><span class="p">:</span> <span class="s2">&quot;//api.trello.com/1/client.js?key=applicationkey&quot;</span><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>function AuthenticateTrello() {
-</span><span class='line'>  Trello.authorize({
-</span><span class='line'>    name: &quot;YourApplication&quot;,
-</span><span class='line'>    type: &quot;popup&quot;,
-</span><span class='line'>    interactive: true,
-</span><span class='line'>    expiration: &quot;never&quot;,
-</span><span class='line'>    persist: true,
-</span><span class='line'>    success: function () { onAuthorizeSuccessful(); },
-</span><span class='line'>    scope: { write: false, read: true },
-</span><span class='line'>  });
-</span><span class='line'>}
-</span><span class='line'>function onAuthorizeSuccessful() {
-</span><span class='line'>  var token = Trello.token();
-</span><span class='line'>  window.location.replace(&quot;/auth?token=&quot; + token);
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'><span class="nt">%a</span><span class="p">{</span><span class="ss">href</span><span class="p">:</span> <span class="s2">&quot;javascript:void(0)&quot;</span><span class="p">,</span> <span class="ss">onClick</span><span class="p">:</span> <span class="s2">&quot;AuthenticateTrello()&quot;</span><span class="p">}</span>
-</span><span class='line'>  Connect With Trello
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p>When the user clicks the link, we have Trello set to activate a &ldquo;popup&rdquo; that will ask them to &ldquo;Allow&rdquo; or &ldquo;Deny&rdquo; our app from accessing their data. When the user allows us access, the popup closes and we hit the &ldquo;onAuthorizeSuccessful&rdquo; method. In my method, I simply redirect them to the <code>/auth</code> route with <code>token</code> manually added to the params list. One of the interesting options listed above is the &ldquo;persist&rdquo; option, which tells Trello whether it should prompt the user for his or her token every time. By telling Trello to persist, the user will only be presented with the popup when he or she needs to reauthenticate.</p>
-
-
-
-
-<p>You can learn more about member tokens from <a href="//trello.com/docs/gettingstarted/authorize.html">https://trello.com/docs/gettingstarted/authorize.html</a>.</p>
 
 ]]></content>
   </entry>

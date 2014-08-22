@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ollert | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/ollert/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-16T11:03:51-04:00</updated>
+  <updated>2014-08-22T06:42:13-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,84 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Hotfixing a Bug in Trello's client.js]]></title>
+    <link href="http://larry-price.com/blog/2014/08/22/fixing-some-minor-bugs-in-trellos-client-dot-js/"/>
+    <updated>2014-08-22T06:08:21-04:00</updated>
+    <id>http://larry-price.com/blog/2014/08/22/fixing-some-minor-bugs-in-trellos-client-dot-js</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m a huge fan of <a href="https://trello.com">Trello</a>, and I recently created an app to analyze Trello data called <a href="https://ollertapp.com">Ollert</a>. Ollert makes heavy use of the <a href="http://trello.com/docs">Trello API</a>. I&rsquo;ve written previously about <a href="http://larry-price.com/blog/2014/03/18/connecting-to-the-trello-api/">using Trello&rsquo;s client.js to connect to the Trello API</a>.</p>
+
+
+
+
+<p>During some ad-hoc testing of opening/closing the Trello authorization popup, I found that clicking &ldquo;Deny&rdquo; on the popup, reopening it, and then clicking &ldquo;Connect&rdquo; resulted in me not being able to connect. I spent some time looking into workarounds and I even contacted Trello support. After studying <a href="https://trello.com/1/client.coffee">client.coffee</a>, I eventually found the problem: the Trello client keeps around an anonymous object called <code>ready</code> that stores some session data. When a user clicks &lsquo;Deny&rsquo;, this <code>ready</code> object remembers. I was able to fix the Deny/Allow issue by pulling down a local copy of client.js and making an interface change to the module:</p>
+
+
+<p><figure class='code'><figcaption><span>client.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">clearReady</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">ready</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>From <a href="http://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">another issue I was having</a>, I already call <code>Trello.deauthorize()</code> before my application attempts to contact Trello, so now I also make a call to <code>Trello.clearReady()</code>. My <code>authorize()</code> function looks like this:</p>
+
+
+<p><figure class='code'><figcaption><span>trello-controller.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">authorize</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">expires</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">Trello</span><span class="p">.</span><span class="nx">deauthorize</span><span class="p">();</span>
+</span><span class='line'>  <span class="nx">Trello</span><span class="p">.</span><span class="nx">clearReady</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">Trello</span><span class="p">.</span><span class="nx">authorize</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Ollert&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;popup&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">interactive</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">expiration</span><span class="o">:</span> <span class="nx">expires</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">persist</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">success</span><span class="o">:</span> <span class="nx">callback</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">scope</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">read</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">write</span><span class="o">:</span> <span class="kc">true</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>Since I&rsquo;ve pulled client.js locally, I&rsquo;m no longer sending my developer token when I load the file. I manually set my key when the page loads, but it could just as easily be done in my <code>authorize</code> method above.</p>
+
+
+<p><figure class='code'><figcaption><span>layout.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">:</span><span class="nx">javascript</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">Trello</span><span class="p">.</span><span class="nx">setKey</span><span class="p">(</span><span class="s2">&quot;#{ENV[&#39;PUBLIC_KEY&#39;]}&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>You can find a copy of my modified client.js <a href="https://gist.github.com/larryprice/1e67ddcd53c686fbc1de">in this Gist</a>.</p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Testing through a Trello connection with Capybara and Webkit]]></title>
@@ -397,7 +475,7 @@
 </span><span class='line'>  Team MyApp
 </span><span class='line'>
 </span><span class='line'><span class="nt">%p</span>
-</span><span class='line'>  This email account is not monitored and will not receive replies. For more information, contact &lt;a href=&quot;<a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#99;&#111;&#x6e;&#x6e;&#101;&#x63;&#x74;&#x40;&#109;&#x79;&#97;&#x70;&#x70;&#x2e;&#99;&#x6f;&#x6d;&#x26;&#113;&#x75;&#111;&#x74;&#59;&#x26;&#103;&#116;&#59;&#x63;&#x6f;&#110;&#110;&#x65;&#99;&#x74;&#x40;&#109;&#x79;&#97;&#x70;&#x70;&#46;&#99;&#111;&#x6d;&#x26;&#x6c;&#116;&#59;&#47;&#x61;&#x26;&#x67;&#116;&#x3b;&#46;">&#99;&#x6f;&#x6e;&#x6e;&#101;&#x63;&#x74;&#x40;&#x6d;&#121;&#97;&#x70;&#x70;&#x2e;&#99;&#111;&#x6d;&#38;&#x71;&#117;&#x6f;&#116;&#59;&#x26;&#103;&#x74;&#59;&#x63;&#x6f;&#x6e;&#110;&#x65;&#99;&#x74;&#64;&#109;&#121;&#x61;&#112;&#x70;&#46;&#99;&#111;&#x6d;&#x26;&#108;&#116;&#59;&#x2f;&#x61;&#38;&#103;&#x74;&#x3b;&#46;</a>
+</span><span class='line'>  This email account is not monitored and will not receive replies. For more information, contact &lt;a href=&quot;<a href="&#109;&#x61;&#105;&#108;&#116;&#111;&#x3a;&#99;&#111;&#110;&#110;&#101;&#99;&#x74;&#64;&#109;&#121;&#97;&#x70;&#112;&#x2e;&#99;&#x6f;&#x6d;&#x26;&#113;&#117;&#111;&#x74;&#x3b;&#38;&#x67;&#x74;&#59;&#x63;&#x6f;&#x6e;&#x6e;&#x65;&#x63;&#x74;&#x40;&#x6d;&#x79;&#97;&#112;&#x70;&#46;&#99;&#111;&#109;&#x26;&#108;&#116;&#59;&#x2f;&#97;&#38;&#x67;&#x74;&#59;&#46;">&#x63;&#x6f;&#110;&#110;&#101;&#x63;&#x74;&#x40;&#109;&#121;&#97;&#112;&#x70;&#46;&#99;&#111;&#109;&#38;&#113;&#x75;&#x6f;&#116;&#x3b;&#38;&#x67;&#x74;&#59;&#x63;&#x6f;&#110;&#x6e;&#101;&#x63;&#x74;&#64;&#x6d;&#x79;&#97;&#112;&#x70;&#46;&#99;&#x6f;&#109;&#38;&#x6c;&#116;&#x3b;&#x2f;&#x61;&#38;&#x67;&#x74;&#x3b;&#x2e;</a>
 </span></code></pre></td></tr></table></div></figure></p>
 
 <p>Given the pre-defined steps from email-spec, testing that this email gets sent is a breeze. Adding a scenario to my feature file:</p>
@@ -430,16 +508,16 @@
 </span><span class='line'><span class="k">Background:</span><span class="nf"></span>
 </span><span class='line'><span class="k">  Given </span><span class="nf">a clear email queue</span>
 </span><span class='line'><span class="nf">  </span><span class="k">When </span><span class="nf">I go to the signup page</span>
-</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I fill in &quot;</span><span class="s">email</span><span class="nf">&quot; with &quot;</span><span class="s"><a href="&#x6d;&#97;&#105;&#x6c;&#116;&#111;&#x3a;&#x70;&#114;&#101;&#122;&#x40;&#119;&#x68;&#x69;&#x74;&#x65;&#x68;&#x6f;&#x75;&#x73;&#x65;&#x2e;&#x67;&#111;&#118;">&#112;&#x72;&#x65;&#x7a;&#x40;&#119;&#x68;&#x69;&#x74;&#x65;&#x68;&#111;&#x75;&#115;&#101;&#x2e;&#x67;&#111;&#118;</a></span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I fill in &quot;</span><span class="s">email</span><span class="nf">&quot; with &quot;</span><span class="s"><a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#x70;&#x72;&#101;&#122;&#x40;&#x77;&#104;&#x69;&#x74;&#101;&#104;&#111;&#117;&#115;&#101;&#x2e;&#x67;&#x6f;&#118;">&#x70;&#114;&#x65;&#122;&#x40;&#119;&#x68;&#x69;&#116;&#101;&#x68;&#x6f;&#117;&#115;&#101;&#46;&#x67;&#x6f;&#118;</a></span><span class="nf">&quot;</span>
 </span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I fill in &quot;</span><span class="s">password</span><span class="nf">&quot; with &quot;</span><span class="s">bunnies</span><span class="nf">&quot;</span>
 </span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I press &quot;</span><span class="s">Sign Up</span><span class="nf">&quot;</span>
-</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">&quot;</span><span class="s"><a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#112;&#114;&#101;&#122;&#64;&#119;&#x68;&#x69;&#x74;&#101;&#x68;&#111;&#117;&#x73;&#101;&#x2e;&#x67;&#x6f;&#x76;">&#112;&#114;&#101;&#122;&#64;&#119;&#104;&#105;&#116;&#101;&#x68;&#111;&#117;&#x73;&#101;&#x2e;&#x67;&#111;&#118;</a></span><span class="nf">&quot; should receive an email</span>
+</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">&quot;</span><span class="s"><a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#x70;&#114;&#x65;&#122;&#64;&#119;&#x68;&#x69;&#x74;&#101;&#104;&#111;&#x75;&#115;&#101;&#46;&#103;&#111;&#x76;">&#112;&#114;&#101;&#x7a;&#64;&#x77;&#104;&#x69;&#116;&#x65;&#104;&#111;&#117;&#115;&#x65;&#46;&#103;&#x6f;&#x76;</a></span><span class="nf">&quot; should receive an email</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">Scenario:</span><span class="nf"> Receives email with correct contents</span>
-</span><span class='line'><span class="k">  When </span><span class="nf">&quot;</span><span class="s"><a href="&#109;&#x61;&#x69;&#108;&#116;&#x6f;&#x3a;&#112;&#114;&#101;&#x7a;&#64;&#119;&#x68;&#105;&#x74;&#x65;&#x68;&#x6f;&#117;&#x73;&#x65;&#x2e;&#x67;&#111;&#x76;">&#112;&#x72;&#101;&#122;&#x40;&#x77;&#104;&#105;&#x74;&#101;&#x68;&#111;&#117;&#115;&#101;&#x2e;&#103;&#x6f;&#118;</a></span><span class="nf">&quot; opens the email</span>
+</span><span class='line'><span class="k">  When </span><span class="nf">&quot;</span><span class="s"><a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#x70;&#114;&#101;&#x7a;&#x40;&#119;&#104;&#x69;&#x74;&#101;&#x68;&#x6f;&#x75;&#x73;&#101;&#x2e;&#x67;&#111;&#x76;">&#112;&#x72;&#x65;&#122;&#64;&#x77;&#104;&#105;&#116;&#x65;&#104;&#111;&#117;&#115;&#101;&#x2e;&#x67;&#111;&#x76;</a></span><span class="nf">&quot; opens the email</span>
 </span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">they should see the email delivered from &quot;</span><span class="s">MyApp Help Desk </span><span class="nv">&lt;noreply@myapp.com&gt;</span><span class="nf">&quot;</span>
 </span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">they should see &quot;</span><span class="s">MyApp Account Verification</span><span class="nf">&quot; in the email subject</span>
-</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">they should see &quot;</span><span class="s">Username: <a href="&#109;&#97;&#x69;&#x6c;&#x74;&#x6f;&#58;&#112;&#x72;&#101;&#122;&#64;&#119;&#x68;&#105;&#116;&#x65;&#x68;&#111;&#x75;&#115;&#101;&#x2e;&#103;&#111;&#x76;">&#x70;&#x72;&#x65;&#122;&#x40;&#x77;&#104;&#x69;&#x74;&#x65;&#104;&#x6f;&#x75;&#x73;&#x65;&#46;&#x67;&#x6f;&#x76;</a></span><span class="nf">&quot; in the email body</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">they should see &quot;</span><span class="s">Username: <a href="&#109;&#97;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#112;&#x72;&#101;&#122;&#64;&#x77;&#x68;&#105;&#x74;&#101;&#x68;&#x6f;&#117;&#x73;&#101;&#46;&#103;&#111;&#118;">&#112;&#114;&#x65;&#x7a;&#x40;&#119;&#x68;&#x69;&#x74;&#101;&#x68;&#111;&#117;&#115;&#x65;&#x2e;&#103;&#111;&#118;</a></span><span class="nf">&quot; in the email body</span>
 </span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">they should see &quot;</span><span class="s">An account verification has been requested</span><span class="nf">&quot;</span>
 </span></code></pre></td></tr></table></div></figure></p>
 
@@ -540,116 +618,6 @@
 </span></code></pre></td></tr></table></div></figure></p>
 
 <p>Voilà. Why does this only happen in IE? I was originally going to blame the local store, but, since I was able to reproduce the defect in IE9 (no HTML5), I no longer believe that to be the case. I&rsquo;m currently resigned to chalk it up as IE just being IE.</p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Lessons Learned during the Conception of Ollert]]></title>
-    <link href="http://larry-price.com/blog/2014/06/12/lessons-learned-during-the-conception-of-ollert/"/>
-    <updated>2014-06-12T20:32:00-04:00</updated>
-    <id>http://larry-price.com/blog/2014/06/12/lessons-learned-during-the-conception-of-ollert</id>
-    <content type="html"><![CDATA[<p>During <a href="http://sep.com">SEP&rsquo;s</a> previous <a href="http://sep.com/labs/">startup weekend</a>, I pitched an idea for a <a href="http://trello.com">Trello</a> Analysis Tool called <a href="https://ollertapp.com">Ollert</a>. In less than three days, a team of 6 built a minimal viable product (MVP) and put it live on the internet. In a little over three months, I have slowly guided Ollert through the legal department, obtained a real domain with security, and fixed a few bugs along the way. I&rsquo;ve learned a thing or two about seeing a hackathon project to fruition that I&rsquo;d like to get in writing.</p>
-
-
-
-
-<h3>1. You Can Never Be Too Prepared</h3>
-
-
-
-
-<p>Before Startup Weekend, I spent days refining my idea and coming up with a cute little proof of concept. I even laid out work items for my developers to work on. When I finally discovered a clever name, I thought my preparation was over.</p>
-
-
-
-
-<p>I was wrong.</p>
-
-
-
-
-<p>Although I requested 5 developers to help me build Ollert, my plans only allowed for two developers to work simultaneously. I didn&rsquo;t realize how hard it would be to keep everyone busy all the time, especially my less-experienced engineers.</p>
-
-
-
-
-<p>Although I did proof-of-concept my idea before we started, I failed to proof-of-concept the more dynamic capabilities a multi-user web application needs to provide. This mistake cost another developer and I the first night of the weekend, plus a bit of the next morning.</p>
-
-
-
-
-<p>Don&rsquo;t even get me started about environment setup. Although I run <a href="http://www.ubuntu.com">Ubuntu</a> natively and had all my developer tools ready before we started work Friday night, the rest of my team were users of That Other Operating System. I should have created a virtual machine with everything all set up, burned it to several USB drives, and let my developers set up VirtualBox without my intervention.</p>
-
-
-
-
-<h3>2. Talk to Legal</h3>
-
-
-
-
-<p>Why do I care about legal? Isn&rsquo;t this my responsibility anyway?</p>
-
-
-
-
-<p>As it turns out, putting a startup weekend project live on the internet before the weekend is over is really cool from a team perspective, but terrifying from a legal perspective. With our MVP, I wasn&rsquo;t using SSL to encrypt user data. I didn&rsquo;t consider how Fog Creek would react once they realized our name is their name backwards. I even had the chutzpah to stick my company&rsquo;s logo in my site&rsquo;s footer.</p>
-
-
-
-
-<p>A quick discussion with management will prepare both sides for the &ldquo;grand reveal&rdquo; if the project makes it to launch. Personally, I&rsquo;d like to see some level of legal counsel in the Startup Weekend &ldquo;pre-pitch&rdquo; session to get feedback before implementation.</p>
-
-
-
-
-<h3>3. Listen</h3>
-
-
-
-
-<p>The second day, one of my developers mentioned using endpoints in the application, and I rejected this idea on the basis that it was too complicated. On the dawn of the final day, we realized that we needed to use his approach or the application would be unusable. This required us to do a lot of rework that could have been avoided. I often think about what other ideas might have been suggested by my team that I may have accidentally ignored.</p>
-
-
-
-
-<h3>4. Easy Tasks</h3>
-
-
-
-
-<p>My assumption going into Startup Weekend was that my team would all be familiar enough with the technology to be able to &ldquo;jump right in&rdquo; or follow along with someone who could. This was a bad assumption.</p>
-
-
-
-
-<p>It&rsquo;s easy to find tasks that <em>I</em> can do. It&rsquo;s much more difficult to find tasks that <em>anyone</em> could do. What are the less-involved tasks on your current project that a less-experienced developer could work on until they&rsquo;re ready to tackle something bigger? Can they set up the database, or the tests? Can you find a guide for them to follow to do these things? If not, you&rsquo;ll have people on your team who don&rsquo;t feel involved but desperately want to help.</p>
-
-
-
-
-<h3>5. Start Small</h3>
-
-
-
-
-<p>Ollert is a pretty big idea, especially for a three-day project. I had high hopes of making it even bigger until the dawn of the final day. I wanted to include some sort of payment system to prove that we would be able to charge people when they sign up without actually charging them. This &ldquo;feature&rdquo; of fake payment has no place in a real product, and would have been misleading at best. We had dozens of ideas for statistics and charts to make it into the website that just weren&rsquo;t that useful.</p>
-
-
-
-
-<p>Limiting scope might have allowed us to come up with a more polished MVP; I walked away the final evening wishing I had left out sign up/in in favor of giving the application more sex appeal.</p>
-
-
-
-
-<h3>Conclusion</h3>
-
-
-
-
-<p>Starting a project is hard. It&rsquo;s even more difficult when you have to delegate most of the work to other people. Startup Weekend is a manger and a mortuary, seeing the birth of many ideas and the death of most. I hope to take this experience and make an even better new product next Startup Weekend.</p>
 
 ]]></content>
   </entry>
