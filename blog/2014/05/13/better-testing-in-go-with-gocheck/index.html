@@ -127,16 +127,16 @@
 
 <p>As usual, it&rsquo;s time to guide you through a contrived example. Start by installing the package:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>go get gopkg.in/check.v1
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>Let&rsquo;s see, what should we make&hellip; how about a tip calculating library? We should start by testing, because we&rsquo;re obsessed with TDD.</p>
 
 <p>Test #1: Returns 0 for free meal</p>
 
-<figure class='code'><figcaption><span>calculator_test.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>calculator_test.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -170,12 +170,12 @@
 </span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">MySuite</span><span class="p">)</span> <span class="nx">TestReturns0ForFreeMeal</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">C</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>  <span class="nx">c</span><span class="p">.</span><span class="nx">Assert</span><span class="p">(</span><span class="nx">calculateTip</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span> <span class="nx">Equals</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
 </span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>Not quite as obvious as the internal testing framework. First we hook up gocheck into the &ldquo;go test&rdquo; runner. Then we create a test suite; ours is empty for now and called <code>MySuite</code>. We call <code>Suite</code> to intialize the test runner with our custom suite. We then write our first test to assert that calculating the tip returns a value equal to 0. All tests must be prefixed with the word &ldquo;Test&rdquo;. Now I&rsquo;ll write the implementation:</p>
 
-<figure class='code'><figcaption><span>calculator.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>calculator.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -185,12 +185,12 @@
 </span><span class='line'><span class="kd">func</span> <span class="nx">calculateTip</span><span class="p">(</span><span class="nx">bill</span> <span class="kt">float64</span><span class="p">)</span> <span class="kt">float64</span> <span class="p">{</span>
 </span><span class='line'>  <span class="k">return</span> <span class="mf">0.0</span>
 </span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>Running the tests&hellip;</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -198,12 +198,12 @@
 </span><span class='line'>OK: 1 passed
 </span><span class='line'>PASS
 </span><span class='line'>ok    _/home/lrp/Projects/2014/gocheck-quick  0.003s
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>Woohoo! All passed. What happens if we write a failing test?</p>
 
-<figure class='code'><figcaption><span>calculator_test.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>calculator_test.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -211,12 +211,12 @@
 </span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">MySuite</span><span class="p">)</span> <span class="nx">TestReturns15PercentByDefault</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">C</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>  <span class="nx">c</span><span class="p">.</span><span class="nx">Assert</span><span class="p">(</span><span class="nx">calculateTip</span><span class="p">(</span><span class="mf">100.0</span><span class="p">),</span> <span class="nx">Equals</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">)</span>
 </span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>Results:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -246,12 +246,12 @@
 </span><span class='line'>FAIL
 </span><span class='line'><span class="nb">exit </span>status 1
 </span><span class='line'>FAIL  _/home/lrp/Projects/2014/gocheck-quick  0.003s
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>A nasty failure that one. I&rsquo;ll fix it and continue:</p>
 
-<figure class='code'><figcaption><span>calculator.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>calculator.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -261,12 +261,12 @@
 </span><span class='line'><span class="kd">func</span> <span class="nx">calculateTip</span><span class="p">(</span><span class="nx">bill</span> <span class="kt">float64</span><span class="p">)</span> <span class="kt">float64</span> <span class="p">{</span>
 </span><span class='line'>  <span class="k">return</span> <span class="mf">.15</span> <span class="o">*</span> <span class="nx">bill</span>
 </span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>I want to create a Setup method for my entire suite. I&rsquo;ll store some silly information there for information&rsquo;s sake. The minBill and maxBill variables will only be set when I first load the suite.</p>
 
-<figure class='code'><figcaption><span>calculator_test.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>calculator_test.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -324,12 +324,12 @@
 </span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">MySuite</span><span class="p">)</span> <span class="nx">TestReturns15PercentByDefault</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">C</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>  <span class="nx">c</span><span class="p">.</span><span class="nx">Assert</span><span class="p">(</span><span class="nx">calculateTip</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">maxBill</span><span class="p">),</span> <span class="nx">Equals</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">)</span>
 </span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>What if I wanted to set some information at the start of each test? I&rsquo;ll log the current test number on the suite, updating it every time I run a test:</p>
 
-<figure class='code'><figcaption><span>calculator_test.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>calculator_test.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -371,12 +371,12 @@
 </span><span class='line'>  <span class="nx">s</span><span class="p">.</span><span class="nx">testNumber</span> <span class="o">+=</span> <span class="mi">1</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'><span class="o">...</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>Result:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -388,7 +388,7 @@
 </span><span class='line'>OK: 2 passed
 </span><span class='line'>PASS
 </span><span class='line'>ok    _/home/lrp/Projects/2014/gocheck-quick  0.004s
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>You can create tear down methods for suites and tests in the same manner, replacing the appropriate words above.</p>
@@ -448,6 +448,10 @@
   <ul class="posts">
     
         <li class="related">
+          <a href="/blog/2014/05/13/better-testing-in-go-with-gocheck/">Better testing in Go with gocheck</a>
+        </li>
+    
+        <li class="related">
           <a href="/blog/2013/01/19/testing-a-sinatra-app-with-capybara/">Testing a Sinatra App with Capybara</a>
         </li>
     
@@ -461,10 +465,6 @@
     
         <li class="related">
           <a href="/blog/2014/06/04/jasmine-a-whole-new-world-of-javascript-testing/">Jasmine - A Whole New World of Javascript Testing</a>
-        </li>
-    
-        <li class="related">
-          <a href="/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo/">Pushing an Application to Heroku that Uses Ruby and Mongo</a>
         </li>
     
   </ul>
@@ -507,6 +507,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/08/31/the-honest-truth-about-dishonesty/">The (Honest) Truth About Dishonesty</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/08/22/fixing-some-minor-bugs-in-trellos-client-dot-js/">Hotfixing a Bug in Trello's client.js</a>
       </li>
     
@@ -522,15 +526,11 @@
         <a href="/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install/">Use NVM to Manage Your NodeJS Install</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards/">Ollert - Reveal the Data Behind Your Trello Boards</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 103.75%'>agile</a> <a href='/blog/categories/c-plus-plus' style='font-size: 111.25%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 111.25%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.75%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 115.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 118.75%'>database</a> <a href='/blog/categories/foreman' style='font-size: 103.75%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.75%'>foss</a> <a href='/blog/categories/git' style='font-size: 103.75%'>git</a> <a href='/blog/categories/gmock' style='font-size: 103.75%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 111.25%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 103.75%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 103.75%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 103.75%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 111.25%'>heroku</a> <a href='/blog/categories/html' style='font-size: 107.5%'>html</a> <a href='/blog/categories/internet' style='font-size: 103.75%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 118.75%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 115.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 107.5%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 111.25%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 103.75%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 103.75%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 103.75%'>nodejs</a> <a href='/blog/categories/nokogiri' style='font-size: 103.75%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 156.25%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 107.5%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 103.75%'>nvm</a> <a href='/blog/categories/ollert' style='font-size: 141.25%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 115.0%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 103.75%'>pony</a> <a href='/blog/categories/qmake' style='font-size: 103.75%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 103.75%'>qt</a> <a href='/blog/categories/rails' style='font-size: 103.75%'>rails</a> <a href='/blog/categories/retro' style='font-size: 111.25%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 107.5%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 160.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 111.25%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 103.75%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 103.75%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 130.0%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 103.75%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 133.75%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 103.75%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 103.75%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 118.75%'>testing</a> <a href='/blog/categories/trello' style='font-size: 126.25%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.5%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 103.75%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 103.75%'>upstart</a> <a href='/blog/categories/web' style='font-size: 145.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 133.75%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 103.75%'>writeups</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 103.75%'>agile</a> <a href='/blog/categories/c-plus-plus' style='font-size: 111.25%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 111.25%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.75%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 115.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 118.75%'>database</a> <a href='/blog/categories/foreman' style='font-size: 103.75%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.75%'>foss</a> <a href='/blog/categories/git' style='font-size: 103.75%'>git</a> <a href='/blog/categories/gmock' style='font-size: 103.75%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 111.25%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 103.75%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 103.75%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 103.75%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 111.25%'>heroku</a> <a href='/blog/categories/html' style='font-size: 107.5%'>html</a> <a href='/blog/categories/internet' style='font-size: 103.75%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 118.75%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 115.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 107.5%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 111.25%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 103.75%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 103.75%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 103.75%'>nodejs</a> <a href='/blog/categories/nokogiri' style='font-size: 103.75%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 107.5%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 103.75%'>nvm</a> <a href='/blog/categories/ollert' style='font-size: 141.25%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 115.0%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 103.75%'>pony</a> <a href='/blog/categories/qmake' style='font-size: 103.75%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 103.75%'>qt</a> <a href='/blog/categories/rails' style='font-size: 103.75%'>rails</a> <a href='/blog/categories/retro' style='font-size: 111.25%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 107.5%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 160.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 111.25%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 103.75%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 103.75%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 130.0%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 103.75%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 133.75%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 103.75%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 103.75%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 118.75%'>testing</a> <a href='/blog/categories/trello' style='font-size: 126.25%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.5%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 103.75%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 103.75%'>upstart</a> <a href='/blog/categories/web' style='font-size: 145.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 137.5%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 103.75%'>writeups</a> </span>
 </section>
 
 <section>

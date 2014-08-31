@@ -4,7 +4,7 @@
   <title><![CDATA[Category: non-technical | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/non-technical/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-22T06:46:57-04:00</updated>
+  <updated>2014-08-31T14:44:19-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,31 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[The (Honest) Truth About Dishonesty]]></title>
+    <link href="http://larry-price.com/blog/2014/08/31/the-honest-truth-about-dishonesty/"/>
+    <updated>2014-08-31T13:35:40-04:00</updated>
+    <id>http://larry-price.com/blog/2014/08/31/the-honest-truth-about-dishonesty</id>
+    <content type="html"><![CDATA[<h3>The Idea</h3>
+
+<p>Everyone lies. Everyone cheats. From Marcy down the street cheating on her diet to Bernie Madoff committing massive finanical fraud, we&rsquo;re all a little dishonest from time to time. With the power of experimentats and research, Dan Ariely seeks to learn what leads humans to act dishonestly in <em><a href="http://amzn.to/1qsOgTy">The (Honest) Truth About Dishonesty</a></em>.</p>
+
+<h3>The Gooey Center</h3>
+
+<p>Since reading <em><a href="http://amzn.to/VYzVTZ">Predictably Irrational</a></em> earlier this year, I&rsquo;ve really liked reading Dan Ariely; his writing style is familiar yet authoritative, making for highly readable books filled with high-quality experiments and meaningful insights. <em>The (Honest) Truth About Dishonesty</em> is a similar read to <em>Predictably Irrational</em>, but with a tight focus on what drives the common man to lie and cheat.</p>
+
+<p>The main takeaway is, given the chance, most people will cheat just a little given the opportunity. Ariely&rsquo;s experiments found that very few people cheated heavily, even in situations where the likelihood of being caught is minimal. Rounding up your billable hours on a timesheet is easy to do without a shred of guilt, and the likelihood of getting caught is approximately nil. On the other hand, fudging an hour or two in a single day is not something anyone I know would take lightly. Unfortunately, if you round up billable hours by 10 minutes a day for a whole week, you&rsquo;ve fudged nearly an hour of billable work (without the guilt).</p>
+
+<p>Day-to-day living makes us less honest. If you&rsquo;ve had a long day at work, you&rsquo;re more likely to cheat on your diet when you get home because your defenses have been torn down. You&rsquo;re more likely to put things off in favor of sitting around watching television.</p>
+
+<p>Ariely finds that collaboration also leads to more dishonesty: as humans, we are more willing to bend the rules if it will benefit someone else, especially if we have befriended that someone else.</p>
+
+<h3>Who Would Like This</h3>
+
+<p>Those interested in behavioral economics should get a kick out of this book, especially if they enjoyed Ariely&rsquo;s other works. Reading this book can also make you think more critically about some of the &ldquo;little white lies&rdquo; you tell yourself and others throught the day.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Ollert - Reveal The Data Behind Your Trello Boards]]></title>
@@ -176,51 +201,6 @@
 <p>There are <a href="//duckduckgo.com/goodies">100s of other goodies</a> as well. Do math using an &ldquo;=&rdquo; sign, like &ldquo;=128*256&rdquo;. Find &ldquo;Hello, World&rdquo; examples by searching for &ldquo;hello world perl&rdquo; or &ldquo;hello world clojure&rdquo;. Do a Twitter hashtag search to find out what &ldquo;#yolo&rdquo; means. Currency conversions. Unit conversions. Convert between timezones.</p>
 
 <p>Okay, enough shameless plugging for my favorite search engine. Give it a chance. Let those Google servers cool down for a few microseconds, they won&rsquo;t mind.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Tell Your Users When You Fail]]></title>
-    <link href="http://larry-price.com/blog/2013/12/12/tell-your-users-when-you-fail/"/>
-    <updated>2013-12-12T19:41:00-05:00</updated>
-    <id>http://larry-price.com/blog/2013/12/12/tell-your-users-when-you-fail</id>
-    <content type="html"><![CDATA[<p>Your users put a lot of faith in you. They put up with your terrible design, your horrible taste in color scheme, and your ability to take up over 100% of their computer&rsquo;s memory. With that in mind, don&rsquo;t these poor people deserve a little bit of honesty?</p>
-
-<p>I came across some code recently that irked me. This code asks for a handle to a database abstraction class and then runs a query on it. It looks kinda like this:</p>
-
-<pre><code class="ruby settings.rb">def changeSettings(newSettings)
-  db = dbFactory.get("settings.db")
-  if !db.nil?
-    db.execute(buildSaveQuery(newSettings))
-  end
-end
-</code></pre>
-
-<p>How nice that <code>changeSettings</code> doesn&rsquo;t try to play with a <code>nil</code> database, right? But what about the user&rsquo;s data? It wasn&rsquo;t saved. And no one knows. <em>Not even you</em>. Now, maybe the user will happily continue what he&rsquo;s doing until he notices that his new settings aren&rsquo;t quite right. So he goes back to them again. Same result. Repeat ad infinitum.</p>
-
-<p>How I would initially approach this is to add an <code>else</code> statement that launches a dialog giving some useful data to the user. Whatever you do, for the love of code, DO NOT tell the user that you had database problems. For most applications, the user will have no idea what that means. It might look something like this:</p>
-
-<pre><code class="ruby settings.rb">def changeSettings(newSettings)
-  db = dbFactory.get("settings.db")
-  if !db.nil?
-    db.execute(buildSaveQuery(newSettings))
-  else
-    showDialog(title="Save Failed!",
-               msg="I'm sorry, but your data could not be saved." +
-                   "Press 'Try Again' to give it another go." +
-                   "If the problem persists, restart the application" +
-                   " or contact system support.")
-  end
-end
-</code></pre>
-
-<p>This is not a bad solution. But what about all the other places in the code I get the database from the factory? I&rsquo;d have to update those as well. It would be better to be able to code the factory to launch a similar error dialog whenever this happens. Even better, let me hand the factory a reference to an appropriate dialog whenever I call <code>dbFactory.get</code>.</p>
-
-<p>Another much more frightening possibility is to skip the <code>nil</code> check. Can you guarantee that <code>dbFactory.get</code> will never be <code>nil</code>? In that case, this option is actually pretty good.</p>
-
-<p>Even if that&rsquo;s not a guarantee you can make, it may still be a valid solution. <a href="http://www.artima.com/intv/defenseP.html">Crash early before you do too much damage</a>. Now, if there&rsquo;s some kind of crash-handler or global exception-catcher in your application, then you can catch the impending crash and tell the user the application needs to be restarted&hellip; And the app probably needs to be restarted anyway! There&rsquo;s no need to keep running after you&rsquo;ve reached some horrible error state that needs to be addressed.</p>
-
-<p>Just do <em>something</em>! Your users (especially if that happens to include me) will appreciate your honesty, even if it&rsquo;s so brutal that they have to restart the application.</p>
 ]]></content>
   </entry>
   

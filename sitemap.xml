@@ -3,6 +3,12 @@
   
   
   <url>
+    <loc>http://larry-price.com/blog/2014/08/31/the-honest-truth-about-dishonesty/</loc>
+    <lastmod>2014-08-31T13:35:40-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://larry-price.com/blog/2014/08/22/fixing-some-minor-bugs-in-trellos-client-dot-js/</loc>
     <lastmod>2014-08-22T06:08:21-04:00</lastmod>
     <priority>0.8</priority>
@@ -353,28 +359,28 @@
   
   <url>
     <loc>http://larry-price.com/blog/books/</loc>
-    <lastmod>2014-08-22T06:46:57-04:00</lastmod>
+    <lastmod>2014-08-31T14:44:19-04:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://larry-price.com/blog/projects/</loc>
-    <lastmod>2014-08-22T06:46:57-04:00</lastmod>
+    <lastmod>2014-08-31T14:44:19-04:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://larry-price.com/blog/archives/</loc>
-    <lastmod>2014-08-22T06:46:57-04:00</lastmod>
+    <lastmod>2014-08-31T14:44:19-04:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://larry-price.com/</loc>
-    <lastmod>2014-08-22T06:46:57-04:00</lastmod>
+    <lastmod>2014-08-31T14:44:19-04:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>

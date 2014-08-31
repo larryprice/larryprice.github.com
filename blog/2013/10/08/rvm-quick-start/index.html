@@ -113,23 +113,23 @@
 
 <p>RVM is a simple tool to solve just problems. And it works pretty well. I hit some kinks along the way, but my installation pleases me well enough. Getting RVM is not for the faint of heart. Maybe there are better ways to do it, but the website says to execute the following:</p>
 
-<figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; curl -L https://get.rvm.io | bash -s stable
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>This command uses curl to fetch the data that lives at <code>https://get.rvm.io</code>, which happens to be a big bash script. It executes the bash script with the args <code>-s stable</code>. &lsquo;Stable&rsquo; means the latest stable release of RVM. I could just as easily give it &lsquo;dev&rsquo; and get the latest developer release instead, but I really don&rsquo;t want that. So that command does a lot of stuff and may give you some further instructions to run before you can continue. Use that big head of yours and follow the instructions. You may also need to restart a terminal to get RVM to be recognized as a command. Since I was using <code>gnome-terminal</code>, I had to follow these <a href="https://rvm.io/integration/gnome-terminal">instructions</a>.</p>
 
 <p>Now I want RVM to know about some Ruby versions. For a full list of possible Ruby versions to install, run <code>rvm list known</code>. I just want 1.9.3. I found that I needed to do this even though I had 1.9.3 installed on my system previously.</p>
 
-<figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; rvm install ruby-1.9.3
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>In Ubuntu 13.04, this command installs ruby-1.9.3 in <code>~/.rvm/rubies/ruby-1.9.3-p448/bin/ruby</code>. I&rsquo;ve found that this also sets my default Ruby to the RVM version of Ruby, which I don&rsquo;t want. To verify and undo this, I executed the following commands outside of my project directory.</p>
 
-<figure class='code'><figcaption><span>/home/lrp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>/home/lrp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -147,19 +147,19 @@
 </span><span class='line'>&gt; which ruby
 </span><span class='line'>/usr/bin/ruby
 </span><span class='line'>&gt;
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>Now that that&rsquo;s settled, I want to tell RVM to use the local version of Ruby for my project and to install any gems in a special location.</p>
 
-<figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; rvm 1.9.3@my-project --create --ruby-version
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>This creates a gemset and ruby-version file (<code>.ruby-gemset</code> and <code>.ruby-version</code> files) using the Ruby installation 1.9.3 created above. I specifiy to use <code>--ruby-version</code> instead of <code>--rvmrc</code> because RVM told me that I should. After some research, the <code>.ruby-version</code> file is used by several other tools, so this will keep my potential number of config files low. Now I check that all my Ruby versions are okay.</p>
 
-<figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>/home/lrp/my_project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -171,7 +171,7 @@
 </span><span class='line'>&gt; which ruby
 </span><span class='line'>/usr/bin/ruby
 </span><span class='line'>&gt;
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>When in my project directory, all the gems I install will be installed to my specified gemset, which means they are no longer cluttering my global gemspace, even when I install them using Bundler. It also means that I can use ruby-1.9.3 for this project and 2.0 for another project with minimal mental overhead. This makes me a happy developer.</p>
@@ -231,6 +231,10 @@
   <ul class="posts">
     
         <li class="related">
+          <a href="/blog/2013/10/08/rvm-quick-start/">RVM Quick Start</a>
+        </li>
+    
+        <li class="related">
           <a href="/blog/2013/01/19/testing-a-sinatra-app-with-capybara/">Testing a Sinatra App with Capybara</a>
         </li>
     
@@ -244,10 +248,6 @@
     
         <li class="related">
           <a href="/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo/">Pushing an Application to Heroku that Uses Ruby and Mongo</a>
-        </li>
-    
-        <li class="related">
-          <a href="/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install/">Use NVM to manage your NodeJS install</a>
         </li>
     
   </ul>
@@ -290,6 +290,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/08/31/the-honest-truth-about-dishonesty/">The (Honest) Truth About Dishonesty</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/08/22/fixing-some-minor-bugs-in-trellos-client-dot-js/">Hotfixing a Bug in Trello's client.js</a>
       </li>
     
@@ -305,15 +309,11 @@
         <a href="/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install/">Use NVM to Manage Your NodeJS Install</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards/">Ollert - Reveal the Data Behind Your Trello Boards</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 103.75%'>agile</a> <a href='/blog/categories/c-plus-plus' style='font-size: 111.25%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 111.25%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.75%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 115.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 118.75%'>database</a> <a href='/blog/categories/foreman' style='font-size: 103.75%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.75%'>foss</a> <a href='/blog/categories/git' style='font-size: 103.75%'>git</a> <a href='/blog/categories/gmock' style='font-size: 103.75%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 111.25%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 103.75%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 103.75%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 103.75%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 111.25%'>heroku</a> <a href='/blog/categories/html' style='font-size: 107.5%'>html</a> <a href='/blog/categories/internet' style='font-size: 103.75%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 118.75%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 115.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 107.5%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 111.25%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 103.75%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 103.75%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 103.75%'>nodejs</a> <a href='/blog/categories/nokogiri' style='font-size: 103.75%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 156.25%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 107.5%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 103.75%'>nvm</a> <a href='/blog/categories/ollert' style='font-size: 141.25%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 115.0%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 103.75%'>pony</a> <a href='/blog/categories/qmake' style='font-size: 103.75%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 103.75%'>qt</a> <a href='/blog/categories/rails' style='font-size: 103.75%'>rails</a> <a href='/blog/categories/retro' style='font-size: 111.25%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 107.5%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 160.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 111.25%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 103.75%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 103.75%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 130.0%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 103.75%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 133.75%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 103.75%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 103.75%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 118.75%'>testing</a> <a href='/blog/categories/trello' style='font-size: 126.25%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.5%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 103.75%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 103.75%'>upstart</a> <a href='/blog/categories/web' style='font-size: 145.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 133.75%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 103.75%'>writeups</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 103.75%'>agile</a> <a href='/blog/categories/c-plus-plus' style='font-size: 111.25%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 111.25%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.75%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 115.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 118.75%'>database</a> <a href='/blog/categories/foreman' style='font-size: 103.75%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.75%'>foss</a> <a href='/blog/categories/git' style='font-size: 103.75%'>git</a> <a href='/blog/categories/gmock' style='font-size: 103.75%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 111.25%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 103.75%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 103.75%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 103.75%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 111.25%'>heroku</a> <a href='/blog/categories/html' style='font-size: 107.5%'>html</a> <a href='/blog/categories/internet' style='font-size: 103.75%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 118.75%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 115.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 107.5%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 111.25%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 103.75%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 103.75%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 103.75%'>nodejs</a> <a href='/blog/categories/nokogiri' style='font-size: 103.75%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 107.5%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 103.75%'>nvm</a> <a href='/blog/categories/ollert' style='font-size: 141.25%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 115.0%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 103.75%'>pony</a> <a href='/blog/categories/qmake' style='font-size: 103.75%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 103.75%'>qt</a> <a href='/blog/categories/rails' style='font-size: 103.75%'>rails</a> <a href='/blog/categories/retro' style='font-size: 111.25%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 107.5%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 160.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 111.25%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 103.75%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 103.75%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 130.0%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 103.75%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 133.75%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 103.75%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 103.75%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 118.75%'>testing</a> <a href='/blog/categories/trello' style='font-size: 126.25%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.5%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 103.75%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 103.75%'>upstart</a> <a href='/blog/categories/web' style='font-size: 145.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 137.5%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 103.75%'>writeups</a> </span>
 </section>
 
 <section>

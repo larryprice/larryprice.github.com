@@ -4,7 +4,7 @@
   <title><![CDATA[Category: write-ups | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/write-ups/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-22T06:46:57-04:00</updated>
+  <updated>2014-08-31T14:44:19-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,31 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[The (Honest) Truth About Dishonesty]]></title>
+    <link href="http://larry-price.com/blog/2014/08/31/the-honest-truth-about-dishonesty/"/>
+    <updated>2014-08-31T13:35:40-04:00</updated>
+    <id>http://larry-price.com/blog/2014/08/31/the-honest-truth-about-dishonesty</id>
+    <content type="html"><![CDATA[<h3>The Idea</h3>
+
+<p>Everyone lies. Everyone cheats. From Marcy down the street cheating on her diet to Bernie Madoff committing massive finanical fraud, we&rsquo;re all a little dishonest from time to time. With the power of experimentats and research, Dan Ariely seeks to learn what leads humans to act dishonestly in <em><a href="http://amzn.to/1qsOgTy">The (Honest) Truth About Dishonesty</a></em>.</p>
+
+<h3>The Gooey Center</h3>
+
+<p>Since reading <em><a href="http://amzn.to/VYzVTZ">Predictably Irrational</a></em> earlier this year, I&rsquo;ve really liked reading Dan Ariely; his writing style is familiar yet authoritative, making for highly readable books filled with high-quality experiments and meaningful insights. <em>The (Honest) Truth About Dishonesty</em> is a similar read to <em>Predictably Irrational</em>, but with a tight focus on what drives the common man to lie and cheat.</p>
+
+<p>The main takeaway is, given the chance, most people will cheat just a little given the opportunity. Ariely&rsquo;s experiments found that very few people cheated heavily, even in situations where the likelihood of being caught is minimal. Rounding up your billable hours on a timesheet is easy to do without a shred of guilt, and the likelihood of getting caught is approximately nil. On the other hand, fudging an hour or two in a single day is not something anyone I know would take lightly. Unfortunately, if you round up billable hours by 10 minutes a day for a whole week, you&rsquo;ve fudged nearly an hour of billable work (without the guilt).</p>
+
+<p>Day-to-day living makes us less honest. If you&rsquo;ve had a long day at work, you&rsquo;re more likely to cheat on your diet when you get home because your defenses have been torn down. You&rsquo;re more likely to put things off in favor of sitting around watching television.</p>
+
+<p>Ariely finds that collaboration also leads to more dishonesty: as humans, we are more willing to bend the rules if it will benefit someone else, especially if we have befriended that someone else.</p>
+
+<h3>Who Would Like This</h3>
+
+<p>Those interested in behavioral economics should get a kick out of this book, especially if they enjoyed Ariely&rsquo;s other works. Reading this book can also make you think more critically about some of the &ldquo;little white lies&rdquo; you tell yourself and others throught the day.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Rework]]></title>
@@ -124,42 +149,6 @@
 <h3>Who Would Like This</h3>
 
 <p>C++ Programmers should have this book (at least the first 6 chapters) crammed down their throats and into their squishy pink brains. After learning all the &ldquo;basic&rdquo; concepts of C++, the lessons this book teaches in design and the nature of C++ should be taken into consideration.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Joel On Software]]></title>
-    <link href="http://larry-price.com/blog/2013/04/28/joel-on-software/"/>
-    <updated>2013-04-28T11:38:00-04:00</updated>
-    <id>http://larry-price.com/blog/2013/04/28/joel-on-software</id>
-    <content type="html"><![CDATA[<blockquote><p>We&rsquo;re programmers. Programmers are, in their hearts, architects, and the
-first thing they want to do when they get to a site is to bulldoze the place
-flat and build something grand. We&rsquo;re not excited by incremental renovation:
-tinkering, improving, planting flower beds.</p>
-
-<p>&ndash; Joel Spolsky, &ldquo;Things you Should Never Do, Part I&rdquo;</p></blockquote>
-
-<h3>The Gist</h3>
-
-<p><a href="http://www.amazon.com/gp/product/1590593898/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1590593898&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Joel On Software</em></a> is a collection of blog posts by the great <a href="http://www.joelonsoftware.com/">Joel Spolsky</a>. He has risen to Internet Fame after his experience working for Microsoft and eventually starting his own company. The &ldquo;chapters&rdquo; (blog posts) provide insight into picking a language for your codebase, recruiting engineers, managing programmers, fixing bugs, paper prototyping, and how Microsoft works.</p>
-
-<h3>My Opinion</h3>
-
-<p>Joel Spolsky is a god sent down from Mount Olympus to calmly explain to us why we are sometimes terrible people and then goes on to tell us it&rsquo;s okay and we should learn from our past. I loved this book, especially since I read it at the same time as some really terrible books (namely <a href="http://www.amazon.com/gp/product/0672326140/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=0672326140&amp;linkCode=as2&amp;tag=larpriandthee-20">The Inmates are Running the Asylum</a> and <a href="http://www.amazon.com/gp/product/1491017082/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1491017082&amp;linkCode=as2&amp;tag=larpriandthee-20">Enterprise Games</a>; I do not recommend these books).</p>
-
-<p>Spolsky talks a lot about specs in the first part of the book, and at first I thought that he was stating too much of the obvious; but then why don&rsquo;t we do specs in this obvious way? Instead, we resign ourselves to write a tiny portion of the spec, start programming, and then implicitly change the spec while only haphazardly updating our documentation. I&rsquo;ve been on projects before where we would have greatly benefitted from having a solid spec; we knew exactly what needed to be done, because we were rewriting a successful product the company had released several years ago. With an ever-changing spec, we programmed ourselves into a hole, and struggled for at least half a year to claw our way back out. I have to wonder if more pre-planning would have saved us from ourselves.</p>
-
-<p>Spolsky&rsquo;s advice on hiring people is invaluable (<a href="http://www.joelonsoftware.com/articles/GuerrillaInterviewing3.html">The Guerrilla Guide to Interviewing</a>). In fact, I wish that I had read some of these blog posts while I was interviewing. Spolsky says that recruiters should ask &ldquo;impossible questions&rdquo; and not worry about what the answers given are, just that the recruit comes up with something. He says to stop asking trivia questions. He talks about relying on all interviewers equally: if any two interviewers say &ldquo;No&rdquo; to a candidate, the candidate is toast. He talks about asking candidates about projects and looking for passion, which is almost always the sign of a good programmer.</p>
-
-<p>Spolsky talks about the commodity market of software/hardware. To sum it up, the supply of one drives the demand of the other. This section made me think about the current PC market: hardware is cheap <em>and</em> software is cheap. Not only is software cheap, but it&rsquo;s often <em>free</em>. Prices for hardware haven&rsquo;t been going down at nearly the rate it used to, but that seems natural as the price approaches the cost of labor and parts. Most of the hardware innovation right now seems to be aimed at the tiny computers in our pockets (or <a href="http://www.google.com/glass/start/">on our face</a>, soon enough). Google&rsquo;s software makes money by displaying ads using its search engine, so Google has entered the market of making software that is compatible with all kinds of different hardware. Google has played the commodities game like a champ, getting hardware running their software into hundreds of millions of pockets.</p>
-
-<p>Some of the weaker parts of the book are when Spolsky talks about .NET. I&rsquo;m not going to go into detail, but when he wrote these posts, .NET was just entering the market. Spolsky starts by bashing .NET for making all the old Windows API code unusable, but in later blog posts falls hard for .NET and starts thinking about ways to rewrite his entire life in .NET.</p>
-
-<h3>Who Would Like This</h3>
-
-<p>I believe that programmers are the main audience for this book, and I am a programmer who loved reading it. Spolsky does not talk down to the reader, nor does he dumb down the nitty-gritty technical blog posts.</p>
-
-<p>Programmers who intend to become managers may get added benefit from this book, as Spolsky discusses some interesting recruiting techniques and ways to deal with programmers. My company uses some of Spolsky&rsquo;s advice when hiring engineers (quite a bit of it, thinking back to my interview), and we&rsquo;ve been hiring only the best and brightest cowboys in the Midwest for years.</p>
 ]]></content>
   </entry>
   

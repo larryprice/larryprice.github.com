@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="http://larry-price.com/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-22T06:46:57-04:00</updated>
+  <updated>2014-08-31T14:44:19-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,31 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[The (Honest) Truth About Dishonesty]]></title>
+    <link href="http://larry-price.com/blog/2014/08/31/the-honest-truth-about-dishonesty/"/>
+    <updated>2014-08-31T13:35:40-04:00</updated>
+    <id>http://larry-price.com/blog/2014/08/31/the-honest-truth-about-dishonesty</id>
+    <content type="html"><![CDATA[<h3>The Idea</h3>
+
+<p>Everyone lies. Everyone cheats. From Marcy down the street cheating on her diet to Bernie Madoff committing massive finanical fraud, we&rsquo;re all a little dishonest from time to time. With the power of experimentats and research, Dan Ariely seeks to learn what leads humans to act dishonestly in <em><a href="http://amzn.to/1qsOgTy">The (Honest) Truth About Dishonesty</a></em>.</p>
+
+<h3>The Gooey Center</h3>
+
+<p>Since reading <em><a href="http://amzn.to/VYzVTZ">Predictably Irrational</a></em> earlier this year, I&rsquo;ve really liked reading Dan Ariely; his writing style is familiar yet authoritative, making for highly readable books filled with high-quality experiments and meaningful insights. <em>The (Honest) Truth About Dishonesty</em> is a similar read to <em>Predictably Irrational</em>, but with a tight focus on what drives the common man to lie and cheat.</p>
+
+<p>The main takeaway is, given the chance, most people will cheat just a little given the opportunity. Ariely&rsquo;s experiments found that very few people cheated heavily, even in situations where the likelihood of being caught is minimal. Rounding up your billable hours on a timesheet is easy to do without a shred of guilt, and the likelihood of getting caught is approximately nil. On the other hand, fudging an hour or two in a single day is not something anyone I know would take lightly. Unfortunately, if you round up billable hours by 10 minutes a day for a whole week, you&rsquo;ve fudged nearly an hour of billable work (without the guilt).</p>
+
+<p>Day-to-day living makes us less honest. If you&rsquo;ve had a long day at work, you&rsquo;re more likely to cheat on your diet when you get home because your defenses have been torn down. You&rsquo;re more likely to put things off in favor of sitting around watching television.</p>
+
+<p>Ariely finds that collaboration also leads to more dishonesty: as humans, we are more willing to bend the rules if it will benefit someone else, especially if we have befriended that someone else.</p>
+
+<h3>Who Would Like This</h3>
+
+<p>Those interested in behavioral economics should get a kick out of this book, especially if they enjoyed Ariely&rsquo;s other works. Reading this book can also make you think more critically about some of the &ldquo;little white lies&rdquo; you tell yourself and others throught the day.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Hotfixing a Bug in Trello's client.js]]></title>
@@ -2354,74 +2379,6 @@
 
 
 <p>Now, as your friend and teacher, I command you to use this knowledge to go <a href="//ollert.herokuapp.com">do cool stuff</a> with Trello!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Connecting to the Trello API]]></title>
-    <link href="http://larry-price.com/blog/2014/03/18/connecting-to-the-trello-api/"/>
-    <updated>2014-03-18T20:00:11-04:00</updated>
-    <id>http://larry-price.com/blog/2014/03/18/connecting-to-the-trello-api</id>
-    <content type="html"><![CDATA[<p><a href="//trello.com">Trello</a> has a <a href="//trello.com/docs/">pretty sweet API</a>, which we use extensively in our Trello-analysis app <a href="//ollert.herokuapp.com">Ollert</a>. Initially connecting to the Trello API took us a few hours, so I&rsquo;d like to make a record of how we managed to connect.</p>
-
-<p>Making a connection to Trello requires two hashcodes: an application key and a Trello member token. You can generate and view your application key by visiting <a href="//trello.com/1/appKey/generate">https://trello.com/1/appKey/generate</a>.</p>
-
-<p>The member token is something we need to get from the user. There are two ways to get a user&rsquo;s member token: through fragments and through a <strong>postMessage</strong>. You can also request different levels of access (read, write, read+write), and different expiration periods (such as 1 day, 30 days, or never) for member tokens. For the remainder of this writing, I&rsquo;ll be accessing a read-only member token that never expires.</p>
-
-<p>We didn&rsquo;t have a lot of luck with fragments, but the concept is simple enough. You have the user click a link that probably says &ldquo;Connect With Trello&rdquo; which is similar to:</p>
-
-<p><code>https://trello.com/1/authorize?key=applicationkey&amp;name=applicationname&amp;expiration=never&amp;response_type=token</code></p>
-
-<p>At this point, the user is redirected to Trello and given the opportunity to Allow or Deny your application access. Once allowed, the user sees a static Trello page with their member token in plain text. Somehow you&#8221;re supposed to convey to them that they should copy this token and paste it back to you. This has clear drawbacks in usability.</p>
-
-<p>Using the <strong>postMessage</strong> method of accessing a member token was significantly more fruitful. Trello provides a Javascript file named <a href="https://trello.com/docs/gettingstarted/clientjs.html">client.js</a> that does most of the legwork for you. An example:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nt">%script</span><span class="p">{</span><span class="ss">src</span><span class="p">:</span> <span class="s2">&quot;//api.trello.com/1/client.js?key=applicationkey&quot;</span><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>function AuthenticateTrello() {
-</span><span class='line'>  Trello.authorize({
-</span><span class='line'>    name: &quot;YourApplication&quot;,
-</span><span class='line'>    type: &quot;popup&quot;,
-</span><span class='line'>    interactive: true,
-</span><span class='line'>    expiration: &quot;never&quot;,
-</span><span class='line'>    persist: true,
-</span><span class='line'>    success: function () { onAuthorizeSuccessful(); },
-</span><span class='line'>    scope: { write: false, read: true },
-</span><span class='line'>  });
-</span><span class='line'>}
-</span><span class='line'>function onAuthorizeSuccessful() {
-</span><span class='line'>  var token = Trello.token();
-</span><span class='line'>  window.location.replace(&quot;/auth?token=&quot; + token);
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'><span class="nt">%a</span><span class="p">{</span><span class="ss">href</span><span class="p">:</span> <span class="s2">&quot;javascript:void(0)&quot;</span><span class="p">,</span> <span class="ss">onClick</span><span class="p">:</span> <span class="s2">&quot;AuthenticateTrello()&quot;</span><span class="p">}</span>
-</span><span class='line'>  Connect With Trello
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>When the user clicks the link, we have Trello set to activate a &ldquo;popup&rdquo; that will ask them to &ldquo;Allow&rdquo; or &ldquo;Deny&rdquo; our app from accessing their data. When the user allows us access, the popup closes and we hit the &ldquo;onAuthorizeSuccessful&rdquo; method. In my method, I simply redirect them to the <code>/auth</code> route with <code>token</code> manually added to the params list. One of the interesting options listed above is the &ldquo;persist&rdquo; option, which tells Trello whether it should prompt the user for his or her token every time. By telling Trello to persist, the user will only be presented with the popup when he or she needs to reauthenticate.</p>
-
-<p>You can learn more about member tokens from <a href="//trello.com/docs/gettingstarted/authorize.html">https://trello.com/docs/gettingstarted/authorize.html</a>.</p>
 ]]></content>
   </entry>
   
