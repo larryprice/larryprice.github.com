@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="The Idea Everyone lies. Everyone cheats. From Marcy down the street cheating on her diet to Bernie Madoff committing massive finanical fraud, we& &hellip;">
+  <meta name="description" content="As I venture through the land of NodeJS, I&rsquo;ve found the wonder and magic of NPM, a package management tool for Javscript similar to ruby&rsquo; &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,127 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way/">Fetching Random Mongoose Objects the Simple Way</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-15T20:11:13-04:00" pubdate data-updated="true"></time>
+        
+           | <a href="/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way/#disqus_thread"
+             data-disqus-identifier="http://larry-price.com/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As I venture through the land of <a href="http://nodejs.org/">NodeJS</a>, I&rsquo;ve found the wonder and magic of <a href="http://npmjs.org/">NPM</a>, a package management tool for Javscript similar to <a href="https://www.ruby-lang.org/">ruby</a>&rsquo;s gems. Although there are nearly 100,000 packages on the main npmjs site (94,553 at time-of-writing), it seems there are still niches to be filled.</p>
+
+<p>Recently, while working on a <strong>top secret side-project</strong>, I wanted to grab a random object from a <a href="https://www.mongodb.org/">MongoDB</a> collection. I used the highly-extensible <a href="http://mongoosejs.com/">mongoose</a> to set up my models and just needed to find a package somewhere with the desired functionality. I found such a package called <a href="https://github.com/matomesc/mongoose-random">mongoose-random</a>, but, unfortunately, I was never able to get this plugin to work correctly. The plugin in question also needed to insert new columns on your tables, which I didn&rsquo;t really want. So I decided to create a new package.</p>
+
+<p><a href="https://www.npmjs.org/package/mongoose-simple-random">mongoose-simple-random</a> is an incredibly easy way to include a random accessor on your mongoose models. All that&rsquo;s required is adding the plugin to the schema before compiling the model:</p>
+
+<figure class='code'><figcaption><span>test.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">random</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mongoose-simple-random&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Schema</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">message</span><span class="o">:</span> <span class="nb">String</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'><span class="nx">s</span><span class="p">.</span><span class="nx">plugin</span><span class="p">(</span><span class="nx">random</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Test</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">model</span><span class="p">(</span><span class="s1">&#39;Test&#39;</span><span class="p">,</span> <span class="nx">s</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now I can ask the model for a single random element of the <code>Test</code> model with a single call to <code>findOneRandom</code>:</p>
+
+<figure class='code'><figcaption><span>find_one.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">Test</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./test&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Test</span><span class="p">.</span><span class="nx">findOneRandom</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">else</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Need to find more than one? Use <code>findRandom</code> to get an array:</p>
+
+<figure class='code'><figcaption><span>find_five.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">Test</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./test&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Test</span><span class="p">.</span><span class="nx">findRandom</span><span class="p">({},</span> <span class="p">{},</span> <span class="p">{</span><span class="nx">count</span><span class="o">:</span> <span class="mi">5</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">else</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Zowee! Just like the default <code>find</code> methods, you can pass in optional filters, fields, and options:</p>
+
+<figure class='code'><figcaption><span>find_five_with_optionals.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">Test</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./test&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">filter</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">type</span><span class="o">:</span> <span class="p">{</span> <span class="nx">$in</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;engineering&#39;</span><span class="p">]</span> <span class="p">}</span> <span class="p">};</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">fields</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">description</span><span class="o">:</span> <span class="mi">0</span> <span class="p">};</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">skip</span><span class="o">:</span> <span class="mi">10</span><span class="p">,</span> <span class="nx">limit</span><span class="o">:</span> <span class="mi">10</span><span class="p">,</span> <span class="nx">count</span><span class="o">:</span> <span class="mi">5</span> <span class="p">};</span>
+</span><span class='line'><span class="nx">Test</span><span class="p">.</span><span class="nx">findRandom</span><span class="p">(</span><span class="nx">filter</span><span class="p">,</span> <span class="nx">fields</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">else</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Given 1000s of objects, performance is excellent. I haven&rsquo;t tested it on larger-scale databases, but I wouldn&rsquo;t mind seeing some performance tests in the future.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -720,85 +841,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install/">Use NVM to Manage Your NodeJS Install</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-02T20:00:57-04:00" pubdate data-updated="true"></time>
-        
-           | <a href="/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install/#disqus_thread"
-             data-disqus-identifier="http://larry-price.com/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&rsquo;ve been trying to get into <a href="http://nodejs.org/">NodeJS</a>, and so my immediate thought is that I want to be able to install different versions for different projects, a la <a href="https://rvm.io">rvm</a> for <a href="https://ruby-lang.org">ruby</a>. Fortunately, this already exists.</p>
-
-<p><a href="https://github.com/creationix/nvm">NVM</a> gives me the equivalent functionality of rvm but for NodeJS, making all my dreams come true. Here&rsquo;s how I installed it on my Linux boxes:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>curl https://raw.githubusercontent.com/creationix/nvm/v0.12.2/install.sh | bash
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><em>Note: This URL will get you nvm version 0.12.2. This link may not be valid in the future, where you come from. Check out the <a href="https://github.com/creationix/nvm">github repo</a> for any newer versions. If you&rsquo;re brave, trusting, or just really naïve, you can even change <code>v0.12.2</code> above to <code>master</code> to get the bleeding edge install.</em></p>
-
-<p>The above line of code will download the files, install nvm in your home directory, and update your profile to include nvm&rsquo;s current Node version in your path. NVM autocomplete isn&rsquo;t in place by default, but we can enable it by adding the following to the end of our .bash_profile:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[[</span> -r <span class="nv">$NVM_DIR</span>/bash_completion <span class="o">]]</span> <span class="o">&amp;&amp;</span> . <span class="nv">$NVM_DIR</span>/bash_completion
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now it&rsquo;s time to actually install us some Node! You can use <code>nvm ls-remote</code> to list the versions of Node currently available for download. At the time of this writing, the most recent version is <strong>v0.11.13</strong>. Installing is easy (and quick):</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>nvm install 0.11.13
-</span><span class='line'>...
-</span><span class='line'><span class="nv">$ </span>nvm use 0.11.13
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Since this is the only Node on my system, I&rsquo;d like to set it as the default.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>nvm <span class="nb">alias </span>default 0.11.13
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>What if I&rsquo;m <code>cd</code>ing out of control and I don&rsquo;t know what Node version I need in my current directory? Create a file called <code>.nvmrc</code> in the directory containing the version number you want nvm to use and then type <code>node use</code> ENTER; Now you&rsquo;re using the version of Node you meant to. This also prevents people from using the wrong versions of Node to try to run your code, which would of course be a catastrophe.</p>
-
-<p>PLUS nvm installs the right version of npm whenever you install Node, so there&rsquo;s no need to worry about dealing with your base npm not working with different versions of Node.</p>
-
-<p>Thank <a href="https://en.wikipedia.org/wiki/Free_and_Open_Source_Software">FOSS</a> for nvm. Maybe one day soon I&rsquo;ll do useful things in Node an tell you about them.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="2">&larr; Older</a>
@@ -826,6 +868,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way/">Fetching Random Mongoose Objects the Simple Way</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/08/31/the-honest-truth-about-dishonesty/">The (Honest) Truth About Dishonesty</a>
       </li>
     
@@ -841,15 +887,11 @@
         <a href="/blog/2014/08/05/javascript-testing-with-capybara-and-cucumber/">Javascript Testing With Capybara and Cucumber</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install/">Use NVM to Manage Your NodeJS Install</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 103.75%'>agile</a> <a href='/blog/categories/c-plus-plus' style='font-size: 111.25%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 111.25%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.75%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 115.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 118.75%'>database</a> <a href='/blog/categories/foreman' style='font-size: 103.75%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.75%'>foss</a> <a href='/blog/categories/git' style='font-size: 103.75%'>git</a> <a href='/blog/categories/gmock' style='font-size: 103.75%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 111.25%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 103.75%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 103.75%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 103.75%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 111.25%'>heroku</a> <a href='/blog/categories/html' style='font-size: 107.5%'>html</a> <a href='/blog/categories/internet' style='font-size: 103.75%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 118.75%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 115.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 107.5%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 111.25%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 103.75%'>mongolab</a> <a href='/blog/categories/mvc' style='font-size: 103.75%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 103.75%'>nodejs</a> <a href='/blog/categories/nokogiri' style='font-size: 103.75%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 107.5%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 103.75%'>nvm</a> <a href='/blog/categories/ollert' style='font-size: 141.25%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 115.0%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 103.75%'>pony</a> <a href='/blog/categories/qmake' style='font-size: 103.75%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 103.75%'>qt</a> <a href='/blog/categories/rails' style='font-size: 103.75%'>rails</a> <a href='/blog/categories/retro' style='font-size: 111.25%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 107.5%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 160.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 111.25%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 103.75%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 103.75%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 130.0%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 103.75%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 133.75%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 103.75%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 103.75%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 118.75%'>testing</a> <a href='/blog/categories/trello' style='font-size: 126.25%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.5%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 103.75%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 103.75%'>upstart</a> <a href='/blog/categories/web' style='font-size: 145.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 137.5%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 103.75%'>writeups</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 103.75%'>agile</a> <a href='/blog/categories/c-plus-plus' style='font-size: 111.25%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 111.25%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.75%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 115.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 122.5%'>database</a> <a href='/blog/categories/foreman' style='font-size: 103.75%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.75%'>foss</a> <a href='/blog/categories/git' style='font-size: 103.75%'>git</a> <a href='/blog/categories/gmock' style='font-size: 103.75%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 111.25%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 103.75%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 103.75%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 103.75%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 111.25%'>heroku</a> <a href='/blog/categories/html' style='font-size: 107.5%'>html</a> <a href='/blog/categories/internet' style='font-size: 103.75%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 122.5%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 115.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 111.25%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 111.25%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 103.75%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 103.75%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 103.75%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 107.5%'>nodejs</a> <a href='/blog/categories/nokogiri' style='font-size: 103.75%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 107.5%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 103.75%'>nvm</a> <a href='/blog/categories/ollert' style='font-size: 141.25%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 115.0%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 103.75%'>pony</a> <a href='/blog/categories/qmake' style='font-size: 103.75%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 103.75%'>qt</a> <a href='/blog/categories/rails' style='font-size: 103.75%'>rails</a> <a href='/blog/categories/retro' style='font-size: 111.25%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 107.5%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 160.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 111.25%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 103.75%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 103.75%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 130.0%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 103.75%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 133.75%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 103.75%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 103.75%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 118.75%'>testing</a> <a href='/blog/categories/trello' style='font-size: 126.25%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.5%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 103.75%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 103.75%'>upstart</a> <a href='/blog/categories/web' style='font-size: 145.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 137.5%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 103.75%'>writeups</a> </span>
 </section>
 
 <section>

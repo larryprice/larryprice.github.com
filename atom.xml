@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="http://larry-price.com/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-31T14:44:19-04:00</updated>
+  <updated>2014-09-16T18:49:08-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,97 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Fetching Random Mongoose Objects the Simple Way]]></title>
+    <link href="http://larry-price.com/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way/"/>
+    <updated>2014-09-15T20:11:13-04:00</updated>
+    <id>http://larry-price.com/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way</id>
+    <content type="html"><![CDATA[<p>As I venture through the land of <a href="http://nodejs.org/">NodeJS</a>, I&rsquo;ve found the wonder and magic of <a href="http://npmjs.org/">NPM</a>, a package management tool for Javscript similar to <a href="https://www.ruby-lang.org/">ruby</a>&rsquo;s gems. Although there are nearly 100,000 packages on the main npmjs site (94,553 at time-of-writing), it seems there are still niches to be filled.</p>
+
+<p>Recently, while working on a <strong>top secret side-project</strong>, I wanted to grab a random object from a <a href="https://www.mongodb.org/">MongoDB</a> collection. I used the highly-extensible <a href="http://mongoosejs.com/">mongoose</a> to set up my models and just needed to find a package somewhere with the desired functionality. I found such a package called <a href="https://github.com/matomesc/mongoose-random">mongoose-random</a>, but, unfortunately, I was never able to get this plugin to work correctly. The plugin in question also needed to insert new columns on your tables, which I didn&rsquo;t really want. So I decided to create a new package.</p>
+
+<p><a href="https://www.npmjs.org/package/mongoose-simple-random">mongoose-simple-random</a> is an incredibly easy way to include a random accessor on your mongoose models. All that&rsquo;s required is adding the plugin to the schema before compiling the model:</p>
+
+<figure class='code'><figcaption><span>test.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">random</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mongoose-simple-random&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Schema</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">message</span><span class="o">:</span> <span class="nb">String</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'><span class="nx">s</span><span class="p">.</span><span class="nx">plugin</span><span class="p">(</span><span class="nx">random</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Test</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">model</span><span class="p">(</span><span class="s1">&#39;Test&#39;</span><span class="p">,</span> <span class="nx">s</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now I can ask the model for a single random element of the <code>Test</code> model with a single call to <code>findOneRandom</code>:</p>
+
+<figure class='code'><figcaption><span>find_one.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">Test</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./test&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Test</span><span class="p">.</span><span class="nx">findOneRandom</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">else</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Need to find more than one? Use <code>findRandom</code> to get an array:</p>
+
+<figure class='code'><figcaption><span>find_five.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">Test</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./test&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Test</span><span class="p">.</span><span class="nx">findRandom</span><span class="p">({},</span> <span class="p">{},</span> <span class="p">{</span><span class="nx">count</span><span class="o">:</span> <span class="mi">5</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">else</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Zowee! Just like the default <code>find</code> methods, you can pass in optional filters, fields, and options:</p>
+
+<figure class='code'><figcaption><span>find_five_with_optionals.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">Test</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./test&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">filter</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">type</span><span class="o">:</span> <span class="p">{</span> <span class="nx">$in</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;engineering&#39;</span><span class="p">]</span> <span class="p">}</span> <span class="p">};</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">fields</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">description</span><span class="o">:</span> <span class="mi">0</span> <span class="p">};</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">skip</span><span class="o">:</span> <span class="mi">10</span><span class="p">,</span> <span class="nx">limit</span><span class="o">:</span> <span class="mi">10</span><span class="p">,</span> <span class="nx">count</span><span class="o">:</span> <span class="mi">5</span> <span class="p">};</span>
+</span><span class='line'><span class="nx">Test</span><span class="p">.</span><span class="nx">findRandom</span><span class="p">(</span><span class="nx">filter</span><span class="p">,</span> <span class="nx">fields</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">else</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Given 1000s of objects, performance is excellent. I haven&rsquo;t tested it on larger-scale databases, but I wouldn&rsquo;t mind seeing some performance tests in the future.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The (Honest) Truth About Dishonesty]]></title>
@@ -2244,141 +2335,6 @@
 <h3>Who Would Like This</h3>
 
 <p>Anyone trying to communicate a new idea to someone else could benefit from this book. On a broader scope, this book can benefit your communication patterns in general. This is particularly helpful for professionals, who may have a difficulty expressing their ideas without getting too deep in the technicalities.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Using the Trello API in Ruby]]></title>
-    <link href="http://larry-price.com/blog/2014/03/20/using-the-trello-api-in-ruby/"/>
-    <updated>2014-03-20T19:37:36-04:00</updated>
-    <id>http://larry-price.com/blog/2014/03/20/using-the-trello-api-in-ruby</id>
-    <content type="html"><![CDATA[<p>So, you want to gather data using the <a href="//trello.com">Trello</a> API so that you can <a href="//ollert.herokuapp.com">do something cool with it</a>? And you&rsquo;re using <a href="//ruby-lang.org">Ruby</a>? Enter <a href="//github.com/jeremytregunna/ruby-trello">ruby-trello</a>. Install!</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>gem install ruby-trello
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We&rsquo;ll start off easy, and assume that we&rsquo;re writing a personal application where we only need to access data for one user at a time. We start by configuring ruby-trello. I&rsquo;m going to assume that you&rsquo;ve already generated a public key and received a member token and stored them in your environment.</p>
-
-<figure class='code'><figcaption><span>global_config_test.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;trello&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">Trello</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
-</span><span class='line'>  <span class="c1"># API key generated by visiting https://trello.com/1/appKey/generate</span>
-</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">developer_public_key</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;PUBLIC_KEY&#39;</span><span class="o">]</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Member token</span>
-</span><span class='line'>  <span class="c1"># larry-price.com/blog/2014/03/18/connecting-to-the-trello-api/</span>
-</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">member_token</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;MEMBER_TOKEN&#39;</span><span class="o">]</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This connects me to a specific member as found through <code>ENV['MEMBER_TOKEN']</code>. I previously wrote <a href="http://larry-price.com/blog/2014/03/18/connecting-to-the-trello-api/">another post</a> about getting a member token from a user.</p>
-
-<p>For demonstration, I&rsquo;ll find myself, grab my first board, and then display the name, names of lists, members who have worked on the project, and some numbers about each of the cards in the board. This is essentially my proof of concept for a <a href="http://larry-price.com/blog/2014/03/17/sep-startup-weekend-ollert/">super-cool web-app I wrote</a> called <a href="//ollert.herokuapp.com">Ollert</a>.</p>
-
-<figure class='code'><figcaption><span>global_config_test.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># find myself</span>
-</span><span class='line'><span class="n">me</span> <span class="o">=</span> <span class="ss">Trello</span><span class="p">:</span><span class="ss">:Member</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_larryprice&quot;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># find first board</span>
-</span><span class='line'><span class="n">board</span> <span class="o">=</span> <span class="n">me</span><span class="o">.</span><span class="n">boards</span><span class="o">.</span><span class="n">first</span>
-</span><span class='line'><span class="nb">puts</span> <span class="n">board</span><span class="o">.</span><span class="n">name</span>
-</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;Lists: </span><span class="si">#{</span><span class="n">board</span><span class="o">.</span><span class="n">lists</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.join(&#39;, &#39;)}&quot;</span>
-</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;Members: </span><span class="si">#{</span><span class="n">board</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">.</span><span class="n">full_name</span><span class="si">}</span><span class="s2">.join(&#39;, &#39;)}&quot;</span>
-</span><span class='line'><span class="n">board</span><span class="o">.</span><span class="n">cards</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">card</span><span class="o">|</span>
-</span><span class='line'>      <span class="nb">puts</span> <span class="s2">&quot;- </span><span class="se">\&quot;</span><span class="si">#{</span><span class="n">card</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span>
-</span><span class='line'>      <span class="nb">puts</span> <span class="s2">&quot;-- Actions: </span><span class="si">#{</span><span class="n">card</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">nil?</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="n">card</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>      <span class="nb">puts</span> <span class="s2">&quot;-- Members: </span><span class="si">#{</span><span class="n">card</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>      <span class="nb">puts</span> <span class="s2">&quot;-- Labels: </span><span class="si">#{</span><span class="n">card</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Wow, cool! Such data! This is really great for a single user because we only have to make the connection to Trello once (which is not incredibly fast). However, this won&rsquo;t work in a multi-user environment since we configured ruby-trello to use a specific member token. So how do we connect to multiple members at a time? Let&rsquo;s print out the same data we did above for a single user, but using <code>Trello::Client</code> to connect to Trello.</p>
-
-<figure class='code'><figcaption><span>client_test.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;trello&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">me</span> <span class="o">=</span> <span class="ss">Trello</span><span class="p">:</span><span class="ss">:Client</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
-</span><span class='line'>  <span class="ss">:developer_public_key</span> <span class="o">=&gt;</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;PUBLIC_KEY&#39;</span><span class="o">]</span><span class="p">,</span>
-</span><span class='line'>  <span class="ss">:member_token</span> <span class="o">=&gt;</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;MY_MEMBER_TOKEN&#39;</span><span class="o">]</span>
-</span><span class='line'><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">you</span> <span class="o">=</span> <span class="ss">Trello</span><span class="p">:</span><span class="ss">:Client</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
-</span><span class='line'>  <span class="ss">:developer_public_key</span> <span class="o">=&gt;</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;PUBLIC_KEY&#39;</span><span class="o">]</span><span class="p">,</span>
-</span><span class='line'>  <span class="ss">:member_token</span> <span class="o">=&gt;</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;YOUR_MEMBER_TOKEN&#39;</span><span class="o">]</span>
-</span><span class='line'><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">[</span><span class="n">me</span><span class="p">,</span> <span class="n">you</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">user</span><span class="o">|</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="n">user</span><span class="o">.</span><span class="n">fullname</span>
-</span><span class='line'>  <span class="n">board</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">boards</span><span class="o">.</span><span class="n">first</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="n">board</span><span class="o">.</span><span class="n">name</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;Lists: </span><span class="si">#{</span><span class="n">board</span><span class="o">.</span><span class="n">lists</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.join(&#39;, &#39;)}&quot;</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;Members: </span><span class="si">#{</span><span class="n">board</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">.</span><span class="n">full_name</span><span class="si">}</span><span class="s2">.join(&#39;, &#39;)}&quot;</span>
-</span><span class='line'>  <span class="n">board</span><span class="o">.</span><span class="n">cards</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">card</span><span class="o">|</span>
-</span><span class='line'>        <span class="nb">puts</span> <span class="s2">&quot;- </span><span class="se">\&quot;</span><span class="si">#{</span><span class="n">card</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span>
-</span><span class='line'>        <span class="nb">puts</span> <span class="s2">&quot;-- Actions: </span><span class="si">#{</span><span class="n">card</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">nil?</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="n">card</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>        <span class="nb">puts</span> <span class="s2">&quot;-- Members: </span><span class="si">#{</span><span class="n">card</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>        <span class="nb">puts</span> <span class="s2">&quot;-- Labels: </span><span class="si">#{</span><span class="n">card</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now, as your friend and teacher, I command you to use this knowledge to go <a href="//ollert.herokuapp.com">do cool stuff</a> with Trello!</p>
 ]]></content>
   </entry>
   

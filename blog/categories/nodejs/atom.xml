@@ -4,7 +4,7 @@
   <title><![CDATA[Category: nodejs | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/nodejs/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-31T14:44:19-04:00</updated>
+  <updated>2014-09-16T18:49:08-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,64 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Fetching Random Mongoose Objects the Simple Way]]></title>
+    <link href="http://larry-price.com/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way/"/>
+    <updated>2014-09-15T20:11:13-04:00</updated>
+    <id>http://larry-price.com/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way</id>
+    <content type="html"><![CDATA[<p>As I venture through the land of <a href="http://nodejs.org/">NodeJS</a>, I&rsquo;ve found the wonder and magic of <a href="http://npmjs.org/">NPM</a>, a package management tool for Javscript similar to <a href="https://www.ruby-lang.org/">ruby</a>&rsquo;s gems. Although there are nearly 100,000 packages on the main npmjs site (94,553 at time-of-writing), it seems there are still niches to be filled.</p>
+
+<p>Recently, while working on a <strong>top secret side-project</strong>, I wanted to grab a random object from a <a href="https://www.mongodb.org/">MongoDB</a> collection. I used the highly-extensible <a href="http://mongoosejs.com/">mongoose</a> to set up my models and just needed to find a package somewhere with the desired functionality. I found such a package called <a href="https://github.com/matomesc/mongoose-random">mongoose-random</a>, but, unfortunately, I was never able to get this plugin to work correctly. The plugin in question also needed to insert new columns on your tables, which I didn&rsquo;t really want. So I decided to create a new package.</p>
+
+<p><a href="https://www.npmjs.org/package/mongoose-simple-random">mongoose-simple-random</a> is an incredibly easy way to include a random accessor on your mongoose models. All that&rsquo;s required is adding the plugin to the schema before compiling the model:</p>
+
+<pre><code class="javascript test.js">var random = require('mongoose-simple-random');
+
+var s = new Schema({
+  message: String
+});
+s.plugin(random);
+
+Test = mongoose.model('Test', s);
+</code></pre>
+
+<p>Now I can ask the model for a single random element of the <code>Test</code> model with a single call to <code>findOneRandom</code>:</p>
+
+<pre><code class="javascript find_one.js">var Test = require('./test');
+
+Test.findOneRandom(function(err, element) {
+  if (err) console.log(err);
+  else console.log(element);
+});
+</code></pre>
+
+<p>Need to find more than one? Use <code>findRandom</code> to get an array:</p>
+
+<pre><code class="javascript find_five.js">var Test = require('./test');
+
+Test.findRandom({}, {}, {count: 5}, function(err, results) {
+  if (err) console.log(err);
+  else console.log(results);
+});
+</code></pre>
+
+<p>Zowee! Just like the default <code>find</code> methods, you can pass in optional filters, fields, and options:</p>
+
+<pre><code class="javascript find_five_with_optionals.js">var Test = require('./test');
+
+var filter = { type: { $in: ['education', 'engineering'] } };
+var fields = { name: 1, description: 0 };
+var options = { skip: 10, limit: 10, count: 5 };
+Test.findRandom(filter, fields, options, function(err, results) {
+  if (err) console.log(err);
+  else console.log(results);
+});
+</code></pre>
+
+<p>Given 1000s of objects, performance is excellent. I haven&rsquo;t tested it on larger-scale databases, but I wouldn&rsquo;t mind seeing some performance tests in the future.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Use NVM to manage your NodeJS install]]></title>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: javascript | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-08-31T14:44:19-04:00</updated>
+  <updated>2014-09-16T18:49:08-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,64 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Fetching Random Mongoose Objects the Simple Way]]></title>
+    <link href="http://larry-price.com/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way/"/>
+    <updated>2014-09-15T20:11:13-04:00</updated>
+    <id>http://larry-price.com/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way</id>
+    <content type="html"><![CDATA[<p>As I venture through the land of <a href="http://nodejs.org/">NodeJS</a>, I&rsquo;ve found the wonder and magic of <a href="http://npmjs.org/">NPM</a>, a package management tool for Javscript similar to <a href="https://www.ruby-lang.org/">ruby</a>&rsquo;s gems. Although there are nearly 100,000 packages on the main npmjs site (94,553 at time-of-writing), it seems there are still niches to be filled.</p>
+
+<p>Recently, while working on a <strong>top secret side-project</strong>, I wanted to grab a random object from a <a href="https://www.mongodb.org/">MongoDB</a> collection. I used the highly-extensible <a href="http://mongoosejs.com/">mongoose</a> to set up my models and just needed to find a package somewhere with the desired functionality. I found such a package called <a href="https://github.com/matomesc/mongoose-random">mongoose-random</a>, but, unfortunately, I was never able to get this plugin to work correctly. The plugin in question also needed to insert new columns on your tables, which I didn&rsquo;t really want. So I decided to create a new package.</p>
+
+<p><a href="https://www.npmjs.org/package/mongoose-simple-random">mongoose-simple-random</a> is an incredibly easy way to include a random accessor on your mongoose models. All that&rsquo;s required is adding the plugin to the schema before compiling the model:</p>
+
+<pre><code class="javascript test.js">var random = require('mongoose-simple-random');
+
+var s = new Schema({
+  message: String
+});
+s.plugin(random);
+
+Test = mongoose.model('Test', s);
+</code></pre>
+
+<p>Now I can ask the model for a single random element of the <code>Test</code> model with a single call to <code>findOneRandom</code>:</p>
+
+<pre><code class="javascript find_one.js">var Test = require('./test');
+
+Test.findOneRandom(function(err, element) {
+  if (err) console.log(err);
+  else console.log(element);
+});
+</code></pre>
+
+<p>Need to find more than one? Use <code>findRandom</code> to get an array:</p>
+
+<pre><code class="javascript find_five.js">var Test = require('./test');
+
+Test.findRandom({}, {}, {count: 5}, function(err, results) {
+  if (err) console.log(err);
+  else console.log(results);
+});
+</code></pre>
+
+<p>Zowee! Just like the default <code>find</code> methods, you can pass in optional filters, fields, and options:</p>
+
+<pre><code class="javascript find_five_with_optionals.js">var Test = require('./test');
+
+var filter = { type: { $in: ['education', 'engineering'] } };
+var fields = { name: 1, description: 0 };
+var options = { skip: 10, limit: 10, count: 5 };
+Test.findRandom(filter, fields, options, function(err, results) {
+  if (err) console.log(err);
+  else console.log(results);
+});
+</code></pre>
+
+<p>Given 1000s of objects, performance is excellent. I haven&rsquo;t tested it on larger-scale databases, but I wouldn&rsquo;t mind seeing some performance tests in the future.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Hotfixing a Bug in Trello's client.js]]></title>
@@ -499,53 +557,6 @@ this.orderSent = function() {
 </code></pre>
 
 <p>Full sample code <a href="https://github.com/larryprice/jasmine-pizza">available on Github</a>. There&rsquo;s a lot of other interesting things Jasmine can do that I&rsquo;m still learning about. If applicable, I&rsquo;ll try to create a blog post for advanced Jasmine usage in the future.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Connecting to the Trello API]]></title>
-    <link href="http://larry-price.com/blog/2014/03/18/connecting-to-the-trello-api/"/>
-    <updated>2014-03-18T20:00:11-04:00</updated>
-    <id>http://larry-price.com/blog/2014/03/18/connecting-to-the-trello-api</id>
-    <content type="html"><![CDATA[<p><a href="//trello.com">Trello</a> has a <a href="//trello.com/docs/">pretty sweet API</a>, which we use extensively in our Trello-analysis app <a href="//ollert.herokuapp.com">Ollert</a>. Initially connecting to the Trello API took us a few hours, so I&rsquo;d like to make a record of how we managed to connect.</p>
-
-<p>Making a connection to Trello requires two hashcodes: an application key and a Trello member token. You can generate and view your application key by visiting <a href="//trello.com/1/appKey/generate">https://trello.com/1/appKey/generate</a>.</p>
-
-<p>The member token is something we need to get from the user. There are two ways to get a user&rsquo;s member token: through fragments and through a <strong>postMessage</strong>. You can also request different levels of access (read, write, read+write), and different expiration periods (such as 1 day, 30 days, or never) for member tokens. For the remainder of this writing, I&rsquo;ll be accessing a read-only member token that never expires.</p>
-
-<p>We didn&rsquo;t have a lot of luck with fragments, but the concept is simple enough. You have the user click a link that probably says &ldquo;Connect With Trello&rdquo; which is similar to:</p>
-
-<p><code>https://trello.com/1/authorize?key=applicationkey&amp;name=applicationname&amp;expiration=never&amp;response_type=token</code></p>
-
-<p>At this point, the user is redirected to Trello and given the opportunity to Allow or Deny your application access. Once allowed, the user sees a static Trello page with their member token in plain text. Somehow you&#8221;re supposed to convey to them that they should copy this token and paste it back to you. This has clear drawbacks in usability.</p>
-
-<p>Using the <strong>postMessage</strong> method of accessing a member token was significantly more fruitful. Trello provides a Javascript file named <a href="https://trello.com/docs/gettingstarted/clientjs.html">client.js</a> that does most of the legwork for you. An example:</p>
-
-<pre><code class="haml">%script{src: "//api.trello.com/1/client.js?key=applicationkey"}
-
-function AuthenticateTrello() {
-  Trello.authorize({
-    name: "YourApplication",
-    type: "popup",
-    interactive: true,
-    expiration: "never",
-    persist: true,
-    success: function () { onAuthorizeSuccessful(); },
-    scope: { write: false, read: true },
-  });
-}
-function onAuthorizeSuccessful() {
-  var token = Trello.token();
-  window.location.replace("/auth?token=" + token);
-}
-
-%a{href: "javascript:void(0)", onClick: "AuthenticateTrello()"}
-  Connect With Trello
-</code></pre>
-
-<p>When the user clicks the link, we have Trello set to activate a &ldquo;popup&rdquo; that will ask them to &ldquo;Allow&rdquo; or &ldquo;Deny&rdquo; our app from accessing their data. When the user allows us access, the popup closes and we hit the &ldquo;onAuthorizeSuccessful&rdquo; method. In my method, I simply redirect them to the <code>/auth</code> route with <code>token</code> manually added to the params list. One of the interesting options listed above is the &ldquo;persist&rdquo; option, which tells Trello whether it should prompt the user for his or her token every time. By telling Trello to persist, the user will only be presented with the popup when he or she needs to reauthenticate.</p>
-
-<p>You can learn more about member tokens from <a href="//trello.com/docs/gettingstarted/authorize.html">https://trello.com/docs/gettingstarted/authorize.html</a>.</p>
 ]]></content>
   </entry>
   
