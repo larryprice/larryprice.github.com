@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="http://larry-price.com/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-10-13T19:15:54-04:00</updated>
+  <updated>2014-10-14T06:37:26-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,69 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[The Wisdom of Confucius - Now Available in an API]]></title>
+    <link href="http://larry-price.com/blog/2014/10/14/the-wisdom-of-confucius-now-available-in-an-api/"/>
+    <updated>2014-10-14T06:03:16-04:00</updated>
+    <id>http://larry-price.com/blog/2014/10/14/the-wisdom-of-confucius-now-available-in-an-api</id>
+    <content type="html"><![CDATA[<p>I make a lot of silly things while learning new technology. In this case I have tapped into the almighty power of <a href="https://en.wikipedia.org/wiki/Confucius">Confucius</a>, a Chinese philosopher from 2500 years ago credited for writing or editing many Chinese classic texts. Growing up as an American child, I associated Confucius with proverbs, and I associated proverbs with that classic after-Chinese-dinner dessert <a href="https://en.wikipedia.org/wiki/Fortune_cookie">the fortune cookie</a>.</p>
+
+<p>Fortune cookies are a pure delight: a message in a bottle from the restaurant&rsquo;s proprietors for you to enjoy as you kindly vacate the facility.</p>
+
+<p>Most fortune cookies that I&rsquo;ve opened recently have three parts: a fortune (generally a proverb), a lesson in simplified Chinese, and a lottery number. So many secrets wrapped up in such a small, golden treasure.</p>
+
+<p>Ever left a Chinese restaurant, gotten in your car, and felt the need to break something only to realize you left your precious fortune cookie on the table? I have built a solution.</p>
+
+<p><a href="http://fortunecookieapi.herokuapp.com/">The Fortune Cookie API</a> is a simple, RESTful API built to generate fortune cookie data. The root URL shows documentation built using <a href="https://apiary.io/">Apiary.io</a>.</p>
+
+<p>How does it work? I need fortunes now!</p>
+
+<p>There are options. You can get <code>fortunes</code> from the <a href="http://fortunecookieapi.herokuapp.com/v1/fortunes">/v1/fortunes</a> endpoint, <code>lessons</code> from the <a href="http://fortunecookieapi.herokuapp.com/v1/lessons">/v1/lessons</a> endpoint, and lottery numbers from the <a href="http://fortunecookieapi.herokuapp.com/v1/lottos">/v1/lottos</a> endpoint. By default you get 100 of any model, but all endpoints include a <code>limit</code> (max 1000), <code>skip</code>, and <code>page</code> parameter to facilitate getting all the lessons and fortunes. For lottery numbers, we approximately build <a href="https://en.wikipedia.org/wiki/Powerball">Powerball</a> numbers except we currently ignore the rule for red balls, which means there are something ike 42 billion different possibilities. Due to the high number of potential lottery numbers, the <code>lottos</code> endpoint also includes a <code>firstId</code> parameter that lets you start from anywhere.</p>
+
+<p>But there&rsquo;s no need to get the individual models (unless you&rsquo;re into that kind of thing)! I also created a <a href="http://fortunecookieapi.herokuapp.com/v1/cookie">/v1/cookie</a> endpoint to retrieve a random fortune, lesson, and lottery number as a single object. Woohoo! You can specify the number of cookies (max 100) with the <code>limit</code> parameter.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>GET http://fortunecookieapi.herokuapp.com/v1/cookie
+</span><span class='line'>
+</span><span class='line'>{
+</span><span class='line'>  "fortune": {
+</span><span class='line'>    "id": "53ffcf1d4ea4f76d1b8f223e",
+</span><span class='line'>    "message": "This fortune intentionally left blank"
+</span><span class='line'>  },
+</span><span class='line'>  "lotto": {
+</span><span class='line'>    "id": "001000200030004000500006",
+</span><span class='line'>    "numbers": [10,20,30,40,50,6]
+</span><span class='line'>  },
+</span><span class='line'>  "lesson": {
+</span><span class='line'>    "id": "53ffcf1d4ea4f76d1b8f2241",
+</span><span class='line'>    "chinese": "因特网",
+</span><span class='line'>    "pronunciation": "yintewang",
+</span><span class='line'>    "english": "internet"
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you can fill that hole in your heart where the fortune cookies are missing. If you&rsquo;re interested in the code, you can <a href="https://github.com/larryprice/fortune-cookie-api">check it out on Github</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Fetching Random Mongoose Objects the Simple Way]]></title>
@@ -2308,33 +2371,6 @@
 
 
 <p>Div tag ids such as &ldquo;wrap&rdquo;, &ldquo;push&rdquo;, and &ldquo;footer&rdquo; can be whatever you want. The height of the footer can be adjusted to fit whatever content you want; I found that using <code>min-height</code> instead of <code>height</code> allowed my content to resize appropriately when wrapped. Styles should definitely be moved to a css file.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Made to Stick]]></title>
-    <link href="http://larry-price.com/blog/2014/03/22/made-to-stick/"/>
-    <updated>2014-03-22T14:31:02-04:00</updated>
-    <id>http://larry-price.com/blog/2014/03/22/made-to-stick</id>
-    <content type="html"><![CDATA[<blockquote><p>Knowledge curses us, if we find it hard to imagine what it was like not to know it. And it becomes difficult to share our knowledge with others because we can&rsquo;t readily re-create our listener&rsquo;s state of mind.</p></blockquote>
-
-<h3>The Gist</h3>
-
-<p><a href="http://www.amazon.com/gp/product/1400064287/ref=as_li_qf_sp_asin_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1400064287&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Made to Stick</em> by brothers Chip Heath and Dan Heath</a> tries to uncover why some ideas capture our imagination while others fall into the abyss, never to be seen again.</p>
-
-<h3>My opinion</h3>
-
-<p>I really enjoyed this book. I tend to read very technical books, so this was a nice change of pace. I coincidentally was reading this book while coming up with a &lsquo;pitch&rsquo; for my recent SEP Startup Weekend project, <a href="//ollert.herokuapp.com">Ollert</a>.</p>
-
-<p><em>Made to Stick</em> lays out examples of really good and really mediocre descriptions of ideas. The authors then use the concepts discussed within the book to improve these ideas or discuss why they are effective. Whenever I hear people explaining real-world ideas, I start to think about the concepts laid out in this book. I&rsquo;d like to be able to use these concepts to communicate my own ideas more effectively, but I have thus far found it to be easier said than done.</p>
-
-<p>The book is not terribly long. This allowed me to connect all the concepts and better critique the numerous examples.</p>
-
-<p>Although I did enjoy the book, a few of the sections came off a little bit like a self-help program. The concepts described in the book are &lsquo;Simplicity&rsquo;, &lsquo;Unexpectedness&rsquo;, &lsquo;Concreteness&rsquo;, &lsquo;Credibility&rsquo;, &lsquo;Emotional&rsquo;, and &lsquo;Stories&rsquo;, which &ldquo;just happen&rdquo; to spell out <em>most</em> of the word &ldquo;success.&rdquo; This silly feel-goodery acronym makes the cynical side of me cringe.</p>
-
-<h3>Who Would Like This</h3>
-
-<p>Anyone trying to communicate a new idea to someone else could benefit from this book. On a broader scope, this book can benefit your communication patterns in general. This is particularly helpful for professionals, who may have a difficulty expressing their ideas without getting too deep in the technicalities.</p>
 ]]></content>
   </entry>
   

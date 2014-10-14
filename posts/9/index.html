@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="Relying on other people is hard. I&rsquo;ve always found it difficult to understand that other people aren&rsquo;t me. Don&rsquo;t get me wrong, &hellip;">
+  <meta name="description" content="Oh, Sinatra. You&rsquo;re oh-so-very dear to me. You made it so easy for me to write my first web apps. All I had to do was write a couple routes and &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,107 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/">On the Futility of Man and Trying to Divide a Sinatra App Into Separate Controllers</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-26T22:35:00-04:00" pubdate data-updated="true"></time>
+        
+           | <a href="/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/#disqus_thread"
+             data-disqus-identifier="http://larry-price.com/blog/2013/08/26/on-the-futility-of-man-and-trying-to-divide-a-sinatra-app-into-separate-controllers/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Oh, <a href="http://www.sinatrarb.com/">Sinatra</a>. You&rsquo;re oh-so-very dear to me. You made it so easy for me to write my <a href="http://capitalpunishment.herokuapp.com">first</a> <a href="http://pokephile.herokuapp.com">web</a> apps. All I had to do was write a couple routes and throw together a few HTML-like files and I had a web app. I used pattern matching to reduce the web-facing code for <a href="https://github.com/larryprice/CapitalPunishment">Capital Punishment</a> from ~500 lines of code to &lt;100 lines of code. You are perfect for writing small-time web applications.</p>
+
+<p>But what about large web applications? What about a web app that has normal users and admin users, makes lots of database reads and writes (my previous apps only did reads from a user-facing perspective), and has to be able to show the history of everything, forever, to the authorized users who request it?</p>
+
+<p>You see, Sinatra is kind of an <a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">MVC framework</a>, but not exactly. In Sinatra, you have Views (your HTML inter-mixed with Ruby code in your desired DSL) and you have Controllers (each of your routes). When a database is involved, you can use something like <a href="https://github.com/bmizerany/sinatra-activerecord">ActiveRecord</a> or <a href="http://mongoid.org/en/mongoid/index.html">Mongoid</a> or <a href="http://datamapper.org/">DataMapper</a> and you have yourself Models.</p>
+
+<p>So every route is kind of a Controller. Every. Route. In Capital Punishment, there were once 8 routes (there are now 7). In the project I&rsquo;ve been working on recently, there are currently 56 routes. 56 routes in the language described above means I kind of have 56 controllers.</p>
+
+<p>That&rsquo;s been pretty overwhelming, especially since the traditional way of creating routes in Sinatra is to shove them all in the same file. There are a few ways I could think of to address this. The way we chose six months ago (for better or worse) was found <a href="http://stackoverflow.com/questions/5877000/what-is-a-controller-in-sinatra">on StackOverflow</a>, and involves creating a bunch of different files where you shove all related routes. So you get this situation:</p>
+
+<figure class='code'><figcaption><span>app.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">App</span> <span class="o">&lt;</span> <span class="ss">Sinatra</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">require_relative</span> <span class="s1">&#39;controllers/helpers&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">__FILE__</span><span class="p">)</span><span class="si">}</span><span class="s2">/controllers/*.rb&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">file</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">require</span> <span class="n">file</span><span class="o">.</span><span class="n">chomp</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">extname</span><span class="p">(</span><span class="n">file</span><span class="p">))</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">App</span>
+</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">erb</span> <span class="ss">:home</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>controllers/reports_controller.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">App</span>
+</span><span class='line'>  <span class="n">get</span> <span class="s1">&#39;/reports/user_bills&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">erb</span> <span class="ss">:user_bills_report</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And so on and so forth. This works fine for a while, but we&rsquo;ve ended up with 13 &ldquo;controller&rdquo; files, many of which are not trivial. This also makes the App class quite large since its controllers handle most of the logic for the app. This also doesn&rsquo;t enforce any kind of URL-naming logic, so if a developer is working hard (s)he may create both <code>/reports/user_bills</code> and <code>user_info_reports</code> without realizing the inconsistency (s)he just injected into the system.</p>
+
+<p>In hindsight, this method is not perfect. I think that the Rails method of individual controllers is significantly better for large apps. Some people have been using other methods for trying to make Sinatra more MVC, such as <a href="https://github.com/jorrizza/sinatra-mvc">sinatra-mvc</a>. To be frank, sinatra-mvc pretty much does the same thing we&rsquo;ve done, but with more structure.</p>
+
+<p>I think what I&rsquo;ve learned is that you should use a tool for its intended purpose. Sinatra was written to quickly create web apps in Ruby with minimal effort. Once you have more than 10-15 routes, you should reconsider whether your app can still be called &ldquo;minimal effort.&rdquo; Sinatra may fly you to the moon, but you&rsquo;re unlikely to see what spring is like on Jupiter or Mars.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -336,202 +437,6 @@ tinkering, improving, planting flower beds.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">Tags in C++ Cucumber Tests</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-15T22:10:00-04:00" pubdate data-updated="true"></time>
-        
-           | <a href="/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/#disqus_thread"
-             data-disqus-identifier="http://larry-price.com/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The project I&rsquo;m working on is slowly adding <a href="https://github.com/cucumber/cucumber-cpp">Cucumber</a> acceptance tests to our massive code base in order to replace aging <a href="https://code.google.com/p/robotframework/">Robot tests</a>. One would think that getting developers on our team to use Cucumber would be east, since it uses <a href="https://code.google.com/p/googletest/">googletest</a> and <a href="https://code.google.com/p/googlemock/">googlemock</a> which we use for our unit tests. Unfortunately, very few people on the team have been motivated to write integration tests using the new framework, so I have very few people to go to when I have problems writing my own integration tests.</p>
-
-<p>The area of the code I deal with uses <a href="http://www.mono-project.com/Embedding_Mono">embedded mono</a> to communicate with some C# libraries that we share with other applications. This means we have unmanaged memory which talks with managed memory. This has caused us more headaches than I care to remember. One such problem is that we have a static object that we only want to create and destroy once. So I write my first Cucumber test:</p>
-
-<figure class='code'><figcaption><span>DoStuff.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Do that thing that we have to do</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Do it my way</span>
-</span><span class='line'><span class="k">  Given </span><span class="nf">I have done step </span><span class="s">1</span><span class="nf"></span>
-</span><span class='line'><span class="nf">  </span><span class="k">When </span><span class="nf">I do step </span><span class="s">2</span><span class="nf"></span>
-</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">I should see results</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>DoStuff_StepDefinitions.cpp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="cp">#include &lt;cucumber-cpp/defs.hpp&gt;</span>
-</span><span class='line'><span class="cp">#include &lt;gtest/gtest.h&gt;</span>
-</span><span class='line'><span class="cp">#include &lt;mono/jit/jit.h&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">const</span> <span class="n">QString</span> <span class="n">DOMAIN_NAME</span> <span class="o">=</span> <span class="s">&quot;bridge&quot;</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">Context</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="c1">// The static Mono object</span>
-</span><span class='line'>  <span class="k">static</span> <span class="n">MonoDomain</span> <span class="o">*</span><span class="n">Domain</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">BEFORE</span><span class="p">()</span> <span class="p">{</span> <span class="n">Context</span><span class="o">::</span><span class="n">Domain</span> <span class="o">=</span> <span class="n">mono_jit_init</span><span class="p">(</span><span class="n">DOMAIN_NAME</span><span class="p">);</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">AFTER</span><span class="p">()</span> <span class="p">{</span> <span class="n">mono_jit_cleanup</span><span class="p">(</span><span class="n">Context</span><span class="o">::</span><span class="n">Domain</span><span class="p">);</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">GIVEN</span><span class="p">(</span><span class="s">&quot;^I have done step 1$&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">WHEN</span><span class="p">(</span><span class="s">&quot;^I do step 2$&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">THEN</span><span class="p">(</span><span class="s">&quot;^I should see results$&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Before my scenario starts, the <code>BEFORE()</code> function is called and my MonoDomain object is created. When the scenario ends, my <code>AFTER()</code> statement is called and the objects in my MonoDomain are cleaned up. Now, I add a second scenario.</p>
-
-<figure class='code'><figcaption><span>DoStuff.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Do that thing that we have to do</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Do it my way</span>
-</span><span class='line'><span class="nf">  ...</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">Scenario: Do it your way</span>
-</span><span class='line'><span class="nf">  ...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now I run my Cucumber test, and Mono explodes. Why? Because the <code>BEFORE()</code> and <code>AFTER()</code> functions are not <em>before all</em> and <em>after all</em>, but <em>before each</em> and <em>after each</em>.</p>
-
-<p>So what should we do? Move the function calls in the <code>BEFORE()</code> and <code>AFTER()</code> statements into the constructor and destructor of the Context class?</p>
-
-<p>Same problem. Are there <code>BEFORE_ALL()</code> and <code>AFTER_ALL()</code> macros? No.</p>
-
-<p>I began to panic. I asked the person who taught me how to write Cucumber tests in C++. Our idea was to create the MonoDomain during what I knew would be the first step, and delete it after what I knew would be the last step. Oh, the horror! That would mean not being able to reuse those steps, not to mention moving the creation/destruction code around anytime I wanted to add new steps or change the order of my previous steps. We also thought about making specific steps and sticking them at the front of the first scenario and at the end of the last scenario. This still meant that the lay developer would have to recognize these first and last steps from the others. I asked my local senior engineer, and his advice was to create separate Cucumber tests for each scenario I intended to create. My plan was to write 6 scenarios in the long-term for this feature, and I really didn&rsquo;t want to turn these very similar tests with beautifully reusable steps into 6 features.</p>
-
-<p>Then it hit me: Cucumber is open source. I found the source <a href="https://github.com/cucumber/cucumber-cpp">on Github</a> and started looking through <a href="https://github.com/cucumber/cucumber-cpp/tree/master/examples/">the example code</a>. It was there that I discovered <a href="https://github.com/cucumber/cucumber-cpp/tree/master/examples/FeatureShowcase/tag">tags</a>. Tags were the solution to my problem.</p>
-
-<figure class='code'><figcaption><span>DoStuff.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Do that thing that we have to do</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">@first</span>
-</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Do it my way</span>
-</span><span class='line'><span class="nf">  ...</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">@last</span>
-</span><span class='line'><span class="nf">Scenario: Do it your way</span>
-</span><span class='line'><span class="nf">  ...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Using tags, I could label my scenarios with meaningful <code>@first</code> and <code>@last</code> tags to signify the beginning and end of my tests. The trick is to then add the required tags to my <code>BEFORE()</code> and <code>AFTER()</code> macro as such:</p>
-
-<figure class='code'><figcaption><span>DoStuff_StepDefinitions.cpp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="cp">#include &lt;cucumber-cpp/defs.hpp&gt;</span>
-</span><span class='line'><span class="cp">#include &lt;gtest/gtest.h&gt;</span>
-</span><span class='line'><span class="cp">#include &lt;mono/jit/jit.h&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">const</span> <span class="n">QString</span> <span class="n">DOMAIN_NAME</span> <span class="o">=</span> <span class="s">&quot;bridge&quot;</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">Context</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="c1">// The static Mono object</span>
-</span><span class='line'>  <span class="k">static</span> <span class="n">MonoDomain</span> <span class="o">*</span><span class="n">Domain</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">BEFORE</span><span class="p">(</span><span class="s">&quot;@first&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">Context</span><span class="o">::</span><span class="n">Domain</span> <span class="o">=</span> <span class="n">mono_jit_init</span><span class="p">(</span><span class="n">DOMAIN_NAME</span><span class="p">);</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">AFTER</span><span class="p">(</span><span class="s">&quot;@last&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">mono_jit_cleanup</span><span class="p">(</span><span class="n">Context</span><span class="o">::</span><span class="n">Domain</span><span class="p">);</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// ...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now my MonoDomain is only created <em>before</em> the scenario labeled <code>@first</code> and <em>after</em> the scenario labeled <code>@last</code>. Obviously, this isn&rsquo;t the cleanest fix imaginable, but it was the cleanest fix <em>available</em>. Whenever someone wants to add a new step to this test, they need to remember to move the <code>@last</code> tag to their scenario. However, I have the hope that it will be pretty obvious that the second scenario is no longer &ldquo;last&rdquo; when there is a third scenario following the &ldquo;last&rdquo; scenario. Anyway, it leaves me happy enough, since now my tests don&rsquo;t explode and I&rsquo;m able to reuse ~50% of the steps I had already written for the first scenario. I added a third scenario later on and 9 out of the 10 steps in the scenario were reused from the first and second scenario.</p>
-
-<p>There are lots of other cool things you can do with Cucumber tags, like having multiple tags on objects. All tags that match <code>@first</code> will do one thing, but tags that match <code>@first</code> and <code>@second</code> can have multiple <code>BEFORE()</code> or <code>AFTER()</code> clauses.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="10">&larr; Older</a>
@@ -561,6 +466,10 @@ tinkering, improving, planting flower beds.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/10/14/the-wisdom-of-confucius-now-available-in-an-api/">The Wisdom of Confucius - Now Available in an API</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way/">Fetching Random Mongoose Objects the Simple Way</a>
       </li>
     
@@ -576,15 +485,11 @@ tinkering, improving, planting flower beds.</p>
         <a href="/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit/">Testing Through a Trello Connection With Capybara and Webkit</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/08/05/javascript-testing-with-capybara-and-cucumber/">Javascript Testing With Capybara and Cucumber</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 103.75%'>agile</a> <a href='/blog/categories/c-plus-plus' style='font-size: 111.25%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 111.25%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.75%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 115.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 122.5%'>database</a> <a href='/blog/categories/foreman' style='font-size: 103.75%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.75%'>foss</a> <a href='/blog/categories/git' style='font-size: 103.75%'>git</a> <a href='/blog/categories/gmock' style='font-size: 103.75%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 111.25%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 103.75%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 103.75%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 103.75%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 111.25%'>heroku</a> <a href='/blog/categories/html' style='font-size: 107.5%'>html</a> <a href='/blog/categories/internet' style='font-size: 103.75%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 122.5%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 115.0%'>linux</a> <a href='/blog/categories/mongodb' style='font-size: 111.25%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 111.25%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 103.75%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 103.75%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 103.75%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 107.5%'>nodejs</a> <a href='/blog/categories/nokogiri' style='font-size: 103.75%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 107.5%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 103.75%'>nvm</a> <a href='/blog/categories/ollert' style='font-size: 141.25%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 115.0%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 103.75%'>pony</a> <a href='/blog/categories/qmake' style='font-size: 103.75%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 103.75%'>qt</a> <a href='/blog/categories/rails' style='font-size: 103.75%'>rails</a> <a href='/blog/categories/retro' style='font-size: 111.25%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 107.5%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 160.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 111.25%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 103.75%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 103.75%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 130.0%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 103.75%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 133.75%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 103.75%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 103.75%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 118.75%'>testing</a> <a href='/blog/categories/trello' style='font-size: 126.25%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.5%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 103.75%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 103.75%'>upstart</a> <a href='/blog/categories/web' style='font-size: 145.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 137.5%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 103.75%'>writeups</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 103.75%'>agile</a> <a href='/blog/categories/api' style='font-size: 103.75%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 111.25%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 111.25%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.75%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 115.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 122.5%'>database</a> <a href='/blog/categories/foreman' style='font-size: 103.75%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.75%'>foss</a> <a href='/blog/categories/git' style='font-size: 103.75%'>git</a> <a href='/blog/categories/gmock' style='font-size: 103.75%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 111.25%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 103.75%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 103.75%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 103.75%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 111.25%'>heroku</a> <a href='/blog/categories/html' style='font-size: 107.5%'>html</a> <a href='/blog/categories/internet' style='font-size: 103.75%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 126.25%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 115.0%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 103.75%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 111.25%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 111.25%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 103.75%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 103.75%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 103.75%'>mvc</a> <a href='/blog/categories/node' style='font-size: 103.75%'>node</a> <a href='/blog/categories/nodejs' style='font-size: 107.5%'>nodejs</a> <a href='/blog/categories/nokogiri' style='font-size: 103.75%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 107.5%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 103.75%'>nvm</a> <a href='/blog/categories/ollert' style='font-size: 141.25%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 115.0%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 103.75%'>pony</a> <a href='/blog/categories/qmake' style='font-size: 103.75%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 103.75%'>qt</a> <a href='/blog/categories/rails' style='font-size: 103.75%'>rails</a> <a href='/blog/categories/retro' style='font-size: 111.25%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 107.5%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 160.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 111.25%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 103.75%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 103.75%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 130.0%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 103.75%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 133.75%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 103.75%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 103.75%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 118.75%'>testing</a> <a href='/blog/categories/trello' style='font-size: 126.25%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.5%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 103.75%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 103.75%'>upstart</a> <a href='/blog/categories/web' style='font-size: 148.75%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 137.5%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 103.75%'>writeups</a> </span>
 </section>
 
 <section>
