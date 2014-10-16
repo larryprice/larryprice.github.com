@@ -14,16 +14,16 @@ Most fortune cookies that I've opened recently have three parts: a fortune (gene
 
 Ever left a Chinese restaurant, gotten in your car, and felt the need to break something only to realize you left your precious fortune cookie on the table? I have built a solution.
 
-[The Fortune Cookie API](http://fortunecookieapi.herokuapp.com/) is a simple, RESTful API built to generate fortune cookie data. The root URL shows documentation built using [Apiary.io](https://apiary.io/).
+[The Fortune Cookie API](http://fortunecookieapi.com/) is a simple, RESTful API built to generate fortune cookie data. The root URL shows documentation built using [Apiary.io](https://apiary.io/).
 
 How does it work? I need fortunes now!
 
-There are options. You can get `fortunes` from the [/v1/fortunes](http://fortunecookieapi.herokuapp.com/v1/fortunes) endpoint, `lessons` from the [/v1/lessons](http://fortunecookieapi.herokuapp.com/v1/lessons) endpoint, and lottery numbers from the [/v1/lottos](http://fortunecookieapi.herokuapp.com/v1/lottos) endpoint. By default you get 100 of any model, but all endpoints include a `limit` (max 1000), `skip`, and `page` parameter to facilitate getting all the lessons and fortunes. For lottery numbers, we approximately build [Powerball](https://en.wikipedia.org/wiki/Powerball) numbers except we currently ignore the rule for red balls, which means there are something ike 42 billion different possibilities. Due to the high number of potential lottery numbers, the `lottos` endpoint also includes a `firstId` parameter that lets you start from anywhere.
+There are options. You can get `fortunes` from the [/v1/fortunes](http://fortunecookieapi.com/v1/fortunes) endpoint, `lessons` from the [/v1/lessons](http://fortunecookieapi.com/v1/lessons) endpoint, and lottery numbers from the [/v1/lottos](http://fortunecookieapi.com/v1/lottos) endpoint. By default you get 100 of any model, but all endpoints include a `limit` (max 1000), `skip`, and `page` parameter to facilitate getting all the lessons and fortunes. For lottery numbers, we approximately build [Powerball](https://en.wikipedia.org/wiki/Powerball) numbers except we currently ignore the rule for red balls, which means there are something ike 42 billion different possibilities. Due to the high number of potential lottery numbers, the `lottos` endpoint also includes a `firstId` parameter that lets you start from anywhere.
 
-But there's no need to get the individual models (unless you're into that kind of thing)! I also created a [/v1/cookie](http://fortunecookieapi.herokuapp.com/v1/cookie) endpoint to retrieve a random fortune, lesson, and lottery number as a single object. Woohoo! You can specify the number of cookies (max 100) with the `limit` parameter.
+But there's no need to get the individual models (unless you're into that kind of thing)! I also created a [/v1/cookie](http://fortunecookieapi.com/v1/cookie) endpoint to retrieve a random fortune, lesson, and lottery number as a single object. Woohoo! You can specify the number of cookies (max 100) with the `limit` parameter.
 
 ```
-GET http://fortunecookieapi.herokuapp.com/v1/cookie
+GET http://fortunecookieapi.com/v1/cookie
 
 {
   "fortune": {
@@ -44,3 +44,5 @@ GET http://fortunecookieapi.herokuapp.com/v1/cookie
 ```
 
 Now you can fill that hole in your heart where the fortune cookies are missing. If you're interested in the code, you can [check it out on Github](https://github.com/larryprice/fortune-cookie-api).
+
+UPDATE: I've registered the domain [fortunecookieapi.com](http://fortunecookieapi.com) for the love of fortune cookies. Enjoy.
