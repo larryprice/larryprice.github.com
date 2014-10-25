@@ -4,7 +4,7 @@
   <title><![CDATA[Category: web | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/web/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-10-14T06:37:26-04:00</updated>
+  <updated>2014-10-25T09:58:12-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -26,15 +26,15 @@
 
 <p>Ever left a Chinese restaurant, gotten in your car, and felt the need to break something only to realize you left your precious fortune cookie on the table? I have built a solution.</p>
 
-<p><a href="http://fortunecookieapi.herokuapp.com/">The Fortune Cookie API</a> is a simple, RESTful API built to generate fortune cookie data. The root URL shows documentation built using <a href="https://apiary.io/">Apiary.io</a>.</p>
+<p><a href="http://fortunecookieapi.com/">The Fortune Cookie API</a> is a simple, RESTful API built to generate fortune cookie data. The root URL shows documentation built using <a href="https://apiary.io/">Apiary.io</a>.</p>
 
 <p>How does it work? I need fortunes now!</p>
 
-<p>There are options. You can get <code>fortunes</code> from the <a href="http://fortunecookieapi.herokuapp.com/v1/fortunes">/v1/fortunes</a> endpoint, <code>lessons</code> from the <a href="http://fortunecookieapi.herokuapp.com/v1/lessons">/v1/lessons</a> endpoint, and lottery numbers from the <a href="http://fortunecookieapi.herokuapp.com/v1/lottos">/v1/lottos</a> endpoint. By default you get 100 of any model, but all endpoints include a <code>limit</code> (max 1000), <code>skip</code>, and <code>page</code> parameter to facilitate getting all the lessons and fortunes. For lottery numbers, we approximately build <a href="https://en.wikipedia.org/wiki/Powerball">Powerball</a> numbers except we currently ignore the rule for red balls, which means there are something ike 42 billion different possibilities. Due to the high number of potential lottery numbers, the <code>lottos</code> endpoint also includes a <code>firstId</code> parameter that lets you start from anywhere.</p>
+<p>There are options. You can get <code>fortunes</code> from the <a href="http://fortunecookieapi.com/v1/fortunes">/v1/fortunes</a> endpoint, <code>lessons</code> from the <a href="http://fortunecookieapi.com/v1/lessons">/v1/lessons</a> endpoint, and lottery numbers from the <a href="http://fortunecookieapi.com/v1/lottos">/v1/lottos</a> endpoint. By default you get 100 of any model, but all endpoints include a <code>limit</code> (max 1000), <code>skip</code>, and <code>page</code> parameter to facilitate getting all the lessons and fortunes. For lottery numbers, we approximately build <a href="https://en.wikipedia.org/wiki/Powerball">Powerball</a> numbers except we currently ignore the rule for red balls, which means there are something ike 42 billion different possibilities. Due to the high number of potential lottery numbers, the <code>lottos</code> endpoint also includes a <code>firstId</code> parameter that lets you start from anywhere.</p>
 
-<p>But there&rsquo;s no need to get the individual models (unless you&rsquo;re into that kind of thing)! I also created a <a href="http://fortunecookieapi.herokuapp.com/v1/cookie">/v1/cookie</a> endpoint to retrieve a random fortune, lesson, and lottery number as a single object. Woohoo! You can specify the number of cookies (max 100) with the <code>limit</code> parameter.</p>
+<p>But there&rsquo;s no need to get the individual models (unless you&rsquo;re into that kind of thing)! I also created a <a href="http://fortunecookieapi.com/v1/cookie">/v1/cookie</a> endpoint to retrieve a random fortune, lesson, and lottery number as a single object. Woohoo! You can specify the number of cookies (max 100) with the <code>limit</code> parameter.</p>
 
-<pre><code>GET http://fortunecookieapi.herokuapp.com/v1/cookie
+<pre><code>GET http://fortunecookieapi.com/v1/cookie
 
 {
   "fortune": {
@@ -55,6 +55,8 @@
 </code></pre>
 
 <p>Now you can fill that hole in your heart where the fortune cookies are missing. If you&rsquo;re interested in the code, you can <a href="https://github.com/larryprice/fortune-cookie-api">check it out on Github</a>.</p>
+
+<p>UPDATE: I&rsquo;ve registered the domain <a href="http://fortunecookieapi.com">fortunecookieapi.com</a> for the love of fortune cookies. Enjoy.</p>
 ]]></content>
   </entry>
   
