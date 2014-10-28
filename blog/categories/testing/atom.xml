@@ -4,7 +4,7 @@
   <title><![CDATA[Category: testing | Larry Price]]></title>
   <link href="http://larry-price.com/blog/categories/testing/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-10-28T18:41:39-04:00</updated>
+  <updated>2014-10-28T19:32:26-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,41 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[To System Test or Not to System Test]]></title>
+    <link href="http://larry-price.com/blog/2014/10/28/to-system-test-or-not-to-system-test/"/>
+    <updated>2014-10-28T17:42:06-04:00</updated>
+    <id>http://larry-price.com/blog/2014/10/28/to-system-test-or-not-to-system-test</id>
+    <content type="html"><![CDATA[<p>System tests: a boon to product verification, but also time taken away from raw development. System-level testing means bringing up the whole system and running through a set of steps to verify that the system is working properly on all levels.</p>
+
+<p>We have lots of system tests on our project, some that check for the existence of UI elements, and some that verify that a user can go through the entire e-commerce process. Some of the tests require network access, so they take up to 3 or 4 minutes. I had gotten used to writing system tests with <a href="https://www.ruby-lang.org/en/">ruby</a> and <a href="https://github.com/jnicklas/capybara">capybara</a>, which I&rsquo;ve always found straightforward and easy to write. But this current project is in ASP.NET MVC, which seems to have greatly complicated bringing up and automatically manipulating the system. Our current test suite takes over an hour to run and results in at least 10 consistently-failing tests (referred to as &ldquo;flaky&rdquo; for dignity&rsquo;s sake).</p>
+
+<p>Because of this, there has been talk about getting rid of the system tests.</p>
+
+<p>Getting rid of system tests? Doesn&rsquo;t this go against everything we believe in? Think of TDD! Think of the children! Think of acceptance criteria! Won&rsquo;t somebody think of the children!</p>
+
+<p>So I&rsquo;ve been thinking: what is the purpose of system tests? The first thing that comes to mind is the obvious: to test the full stack. Often components work well individually but throw tantrums when forced to interact with the rest of the system.</p>
+
+<p>Another obvious answer: system health. If the system tests are passing, then surely the site still works after my push! You did add a system test for that changeset, right?</p>
+
+<p>I&rsquo;m not satisfied with those answers. Those are great <em>side effects</em> to writing system tests, but they aren&rsquo;t <em>sustainable</em> reasons. For their own devious reasons, someone can always delete a system test that would have broken with your code change. You can always write your system test steps poorly, resulting in incorrect (though passing) behavior.</p>
+
+<p>The best reason for writing system tests is <strong>to find out what you&rsquo;ve accomplished</strong>.</p>
+
+<p>Sometimes when I finish coding a new feature, I ask myself &ldquo;MY GOD WHAT HAVE I DONE.&rdquo; There are unit tests in place, and they have great names like <code>SetsIsValidToTrue</code> and <code>ReturnsSomethingThatsNotNull</code> and <code>DoesntCrashTheSystem</code>, but they fail to tell me what just happened. So I switch context to the system tests. In writing a system test, I bring up the whole system, run through my Happy Path™ and my edge cases, and <strong>I can see precisely what I&rsquo;ve done</strong>. I can watch my work succeed or fail. I can see when it takes way too many complicated page clicks to perform a task. I can see that when I click something too quickly the page fails to load. I can see that the URL is just plain <em>weird</em>. Most importantly, I can sit back and <strong>see</strong> it happening.</p>
+
+<p>So I push my system test to the build server and it works fine until a few dozen other changesets go through on the same page and eventually the system test becomes flaky.</p>
+
+<p>Where did we go wrong?</p>
+
+<p>I have an idea on how to deal with this, but you&rsquo;re probably not going to like it.</p>
+
+<p>As soon as I push a system test, it becomes legacy. You are no longer allowed to edit this system test. If you are updating that feature, you are responsible to <em>delete</em> and potentially <em>rewrite</em> each relevant test. In doing this, you are now required to think about the way the whole system fits together every time you push a feature. System tests will become a picture frozen in time of the way the feature worked the last time it was worked on. System tests will no longer be <em>a rolling history of what the system did</em>, but <em>an exact specification of what the system does</em>. They become a piece of the development process to demonstrate the intended functionality of the feature.</p>
+
+<p>In following this practice, we technically lose out on reusable system test code. I say good riddance, as testing code is the quickest part of any system to become bloated and convoluted. The loss in test creation speed could be worth the gain in developer knowledge of the intricacies of the system.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Javascript testing with Capybara and Cucumber]]></title>
@@ -628,105 +663,6 @@ AFTER_ALL() { cout &lt;&lt; "This is the last step!" &lt;&lt; endl; }
 <p>This is the same behavior as the first example, except I don&rsquo;t have to force my fellow developers to move tags around when they add/remove scenarios. Also now my fellow developers can stop asking me why I was using tags and why when they added a scenario they couldn&rsquo;t get the tests to pass.</p>
 
 <p>The moral of the story is that you should go implement that feature you want to see in your favorite open source project.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Tags in C++ Cucumber tests]]></title>
-    <link href="http://larry-price.com/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/"/>
-    <updated>2013-04-15T22:10:00-04:00</updated>
-    <id>http://larry-price.com/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests</id>
-    <content type="html"><![CDATA[<p>The project I&rsquo;m working on is slowly adding <a href="https://github.com/cucumber/cucumber-cpp">Cucumber</a> acceptance tests to our massive code base in order to replace aging <a href="https://code.google.com/p/robotframework/">Robot tests</a>. One would think that getting developers on our team to use Cucumber would be east, since it uses <a href="https://code.google.com/p/googletest/">googletest</a> and <a href="https://code.google.com/p/googlemock/">googlemock</a> which we use for our unit tests. Unfortunately, very few people on the team have been motivated to write integration tests using the new framework, so I have very few people to go to when I have problems writing my own integration tests.</p>
-
-<p>The area of the code I deal with uses <a href="http://www.mono-project.com/Embedding_Mono">embedded mono</a> to communicate with some C# libraries that we share with other applications. This means we have unmanaged memory which talks with managed memory. This has caused us more headaches than I care to remember. One such problem is that we have a static object that we only want to create and destroy once. So I write my first Cucumber test:</p>
-
-<pre><code class="cucumber DoStuff.feature">Feature: Do that thing that we have to do
-
-Scenario: Do it my way
-  Given I have done step 1
-  When I do step 2
-  Then I should see results
-</code></pre>
-
-<pre><code class="c++ DoStuff_StepDefinitions.cpp">#include &lt;cucumber-cpp/defs.hpp&gt;
-#include &lt;gtest/gtest.h&gt;
-#include &lt;mono/jit/jit.h&gt;
-
-const QString DOMAIN_NAME = "bridge";
-
-class Context
-{
-  // The static Mono object
-  static MonoDomain *Domain;
-}
-
-BEFORE() { Context::Domain = mono_jit_init(DOMAIN_NAME); }
-
-AFTER() { mono_jit_cleanup(Context::Domain); }
-
-GIVEN("^I have done step 1$") { /* ... */ }
-
-WHEN("^I do step 2$") { /* ... */ }
-
-THEN("^I should see results$") { /* ... */ }
-</code></pre>
-
-<p>Before my scenario starts, the <code>BEFORE()</code> function is called and my MonoDomain object is created. When the scenario ends, my <code>AFTER()</code> statement is called and the objects in my MonoDomain are cleaned up. Now, I add a second scenario.</p>
-
-<pre><code class="cucumber DoStuff.feature">Feature: Do that thing that we have to do
-
-Scenario: Do it my way
-  ...
-
-Scenario: Do it your way
-  ...
-</code></pre>
-
-<p>Now I run my Cucumber test, and Mono explodes. Why? Because the <code>BEFORE()</code> and <code>AFTER()</code> functions are not <em>before all</em> and <em>after all</em>, but <em>before each</em> and <em>after each</em>.</p>
-
-<p>So what should we do? Move the function calls in the <code>BEFORE()</code> and <code>AFTER()</code> statements into the constructor and destructor of the Context class?</p>
-
-<p>Same problem. Are there <code>BEFORE_ALL()</code> and <code>AFTER_ALL()</code> macros? No.</p>
-
-<p>I began to panic. I asked the person who taught me how to write Cucumber tests in C++. Our idea was to create the MonoDomain during what I knew would be the first step, and delete it after what I knew would be the last step. Oh, the horror! That would mean not being able to reuse those steps, not to mention moving the creation/destruction code around anytime I wanted to add new steps or change the order of my previous steps. We also thought about making specific steps and sticking them at the front of the first scenario and at the end of the last scenario. This still meant that the lay developer would have to recognize these first and last steps from the others. I asked my local senior engineer, and his advice was to create separate Cucumber tests for each scenario I intended to create. My plan was to write 6 scenarios in the long-term for this feature, and I really didn&rsquo;t want to turn these very similar tests with beautifully reusable steps into 6 features.</p>
-
-<p>Then it hit me: Cucumber is open source. I found the source <a href="https://github.com/cucumber/cucumber-cpp">on Github</a> and started looking through <a href="https://github.com/cucumber/cucumber-cpp/tree/master/examples/">the example code</a>. It was there that I discovered <a href="https://github.com/cucumber/cucumber-cpp/tree/master/examples/FeatureShowcase/tag">tags</a>. Tags were the solution to my problem.</p>
-
-<pre><code class="cucumber DoStuff.feature">Feature: Do that thing that we have to do
-
-@first
-Scenario: Do it my way
-  ...
-
-@last
-Scenario: Do it your way
-  ...
-</code></pre>
-
-<p>Using tags, I could label my scenarios with meaningful <code>@first</code> and <code>@last</code> tags to signify the beginning and end of my tests. The trick is to then add the required tags to my <code>BEFORE()</code> and <code>AFTER()</code> macro as such:</p>
-
-<pre><code class="c++ DoStuff_StepDefinitions.cpp">#include &lt;cucumber-cpp/defs.hpp&gt;
-#include &lt;gtest/gtest.h&gt;
-#include &lt;mono/jit/jit.h&gt;
-
-const QString DOMAIN_NAME = "bridge";
-
-class Context
-{
-  // The static Mono object
-  static MonoDomain *Domain;
-}
-
-BEFORE("@first") { Context::Domain = mono_jit_init(DOMAIN_NAME); }
-
-AFTER("@last") { mono_jit_cleanup(Context::Domain); }
-
-// ...
-</code></pre>
-
-<p>Now my MonoDomain is only created <em>before</em> the scenario labeled <code>@first</code> and <em>after</em> the scenario labeled <code>@last</code>. Obviously, this isn&rsquo;t the cleanest fix imaginable, but it was the cleanest fix <em>available</em>. Whenever someone wants to add a new step to this test, they need to remember to move the <code>@last</code> tag to their scenario. However, I have the hope that it will be pretty obvious that the second scenario is no longer &ldquo;last&rdquo; when there is a third scenario following the &ldquo;last&rdquo; scenario. Anyway, it leaves me happy enough, since now my tests don&rsquo;t explode and I&rsquo;m able to reuse ~50% of the steps I had already written for the first scenario. I added a third scenario later on and 9 out of the 10 steps in the scenario were reused from the first and second scenario.</p>
-
-<p>There are lots of other cool things you can do with Cucumber tags, like having multiple tags on objects. All tags that match <code>@first</code> will do one thing, but tags that match <code>@first</code> and <code>@second</code> can have multiple <code>BEFORE()</code> or <code>AFTER()</code> clauses.</p>
 ]]></content>
   </entry>
   
