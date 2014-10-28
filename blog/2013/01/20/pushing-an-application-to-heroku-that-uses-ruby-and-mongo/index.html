@@ -115,14 +115,14 @@
 
 <p>Now we need the Heroku Toolbelt. I&rsquo;ll illustrate for Ubuntu 12.10, but there&rsquo;s also <a href="https://toolbelt.heroku.com/">documentation for installing on any OS</a>.</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>The toolbelt installs some Heroku-specific applications in addition to ensuring you have Foreman and <a href="http://git-scm.com/">Git</a> on your system. Now it&rsquo;s time to tell the Heroku Toolbelt who we are.</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Step 3 - Modified Excerpt from the Heroku Getting Started guide</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>Step 3 - Modified Excerpt from the Heroku Getting Started guide</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -138,12 +138,12 @@
 </span><span class='line'>Would you like to generate one? <span class="o">[</span>Yn<span class="o">]</span>
 </span><span class='line'>Generating new SSH public key.
 </span><span class='line'>Uploading ssh public key /home/larry/.ssh/id_rsa.pub
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>In order for Heroku to figure out what ruby gems are needed to run your application, you need to specify a Gemfile. It&rsquo;s wise to specify a specific version of Ruby, and it&rsquo;s also a good idea to keep the gems' versions close to the state you developed with. For the <a href="/blog/categories/pokephile">Pokephile</a> application created in this series, this is my Gemfile:</p>
+<p>In order for Heroku to figure out what ruby gems are needed to run your application, you need to specify a Gemfile. It&rsquo;s wise to specify a specific version of Ruby, and it&rsquo;s also a good idea to keep the gems&#8217; versions close to the state you developed with. For the <a href="/blog/categories/pokephile">Pokephile</a> application created in this series, this is my Gemfile:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>project/Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>project/Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -169,12 +169,12 @@
 </span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;rspec&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt;2.11.0&#39;</span>
 </span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;nokogiri&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt;1.5.5&#39;</span>
 </span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>First I specify a source for my gems: &lsquo;rubygems&rsquo; defaults to &ldquo;<a href="http://rubygems.org">http://rubygems.org</a>&rdquo; and hasn&rsquo;t failed me yet. Next I specify that I want to use Ruby 1.9.3, a necessity because Mongoid 3.x doesn&rsquo;t work correctly with 1.9.2. The versions of the first three gems were chosen by typing the following in the command line to determine which version I had installed on my machine:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -186,7 +186,7 @@
 </span><span class='line'>sinatra <span class="o">(</span>1.3.3, 1.3.2<span class="o">)</span>
 </span><span class='line'>sinatra-contrib <span class="o">(</span>1.3.2<span class="o">)</span>
 </span><span class='line'>sinatra-reloader <span class="o">(</span>1.0<span class="o">)</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>The &lsquo;~>&rsquo; operator tells Bundler to use greater-than-equal but stop before next highest version. So, for Sinatra &lsquo;~>1.3.2&rsquo; means that Bundler will accept anything greater-than-or-equal-to &lsquo;1.3.2&rsquo; and less than &lsquo;1.4.0.&rsquo; I tend to rely on the &lsquo;~>&rsquo; operator so I can be sure no APIs are changed in my gems.</p>
@@ -195,7 +195,7 @@
 
 <p>For this Gemfile to be meaningful, we need to use a program called <a href="http://gembundler.com/">Bundler</a> to &ldquo;bundle&rdquo; the gems and their dependencies in a Gemfile.lock file.</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -209,14 +209,14 @@
 </span><span class='line'><span class="nv">$ </span>bundle install
 </span><span class='line'>...
 </span><span class='line'>Your bundle is <span class="nb">complete</span>! Use <span class="sb">`</span>bundle show <span class="o">[</span>gemname<span class="o">]</span><span class="sb">`</span> to see where a bundled gem is installed.
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Running bundler will create a Gemfile.lock file and make sure your system has the specified gems. If some gems are missing or need new versions to be installed, bundler will ask the user for their password to get the required gems.</p>
 
 <p>The next step for setting things up is to set up Git. If your application is already using Git, you only need to commit all files to verify that the Gemfile and Gemfile.lock make it into the repository.</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -224,12 +224,12 @@
 </span><span class='line'><span class="nv">$ </span>git init
 </span><span class='line'><span class="nv">$ </span>git add .
 </span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;Initial commit.&quot;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Now we create a Heroku project and give it a meaningful name. If you can&rsquo;t think of a meaningful name, use &lsquo;heroku create&rsquo; and Heroku will come up with something for you.</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -237,28 +237,28 @@
 </span><span class='line'>Creating meaningful-name... <span class="k">done</span>, stack is cedar
 </span><span class='line'>http://meaningful-name.herokuapp.com/ | git@heroku.com:meaningful-name.git
 </span><span class='line'>Git remote heroku added
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>We&rsquo;re almost there. Because we included accessing Mongo databases in our application, we have to take care of that on the web. The easiest way to do that is using a Heroku Add-on. At this time, there are two major Heroku Add-ons for Mongo databases: <a href="https://addons.heroku.com/mongolab">MongoLab</a> and <a href="https://addons.heroku.com/mongohq">MongoHQ</a>. Both services have a starter service for $0/month, which is pretty awesome in my opinion. I flipped a coin and picked MongoLab for this application. Adding the add-on to our project:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>heroku addons:add mongolab:starter
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>If you haven&rsquo;t already, Heroku will ask you to &ldquo;verify your account&rdquo; before continuing. This means that you have to put in some credit card information. Note that you will not be charged, I guess Heroku just wants some indication that you might eventually pay for something. After you put in your credit card information, you may need to run the above command again.</p>
 
 <p>Now that MongoLab is set up on the server-side, we need to tell Mongoid how to connect to that server. The following command will give you the environment variable needed to connect to the server:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>heroku config | grep MONGOLAB_URI
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Now we update our mongoid.yml file to use that string:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>project/mongoid.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>project/mongoid.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -302,12 +302,12 @@
 </span><span class='line'>      <span class="l-Scalar-Plain">options</span><span class="p-Indicator">:</span>
 </span><span class='line'>        <span class="l-Scalar-Plain">skip_version_check</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
 </span><span class='line'>        <span class="l-Scalar-Plain">safe</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Because of the way my application works, I want to prepopulate the database with some Pokemon.</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -333,25 +333,25 @@
 </span><span class='line'><span class="o">{</span><span class="s2">&quot;sessions&quot;</span><span class="o">=</span>&gt;<span class="o">{</span><span class="s2">&quot;default&quot;</span><span class="o">=</span>&gt;<span class="o">{</span><span class="s2">&quot;uri&quot;</span><span class="o">=</span>&gt;nil, <span class="s2">&quot;options&quot;</span><span class="o">=</span>&gt;<span class="o">{</span><span class="s2">&quot;skip_version_check&quot;</span><span class="o">=</span>&gt;true, <span class="s2">&quot;safe&quot;</span><span class="o">=</span>&gt;true<span class="o">}}}}</span>
 </span><span class='line'>&gt;&gt; Populater.new.add_pokemon 1000
 </span><span class='line'>nil
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>With the production database populated, we need to set an environment variable in our production application defining the environment.</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>heroku config:add <span class="nv">MONGOID_ENV</span><span class="o">=</span>production
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Now that we&rsquo;ve made changes to the mongoid.yml file, we should commit again and push to Heroku.</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git commit -a -m <span class="s2">&quot;Updating mongoid.yml file for production&quot;</span>
 </span><span class='line'>...
 </span><span class='line'><span class="nv">$ </span>git push heroku master
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>And that&rsquo;s it! Check your Heroku URL to make sure everything looks okay and call it a day, or make some upgrades as I did for my <a href="http://pokephile.herokuapp.com">personal version of this project</a>.</p>
@@ -460,11 +460,15 @@
   </span>
 </section><section>
   <h1>void* Larry</h1>
-  <p>I'm a codeslinger debugging from the mean streets of Indiana. Welcome to my blog, where I'll tell the tales of wondrous things I discover in the digital jungle.</p>
+  <p>I&#8217;m a codeslinger debugging from the mean streets of Indiana. Welcome to my blog, where I&#8217;ll tell the tales of wondrous things I discover in the digital jungle.</p>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/10/28/to-system-test-or-not-to-system-test/">To System Test or Not to System Test</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/10/14/the-wisdom-of-confucius-now-available-in-an-api/">The Wisdom of Confucius - Now Available in an API</a>
@@ -479,24 +483,20 @@
       </li>
     
       <li class="post">
-        <a href="/blog/2014/08/22/fixing-some-minor-bugs-in-trellos-client-dot-js/">Hotfixing a Bug in Trello's client.js</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit/">Testing Through a Trello Connection With Capybara and Webkit</a>
+        <a href="/blog/2014/08/22/fixing-some-minor-bugs-in-trellos-client-dot-js/">Hotfixing a Bug in Trello&#8217;s client.js</a>
       </li>
     
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 103.75%'>agile</a> <a href='/blog/categories/api' style='font-size: 103.75%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 111.25%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 111.25%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.75%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 115.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 122.5%'>database</a> <a href='/blog/categories/foreman' style='font-size: 103.75%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.75%'>foss</a> <a href='/blog/categories/git' style='font-size: 103.75%'>git</a> <a href='/blog/categories/gmock' style='font-size: 103.75%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 111.25%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 103.75%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 103.75%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 103.75%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 111.25%'>heroku</a> <a href='/blog/categories/html' style='font-size: 107.5%'>html</a> <a href='/blog/categories/internet' style='font-size: 103.75%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 126.25%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 115.0%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 103.75%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 111.25%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 111.25%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 103.75%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 103.75%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 103.75%'>mvc</a> <a href='/blog/categories/node' style='font-size: 103.75%'>node</a> <a href='/blog/categories/nodejs' style='font-size: 107.5%'>nodejs</a> <a href='/blog/categories/nokogiri' style='font-size: 103.75%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 107.5%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 103.75%'>nvm</a> <a href='/blog/categories/ollert' style='font-size: 141.25%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 115.0%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 103.75%'>pony</a> <a href='/blog/categories/qmake' style='font-size: 103.75%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 103.75%'>qt</a> <a href='/blog/categories/rails' style='font-size: 103.75%'>rails</a> <a href='/blog/categories/retro' style='font-size: 111.25%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 107.5%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 160.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 111.25%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 103.75%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 103.75%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 130.0%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 103.75%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 133.75%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 103.75%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 103.75%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 118.75%'>testing</a> <a href='/blog/categories/trello' style='font-size: 126.25%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.5%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 103.75%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 103.75%'>upstart</a> <a href='/blog/categories/web' style='font-size: 148.75%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 137.5%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 103.75%'>writeups</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 103.52941176470588%'>agile</a> <a href='/blog/categories/api' style='font-size: 103.52941176470588%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 110.58823529411765%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 110.58823529411765%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.52941176470588%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 114.11764705882354%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 121.17647058823529%'>database</a> <a href='/blog/categories/foreman' style='font-size: 103.52941176470588%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.52941176470588%'>foss</a> <a href='/blog/categories/git' style='font-size: 103.52941176470588%'>git</a> <a href='/blog/categories/gmock' style='font-size: 103.52941176470588%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 110.58823529411765%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 103.52941176470588%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 103.52941176470588%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 103.52941176470588%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 110.58823529411765%'>heroku</a> <a href='/blog/categories/html' style='font-size: 107.05882352941177%'>html</a> <a href='/blog/categories/internet' style='font-size: 103.52941176470588%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 124.70588235294117%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 114.11764705882354%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 103.52941176470588%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 110.58823529411765%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 110.58823529411765%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 103.52941176470588%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 103.52941176470588%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 103.52941176470588%'>mvc</a> <a href='/blog/categories/node' style='font-size: 103.52941176470588%'>node</a> <a href='/blog/categories/nodejs' style='font-size: 107.05882352941177%'>nodejs</a> <a href='/blog/categories/nokogiri' style='font-size: 103.52941176470588%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 107.05882352941177%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 103.52941176470588%'>nvm</a> <a href='/blog/categories/ollert' style='font-size: 138.8235294117647%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 114.11764705882354%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 103.52941176470588%'>pony</a> <a href='/blog/categories/qmake' style='font-size: 103.52941176470588%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 103.52941176470588%'>qt</a> <a href='/blog/categories/rails' style='font-size: 103.52941176470588%'>rails</a> <a href='/blog/categories/retro' style='font-size: 110.58823529411765%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 107.05882352941177%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 156.47058823529412%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 110.58823529411765%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 103.52941176470588%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 103.52941176470588%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 128.23529411764707%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 103.52941176470588%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 131.76470588235293%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 103.52941176470588%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 103.52941176470588%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 117.64705882352942%'>testing</a> <a href='/blog/categories/trello' style='font-size: 124.70588235294117%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.05882352941177%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 103.52941176470588%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 103.52941176470588%'>upstart</a> <a href='/blog/categories/web' style='font-size: 145.88235294117646%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 135.29411764705884%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 103.52941176470588%'>writeups</a> </span>
 </section>
 
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating...</li>
+    <li class="loading">Status updating&#8230;</li>
   </ul>
   
   <a href="https://github.com/larryprice">@larryprice</a> on GitHub

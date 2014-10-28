@@ -3,6 +3,12 @@
   
   
   <url>
+    <loc>http://larry-price.com/blog/2014/10/28/to-system-test-or-not-to-system-test/</loc>
+    <lastmod>2014-10-28T17:42:06-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://larry-price.com/blog/2014/10/14/the-wisdom-of-confucius-now-available-in-an-api/</loc>
     <lastmod>2014-10-14T06:03:16-04:00</lastmod>
     <priority>0.8</priority>
@@ -371,28 +377,28 @@
   
   <url>
     <loc>http://larry-price.com/blog/books/</loc>
-    <lastmod>2014-10-25T09:58:12-04:00</lastmod>
+    <lastmod>2014-10-28T18:41:39-04:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://larry-price.com/blog/projects/</loc>
-    <lastmod>2014-10-25T09:58:12-04:00</lastmod>
+    <lastmod>2014-10-28T18:41:39-04:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://larry-price.com/blog/archives/</loc>
-    <lastmod>2014-10-25T09:58:12-04:00</lastmod>
+    <lastmod>2014-10-28T18:41:39-04:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://larry-price.com/</loc>
-    <lastmod>2014-10-25T09:58:12-04:00</lastmod>
+    <lastmod>2014-10-28T18:41:39-04:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>

@@ -130,16 +130,16 @@
 
 <p>Moving templates is quite trivial. In the global scope:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/9994d11b5275bc5faee911e5db2c994bc91052e2'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/9994d11b5275bc5faee911e5db2c994bc91052e2'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gd">-var templates = template.Must(template.ParseFiles(&quot;edit.html&quot;, &quot;view.html&quot;))</span>
 </span><span class='line'><span class="gi">+var templates = template.Must(template.ParseFiles(&quot;tmpl/edit.html&quot;, &quot;tmpl/view.html&quot;))</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>I found moving the page data to <code>data/</code> was a little trickier, especially if the directory didn&rsquo;t already exist. You may not have the same issue, but I remedied this by creating the directory if it doesn&rsquo;t exist. My <code>save</code> function differences:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/e86a707d37b802b2d59b8ef261b3fdcab46d5870'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/e86a707d37b802b2d59b8ef261b3fdcab46d5870'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -153,14 +153,14 @@
 </span><span class='line'><span class="gi">+  filename := &quot;data/&quot; + p.Title + &quot;.txt&quot;</span>
 </span><span class='line'><span class="gi">+  return ioutil.WriteFile(filename, p.Body, 0600)</span>
 </span><span class='line'>}
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <h4>Add a handler to make the web root redirect to /view/FrontPage</h4>
 
 <p>All we&rsquo;re going to do is create a simple handler called <code>rootHandler</code> that redirects to a new page called <code>FrontPage</code>. We then add it in the <code>main</code> function. The tutorial had us wrap out handlers in a function call to take some special actions, but that wrapper would mess up our handler in its current form. So I just <code>Redirect</code> to the <code>view</code> handler, which will then decide whether to view or create the FrontPage.</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/e41fccc2d244a3b0d62d600d94897a076c87d53d'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/e41fccc2d244a3b0d62d600d94897a076c87d53d'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -182,14 +182,14 @@
 </span><span class='line'>  http.HandleFunc(&quot;/view/&quot;, makeHandler(viewHandler))
 </span><span class='line'>  http.HandleFunc(&quot;/edit/&quot;, makeHandler(editHandler))
 </span><span class='line'>  http.HandleFunc(&quot;/save/&quot;, makeHandler(saveHandler))
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <h4>Spruce up the page templates by making them valid HTML and adding some CSS rules.</h4>
 
 <p>I took my old <code>.html</code> files and put them through <a href="http://validator.w3.org/#validate_by_input">a validator</a>. Making them valid only involved adding <code>DOCTYPE</code>, <code>html</code>, and <code>head</code> tags. The <code>head</code> tag needed <code>meta</code>, and <code>title</code> tags and we were valid. I&rsquo;ve shown <code>view.html</code> below.</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>view.html</span><a href='https://github.com/larryprice/gowiki/commit/771b4ecc8a550ee438720dc5c3d3f47954a1e4ff'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>view.html</span><a href='https://github.com/larryprice/gowiki/commit/771b4ecc8a550ee438720dc5c3d3f47954a1e4ff'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -213,7 +213,7 @@
 </span><span class='line'>
 </span><span class='line'> &lt;div&gt;&lt;/div&gt;
 </span><span class='line'><span class="gi">+&lt;/html&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <h4>Implement inter-page linking by converting instances of [PageName]</h4>
@@ -222,7 +222,7 @@
 
 <p>As it turns out, <code>ExecuteTemplate</code> will not escape variables of the type <code>template.HTML</code>. So I added another variable onto the <code>Page</code> struct called <code>DisplayBody</code>.</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -232,19 +232,19 @@
 </span><span class='line'>     Body  []byte
 </span><span class='line'><span class="gi">+    DisplayBody template.HTML</span>
 </span><span class='line'>}
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Next, I create a regular expression to find instances of [PageName] and I put the defintion above the <code>main</code> method.</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gi">+var linkRegexp = regexp.MustCompile(&quot;\\[([a-zA-Z0-9]+)\\]&quot;)</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>In my <code>viewHandler</code>, I escape <code>Body</code> and then set <code>DisplayBody</code> to that escaped string with the links substituted.</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -262,16 +262,16 @@
 </span><span class='line'><span class="gi">+    }))</span>
 </span><span class='line'>  renderTemplate(w, &quot;view&quot;, p)
 </span><span class='line'>}
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>To finish up, I modify the <code>view.html</code> to show <code>DisplayBody</code>. I don&rsquo;t use <code>printf</code>, because that would turn <code>DisplayBody</code> back into a <code>string</code> and <code>ExecuteTemplate</code> would escape it.</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>wiki.go</span><a href='https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gd">-&lt;div&gt;&lt;/div&gt;</span>
 </span><span class='line'><span class="gi">+&lt;div&gt;&lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>And that completes the extra exercises for Google&rsquo;s <em>Writing Web Applications</em> tutorial. Hopefully one day this helps someone who gets stuck.</p>
@@ -380,11 +380,15 @@
   </span>
 </section><section>
   <h1>void* Larry</h1>
-  <p>I'm a codeslinger debugging from the mean streets of Indiana. Welcome to my blog, where I'll tell the tales of wondrous things I discover in the digital jungle.</p>
+  <p>I&#8217;m a codeslinger debugging from the mean streets of Indiana. Welcome to my blog, where I&#8217;ll tell the tales of wondrous things I discover in the digital jungle.</p>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/10/28/to-system-test-or-not-to-system-test/">To System Test or Not to System Test</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/10/14/the-wisdom-of-confucius-now-available-in-an-api/">The Wisdom of Confucius - Now Available in an API</a>
@@ -399,24 +403,20 @@
       </li>
     
       <li class="post">
-        <a href="/blog/2014/08/22/fixing-some-minor-bugs-in-trellos-client-dot-js/">Hotfixing a Bug in Trello's client.js</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit/">Testing Through a Trello Connection With Capybara and Webkit</a>
+        <a href="/blog/2014/08/22/fixing-some-minor-bugs-in-trellos-client-dot-js/">Hotfixing a Bug in Trello&#8217;s client.js</a>
       </li>
     
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 103.75%'>agile</a> <a href='/blog/categories/api' style='font-size: 103.75%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 111.25%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 111.25%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.75%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 115.0%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 122.5%'>database</a> <a href='/blog/categories/foreman' style='font-size: 103.75%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.75%'>foss</a> <a href='/blog/categories/git' style='font-size: 103.75%'>git</a> <a href='/blog/categories/gmock' style='font-size: 103.75%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 111.25%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 103.75%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 103.75%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 103.75%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 111.25%'>heroku</a> <a href='/blog/categories/html' style='font-size: 107.5%'>html</a> <a href='/blog/categories/internet' style='font-size: 103.75%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 126.25%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 115.0%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 103.75%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 111.25%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 111.25%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 103.75%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 103.75%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 103.75%'>mvc</a> <a href='/blog/categories/node' style='font-size: 103.75%'>node</a> <a href='/blog/categories/nodejs' style='font-size: 107.5%'>nodejs</a> <a href='/blog/categories/nokogiri' style='font-size: 103.75%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 107.5%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 103.75%'>nvm</a> <a href='/blog/categories/ollert' style='font-size: 141.25%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 115.0%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 103.75%'>pony</a> <a href='/blog/categories/qmake' style='font-size: 103.75%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 103.75%'>qt</a> <a href='/blog/categories/rails' style='font-size: 103.75%'>rails</a> <a href='/blog/categories/retro' style='font-size: 111.25%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 107.5%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 160.0%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 111.25%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 103.75%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 103.75%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 130.0%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 103.75%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 133.75%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 103.75%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 103.75%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 118.75%'>testing</a> <a href='/blog/categories/trello' style='font-size: 126.25%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.5%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 103.75%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 103.75%'>upstart</a> <a href='/blog/categories/web' style='font-size: 148.75%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 137.5%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 103.75%'>writeups</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 103.52941176470588%'>agile</a> <a href='/blog/categories/api' style='font-size: 103.52941176470588%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 110.58823529411765%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 110.58823529411765%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.52941176470588%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 114.11764705882354%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 121.17647058823529%'>database</a> <a href='/blog/categories/foreman' style='font-size: 103.52941176470588%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.52941176470588%'>foss</a> <a href='/blog/categories/git' style='font-size: 103.52941176470588%'>git</a> <a href='/blog/categories/gmock' style='font-size: 103.52941176470588%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 110.58823529411765%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 103.52941176470588%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 103.52941176470588%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 103.52941176470588%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 110.58823529411765%'>heroku</a> <a href='/blog/categories/html' style='font-size: 107.05882352941177%'>html</a> <a href='/blog/categories/internet' style='font-size: 103.52941176470588%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 124.70588235294117%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 114.11764705882354%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 103.52941176470588%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 110.58823529411765%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 110.58823529411765%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 103.52941176470588%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 103.52941176470588%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 103.52941176470588%'>mvc</a> <a href='/blog/categories/node' style='font-size: 103.52941176470588%'>node</a> <a href='/blog/categories/nodejs' style='font-size: 107.05882352941177%'>nodejs</a> <a href='/blog/categories/nokogiri' style='font-size: 103.52941176470588%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 107.05882352941177%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 103.52941176470588%'>nvm</a> <a href='/blog/categories/ollert' style='font-size: 138.8235294117647%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 114.11764705882354%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 103.52941176470588%'>pony</a> <a href='/blog/categories/qmake' style='font-size: 103.52941176470588%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 103.52941176470588%'>qt</a> <a href='/blog/categories/rails' style='font-size: 103.52941176470588%'>rails</a> <a href='/blog/categories/retro' style='font-size: 110.58823529411765%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 107.05882352941177%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 156.47058823529412%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 110.58823529411765%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 103.52941176470588%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 103.52941176470588%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 128.23529411764707%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 103.52941176470588%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 131.76470588235293%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 103.52941176470588%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 103.52941176470588%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 117.64705882352942%'>testing</a> <a href='/blog/categories/trello' style='font-size: 124.70588235294117%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.05882352941177%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 103.52941176470588%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 103.52941176470588%'>upstart</a> <a href='/blog/categories/web' style='font-size: 145.88235294117646%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 135.29411764705884%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 103.52941176470588%'>writeups</a> </span>
 </section>
 
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating...</li>
+    <li class="loading">Status updating&#8230;</li>
   </ul>
   
   <a href="https://github.com/larryprice">@larryprice</a> on GitHub
