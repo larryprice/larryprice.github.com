@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Writeups - Larry Price</title>
+  <title>My Battle With Hour-Based Estimation - Larry Price</title>
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="Category: writeups">
+  <meta name="description" content="I despise estimating in hours. Hours are too granular. Hours are too difficult to distinguish from hours on a clock (they&rsquo;re even spelled the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://larry-price.com/blog/categories/writeups">
+  <link rel="canonical" href="http://larry-price.com/blog/2014/10/29/the-epic-battle-between-estimates-and-getting-work-done">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Larry Price" type="application/atom+xml">
@@ -79,36 +79,142 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Writeups</h1>
+    
+      <h1 class="entry-title">My Battle With Hour-Based Estimation</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-10-29T18:33:27-04:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>29</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>6:33 pm</span></time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://larry-price.com">Comments</a>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>I despise estimating in hours. Hours are too granular. Hours are too difficult to distinguish from hours on a clock (<em>they&rsquo;re even spelled the same</em>).</p>
 
-  
-  <h2>2014</h2>
+<p>In any project where we work in hours, we always desparately task out stories in hours fill our capacity. <em>Which is also measured in hours</em>. We take people&rsquo;s days off and we estimate that developers spend about &frac34; of the day watching Youtube videos and reading Hacker News. So a developer works <strong>about 6 clock hours</strong> in a given day.</p>
 
-<article>
-  
-<h1><a href="/blog/2014/04/04/the-lean-startup/">The Lean Startup</a></h1>
-<time datetime="2014-04-04T21:22:02-04:00" pubdate><span class='month'>Apr</span> <span class='day'>04</span> <span class='year'>2014</span></time>
+<p>Then we start tasking out stories. We estimate that this task will take <strong>about 12 hours</strong>, this one <strong>about 8 hours</strong>, and we&rsquo;ll top it all off with a task of <strong>about 4 hours</strong> for ad-hoc testing. All in all, this story is estimated to take <strong>exactly 24 hours</strong>.</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/writeups/'>writeups</a></span>
-</footer>
+<p>Now we do some math. Obviously, since a developer can get <strong>6 hours</strong> of work done in a day and this story will take <strong>24 hours</strong>, the story will be done in <strong>exactly 4 development days</strong>, or <strong>exactly 3 real days</strong>. We watch our capacity (in hours) fill by 24 and note all the space that&rsquo;s left.</p>
 
+<p>Someone without reference to our developer-day-to-work-day comparison walks by. Excellent, it&rsquo;ll be done in three days, you say? That fits the schedule perfectly, tell the client we&rsquo;ll be done with that feature by Thursday. Let&rsquo;s add some more to your backlog&hellip;</p>
 
-</article>
+<p>For all we know, this estimate may work out. However, from my experience, the 8 hour task and 12 hour task will probably spend about the same amount of time in development, taking anywhere from 1-3 days each. Fortunately, the &ldquo;testing&rdquo; task will only take about 30 minutes.</p>
 
+<p>What&rsquo;s wrong here?</p>
+
+<p>Humans are bad at estimating. We become much worse at estimating when we start talking about knowledge work. I happen to believe we become even worse at estimating when we try to use time as a unit of measure. How long does it take you to get to work? I would say it takes me about 5 minutes. Google Maps tells me I would be lucky to get there in 10 without traffic. My estimation in minutes is <strong>bad</strong>, conflated by the monotony of performing a menial task over and over again.</p>
+
+<p>When we have retros, we don&rsquo;t discuss how incorrect our hourly measurements were. We have a hybrid system of estimating stories in points and tasks in hours. We discuss the discrepancy between estimated and actual story points instead, despite the disconnect between our task estimates and our story estimates. (Another reason we don&rsquo;t discuss hour estimations at the retro is that it would take <strong>forever</strong> due to the high number of tasks and the granularity of hours (did this take one day or two, I can&rsquo;t remember)).</p>
+
+<p>Do I have a solution to this problem? Of course I do. Don&rsquo;t use hours. Stick with points, and keep them as vague and hand-wavey as possible.</p>
+
+<p>We often run into an issue of associating points with number of hours or days. &ldquo;Well, a 3 takes us about a week and a 5 takes us about 2 weeks. This story seems like it&rsquo;ll take about a week.&rdquo;</p>
+
+<p>Points <strong>do not</strong> translate directly to how long a story will take. Points <strong>do</strong> translate to how much work a story feels like relative to the stories which have come before it.</p>
+
+<p>Eventually, you should have a big enough pile of 1s, 2s, 3s, and 5s that you can relate a new story to a previous story. This story feels like a 3, about as much work as that story where we had to herd those cats. This story feels like a 1, technically all I have to do is flip this boolean&hellip;</p>
+
+<p>When starting a project, estimate stories but don&rsquo;t try to estimate a capacity. Just see how many points you can get done in a sprint. Do it again for the second sprint. Keep doing it until your numbers balance out. This means that your estimates are becoming consistent and you&rsquo;re getting over the new project hump. Now you can tell your manager that you should be able to get 20 points done in a sprint, because you&rsquo;ve consistently bounced around that number the past few sprints.</p>
+
+<p>Don&rsquo;t get too hasty and start telling people that you should be able to do more points with each sprint. I hate to break it to you, but you&rsquo;re not getting that much better each sprint. You need to adjust your point estimation to match your current competency level.</p>
+
+<p>End rant. It&rsquo;ll probably be a long time before we see the death of hourly estimations, especially with big-name tools like Rally and Visual Studio Online containing fields explicitly for that purpose. Just fight the good fight for now.</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Larry Price</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-10-29T18:33:27-04:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>29</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>6:33 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/agile/'>agile</a>, <a class='category' href='/blog/categories/non-technical/'>non-technical</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://larry-price.com/blog/2014/10/29/the-epic-battle-between-estimates-and-getting-work-done/" data-via="larryrprice" data-counturl="http://larry-price.com/blog/2014/10/29/the-epic-battle-between-estimates-and-getting-work-done/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="small"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    
+      <div>
+  <h3>Related Posts</h3>
+  <ul class="posts">
+    
+        <li class="related">
+          <a href="/blog/2014/10/29/the-epic-battle-between-estimates-and-getting-work-done/">My Battle With Hour-Based Estimation</a>
+        </li>
+    
+        <li class="related">
+          <a href="/blog/2014/05/14/takeaways-from-agileindy-2014/">Takeaways From AgileIndy 2014</a>
+        </li>
+    
+        <li class="related">
+          <a href="/blog/2013/01/19/testing-a-sinatra-app-with-capybara/">Testing a Sinatra App with Capybara</a>
+        </li>
+    
+        <li class="related">
+          <a href="/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/">Schemaless databases with Ruby and MongoDB</a>
+        </li>
+    
+        <li class="related">
+          <a href="/blog/2014/06/12/lessons-learned-during-the-conception-of-ollert/">Lessons Learned during the Conception of Ollert</a>
+        </li>
+    
+  </ul>
+</div>
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/10/28/to-system-test-or-not-to-system-test/" title="Previous Post: To System Test or Not to System Test">&laquo; To System Test or Not to System Test</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -227,7 +333,10 @@
       var disqus_shortname = 'larryprice';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://larry-price.com/blog/2014/10/29/the-epic-battle-between-estimates-and-getting-work-done/';
+        var disqus_url = 'http://larry-price.com/blog/2014/10/29/the-epic-battle-between-estimates-and-getting-work-done/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

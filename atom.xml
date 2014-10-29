@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="http://larry-price.com/atom.xml" rel="self"/>
   <link href="http://larry-price.com/"/>
-  <updated>2014-10-28T19:32:26-04:00</updated>
+  <updated>2014-10-29T18:28:59-04:00</updated>
   <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,45 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[My Battle With Hour-Based Estimation]]></title>
+    <link href="http://larry-price.com/blog/2014/10/29/the-epic-battle-between-estimates-and-getting-work-done/"/>
+    <updated>2014-10-29T18:33:27-04:00</updated>
+    <id>http://larry-price.com/blog/2014/10/29/the-epic-battle-between-estimates-and-getting-work-done</id>
+    <content type="html"><![CDATA[<p>I despise estimating in hours. Hours are too granular. Hours are too difficult to distinguish from hours on a clock (<em>they&rsquo;re even spelled the same</em>).</p>
+
+<p>In any project where we work in hours, we always desparately task out stories in hours fill our capacity. <em>Which is also measured in hours</em>. We take people&rsquo;s days off and we estimate that developers spend about &frac34; of the day watching Youtube videos and reading Hacker News. So a developer works <strong>about 6 clock hours</strong> in a given day.</p>
+
+<p>Then we start tasking out stories. We estimate that this task will take <strong>about 12 hours</strong>, this one <strong>about 8 hours</strong>, and we&rsquo;ll top it all off with a task of <strong>about 4 hours</strong> for ad-hoc testing. All in all, this story is estimated to take <strong>exactly 24 hours</strong>.</p>
+
+<p>Now we do some math. Obviously, since a developer can get <strong>6 hours</strong> of work done in a day and this story will take <strong>24 hours</strong>, the story will be done in <strong>exactly 4 development days</strong>, or <strong>exactly 3 real days</strong>. We watch our capacity (in hours) fill by 24 and note all the space that&rsquo;s left.</p>
+
+<p>Someone without reference to our developer-day-to-work-day comparison walks by. Excellent, it&rsquo;ll be done in three days, you say? That fits the schedule perfectly, tell the client we&rsquo;ll be done with that feature by Thursday. Let&rsquo;s add some more to your backlog&hellip;</p>
+
+<p>For all we know, this estimate may work out. However, from my experience, the 8 hour task and 12 hour task will probably spend about the same amount of time in development, taking anywhere from 1-3 days each. Fortunately, the &ldquo;testing&rdquo; task will only take about 30 minutes.</p>
+
+<p>What&rsquo;s wrong here?</p>
+
+<p>Humans are bad at estimating. We become much worse at estimating when we start talking about knowledge work. I happen to believe we become even worse at estimating when we try to use time as a unit of measure. How long does it take you to get to work? I would say it takes me about 5 minutes. Google Maps tells me I would be lucky to get there in 10 without traffic. My estimation in minutes is <strong>bad</strong>, conflated by the monotony of performing a menial task over and over again.</p>
+
+<p>When we have retros, we don&rsquo;t discuss how incorrect our hourly measurements were. We have a hybrid system of estimating stories in points and tasks in hours. We discuss the discrepancy between estimated and actual story points instead, despite the disconnect between our task estimates and our story estimates. (Another reason we don&rsquo;t discuss hour estimations at the retro is that it would take <strong>forever</strong> due to the high number of tasks and the granularity of hours (did this take one day or two, I can&rsquo;t remember)).</p>
+
+<p>Do I have a solution to this problem? Of course I do. Don&rsquo;t use hours. Stick with points, and keep them as vague and hand-wavey as possible.</p>
+
+<p>We often run into an issue of associating points with number of hours or days. &ldquo;Well, a 3 takes us about a week and a 5 takes us about 2 weeks. This story seems like it&rsquo;ll take about a week.&rdquo;</p>
+
+<p>Points <strong>do not</strong> translate directly to how long a story will take. Points <strong>do</strong> translate to how much work a story feels like relative to the stories which have come before it.</p>
+
+<p>Eventually, you should have a big enough pile of 1s, 2s, 3s, and 5s that you can relate a new story to a previous story. This story feels like a 3, about as much work as that story where we had to herd those cats. This story feels like a 1, technically all I have to do is flip this boolean&hellip;</p>
+
+<p>When starting a project, estimate stories but don&rsquo;t try to estimate a capacity. Just see how many points you can get done in a sprint. Do it again for the second sprint. Keep doing it until your numbers balance out. This means that your estimates are becoming consistent and you&rsquo;re getting over the new project hump. Now you can tell your manager that you should be able to get 20 points done in a sprint, because you&rsquo;ve consistently bounced around that number the past few sprints.</p>
+
+<p>Don&rsquo;t get too hasty and start telling people that you should be able to do more points with each sprint. I hate to break it to you, but you&rsquo;re not getting that much better each sprint. You need to adjust your point estimation to match your current competency level.</p>
+
+<p>End rant. It&rsquo;ll probably be a long time before we see the death of hourly estimations, especially with big-name tools like Rally and Visual Studio Online containing fields explicitly for that purpose. Just fight the good fight for now.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[To System Test or Not to System Test]]></title>
@@ -2283,39 +2322,6 @@
 
 
 <p>And enjoy.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Rework]]></title>
-    <link href="http://larry-price.com/blog/2014/03/26/rework/"/>
-    <updated>2014-03-26T21:00:33-04:00</updated>
-    <id>http://larry-price.com/blog/2014/03/26/rework</id>
-    <content type="html"><![CDATA[<blockquote><p>You want to get into the rhythm of making choices. When you get in that flow of making decision after decision, you build momentum and boost morale. Decisions are progress. Each one you make is a brick in your foundation. You can&rsquo;t build on top of &ldquo;We&rsquo;ll decide later,&rdquo; but you <em>can</em> build on top of &ldquo;Done.&rdquo;</p>
-
-<p>Excerpt from &ldquo;Decisions are Progress&rdquo; in <em>Rework</em></p></blockquote>
-
-<h3>The Gist</h3>
-
-<p><a href="http://www.amazon.com/gp/product/0307463745/ref=as_li_qf_sp_asin_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0307463745&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>Rework</em> by Jason Fried and David Heinemeier Hansson</a> is a business advice book for keeping small, focused teams without all the cruft of business.</p>
-
-<h3>My Opinion</h3>
-
-<p><em>Rework</em> is my kind of book. It&rsquo;s best described as business advice for hippy programmers. It&rsquo;s amazing that this book describes the business practices of a real company that&rsquo;s modestly successful.</p>
-
-<p>Speaking of the authors of this book, they&rsquo;re the guys who made <a href="//rubyonrails.org/">Ruby on Rails</a>, which gives them street cred as far as I&rsquo;m concerned.</p>
-
-<p>This is a book of proverbs. Ignore the real world. Start a business, not a startup. Build half a product, not a half-assed product. Meetings are toxic. Hire managers of one. ASAP is po:son.</p>
-
-<p>When you look at it, this advice is not insightful: it&rsquo;s obvious. It just also happens to be against how modern-day companies work. And maybe this advice isn&rsquo;t useful for everyone; once a company stops following these rules, it seems difficult to change. The smaller and newer the company, the easier it is to avoid the issues introduced with bigger businesses.</p>
-
-<p>This book talks about ideas being cheap. Implementing the idea is where all the work lies. Have an idea? Start working on it now. Find time. Go to bed an hour later. Watch an hour less of TV. Your idea is meaningless unless you actually follow through.</p>
-
-<p>There&rsquo;s also good advice within this book for people who are pressured to overwork. Avoid workaholics: overworking hurts the decision-making processes, so people who are working more hours are just spending more hours making worse decisions. When employees work long hours, other employees are also influenced to work longer hours. More poeple making worse decisions? Count me out. Hire people with outside lives who go home at 5: busy people have to manage their time, and will thus find more efficient ways to accomplish their work.</p>
-
-<h3>Who Would Like This</h3>
-
-<p>Interested in starting a company? In making managerial changes within your current company? In making changes to the way you work? Reading this book can help you realize that you don&rsquo;t need all the modern-day business cruft to make your business a success.</p>
 ]]></content>
   </entry>
   

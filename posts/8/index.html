@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="To whom do I owe any programming success I may have in a given day? My education? My wonderful peers? The shriveled wad of grey goo in my head? None &hellip;">
+  <meta name="description" content="A few months ago I blogged about tags in cucumber-c++. The scenario I presented involved using tags to call a BEFORE hook before the first scenario &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,118 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/22/hooks-in-cucumber-cpp/">Hooks in Cucumber-cpp</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-11-22T20:40:00-05:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2013</span></span> <span class='time'>8:40 pm</span></time>
+        
+           | <a href="/blog/2013/11/22/hooks-in-cucumber-cpp/#disqus_thread"
+             data-disqus-identifier="http://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A few months ago <a href="/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">I blogged about tags</a> in <a href="https://github.com/cucumber/cucumber-cpp">cucumber-c++</a>. The scenario I presented involved using tags to call a <code>BEFORE</code> hook before the first scenario and an <code>AFTER</code> hook after the last scenario. The code looked a little bit like this:</p>
+
+<figure class='code'><figcaption><span>DoStuff.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="nt">@first</span><span class="nf"></span>
+</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Do it my way</span>
+</span><span class='line'><span class="nf">  ...</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">Scenario: Don&#39;t do it</span>
+</span><span class='line'><span class="nf">  ...</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">@last</span>
+</span><span class='line'><span class="nf">Scenario: Do it your way</span>
+</span><span class='line'><span class="nf">  ...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>DoStuff_StepDefinitions.cpp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="n">BEFORE</span><span class="p">(</span><span class="s">&quot;@first&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;This is the first step!&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">AFTER</span><span class="p">(</span><span class="s">&quot;@last&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;This is the last step!&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The scnenario labeled <code>@first</code> would call the corresponding <code>BEFORE</code> macro and the <code>@last</code> scenario would call the <code>AFTER</code> macro. If I didn&rsquo;t have tags in place, the macros would have both been invoked before/after each scenario. Macros for <code>BEFORE_STEP</code> and <code>AROUND_STEP</code> are also available; <code>BEFORE_STEP</code> allows you to tag individual steps and <code>AROUND_STEP</code> acts as a before/after for individual steps.</p>
+
+<p>This was a workaround. What I really wanted to do was to not use tags, and instead unconditionally perform an action before the first scenario was run and after the last scenario is complete. Since cucumber-cpp is open source, I decided to implement that a few weeks ago (<a href="https://github.com/cucumber/cucumber-cpp/commit/26e11d0248edf32a8bac17df9d2d4ceb135ed502">see changeset</a>). Now the above example becomes:</p>
+
+<figure class='code'><figcaption><span>DoStuff.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Scenario:</span><span class="nf"> Do it my way</span>
+</span><span class='line'><span class="nf">  ...</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">Scenario: Don&#39;t do it</span>
+</span><span class='line'><span class="nf">  ...</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">Scenario: Do it your way</span>
+</span><span class='line'><span class="nf">  ...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>DoStuff_StepDefinitions.cpp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="n">BEFORE_ALL</span><span class="p">()</span> <span class="p">{</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;This is the first step!&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">AFTER_ALL</span><span class="p">()</span> <span class="p">{</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;This is the last step!&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is the same behavior as the first example, except I don&rsquo;t have to force my fellow developers to move tags around when they add/remove scenarios. Also now my fellow developers can stop asking me why I was using tags and why when they added a scenario they couldn&rsquo;t get the tests to pass.</p>
+
+<p>The moral of the story is that you should go implement that feature you want to see in your favorite open source project.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -404,58 +516,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/08/the-pragmatic-programmer/">The Pragmatic Programmer</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2013-09-08T12:00:00-04:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>12:00 pm</span></time>
-        
-           | <a href="/blog/2013/09/08/the-pragmatic-programmer/#disqus_thread"
-             data-disqus-identifier="http://larry-price.com/blog/2013/09/08/the-pragmatic-programmer/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p>Don&rsquo;t be a slave to history. Don&rsquo;t let existing code dictate future code. All code can be replaced if it is no longer appropriate</p></blockquote>
-
-<h3>The Gist</h3>
-
-<p><a href="http://www.amazon.com/gp/product/020161622X/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=020161622X&amp;linkCode=as2&amp;tag=larpriandthee-20"><em>The Pragmatic Programmer</em></a> written by Andrew Hunt and David Thomas is a book about being an above-average software developer.</p>
-
-<h3>My Opinion</h3>
-
-<p>There are many good concepts in this book. However, I&rsquo;ve been reading a bit much lately and found that most of the topics covered have been rehashed in other books. As it turns out, re-reading this kind of motivational book is less exciting when you&rsquo;ve read similar texts earlier in the year.</p>
-
-<p>I did enjoy the section on Refactoring; there has been some discussion on my current project team of what to do when you see &ldquo;gnarly&rdquo; code. This section reiterates the fact that poorly-written code should be updated. The authors talk about treating code as organic. Refactoring your code as it grows is the same as reevaluating oneself as one grows older. Changing one&rsquo;s hair or clothes, changing what one eats or reads or watches (inputs), or changing a daily routine is just refactoring of your daily life: the person is the same and accomplishes largely the same tasks, but in a slightly different manner.</p>
-
-<p>One tip in this book is &ldquo;Use one editor well.&rdquo; I&rsquo;ve found that I love to use <a href="http://www.sublimetext.com/">Sublime Text</a> for my work in Ruby, Python, and markup languages. Having said that, I find Sublime an inappropriate tool for doing C++ (<a href="https://qt-project.org/wiki/Category:Tools::QtCreator">Qt Creator</a>), Java (<a href="http://eclipse.org/">Eclipse</a> or even <a href="https://netbeans.org/">NetBeans</a>), or anything .NET (duh Visual Studio). Considering my job could involve any programming language, I would revise this tip to &ldquo;Use the right editor for the job, and learn to use it well.&rdquo;</p>
-
-<p>The chapter introductions were largely worthless to me: long-winded summaries of EVERYTHING in the chapter. I eventually trained myself to automatically skip the chapter intros in favor of reading the details. It seems that I could have just as easily gone the other way and gotten away with only reading the intros, but that hardly seems like any fun.</p>
-
-<h3>Who Would Like This</h3>
-
-<p>Fresh-outs should read this book. It&rsquo;s not too long and it&rsquo;s split into manageable chapters. Great for fresh-out book clubs, in which I probably should have participated.</p>
-
-<p>Who would not like this? People who have read books with similar premeses, such as <a href="/blog/2013/02/19/code-complete-second-edition/"><em>Code Complete</em></a>, within recent memory.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/9">&larr; Older</a>
@@ -484,6 +544,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/10/29/the-epic-battle-between-estimates-and-getting-work-done/">My Battle With Hour-Based Estimation</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/10/28/to-system-test-or-not-to-system-test/">To System Test or Not to System Test</a>
       </li>
     
@@ -499,15 +563,11 @@
         <a href="/blog/2014/08/31/the-honest-truth-about-dishonesty/">The (Honest) Truth About Dishonesty</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/08/22/fixing-some-minor-bugs-in-trellos-client-dot-js/">Hotfixing a Bug in Trello&#8217;s client.js</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 103.52941176470588%'>agile</a> <a href='/blog/categories/api' style='font-size: 103.52941176470588%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 110.58823529411765%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 110.58823529411765%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.52941176470588%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 114.11764705882354%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 121.17647058823529%'>database</a> <a href='/blog/categories/foreman' style='font-size: 103.52941176470588%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.52941176470588%'>foss</a> <a href='/blog/categories/git' style='font-size: 103.52941176470588%'>git</a> <a href='/blog/categories/gmock' style='font-size: 103.52941176470588%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 110.58823529411765%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 103.52941176470588%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 103.52941176470588%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 103.52941176470588%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 110.58823529411765%'>heroku</a> <a href='/blog/categories/html' style='font-size: 107.05882352941177%'>html</a> <a href='/blog/categories/internet' style='font-size: 103.52941176470588%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 124.70588235294117%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 114.11764705882354%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 103.52941176470588%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 110.58823529411765%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 110.58823529411765%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 103.52941176470588%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 103.52941176470588%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 103.52941176470588%'>mvc</a> <a href='/blog/categories/node' style='font-size: 103.52941176470588%'>node</a> <a href='/blog/categories/nodejs' style='font-size: 107.05882352941177%'>nodejs</a> <a href='/blog/categories/nokogiri' style='font-size: 103.52941176470588%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 107.05882352941177%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 103.52941176470588%'>nvm</a> <a href='/blog/categories/ollert' style='font-size: 138.8235294117647%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 114.11764705882354%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 103.52941176470588%'>pony</a> <a href='/blog/categories/qmake' style='font-size: 103.52941176470588%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 103.52941176470588%'>qt</a> <a href='/blog/categories/rails' style='font-size: 103.52941176470588%'>rails</a> <a href='/blog/categories/retro' style='font-size: 110.58823529411765%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 107.05882352941177%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 156.47058823529412%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 110.58823529411765%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 103.52941176470588%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 103.52941176470588%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 128.23529411764707%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 103.52941176470588%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 131.76470588235293%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 103.52941176470588%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 103.52941176470588%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 121.17647058823529%'>testing</a> <a href='/blog/categories/trello' style='font-size: 124.70588235294117%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.05882352941177%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 103.52941176470588%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 103.52941176470588%'>upstart</a> <a href='/blog/categories/web' style='font-size: 145.88235294117646%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 135.29411764705884%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 103.52941176470588%'>writeups</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/agile' style='font-size: 106.66666666666667%'>agile</a> <a href='/blog/categories/api' style='font-size: 103.33333333333333%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 110.0%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 110.0%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.33333333333333%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 113.33333333333333%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 120.0%'>database</a> <a href='/blog/categories/foreman' style='font-size: 103.33333333333333%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.33333333333333%'>foss</a> <a href='/blog/categories/git' style='font-size: 103.33333333333333%'>git</a> <a href='/blog/categories/gmock' style='font-size: 103.33333333333333%'>gmock</a> <a href='/blog/categories/golang' style='font-size: 110.0%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 103.33333333333333%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 103.33333333333333%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 103.33333333333333%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 110.0%'>heroku</a> <a href='/blog/categories/html' style='font-size: 106.66666666666667%'>html</a> <a href='/blog/categories/internet' style='font-size: 103.33333333333333%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 123.33333333333333%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 113.33333333333333%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 103.33333333333333%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 110.0%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 110.0%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 103.33333333333333%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 103.33333333333333%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 103.33333333333333%'>mvc</a> <a href='/blog/categories/node' style='font-size: 103.33333333333333%'>node</a> <a href='/blog/categories/nodejs' style='font-size: 106.66666666666667%'>nodejs</a> <a href='/blog/categories/nokogiri' style='font-size: 103.33333333333333%'>nokogiri</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 106.66666666666667%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 103.33333333333333%'>nvm</a> <a href='/blog/categories/ollert' style='font-size: 136.66666666666666%'>ollert</a> <a href='/blog/categories/pokephile' style='font-size: 113.33333333333333%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 103.33333333333333%'>pony</a> <a href='/blog/categories/qmake' style='font-size: 103.33333333333333%'>qmake</a> <a href='/blog/categories/qt' style='font-size: 103.33333333333333%'>qt</a> <a href='/blog/categories/rails' style='font-size: 103.33333333333333%'>rails</a> <a href='/blog/categories/retro' style='font-size: 110.0%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 106.66666666666667%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 153.33333333333334%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 110.0%'>rvm</a> <a href='/blog/categories/satire' style='font-size: 103.33333333333333%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 103.33333333333333%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 126.66666666666667%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 103.33333333333333%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 130.0%'>sinatra</a> <a href='/blog/categories/sql' style='font-size: 103.33333333333333%'>sql</a> <a href='/blog/categories/tdd' style='font-size: 103.33333333333333%'>tdd</a> <a href='/blog/categories/testing' style='font-size: 120.0%'>testing</a> <a href='/blog/categories/trello' style='font-size: 123.33333333333333%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 106.66666666666667%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 103.33333333333333%'>ubuntu</a> <a href='/blog/categories/upstart' style='font-size: 103.33333333333333%'>upstart</a> <a href='/blog/categories/web' style='font-size: 143.33333333333334%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 133.33333333333334%'>write-ups</a> <a href='/blog/categories/writeups' style='font-size: 103.33333333333333%'>writeups</a> </span>
 </section>
 
 <section>
