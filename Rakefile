@@ -9,7 +9,7 @@ ssh_port       = "22"
 document_root  = "~/website.com/"
 rsync_delete   = false
 rsync_args     = ""  # Any extra arguments to pass to rsync
-deploy_default = "push"
+deploy_default = "openshift"
 
 # This will be configured for you when you run config_deploy
 deploy_branch  = "master"
@@ -312,6 +312,28 @@ desc "copy dot files for deployment"
 task :copydot, :source, :dest do |t, args|
   FileList["#{args.source}/**/.*"].exclude("**/.", "**/..", "**/.DS_Store", "**/._*").each do |file|
     cp_r file, file.gsub(/#{args.source}/, "#{args.dest}") unless File.directory?(file)
+  end
+end
+
+desc "Deploy website to OpenShift"
+task :openshift do
+  puts "## Deploying branch to OpenShift"
+  puts "## Pulling any updates from OpenShift"
+  cd "#{deploy_dir}" do 
+    Bundler.with_clean_env { system "git pull" }
+  end
+  (Dir["#{deploy_dir}/public/*"]).each { |f| rm_rf(f) }
+  Rake::Task[:copydot].invoke(public_dir, deploy_dir)
+  puts "\n## Copying #{public_dir} to #{deploy_dir}/public"
+  cp_r "#{public_dir}/.", "#{deploy_dir}/public"
+  cd "#{deploy_dir}" do
+    system "git add -A"
+    message = "Site updated at #{Time.now.utc}"
+    puts "\n## Committing: #{message}"
+    system "git commit -m \"#{message}\""
+    puts "\n## Pushing generated #{deploy_dir} website"
+    Bundler.with_clean_env { system "git push -f origin master" }
+    puts "\n## OpenShift deploy complete"
   end
 end
 

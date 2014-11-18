@@ -5,6 +5,8 @@
 .pygments-cache
 .ruby-gemset
 _deploy
+_old_deploy
+_openshift
 public
 sass.old
 source.old
