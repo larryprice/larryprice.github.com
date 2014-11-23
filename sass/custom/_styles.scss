@@ -6,8 +6,25 @@ p code {
   border: 0;
 }
 
-aside.sidebar img.social-media-icon {
-  border: 0;
-  box-shadow: rgba(0,0,0,0.15) 0 0px 0px;
-  -webkit-box-shadow: rgba(0,0,0,0.15) 0 0px 0px;
+aside {
+  &.sidebar {
+    .social-media-bar {
+      display: block;
+      text-align: center;
+      margin: .5em;
+
+      img {
+        &.social-media-icon {
+          border: 0;
+          box-shadow: rgba(0,0,0,0.15) 0 0px 0px;
+          -webkit-box-shadow: rgba(0,0,0,0.15) 0 0px 0px;
+
+          width: 40px;
+          @media(max-width: 1000px) {
+            width: 35px;
+          }
+        }
+      }
+    }
+  }
 }
