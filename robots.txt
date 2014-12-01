@@ -1,4 +1,2 @@
 User-agent: *
-Disallow: 
-
-Sitemap: http://larry-price.com/sitemap.xml 
+Disallow: /
