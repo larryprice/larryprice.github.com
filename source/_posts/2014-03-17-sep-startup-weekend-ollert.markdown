@@ -3,7 +3,7 @@ layout: post
 title: "SEP Startup Weekend: Ollert"
 date: 2014-03-17 20:07:38 -0400
 comments: true
-categories: web trello ollert
+categories: trello ollert non-technical
 ---
 
 Last weekend was [SEP](//sep.com)'s 6th Semi-Annual [Startup Weekend](//sep.com/labs/startupweekend/). For those unfamiliar, software developers pitch ideas Friday evening and developers volunteer their time to come up with a [minimum viable product](//en.wikipedia.org/wiki/Minimum_viable_product) in the next 48 hours. Free beer is the only thing that makes such a weekend possible.
