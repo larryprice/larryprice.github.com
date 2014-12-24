@@ -13,8 +13,8 @@ I did some work with [Google Go](http://golang.org/) recently and had the chance
 * Store templates in tmpl/ and page data in data/.
 * Add a handler to make the web root redirect to /view/FrontPage.
 * Spruce up the page templates by making them valid HTML and adding some CSS rules.
-* Implement inter-page linking by converting instances of [PageName] to 
-\<a href="/view/PageName"\>PageName\</a\>. (hint: you could use regexp.ReplaceAllFunc to do this)
+* Implement inter-page linking by converting instances of `\[PageName\]` to 
+`&lt;a href="/view/PageName"&gt;PageName&lt;/a&gt;`. (hint: you could use regexp.ReplaceAllFunc to do this)
 
 This is what I'd like to go over. I scoured the web and didn't have much luck finding solutions to these issues. That would be okay if they were all trivial, but the final step is not straightforward. I'm going to assume you've already gone over the tutorial. You can see [my repository on Github](https://github.com/larryprice/gowiki/), and I have included links to the appropriate commits in the code sections of this blog post.
 
@@ -78,7 +78,7 @@ I took my old `.html` files and put them through [a validator](http://validator.
 +</html>
 ```
 
-####Implement inter-page linking by converting instances of [PageName]
+####Implement inter-page linking by converting instances of `\[PageName\]`
 
 Converting [PageName] to a hyperlink was a bit more complicated than expected. I originally just tried to run the string through `ReplaceAllFunc` and replace all instance of [PageName] with an equivalent hyperlink. This does not work because we use Go's `ExecuteTemplate` method to render our template. `ExecuteTemplate` escapes any HTML that we give it to prevent us from displaying unwanted HTML. Getting around this was the fun part, because I want the benefit of escaped HTML while still having the ability to substitute my own HTML.
 
@@ -92,7 +92,7 @@ type Page struct {
 }
 ```
 
-Next, I create a regular expression to find instances of [PageName] and I put the defintion above the `main` method.
+Next, I create a regular expression to find instances of `\[PageName\]` and I put the defintion above the `main` method.
 
 ``` diff wiki.go https://github.com/larryprice/gowiki/commit/38c48717420de78f15dc48152ce16d1bdb417288
 +var linkRegexp = regexp.MustCompile("\\[([a-zA-Z0-9]+)\\]")
