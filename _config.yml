@@ -2,7 +2,7 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://www.larry-price.com
+url: https://larry-price.com
 title: Larry Price
 subtitle: And The Endless Cup Of Coffee
 author: Larry Price
@@ -19,7 +19,7 @@ date_format: "ordinal"
 subscribe_rss: /atom.xml
 subscribe_email:
 # RSS feeds can list your email address if you like
-email:
+email: larry@larry-price.com
 
 # ----------------------- #
 #    Jekyll & Plugins     #
@@ -40,7 +40,7 @@ rdiscount:
     - footnotes
     - smart
 highlighter: pygments # default python pygments have been replaced by pygments.rb
-lsi: true
+# lsi: true
 paginate: 5          # Posts per page on the blog index
 paginate_path: "posts/:num"  # Directory base for pagination URLs eg. /posts/2/
 recent_posts: 5       # Posts in the sidebar Recent Posts section
