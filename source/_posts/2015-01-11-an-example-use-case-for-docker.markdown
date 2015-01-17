@@ -14,7 +14,7 @@ I spent a lot of time last week asking questions about Docker. [What](#whatdocke
 
 Through a series of commands, Docker pulls up a base system image and applies changes to create a custom image. Docker provides the means to access any of these step-level containers for further manipulation. Docker uses a unique layered system such that sibling layers can utilize the same base images, in contrast to a virtual machine which would require multiple copies of things like operating systems, shared libraries, and shared binaries. The image below is an excellent visualization of the difference between a virtual machine and a Docker container.
 
-![VM vs LXC](http://i.imgur.com/Lps6K6y.png?1)
+![VM vs LXC](https://i.imgur.com/Lps6K6y.png?1)
 
 ###<a name="whydocker"></a>Why use Docker?###
 
