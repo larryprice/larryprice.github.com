@@ -6,6 +6,8 @@ comments: true
 categories: golang linux
 ---
 
+___Update Jan 17, 2015:___ __It's 2015 and things are different. Check out my [updated post on managing Go dependencies](/blog/2015/01/18/managing-a-go-environment-in-ubuntu) for a better solution.__
+
 Some very light cajoling led me to do some investigation into [Google Go](http://golang.org/) (often called __golang__ for ease of internet search). This is a brief recounting of how I got up and running on [Ubuntu](http://ubuntu.com) (first 12.04 and then 13.10). Luckily, this has been made espcially easy for us with the introduction of a [golang package in the Ubuntu package repositories](http://packages.ubuntu.com/precise/golang). There are also [official installation instructions](http://golang.org/doc/install) if you don't like mine.
 
 Open up a terminal and let loose:
