@@ -6,7 +6,7 @@ comments: true
 categories: web ruby sinatra ollert
 ---
 
-Now that [I send emails using Pony](/blog/2014/07/07/deauthorizing-token-with-the-trello-client/), I want to be able to verify that the emails are being generated correctly. I also don't want to send real emails and have my tests check an inbox somewhere. I found a couple of solutions to do this, including [pony-test](https://github.com/johnmendonca/pony-test) and [email-spec](https://github.com/bmabey/email-spec). Although pony-test fits my needs perfectly, the last commit was December 27, 2011 (2.5 years ago at the time of this post), and thus was using an outdated version of [capybara](https://github.com/jnicklas/capybara) which I was unwilling to use. Fortunately, pony-spec is mostly just a fork of email-spec with all the non-Pony components ripped out.
+Now that [I send emails using Pony](/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/), I want to be able to verify that the emails are being generated correctly. I also don't want to send real emails and have my tests check an inbox somewhere. I found a couple of solutions to do this, including [pony-test](https://github.com/johnmendonca/pony-test) and [email-spec](https://github.com/bmabey/email-spec). Although pony-test fits my needs perfectly, the last commit was December 27, 2011 (2.5 years ago at the time of this post), and thus was using an outdated version of [capybara](https://github.com/jnicklas/capybara) which I was unwilling to use. Fortunately, pony-spec is mostly just a fork of email-spec with all the non-Pony components ripped out.
 
 I'm going to be using Cucumber to test my emails, but email-spec also boasts compatibility with rspec and Turnip. To get started:
 
@@ -16,7 +16,7 @@ $ gem install email-spec
 
 The developers of email-spec were kind enough to give us some free step definitions. If I was using rails, I could just type `rails generate email_spec:steps`, but since I'm using Sinatra I opted just to copy-paste the file into my `step_definitions/` directory. You can find `email_steps.rb` [on Github](https://raw.githubusercontent.com/bmabey/email-spec/master/lib/generators/email_spec/steps/templates/email_steps.rb).
 
-In [my last post about small horses and emails](/blog/2014/07/07/deauthorizing-token-with-the-trello-client/), I used the following code to send a confirmation email on signup:
+In [my last post about small horses and emails](/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/), I used the following code to send a confirmation email on signup:
 
 ``` ruby web.rb
 # ...
