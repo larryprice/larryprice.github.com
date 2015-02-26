@@ -238,11 +238,16 @@ end
 # usage rake isolate[my-post]
 desc "Move all other posts than the one currently being worked on to a temporary stash location (stash) so regenerating the site happens much more quickly."
 task :isolate, :filename do |t, args|
+  args.with_defaults(:filename => get_latest_post(source_dir, posts_dir))
   stash_dir = "#{source_dir}/#{stash_dir}"
   FileUtils.mkdir(stash_dir) unless File.exist?(stash_dir)
   Dir.glob("#{source_dir}/#{posts_dir}/*.*") do |post|
     FileUtils.mv post, stash_dir unless post.include?(args.filename)
   end
+end
+
+def get_latest_post(source_dir, posts_dir)
+  Dir.glob("#{source_dir}/#{posts_dir}/*.*").sort.last
 end
 
 desc "Move all stashed posts back into the posts directory, ready for site generation."
