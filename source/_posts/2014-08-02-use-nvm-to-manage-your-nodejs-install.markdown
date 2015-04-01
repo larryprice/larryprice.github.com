@@ -36,7 +36,7 @@ Since this is the only Node on my system, I'd like to set it as the default.
 $ nvm alias default 0.11.13
 ```
 
-What if I'm `cd`ing out of control and I don't know what Node version I need in my current directory? Create a file called `.nvmrc` in the directory containing the version number you want nvm to use and then type `node use` ENTER; Now you're using the version of Node you meant to. This also prevents people from using the wrong versions of Node to try to run your code, which would of course be a catastrophe.
+What if I'm `cd`ing out of control and I don't know what Node version I need in my current directory? Create a file called `.nvmrc` in the directory containing the version number you want nvm to use and then type `nvm use` ENTER; Now you're using the version of Node you meant to. This also prevents people from using the wrong versions of Node to try to run your code, which would of course be a catastrophe.
 
 PLUS nvm installs the right version of npm whenever you install Node, so there's no need to worry about dealing with your base npm not working with different versions of Node.
 
