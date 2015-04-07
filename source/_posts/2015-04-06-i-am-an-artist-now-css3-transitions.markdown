@@ -9,7 +9,7 @@ categories: css
 I just discovered [CSS3 Animation](//www.w3.org/TR/css3-animations/) and I am quickly becoming obsessed.
 
 <a name="infinite-ball"></a>
-{% jsfiddle 9uny3mb1/1 result,html,css light 150px %}
+{% jsfiddle 9uny3mb1/7 result,html,css light 150px %}
 
 CSS3 makes DOM animations really easy. I can move things around, shrink or enlarge text and images, make buttons and links "pop" on hover, and help the user focus on the most relevant information. This can all be done through CSS3.
 
@@ -17,7 +17,7 @@ __DISCLAIMER__: Contrary to the title of this article, I am less of a Picasso an
 
 ### Animation ###
 
-Do you see that ball [up there](#infinite-ball)? If you can't, go check out the [jsfiddle](//jsfiddle.net/9uny3mb1/1). The concepts are so simple an embedded programmer could do it. Let's look at the `animation-` tags on the ball first:
+Do you see that ball [up there](#infinite-ball)? If you can't, go check out the [jsfiddle](//jsfiddle.net/9uny3mb1/7). The concepts are so simple an embedded programmer could do it. Let's look at the `animation-` tags on the ball first:
 
 ``` css
 .ball {
@@ -38,7 +38,7 @@ Do you see that ball [up there](#infinite-ball)? If you can't, go check out the 
   * The number of times the animation should run. Default 1.
   * Example: infinite
 
-Note that there are several other `animation-` attributes to give you more control, but we only need a few in this case. For a more in-depth look at these attributes and their constituents, I advise you to check out [this MDN article](https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Using_CSS_animations).
+Note that there are several other `animation-` attributes to give you more control, but we only need a few in this case. For a more in-depth look at these attributes and their constituents, I advise you to check out [this MDN article](https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Using_CSS_animations). Also, note that at this point Google's Chrome browser still requires `-webkit-` prefixes on animation objects. Hopefully they join the rest of the modern world soon.
 
 The `animation-` attributes let us configure our usage of an animation, but the real guts of the animation come from the definition inside a `@keyframes` tag.
 
