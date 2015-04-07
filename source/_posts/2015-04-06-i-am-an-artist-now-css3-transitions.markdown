@@ -3,7 +3,7 @@ layout: post
 title: "I am an Artist Now: CSS3 Transitions"
 date: 2015-04-06 18:57:36 -0400
 comments: true
-categories: css3
+categories: css
 ---
 
 I just discovered [CSS3 Animation](//www.w3.org/TR/css3-animations/) and I am quickly becoming obsessed.
