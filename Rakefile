@@ -297,7 +297,7 @@ end
 ##############
 
 desc "Default deploy task"
-task :deploy do
+task :simple_deploy do
   # Check if preview posts exist, which should not be published
   if File.exists?(".preview-mode")
     puts "## Found posts in preview mode, regenerating files ..."
@@ -310,7 +310,7 @@ task :deploy do
 end
 
 desc "Generate website and deploy"
-task :gen_deploy => [:integrate, :generate, :deploy] do
+task :deploy => [:integrate, :generate, :simple_deploy] do
 end
 
 desc "copy dot files for deployment"
