@@ -3,7 +3,7 @@ layout: post
 title: "Schemaless databases with Ruby and MongoDB"
 date: 2013-01-05 16:54
 comments: true
-categories: ruby mongodb database rspec tdd nosql nokogiri pokephile
+categories: ruby mongodb database testing
 ---
 
 This is Part 1 in a multi-part series to detail the creation of a "simple" project combining [Ruby][ruby], [MongoDB][mongodb], [RSpec][rspec], [Sinatra][sinatra], and [Capybara][capybara] in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the [Pokephile category][series-tag]. Part 1 details getting started with MongoDB and creating a collection using data scraped off the web using [Nokogiri][nokogiri]. The code for this side-project is located [on Github][pokephile].

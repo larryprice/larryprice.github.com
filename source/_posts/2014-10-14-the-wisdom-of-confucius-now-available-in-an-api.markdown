@@ -3,7 +3,7 @@ layout: post
 title: "The wisdom of Confucius - now available in an API"
 date: 2014-10-14 06:03:16 -0400
 comments: true
-categories: javascript node mongo api web
+categories: javascript nodejs mongo api web
 ---
 
 I make a lot of silly things while learning new technology. In this case I have tapped into the almighty power of [Confucius](https://en.wikipedia.org/wiki/Confucius), a Chinese philosopher from 2500 years ago credited for writing or editing many Chinese classic texts. Growing up as an American child, I associated Confucius with proverbs, and I associated proverbs with that classic after-Chinese-dinner dessert [the fortune cookie](https://en.wikipedia.org/wiki/Fortune_cookie).
