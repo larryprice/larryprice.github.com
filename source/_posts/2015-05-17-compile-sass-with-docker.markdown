@@ -10,7 +10,7 @@ categories: sass web docker
 
 Running this image is easy. Let's say I have some SASS code:
 
-``` sass /home/larry/test-project/public/css/style.sass
+``` sass /home/larry/test-project/public/css/style.scss
 .service-home .search-area {
   margin-top: 0;
 
