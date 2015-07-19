@@ -14,24 +14,26 @@ For this demo, I'll make a simple web page starting with the text "Page 1" and a
 
 
 ``` html index.html
-<div id="content" style="margin-bottom: 1.5em;">Welcome</div>
+<span id="content" style="margin-bottom: 1.5em;">Welcome</span>
 <button id="continue" onclick="nextPage()">
   Continue
 </button>
-<script type="text/javascript" async>
-  function nextPage() {
-    var content = document.getElementById("content");
-    if (content.innerHTML === "Welcome") {
-      updatePageContent(1);
-    } else {
-      updatePageContent(parseInt(content.innerHTML.slice(5))+1);
-    }
-  }
+```
 
-  function updatePageContent(pageNumber) {
-    document.getElementById("content").innerHTML = "Page " + pageNumber;
+``` javascript index.html
+// ...
+function nextPage() {
+  var content = document.getElementById("content");
+  if (content.innerHTML === "Welcome") {
+    updatePageContent(1);
+  } else {
+    updatePageContent(parseInt(content.innerHTML.slice(5))+1);
   }
-</script>
+}
+function updatePageContent(pageNumber) {
+  document.getElementById("content").innerHTML = "Page " + pageNumber;
+}
+// ...
 ```
 
 Running this code and clicking "Continue", the user has no way to go back. He or she would need to start over from the beginning, which is bad for the user and bad for us too. We can update the browser's history using `pushState` and `popState` commands from the History API. For this contrived example, I'll add my `pushState` call in the `nextPage` function:
