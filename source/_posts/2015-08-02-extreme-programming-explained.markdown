@@ -8,7 +8,7 @@ categories: write-ups
 
 ### The Gist
 
-[_Extreme Programming Explained_](http://amzn.to/1KKM3Q0) is the _de facto_ book on XP written by Kent Beck. In the world of XP, software development is fun and efficient. Communication is open between all parties, pair programming is mandatory, builds are short, and tests are written before production code. Beck invites the reader to apply bits and peices of XP to the development process to see incremental improvements, which is a very XP way of implementing XP.
+[_Extreme Programming Explained_](http://amzn.to/1KKM3Q0) is the _de facto_ book on XP written by Kent Beck. In the world of XP, software development is fun and efficient. Communication is open between all parties, pair programming is mandatory, builds are short, and tests are written before production code. Beck invites the reader to apply bits and pieces of XP to the development process to see incremental improvements, which is a very XP way of implementing XP.
 
 ### Takeaways
 
@@ -30,6 +30,6 @@ Taking baby steps is okay. It's unlikely you'll be able to institute all the gre
 
 ### My Action Items
 
-* Write more tests. I've been having a tough time getting tests written in this current project because it's largely UI and intializing a provided library. This week I want to come out net-positive on tests.
-* Test first. I've accomplished this on a few occassions, including a recent bug fix I pushed to an open-source library I created. But this is hard. I have a tendency to dive in headfirst when a test could help set the stage for a simpler design.
+* Write more tests. I've been having a tough time getting tests written in this current project because it's largely UI and initializing a provided library. This week I want to come out net-positive on tests.
+* Test first. I've accomplished this on a few occasions, including a recent bug fix I pushed to an open-source library I created. But this is hard. I have a tendency to dive in headfirst when a test could help set the stage for a simpler design.
 * 1-week iterations. I have pushed against 1-week iterations because I often found them to be "too short," but I'm starting to come around to the idea of getting 1-2 items done per developer (or pair) per iteration. Other benefits include shorter feedback loop and less estimation required. My current project is a team of one, so this action item might have to sit on the backburner for a few months.
