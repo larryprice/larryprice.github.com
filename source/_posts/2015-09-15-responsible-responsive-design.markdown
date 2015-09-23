@@ -24,7 +24,7 @@ Start with the mobile version. If you can design for a small screen with weird g
 
 Use HTML5 elements when possible. `<picture>` and `<video>` can be very efficient in choosing which images or videos to load from the server, preventing the client from downloading the `1x`, `2x`, `3x` versions of your images. Don't forget about `<svg>` either for handling vector graphics.
 
-Screen readers read _everything visible_. This can cause a lot of bad things to happen. Using `display: block` will prevent screen readers from telling the user about your collapsed items (think of all the wasted hamburgers). Elements strategically hidden with `z-index` are listed by the screen reader as a visible element, potentially misinterpreting your intent. Markup created dynamically could have a drastic effect on that user's experience. We should be diligent with our markup to remain inclusive.
+Screen readers read _everything visible_. This can cause a lot of bad things to happen. Using `display: none` will prevent screen readers from telling the user about your collapsed items (think of all the wasted hamburgers). Elements strategically hidden with `z-index` are listed by the screen reader as a visible element, potentially misinterpreting your intent. Markup created dynamically could have a drastic effect on that user's experience. We should be diligent with our markup to remain inclusive.
 
 Polyfill, shims, and shivs are some common terms to refer to libraries which fake modern browser functionality into older browsers. `html5shiv`, `selectivizr`, and `modernizr` can be described by these words.
 
