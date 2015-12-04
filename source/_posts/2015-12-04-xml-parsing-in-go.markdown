@@ -6,9 +6,6 @@ comments: true
 categories: go golang xml
 ---
 
-XML Parsing in Go
-=================
-
 Need to parse an XML file in go? XML (en|de)coding is build into go's standard library. Basic parsing of nodes and embedded nodes is straightforward, but there are some interesting things to think about when you need to parse attributes, lists, and if you don't want to create new structs all over the place.
 
 For this exercise, let's look at the following XML document:
