@@ -59,7 +59,7 @@ A `Person` has a list of `Address`es. Since we know that `address` is a direct d
 
 ``` go
 type Person struct {
-  Name string         `xml:"string"`
+	Name string         `xml:"name"`
 	Addresses []Address `xml:"addresses>address"`
 }
 ```
