@@ -32,7 +32,7 @@ The simplest node to parse is going to be `<name>`. We'll need an object to unma
 
 ``` go
 type Person struct {
-  Name string `xml:"string"`
+  Name string `xml:"name"`
 }
 ```
 
