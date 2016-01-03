@@ -1,0 +1,69 @@
+---
+layout: post
+title: "2015 Retrospective"
+date: 2016-01-03 15:25:41 -0500
+comments: true
+categories: non-technical retro
+---
+
+Another year gone.
+
+### What I Wanted from 2015 ###
+
+I set some arbitrary goals for myself at the end of 2014, and I sort of accomplished most of them. Here's a short list:
+
+* Contribute meaningful code to several open source projects not created by me
+  * Documentation to [ace](https://github.com/larryprice/ace), features to [asknot](https://github.com/larryprice/asknot), minor fix to [fireplace](https://github.com/larryprice/fireplace), minor fix to [planet.indyhackers](https://github.com/larryprice/indyhackers.org-planet), small feature to [gvp](https://github.com/larryprice/gvp)
+* Read at least 1 book per month
+  * I read 8 books professionally, started getting into graphic novels, and read a couple of silly books by celebrities. I'll count this as a win.
+* Attend more meetups
+  * I hosted quite a few Golang meetups and attended a few ISA meetups, but I'm not sure I actually went to more meetups.
+* &gt;3000 sessions/month on this blog (currently ~1400)
+  * By the end of the year, I was doing a little over 4000 sessions/month. I had a few popular posts on Go and Docker which I believe contributed to this.
+* Improve social skills
+  * Eh. Unfortunately, this year I largely worked on solo projects in the office which didn't give me many opportunities to improve my social skills.
+* Work remotely more and better
+  * I started off the year doing this well and I was working 2 days a week from home. After one of my projects got canceled, I never managed to get back into the swing of working remotely.
+* Obtain more technical leadership roles on projects
+  * Technically, I accomplished this. Again, this feels like somewhat of a weak victory as I only had the opportunities to lead myself.
+
+### Surprise Victories of 2015 ###
+
+Not everything can be planned.
+
+* Got paid to build a video course on [writing web applications in Go](https://www.packtpub.com/web-development/go-web-development-video).
+  * I was approached via email by Packt Publishing after they recognized all of my work on my blog and Github in Go. I agreed to create a multi-video course on creating a modern web application in Go from scratch. This was a lot of fun, but also a lot of work. Since I love to teach, I may be looking for more opportunities like this.
+* SEP Professional Development Revamp
+  * I am a part of a continued effort to overhaul the Professional Development system at SEP. We are moving away from monetary rewards and towards shared experiences. The first iteration received positive feedback, and we are days away from launching our second attempt.
+* Guides Program
+  * In late October, I was asked to be a "guide" for a new employee at SEP. I jumped at the opportunity and have been lucky to help guide an all-around good guy through his first few months at SEP.
+* Open Sourcing [Ollert](https://ollertapp.com)
+  * We even got a few pull requests. See [the repo](https://github.com/sep/ollert).
+* Cats
+  * We got two cats, Juniper and Jelly Bean. I didn't even know I wanted cats until I got them, but they've been an important addition to my little family.
+
+### Things I Worked On Professionally ###
+
+I'll keep this brief.
+
+* Reporting tool for school administrators in Go
+* Critical web bugs in a traffic radar system, primarily Javascript work
+* iOS app for sending results from a medical device to client servers
+* Bugs and minor features for previous client building an e-commerce website in C# ASP.NET both WebForms and MVC
+
+### What I Want From 2016 ###
+
+* Spend Money
+  * My parents raised me to be cheap, and we always seemed to be just scraping by. These teachings served me very well in college and for the year or two after, but now I'm lucky enough to have a great job, house, wife, American dream, etc, and I've found myself becoming somewhat of a miser. We finally bit the bullet this weekend and bought a fancy new mattress, but I want this to be the year of me buying new stuff that I've always wanted but been too hesitant to purchase.
+* Back Into Web
+  * I got really deep into web in 2014 and the first half of 2015, and it's a platform that I really like to work in. If I can't find web work in the office, I'll be making open-source web work a priority.
+* Work With Others
+  * This has been the year of solo projects for me, and to be quite honest I've found myself feeling downright lonely the past couple months. It's frustrating to have no one to share with, to fight with, and to laugh with on a project. I intend to rail hard against any project assignment where I am the only engineer.
+* Become Part of an Open-Source Community
+  * I have a tendency to build my own side-projects or submit individual pull requests and never be heard from again. This year, I want to find a project where I can be a part of something bigger than just me.
+* Good Vibes
+  * I want to have a positive influence. I'm not 100% sure how people view me now, but I understand that I complain a lot and probably come off as a bit negative. I know that I have the power to make waves when given the chance, but I want to make sure that those waves don't leave the surfers with a sour taste in their mouths.
+
+### So Long, 2015 ###
+
+A year where I didn't accomplish as much of what I set out to, but I managed to find a few surprise wins along the way. If you catch me going against any of my resolutions in 2016, I encourage you to deride me and set me back on track; I'll be happy to do the same for you.
