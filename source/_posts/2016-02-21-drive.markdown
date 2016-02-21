@@ -1,0 +1,40 @@
+---
+layout: post
+title: "Drive"
+date: 2016-02-21 11:38:22 -0500
+comments: true
+categories: write-ups
+---
+
+> Have you ever seen a six-month-old or a three-year-old who’s not curious and self-directed? I haven’t. That’s how we are out of the box.  
+> -- Dan Pink
+
+### The Gist ###
+
+Daniel Pink's [_Drive_](http://amzn.to/1SZTo29) explores how to motivate modern humans. Today's offices still employ business practices created to meet the needs of late 19th and early 20th century workers performing monotonous tasks, but many modern workers spend their days doing creative work which is ill-suited for stick-and-carrot management. Pink posits that today's workforce crave autonomy, mastery, and purpose to lead a satisfying life and produce better, maybe even faster, results.
+
+### Takeaways ###
+
+"Stick and carrot" refers to the technique of "if you do this, then you'll get that" motivation. Work overtime this week and I'll buy you bagels on Friday. Read a book and you'll get a free personal pan pizza. Sit, good boy, here's a treat. Alternatively, "now that" rewards are ok from time to time. "Now that" the team has worked well together for a few weeks, I decided to bring in some donuts. "Now that" we handed off the code to the client, let's go get lunch. Note that "now that" rewards should not become predictable, lest they become "if then" rewards.
+
+The concepts in this book are not new. Researchers have discovered this kind of interesting behavior since the '60s, and each time they are essentially ignored by the general population. Over the last few years, I have read several books on this topic and assumed we were only just starting to realize that sticks and carrots were bad for creative work, but it seems to have taken some time for these concepts to enter the public view.
+
+"Flow" is the optimal state of working, where the work is challenging enough to keep one engaged but familiar enough to allow mental connections to be made. It doesn't mean working on something so easy one can get it done fast, because such trivial exercises are boring and non-enriching. Alternatively, it doesn't mean working on something so difficult that one is "head down" for several days accomplishing nothing, because this type of task is exhausting. You'll know when flow has struck when you glance up at the clock and suddenly an hour has gone by and you feel good about what you've already accomplished and you can see what you'll be accomplishing in the next hour.
+
+Although money is a poor way to motivate workers, all workers should still be given a fair base pay and benefits package. Everyone needs to live, and unfortunately we don't live in a Roddenberry socialist utopia where everyone works together to build a functioning world where everyone is paid in the love of one's career. In fact, Pink prescribes that organizations should try to pay employees slightly above average, which should essentially take the money issue off the table during recruiting and retention.
+
+The best motivation in the modern workplace is the encouragement of _autonomy_, _mastery_, and _purpose_.
+
+_Autonomy_ is the ability to make decisions for oneself, and cause a meaningful impact on the work being done. The craving of the modern human for autonomy can be explicitly seen in the rise of agile software development, remote working, Etsy retailers, startups, farmer's markets, and freelancing over the past 20 years. When people are allowed to make decisions without the intervention of big brother, they feel more ownership over the work they do, and they feel more freedom to be creative.
+
+_Mastery_ is continual improvement. A 5K runner achieves her goal of finishing in 20 minutes and sets a new goal for 19 minutes, then 18 minutes, and so on. She never stops to say "20 minutes was good enough, I think I'll stop now." Mastery is usually something that can never 100% achieved, but the quest for mastery is something that drives us to be better than  we were yesterday.
+
+When we think about _purpose_, we think about leaving our mark on the world. For some organizations, this may involve redistributing part (or all) of the annual revenue to charity. It could also mean building a better medical device for diabetics. Not all purposes are created equal. Improved quarterly sales, more working hours, higher profit margins, happier stockholders are all invalid purposes that do not drive workers to be happier.
+
+Schools suffer substantially from our system of numbers-based achievements. Better grades and better test results have become the primary indicator of success, quelling the curiosity of our children and destroying the happiness of our teachers. Getting away from numbers-based learning will be an extremely difficult task, but there are already schools working towards this goal.
+
+### Action Items ###
+
+* Recognize when I've been in flow and write it down.
+* Recognize when someone is offering me an "if-then" reward, and try to determine a better way to think about it.
+* Recognize when I offer someone an "if-then", and think about the consequences. Did they perform better or worse than I expected? How could I have created an opportunity for the other person to improve themselves instead?
