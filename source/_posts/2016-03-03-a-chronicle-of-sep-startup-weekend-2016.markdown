@@ -47,7 +47,7 @@ During demos, we presented all three apps and everyone was quite impressed at ou
 ### Action Items
 
 * _General Things_
-  * __Learn more about React Native.__ I was largely shielded from the pain as I was working on the API and React web parts of our project, but from waht I've seen and heard React Native is an incredible framework for getting things done and sharing code and code paradigms.
+  * __Learn more about React Native.__ I was largely shielded from the pain as I was working on the API and React web parts of our project, but from what I've seen and heard React Native is an incredible framework for getting things done and sharing code and code paradigms.
   * __Start using ES2015.__ Tools like [Babel](https://babeljs.io/) allow us to start using next-generation javascript standards to write code now even if the browser support is unavailable.
   * __Do more with [webpack](https://webpack.github.io/) or [browserify](http://browserify.org/).__ I want to be able to use these tools to optimize pre-rendering on our site, but we were in such a rush we primarily used webpack to enable us to use several NodeJS dependencies. Still cool, but we there's so much else to explore.
 * _Startup Weekend_
