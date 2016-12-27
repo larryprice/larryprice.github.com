@@ -1,0 +1,60 @@
+---
+layout: post
+title: "2016 Retrospective"
+date: 2016-12-27 13:35:56 -0500
+comments: true
+categories: non-technical retro
+---
+
+This has been a unique year for me, and I wanted to quickly lay out what I've accomplished and where I think I'm going for the coming year. This is now officially a tradition at three posts (see: [2014](/blog/2014/12/31/2014-retrospective/) and [2015](/blog/2016/01/03/2015-year-in-review/)).
+
+### Revisiting 2016's Goals ###
+
+These are the goals I set for myself at the start of the year and how I met or missed them:
+
+* Spend Money
+  * I wanted to become less of a miser and spend more money. Note that this is not for bragging purposes, just that I am naturally very frugal and hesitant to spend money. I think we did a pretty good job, though! For starters, I swapped out my commuter car for a tech-heavy crossover. We stayed in a really cool art-hotel in downtown Cincinnati in the Spring, drove across the country for a big Yellowstone trip in early Summer, stayed at the Indiana Dunes for a few days in the Fall, and took a brief trip to Madison, WI, shortly thereafter. I bought a nice sitting/standing desk and chair for my home office. I paid the entry fee to go to GenCon for a day. Our fridge, dishwasher, and furnace all died one weekend, and it ended with me buying upgraded, modern appliances. I've also been keeping the post office busy with plenty of orders off Amazon, and I've been trying to Kickstart more games that I think deserve attention. I also found a new hobby in homebrewing which has been a great use of fun-money.
+* Back Into Web
+  * At the start of 2016, I though I really wanted to do more web work. Turns out I've done a 180 on this one, and I now work on primarily desktop/mobile with minimal web work, and I wouldn't have it any other way for the time being.
+* Work With Others
+  * In 2015, I worked alone a lot. In 2016, I joined a new company where I work remotely. Although I don't necessarily see my coworkers every day, I am working on projects with multiple developers and communicating constantly with my teammates (and others) through chat. Working with others again has helped me grow socially and become a better engineer.
+* Become Part of an Open-Source Community
+  * I really wanted to better integrate FLOSS into my life and my career, and I believe I've hit the jackpot. My job is to build popular open-source operating system Ubuntu, where all the code I write is public and generally GPLv3. My job is to write open-source software, and to interact with the community. I use my own software and report/fix bugs that affect me all the time.
+* Good Vibes
+  * I was feeling a bit down at the end of 2015, and I wanted to be a more positive person in 2016. Although there were some depressing things going on worldwide in 2016, I am generally happier with my personal and professional life on a micro-level.
+
+### Surprise Victories ###
+
+* New Job
+  * The big one! After almost four years at SEP, I transitioned to a new role at Canonical. I get to work on Ubuntu, one of my favorite open-source projects, as my full-time job. This also means I get to work remotely, dropping my commute from 30 miles in 2012 to 3 miles in 2014 to 50 feet in 2016. I've been having a great time working on software that's in the public spotlight, working with the community, and traveling every few months to see my coworkers. With this new job, I've also had the opportunity to visit Europe for the first time this year.
+* Less Own-Time Work
+  * Although I've hit pretty hard in the past that developers should do some learning outside of work, this year likely contained the least own-time work I've ever done. I've been finding joys in non-software hobbies and home maintenance, and working on Ubuntu as my full-time job has made me less needy for doing open-source work in my off-hours. I tend to respond to bugs and Github PRs at any hour, and I follow more technical people on social media than I used to. I think this stems from a satisfaction from the learning I do throughout the day, and the difficulty of separating work-life and home-life when one works at home.
+* FOSDEM
+  * Yesterday, I learned that I'll be giving a talk at [FOSDEM](https://fosdem.org/2017/). I'm very excited (and nervous) to give my first-ever conference talk in Brussels this February.
+* Homebrewing
+  * I picked up homebrewing beer at the start of 2016, and I love it. I started with simple pre-made extract kits, but have worked my way up to creating my own all-grain recipes and labels. Brewing is a fun, tasty hobby giving me some creative, manual labor to break the mold of always doing computer work.
+* Books
+  * I read a significant amount of non-software books this year. Some of my favorites (disclosure: referral links): [_Player Piano_ by Kurt Vonnegut](https://www.amazon.com/gp/product/0385333781/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&tag=larpriandthee-20&camp=1789&creative=9325&linkCode=as2&creativeASIN=0385333781&linkId=4dfaf23d21ba24414455e3e63b13fb26), [_Where Am I Now?_ by Mara Wilson](https://www.amazon.com/gp/product/0143128221/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&tag=larpriandthee-20&camp=1789&creative=9325&linkCode=as2&creativeASIN=0143128221&linkId=fa499fb309ea38b089e65cf5f76280ab), [_Lullaby_ by Chuck Palahniuk](https://www.amazon.com/gp/product/0385722192/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&tag=larpriandthee-20&camp=1789&creative=9325&linkCode=as2&creativeASIN=0385722192&linkId=e5f40fba83539802415a677829b41295), [_Embed with Games_ by Cara Ellison](https://www.amazon.com/gp/product/1846973449/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&tag=larpriandthee-20&camp=1789&creative=9325&linkCode=as2&creativeASIN=1846973449&linkId=09907a1df99eac78c9badfa88e1f57d8), and [_Bitch Planet Volume 1_ by Kelly Sue Deconnick](https://www.amazon.com/gp/product/1632153661/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&tag=larpriandthee-20&camp=1789&creative=9325&linkCode=as2&creativeASIN=1632153661&linkId=c1a87961a757bba8891aeba4958c71c5).
+* Spotify
+  * Spotify is very good for listening to whatever music I want anytime, especially now that I work at home. If you really like a band, you should still buy their music or merch through their website to make sure they get paid to keep existing.
+
+### 2017 Goals ###
+
+* Local
+  * I'd like to make sure I stay involved locally, especially as I continue to work from home. I've let my Golang group dwindle over the past few months, and I'd like to see us back up to our numbers at the start of 2016. If possible, I'd also like to attend other meetups and meet more local devs.
+* Linux Greybeard
+  * This is a slow process, but I want to get better at using Linux in general. I've been surprised at how much I've learned about the low-level workings of Ubuntu over the past 9 months. I'm excited to see what I can learn over the next year, especially as I'll likely move into a different codebase at some point this year.
+* More talking
+  * I'm very excited to be giving a talk at FOSDEM this year, but I would enjoy doing such things more regularly. It doesn't necessarily have to be at conferences, as I could do meetups much more easily. I need to try to get back into blogging more regularly. Additionally, I've recently been kicking around ideas for a discussion-based podcast on the worst parts of software development, although that may have already been done to death. Contact if interested.
+* Transition Web Tooling
+  * I would like to switch over my analytics systems to use a personal Piwik instance, and I would love to replace the (hopefully unobtrusive) ads on this site with some kind of tip jar system. I would also like to update this blog to use a Let's Encrypt certificate, as well as [Ollert](https://ollertapp.com) once I've been given full control.
+* Kegging
+  * In my homebrewing, I've been bottling my beers. This is generally ok, but I think the beer would be consumed faster if I kegged it and could fill growlers for my friends and family. Getting started with kegging is expensive, requiring the purchase of kegs, tanks, parts, and some sort of refrigeration unit. By the end of the year, I intend to have a kegerator-style setup with the ability to stow and distribute from two kegs.
+* Moving
+  * My wife is looking into graduate schools for Fall 2017, and has already been accepted by one. I'm currently assuming a big part of my life this Spring/Summer will be finding and adjusting to a new home.
+* Active Activism
+  * I've complained a lot about our government and the way the world works on social media, at the "water cooler", and privately to my wife, but it's become obvious that passive activism isn't good enough. Signing petitions and [pledges](http://neveragain.tech) are nice gestures, but are more meaningful when backed up by real action. I'd like to do something, though I'm not sure what at the moment. By the end of 2017, I would like to, at minimum, have a plan to donate, join, create, or generally be more involved.
+
+### Adieu, 2016 ###
+
+Major changes in my life, career, and the world at large have made 2016 a memorable year for me. I highly encourage you to reflect on the year you've had and think about what you can do to make 2017 great. Happy new year!
