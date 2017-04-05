@@ -3,7 +3,7 @@ layout: post
 title: "Creating a D-Bus Service with Python"
 date: 2017-04-04 21:40:49 -0400
 comments: true
-categories: ubuntu python dbus async
+categories: ubuntu python dbus
 ---
 
 I've been working on a d-bus service to replace some of the management guts of my project for a while now. We started out creating a simple service, but some of our management processes take a long time to run, causing a timeout error when calling these methods. I needed a way to run these tasks in the background and report status to any possible clients. I'd like to outline my approach to making this possible. This will be a multi-part blog series starting from the bottom: a very simple, synchronous d-bus service. By the end of this series, we'll have a small codebase with asynchronous tasks which can be interacted with (input/output) from D-Bus clients.
