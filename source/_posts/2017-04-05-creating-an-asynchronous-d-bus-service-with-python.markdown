@@ -178,12 +178,14 @@ Last thing we need to do is to update the client to use the new methods. We'll c
 # ...
 
 if args.slow:
+    import time
     thread_id = random_data.slow(int(args.bits))
     while True:
         result = random_data.slow_result(thread_id)
         if result:
             print("Your random number is: %s" % result)
             break
+        time.sleep(1)
 
 # ...
 ```
@@ -204,3 +206,5 @@ $ ./client 16 --slow
 ### Next time ###
 
 This polling method works as a naive approach, but we can do better. Next time we'll look into using D-Bus signals to make our client more asynchronous and remove our current polling implementation.
+
+As a reminder, the end result of our code in this post is MIT Licensed and can be found on Github: [https://github.com/larryprice/python-dbus-blog-series/tree/part2](https://github.com/larryprice/python-dbus-blog-series/tree/part2).
