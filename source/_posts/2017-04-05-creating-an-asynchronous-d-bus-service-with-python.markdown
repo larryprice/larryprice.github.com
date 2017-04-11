@@ -6,7 +6,7 @@ comments: true
 categories: ubuntu python dbus
 ---
 
-_This is the second in a series of blog posts on creating an asynchronous D-Bus service in python. For part 1, see [/blog/2017/04/04/creating-a-d-bus-service-with-python/](/blog/2017/04/04/creating-a-d-bus-service-with-python/)._
+_This is the second in a series of blog posts on creating an asynchronous D-Bus service in python. For part 1, [go here](/blog/2017/04/04/creating-a-d-bus-service-with-python/)._
 
 Last time we created a base for our asynchronous D-Bus service with a simple synchronous server/client. In this post, we'll start from that base which can be found on Github: [https://github.com/larryprice/python-dbus-blog-series/tree/part1](https://github.com/larryprice/python-dbus-blog-series/tree/part1). Of course, all of today's code can be found in the same project with the part2 tag: [https://github.com/larryprice/python-dbus-blog-series/tree/part2](https://github.com/larryprice/python-dbus-blog-series/tree/part2).
 
