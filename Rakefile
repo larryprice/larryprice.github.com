@@ -9,7 +9,7 @@ ssh_port       = "22"
 document_root  = "~/website.com/"
 rsync_delete   = false
 rsync_args     = ""  # Any extra arguments to pass to rsync
-deploy_default = "openshift"
+deploy_default = "push" # back to github pages
 
 # This will be configured for you when you run config_deploy
 deploy_branch  = "master"
@@ -324,7 +324,7 @@ desc "Deploy website to OpenShift"
 task :openshift do
   puts "## Deploying branch to OpenShift"
   puts "## Pulling any updates from OpenShift"
-  cd "#{deploy_dir}" do 
+  cd "#{deploy_dir}" do
     Bundler.with_clean_env { system "git pull" }
   end
   (Dir["#{deploy_dir}/public/*"]).each { |f| rm_rf(f) }
@@ -356,7 +356,7 @@ desc "deploy public directory to github pages"
 multitask :push do
   puts "## Deploying branch to Github Pages "
   puts "## Pulling any updates from Github Pages "
-  cd "#{deploy_dir}" do 
+  cd "#{deploy_dir}" do
     Bundler.with_clean_env { system "git pull" }
   end
   (Dir["#{deploy_dir}/*"]).each { |f| rm_rf(f) }

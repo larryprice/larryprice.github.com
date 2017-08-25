@@ -15,3 +15,4 @@ source/stylesheets/screen.css
 vendor
 node_modules
 Gemfile.lock
+.rake_tasks~
