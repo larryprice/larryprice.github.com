@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: docker | Larry Price]]></title>
+  <link href="https://larry-price.com/blog/categories/docker/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2017-08-25T08:42:34-05:00</updated>
+  <id>https://larry-price.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    <email><![CDATA[larry@larry-price.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Compile JSX with Docker]]></title>
+    <link href="https://larry-price.com/blog/2015/06/08/compile-jsx-with-docker/"/>
+    <updated>2015-06-08T12:45:51-04:00</updated>
+    <id>https://larry-price.com/blog/2015/06/08/compile-jsx-with-docker</id>
+    <content type="html"><![CDATA[<p>Users of <a href="https://facebook.github.io/react/index.html">ReactJS</a> may be familiar with <a href="https://facebook.github.io/react/docs/jsx-in-depth.html">JSX</a>, &ldquo;a Javascript syntax extension that looks similar to XML.&rdquo; JSX makes writing React components a little bit easier. I wrote a bunch of JSX components when I built <a href="https://www.refer-madness.com">Refer Madness</a>, and I wanted to find a sane way to compile my JSX files into plain JS files. As I was already using Docker to run my server-side and my <a href="/blog/2015/05/17/compile-sass-with-docker/">compile my SASS</a>, I created <a href="https://registry.hub.docker.com/u/larryprice/jsx/">a Docker image to compile my JSX code</a> whenever file changes were detected.</p>
+
+<p>I have a simple JSX file:</p>
+
+<pre><code class="javascript login.jsx">var LoginButton = React.createClass({
+  togglePanel: function() {
+    if (window.location.pathname === "/") {
+      $(".title").toggleClass("shrink fast");
+    }
+    $("#authenticate-panel").collapse('toggle');
+  },
+  render: function() {
+    return (
+      &lt;div className="col-xs-12 col-sm-2 text-center"&gt;
+        &lt;button className="login-btn btn btn-default" data-toggle="collapse" onClick={this.togglePanel}
+                aria-expanded="false" aria-controls="authenticate-panel"&gt;
+          &lt;span className="glyphicon glyphicon-lock"&gt;&lt;/span&gt;
+          Sign Up or Log In
+        &lt;/button&gt;
+      &lt;/div&gt;
+    )
+  }
+});
+</code></pre>
+
+<p>With <a href="https://docs.docker.com/installation/#installation">Docker already installed</a>, I fire up a new container:</p>
+
+<pre><code class="bash">$ docker run -v $PWD:/src --rm larryprice/jsx
+</code></pre>
+
+<p>In this case, <code>$PWD</code> is the directory where my JSX files live. The <code>-v</code> flag creates a volume in my container. The <code>--rm</code> flag will remove the container when I&rsquo;m finished using it (for convenience). <code>larryprice/jsx</code> is the image I want to use. This command will watch the current directory and compile the JSX whenever it detects a file change. The generated files will be created next to the JSX files.</p>
+
+<p>What&rsquo;s in the image, you ask? It&rsquo;s just the <code>node:latest</code> image with <code>react-tools</code> installed which automatically runs the command <code>jsx --extension jsx --watch src/ src/</code>. It&rsquo;s fairly simple, but way easier than having to do all this myself.</p>
+
+<p>If I want to use the JSX image with docker-compose alongside the rest of a web application, I might have something like this:</p>
+
+<pre><code class="yaml docker-compose.yml">app:
+  image: golang:1.4
+  working_dir: /go/src/simple-golang-app
+  command: go run main.go
+  volumes:
+    - ./simple-golang-app:/go/src/simple-golang-app
+jsx:
+  image: larryprice/jsx
+  volumes:
+    - ./public/scripts:/src
+</code></pre>
+
+<p>It means not having to install Node or npm on your system if you don&rsquo;t already have it. Being able to compile my SCSS, JSX, and Go code all in once command was a lifesaver, and being able to recreate this environment anywhere meant keeping my computers in-sync was simple. Life, love, and Docker.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Compile Sass with Docker]]></title>
+    <link href="https://larry-price.com/blog/2015/05/17/compile-sass-with-docker/"/>
+    <updated>2015-05-17T16:11:18-04:00</updated>
+    <id>https://larry-price.com/blog/2015/05/17/compile-sass-with-docker</id>
+    <content type="html"><![CDATA[<p><a href="http://sass-lang.com/">SASS</a> is a delightful way to write CSS, but compiling SASS for your web application might not be the most obvious task. There are different installation methods, most of them involving cluttering up your filesystem with external dependencies.  Compiling SASS is easy when you&rsquo;re doing <code>rails</code> or <code>sinatra</code>-work, but I demand to write code in a compiled language. So I created <a href="https://registry.hub.docker.com/u/larryprice/sass/">a docker image</a> to compile SASS code automatically called <code>larryprice/sass</code>.</p>
+
+<p>Running this image is easy. Let&rsquo;s say I have some SASS code:</p>
+
+<pre><code class="sass /home/larry/test-project/public/css/style.scss">.service-home .search-area {
+  margin-top: 0;
+
+  .service-name {
+    font-size: 44px;
+    font-weight: bold;
+  }
+}
+</code></pre>
+
+<p>Given that <a href="https://docs.docker.com/installation/#installation">I have Docker already installed</a>, I&rsquo;ll start up my Docker container:</p>
+
+<pre><code class="bash">$ docker run -v /home/larry/test-project/public/css:/src --rm larryprice/sass
+</code></pre>
+
+<p>That&rsquo;s it. The directory <code>/home/larry/test-project/public/css</code> (containing my SASS code) is now being watched by the SASS compiler. Any time I make a change to a file in that directory, my code will automatically be recompiled. The above command runs the SASS watcher in the foreground, which allows me to see any compile errors in my terminal window. If I wanted to run the SASS compiler in the background, I just have to add the <code>-d</code> flag:</p>
+
+<pre><code class="bash">$ docker run -v /home/larry/test-project/public/css:/src --rm -d larryprice/sass
+</code></pre>
+
+<p>If my project is using <code>docker-compose</code>, I could add an image in my <code>docker-compose.yml</code> to run the SASS compiler alongside my application. For instance, if I&rsquo;m running a web application with <code>go</code>:</p>
+
+<pre><code class="yaml docker-compose.yml">app:
+  image: golang:1.4
+  working_dir: /go/src/simple-golang-app
+  command: go run main.go
+  volumes:
+    - ./simple-golang-app:/go/src/simple-golang-app
+sass:
+  image: larryprice/sass
+  volumes:
+    - ./public/css:/src
+</code></pre>
+
+<p>Now, running <code>docker-compose up</code> would also run the SASS compiler.</p>
+
+<p>I like using <code>docker-compose</code> in these situations as it limits the number of conflicting tools installed on my host machine. If I ever decide that SASS is the worst or that ruby is the devil, all I have to do is <code>docker rmi larryprice/sass</code>. No need to run <code>find</code> commands for every file with <code>sass</code> in the title; just a single, simple command to destroy all evidence.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A Quick Guide to Using docker-compose (previously fig)]]></title>
+    <link href="https://larry-price.com/blog/2015/02/26/a-quick-guide-to-using-docker-compose-previously-fig/"/>
+    <updated>2015-02-26T07:43:59-05:00</updated>
+    <id>https://larry-price.com/blog/2015/02/26/a-quick-guide-to-using-docker-compose-previously-fig</id>
+    <content type="html"><![CDATA[<p>Have you used <a href="https://www.docker.com/">Docker</a> yet? Docker is awesome! Docker is a tool for managing isolated system environments. I have started using Docker for <strong>everything</strong>. This is not <a href="/blog/2015/01/11/an-example-use-case-for-docker">the first time I&rsquo;ve written about this delightful tool</a>.</p>
+
+<p>Though the ideas and implementation behind Docker are really cool, the command line syntax is extremely cumbersome. There used to be this great third-party tool to address this problem called <a href="http://www.fig.sh/">fig</a>. But, as of <a href="https://github.com/docker/compose/releases/tag/1.1.0">yesterday</a>, it looks like Docker is maintaining <code>fig</code> and have renamed it to <code>docker-compose</code>. The impact of this change is minimal on developers - rename <code>fig.yml</code> files to <code>docker-compose.yml</code>, use <code>docker-compose up</code> instead of <code>fig up</code>. Some great features have been added that I&rsquo;ve been sorely missing, including the ability to use environment files and only grabbing the latest tagged images from <a href="https://registry.hub.docker.com/">the hub</a>.</p>
+
+<p>Let&rsquo;s learn you some <code>docker-compose</code>.</p>
+
+<h3>Installation</h3>
+
+<p>Two ways: <code>pip install docker-compose</code> (if you&rsquo;re into that kind of thing) or through a questionable bash script:</p>
+
+<pre><code class="bash">$ curl -L https://github.com/docker/compose/releases/download/1.1.0/docker-compose-`uname -s`-`uname -m` &gt; /usr/local/bin/docker-compose
+$ chmod +x /usr/local/bin/docker-compose
+</code></pre>
+
+<p>You probably want bash completion while you&rsquo;re at it:</p>
+
+<pre><code class="bash">$ curl -L https://raw.githubusercontent.com/docker/compose/1.1.0/contrib/completion/bash/docker-compose &gt; /etc/bash_completion.d/docker-compose
+</code></pre>
+
+<h3>Compose, World</h3>
+
+<p>Let&rsquo;s say I have a simple Go application which only prints the obligatory &ldquo;Hello, World&rdquo;:</p>
+
+<pre><code class="go simple-golang-app/main.go">package main
+
+import "fmt"
+
+func main() {
+  fmt.Println("Hello, World")
+}
+</code></pre>
+
+<p>I want to run this with <code>docker-compose</code>, so I create the following file:</p>
+
+<pre><code class="yaml docker-compose.yml">app:
+  image: golang:1.4
+  working_dir: /go/src/simple-golang-app
+  command: go run main.go
+  volumes:
+    - ./simple-golang-app:/go/src/simple-golang-app
+</code></pre>
+
+<p>This file specifies using the <code>golang:1.4</code> image as the base image. It maps the our code directory to a directory in the <code>$GOPATH</code> in the container. It then specifies running the command <code>go run main.go</code> from the working directory of <code>/go/src/simple-golang-app</code>. So let&rsquo;s run it:</p>
+
+<pre><code class="bash">$ docker-compose up
+Creating dockercomposeexample_app_1...
+Attaching to dockercomposeexample_app_1
+app_1 | Hello, World
+dockercomposeexample_app_1 exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+</code></pre>
+
+<h3>Composing a Database Connection</h3>
+
+<p>Now let&rsquo;s say I want to connect to a database and find some information. The following example connects to a Mongo database, inserts a record, and spits out all the existing records:</p>
+
+<pre><code class="go database-golang-app/main.go">package main
+
+import (
+  "fmt"
+  "gopkg.in/mgo.v2"
+  "gopkg.in/mgo.v2/bson"
+  "os"
+  "time"
+)
+
+type Ping struct {
+  Id   bson.ObjectId `bson:"_id"`
+  Time time.Time     `bson:"time"`
+}
+
+func main() {
+  // get the session using information from environment, ignore errors
+  session, _ := mgo.Dial(os.Getenv("DATABASE_PORT_27017_TCP_ADDR"))
+  db := session.DB(os.Getenv("DB_NAME"))
+  defer session.Close()
+
+  // insert new record
+  ping := Ping{
+    Id:   bson.NewObjectId(),
+    Time: time.Now(),
+  }
+  db.C("pings").Insert(ping)
+
+  // get all records
+  pings := []Ping{}
+  db.C("pings").Find(nil).All(&amp;pings)
+
+  fmt.Println(pings)
+}
+</code></pre>
+
+<p>This application has an external dependency on <code>mgo</code>, which means I&rsquo;ll need to have that dependency installed somehow. I&rsquo;ll make a <code>Dockerfile</code> to live alongside this example:</p>
+
+<pre><code class="Dockerfile database-golang-app/Dockerfile">FROM golang:1.4
+
+RUN go get gopkg.in/mgo.v2
+</code></pre>
+
+<p>Now I&rsquo;ll construct a yaml file for <code>docker-compose</code> to consume. This time, we need to <code>build</code> the main app from our <code>Dockerfile</code>, add in a second container for the database, add a <code>link</code> between our application and the database, and specify an <code>environment</code> variable.</p>
+
+<pre><code class="yaml docker-compose.yaml">advanced:
+  build: ./database-golang-app
+  working_dir: /go/src/database-golang-app
+  command: go run main.go
+  volumes:
+    - ./database-golang-app:/go/src/database-golang-app
+  links:
+    - database
+  environment:
+    - DB_NAME=advanced-golang-db
+database:
+  image: mongo:3.0
+  command: mongod --smallfiles --quiet --logpath=/dev/null
+</code></pre>
+
+<p>Since <code>mongod</code> has a tendency to spit up a big boilerplate on initialization, I redirect its output to <code>/dev/null</code> for this example. Let&rsquo;s see what happens when we compose:</p>
+
+<pre><code class="bash">$ docker-compose up
+Creating dockercomposeexample_database_1...
+Creating dockercomposeexample_advanced_1...
+Attaching to dockercomposeexample_database_1, dockercomposeexample_advanced_1
+advanced_1 | [{ObjectIdHex("54efd8f889120d000d000001") 2015-02-27 02:39:52.53 +0000 UTC}]
+dockercomposeexample_advanced_1 exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+Stopping dockercomposeexample_database_1...
+</code></pre>
+
+<p>If you squint, you can see the output next to the <code>advanced_1</code> tag. We printed out one item from our database - the one we just added. What if we run it again?</p>
+
+<pre><code class="bash">$ docker-compose up
+...
+advanced_1 | [{ObjectIdHex("54efd8f889120d000d000001") 2015-02-27 02:39:52.53 +0000 UTC} {ObjectIdHex("54efdbb936cc3f000e000001") 2015-02-27 02:51:37.879 +0000 UTC}]
+...
+</code></pre>
+
+<p>This output proves that we&rsquo;re fetching from the database each time in addition to adding new records. Since the Mongo <code>Dockerfile</code> we used to build the image creates a <code>volume</code>, we get to see the data persisted.</p>
+
+<p>To achieve the same goal with the Docker CLI, I would need to do this:</p>
+
+<pre><code class="bash">$ docker run -d --name database mongo:3.0
+$ docker build -t database-golang-app ./database-golang-app
+$ docker run --link database:database -e DB_NAME=advanced-golang-db \
+    -v /home/lrp/Projects/2015/docker-compose-example/database-golang-app:/go/src/database-golang-app \
+     database-golang-app go run /go/src/database-golang-app/main.go
+</code></pre>
+
+<p>Keeping that much information at your fingertips all at once absolutely <em>hurts</em>. Making that line reproducible means copy/pasting it into/out of a README somewhere, or running some &ldquo;single-line script&rdquo; which only the one guy on the team is allowed to touch. <code>docker-compose</code> fixes these issues and makes <code>docker</code> a joy to use.</p>
+
+<p><em>You can find all of the source code for this blog post on Github: <a href="https://github.com/larryprice/docker-compose-example">https://github.com/larryprice/docker-compose-example</a>.</em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[An Example Use Case for Docker]]></title>
+    <link href="https://larry-price.com/blog/2015/01/11/an-example-use-case-for-docker/"/>
+    <updated>2015-01-11T19:22:43-05:00</updated>
+    <id>https://larry-price.com/blog/2015/01/11/an-example-use-case-for-docker</id>
+    <content type="html"><![CDATA[<p>I spent a lot of time last week asking questions about Docker. <a href="#whatdocker">What</a> is Docker? How could Docker help me <a href="#whydocker">day-to-day</a>? How easy is Docker to <a href="#howdocker">use</a>? How does Docker like its eggs cooked? Isn&rsquo;t Docker a brand of sneakers?</p>
+
+<h3><a name="whatdocker"></a>What is Docker?</h3>
+
+<p><a href="https://www.docker.com/">Docker</a> is a utility for maintaining system environments. Docker capitalizes on <a href="https://en.wikipedia.org/wiki/LXC">Linux containers</a>, a method of operating system virtualization which isolates multiple process groups on a single host.</p>
+
+<p>Through a series of commands, Docker pulls up a base system image and applies changes to create a custom image. Docker provides the means to access any of these step-level containers for further manipulation. Docker uses a unique layered system such that sibling layers can utilize the same base images, in contrast to a virtual machine which would require multiple copies of things like operating systems, shared libraries, and shared binaries. The image below is an excellent visualization of the difference between a virtual machine and a Docker container.</p>
+
+<p><img src="https://i.imgur.com/Lps6K6y.png?1" alt="VM vs LXC" /></p>
+
+<h3><a name="whydocker"></a>Why use Docker?</h3>
+
+<p>Docker&rsquo;s primary job is to take in a series of commands and spit out a clean environment with those settings. This is especially useful in deployment. I can take the Docker <code>ubuntu</code> image, download and install all my dependencies, copy over my application code, and run my application given some environment variables.</p>
+
+<p>All of that should sound somewhat familiar if you&rsquo;ve ever used <a href="https://heroku.com">heroku</a>. Heroku performs very similar tasks to get your application up and running: take a Linux image, download base tools for ruby/python/nodejs/whatever, install application-specific dependencies (through bundler, flask, npm, etc.), and run your application given some environment. Docker gives you the power of heroku at the development level. &hellip;Sort of.</p>
+
+<p>If I can create a Docker container for my application to run in, I can set up a build server to use a container to run my tests. I can use that same container to build a <em>clean</em> staging environment. I can use the staging container to build an <em>identically clean</em> production environment. With that knowledge in hand, I know the exact state of the production environment every time I deploy and I can reproduce it locally.</p>
+
+<p>Theoretically, I can even use Docker for setting up a development environment, although after a few days of attempting this I still think you&rsquo;re better off running natively.</p>
+
+<p>Of course, Docker keeps <a href="https://www.docker.com/resources/usecases/">a big list of examples</a> from big-name company use-cases if you&rsquo;re interested.</p>
+
+<h3><a name="howdocker"></a>Example Usage</h3>
+
+<p>Brass. Tacks. Let us get down to them, compadre.</p>
+
+<p>You probably want to <a href="https://docs.docker.com/installation/#installation">install Docker</a> first. If you&rsquo;re not using Linux, have fun installing <a href="https://github.com/boot2docker/boot2docker">boot2docker</a>, the rest of us are going to get started without you.</p>
+
+<p>I started by trying to bootstrap my environment for <a href="https://ollertapp.com">Ollert</a> with Docker. Ollert uses ruby-2.2, QtWebkit (in test), and MongoDB. It uses bundler to install any required ruby gems. Not too complicated, but I&rsquo;ve noticed it&rsquo;s never easy to get a new developer&rsquo;s environment quite right.</p>
+
+<p>We start out with the official <a href="https://registry.hub.docker.com/_/ruby/">ruby:2.2.0</a> image from the Docker Hub:</p>
+
+<pre><code class="bash">$ docker run ruby:2.2.0 echo "B-b-b-b-brass t-t-t-t-tacks!"
+</code></pre>
+
+<p>OMG that step will take forever if you&rsquo;ve never downloaded the base <code>debian</code> image. It downloads and sets up quite a few layers. If you&rsquo;re interested in what it&rsquo;s doing behind the scenes and you can read Dockerfiles, <a href="https://github.com/docker-library/ruby/blob/b7fefd2fa79882da90feb0718430680c77c5fa8b/2.2/Dockerfile">this file</a> is what&rsquo;s being executed. Anyway, when it&rsquo;s done you should see a friendly reminder about what we&rsquo;ve gotten down to. We use <code>docker run</code> to run (download first if necessary) an image; in this case, the <code>ruby:2.2.0</code> image. Everything after the image name is the command to run. Now that we&rsquo;ve downloaded some base images, you can check out your available images using <code>docker images</code>.</p>
+
+<p>Now I need to install my system-level dependencies:</p>
+
+<pre><code class="bash">$ docker run ruby:2.2.0 apt-get update
+</code></pre>
+
+<p>Note how this time the base image was already found in your local repository, resulting in a command that ran pretty quickly (based on your internet speeds (sorry Comcast customers!)). But what have we really done so far? We&rsquo;ve created two separate containers: one with our initial echo command (useless) and one with all our updates. To see these containers, use <code>docker ps -a</code>. This will give you output similar to the following:</p>
+
+<pre><code class="bash">$ docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                      PORTS             NAMES
+ad5ddd55f2c2        ruby:2.2.0        "apt-get update"         2 seconds ago       Exited (0) 2 seconds ago                        mad_curie
+10cbaac4488c        ruby:2.2.0        "echo 'B-b-b-b-brass"    15 minutes ago      Exited (0) 15 minutes ago                       mad_perlman
+</code></pre>
+
+<p>These are now the containers available. We can create a new image from the first container using <code>docker commit ad5 rubyapp</code>, which will allow us to use it to create further containers. However, if we were to do this for every command we wanted to execute, we might be here for a while. We could go into <code>bash</code> on the base image and do all of our steps:</p>
+
+<pre><code class="bash">$ docker run -it ruby:2.2.0 /bin/bash
+root@1be43510341e:/# apt-get update
+...
+root@1be43510341e:/# apt-get auto-remove
+...
+root@1be43510341e:/# apt-get install -y --force-yes libqtwebkit-dev mongodb
+...
+</code></pre>
+
+<p>We could then use this image to run our app - however, this is also tedious and a bad solution. We want something that we can see on a granular level and reproduce every time for a base image. Fortunately, Docker provides us an easy way to do this using a DSL. Introducing the <code>Dockerfile</code>:</p>
+
+<pre><code class="Dockerfile"># base image
+FROM ruby:2.2.0
+
+#install system-level dependencies
+RUN apt-get update &amp;&amp; apt-get autoremove -y &amp;&amp; apt-get install -y --force-yes libqtwebkit-dev mongodb
+
+# install gems from /tmp such that bundling is CACHED
+WORKDIR /tmp
+ADD Gemfile Gemfile
+ADD Gemfile.lock Gemfile.lock
+ADD .env .env
+RUN bundle install
+
+# load application source
+ADD . /usr/src/app
+WORKDIR /usr/src/app
+
+# port where application is served
+EXPOSE 5000
+</code></pre>
+
+<p>The syntax is a little different, but all we&rsquo;re doing is telling Docker our base image, issuing commands, and copying files. The <code>ADD</code> command allows us to copy files from our host system. In this case, I copy over <code>.</code> to <code>/usr/src/app</code> in the container. I also copy over my Gemfile separately to <a href="http://ilikestuffblog.com/2014/01/06/how-to-skip-bundle-install-when-deploying-a-rails-app-to-docker/">cache the bundle so it does not install every time</a>. I then expose the port I want my application to use. Run this file as such:</p>
+
+<pre><code class="bash">$ docker build -t rubyapp .
+</code></pre>
+
+<p>This creates an image called <code>rubyapp</code> and a container for every line of the Dockerfile that is run. Although your first build may take a moment, subsequent builds will be cached and should be significantly faster. Now, if we want to run my application:</p>
+
+<pre><code class="bash">$ docker run -d --name rubyappinstance rubyapp foreman start -d /usr/src/app
+</code></pre>
+
+<p>I use <code>foreman</code> to start my application from the given directory. I tell Docker that the application will be daemonized using the <code>-d</code> flag. If I check my running containers with <code>docker ps</code>, I&rsquo;ll see my application running. If I want to stop it, I just run <code>docker stop rubyappinstance</code>.</p>
+
+<p>I&rsquo;m going to stop there for now. In order to get Ollert working properly, I also need to <a href="http://docs.docker.com/userguide/dockerlinks/">link a Mongo database</a> and change some environment variables in my application, but those are relatively easy tasks.</p>
+
+<h3>Is it worth it?</h3>
+
+<p>The only conclusion is a definite maybe. Docker is definitely pretty cool. It may be able to help you deploy custom applications easier; for Ollert, it feels like overkill. There is a lot of overhead in downloading core versions of different operating systems, and I already find myself itching to clean up all the leftover Docker images/containers on my machine I used once and never again. After getting the Docker development out of the way (building and testing a Dockerfile), you may save yourself some time in the future if you have to change hosting services or CI environments. Try it out! It&rsquo;s a pretty neat concept and definitely worth your attention in 2015.</p>
+]]></content>
+  </entry>
+  
+</feed>

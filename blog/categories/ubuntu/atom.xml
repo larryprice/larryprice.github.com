@@ -1,0 +1,692 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ubuntu | Larry Price]]></title>
+  <link href="https://larry-price.com/blog/categories/ubuntu/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2017-08-25T08:42:34-05:00</updated>
+  <id>https://larry-price.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    <email><![CDATA[larry@larry-price.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using D-Bus Signals in Python]]></title>
+    <link href="https://larry-price.com/blog/2017/04/11/using-d-bus-signals-in-python/"/>
+    <updated>2017-04-11T15:30:58-04:00</updated>
+    <id>https://larry-price.com/blog/2017/04/11/using-d-bus-signals-in-python</id>
+    <content type="html"><![CDATA[<p><em>This is the third in a series of blog posts on creating an asynchronous D-Bus service in python. For the inital entry, <a href="/blog/2017/04/04/creating-a-d-bus-service-with-python/">go here</a>. For the previous entry, <a href="/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python/">go here</a></em></p>
+
+<p>Last time we transformed our base synchronous D-Bus service to include asynchronous calls in a rather naive way. In this post, we&rsquo;ll refactor those asynchronous calls to include D-Bus signals; codewise, we&rsquo;ll pick up right where we left off after part 2: <a href="https://github.com/larryprice/python-dbus-blog-series/tree/part2">https://github.com/larryprice/python-dbus-blog-series/tree/part2</a>. Of course, all of today&rsquo;s code can be found in the same project with the part3 tag: <a href="https://github.com/larryprice/python-dbus-blog-series/tree/part3">https://github.com/larryprice/python-dbus-blog-series/tree/part3</a>.</p>
+
+<h3>Sending Signals</h3>
+
+<p>We can fire signals from within our D-Bus service to notify clients of tasks finishing, progress updates, or data availability. Clients subscribe to these signals and act accordingly. Let&rsquo;s start by changing the signature of the <code>slow_result</code> method of <code>RandomData</code> to be a signal:</p>
+
+<pre><code class="python random_data.py"># ...
+@dbus.service.signal("com.larry_price.test.RandomData", signature='ss')
+def slow_result(self, thread_id, result):
+    pass
+</code></pre>
+
+<p>We&rsquo;ve replaced the context decorator with a <code>signal</code>, and we&rsquo;ve swapped out the guts of this method for a <code>pass</code>, meaning the method will call but doesn&rsquo;t do anything else. We now need a way to call this signal, which we can do from the <code>SlowThread</code> class we were using before. When creating a <code>SlowThread</code> in the <code>slow</code> method, we can pass in this signal as a callback. At the same time, we can remove the <code>threads</code> list we used to use to keep track of existing <code>SlowThread</code> objects.</p>
+
+<pre><code class="python random_data.py">class RandomData(dbus.service.Object):
+    def __init__(self, bus_name):
+        super().__init__(bus_name, "/com/larry_price/test/RandomData")
+
+        random.seed()
+
+    @dbus.service.method("com.larry_price.test.RandomData",
+                         in_signature='i', out_signature='s')
+    def slow(self, bits=8):
+        thread = SlowThread(bits, self.slow_result)
+        return thread.thread_id
+
+    # ...
+</code></pre>
+
+<p>Now we can make some updates to <code>SlowThread</code>. The first thing we should do is add a new parameter <code>callback</code> and store it on the object. Because <code>slow_result</code> no longer checks the <code>done</code> property, we can remove that and the <code>finished</code> event. Instead of calling <code>set</code> on the event, we can now simply call the <code>callback</code> we stored with the current <code>thread_id</code> and <code>result</code>. We end up with a couple of unused variables here, so I&rsquo;ve also gone ahead and refactored the <code>work</code> method on <code>SlowThread</code> to be a little cleaner.</p>
+
+<pre><code class="python"># ...
+
+class SlowThread(object):
+    def __init__(self, bits, callback):
+        self._callback = callback
+        self.result = ''
+
+        self.thread = threading.Thread(target=self.work, args=(bits,))
+        self.thread.start()
+        self.thread_id = str(self.thread.ident)
+
+    def work(self, bits):
+        num = ''
+
+        while True:
+            num += str(random.randint(0, 1))
+            bits -= 1
+            time.sleep(1)
+
+            if bits &lt;= 0:
+                break
+
+        self._callback(self.thread_id, str(int(num, 2)))
+</code></pre>
+
+<p>And that&rsquo;s it for the service-side. Any callers will need to subscribe to our <code>slow_result</code> method, call our <code>slow</code> method, and wait for the result to come in.</p>
+
+<h3>Receiving Signals</h3>
+
+<p>We need to make some major changes to our <code>client</code> program in order to receive signals. We&rsquo;ll need to introduce a main loop, which we&rsquo;ll spin up in a separate thread, for communicating on the bus. The way I like to do this is with a ContextManager so we can guarantee that the loop will be exited when the program exits. We&rsquo;ll move the logic we previously used in <code>client</code> to get the <code>RandomData</code> object into a private member method called <code>_setup_object</code>, which we&rsquo;ll call on context entry after creating the loop. On context exit, we&rsquo;ll simply call <code>quit</code> on the loop.</p>
+
+<pre><code class="python client"># Encapsulate calling the RandomData object on the session bus with a main loop
+import dbus, dbus.exceptions, dbus.mainloop.glib
+import threading
+from gi.repository import GLib
+class RandomDataClient(object):
+    def __enter__(self):
+        self._setup_dbus_loop()
+        self._setup_object()
+
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self._loop.quit()
+        return True
+
+    def _setup_dbus_loop(self):
+        dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+        self._loop = GLib.MainLoop()
+
+        self._thread = threading.Thread(target=self._loop.run)
+        self._thread.start()
+
+    def _setup_object(self):
+        try:
+            self._bus = dbus.SessionBus()
+            self._random_data = self._bus.get_object("com.larry-price.test",
+                                                     "/com/larry_price/test/RandomData")
+        except dbus.exceptions.DBusException as e:
+            print("Failed to initialize D-Bus object: '%s'" % str(e))
+            sys.exit(2)
+</code></pre>
+
+<p>We can add methods on <code>RandomDataClient</code> to encapsulate <code>quick</code> and <code>slow</code>. <code>quick</code> is easy - we&rsquo;ll just return <code>self._random_data.quick(bits)</code>. <code>slow</code>, on the other hand, will take a bit of effort. We&rsquo;ll need to subscribe to the <code>slow_result</code> signal, giving a callback for when the signal is received. Since we want to wait for the result here, we&rsquo;ll create a <code>threading.Event</code> object and <code>wait</code> for it to be <code>set</code>, which we&rsquo;ll do in our handler. The handler, which we&rsquo;ll call <code>_finished</code> will validate that it has received the right result based on the current <code>thread_id</code> and then set the <code>result</code> on the <code>RandomDataClient</code> object. After all this, we&rsquo;ll remove the signal listener from our bus connection and return the final result.</p>
+
+<pre><code class="python client">class RandomDataClient(object):
+    # ...
+
+    def quick(self, bits):
+        return self._random_data.quick(bits)
+
+    def _finished(self, thread_id, result):
+        if self._thread_id == self._thread_id:
+            self._result = result
+            self._done.set()
+
+    def slow(self, bits):
+        self._done = threading.Event()
+        self._thread_id = None
+        self._result = None
+
+        signal = self._bus.add_signal_receiver(path="/com/larry_price/test/RandomData", handler_function=self._finished,
+                                               dbus_interface="com.larry_price.test.RandomData", signal_name='slow_result')
+        self._thread_id = self._random_data.slow(bits)
+        self._done.wait()
+        signal.remove()
+
+        return self._result
+</code></pre>
+
+<p>Now we&rsquo;re ready to actually call these methods. We&rsquo;ll wrap our old calling code with the <code>RandomDataClient</code> context manager, and we&rsquo;ll directly call the methods as we did before on the client:</p>
+
+<pre><code class="python client"># ...
+
+# Call the appropriate method with the given number of bits
+with RandomDataClient() as client:
+    if args.slow:
+        print("Your random number is: %s" % client.slow(int(args.bits)))
+    else:
+        print("Your random number is: %s" % client.quick(int(args.bits)))
+</code></pre>
+
+<p>This should have feature-parity with our part 2 code, but now we don&rsquo;t have to deal with an infinite loop waiting for the service to return.</p>
+
+<h3>Next time</h3>
+
+<p>We have a working asynchronous D-Bus service using signals. Next time I&rsquo;d like to dive into forwarding command output from a D-Bus service to a client.</p>
+
+<p>As a reminder, the end result of our code in this post is MIT Licensed and can be found on Github: <a href="https://github.com/larryprice/python-dbus-blog-series/tree/part3">https://github.com/larryprice/python-dbus-blog-series/tree/part3</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Creating an Asynchronous D-Bus Service with Python]]></title>
+    <link href="https://larry-price.com/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python/"/>
+    <updated>2017-04-05T15:41:56-04:00</updated>
+    <id>https://larry-price.com/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python</id>
+    <content type="html"><![CDATA[<p><em>This is the second in a series of blog posts on creating an asynchronous D-Bus service in python. For part 1, <a href="/blog/2017/04/04/creating-a-d-bus-service-with-python/">go here</a>.</em></p>
+
+<p>Last time we created a base for our asynchronous D-Bus service with a simple synchronous server/client. In this post, we&rsquo;ll start from that base which can be found on Github: <a href="https://github.com/larryprice/python-dbus-blog-series/tree/part1">https://github.com/larryprice/python-dbus-blog-series/tree/part1</a>. Of course, all of today&rsquo;s code can be found in the same project with the part2 tag: <a href="https://github.com/larryprice/python-dbus-blog-series/tree/part2">https://github.com/larryprice/python-dbus-blog-series/tree/part2</a>.</p>
+
+<h3>Why Asynchronous?</h3>
+
+<p>Before we dive into making our service asynchronous, we need a reason to make our service asynchronous. Currently, our only d-bus object contains a single method, <code>quick</code>, which lives up to its namesake and is done very quickly. Let&rsquo;s add another method to <code>RandomData</code> which takes a while to finish its job.</p>
+
+<pre><code class="python random_data.py">import dbus.service
+import random
+import time
+
+class RandomData(dbus.service.Object):
+    def __init__(self, bus_name):
+        super().__init__(bus_name, "/com/larry_price/test/RandomData")
+        random.seed()
+
+    @dbus.service.method("com.larry_price.test.RandomData",
+                         in_signature='i', out_signature='s')
+    def quick(self, bits=8):
+        return str(random.getrandbits(bits))
+
+    @dbus.service.method("com.larry_price.test.RandomData",
+                         in_signature='i', out_signature='s')
+    def slow(self, bits=8):
+        num = str(random.randint(0, 1))
+        while bits &gt; 1:
+            num += str(random.randint(0, 1))
+            bits -= 1
+            time.sleep(1)
+
+        return str(int(num, 2))
+</code></pre>
+
+<p>Note the addition of the <code>slow</code> method on the <code>RandomData</code> object. <code>slow</code> is a contrived implementation of building an n-bit random number by concatenating 1s and 0s, sleeping for 1 second between each iteration. This will still go fairly quickly for a small number of bits, but could take quite some time for numbers as low as 16 bits.</p>
+
+<p>In order to call the new method, we need to modify our <code>client</code> binary. Let&rsquo;s add in the <code>argparse</code> module and take in a new argument: <code>--slow</code>. Of course, <code>--slow</code> will instruct the program to call <code>slow</code> instead of <code>quick</code>, which we&rsquo;ll add to the bottom of the program.</p>
+
+<pre><code class="python client">#!/usr/bin/env python3
+
+# Take in a single optional integral argument
+import sys
+import argparse
+
+arg_parser = argparse.ArgumentParser(description='Get random numbers')
+arg_parser.add_argument('bits', nargs='?', default=16)
+arg_parser.add_argument('-s', '--slow', action='store_true',
+                        default=False, required=False,
+                        help='Use the slow method')
+
+args = arg_parser.parse_args()
+
+# Create a reference to the RandomData object on the  session bus
+import dbus, dbus.exceptions
+try:
+    bus = dbus.SessionBus()
+    random_data = bus.get_object("com.larry-price.test", "/com/larry_price/test/RandomData")
+except dbus.exceptions.DBusException as e:
+    print("Failed to initialize D-Bus object: '%s'" % str(e))
+    sys.exit(2)
+
+# Call the appropriate method with the given number of bits
+if args.slow:
+    print("Your random number is: %s" % random_data.slow(int(args.bits)))
+else:
+    print("Your random number is: %s" % random_data.quick(int(args.bits)))
+</code></pre>
+
+<p>Now we can run our <code>client</code> a few times to see the result of running in slow mode. Make sure to start or restart the <code>service</code> binary before running these commands:</p>
+
+<pre><code class="bash">$ ./client 4
+Your random number is: 2
+$ ./client 4 --slow
+Your random number is: 15
+$ ./client 16
+Your random number is: 64992
+$ ./client 16 --slow
+Traceback (most recent call last):
+  File "./client", line 26, in &lt;module&gt;
+    print("Your random number is: %s" % random_data.slow(int(args.bits)))
+  File "/usr/lib/python3/dist-packages/dbus/proxies.py", line 70, in __call__
+    return self._proxy_method(*args, **keywords)
+  File "/usr/lib/python3/dist-packages/dbus/proxies.py", line 145, in __call__
+    **keywords)
+  File "/usr/lib/python3/dist-packages/dbus/connection.py", line 651, in call_blocking
+    message, timeout)
+dbus.exceptions.DBusException: org.freedesktop.DBus.Error.NoReply: Did not receive a reply. Possible causes include: the remote application did not send a reply, the message bus security policy blocked the reply, the reply timeout expired, or the network connection was broken.
+</code></pre>
+
+<p>Your mileage may vary (it <em>is</em> a random number generator, after all), but you should eventually see a similar crash which is caused by a timeout in the response of the D-Bus server. We know that this algorithm works; it just needs more time to run. Since a synchronous call won&rsquo;t work here, we&rsquo;ll have to switch over to more asynchronous methods&hellip;</p>
+
+<h3>An Asynchronous Service</h3>
+
+<p>At this point, we can go one of two ways. We can use the <code>threading</code> module to spin threads within our process, or we can use the <code>multiprocessing</code> module to create child processes. Child processes will be slightly pudgier, but will give us more functionality. Threads are a little simpler, so we&rsquo;ll start there. We&rsquo;ll create a class called <code>SlowThread</code>, which will do the work we used to do within the <code>slow</code> method. This class will spin up a thread that performs our work. When the work is finished, it will set a <code>threading.Event</code> that can be used to check that the work is completed. <code>threading.Event</code> is a cross-thread synchronization object; when the thread calls <code>set</code> on the <code>Event</code>, we know that the thread is ready for us to check the result. In our case, we call <code>is_set</code> on our event to tell a user whether or not our data is ready.</p>
+
+<pre><code class="python random_data.py"># ...
+
+import threading
+class SlowThread(object):
+    def __init__(self, bits):
+        self.finished = threading.Event()
+        self.result = ''
+
+        self.thread = threading.Thread(target=self.work, args=(bits,))
+        self.thread.start()
+        self.thread_id = str(self.thread.ident)
+
+    @property
+    def done(self):
+        return self.finished.wait(1)
+
+    def work(self, bits):
+        num = str(random.randint(0, 1))
+        while bits &gt; 1:
+            num += str(random.randint(0, 1))
+            bits -= 1
+            time.sleep(1)
+
+        self.result = str(num)
+        self.finished.set()
+
+# ...
+</code></pre>
+
+<p>On the <code>RandomData</code> object itself, we&rsquo;ll initialize a new thread tracking list called <code>threads</code>. In <code>slow</code>, we&rsquo;ll initialize a <code>SlowThread</code> object, append it to our <code>threads</code> list, and return the thread identifier from <code>SlowThread</code>. We&rsquo;ll also want to add a method to try to get the result from a given <code>SlowThread</code> called <code>slow_result</code>, which will take in the thread identifier we returned earlier and try to find the appropriate thread. If the thread is finished (the <code>event</code> is set), we&rsquo;ll remove the thread from our list and return the result to the caller.</p>
+
+<pre><code class="python random_data.py"># ...
+
+class RandomData(dbus.service.Object):
+    def __init__(self, bus_name):
+        super().__init__(bus_name, "/com/larry_price/test/RandomData")
+
+        random.seed()
+        self.threads = []
+
+    # ...
+
+    @dbus.service.method("com.larry_price.test.RandomData",
+                         in_signature='i', out_signature='s')
+    def slow(self, bits=8):
+        thread = SlowThread(bits)
+        self.threads.append(thread)
+        return thread.thread_id
+
+    @dbus.service.method("com.larry_price.test.RandomData",
+                         in_signature='s', out_signature='s')
+    def slow_result(self, thread_id):
+        thread = [t for t in self.threads if t.thread_id == thread_id]
+        if not thread:
+            return 'No thread matching id %s' % thread_id
+
+        thread = thread[-1]
+        if thread.done:
+            result = thread.result
+            self.threads.remove(thread)
+            return result
+
+        return ''
+</code></pre>
+
+<p>Last thing we need to do is to update the client to use the new methods. We&rsquo;ll call <code>slow</code> as we did before, but this time we&rsquo;ll store the intermediate result as the thread identifier. Next we&rsquo;ll use a while loop to spin forever until the result is ready.</p>
+
+<pre><code class="python client"># ...
+
+if args.slow:
+    import time
+    thread_id = random_data.slow(int(args.bits))
+    while True:
+        result = random_data.slow_result(thread_id)
+        if result:
+            print("Your random number is: %s" % result)
+            break
+        time.sleep(1)
+
+# ...
+</code></pre>
+
+<p>Note that this is not the smartest way to do this; more on that in the next post. Let&rsquo;s give it a try!</p>
+
+<pre><code class="bash">$ ./client 4
+Your random number is: 7
+$ ./client 4 --slow
+Your random number is: 12
+$ ./client 16
+Your random number is: 5192
+$ ./client 16 --slow
+27302
+</code></pre>
+
+<h3>Next time</h3>
+
+<p>This polling method works as a naive approach, but we can do better. Next time we&rsquo;ll look into using D-Bus signals to make our client more asynchronous and remove our current polling implementation.</p>
+
+<p>As a reminder, the end result of our code in this post is MIT Licensed and can be found on Github: <a href="https://github.com/larryprice/python-dbus-blog-series/tree/part2">https://github.com/larryprice/python-dbus-blog-series/tree/part2</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Creating a D-Bus Service with Python]]></title>
+    <link href="https://larry-price.com/blog/2017/04/04/creating-a-d-bus-service-with-python/"/>
+    <updated>2017-04-04T21:40:49-04:00</updated>
+    <id>https://larry-price.com/blog/2017/04/04/creating-a-d-bus-service-with-python</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been working on a d-bus service to replace some of the management guts of my project for a while now. We started out creating a simple service, but some of our management processes take a long time to run, causing a timeout error when calling these methods. I needed a way to run these tasks in the background and report status to any possible clients. I&rsquo;d like to outline my approach to making this possible. This will be a multi-part blog series starting from the bottom: a very simple, synchronous d-bus service. By the end of this series, we&rsquo;ll have a small codebase with asynchronous tasks which can be interacted with (input/output) from D-Bus clients.</p>
+
+<p>All of this code is written with python3.5 on Ubuntu 17.04 (beta), is MIT licensed, and can be found on Github: <a href="https://github.com/larryprice/python-dbus-blog-series/tree/part1">https://github.com/larryprice/python-dbus-blog-series/tree/part1</a>.</p>
+
+<h3>What is D-Bus?</h3>
+
+<p>From Wikipedia:</p>
+
+<blockquote><p>In computing, D-Bus or DBus (for &ldquo;Desktop Bus&rdquo;), a software bus, is an inter-process communication (IPC) and remote procedure call (RPC) mechanism that allows communication between multiple computer programs (that is, processes) concurrently running on the same machine.</p></blockquote>
+
+<p>D-Bus allows different processes to communicate indirectly through a known interface. The bus can be system-wide or user-specific (session-based). A D-Bus service will post a list of available objects with available methods which D-Bus clients can consume. It&rsquo;s at the heart of much Linux desktop software, allowing processes to communicate with one another without forcing direct dependencies.</p>
+
+<h3>A synchronous service</h3>
+
+<p>Let&rsquo;s start by building a base of a simple, synchronous service. We&rsquo;re going to initialize a loop as a context to run our service within, claim a unique name for our service on the session bus, and then start the loop.</p>
+
+<pre><code class="python service">#!/usr/bin/env python3
+
+import dbus, dbus.service, dbus.exceptions
+import sys
+
+from dbus.mainloop.glib import DBusGMainLoop
+from gi.repository import GLib
+
+# Initialize a main loop
+DBusGMainLoop(set_as_default=True)
+loop = GLib.MainLoop()
+
+# Declare a name where our service can be reached
+try:
+    bus_name = dbus.service.BusName("com.larry-price.test",
+                                    bus=dbus.SessionBus(),
+                                    do_not_queue=True)
+except dbus.exceptions.NameExistsException:
+    print("service is already running")
+    sys.exit(1)
+
+# Run the loop
+try:
+    loop.run()
+except KeyboardInterrupt:
+    print("keyboard interrupt received")
+except Exception as e:
+    print("Unexpected exception occurred: '{}'".format(str(e)))
+finally:
+    loop.quit()
+</code></pre>
+
+<p>Make this binary executable (<code>chmod +x service</code>) and run it. Your service should run indefinitely and do&hellip; nothing. Although we&rsquo;ve already written a lot of code, we haven&rsquo;t added any objects or methods which can be accessed on our service. Let&rsquo;s fix that.</p>
+
+<pre><code class="python dbustest/random_data.py">import dbus.service
+import random
+
+class RandomData(dbus.service.Object):
+    def __init__(self, bus_name):
+        super().__init__(bus_name, "/com/larry_price/test/RandomData")
+        random.seed()
+
+    @dbus.service.method("com.larry_price.test.RandomData",
+                         in_signature='i', out_signature='s')
+    def quick(self, bits=8):
+        return str(random.getrandbits(bits))
+</code></pre>
+
+<p>We&rsquo;ve defined a D-Bus object <code>RandomData</code> which can be accessed using the path <code>/com/larry_price/test/RandomData</code>. This style of string is the general style of an object path. We&rsquo;ve defined an interface implemented by <code>RandomData</code> called <code>com.larry_price.test.RandomData</code> with a single method <code>quick</code> as declared with the <code>@dbus.service.method</code> context decorator. <code>quick</code> will take in a single parameter, <code>bits</code>, which must be an integer as designated by the <code>in_signature</code> in our context decorator. <code>quick</code> will return a string as specified by the <code>out_signature</code> parameter. All that <code>quick</code> does is return a random string given a number of bits. It&rsquo;s simple and it&rsquo;s fast.</p>
+
+<p>Now that we have an object, we need to declare an instance of that object in our service to attach it properly. Let&rsquo;s assume that <code>random_data.py</code> is in a directory <code>dbustest</code> with an empty <code>__init__.py</code>, and our service binary is still sitting in the root directory. Just before we start the loop in the <code>service</code> binary, we can add the following code:</p>
+
+<pre><code class="python service"># ...
+# Run the loop
+try:
+    # Create our initial objects
+    from dbustest.random_data import RandomData
+    RandomData(bus_name)
+
+    loop.run()
+# ...
+</code></pre>
+
+<p>We don&rsquo;t need to do anything with the object we&rsquo;ve initialized; creating it is enough to attach it to our D-Bus service and prevent it from being garbage collected until the service exits. We pass in <code>bus_name</code> so that <code>RandomData</code> will connect to the right bus name.</p>
+
+<h3>A synchronous client</h3>
+
+<p>Now that you have an object with an available method on our service, you&rsquo;re probably interested in calling that method. You can do this on the command line with something like <code>dbus-send</code>, or you could find the service using a GUI tool such as <code>d-feet</code> and call the method directly. But eventually we&rsquo;ll want to do this with a custom program, so let&rsquo;s build a very small program to get started.</p>
+
+<pre><code class="python client">#!/usr/bin/env python3
+
+# Take in a single optional integral argument
+import sys
+bits = 16
+if len(sys.argv) == 2:
+    try:
+        bits = int(sys.argv[1])
+    except ValueError:
+        print("input argument must be integer")
+        sys.exit(1)
+
+# Create a reference to the RandomData object on the  session bus
+import dbus, dbus.exceptions
+try:
+    bus = dbus.SessionBus()
+    random_data = bus.get_object("com.larry-price.test", "/com/larry_price/test/RandomData")
+except dbus.exceptions.DBusException as e:
+    print("Failed to initialize D-Bus object: '%s'" % str(e))
+    sys.exit(2)
+
+# Call the quick method with the given number of bits
+print("Your random number is: %s" % random_data.quick(bits))
+</code></pre>
+
+<p>A large chunk of this code is parsing an input argument as an integer. By default, <code>client</code> will request a 16-bit random number unless it gets a number as input from the command line. Next we spin up a reference to the session bus and attempt to find our <code>RandomData</code> object on the bus using our known service name and object path. Once that&rsquo;s initialized, we can directly call the <code>quick</code> method over the bus with the specified number of bits and print the result.</p>
+
+<p>Make this binary executable also. If you try to run <code>client</code> without running <code>service</code>, you should see an error message explaining that the <code>com.larry-price.test</code> D-Bus service is not running (which would be true). Start <code>service</code>, and then run <code>client</code> with a few different input options and observe the results:</p>
+
+<pre><code class="bash">$ ./service &amp; # to kill service later, be sure to note the pid here!
+$ ./client
+Your random number is: 41744
+$ ./client 100
+Your random number is: 401996322348922753881103222071
+$ ./client 4
+Your random number is: 14
+$ ./client "new donk city"
+input argument must be integer
+</code></pre>
+
+<p>That&rsquo;s all there is to it. A simple, synchronous server and client. The server and client do not directly depend on each other but are able to communicate unidirectionally through simple method calls.</p>
+
+<h3>Next time</h3>
+
+<p>Next time, I&rsquo;ll go into detail on how we can create an asynchronous service and client, and hopefully utilize signals to add a new direction to our communication.</p>
+
+<p>Again, all the code can be found on Github: <a href="https://github.com/larryprice/python-dbus-blog-series/tree/part1">https://github.com/larryprice/python-dbus-blog-series/tree/part1</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Snappy Libertine]]></title>
+    <link href="https://larry-price.com/blog/2017/02/15/snappy-libertine/"/>
+    <updated>2017-02-15T18:38:44-05:00</updated>
+    <id>https://larry-price.com/blog/2017/02/15/snappy-libertine</id>
+    <content type="html"><![CDATA[<p>Libertine is software suite for runnin X11 apps in non-X11 environments and installing deb-based applications on a system without dpkg. Snappy is a package management system to confine applications from one another. Wouldn&rsquo;t it be cool to run libertine as a snap?</p>
+
+<p>Yes. Yes it would.</p>
+
+<h3>snapd</h3>
+
+<p>The first thing to install is snapd itself. You can find installation instructions for many Linux distros at <a href="https://snapcraft.io/docs/core/install">snapcraft.io</a>, but here&rsquo;s the simple command if you&rsquo;re on a debian-based operating system:</p>
+
+<pre><code class="bash">$ sudo apt install snapd
+</code></pre>
+
+<p>Ubuntu users may be surprised to find that snapd is already installed on their systems. snapd is the daemon for handling all things snappy: installing, removing, handling interface connections, etc.</p>
+
+<h3>lxd</h3>
+
+<p>We use lxd as our container backend for libertine in the snap. lxd is essentially a layer on top of lxc to give a better user experience. Fortunately for us, lxd has a snap all ready to go. Unfortunately, the snap version of lxd is incompatible with the deb-based version, so you&rsquo;ll need to completely remove that before continuing. Skip this step if you never installed lxd:</p>
+
+<pre><code class="bash">$ sudo apt remove --purge lxd lxd-client
+$ sudo zpool destroy lxd                 # if you use zfs
+$ sudo ip link set lxdbr0 down           # take down the bridge (lxdbr0 is the default)
+$ sudo brctl delbr lxdbr0                # delete the bridge
+</code></pre>
+
+<p>For installing, in-depth instructions can be found <a href="https://stgraber.org/2016/10/17/lxd-snap-available/">in this blog post by one of the lxd devs</a>. In short, we&rsquo;re going to create a new group called <code>lxd</code>, add ourselves to it, and then add our own user ID and group ID to map to root within the container.</p>
+
+<pre><code class="bash">$ sudo groupadd --system lxd                      # Create the group on your system
+$ sudo usermod -G lxd -a $USER                    # Add the current user
+$ newgrp lxd                                      # update current session with new group
+$ echo root:`id --user ${USER}`:1 &gt;&gt; /etc/subuid  # Setup subuid to map correctly
+$ echo root:`id --group ${USER}`:1 &gt;&gt; /etc/subgid # Setup subgid to map correctly
+$ sudo snap install lxd                           # actually install the snap!
+</code></pre>
+
+<p>We also need to initialize lxd manually. For me, the defaults all work great. The important pieces here are setting up a new network bridge and a new filestore for lxd to use. You can optionally use zfs if you have it installed (<code>zfsutils-linux</code> should do it on Ubuntu). Generally, I just hit &ldquo;return&rdquo; as fast as the questions show up and everything turns out alright. If anything goes wrong, you may need to manually delete zpools, network bridges, or reinstall the lxd snap. No warranties here.</p>
+
+<pre><code class="bash">$ sudo lxd init
+Do you want to configure a new storage pool (yes/no) [default=yes]?
+Name of the new storage pool [default=default]:
+Name of the storage backend to use (dir or zfs) [default=zfs]:
+Create a new ZFS pool (yes/no) [default=yes]?
+Would you like to use an existing block device (yes/no) [default=no]?
+Would you like LXD to be available over the network (yes/no) [default=no]?
+Would you like stale cached images to be updated automatically (yes/no) [default=yes]?
+Would you like to create a new network bridge (yes/no) [default=yes]?
+What should the new bridge be called [default=lxdbr0]?
+What IPv4 address should be used (CIDR subnet notation, “auto” or “none”) [default=auto]?
+</code></pre>
+
+<p>You should now be able to run <code>lxd.lxc list</code> without errors. It may warn you about running <code>lxd init</code>, but don&rsquo;t worry about that if your initialization succeeded.</p>
+
+<h3>libertine</h3>
+
+<p>Now we&rsquo;re onto the easy part. <code>libertine</code> is only available from <code>edge</code> channels in the app store, but we&rsquo;re fairly close to having a version that we could push into more stable channels. For the latest and greatest libertine:</p>
+
+<pre><code class="bash">$ sudo snap install --edge libertine
+$ sudo snap connect libertine:libertined-client libertine:libertined
+</code></pre>
+
+<p>If we want libertine to work fully, we need to jump through a couple of hoops. For starters, dbus-activation is not fully functional at this time for snaps. Lucky for us, we can fake this by either running the d-bus service manually (<code>/snap/bin/libertined</code>), or by adding this file to <code>/usr/share/dbus-1/services/com.canonical.libertine.Service.service</code></p>
+
+<pre><code class="bash /usr/share/dbus-1/services/com.canonical.libertine.Service.service">[D-BUS Service]
+Name=com.canonical.libertine.Service
+Exec=/snap/bin/libertine.libertined --cache-output
+</code></pre>
+
+<p>Personally, I always create the file, which will allow libertined to start automatically on the session bus whenever a user calls it. Hopefully d-bus activation will be fixed sooner rather than later, but this works fine for now.</p>
+
+<p>Another issue is that existing deb-based libertine binaries may conflict with the snap binaries. We can fix this by adjusting <code>PATH</code> in our <code>.bashrc</code> file:</p>
+
+<pre><code class="bash $HOME/.bashrc"># ...
+export PATH=/snap/bin:$PATH
+</code></pre>
+
+<p>This will give higher priority to snap binaries (which should be the default, IMO). One more thing to fix before running full-force is to add an environment variable to <code>/etc/environment</code> such that the correct libertine binary is picked up in Unity 8:</p>
+
+<pre><code class="bash /etc/environment"># ...
+UBUNTU_APP_LAUNCH_LIBERTINE_LAUNCH=/snap/bin/libertine-launch
+</code></pre>
+
+<p>OK! Now we&rsquo;re finally ready to start creating containers and installing packages:</p>
+
+<pre><code class="bash">$ libertine-container-manager create -i my-container
+# ... (this could take a few minutes)
+$ libertine-container-manager install-package -i my-container -p xterm
+# ... (and any other packages you may want)
+</code></pre>
+
+<p>If you want to launch your apps in Unity 7 (why not?):</p>
+
+<pre><code class="bash">$ libertine-launch -i my-container xterm
+# ... (lots of ourput, hopefully an open window!)
+</code></pre>
+
+<p>When running Unity 8, your apps should show up in the app drawer with all the other applications. This will all depend on libertined running, so make sure that it runs at startup!</p>
+
+<p>I&rsquo;ve been making a lot of improvements on the snap lately, especially as the ecosystem continues to mature. One day we plan for a much smoother experience, but this current setup will let us work out some of the kinks and find issues. If you want to switch back the deb-based libertine, you can just install it through <code>apt</code> and remove the change to <code>/etc/environment</code>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Confining a Snapped X11 Application]]></title>
+    <link href="https://larry-price.com/blog/2016/12/10/confining-a-snapped-x11-application/"/>
+    <updated>2016-12-10T17:30:38-05:00</updated>
+    <id>https://larry-price.com/blog/2016/12/10/confining-a-snapped-x11-application</id>
+    <content type="html"><![CDATA[<p><em>Looking for the code? Look no further: <a href="https://github.com/larryprice/pingus-snap">https://github.com/larryprice/pingus-snap</a></em></p>
+
+<p>In my <a href="/blog/2016/12/07/creating-a-snap-from-existing-deb-packages/">last post</a>, I demonstrated creating a snap package for an application available in the archive. I left that application unconfined, which is taboo in the long run if we want our system to be secure. In a few steps, we can add the necessary components to confine our <code>pingus</code> snap.</p>
+
+<p>For reference, this is the original <code>snapcraft.yaml</code> file for creating a <code>pingus</code> snap, except that we&rsquo;ve updated the <code>confinement</code> property to <code>strict</code>:</p>
+
+<pre><code class="yaml snapcraft.yaml">name: pingus
+version: '0.1'
+summary: Free Lemmings(TM) clone
+description: |
+    Pingus is a free clone of the popular Lemmings game.
+    |
+    Your goal is to guide a horde of penguins through a world full of obstacles
+    and penguin traps to safety. Although penguins (unlike lemmings) are rather
+    smart, they sometimes lack the necessary overview and now rely on you to
+    save them.
+
+grade: devel
+confinement: strict
+
+parts:
+  archives:
+    plugin: nil
+    stage-packages:
+      - pingus
+  env:
+    plugin: dump
+    organize:
+      pingus.wrapper: usr/bin/pingus
+
+apps:
+  pingus:
+    command: pingus
+</code></pre>
+
+<p>If you&rsquo;re feeling bold, you can build and install the snap from here, but be warned that this led me into an ncurses nightmare that I had to forcibly kill. That&rsquo;s largely because <code>pingus</code> depends on X11, which is not available out-of-the-box once we&rsquo;ve confined our snap. If we want to use X11, we&rsquo;re going to need to connect to it using the snap-land concept of <a href="http://snapcraft.io/docs/core/interfaces">interfaces</a>. Interfaces allow us to access shared resources and connections provided by the system or other snaps. There&rsquo;s some terminology to grapple with here, but the bottom line is that a &ldquo;slot&rdquo; provides an interface which a &ldquo;plug&rdquo; connects to. You can see a big list of available interfaces with descriptions <a href="http://snapcraft.io/docs/reference/interfaces">on the wiki</a>. Our <code>pingus</code> app will &ldquo;plug&rdquo; into the X11 interface&rsquo;s &ldquo;slot&rdquo;:</p>
+
+<pre><code class="yaml snapcraft.yaml"># ...
+apps:
+  pingus:
+    command: pingus
+    plugs:
+      - x11
+</code></pre>
+
+<p>You can build and install the new snap with the <code>--dangerous</code> flag for your local confined snap. After that, you can verify the interface connection with the <code>snap interfaces</code> command:</p>
+
+<pre><code class="bash">$ snapcraft
+$ sudo snap install --dangerous pingus_0.1_amd64.snap
+pingus 0.1 installed
+$ snap interfaces
+Slot                     Plug
+:alsa                    -
+# ...
+:upower-observe          -
+:x11                     pingus
+</code></pre>
+
+<p>Now, when we run <code>pingus</code>&hellip; it works! Well, video works. If you want sound, we&rsquo;ll also need the <code>pulseaudio</code> interface:</p>
+
+<pre><code class="yaml snapcraft.yaml"># ...
+apps:
+  pingus:
+    command: pingus
+    plugs:
+      - x11
+      - pulseaudio
+</code></pre>
+
+<p>Once again: build, install, and run&hellip; et voilà! Is it just me, or was that surprisingly painless? Of course, not all applications live such isolated lives. Make note that the x11 interface is supposed to be a transitional interface, meaning that we would rather our app fully transition to Mir or some alternative. To go a step further with this snap, we could create a <code>snapcraft.yaml</code> to build from source to get the absolute latest version of our app. At this point, we can change our <code>grade</code> property to <code>stable</code> and feel good about something that we could push to the store for review.</p>
+
+<p><em>Any code you see here is free software. Find the project here: <a href="https://github.com/larryprice/pingus-snap">https://github.com/larryprice/pingus-snap</a></em></p>
+]]></content>
+  </entry>
+  
+</feed>

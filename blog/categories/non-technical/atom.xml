@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: non-technical | Larry Price]]></title>
+  <link href="https://larry-price.com/blog/categories/non-technical/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2017-08-25T08:42:34-05:00</updated>
+  <id>https://larry-price.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    <email><![CDATA[larry@larry-price.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[On Gender Bias and Home Improvement]]></title>
+    <link href="https://larry-price.com/blog/2017/04/18/on-gender-bias-and-home-improvement/"/>
+    <updated>2017-04-18T10:42:10-04:00</updated>
+    <id>https://larry-price.com/blog/2017/04/18/on-gender-bias-and-home-improvement</id>
+    <content type="html"><![CDATA[<p>Instead of a highly technical guide, today I have a short anecdote of some recent electrical work we did in the master bathroom.</p>
+
+<p>I met my wife when I joined my high school robotics team. I was a hammer: with no singular skill that I wanted to focus on, I was thrown into painting, cutting, drilling, electrical, lifting, sanding, building the website, and even marketing. Funnily enough, I never actually worked on programming the robot. As far as I knew at the time, my wife was doing similar work with more focus on marketing and operating the robot.</p>
+
+<p>Fast-forward 10 years. I do most of the indoor home improvement work (electrical, dry walling, painting), and our yard work is fairly balanced. A few weekends ago, we were swapping out the light fixtures in the master bathroom. Well, she was mostly holding the flashlight while I cursed at the previous owner&rsquo;s hackwork. As we&rsquo;re wrapping up the first fixture, she starts asking really basic electrical questions. Beginner&rsquo;s questions.</p>
+
+<p>This struck me as a little odd. I answer with a bit of sarcasm, mentioning that it&rsquo;s the absolute basic stuff she should remember from being on the robotics team. As it turns out, the (all-male) mentor staff never really encouraged the girls to work directly on the robot. The girls were pushed toward things like &ldquo;marketing&rdquo; and operating the robot, presumably because it reflected well on the team to have female drivers/operators. I started to think back on our overlapping time on the team and&hellip; Come to think of it, the girls really were pushed into a less-technical experience while I was pushed towards the greasy work.</p>
+
+<p>This was 10 years ago, so I would hope things are a bit different now as more girls are influenced to get interested in STEM in high school. It&rsquo;s a shame that she wasn&rsquo;t encouraged to take on the same tasks as the boys, and it&rsquo;s left an obvious effect on her into adulthood.</p>
+
+<p>So I started thinking about my parents. My father would include me as much as possible in fixing up the house. My sister, on the other hand, would generally not be included. Granted, she&rsquo;s 4 years younger than me, but I was forced to help my dad do things from a very young age when I would have rather been playing video games than learning life lessons. My wife is the eldest of three daughters, and they also were never really invited to help with home improvement outside of yard work.</p>
+
+<p>We may not have grown up in the most forward-thinking town, but our parents are not sexists. Our robotics mentors may have lived a bit in the past, but they intended no malice while directing students towards work. In both of these cases, the adults were following the same pattern they&rsquo;ve seen for generations. The trick now is to break that pattern.</p>
+
+<p>For the second light fixture in the master bathroom, I held the flashlight. I instructed my wife in removing and replacing the fixture, only intervening on stubborn bolts. After we finished, she thanked me. I felt a bit guilty for not letting her take the wheel for so long. My assumption had always been she had the skills but no desire to get her hands dirty. Turns out she only needed the opportunity to break the pattern.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[2016 Retrospective]]></title>
+    <link href="https://larry-price.com/blog/2016/12/27/2016-year-in-review/"/>
+    <updated>2016-12-27T13:35:56-05:00</updated>
+    <id>https://larry-price.com/blog/2016/12/27/2016-year-in-review</id>
+    <content type="html"><![CDATA[<p>This has been a unique year for me, and I wanted to quickly lay out what I&rsquo;ve accomplished and where I think I&rsquo;m going for the coming year. This is now officially a tradition at three posts (see: <a href="/blog/2014/12/31/2014-retrospective/">2014</a> and <a href="/blog/2016/01/03/2015-year-in-review/">2015</a>).</p>
+
+<h3>Revisiting 2016&rsquo;s Goals</h3>
+
+<p>These are the goals I set for myself at the start of the year and how I met or missed them:</p>
+
+<ul>
+<li>Spend Money
+
+<ul>
+<li>I wanted to become less of a miser and spend more money. Note that this is not for bragging purposes, just that I am naturally very frugal and hesitant to spend money. I think we did a pretty good job, though! For starters, I swapped out my commuter car for a tech-heavy crossover. We stayed in a really cool art-hotel in downtown Cincinnati in the Spring, drove across the country for a big Yellowstone trip in early Summer, stayed at the Indiana Dunes for a few days in the Fall, and took a brief trip to Madison, WI, shortly thereafter. I bought a nice sitting/standing desk and chair for my home office. I paid the entry fee to go to GenCon for a day. Our fridge, dishwasher, and furnace all died one weekend, and it ended with me buying upgraded, modern appliances. I&rsquo;ve also been keeping the post office busy with plenty of orders off Amazon, and I&rsquo;ve been trying to Kickstart more games that I think deserve attention. I also found a new hobby in homebrewing which has been a great use of fun-money.</li>
+</ul>
+</li>
+<li>Back Into Web
+
+<ul>
+<li>At the start of 2016, I though I really wanted to do more web work. Turns out I&rsquo;ve done a 180 on this one, and I now work on primarily desktop/mobile with minimal web work, and I wouldn&rsquo;t have it any other way for the time being.</li>
+</ul>
+</li>
+<li>Work With Others
+
+<ul>
+<li>In 2015, I worked alone a lot. In 2016, I joined a new company where I work remotely. Although I don&rsquo;t necessarily see my coworkers every day, I am working on projects with multiple developers and communicating constantly with my teammates (and others) through chat. Working with others again has helped me grow socially and become a better engineer.</li>
+</ul>
+</li>
+<li>Become Part of an Open-Source Community
+
+<ul>
+<li>I really wanted to better integrate FLOSS into my life and my career, and I believe I&rsquo;ve hit the jackpot. My job is to build popular open-source operating system Ubuntu, where all the code I write is public and generally GPLv3. My job is to write open-source software, and to interact with the community. I use my own software and report/fix bugs that affect me all the time.</li>
+</ul>
+</li>
+<li>Good Vibes
+
+<ul>
+<li>I was feeling a bit down at the end of 2015, and I wanted to be a more positive person in 2016. Although there were some depressing things going on worldwide in 2016, I am generally happier with my personal and professional life on a micro-level.</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>Surprise Victories</h3>
+
+<ul>
+<li>New Job
+
+<ul>
+<li>The big one! After almost four years at SEP, I transitioned to a new role at Canonical. I get to work on Ubuntu, one of my favorite open-source projects, as my full-time job. This also means I get to work remotely, dropping my commute from 30 miles in 2012 to 3 miles in 2014 to 50 feet in 2016. I&rsquo;ve been having a great time working on software that&rsquo;s in the public spotlight, working with the community, and traveling every few months to see my coworkers. With this new job, I&rsquo;ve also had the opportunity to visit Europe for the first time this year.</li>
+</ul>
+</li>
+<li>Less Own-Time Work
+
+<ul>
+<li>Although I&rsquo;ve hit pretty hard in the past that developers should do some learning outside of work, this year likely contained the least own-time work I&rsquo;ve ever done. I&rsquo;ve been finding joys in non-software hobbies and home maintenance, and working on Ubuntu as my full-time job has made me less needy for doing open-source work in my off-hours. I tend to respond to bugs and Github PRs at any hour, and I follow more technical people on social media than I used to. I think this stems from a satisfaction from the learning I do throughout the day, and the difficulty of separating work-life and home-life when one works at home.</li>
+</ul>
+</li>
+<li>FOSDEM
+
+<ul>
+<li>Yesterday, I learned that I&rsquo;ll be giving a talk at <a href="https://fosdem.org/2017/">FOSDEM</a>. I&rsquo;m very excited (and nervous) to give my first-ever conference talk in Brussels this February.</li>
+</ul>
+</li>
+<li>Homebrewing
+
+<ul>
+<li>I picked up homebrewing beer at the start of 2016, and I love it. I started with simple pre-made extract kits, but have worked my way up to creating my own all-grain recipes and labels. Brewing is a fun, tasty hobby giving me some creative, manual labor to break the mold of always doing computer work.</li>
+</ul>
+</li>
+<li>Books
+
+<ul>
+<li>I read a significant amount of non-software books this year. Some of my favorites (disclosure: referral links): <a href="https://www.amazon.com/gp/product/0385333781/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;tag=larpriandthee-20&amp;camp=1789&amp;creative=9325&amp;linkCode=as2&amp;creativeASIN=0385333781&amp;linkId=4dfaf23d21ba24414455e3e63b13fb26"><em>Player Piano</em> by Kurt Vonnegut</a>, <a href="https://www.amazon.com/gp/product/0143128221/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;tag=larpriandthee-20&amp;camp=1789&amp;creative=9325&amp;linkCode=as2&amp;creativeASIN=0143128221&amp;linkId=fa499fb309ea38b089e65cf5f76280ab"><em>Where Am I Now?</em> by Mara Wilson</a>, <a href="https://www.amazon.com/gp/product/0385722192/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;tag=larpriandthee-20&amp;camp=1789&amp;creative=9325&amp;linkCode=as2&amp;creativeASIN=0385722192&amp;linkId=e5f40fba83539802415a677829b41295"><em>Lullaby</em> by Chuck Palahniuk</a>, <a href="https://www.amazon.com/gp/product/1846973449/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;tag=larpriandthee-20&amp;camp=1789&amp;creative=9325&amp;linkCode=as2&amp;creativeASIN=1846973449&amp;linkId=09907a1df99eac78c9badfa88e1f57d8"><em>Embed with Games</em> by Cara Ellison</a>, and <a href="https://www.amazon.com/gp/product/1632153661/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;tag=larpriandthee-20&amp;camp=1789&amp;creative=9325&amp;linkCode=as2&amp;creativeASIN=1632153661&amp;linkId=c1a87961a757bba8891aeba4958c71c5"><em>Bitch Planet Volume 1</em> by Kelly Sue Deconnick</a>.</li>
+</ul>
+</li>
+<li>Spotify
+
+<ul>
+<li>Spotify is very good for listening to whatever music I want anytime, especially now that I work at home. If you really like a band, you should still buy their music or merch through their website to make sure they get paid to keep existing.</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>2017 Goals</h3>
+
+<ul>
+<li>Local
+
+<ul>
+<li>I&rsquo;d like to make sure I stay involved locally, especially as I continue to work from home. I&rsquo;ve let my Golang group dwindle over the past few months, and I&rsquo;d like to see us back up to our numbers at the start of 2016. If possible, I&rsquo;d also like to attend other meetups and meet more local devs.</li>
+</ul>
+</li>
+<li>Linux Greybeard
+
+<ul>
+<li>This is a slow process, but I want to get better at using Linux in general. I&rsquo;ve been surprised at how much I&rsquo;ve learned about the low-level workings of Ubuntu over the past 9 months. I&rsquo;m excited to see what I can learn over the next year, especially as I&rsquo;ll likely move into a different codebase at some point this year.</li>
+</ul>
+</li>
+<li>More talking
+
+<ul>
+<li>I&rsquo;m very excited to be giving a talk at FOSDEM this year, but I would enjoy doing such things more regularly. It doesn&rsquo;t necessarily have to be at conferences, as I could do meetups much more easily. I need to try to get back into blogging more regularly. Additionally, I&rsquo;ve recently been kicking around ideas for a discussion-based podcast on the worst parts of software development, although that may have already been done to death. Contact if interested.</li>
+</ul>
+</li>
+<li>Transition Web Tooling
+
+<ul>
+<li>I would like to switch over my analytics systems to use a personal Piwik instance, and I would love to replace the (hopefully unobtrusive) ads on this site with some kind of tip jar system. I would also like to update this blog to use a Let&rsquo;s Encrypt certificate, as well as <a href="https://ollertapp.com">Ollert</a> once I&rsquo;ve been given full control.</li>
+</ul>
+</li>
+<li>Kegging
+
+<ul>
+<li>In my homebrewing, I&rsquo;ve been bottling my beers. This is generally ok, but I think the beer would be consumed faster if I kegged it and could fill growlers for my friends and family. Getting started with kegging is expensive, requiring the purchase of kegs, tanks, parts, and some sort of refrigeration unit. By the end of the year, I intend to have a kegerator-style setup with the ability to stow and distribute from two kegs.</li>
+</ul>
+</li>
+<li>Moving
+
+<ul>
+<li>My wife is looking into graduate schools for Fall 2017, and has already been accepted by one. I&rsquo;m currently assuming a big part of my life this Spring/Summer will be finding and adjusting to a new home.</li>
+</ul>
+</li>
+<li>Active Activism
+
+<ul>
+<li>I&rsquo;ve complained a lot about our government and the way the world works on social media, at the &ldquo;water cooler&rdquo;, and privately to my wife, but it&rsquo;s become obvious that passive activism isn&rsquo;t good enough. Signing petitions and <a href="http://neveragain.tech">pledges</a> are nice gestures, but are more meaningful when backed up by real action. I&rsquo;d like to do something, though I&rsquo;m not sure what at the moment. By the end of 2017, I would like to, at minimum, have a plan to donate, join, create, or generally be more involved.</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>Adieu, 2016</h3>
+
+<p>Major changes in my life, career, and the world at large have made 2016 a memorable year for me. I highly encourage you to reflect on the year you&rsquo;ve had and think about what you can do to make 2017 great. Happy new year!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Going Remote: 4 Months In, aka Remote Life 4-eva]]></title>
+    <link href="https://larry-price.com/blog/2016/08/04/going-remote-4-months-in/"/>
+    <updated>2016-08-04T20:16:04-04:00</updated>
+    <id>https://larry-price.com/blog/2016/08/04/going-remote-4-months-in</id>
+    <content type="html"><![CDATA[<p><em>This is the third in a series of blog posts detailing my experience acclimating to a fully remote work experience. You may also enjoy my original posts <a href="/blog/2016/04/11/going-remote-1-week/">detailing my first week</a> and <a href="/blog/2016/05/05/going-remote-1-month-in/">my first month</a>.</em></p>
+
+<p>Has it really been 4 months since I started riding the raging river of remote work? After my first month, I felt pretty good about my daily schedule and work/life balance. Since the last post, I&rsquo;ve met many of my co-workers IRL, learned to find my own work, and figured out how to shake things up when I get in a rut.</p>
+
+<h3>But First, Did I Handle My Action Items?</h3>
+
+<p>During my first month, I struggled to figure out what to work on after finishing a task. At this point, it&rsquo;s extremely rare that I don&rsquo;t have a dozen things in the queue like a pile of papers in an In Box about to topple over. I am happily busy all the time, either pulling things off the top of the stack, plucking things from the middle, or coming up with some new feature that I need to add.</p>
+
+<p>I feel a lot more comfortable on chat. Our IRC channels are a bit daunting at first, especially when there&rsquo;s a lot of action going on. I&rsquo;ve learned some good ways to interject or reach out to the people that I need to talk to.</p>
+
+<p>Oh, and I still haven&rsquo;t gotten a new floormat. Yes, this one&rsquo;s still broken. For some reason, it just doesn&rsquo;t annoy me as much as it used to. It&rsquo;s almost endearing: like a three-legged puppy that I roll my chair across and stand on top of for 8 hours a day.</p>
+
+<h3>Meeting IRL</h3>
+
+<blockquote><p>Why would you guys actually meet IRL? - Elliot, <em>Mr Robot</em></p></blockquote>
+
+<p>I know a bunch of my coworkers by IRC nicks, and I see a few of their faces in a Google Hangout for our daily standup. This has been sufficient for me, but we did something truly magical in June. We met IRL.</p>
+
+<p>The team I&rsquo;m on (~10 people) and our sibling team (~10 people) met in Montréal, Québec, Canada, for about a week, and it was unlike any meeting-of-the-minds I&rsquo;ve ever been to. The engineers were largely from the US and Europe. We all stayed in the hotel downtown and used a small conference room to hang out and work all day, every day. We woke up and ate breakfast together, met in the conference room at 9, had snacks and coffee, ate lunch together, stopped working precisely at 6, and met back in the lobby a few minutes later to go out on the town until 11 or midnight. It&rsquo;s a truly intense social experience, especially for a group of people who spend most of their days only interacting with other humans through IRC, <em>especially</em> for a group of people who only meet twice a year or so.</p>
+
+<p>This coming together allowed us to hash out a lot of our plans for the coming months, but I believe the true victory in this type of event is the camaraderie it creates. It&rsquo;s nice to be able to put faces to nicks, think about the inflection in a person&rsquo;s voice coming out in the way they type, and know exactly who I need to ping on IRC to accomplish certain tasks. It&rsquo;s fun to hang out with people from all over the world, and it&rsquo;s fun to go drinking with your coworkers, a thing I had temporarily forgotten.</p>
+
+<p>I&rsquo;ll note that we also happened to be in Montréal during the 23rd annual Mondial de la Biere, a huge international beer festival that lasted several days. I&rsquo;ll also note that it was fun to try to speak little bits of French in Montréal, and I&rsquo;m really looking forward to wherever the next sprint abroad may take us (most likely Europe in October).</p>
+
+<h3>Finding Work</h3>
+
+<p>With a decentralized company, the issue of finding things to work on for new employees can be tough. Do you give them something small and easy and possibly belittling? Do you give them something massive that will leave them scratching their heads for weeks and completely out of touch with the rest of the company? How can you find a good middle ground here?</p>
+
+<p>I&rsquo;d say I was &ldquo;eased in&rdquo; with smaller tasks into my current project. After the first few tasks were completed, it was often unclear to me where I should go next. There was always a list of bugs - was I the right person to work on them? Was there any other impending feature or unlisted bug that I should start looking into instead? These are hard questions for someone who hasn&rsquo;t been around for very long.</p>
+
+<p>Over time, I gained more and more responsibilities. I needed a bug fixed pronto in another project, so I did it myself and submitted an MP. Oh, you understand this codebase? You can be a maintainer now! Oh, I think I remember from your resume that you have some golang experience. We need this fixed ASAP, using SD cards is completely broken without it!</p>
+
+<p>It&rsquo;s all a slippery slope to having a bottomless bucket of super-interesting things to choose from to do work, perform code reviews, and answer community questions. Yet <em>somehow</em> it&rsquo;s all happened in a way that is not overwhelming, but freeing. When I get stuck on a problem or need a short break from my current project, there&rsquo;s plenty of other work to go around. Which leads me to&hellip;</p>
+
+<h3>Shaking Things Up</h3>
+
+<p>Routine can be helpful, but it can also be terrible. For the parts of May and June that I wasn&rsquo;t traveling, I was largely waking up at the same time, making the same lunch, listening to the same music every day, petting the same cats, and picking up the same kinds of tasks from the backlog. None of this was bad <em>per se</em>, but I found myself getting a tad sluggish. It would be harder to work on menial tasks, and easier to come up with elaborate solutions to simple problems. So what did I do?</p>
+
+<p>I started varying my sleep schedule. Some days I get out of bed at 7, other days I get out of bed at 8:45. Because I work from home, I don&rsquo;t have to worry about fighting traffic or skipping breakfast.</p>
+
+<p>I started varying my lunches. I was making some fun rissotto recipes, but since it&rsquo;s summer I&rsquo;ve been mixing up a bunch of different vegetables into a menagerie of salads: sauteed green tomatoes, onions, and zucchini; cukes and onions; pineapple, succotash, and eggs.</p>
+
+<p>As I&rsquo;ve gained more responsibilities for various projects, I&rsquo;ve been able to branch into different kinds of tasks. After finishing up a big rework of one codebase, I can start jumping into bugs somewhere else. I can dig deep somewhere, and pivot when I&rsquo;m ready to go back. There&rsquo;s always something interesting to work on, and I can see the way different tasks help us towards our end goal. Not to mention I can <em>always</em> do bug hunts.</p>
+
+<h3>Remote Life 4-eva</h3>
+
+<p>It&rsquo;s not just working remotely that makes this possible - it&rsquo;s the people, the culture, and the fun and interesting products we&rsquo;re creating. Maybe I&rsquo;ll start blogging more about those things in the future. I don&rsquo;t have much in this area that I&rsquo;m looking to improve on, so this could be the last post in the series. Maybe I&rsquo;ll do one at the 1-year mark to note any new tricks I&rsquo;ve learned. Until then, keep looking our for other non-diary-entry blog posts.</p>
+
+<p>Looking for advice on working remotely? Not sure if you&rsquo;d like it? Do you have a strong disagreement with me as a person or my lifestyle choices? Hit me up and we can chat!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Ranks, Streaks, and Karma - A Look at Competitive Contributions]]></title>
+    <link href="https://larry-price.com/blog/2016/06/23/ranks-streaks-karma/"/>
+    <updated>2016-06-23T21:15:17-04:00</updated>
+    <id>https://larry-price.com/blog/2016/06/23/ranks-streaks-karma</id>
+    <content type="html"><![CDATA[<p>If you weren&rsquo;t paying close attention, you may not have noticed that Github has recently <a href="https://github.com/blog/2173-more-contributions-on-your-profile">removed Streaks from profile pages</a> along with a few other changes.</p>
+
+<p>For the uninitiated, Github tracked each user&rsquo;s commit history every day and displayed this information prominently on the user&rsquo;s profile for the past 365 days. When committing multiple days in succession, a &ldquo;streak&rdquo; is started. Your streak resets the next solar day you don&rsquo;t commit to Github.</p>
+
+<p><strong>What was the purpose of the streak?</strong></p>
+
+<p>The streak encouraged developers to contribute public open-source code as frequently as possible. This is a very good thing! Maybe it even influenced some people to contribute to open-source projects that desperately needed help. Maybe it helped some developers explore new codebases and languages they never dreamt of exploring previously.</p>
+
+<p>However, any good feelings that came from the streak are instantly dashed when you take a day off. All those good-feels you get after working hard to get a 10-day streak? Crushed in an instant. Now you need to start over, but you don&rsquo;t bother because every time you feel a streak coming on it&rsquo;s dashed away. This is a painful reminder that life is short, and you&rsquo;ll only be rewarded in the short-term for any effort you put in.</p>
+
+<p><strong>So if the good-feels wasn&rsquo;t the purpose, how about notoriety? Surely someone with a long streak is a good person and a noble developer!</strong></p>
+
+<p>Except for <a href="https://gist.github.com/cirosantilli/4d24fc646ab9aec8def7">gists like this</a> which will help you generate a 100-year streak. Or the fact that you could make empty commits to personal repos and manipulate the streak. Or you could be making minor documentation/newline changes every day. Not only that, but not all developers use Github as their primary source control platform. Developers could be making contributions to Bitbucket as well as Github and not have that reflected in their streak at all.</p>
+
+<p><strong>My theory is that streaks, though well-intended, served no purpose.</strong></p>
+
+<p>They were ripe for abuse and not a very good &ldquo;reward&rdquo; for contributing code on the side, nor a good indicator of how grey a developer&rsquo;s beard is. Not all good developers make commits every day, and encouraging a commit-a-day is getting people trapped in the Silicon Valley bad-habit of never not working. For the time being, good riddance.</p>
+
+<p>At Canonical, we use Launchpad to host most of our source code. Launchpad has this concept of &ldquo;Karma&rdquo; which tracks your commits, code reviews, bug reports, branch merges, etc on Launchpad. Karma decays over time but not immediately, which means that you can take days off and maintain Karma. From this number, you can usually tell if a user is new to the system, highly active recently, or has turned into a manager. For reference, mine is <a href="https://launchpad.net/~larryprice/+karma">a little over 3000</a> as of this blog post. Although I mostly like the way Karma works, I don&rsquo;t think it&rsquo;s the epitome of source code gamification.</p>
+
+<p>As far as I know, sites like Bitbucket and GitLab don&rsquo;t have such a concept of rewarding heavy coders or giving some indication of recent activity outside of a news feed. Maybe a news feed style is enough?</p>
+
+<p>The good people at Github want you to code socially, and I&rsquo;m excited to see if they can come up with a fun and light way to gamify open-source software while avoiding some of the unfun aspects of streaks and the blaisé concept of news feeds.</p>
+
+<p>What do you think? Do you miss streaks? Did streaks motivate you to contribute more frequently? Any ideas for a new system? Tell me in the comments!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Going Remote: 1 Month In]]></title>
+    <link href="https://larry-price.com/blog/2016/05/05/going-remote-1-month-in/"/>
+    <updated>2016-05-05T20:21:56-04:00</updated>
+    <id>https://larry-price.com/blog/2016/05/05/going-remote-1-month-in</id>
+    <content type="html"><![CDATA[<p><em>This is the second in a series of blog posts detailing my experience migrating from a culture based on co-location to a fully remote environment. You may also enjoy my <a href="/blog/2016/04/11/going-remote-1-week/">original post detailing my first week</a>. Look out for another post in the fall.</em></p>
+
+<p>I&rsquo;ve spent an entire month working remotely. Whereas I spent much of my first week working remotely getting my home office in a working state, the rest of the month was largely spent acclimating to a culture of complete autonomy, getting comfortable with my peers, and finding my way around.</p>
+
+<h3>Attacking My Action Items</h3>
+
+<p>One of my action items from <a href="/blog/2016/04/11/going-remote-1-week/">the week 1 post</a> involved personalizing my workspace. I brought three posters from our second-floor study and planted them on the walls of my new office area downstairs. It makes my new office feel a lot more like my own space and a lot less like the formerly-unused living room. I have a 1994 Ren&amp;Stimpy calendar hanging on the bookshelf as well as a few stickers and other various nerdy hangables. I&rsquo;m fairly happy with the current state of my office.</p>
+
+<p>I&rsquo;ve made a point of exercising more during the work day. I work my biceps and triceps with my handheld weight, as many nose-to-the-ground push-ups as I can, and really hard bicycles until my abs tell me to stop. I&rsquo;ve also been walking outside in the early afternoon to check on the state of my hop garden. Not to mention I&rsquo;m still making significant use of my sit-stand desk.</p>
+
+<p>As far as extracurricular activities go, I think I&rsquo;m keeping steady. I&rsquo;ve been going to my local Code&amp;Coffee, and I just had a monthly meeting of Indy Golang. I&rsquo;ve been reading a bunch of blogs and eating up modern C++ material. I&rsquo;d like to make sure I get to IndySA every now and then, but I usually just whiff the date. I haven&rsquo;t been doing much coding outside of work, but that hasn&rsquo;t been high on my priority list recently. Since I currently work for an open-source company, I am embedded in the world of code all day, and I usually end the day very satisified.</p>
+
+<p>I did not buy a better floormat. Still on the list.</p>
+
+<h3>Acclimation Station</h3>
+
+<p>Although my first week was a success, I&rsquo;ll admit it was still a little awkward. However, I&rsquo;ve found myself significantly more comfortable at the end of my first month.</p>
+
+<p>In this position, there is a level of autonomy unlike any I have ever experienced. No one tells me what to work on next. I figure out what I&rsquo;ll be doing almost entirely based on incoming bug reports, community rumblings, nebulous plans, or simply things that interest and/or annoy me about a project. Priorities are in the eye of the beholder, and it&rsquo;s in my best interest to pick up work that is meaningful and relevant. I complete the task, get it into review, and make sure everybody&rsquo;s happy. Since everyone has a shared goal, it&rsquo;s unusual for developers to be especially nit-picky during reviews, and thus reviews become more focused on correctness, education, and mysterious edge cases.</p>
+
+<p>Talking to people on IRC can be a little daunting because so many of my coworkers are just so good at it. At first, talking to the right people seemed impossible. Eventually, I&rsquo;ve learned to become efficient with my IRC usage and I have certain channels relevant to my current tasks where I hang out. Although I describe our communications as &ldquo;efficient&rdquo;, that&rsquo;s not to say we don&rsquo;t joke around and have a good time. There are people I interact with every day who I consider work-friends even though we&rsquo;ve never spoken face-to-face.</p>
+
+<p>Over the past several weeks we&rsquo;ve held two company-wide events. The first was a remote open forum with our CEO. During the remote forum, the CEO discussed how the company was doing and then she opened the floor for questions. Someone would ask a question in chat, people would vote for those questions, and then we would get an answer. It was done quite well and felt like a great introduction to the CEO and her vision for our company&rsquo;s future. This week was a three-day conference spanning the entire organization. Presenters would share their faces and slides using Hangouts on Air, while attendees watched live and chatted together in a relevant channel. I learned a lot about the wider scope and relevance of my project, and I also got to hear about all the other interesting things going on around the company. I got to hear the founder do a Q&amp;A, which gave rise to many great questions with humble, honest answers which gave me a good idea of what we are all about as an organization. Attendance was optional, so irrelevant presentations could be ignored as easily as closing a tab.</p>
+
+<p>For the first couple weeks, I couldn&rsquo;t figure out how some of my peers could be so busy all the time. Now I understand. I found myself working on projects several dependencies away from my own, adding features and fixing bugs such that our project could integrate with the dependency and we could get features shipped. Due to the nature of everything being open-source, I&rsquo;m constantly working with my peers to figure out where a bug might be stemming from or the appropriate level to inject a feature or even just who to talk to about how things work. You fix a bug in one project and accidentally become a contributor while the project is in desperate need of many code reviews, which you then do and become an even more relevant member to the team.</p>
+
+<p>Oftentimes, traditional office workers will say things to me like, &ldquo;I don&rsquo;t know how you work from home; I&rsquo;d just be distracted all day and wouldn&rsquo;t be able to get anything done.&rdquo; I&rsquo;ve found that to be completely untrue. There are many days where I have trouble not working in the evening. I&rsquo;ll read up on some modern C++ techniques or read some misguided blog post about our projects, and I&rsquo;ll think about jumping on the computer at 9pm just to take a peek. It takes a lot of self-restraint, but I&rsquo;ve thus far been pretty good about not working after work. Hopefully I can keep that up.</p>
+
+<p>In a few weeks, my team is meeting in Montreal to hang out and do code for a week. I&rsquo;m excited for the opportunity to see everyone (not to mention to be in Montreal), and I&rsquo;m certain that it will help me feel even more acclimated to this new environment.</p>
+
+<h3>Some New Action Items</h3>
+
+<ul>
+<li><strong>Better floormat</strong>. Standing on my plastic mat right now, my feet do start to hurt. I need to run to an office supply store and find some rubber padding.</li>
+<li><strong>IRC Champion</strong>. Although I&rsquo;m more comfortable on IRC, I know I could be better about reaching out at the right times to the right people.</li>
+<li><strong>Automaton</strong>. I still grope around for work when I&rsquo;m not sure what to do next. I&rsquo;d like to come up with a process to determine what should be next on the agenda without too much synchronous assistance.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

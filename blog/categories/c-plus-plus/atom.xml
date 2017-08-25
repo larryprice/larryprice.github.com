@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: c++ | Larry Price]]></title>
+  <link href="https://larry-price.com/blog/categories/c-plus-plus/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2017-08-25T08:42:34-05:00</updated>
+  <id>https://larry-price.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    <email><![CDATA[larry@larry-price.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Effective Modern C++]]></title>
+    <link href="https://larry-price.com/blog/2016/06/29/effective-modern-c-plus-plus/"/>
+    <updated>2016-06-29T20:35:23-04:00</updated>
+    <id>https://larry-price.com/blog/2016/06/29/effective-modern-c-plus-plus</id>
+    <content type="html"><![CDATA[<h3>The Gist</h3>
+
+<p>How can one man give the world so much? Scott Meyers transformed my understanding of C++ with <a href="/blog/2013/07/16/effective-c-plus-plus/"><em>Effective C++</em></a>, a book which not only teaches good C++ practices and principles, but also explains what&rsquo;s going on behind the scenes to make those efforts so effectual. <a href="http://amzn.to/29dU9FO"><em>Effective Modern C++</em></a> is the same book aimed at a different audience. The audience of <em>Effective C++</em> was the developer who could use C++ to build a humble home of straw or wood, but didn&rsquo;t know that C++ was born to create homes of brick and mortar. <em>Effective Modern C++</em> is for the seasoned developer who knows the brick home they built with C++98 can stand tall, but is bewildered by the plethora of modern amenities available in the top-floor penthouse that is C++11.</p>
+
+<h3>Takeaways</h3>
+
+<p>Even when first introduced to the language, it seemed the mentality around C++ was that it was simple, baremetal, and robust. It didn&rsquo;t need garbage collection. It didn&rsquo;t need decent threading (fork that). Lambdas? Type deduction? Go talk to a language specification who cares!</p>
+
+<p>But here we are. C++11 can now act a little bit more like its cousins C# and Java, but run fast like its pappy C. I have been on a number of projects where C++11 is king for the last 3 months. The last time I had been on a C++ project, we seemed to be stuck in the ice age. As I first started reading this book, I would read one of the items and apply it directly to the code I was working on literally the following morning. This new C++ is downright <em>luxurious</em> compared to the old one.</p>
+
+<p>C++11 gives us the <code>auto</code> pointer for type deduction, similar to <code>var</code> in C#. Some examples:</p>
+
+<pre><code class="c++">auto x = 1;                 // x is int
+auto y = new Thing();       // y is Thing*
+const auto z = "the thing"; // z is a const char*
+</code></pre>
+
+<p>C++11 also has new loop syntax for iterators:</p>
+
+<pre><code class="c++">std::vector&lt;int&gt; v{4, 6, 0, 3, 3};
+
+for (const auto&amp; value: v)
+{
+    std::cout &lt;&lt; value;
+}
+std::cout &lt;&lt; std::endl
+// prints 46033
+</code></pre>
+
+<p>You may notice in the above code the use of curly braces to initalize the std::vector. Braced initialization allows us to use a <code>std::initalizer_list</code> to initalize STL objects, but it also allows basic construction.</p>
+
+<p>There are now lambdas: function handles defined dynamically which can capture other variables (called a closure).</p>
+
+<pre><code class="c++">auto x = 5;
+auto my_func = [&amp;x](int y) {return x+y;};
+
+my_func(5); // 10
+my_func(3); // 8
+x = 11;
+my_func(5); // 16
+</code></pre>
+
+<p>In the above example, x is captured by reference. You could also copy-capture x by excluding the <code>&amp;</code>.</p>
+
+<p>You like garbage collection? We got you covered. There&rsquo;s <code>std::unique_ptr</code> to represent one-shot memory that should be deleted when the pointer goes out of scope, and there&rsquo;s <code>std::shared_ptr</code> which is reference counted and will be deleted when all references to the shared_ptr go out of scope. These language enhancements are essential, and anyone well-versed in the usage of <code>boost::scoped_ptr</code> and <code>boost::shared_ptr</code> will have no trouble getting the hang of these.</p>
+
+<p>The concurrency API is pretty neat, though I haven&rsquo;t had much chance to play with it. <code>std::atomic</code> allows you to create objects which are guaranteed to be read/write thread-safely. <code>std::future</code> allows you to fire off a command in another thread and continue after it&rsquo;s completion.</p>
+
+<p>Looking to override a method? You can indicate an intentional override with the <code>override</code> keyword to tell the reader and the compiler you&rsquo;re intending to override a parent method. Comes in handy.</p>
+
+<p>Another nice construct is <code>nullptr</code>. In C++, <code>NULL</code> is actually just 0. Because of this you might even see your fellow developers comparing pointers to 0 while you try to determine their intent. We can now compare and set our NULL pointers to <code>nullptr</code>: an improvement soft in functionality, but noticeable in readability.</p>
+
+<p>Although I loved reading about C++ in bite-sized chunks throughout this book, there were a few things that went over my head (not just the first time). A major point of friction between myself and the author were universal references (<code>&amp;&amp;</code>) and the <code>move</code> operator. These concepts were new to me and difficult to grasp the first few times they were brought up in this book. It may have been the order they were presented, or it may have been my lack of contact with them in the real world, but I would recommend having some level of understanding for universal references before reading those parts of this book.</p>
+
+<p>The <code>move</code> operation moves the contents of memory from one object into another, as opposed to a copy operation which will duplicate that memory. A universal reference is, in some sense, a way to allow either a <code>copy</code> or <code>move</code> to be called based on whether an lvalue or an rvalue is being passed in. There are lots of rules involved, and sometimes <code>move</code> is faster than <code>copy</code> but other times it isn&rsquo;t. For me (and I assume many others), this confusion will lead me to largely ignore this feature for now.</p>
+
+<p>There is also quite a bit of discussion early in the book about using type deduction in templates with <code>auto</code> and <code>decltype</code>, but this discussion made my head hurt and made me glad I don&rsquo;t do much template metaprogramming.</p>
+
+<p>On top of all this goodness (and more I didn&rsquo;t mention), C++14 includes a lot of bonus features that make C++ even a little sweeter. Here&rsquo;s a <a href="https://en.wikipedia.org/wiki/C%2B%2B14">shortlist</a>. (Looking for a list of C++11 features? <a href="https://en.wikipedia.org/wiki/C%2B%2B11">Here you go</a>.)</p>
+
+<h3>Action Items</h3>
+
+<ul>
+<li>Read <a href="http://thbecker.net/articles/rvalue_references/section_01.html">Thomas Becker&rsquo;s overview of universal references</a></li>
+<li>Buy the <em>Effective</em> books missing from my collection</li>
+<li>Keep coding with C++</li>
+<li>Enable C++14 in a project</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hooks in cucumber-cpp]]></title>
+    <link href="https://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp/"/>
+    <updated>2013-11-22T20:40:00-06:00</updated>
+    <id>https://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp</id>
+    <content type="html"><![CDATA[<p>A few months ago <a href="/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">I blogged about tags</a> in <a href="https://github.com/cucumber/cucumber-cpp">cucumber-c++</a>. The scenario I presented involved using tags to call a <code>BEFORE</code> hook before the first scenario and an <code>AFTER</code> hook after the last scenario. The code looked a little bit like this:</p>
+
+<pre><code class="cucumber DoStuff.feature">@first
+Scenario: Do it my way
+  ...
+
+Scenario: Don't do it
+  ...
+
+@last
+Scenario: Do it your way
+  ...
+</code></pre>
+
+<pre><code class="c++ DoStuff_StepDefinitions.cpp">
+BEFORE("@first") { cout &lt;&lt; "This is the first step!" &lt;&lt; endl; }
+
+AFTER("@last") { cout &lt;&lt; "This is the last step!" &lt;&lt; endl; }
+
+...
+</code></pre>
+
+<p>The scnenario labeled <code>@first</code> would call the corresponding <code>BEFORE</code> macro and the <code>@last</code> scenario would call the <code>AFTER</code> macro. If I didn&rsquo;t have tags in place, the macros would have both been invoked before/after each scenario. Macros for <code>BEFORE_STEP</code> and <code>AROUND_STEP</code> are also available; <code>BEFORE_STEP</code> allows you to tag individual steps and <code>AROUND_STEP</code> acts as a before/after for individual steps.</p>
+
+<p>This was a workaround. What I really wanted to do was to not use tags, and instead unconditionally perform an action before the first scenario was run and after the last scenario is complete. Since cucumber-cpp is open source, I decided to implement that a few weeks ago (<a href="https://github.com/cucumber/cucumber-cpp/commit/26e11d0248edf32a8bac17df9d2d4ceb135ed502">see changeset</a>). Now the above example becomes:</p>
+
+<pre><code class="cucumber DoStuff.feature">
+Scenario: Do it my way
+  ...
+
+Scenario: Don't do it
+  ...
+
+Scenario: Do it your way
+  ...
+</code></pre>
+
+<pre><code class="c++ DoStuff_StepDefinitions.cpp">
+BEFORE_ALL() { cout &lt;&lt; "This is the first step!" &lt;&lt; endl; }
+
+AFTER_ALL() { cout &lt;&lt; "This is the last step!" &lt;&lt; endl; }
+
+...
+</code></pre>
+
+<p>This is the same behavior as the first example, except I don&rsquo;t have to force my fellow developers to move tags around when they add/remove scenarios. Also now my fellow developers can stop asking me why I was using tags and why when they added a scenario they couldn&rsquo;t get the tests to pass.</p>
+
+<p>The moral of the story is that you should go implement that feature you want to see in your favorite open source project.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Copy Data Using qmake]]></title>
+    <link href="https://larry-price.com/blog/2013/11/14/copy-data-using-qmake/"/>
+    <updated>2013-11-14T21:24:00-06:00</updated>
+    <id>https://larry-price.com/blog/2013/11/14/copy-data-using-qmake</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ll take things that should be really easy but are in fact impossible for $1000, Mr Trebek.</p>
+
+<p>I have a <a href="https://qt-project.org/wiki/Qt_5.0">Qt</a> desktop app that uses <a href="https://qt-project.org/doc/qt-4.8/qmake-manual.html">qmake</a>. I have tests. I have test data that I need to copy to my build directory. Not only that, but I want to copy a whole directory recursively. In Linux <em>and</em> Windows. You must be thinking to yourself, &lsquo;There&rsquo;s no way that&rsquo;s possible, leave me out of your crazy plans!&rsquo; Well to that I say nay. Nay indeed.</p>
+
+<p>I originally copied my test data using the <code>INSTALLS</code> variable. My data folder is just a directory sitting in the test source called &ldquo;TestData.&rdquo; This solution is fantastic because it works cross-platform.</p>
+
+<pre><code class="make MyBAProjectTest.pro">install_it.path = $${OUT_PWD}
+install_it.files += TestData/
+
+INSTALLS += install_it
+</code></pre>
+
+<p>However, this means that if I ever have a clean directory, I have to run <code>make install</code> to install my test data. What a pain! Why bother! Why even write tests when life is this unjust!</p>
+
+<p>BUT WAIT! After combing the depths of the internets for much of the evening, I was able to find many halfway solutions to my original problem. The concept is to add commands to the <code>QMAKE_POST_LINK</code> variable.</p>
+
+<p>For Linux, I use <code>cp</code>:</p>
+
+<pre><code class="make MyBAProjectTest.pro">QMAKE_POST_LINK += $$quote(cp -rf $${PWD}/TestData $${OUT_PWD})
+</code></pre>
+
+<p>For Windows, I use <code>xcopy</code>:</p>
+
+<pre><code class="make MyBAProjectTest.pro">PWD_WIN = $${PWD}
+PWD_WIN ~= s,/,\\,g
+
+QMAKE_POST_LINK += $$quote(mkdir DestFolder)
+QMAKE_POST_LINK += $$quote(xcopy $${PWD_WIN}\\TestData $${OUT_PWD_WIN}\\TestData /E)
+</code></pre>
+
+<p>I also want that directory to be deleted when I run <code>make clean</code>. Cleaning up just means adding some commands to the <code>QMAKE_CLEAN</code> directive. I also want to run the appropriate commands whether I&rsquo;m on Unix or Windows without having to modify my <code>.pro</code> file. Wrapping the previous commands in what I call an &ldquo;OS-space&rdquo; will cause those commands to only run in the specified operating system.</p>
+
+<pre><code class="make MyBAProjectTest.pro">win32 {
+    PWD_WIN = $${PWD}
+    PWD_WIN ~= s,/,\\,g
+
+    QMAKE_POST_LINK += $$quote(mkdir DestFolder)
+    QMAKE_POST_LINK += $$quote(xcopy $${PWD_WIN}\\TestData $${OUT_PWD_WIN}\\TestData /E)
+
+    QMAKE_CLEAN += /s /f /q TestData &amp;&amp; rd /s /q TestData
+}
+
+unix {
+    QMAKE_POST_LINK += $$quote(cp -rf $${PWD}/TestData $${OUT_PWD})
+
+    QMAKE_CLEAN += -r TestData
+}
+</code></pre>
+
+<p>Data copied, tests working again. Take that, Nokia; no matter how difficult you make your build-processing tool, I&rsquo;ll figure out how to contort it to my whims.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Tags in C++ Cucumber tests]]></title>
+    <link href="https://larry-price.com/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/"/>
+    <updated>2013-04-15T22:10:00-05:00</updated>
+    <id>https://larry-price.com/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests</id>
+    <content type="html"><![CDATA[<p>The project I&rsquo;m working on is slowly adding <a href="https://github.com/cucumber/cucumber-cpp">Cucumber</a> acceptance tests to our massive code base in order to replace aging <a href="https://code.google.com/p/robotframework/">Robot tests</a>. One would think that getting developers on our team to use Cucumber would be east, since it uses <a href="https://code.google.com/p/googletest/">googletest</a> and <a href="https://code.google.com/p/googlemock/">googlemock</a> which we use for our unit tests. Unfortunately, very few people on the team have been motivated to write integration tests using the new framework, so I have very few people to go to when I have problems writing my own integration tests.</p>
+
+<p>The area of the code I deal with uses <a href="http://www.mono-project.com/Embedding_Mono">embedded mono</a> to communicate with some C# libraries that we share with other applications. This means we have unmanaged memory which talks with managed memory. This has caused us more headaches than I care to remember. One such problem is that we have a static object that we only want to create and destroy once. So I write my first Cucumber test:</p>
+
+<pre><code class="cucumber DoStuff.feature">Feature: Do that thing that we have to do
+
+Scenario: Do it my way
+  Given I have done step 1
+  When I do step 2
+  Then I should see results
+</code></pre>
+
+<pre><code class="c++ DoStuff_StepDefinitions.cpp">#include &lt;cucumber-cpp/defs.hpp&gt;
+#include &lt;gtest/gtest.h&gt;
+#include &lt;mono/jit/jit.h&gt;
+
+const QString DOMAIN_NAME = "bridge";
+
+class Context
+{
+  // The static Mono object
+  static MonoDomain *Domain;
+}
+
+BEFORE() { Context::Domain = mono_jit_init(DOMAIN_NAME); }
+
+AFTER() { mono_jit_cleanup(Context::Domain); }
+
+GIVEN("^I have done step 1$") { /* ... */ }
+
+WHEN("^I do step 2$") { /* ... */ }
+
+THEN("^I should see results$") { /* ... */ }
+</code></pre>
+
+<p>Before my scenario starts, the <code>BEFORE()</code> function is called and my MonoDomain object is created. When the scenario ends, my <code>AFTER()</code> statement is called and the objects in my MonoDomain are cleaned up. Now, I add a second scenario.</p>
+
+<pre><code class="cucumber DoStuff.feature">Feature: Do that thing that we have to do
+
+Scenario: Do it my way
+  ...
+
+Scenario: Do it your way
+  ...
+</code></pre>
+
+<p>Now I run my Cucumber test, and Mono explodes. Why? Because the <code>BEFORE()</code> and <code>AFTER()</code> functions are not <em>before all</em> and <em>after all</em>, but <em>before each</em> and <em>after each</em>.</p>
+
+<p>So what should we do? Move the function calls in the <code>BEFORE()</code> and <code>AFTER()</code> statements into the constructor and destructor of the Context class?</p>
+
+<p>Same problem. Are there <code>BEFORE_ALL()</code> and <code>AFTER_ALL()</code> macros? No.</p>
+
+<p>I began to panic. I asked the person who taught me how to write Cucumber tests in C++. Our idea was to create the MonoDomain during what I knew would be the first step, and delete it after what I knew would be the last step. Oh, the horror! That would mean not being able to reuse those steps, not to mention moving the creation/destruction code around anytime I wanted to add new steps or change the order of my previous steps. We also thought about making specific steps and sticking them at the front of the first scenario and at the end of the last scenario. This still meant that the lay developer would have to recognize these first and last steps from the others. I asked my local senior engineer, and his advice was to create separate Cucumber tests for each scenario I intended to create. My plan was to write 6 scenarios in the long-term for this feature, and I really didn&rsquo;t want to turn these very similar tests with beautifully reusable steps into 6 features.</p>
+
+<p>Then it hit me: Cucumber is open source. I found the source <a href="https://github.com/cucumber/cucumber-cpp">on Github</a> and started looking through <a href="https://github.com/cucumber/cucumber-cpp/tree/master/examples/">the example code</a>. It was there that I discovered <a href="https://github.com/cucumber/cucumber-cpp/tree/master/examples/FeatureShowcase/tag">tags</a>. Tags were the solution to my problem.</p>
+
+<pre><code class="cucumber DoStuff.feature">Feature: Do that thing that we have to do
+
+@first
+Scenario: Do it my way
+  ...
+
+@last
+Scenario: Do it your way
+  ...
+</code></pre>
+
+<p>Using tags, I could label my scenarios with meaningful <code>@first</code> and <code>@last</code> tags to signify the beginning and end of my tests. The trick is to then add the required tags to my <code>BEFORE()</code> and <code>AFTER()</code> macro as such:</p>
+
+<pre><code class="c++ DoStuff_StepDefinitions.cpp">#include &lt;cucumber-cpp/defs.hpp&gt;
+#include &lt;gtest/gtest.h&gt;
+#include &lt;mono/jit/jit.h&gt;
+
+const QString DOMAIN_NAME = "bridge";
+
+class Context
+{
+  // The static Mono object
+  static MonoDomain *Domain;
+}
+
+BEFORE("@first") { Context::Domain = mono_jit_init(DOMAIN_NAME); }
+
+AFTER("@last") { mono_jit_cleanup(Context::Domain); }
+
+// ...
+</code></pre>
+
+<p>Now my MonoDomain is only created <em>before</em> the scenario labeled <code>@first</code> and <em>after</em> the scenario labeled <code>@last</code>. Obviously, this isn&rsquo;t the cleanest fix imaginable, but it was the cleanest fix <em>available</em>. Whenever someone wants to add a new step to this test, they need to remember to move the <code>@last</code> tag to their scenario. However, I have the hope that it will be pretty obvious that the second scenario is no longer &ldquo;last&rdquo; when there is a third scenario following the &ldquo;last&rdquo; scenario. Anyway, it leaves me happy enough, since now my tests don&rsquo;t explode and I&rsquo;m able to reuse ~50% of the steps I had already written for the first scenario. I added a third scenario later on and 9 out of the 10 steps in the scenario were reused from the first and second scenario.</p>
+
+<p>There are lots of other cool things you can do with Cucumber tags, like having multiple tags on objects. All tags that match <code>@first</code> will do one thing, but tags that match <code>@first</code> and <code>@second</code> can have multiple <code>BEFORE()</code> or <code>AFTER()</code> clauses.</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: write-ups | Larry Price]]></title>
+  <link href="https://larry-price.com/blog/categories/write-ups/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2017-08-25T08:42:34-05:00</updated>
+  <id>https://larry-price.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    <email><![CDATA[larry@larry-price.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Effective Modern C++]]></title>
+    <link href="https://larry-price.com/blog/2016/06/29/effective-modern-c-plus-plus/"/>
+    <updated>2016-06-29T20:35:23-04:00</updated>
+    <id>https://larry-price.com/blog/2016/06/29/effective-modern-c-plus-plus</id>
+    <content type="html"><![CDATA[<h3>The Gist</h3>
+
+<p>How can one man give the world so much? Scott Meyers transformed my understanding of C++ with <a href="/blog/2013/07/16/effective-c-plus-plus/"><em>Effective C++</em></a>, a book which not only teaches good C++ practices and principles, but also explains what&rsquo;s going on behind the scenes to make those efforts so effectual. <a href="http://amzn.to/29dU9FO"><em>Effective Modern C++</em></a> is the same book aimed at a different audience. The audience of <em>Effective C++</em> was the developer who could use C++ to build a humble home of straw or wood, but didn&rsquo;t know that C++ was born to create homes of brick and mortar. <em>Effective Modern C++</em> is for the seasoned developer who knows the brick home they built with C++98 can stand tall, but is bewildered by the plethora of modern amenities available in the top-floor penthouse that is C++11.</p>
+
+<h3>Takeaways</h3>
+
+<p>Even when first introduced to the language, it seemed the mentality around C++ was that it was simple, baremetal, and robust. It didn&rsquo;t need garbage collection. It didn&rsquo;t need decent threading (fork that). Lambdas? Type deduction? Go talk to a language specification who cares!</p>
+
+<p>But here we are. C++11 can now act a little bit more like its cousins C# and Java, but run fast like its pappy C. I have been on a number of projects where C++11 is king for the last 3 months. The last time I had been on a C++ project, we seemed to be stuck in the ice age. As I first started reading this book, I would read one of the items and apply it directly to the code I was working on literally the following morning. This new C++ is downright <em>luxurious</em> compared to the old one.</p>
+
+<p>C++11 gives us the <code>auto</code> pointer for type deduction, similar to <code>var</code> in C#. Some examples:</p>
+
+<pre><code class="c++">auto x = 1;                 // x is int
+auto y = new Thing();       // y is Thing*
+const auto z = "the thing"; // z is a const char*
+</code></pre>
+
+<p>C++11 also has new loop syntax for iterators:</p>
+
+<pre><code class="c++">std::vector&lt;int&gt; v{4, 6, 0, 3, 3};
+
+for (const auto&amp; value: v)
+{
+    std::cout &lt;&lt; value;
+}
+std::cout &lt;&lt; std::endl
+// prints 46033
+</code></pre>
+
+<p>You may notice in the above code the use of curly braces to initalize the std::vector. Braced initialization allows us to use a <code>std::initalizer_list</code> to initalize STL objects, but it also allows basic construction.</p>
+
+<p>There are now lambdas: function handles defined dynamically which can capture other variables (called a closure).</p>
+
+<pre><code class="c++">auto x = 5;
+auto my_func = [&amp;x](int y) {return x+y;};
+
+my_func(5); // 10
+my_func(3); // 8
+x = 11;
+my_func(5); // 16
+</code></pre>
+
+<p>In the above example, x is captured by reference. You could also copy-capture x by excluding the <code>&amp;</code>.</p>
+
+<p>You like garbage collection? We got you covered. There&rsquo;s <code>std::unique_ptr</code> to represent one-shot memory that should be deleted when the pointer goes out of scope, and there&rsquo;s <code>std::shared_ptr</code> which is reference counted and will be deleted when all references to the shared_ptr go out of scope. These language enhancements are essential, and anyone well-versed in the usage of <code>boost::scoped_ptr</code> and <code>boost::shared_ptr</code> will have no trouble getting the hang of these.</p>
+
+<p>The concurrency API is pretty neat, though I haven&rsquo;t had much chance to play with it. <code>std::atomic</code> allows you to create objects which are guaranteed to be read/write thread-safely. <code>std::future</code> allows you to fire off a command in another thread and continue after it&rsquo;s completion.</p>
+
+<p>Looking to override a method? You can indicate an intentional override with the <code>override</code> keyword to tell the reader and the compiler you&rsquo;re intending to override a parent method. Comes in handy.</p>
+
+<p>Another nice construct is <code>nullptr</code>. In C++, <code>NULL</code> is actually just 0. Because of this you might even see your fellow developers comparing pointers to 0 while you try to determine their intent. We can now compare and set our NULL pointers to <code>nullptr</code>: an improvement soft in functionality, but noticeable in readability.</p>
+
+<p>Although I loved reading about C++ in bite-sized chunks throughout this book, there were a few things that went over my head (not just the first time). A major point of friction between myself and the author were universal references (<code>&amp;&amp;</code>) and the <code>move</code> operator. These concepts were new to me and difficult to grasp the first few times they were brought up in this book. It may have been the order they were presented, or it may have been my lack of contact with them in the real world, but I would recommend having some level of understanding for universal references before reading those parts of this book.</p>
+
+<p>The <code>move</code> operation moves the contents of memory from one object into another, as opposed to a copy operation which will duplicate that memory. A universal reference is, in some sense, a way to allow either a <code>copy</code> or <code>move</code> to be called based on whether an lvalue or an rvalue is being passed in. There are lots of rules involved, and sometimes <code>move</code> is faster than <code>copy</code> but other times it isn&rsquo;t. For me (and I assume many others), this confusion will lead me to largely ignore this feature for now.</p>
+
+<p>There is also quite a bit of discussion early in the book about using type deduction in templates with <code>auto</code> and <code>decltype</code>, but this discussion made my head hurt and made me glad I don&rsquo;t do much template metaprogramming.</p>
+
+<p>On top of all this goodness (and more I didn&rsquo;t mention), C++14 includes a lot of bonus features that make C++ even a little sweeter. Here&rsquo;s a <a href="https://en.wikipedia.org/wiki/C%2B%2B14">shortlist</a>. (Looking for a list of C++11 features? <a href="https://en.wikipedia.org/wiki/C%2B%2B11">Here you go</a>.)</p>
+
+<h3>Action Items</h3>
+
+<ul>
+<li>Read <a href="http://thbecker.net/articles/rvalue_references/section_01.html">Thomas Becker&rsquo;s overview of universal references</a></li>
+<li>Buy the <em>Effective</em> books missing from my collection</li>
+<li>Keep coding with C++</li>
+<li>Enable C++14 in a project</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Design for Real Life (Writeup)]]></title>
+    <link href="https://larry-price.com/blog/2016/03/24/design-for-real-life-writeup/"/>
+    <updated>2016-03-24T22:00:47-04:00</updated>
+    <id>https://larry-price.com/blog/2016/03/24/design-for-real-life-writeup</id>
+    <content type="html"><![CDATA[<h3>The Gist</h3>
+
+<p>Have you ever tried to buy airline tickets in a hurry? Have you ever had to find directions to the ER on the hospital website during an actual emergency? Have you ever wondered why you have to give a bug tracker your &ldquo;title,&rdquo; &ldquo;gender,&rdquo; or &ldquo;address&rdquo;? <a href="https://abookapart.com/products/design-for-real-life">Design for Real Life</a> written by <a href="http://meyerweb.com/">Eric Meyer</a> and <a href="https://www.sarawb.com/">Sara Wachter-Boettcher</a> explores the pitfalls of designing for the perfect user and the dangers of asking unnecessary or inappropriate questions.</p>
+
+<p>By the way, the means by which I found out this great book existed is by following Sara on Twitter: <a href="https://twitter.com/sara_ann_marie">you should too</a>!</p>
+
+<h3>Takeaways</h3>
+
+<p>We spend a lot of time designing our websites for the perfect persona. Right this minute, you probably have Sam the Salesperson, Hermoine the HR Rep, and Monica the Manager all smiling down upon you from their painter&rsquo;s tape thrones on the wall next to your cubicle. You meet these caricatures at their best: bellies full of coffee, heads full of false worries, plenty of time, and a healthy dose of get-up-and-go in their web browsing digits. These idealized characters are a great way to make a best-case-scenario product, really nailing that &ldquo;90%"of users everyone wants to find.</p>
+
+<p>What about the other 10% of users? At the start of a long and miserable day full of meetings, can someone short on time and patience create yet another calendar event in the few short minutes they have available? Thirty seconds before Polly the Procrastinator&rsquo;s timesheet is due, can she quickly add in her time without filling in meaningless fields? Instead of focusing on the ideal case, we might be better-served using this kind of time-crunched, ambivalent user as one of our personae. By designing for the streamlined user, we&rsquo;ll likely find that we&rsquo;ve also satisfied the needs of our &ldquo;ideal&rdquo; users.</p>
+
+<p>We ask for too much information. Think about how many times you&rsquo;ve just filled in junk information in forms to get through them as fast as possible. It&rsquo;s not shameful; it just wasn&rsquo;t worth your time to fill our information that you knew the application wouldn&rsquo;t use or could potentially use against you. On another note, think about how many times you&rsquo;ve given up filling out a form for a website because it was just too long. Asking for too much information causes user fatigue, and you are guaranteed to lose users when you start asking them for too much. If your website doesn&rsquo;t need to take location, title, or city of birth to get its job done, stop asking for them. If you have a tough time removing these fields, then write some user-visible text explaining why you need this information.</p>
+
+<p>Some questions could cause an unintended emotional response from users. If you&rsquo;re going through a tough time in your marriage or a recent divorce, filling out &ldquo;title&rdquo; or &ldquo;marital status&rdquo; could cause unwanted emotional duress. A &ldquo;gender&rdquo; dropdown with two options is non-inclusive to users with a non-binary gender identity, and may cause users going through a transition to wince at such a question. Someone who has just suffered the loss of a parent, child, or sibling could feel great emotional pain when you, a complete stranger, bring up family members for no reason but to feed to your bottomless data pit. Once again, the first question you ask yourself should be whether or not you absolutely need that information. Again, if you really want it, consider making more fields optional and explaining how this information will help your application.</p>
+
+<p>Do more user interviews before implementing newly-designed features. We can&rsquo;t assume that everyone will use the app the way we think they will, and we&rsquo;ll always be better off for getting more information.</p>
+
+<p>Your app probably doesn&rsquo;t need to be funny. We litter our error messages with &ldquo;Whoopsie!&rdquo; and our log out messages with &ldquo;Sayonara, sucker!&rdquo;, but this is an absolute waste. When errors occur, there&rsquo;s a chance you&rsquo;ve just angered your user. You know what makes them angrier? That error message you wrote that you found funny at the time. Be informative and supportive in your messaging, and your users will be better off for it.</p>
+
+<h3>Action Items</h3>
+
+<ul>
+<li>Stop trying to be funny in the copy. It&rsquo;s only funny when developing. Maybe we should have some sort of i18n setting that shows funny messages during development and English in production.</li>
+<li>Don&rsquo;t ask so many questions.</li>
+<li>More form fields should be open-answerable. Also more form fields should be optional. Also see previous bullet.</li>
+<li>Streamline the hard stuff. It may not be the most-used feature, but if it&rsquo;s important to a user in emergency mode you can bet it&rsquo;ll be appreciated.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Drive]]></title>
+    <link href="https://larry-price.com/blog/2016/02/21/drive/"/>
+    <updated>2016-02-21T11:38:22-05:00</updated>
+    <id>https://larry-price.com/blog/2016/02/21/drive</id>
+    <content type="html"><![CDATA[<blockquote><p>Have you ever seen a six-month-old or a three-year-old who’s not curious and self-directed? I haven’t. That’s how we are out of the box.<br/>
+&ndash; Dan Pink</p></blockquote>
+
+<h3>The Gist</h3>
+
+<p>Daniel Pink&rsquo;s <a href="http://amzn.to/1SZTo29"><em>Drive</em></a> explores how to motivate modern humans. Today&rsquo;s offices still employ business practices created to meet the needs of late 19th and early 20th century workers performing monotonous tasks, but many modern workers spend their days doing creative work which is ill-suited for stick-and-carrot management. Pink posits that today&rsquo;s workforce crave autonomy, mastery, and purpose to lead a satisfying life and produce better, maybe even faster, results.</p>
+
+<h3>Takeaways</h3>
+
+<p>&ldquo;Stick and carrot&rdquo; refers to the technique of &ldquo;if you do this, then you&rsquo;ll get that&rdquo; motivation. Work overtime this week and I&rsquo;ll buy you bagels on Friday. Read a book and you&rsquo;ll get a free personal pan pizza. Sit, good boy, here&rsquo;s a treat. Alternatively, &ldquo;now that&rdquo; rewards are ok from time to time. &ldquo;Now that&rdquo; the team has worked well together for a few weeks, I decided to bring in some donuts. &ldquo;Now that&rdquo; we handed off the code to the client, let&rsquo;s go get lunch. Note that &ldquo;now that&rdquo; rewards should not become predictable, lest they become &ldquo;if then&rdquo; rewards.</p>
+
+<p>The concepts in this book are not new. Researchers have discovered this kind of interesting behavior since the &lsquo;60s, and each time they are essentially ignored by the general population. Over the last few years, I have read several books on this topic and assumed we were only just starting to realize that sticks and carrots were bad for creative work, but it seems to have taken some time for these concepts to enter the public view.</p>
+
+<p>&ldquo;Flow&rdquo; is the optimal state of working, where the work is challenging enough to keep one engaged but familiar enough to allow mental connections to be made. It doesn&rsquo;t mean working on something so easy one can get it done fast, because such trivial exercises are boring and non-enriching. Alternatively, it doesn&rsquo;t mean working on something so difficult that one is &ldquo;head down&rdquo; for several days accomplishing nothing, because this type of task is exhausting. You&rsquo;ll know when flow has struck when you glance up at the clock and suddenly an hour has gone by and you feel good about what you&rsquo;ve already accomplished and you can see what you&rsquo;ll be accomplishing in the next hour.</p>
+
+<p>Although money is a poor way to motivate workers, all workers should still be given a fair base pay and benefits package. Everyone needs to live, and unfortunately we don&rsquo;t live in a Roddenberry socialist utopia where everyone works together to build a functioning world where everyone is paid in the love of one&rsquo;s career. In fact, Pink prescribes that organizations should try to pay employees slightly above average, which should essentially take the money issue off the table during recruiting and retention.</p>
+
+<p>The best motivation in the modern workplace is the encouragement of <em>autonomy</em>, <em>mastery</em>, and <em>purpose</em>.</p>
+
+<p><em>Autonomy</em> is the ability to make decisions for oneself, and cause a meaningful impact on the work being done. The craving of the modern human for autonomy can be explicitly seen in the rise of agile software development, remote working, Etsy retailers, startups, farmer&rsquo;s markets, and freelancing over the past 20 years. When people are allowed to make decisions without the intervention of big brother, they feel more ownership over the work they do, and they feel more freedom to be creative.</p>
+
+<p><em>Mastery</em> is continual improvement. A 5K runner achieves her goal of finishing in 20 minutes and sets a new goal for 19 minutes, then 18 minutes, and so on. She never stops to say &ldquo;20 minutes was good enough, I think I&rsquo;ll stop now.&rdquo; Mastery is usually something that can never 100% achieved, but the quest for mastery is something that drives us to be better than  we were yesterday.</p>
+
+<p>When we think about <em>purpose</em>, we think about leaving our mark on the world. For some organizations, this may involve redistributing part (or all) of the annual revenue to charity. It could also mean building a better medical device for diabetics. Not all purposes are created equal. Improved quarterly sales, more working hours, higher profit margins, happier stockholders are all invalid purposes that do not drive workers to be happier.</p>
+
+<p>Schools suffer substantially from our system of numbers-based achievements. Better grades and better test results have become the primary indicator of success, quelling the curiosity of our children and destroying the happiness of our teachers. Getting away from numbers-based learning will be an extremely difficult task, but there are already schools working towards this goal.</p>
+
+<h3>Action Items</h3>
+
+<ul>
+<li>Recognize when I&rsquo;ve been in flow and write it down.</li>
+<li>Recognize when someone is offering me an &ldquo;if-then&rdquo; reward, and try to determine a better way to think about it.</li>
+<li>Recognize when I offer someone an &ldquo;if-then&rdquo;, and think about the consequences. Did they perform better or worse than I expected? How could I have created an opportunity for the other person to improve themselves instead?</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Javascript: The Good Parts]]></title>
+    <link href="https://larry-price.com/blog/2015/12/28/javascript-the-good-parts/"/>
+    <updated>2015-12-28T20:17:33-05:00</updated>
+    <id>https://larry-price.com/blog/2015/12/28/javascript-the-good-parts</id>
+    <content type="html"><![CDATA[<h3>The Gist</h3>
+
+<p><a href="http://amzn.to/1OVjj3Z">Javascript: The Good Parts</a> by Douglas Crockford is a short guide to the best parts of the javascript language. Javascript is notorious for being so flexible and feature-rich that many traditional programmers start writing code and completely forget how to program and building a startup based on an idea they got from the <a href="https://twitter.com/boredelonmusk">Bored Elon Musk</a> mock-Twitter account only to wake up a year later cold and alone living in the slums of San Francisco. This book is full of example code with thoughtful explanations to help the average developer write better javascript and leave the web a nicer place.</p>
+
+<h3>Takeaways</h3>
+
+<p>I read this book because I thought the title was too snarky for its own good. Javascript is flexible and capable of doing nearly anything you need but, like any tool, can easily be misused by newcomers. Since javascript is the de facto language of the web, many developers who use javascript are novices or don&rsquo;t think they need to know the language constructs because &ldquo;it&rsquo;s not a real language.&rdquo; Unfortunately, this results in a lot of spaghetti code and insecure javascript being processed by our web browsers.</p>
+
+<p>I studied javascript this past fall to try to hone my skills, and I found that many of the little tricks I picked up through independent study had already been collected in this book. Anyone doing javascript should have a passing knowledge of the contents of this book before they are allowed to push to production.</p>
+
+<p>Now I&rsquo;ll get off my soapbox and point out a few of my favorite points made in this book.</p>
+
+<p>Javascripts most powerful structures are <code>Object</code> and <code>Array</code>. An <code>Array</code> is an <code>Object</code> with properties of type <code>Number</code> cast to integers in sequential order. This means that the <code>Array</code> object <code>[0, 1, "mario", "luigi"]</code> is represented as an <code>Object</code> as <code>{"0": 0, "1": 1, "2": "mario", "3": "luigi"}</code>.</p>
+
+<p><code>Object.hasOwnProperty</code> tells you whether the given property name is on the object&rsquo;s prototype or has been defined on the current object. This is very useful when using a <code>for in</code> loop to filter properties on an object.</p>
+
+<p>Although I&rsquo;ve frequently used the module pattern with a self-executing function to create private scope, I hadn&rsquo;t connected the dots that the reason this magic works is because of closures. Here&rsquo;s an example:</p>
+
+<pre><code class="javascript">var MyModule = (function() {
+  var x = 0;
+  return {
+    reset: function() {
+      x = 0;
+    },
+    do: function() {
+      console.log(x++);
+    }
+  }
+}());
+
+MyModule.reset();
+MyModule.do();    // output: 0
+MyModule.do();    // output: 1
+MyModule.do();    // output: 2
+MyModule.reset();
+MyModule.do();    // output: 0
+</code></pre>
+
+<p><code>MyModule</code> contains the private variable <code>x</code>, which cannot be accessed by anyone who has a reference to this function. However, the internal functions <code>reset</code> and <code>do</code> do have access to the private variable. Because of this, we know no external code can manipulate our internal value and we can guarantee some amount of consistency in our code given there was no tampering of the source. Of course, closures are useful for far more than just scoping variables.</p>
+
+<p>Although there are many ways to mimic traditional inheritance in javascript with <code>new</code> and defining the <code>constructor</code> method on a prototype, it usually makes more sense to use <em>differential inheritance</em>. Given an object named <code>bird</code>, we&rsquo;ll make a new object named <code>parrot</code> using <code>var parrot = Object.create(bird);</code> and start setting new properties on <code>parrot</code> This type of inheritance uses the basics of the language to our advantage and adheres nicely to the native prototypal constructs.</p>
+
+<h3>Action Items</h3>
+
+<ul>
+<li><strong>Differential inheritance.</strong> I&rsquo;ve always tried to force traditional inheritance into my javascript architecture, and it&rsquo;s always felt wrong. The next time I need inheritance, I will try to use DI to utilize javascript&rsquo;s prototype system better.</li>
+<li><strong>Write more javascript.</strong> It&rsquo;s been a while since I got to write javascript professionally, so I&rsquo;d like to ensure I maintain my knowledge base over the coming months by writing more javascript on the side. As web programming is where I want to be, hopefully I can get back into building for the web before the end of the year.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Creating Great Teams (Book Writeup)]]></title>
+    <link href="https://larry-price.com/blog/2015/12/28/creating-great-teams-book-writeup/"/>
+    <updated>2015-12-28T13:30:12-05:00</updated>
+    <id>https://larry-price.com/blog/2015/12/28/creating-great-teams-book-writeup</id>
+    <content type="html"><![CDATA[<h3>The Gist</h3>
+
+<p>Building software teams is a very difficult task. In most organizations, managers cobble together teams based primarily on who&rsquo;s available when the team is forming. Since managers can only know so much about the skills and relationships of each engineer, forming teams this way is chaotic and produces inconsistent results. Instead of management selecting teams, what if engineers created their own teams based on need, past experience, relationships, and doing what&rsquo;s best for the company? <em><a href="http://amzn.to/1VmIS2Y">Creating Great Teams</a></em> by Sandy Mamoli and David Mole (published by PragProg) explores the team self-selection process in great details with step-by-step instructions on running one&rsquo;s own self-selection event.</p>
+
+<h3>Takeaways</h3>
+
+<p><em>Managerial selection</em> is the act of management selecting teams. <em>Self-selection</em> is the act of individuals deciding which team to be on</p>
+
+<p>Managerial selection works really well for smaller companies as there are fewer variables. As an organization grows, it&rsquo;s illogical to assume that a single manager forming a team can continue to know every engineer&rsquo;s skills, interests, career path, and personal relationships with all the other engineers and managers in the company. The writers of <em>Creating Great Teams</em> believe that managerial selection can begin to break down with as few as 10 engineers in an organization.</p>
+
+<p>Managerial selection has the tendency to treat people as interchangeable parts. Every engineer has a different personality and skillset. Project A doesn&rsquo;t need &ldquo;Generic Engineer&rdquo;, it needs Sally and her particular brand of software development.</p>
+
+<p>Engineers working on multiple projects is non-optimal. Everyone agrees that there is a cost to context-switching in productivity, but there is also a cost in engineer happiness and energy levels. The concept of putting engineers on multiple projects is guided by utilization numbers. Utilization tells a manager that Joe is 50% on Project A, so the manager also puts him 25% or 50% on Project B. Utilization-based team design treats engineers like computers as opposed to really nerdy, easily-agitated human beings.</p>
+
+<p>Of course, we already know that self-selection has the potential to build really cool software. Every hackathon weekend starts with engineers building self-selected teams, and these teams are able to crank out more code in the course of a weekend than some projects team can in a month. It&rsquo;s not just the lack of rules that&rsquo;s making these teams more productive, but the joy of working with people you like and the motivation of working on something that interests you.</p>
+
+<p>Convincing an organization to try self-selecting teams is an exercise in public relations. Everyone needs to be on-board and no one can undermine the self-selection process. If &ldquo;management&rdquo; decides that Betty would be better off on Project B than on Project A and moves her after the self-selection process, people will lose faith in the whole event.</p>
+
+<p>People will generally do what&rsquo;s best for the company. Self-selection is a socialist process, where everyone will want to feel good about the outcome. If there is a project that doesn&rsquo;t seem very fun but is vital to the organization&rsquo;s success, someone is guaranteed to bite the bullet and put themselves on that project for the sake of the company.</p>
+
+<p>The middle of the book is dedicated to setting up and running a self-selection event. Setting up the event is a tough process and may take several iterations.</p>
+
+<h3>My Action Items</h3>
+
+<ul>
+<li><strong>Perform a trial event.</strong> At some point in the near future, I want to be involved with a trial self-selection event at my current organization. We have several outlets to do this, such as the Leadership Review or a Lunch and Learn. Although it might be difficult to put company-wide self-selected teams into practice at my organization due to the client-based nature of our work, I am positive we would have many wonderful insights from running a trial event.</li>
+<li><strong>Read Daniel Pink&rsquo;s <em>Drive</em>.</strong> <a href="http://amzn.to/1OpbToV"><em>Drive</em></a> is about what motivates people and is cited several times throughout this book. I&rsquo;ve been meaning to do this since I read <em>Punished By Rewards</em>, but now it&rsquo;s officially on my up-next reading list.</li>
+<li><strong>Read <em>Scaling Agile @ Spotify with Tribes, Squads, Chapters, and Guilds</em>.</strong> <a href="https://dl.dropboxusercontent.com/u/1018963/Articles/SpotifyScaling.pdf"><em>Scaling Agile at Spotify</em></a> is a whitepaper by some of the employees at Spotify discussing how Spotify was able to successfully scale Agile within their organization by breaking groups down into smaller and smaller subgroups.</li>
+<li><strong>Talk about it.</strong> I was invited to join a small book group to discuss the implications of this book after the holiday. Hopefully we can find a way to implement some small amount of self-selection within our own organization, or at the very least determine all the current blockers for doing self-selection. I&rsquo;ll note that this book group is a self-selected team.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: retro | Larry Price]]></title>
+  <link href="https://larry-price.com/blog/categories/retro/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2017-08-25T08:42:34-05:00</updated>
+  <id>https://larry-price.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    <email><![CDATA[larry@larry-price.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[2016 Retrospective]]></title>
+    <link href="https://larry-price.com/blog/2016/12/27/2016-year-in-review/"/>
+    <updated>2016-12-27T13:35:56-05:00</updated>
+    <id>https://larry-price.com/blog/2016/12/27/2016-year-in-review</id>
+    <content type="html"><![CDATA[<p>This has been a unique year for me, and I wanted to quickly lay out what I&rsquo;ve accomplished and where I think I&rsquo;m going for the coming year. This is now officially a tradition at three posts (see: <a href="/blog/2014/12/31/2014-retrospective/">2014</a> and <a href="/blog/2016/01/03/2015-year-in-review/">2015</a>).</p>
+
+<h3>Revisiting 2016&rsquo;s Goals</h3>
+
+<p>These are the goals I set for myself at the start of the year and how I met or missed them:</p>
+
+<ul>
+<li>Spend Money
+
+<ul>
+<li>I wanted to become less of a miser and spend more money. Note that this is not for bragging purposes, just that I am naturally very frugal and hesitant to spend money. I think we did a pretty good job, though! For starters, I swapped out my commuter car for a tech-heavy crossover. We stayed in a really cool art-hotel in downtown Cincinnati in the Spring, drove across the country for a big Yellowstone trip in early Summer, stayed at the Indiana Dunes for a few days in the Fall, and took a brief trip to Madison, WI, shortly thereafter. I bought a nice sitting/standing desk and chair for my home office. I paid the entry fee to go to GenCon for a day. Our fridge, dishwasher, and furnace all died one weekend, and it ended with me buying upgraded, modern appliances. I&rsquo;ve also been keeping the post office busy with plenty of orders off Amazon, and I&rsquo;ve been trying to Kickstart more games that I think deserve attention. I also found a new hobby in homebrewing which has been a great use of fun-money.</li>
+</ul>
+</li>
+<li>Back Into Web
+
+<ul>
+<li>At the start of 2016, I though I really wanted to do more web work. Turns out I&rsquo;ve done a 180 on this one, and I now work on primarily desktop/mobile with minimal web work, and I wouldn&rsquo;t have it any other way for the time being.</li>
+</ul>
+</li>
+<li>Work With Others
+
+<ul>
+<li>In 2015, I worked alone a lot. In 2016, I joined a new company where I work remotely. Although I don&rsquo;t necessarily see my coworkers every day, I am working on projects with multiple developers and communicating constantly with my teammates (and others) through chat. Working with others again has helped me grow socially and become a better engineer.</li>
+</ul>
+</li>
+<li>Become Part of an Open-Source Community
+
+<ul>
+<li>I really wanted to better integrate FLOSS into my life and my career, and I believe I&rsquo;ve hit the jackpot. My job is to build popular open-source operating system Ubuntu, where all the code I write is public and generally GPLv3. My job is to write open-source software, and to interact with the community. I use my own software and report/fix bugs that affect me all the time.</li>
+</ul>
+</li>
+<li>Good Vibes
+
+<ul>
+<li>I was feeling a bit down at the end of 2015, and I wanted to be a more positive person in 2016. Although there were some depressing things going on worldwide in 2016, I am generally happier with my personal and professional life on a micro-level.</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>Surprise Victories</h3>
+
+<ul>
+<li>New Job
+
+<ul>
+<li>The big one! After almost four years at SEP, I transitioned to a new role at Canonical. I get to work on Ubuntu, one of my favorite open-source projects, as my full-time job. This also means I get to work remotely, dropping my commute from 30 miles in 2012 to 3 miles in 2014 to 50 feet in 2016. I&rsquo;ve been having a great time working on software that&rsquo;s in the public spotlight, working with the community, and traveling every few months to see my coworkers. With this new job, I&rsquo;ve also had the opportunity to visit Europe for the first time this year.</li>
+</ul>
+</li>
+<li>Less Own-Time Work
+
+<ul>
+<li>Although I&rsquo;ve hit pretty hard in the past that developers should do some learning outside of work, this year likely contained the least own-time work I&rsquo;ve ever done. I&rsquo;ve been finding joys in non-software hobbies and home maintenance, and working on Ubuntu as my full-time job has made me less needy for doing open-source work in my off-hours. I tend to respond to bugs and Github PRs at any hour, and I follow more technical people on social media than I used to. I think this stems from a satisfaction from the learning I do throughout the day, and the difficulty of separating work-life and home-life when one works at home.</li>
+</ul>
+</li>
+<li>FOSDEM
+
+<ul>
+<li>Yesterday, I learned that I&rsquo;ll be giving a talk at <a href="https://fosdem.org/2017/">FOSDEM</a>. I&rsquo;m very excited (and nervous) to give my first-ever conference talk in Brussels this February.</li>
+</ul>
+</li>
+<li>Homebrewing
+
+<ul>
+<li>I picked up homebrewing beer at the start of 2016, and I love it. I started with simple pre-made extract kits, but have worked my way up to creating my own all-grain recipes and labels. Brewing is a fun, tasty hobby giving me some creative, manual labor to break the mold of always doing computer work.</li>
+</ul>
+</li>
+<li>Books
+
+<ul>
+<li>I read a significant amount of non-software books this year. Some of my favorites (disclosure: referral links): <a href="https://www.amazon.com/gp/product/0385333781/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;tag=larpriandthee-20&amp;camp=1789&amp;creative=9325&amp;linkCode=as2&amp;creativeASIN=0385333781&amp;linkId=4dfaf23d21ba24414455e3e63b13fb26"><em>Player Piano</em> by Kurt Vonnegut</a>, <a href="https://www.amazon.com/gp/product/0143128221/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;tag=larpriandthee-20&amp;camp=1789&amp;creative=9325&amp;linkCode=as2&amp;creativeASIN=0143128221&amp;linkId=fa499fb309ea38b089e65cf5f76280ab"><em>Where Am I Now?</em> by Mara Wilson</a>, <a href="https://www.amazon.com/gp/product/0385722192/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;tag=larpriandthee-20&amp;camp=1789&amp;creative=9325&amp;linkCode=as2&amp;creativeASIN=0385722192&amp;linkId=e5f40fba83539802415a677829b41295"><em>Lullaby</em> by Chuck Palahniuk</a>, <a href="https://www.amazon.com/gp/product/1846973449/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;tag=larpriandthee-20&amp;camp=1789&amp;creative=9325&amp;linkCode=as2&amp;creativeASIN=1846973449&amp;linkId=09907a1df99eac78c9badfa88e1f57d8"><em>Embed with Games</em> by Cara Ellison</a>, and <a href="https://www.amazon.com/gp/product/1632153661/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;tag=larpriandthee-20&amp;camp=1789&amp;creative=9325&amp;linkCode=as2&amp;creativeASIN=1632153661&amp;linkId=c1a87961a757bba8891aeba4958c71c5"><em>Bitch Planet Volume 1</em> by Kelly Sue Deconnick</a>.</li>
+</ul>
+</li>
+<li>Spotify
+
+<ul>
+<li>Spotify is very good for listening to whatever music I want anytime, especially now that I work at home. If you really like a band, you should still buy their music or merch through their website to make sure they get paid to keep existing.</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>2017 Goals</h3>
+
+<ul>
+<li>Local
+
+<ul>
+<li>I&rsquo;d like to make sure I stay involved locally, especially as I continue to work from home. I&rsquo;ve let my Golang group dwindle over the past few months, and I&rsquo;d like to see us back up to our numbers at the start of 2016. If possible, I&rsquo;d also like to attend other meetups and meet more local devs.</li>
+</ul>
+</li>
+<li>Linux Greybeard
+
+<ul>
+<li>This is a slow process, but I want to get better at using Linux in general. I&rsquo;ve been surprised at how much I&rsquo;ve learned about the low-level workings of Ubuntu over the past 9 months. I&rsquo;m excited to see what I can learn over the next year, especially as I&rsquo;ll likely move into a different codebase at some point this year.</li>
+</ul>
+</li>
+<li>More talking
+
+<ul>
+<li>I&rsquo;m very excited to be giving a talk at FOSDEM this year, but I would enjoy doing such things more regularly. It doesn&rsquo;t necessarily have to be at conferences, as I could do meetups much more easily. I need to try to get back into blogging more regularly. Additionally, I&rsquo;ve recently been kicking around ideas for a discussion-based podcast on the worst parts of software development, although that may have already been done to death. Contact if interested.</li>
+</ul>
+</li>
+<li>Transition Web Tooling
+
+<ul>
+<li>I would like to switch over my analytics systems to use a personal Piwik instance, and I would love to replace the (hopefully unobtrusive) ads on this site with some kind of tip jar system. I would also like to update this blog to use a Let&rsquo;s Encrypt certificate, as well as <a href="https://ollertapp.com">Ollert</a> once I&rsquo;ve been given full control.</li>
+</ul>
+</li>
+<li>Kegging
+
+<ul>
+<li>In my homebrewing, I&rsquo;ve been bottling my beers. This is generally ok, but I think the beer would be consumed faster if I kegged it and could fill growlers for my friends and family. Getting started with kegging is expensive, requiring the purchase of kegs, tanks, parts, and some sort of refrigeration unit. By the end of the year, I intend to have a kegerator-style setup with the ability to stow and distribute from two kegs.</li>
+</ul>
+</li>
+<li>Moving
+
+<ul>
+<li>My wife is looking into graduate schools for Fall 2017, and has already been accepted by one. I&rsquo;m currently assuming a big part of my life this Spring/Summer will be finding and adjusting to a new home.</li>
+</ul>
+</li>
+<li>Active Activism
+
+<ul>
+<li>I&rsquo;ve complained a lot about our government and the way the world works on social media, at the &ldquo;water cooler&rdquo;, and privately to my wife, but it&rsquo;s become obvious that passive activism isn&rsquo;t good enough. Signing petitions and <a href="http://neveragain.tech">pledges</a> are nice gestures, but are more meaningful when backed up by real action. I&rsquo;d like to do something, though I&rsquo;m not sure what at the moment. By the end of 2017, I would like to, at minimum, have a plan to donate, join, create, or generally be more involved.</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>Adieu, 2016</h3>
+
+<p>Major changes in my life, career, and the world at large have made 2016 a memorable year for me. I highly encourage you to reflect on the year you&rsquo;ve had and think about what you can do to make 2017 great. Happy new year!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A Chronicle of SEP Startup Weekend 2016]]></title>
+    <link href="https://larry-price.com/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016/"/>
+    <updated>2016-03-03T15:16:29-05:00</updated>
+    <id>https://larry-price.com/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016</id>
+    <content type="html"><![CDATA[<p>Last weekend was the 2016 SEP Startup Weekend, a bi-annual hackathon where a few of the engineers get together for 48 hours to build things. As far as most people know, we transform massive quantities of beer, coffee, and unhealthy food into cohesive piles of code. Although that about sums it up, I thought it might be nice to chronicle my team&rsquo;s experience of this season&rsquo;s event. Enjoy!</p>
+
+<h3>The Pitch</h3>
+
+<p>In my first startup weekend since <a href="/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards/">Ollert</a>, I pitched an idea for an instant runoff voting platform called RePoll. RePoll would allow users to create polls, rank candidates, and view results in a login-less system via a web portal, Android, and iOS app. To make it all interesting, I wanted to do all of the coding in javascript by using <a href="http://facebook.github.io/react/">React</a> for the web frontend and <a href="https://facebook.github.io/react-native/">React Native</a> for the iOS and Android apps.</p>
+
+<h3>Friday</h3>
+
+<p>I somehow convinced 3 of my coworkers to help me on Friday night, who I&rsquo;ll refer to as H, G, and K, forming teams by combining the letters.</p>
+
+<p>After sending around a few images and documents with my proposed architecture, I had GH start working together to build the Android app in React Native. Unfortunately, we hit a few snags in getting React Native to run an Android app on actual hardware, but late into the evening everything was up and running on a <a href="https://www.genymotion.com/">genymotion simulator</a>. By the end of the night, GH had a good portion of the <a href="https://facebook.github.io/react-native/docs/tutorial.html#content">React Native opening tutorial</a> completed.</p>
+
+<p>In the meantime, K and myself were hard at work building a core web API in NodeJS for all apps to use. We decided to use Mongo so we didn&rsquo;t have to worry about updating schema and initializing databases, and we used <a href="http://www.getpostman.com/">Postman</a> to test our API calls. I may have overarchitected the session/token-based authorization system, but we got over 50% of the way done with the API. In my initial estimates, I wanted to have the API 100% completed by Friday night, but we were all tired and decided to break for the night around 10p.</p>
+
+<p>Although everyone else headed out the door, the garage was packed with cars leaving a fancy-pants event held near our office. I stayed behind for about an hour setting up our API to run on <a href="https://re-poll.herokuapp.com/">heroku with a MongoDB instance</a>, and then configuring DNS for the domain I had already purchased.</p>
+
+<h3>Saturday</h3>
+
+<p>I arrived early and laid down <a href="https://open.spotify.com/album/0XxLqWttW6u6vP3Yz9Sye3">some sweet jams</a>. I continued working on the API alone and had K start working on the iOS app. We added a new teammate, dubbed A, who started work on the web frontend. The API neared completion by the end of the afternoon, and the mobile apps were beginning to hook into the publicly accessible API. During this time, several bugs were found in the initial API code and were fixed. The iOS app was making quick UI progress, but having issues connecting to the API. I started floating between dev teams as I got drowsy, but eventually got a second wind and started helping with the web frontend. The Android and web applications were both able to create polls before everyone went home. A started using a web React datetime component to set start and end dates, while the Android team was figuring out how to use the native calendar and clock to select dates and times.</p>
+
+<p>To store data, the mobile teams started using the <a href="https://facebook.github.io/react-native/docs/asyncstorage.html">Async Storage</a> library which allows for OS-agnostic storage of data in iOS and Android. On the web frontend, we used local storage to keep around any information we might need.</p>
+
+<p>Near the end of the night as I started working on the poll results page on the web frontend, I started finding system-crashing bugs in my interpretation of instant runoff voting, and eventually found that the results weren&rsquo;t always correct.</p>
+
+<p>One item slowing us down Saturday when writing React Native code was its insistence on using syntax defined in ES2015. Our team was largely unfamiliar with this new syntax, so this tripped us up a bit more than expected. All in all, it was a great learning experience to see this cutting edge specification in action.</p>
+
+<h3>Sunday</h3>
+
+<p>Early again, I created a <a href="https://repoll-web.herokuapp.com/">heroku app for our web frontend</a> and set up the DNS appropriately. As the rest of the team started to pile in (and the smells of bacon arose from the Commons), I transitioned to trying to fix the incorrect ballot-counting logic in the API. I ended up rewriting the code several times, but finally found an algorithm that worked correctly. At this point I was kicking myself for not writing tests to verify we were writing good code.</p>
+
+<p>The Android team caught a second wind, finishing the create poll page and started tackling poll lookup. The original plans called for a typeahead, which ended up being tougher to implement than expected, so the Android app instead supplied a simple textbox to attempt to match an existing poll. In doing this, the Android team successfully created an authentication token in the API and was able to display poll candidates in the app before running out of time.</p>
+
+<p>The iOS team continued to have issues with the API, but successfully mocked out most of the rest of the app right before the demos.</p>
+
+<p>Due to familiarity with the tech, the web team was able to get most of the way to a completed layout. I hastily fashioned a dual-list system for seeing candidates and ballot selection, while A transformed that system into a drag and droppable component. We were able to submit updated ballots to the server and fetch previous ballots for our poll tokens. With the updated API, the results page started working and it became possible to view the steps involved in eliminating candidates during the runoff process.</p>
+
+<p>During demos, we presented all three apps and everyone was quite impressed at our javascripting.</p>
+
+<h3>Action Items</h3>
+
+<ul>
+<li><em>General Things</em>
+
+<ul>
+<li><strong>Learn more about React Native.</strong> I was largely shielded from the pain as I was working on the API and React web parts of our project, but from what I&rsquo;ve seen and heard React Native is an incredible framework for getting things done and sharing code and code paradigms.</li>
+<li><strong>Start using ES2015.</strong> Tools like <a href="https://babeljs.io/">Babel</a> allow us to start using next-generation javascript standards to write code now even if the browser support is unavailable.</li>
+<li><strong>Do more with <a href="https://webpack.github.io/">webpack</a> or <a href="http://browserify.org/">browserify</a>.</strong> I want to be able to use these tools to optimize pre-rendering on our site, but we were in such a rush we primarily used webpack to enable us to use several NodeJS dependencies. Still cool, but there&rsquo;s so much else to explore.</li>
+</ul>
+</li>
+<li><em>Startup Weekend</em>
+
+<ul>
+<li><strong>Estimate better.</strong> I drastically underestimated the amount of work needed to get this project completed in a weekend. We would have had a better chance had I pre-built the API. I think doing some pre-work in this case would have been okay, but I also could have asked for more help. Next time I would like to do a better job of figuring out how much work there is and how much time it will take.</li>
+<li><strong>Be an expert.</strong> About half the work we did this weekend was in unknown territory for me. I should have studied further on getting React Native working before the event, and I should have known a little bit more about ES2015 as well. Although the lack of expertise slowed us down a bit, my teammates were extremely adaptive and loved learning the new tech.</li>
+<li><strong>Create and prep the team beforehand.</strong> I had enlisted one engineer before the pitches Friday night, and I ran my presentation through that engineer to verify it all made sense. I should have also run some of my architecture ideas past that engineer to get buy-in. I also wouldn&rsquo;t mind having the team mostly formed before we start, but that&rsquo;s a big commitment to ask of people.</li>
+<li><strong>Take more frequent, shorter breaks.</strong> We hit the Monon Saturday afternoon and walked for 30-40 minutes which ended up making me drowsy. However, the fresh air did us some good and was revitalizing for the project in general. It would be great to have more frequent, 10-15 minute walks, but it&rsquo;s really difficult to find a time when the team is ready to take a group break in such a fast-paced environment.</li>
+</ul>
+</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[2015 Retrospective]]></title>
+    <link href="https://larry-price.com/blog/2016/01/03/2015-year-in-review/"/>
+    <updated>2016-01-03T15:25:41-05:00</updated>
+    <id>https://larry-price.com/blog/2016/01/03/2015-year-in-review</id>
+    <content type="html"><![CDATA[<p>Another year gone.</p>
+
+<h3>What I Wanted from 2015</h3>
+
+<p>I set some arbitrary goals for myself at the end of 2014, and I sort of accomplished most of them. Here&rsquo;s a short list:</p>
+
+<ul>
+<li>Contribute meaningful code to several open source projects not created by me
+
+<ul>
+<li>Documentation to <a href="https://github.com/larryprice/ace">ace</a>, features to <a href="https://github.com/larryprice/asknot">asknot</a>, minor fix to <a href="https://github.com/larryprice/fireplace">fireplace</a>, minor fix to <a href="https://github.com/larryprice/indyhackers.org-planet">planet.indyhackers</a>, small feature to <a href="https://github.com/larryprice/gvp">gvp</a></li>
+</ul>
+</li>
+<li>Read at least 1 book per month
+
+<ul>
+<li>I read 8 books professionally, started getting into graphic novels, and read a couple of silly books by celebrities. I&rsquo;ll count this as a win.</li>
+</ul>
+</li>
+<li>Attend more meetups
+
+<ul>
+<li>I hosted quite a few Golang meetups and attended a few ISA meetups, but I&rsquo;m not sure I actually went to more meetups.</li>
+</ul>
+</li>
+<li>&gt;3000 sessions/month on this blog (currently ~1400)
+
+<ul>
+<li>By the end of the year, I was doing a little over 4000 sessions/month. I had a few popular posts on Go and Docker which I believe contributed to this.</li>
+</ul>
+</li>
+<li>Improve social skills
+
+<ul>
+<li>Eh. Unfortunately, this year I largely worked on solo projects in the office which didn&rsquo;t give me many opportunities to improve my social skills.</li>
+</ul>
+</li>
+<li>Work remotely more and better
+
+<ul>
+<li>I started off the year doing this well and I was working 2 days a week from home. After one of my projects got canceled, I never managed to get back into the swing of working remotely.</li>
+</ul>
+</li>
+<li>Obtain more technical leadership roles on projects
+
+<ul>
+<li>Technically, I accomplished this. Again, this feels like somewhat of a weak victory as I only had the opportunities to lead myself.</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>Surprise Victories of 2015</h3>
+
+<p>Not everything can be planned.</p>
+
+<ul>
+<li>Got paid to build a video course on <a href="https://www.packtpub.com/web-development/go-web-development-video">writing web applications in Go</a>.
+
+<ul>
+<li>I was approached via email by Packt Publishing after they recognized all of my work on my blog and Github in Go. I agreed to create a multi-video course on creating a modern web application in Go from scratch. This was a lot of fun, but also a lot of work. Since I love to teach, I may be looking for more opportunities like this.</li>
+</ul>
+</li>
+<li>SEP Professional Development Revamp
+
+<ul>
+<li>I am a part of a continued effort to overhaul the Professional Development system at SEP. We are moving away from monetary rewards and towards shared experiences. The first iteration received positive feedback, and we are days away from launching our second attempt.</li>
+</ul>
+</li>
+<li>Guides Program
+
+<ul>
+<li>In late October, I was asked to be a &ldquo;guide&rdquo; for a new employee at SEP. I jumped at the opportunity and have been lucky to help guide an all-around good guy through his first few months at SEP.</li>
+</ul>
+</li>
+<li>Open Sourcing <a href="https://ollertapp.com">Ollert</a>
+
+<ul>
+<li>We even got a few pull requests. See <a href="https://github.com/sep/ollert">the repo</a>.</li>
+</ul>
+</li>
+<li>Cats
+
+<ul>
+<li>We got two cats, Juniper and Jelly Bean. I didn&rsquo;t even know I wanted cats until I got them, but they&rsquo;ve been an important addition to my little family.</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>Things I Worked On Professionally</h3>
+
+<p>I&rsquo;ll keep this brief.</p>
+
+<ul>
+<li>Reporting tool for school administrators in Go</li>
+<li>Critical web bugs in a traffic radar system, primarily Javascript work</li>
+<li>iOS app for sending results from a medical device to client servers</li>
+<li>Bugs and minor features for previous client building an e-commerce website in C# ASP.NET both WebForms and MVC</li>
+</ul>
+
+
+<h3>What I Want From 2016</h3>
+
+<ul>
+<li>Spend Money
+
+<ul>
+<li>My parents raised me to be cheap, and we always seemed to be just scraping by. These teachings served me very well in college and for the year or two after, but now I&rsquo;m lucky enough to have a great job, house, wife, American dream, etc, and I&rsquo;ve found myself becoming somewhat of a miser. We finally bit the bullet this weekend and bought a fancy new mattress, but I want this to be the year of me buying new stuff that I&rsquo;ve always wanted but been too hesitant to purchase.</li>
+</ul>
+</li>
+<li>Back Into Web
+
+<ul>
+<li>I got really deep into web in 2014 and the first half of 2015, and it&rsquo;s a platform that I really like to work in. If I can&rsquo;t find web work in the office, I&rsquo;ll be making open-source web work a priority.</li>
+</ul>
+</li>
+<li>Work With Others
+
+<ul>
+<li>This has been the year of solo projects for me, and to be quite honest I&rsquo;ve found myself feeling downright lonely the past couple months. It&rsquo;s frustrating to have no one to share with, to fight with, and to laugh with on a project. I intend to rail hard against any project assignment where I am the only engineer.</li>
+</ul>
+</li>
+<li>Become Part of an Open-Source Community
+
+<ul>
+<li>I have a tendency to build my own side-projects or submit individual pull requests and never be heard from again. This year, I want to find a project where I can be a part of something bigger than just me.</li>
+</ul>
+</li>
+<li>Good Vibes
+
+<ul>
+<li>I want to have a positive influence. I&rsquo;m not 100% sure how people view me now, but I understand that I complain a lot and probably come off as a bit negative. I know that I have the power to make waves when given the chance, but I want to make sure that those waves don&rsquo;t leave the surfers with a sour taste in their mouths.</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>So Long, 2015</h3>
+
+<p>A year where I didn&rsquo;t accomplish as much of what I set out to, but I managed to find a few surprise wins along the way. If you catch me going against any of my resolutions in 2016, I encourage you to deride me and set me back on track; I&rsquo;ll be happy to do the same for you.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[2014 Retrospective]]></title>
+    <link href="https://larry-price.com/blog/2014/12/31/2014-retrospective/"/>
+    <updated>2014-12-31T11:40:00-05:00</updated>
+    <id>https://larry-price.com/blog/2014/12/31/2014-retrospective</id>
+    <content type="html"><![CDATA[<p>Happy New Year, dear reader.</p>
+
+<p>2014 was a fairly good year for me. I wrote a lot of code, read a lot of books, and published a lot of blog posts.</p>
+
+<h3>Things I got paid to do</h3>
+
+<p>2014 was a reaffirmation of career goals alongside the opportunities to work with several very different clients. In addition to working on cool stuff, I was promoted to Software Engineer 2. During the tail end of the year, I had the chance to work from home part of the week, which was a great experience. A sampling of my professional works this year:</p>
+
+<ul>
+<li>I wrapped up my time writing Qt/C++ for a touch-screen automated-guidance system embedded in heavy machinery. I spent the first two months of the year playing Tech Lead for a small team of misfits leaving the project during an organizational restructure. I had the opportunity to work directly with a project architect to redesign features and guide my fellow developers through the implementation.</li>
+<li>I worked on <a href="https://h2w.cc">Health2Wealth</a>, a ruby application created by some work friends to track Fitbit data and allow an administrator to award monetary rewards for reaching goals.</li>
+<li>I pitched, designed, and implemented a product called <a href="https://ollertapp.com">Ollert</a>, a Trello analysis tool written in ruby. Built during a 48-hour <a href="http://www.sep.com/labs/startupweekend/">SEP Startup Weekend</a>, I led a team of 6 to bring the project to fruition. SEP has fully embraced the product and I continue to work on <a href="/blog/2014/12/02/ollert-6-months-later/">improving it</a> when not on project work. We currently get about 300 sessions a month, and I frequently get emails from users thanking me, reporting bugs, or submitting feature requests.</li>
+<li>I became part of a team of developers working on a modern asset-tracking tool to replace an existing Microsoft Access tool. This was my introduction to C# programming with ASP.NET MVC. The project was short-lived for my team, but sparked my interests in RESTful APIs and Javascript.</li>
+<li>I worked on a rewrite of a huge WebForms e-commerce site. We created a hybrid site running some pages in the WebForms engine and all of our new pages in fresh MVC. We worked with a high-fidelity prototype created by an outside company, which proved at times invaluable and at other times a thorn in our sides. We worked directly with members of the client on-site, who were able to provide us with great insights into the legacy system and helped us work out unclear requirements.</li>
+<li>In December, I had some fun working on a solo proof-of-concept with a new client. This client is planning to do a rewrite of a large application in 2015 and wanted to do some investigation into rules engines, particularly those using Java. I worked through a few libraries and landed on JBoss Drools, an open-source rules engine with an integrated frontend called KIE Workbench. It&rsquo;s been a while since I wrote any Java code, and I&rsquo;d certainly never deployed any Java web applications. After two weeks of work, I was able to launch a web application using Spring MVC and integrate a KIE Workbench instance running on the same Azure virtual machine. The application is able to pick up rule changes from the Workbench automatically, without recompilation or redeployment.</li>
+</ul>
+
+
+<h3>Of my own volition</h3>
+
+<p>I had a lot of fun coding ideas this year, most of them lost to the raptures of time. A few items of note:</p>
+
+<ul>
+<li>BYO Game of Life (<a href="http://byo-game-of-life.herokuapp.com">http://byo-game-of-life.herokuapp.com</a>)
+
+<ul>
+<li>My most recent release - a frontend web client allowing the user to give a URL pointing to a Game of Life backend. I created a <a href="https://github.com/larryprice/game-of-life-impl">Go implementation</a> as part of my presentation for the inaugural <a href="http://www.meetup.com/Indy-Golang/events/219199103/">Indy Golang meetup</a>.</li>
+</ul>
+</li>
+<li>3rd Day Organics
+
+<ul>
+<li>We finally finished version 1.0 of 3DO, a custom e-commerce website for a co-worker&rsquo;s spouse&rsquo;s cooperative food program. We built the whole application from scratch; in hindsight, we should have set something up using <a href="https://spreecommerce.com">spree</a> or another commerce framework.</li>
+</ul>
+</li>
+<li>Fortune Cookie API (<a href="http://fortunecookieapi.com">http://fortunecookieapi.com</a>)
+
+<ul>
+<li>A fairly silly API written using NodeJS to get data associated with fortune cookies: fortunes, lessons in Chinese, and lottery numbers. I implemented a simple application to access the data at <a href="http://demo.fortunecookieapi.com">http://demo.fortunecookieapi.com</a>.</li>
+</ul>
+</li>
+<li>mongoose-simple-random (<a href="https://www.npmjs.com/package/mongoose-simple-random">https://www.npmjs.com/package/mongoose-simple-random</a>)
+
+<ul>
+<li>My foray into NodeJS packages - this is a plugin which adds <code>findRandom</code> and <code>findOneRandom</code> methods to any mongoose schema. Used extensively in the Fortune Cookie API.</li>
+</ul>
+</li>
+<li>Ollert (<a href="https://ollertapp.com">https://ollertapp.com</a>)
+
+<ul>
+<li>I know I listed it under a paid project, but I was putting over 8 hours a week into Ollert between the time it was originally built and the time I was paid to work on it. It&rsquo;s my big pet project, and I&rsquo;m proud of the things that it and I have accomplished. Trello has noted our accomplishments, validating all the hard work and long hours I&rsquo;d sunk into it.</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>Book It - Where&rsquo;s my free pizza?</h3>
+
+<p>I think that I read 11 books this year. See my <a href="/blog/books">books section</a> for a quick check of which books you should be reading. Some of my favorites:</p>
+
+<ul>
+<li><a href="http://amzn.to/14coDAd">Rework</a> and <a href="http://amzn.to/1rzTsZH">Remote</a> by Jason Fried</li>
+<li><a href="http://amzn.to/14coIUG">Punished by Rewards</a> by Alfie Kohn</li>
+<li><a href="http://amzn.to/1tAMWU0">The XX Factor</a> by Alison Wolf</li>
+<li><a href="http://amzn.to/1Ai3mBk">The Lean Startup</a> by Eric Ries</li>
+<li><a href="http://amzn.to/1x4jaXh">Made to Stick</a> by Chip Heath</li>
+</ul>
+
+
+<h3>This blog o' mine</h3>
+
+<p>In reality, I put quite a bit of work into this blog.</p>
+
+<p>I published <strong>24 blog posts in 2013</strong>; I published <strong>37 in 2014</strong> (including this one).</p>
+
+<p>I had <strong>1700 sessions and 2420 pageviews in 2013</strong>. I did almost that well in a single month at the end of 2014. I had <strong>10,194 sessions and 12,997 pageviews in 2014</strong> (as of 10:46AM EST 12/31/2014).</p>
+
+<p>In February, I set up a custom domain at &ldquo;larry-price.com&rdquo;. Since then, <a href="/blog/2014/12/14/migrating-an-octopress-blog-from-github-pages-to-openshift/">I moved from Github Pages to OpenShift</a> and added SSL.</p>
+
+<p>I integrated Google AdSense this summer. Full disclosure: I&rsquo;ve &ldquo;earned&rdquo; $3.78 in the past 6 months. From my perspective, these ads are simply an experiment to see how I could potentially monetize this blog. Another experiment was posting Amazon Associate links with my <a href="/blog/categories/write-ups">write-up posts</a>; I&rsquo;ve gotten 4 clicks and 0 buys.</p>
+
+<p>In an attempt to keep people on the site &ldquo;longer&rdquo;, I added a Related Posts section above the Comments - it makes the blog take forever to generate and has had negligible results. It turns out users are more likely to click the related tags than the related posts. I intend to remove the Related Posts section soon (it may not be there when you read this).</p>
+
+<h3>Hello, 2015</h3>
+
+<p>As I enter the new year, I want to be able to look back next year at a set of naïve goals and wonder why I ever thought they were practical. So here they are:</p>
+
+<ul>
+<li>Contribute meaningful code to several open source projects not created by me</li>
+<li>Read at least 1 book per month</li>
+<li>Attend more meetups
+
+<ul>
+<li>As a note, I am in fact <em>starting</em> a <a href="http://www.meetup.com/Indy-Golang">meetup for Google Go in Indianapolis</a> starting on January 6, 2015. This goal may actually be attainable!</li>
+</ul>
+</li>
+<li>&gt;3000 sessions/month on this blog (currently ~1400)</li>
+<li>Become pro at using chopsticks
+
+<ul>
+<li>I&rsquo;m already pretty good, but by the end of 2015 I will be eating pizza with chopsticks</li>
+</ul>
+</li>
+<li>More effectively conceal emotions when working with peers and clients
+
+<ul>
+<li>Use this energy and passion to put the situation in my control instead</li>
+</ul>
+</li>
+<li>Work remotely more and better</li>
+<li>Obtain more technical leadership roles on projects
+
+<ul>
+<li>Not entirely in my control, I know, but I&rsquo;m hoping that 2015 is a year where I&rsquo;m able to demonstrate both my technical skills and proclivity to command</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>Goodbye, 2014</h3>
+
+<p>Thanks for reading. Have you thought about doing one of these yourself? You really should! There&rsquo;s lots of help out there if you need it - you can even reach out to me, if you like.</p>
+
+<p>As always, may your compile times be short and your error messages meaningful.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Takeaways From AgileIndy 2014]]></title>
+    <link href="https://larry-price.com/blog/2014/05/14/takeaways-from-agileindy-2014/"/>
+    <updated>2014-05-14T20:59:00-04:00</updated>
+    <id>https://larry-price.com/blog/2014/05/14/takeaways-from-agileindy-2014</id>
+    <content type="html"><![CDATA[<p><a href="//agileindy.org/conference/">The AgileIndy Conference 2014</a> has come and gone. I wasn&rsquo;t sure what to expect, since it was my first conference, but I came out of it feeling rather positive.</p>
+
+<p>A short list of my favorite things from this year&rsquo;s AgileIndy:</p>
+
+<ul>
+<li>Interesting speakers</li>
+<li>Good food</li>
+<li>Uncomfortable chairs</li>
+<li><a href="//twitter.com/search?q=%23agileindy14&amp;src=hash">#agileindy14</a></li>
+<li>Free booze</li>
+<li>Lots of coffee</li>
+<li>Champion dogs</li>
+</ul>
+
+
+<p>Good times. Personally, I found the first half of the day to be superior to the afternoon. I&rsquo;m not sure if it was the speakers or if I&rsquo;m just a morning person, but I&rsquo;m much more interested in discussing what the morning speakers had to say.</p>
+
+<h3>The Dude</h3>
+
+<blockquote><p>We&rsquo;ve got hard problems to solve, we don&rsquo;t need aphorisms, we don&rsquo;t need truisms.
+&ndash; David Hussman</p></blockquote>
+
+<p>The event started out with the self-proclaimed &ldquo;Dude,&rdquo; <a href="//devjam.com/">David Hussman of DevJam</a>. I&rsquo;ve previously had some training involving Mr Hussman at <a href="//sep.com">SEP</a>, during which we had trouble explaining our relationship with Agile: gargantuan project, lots of devs, massive codebase, hour-long builds, and an immature implementation of the so-called Scalable Agile Framework. I thought I knew what to expect during this talk, but I was delightfully mistaken. Everything Hussman said during his keynote fit with the conversations I&rsquo;ve been having with my current teammates.</p>
+
+<p>Hussman talked about &ldquo;process mass,&rdquo; or the weight that you carry as you gain more and more process on a project. &ldquo;Measure your success by evidence, not by adherence&rdquo; to the process. What good is completing a story if you don&rsquo;t have anything to show for it, or if you don&rsquo;t have the quality to back it up? Hussman discussed scrum, and the ridiculous concept of &ldquo;scrum of scrums,&rdquo; and potentially even a &ldquo;scrum of scrum of scrums.&rdquo; In his own words, &ldquo;At some point you have to have something other than a naming convention.&rdquo; Getting stuff done and feeling satisfied with your work is much more important than being able to audit the lifetime of a story, or what day of the week your team gets the most done, or how many meetings your ScrumMaster goes to.</p>
+
+<p>Speaking of ScrumMasters (and Product Owners and Tech Leads for that matter), the Dude wants us to think critically about these roles. Why are Scrum Masters and Tech Leads in meetings all day? A Tech Lead mosies into standup in the morning just to say, &ldquo;Yesterday I was in meetings all day, today I&rsquo;m in meetings all day, no blockers.&rdquo; &ldquo;Somehow [we&rsquo;ve] bonded the process to the people,&rdquo; using process to hold team members hostage. We&rsquo;ve found ourselves turning Agile into a bloated mess, and we&rsquo;re in need of people to relieve the pressure.</p>
+
+<h3>Estimation</h3>
+
+<p>During the first break-out session, <a href="//vance.com/">Steve Vance</a> talked about estimation, one of my favorite topics to complain about.</p>
+
+<p>We started out by defining terms. Unfortunately, we use the word &ldquo;estimation&rdquo; to mean almost anything, from the very precise to the very vague. We &ldquo;estimate&rdquo; in T-shirt sizes, story points, days, and hours. We all mean something different when we make an estimation; it all boils down to an opinion. &ldquo;The work is going to take what it takes,&rdquo; and everyone has an opinion on how long that is.</p>
+
+<p>I mentioned hours in the above paragraph as a unit of estimation. This is a particular pet peeve of mine: I absolutely despise estimating in hours. What do we even mean when we estimate in hours? Vance says, &ldquo;When I say hours as in this is going to take 3 hours, that does not mean 3 clock hours.&rdquo; So what <em>does</em> an hour mean? My current team uses a tool called TFS, which actually forces you to answer this question. So we &ldquo;estimate&rdquo; that Danny Developer will be able to accomplish 5 hours of work every day. We just turned Danny&rsquo;s day into hours on a clock. Now we &ldquo;estimate&rdquo; that a task will take &ldquo;about a day,&rdquo; which translates into 8 hours. Note that <code>1 task day != 1 Danny Day</code>. We&rsquo;re estimating tasks in these very precise units (real-life hours), and poor Danny will probably just work a 10-hour day to finish the task in &ldquo;1 day,&rdquo; which is what the team estimated the task would take.</p>
+
+<p>T-shirt sizing or story points should be able to alleviate these problems, but we have to be vigilant not to concretely define these terms. Estimates should always be relative to yesterday&rsquo;s weather and not based on real time frames. Once you&rsquo;ve defined a 5-point story as taking exactly 5 days, you&rsquo;ve destroyed the whole system and you might as well start estimating in hours again.</p>
+
+<h3>Anti-fragility</h3>
+
+<p><a href="//salhir.wordpress.com">Si Alhir</a> discussed the principles of &ldquo;anti-fragility&rdquo; during the pre-lunch session. Anti-fragility is a post-Agile concept. That&rsquo;s right: <em>post-Agile</em>. I know you were just getting used to Agile, but it seems that we&rsquo;ve created a monster that&rsquo;s getting harder and harder to control. Teams find themselves saying &ldquo;They&rsquo;re not Agile, we&rsquo;re Agile&rdquo; when describing the pitfalls of other teams.</p>
+
+<p>So what is anti-fragility? It&rsquo;s easier to define in relative terms. Traditional teams are hurt by change and actively resist change; Agile teams embrace change and are able to inspect and adapt to it; Anti-Fragile teams embrace disorder and are able to adapt and evolve to chaos. &ldquo;Fragile teams want tranquility,&rdquo; while anti-fragile teams &ldquo;gain from stress.&rdquo; Anti-fragility involves shifting from focusing on avoiding risk to focusing on overcoming risk.</p>
+
+<p>&ldquo;What have you removed?&rdquo; Si asks, reiterating Hussman from earlier in the day. &ldquo;More rules, more process causes more fragility.&rdquo; As our Agile teams add process, this becomes more evident. &ldquo;Dependency,&rdquo; &ldquo;the line between dev and test&rdquo;, and &ldquo;centralized power&rdquo; all cause fragility. Sprint cycles every 1-2 weeks cause a constant stress, which &ldquo;will kill you, numb you.&rdquo; Anti-fragile teams prefer &ldquo;acute stress with recovery time&rdquo; caused by overcoming risk as it materializes. The so-called ScrumMaster of an Agile team is protecting the team from risk, contributing to the overall fragility of the team.</p>
+
+<p>&ldquo;The most fragile thing in the Agile world is teams,&rdquo; Si insists. &ldquo;Consistent, co-located teams.&rdquo; Teams should be able to be disbanded and created at-will or &ldquo;just in time&rdquo; as the need arises. Teams are created to attack &ldquo;focal points,&rdquo; or areas that need attention right away. This is an especially hard pill to swallow, since many of us like the familial feeling that comes with long-term teams. Not to mention the nightmares of billing if you&rsquo;re a consulting company.</p>
+
+<h3>Conclusion</h3>
+
+<p>There were a few other speakers at the conference, but none hit quite as close to home as the three I&rsquo;ve discussed. Overall a very interesting conference and a very fun experience. I&rsquo;m excited to think about these ideas and I&rsquo;d like to attempt to use some of them to make my teams more efficient and maybe even a little happier. It looks like the general flow is to move away from massive amounts of process, working more like Lean Startup or Anti-fragile teams.</p>
+
+<p>A decade from now, we&rsquo;ll be living in a post-anti-fragile world wondering what on earth we were thinking in this world of rules, definitions, estimations, and process.</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: linux | Larry Price]]></title>
+  <link href="https://larry-price.com/blog/categories/linux/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2017-08-25T08:42:34-05:00</updated>
+  <id>https://larry-price.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    <email><![CDATA[larry@larry-price.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[A Quick Guide to Using docker-compose (previously fig)]]></title>
+    <link href="https://larry-price.com/blog/2015/02/26/a-quick-guide-to-using-docker-compose-previously-fig/"/>
+    <updated>2015-02-26T07:43:59-05:00</updated>
+    <id>https://larry-price.com/blog/2015/02/26/a-quick-guide-to-using-docker-compose-previously-fig</id>
+    <content type="html"><![CDATA[<p>Have you used <a href="https://www.docker.com/">Docker</a> yet? Docker is awesome! Docker is a tool for managing isolated system environments. I have started using Docker for <strong>everything</strong>. This is not <a href="/blog/2015/01/11/an-example-use-case-for-docker">the first time I&rsquo;ve written about this delightful tool</a>.</p>
+
+<p>Though the ideas and implementation behind Docker are really cool, the command line syntax is extremely cumbersome. There used to be this great third-party tool to address this problem called <a href="http://www.fig.sh/">fig</a>. But, as of <a href="https://github.com/docker/compose/releases/tag/1.1.0">yesterday</a>, it looks like Docker is maintaining <code>fig</code> and have renamed it to <code>docker-compose</code>. The impact of this change is minimal on developers - rename <code>fig.yml</code> files to <code>docker-compose.yml</code>, use <code>docker-compose up</code> instead of <code>fig up</code>. Some great features have been added that I&rsquo;ve been sorely missing, including the ability to use environment files and only grabbing the latest tagged images from <a href="https://registry.hub.docker.com/">the hub</a>.</p>
+
+<p>Let&rsquo;s learn you some <code>docker-compose</code>.</p>
+
+<h3>Installation</h3>
+
+<p>Two ways: <code>pip install docker-compose</code> (if you&rsquo;re into that kind of thing) or through a questionable bash script:</p>
+
+<pre><code class="bash">$ curl -L https://github.com/docker/compose/releases/download/1.1.0/docker-compose-`uname -s`-`uname -m` &gt; /usr/local/bin/docker-compose
+$ chmod +x /usr/local/bin/docker-compose
+</code></pre>
+
+<p>You probably want bash completion while you&rsquo;re at it:</p>
+
+<pre><code class="bash">$ curl -L https://raw.githubusercontent.com/docker/compose/1.1.0/contrib/completion/bash/docker-compose &gt; /etc/bash_completion.d/docker-compose
+</code></pre>
+
+<h3>Compose, World</h3>
+
+<p>Let&rsquo;s say I have a simple Go application which only prints the obligatory &ldquo;Hello, World&rdquo;:</p>
+
+<pre><code class="go simple-golang-app/main.go">package main
+
+import "fmt"
+
+func main() {
+  fmt.Println("Hello, World")
+}
+</code></pre>
+
+<p>I want to run this with <code>docker-compose</code>, so I create the following file:</p>
+
+<pre><code class="yaml docker-compose.yml">app:
+  image: golang:1.4
+  working_dir: /go/src/simple-golang-app
+  command: go run main.go
+  volumes:
+    - ./simple-golang-app:/go/src/simple-golang-app
+</code></pre>
+
+<p>This file specifies using the <code>golang:1.4</code> image as the base image. It maps the our code directory to a directory in the <code>$GOPATH</code> in the container. It then specifies running the command <code>go run main.go</code> from the working directory of <code>/go/src/simple-golang-app</code>. So let&rsquo;s run it:</p>
+
+<pre><code class="bash">$ docker-compose up
+Creating dockercomposeexample_app_1...
+Attaching to dockercomposeexample_app_1
+app_1 | Hello, World
+dockercomposeexample_app_1 exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+</code></pre>
+
+<h3>Composing a Database Connection</h3>
+
+<p>Now let&rsquo;s say I want to connect to a database and find some information. The following example connects to a Mongo database, inserts a record, and spits out all the existing records:</p>
+
+<pre><code class="go database-golang-app/main.go">package main
+
+import (
+  "fmt"
+  "gopkg.in/mgo.v2"
+  "gopkg.in/mgo.v2/bson"
+  "os"
+  "time"
+)
+
+type Ping struct {
+  Id   bson.ObjectId `bson:"_id"`
+  Time time.Time     `bson:"time"`
+}
+
+func main() {
+  // get the session using information from environment, ignore errors
+  session, _ := mgo.Dial(os.Getenv("DATABASE_PORT_27017_TCP_ADDR"))
+  db := session.DB(os.Getenv("DB_NAME"))
+  defer session.Close()
+
+  // insert new record
+  ping := Ping{
+    Id:   bson.NewObjectId(),
+    Time: time.Now(),
+  }
+  db.C("pings").Insert(ping)
+
+  // get all records
+  pings := []Ping{}
+  db.C("pings").Find(nil).All(&amp;pings)
+
+  fmt.Println(pings)
+}
+</code></pre>
+
+<p>This application has an external dependency on <code>mgo</code>, which means I&rsquo;ll need to have that dependency installed somehow. I&rsquo;ll make a <code>Dockerfile</code> to live alongside this example:</p>
+
+<pre><code class="Dockerfile database-golang-app/Dockerfile">FROM golang:1.4
+
+RUN go get gopkg.in/mgo.v2
+</code></pre>
+
+<p>Now I&rsquo;ll construct a yaml file for <code>docker-compose</code> to consume. This time, we need to <code>build</code> the main app from our <code>Dockerfile</code>, add in a second container for the database, add a <code>link</code> between our application and the database, and specify an <code>environment</code> variable.</p>
+
+<pre><code class="yaml docker-compose.yaml">advanced:
+  build: ./database-golang-app
+  working_dir: /go/src/database-golang-app
+  command: go run main.go
+  volumes:
+    - ./database-golang-app:/go/src/database-golang-app
+  links:
+    - database
+  environment:
+    - DB_NAME=advanced-golang-db
+database:
+  image: mongo:3.0
+  command: mongod --smallfiles --quiet --logpath=/dev/null
+</code></pre>
+
+<p>Since <code>mongod</code> has a tendency to spit up a big boilerplate on initialization, I redirect its output to <code>/dev/null</code> for this example. Let&rsquo;s see what happens when we compose:</p>
+
+<pre><code class="bash">$ docker-compose up
+Creating dockercomposeexample_database_1...
+Creating dockercomposeexample_advanced_1...
+Attaching to dockercomposeexample_database_1, dockercomposeexample_advanced_1
+advanced_1 | [{ObjectIdHex("54efd8f889120d000d000001") 2015-02-27 02:39:52.53 +0000 UTC}]
+dockercomposeexample_advanced_1 exited with code 0
+Gracefully stopping... (press Ctrl+C again to force)
+Stopping dockercomposeexample_database_1...
+</code></pre>
+
+<p>If you squint, you can see the output next to the <code>advanced_1</code> tag. We printed out one item from our database - the one we just added. What if we run it again?</p>
+
+<pre><code class="bash">$ docker-compose up
+...
+advanced_1 | [{ObjectIdHex("54efd8f889120d000d000001") 2015-02-27 02:39:52.53 +0000 UTC} {ObjectIdHex("54efdbb936cc3f000e000001") 2015-02-27 02:51:37.879 +0000 UTC}]
+...
+</code></pre>
+
+<p>This output proves that we&rsquo;re fetching from the database each time in addition to adding new records. Since the Mongo <code>Dockerfile</code> we used to build the image creates a <code>volume</code>, we get to see the data persisted.</p>
+
+<p>To achieve the same goal with the Docker CLI, I would need to do this:</p>
+
+<pre><code class="bash">$ docker run -d --name database mongo:3.0
+$ docker build -t database-golang-app ./database-golang-app
+$ docker run --link database:database -e DB_NAME=advanced-golang-db \
+    -v /home/lrp/Projects/2015/docker-compose-example/database-golang-app:/go/src/database-golang-app \
+     database-golang-app go run /go/src/database-golang-app/main.go
+</code></pre>
+
+<p>Keeping that much information at your fingertips all at once absolutely <em>hurts</em>. Making that line reproducible means copy/pasting it into/out of a README somewhere, or running some &ldquo;single-line script&rdquo; which only the one guy on the team is allowed to touch. <code>docker-compose</code> fixes these issues and makes <code>docker</code> a joy to use.</p>
+
+<p><em>You can find all of the source code for this blog post on Github: <a href="https://github.com/larryprice/docker-compose-example">https://github.com/larryprice/docker-compose-example</a>.</em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Managing a Go Environment in Ubuntu]]></title>
+    <link href="https://larry-price.com/blog/2015/01/18/managing-a-go-environment-in-ubuntu/"/>
+    <updated>2015-01-18T10:58:04-05:00</updated>
+    <id>https://larry-price.com/blog/2015/01/18/managing-a-go-environment-in-ubuntu</id>
+    <content type="html"><![CDATA[<p>Many moons ago, I wrote about <a href="/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04">setting up a Go environment in Ubuntu</a>. After writing that post, I dropped Go development for nearly a year. Today I run the <a href="http://www.meetup.com/Indy-Golang/events/219612982/">Indy Golang meetup</a>, and soon I&rsquo;ll be starting a new work project where I&rsquo;ll be recommending a Go-based tech stack. I&rsquo;ve learned a thing or two about Go and managing its dependencies since I wrote that initial blog post, and I intend to give a short presentation to my meetup about my recent findings. Before I do, I thought I&rsquo;d write a preliminary blog post detailing the tools I use to keep my Go environment sane.</p>
+
+<h3>Installing Go</h3>
+
+<p>The easiest way to install Go in Ubuntu is through <code>aptitude</code>. However, the default version in the Ubuntu repos gets stale fast. I found a tool similar to <code>rvm</code> for downloading and installing local versions of Go called <a href="https://github.com/moovweb/gvm">gvm</a>. For better or worse, <code>gvm</code> is installed through a bash script. Fortunately, it doesn&rsquo;t require sudo:</p>
+
+<pre><code class="bash">$ bash &lt; &lt;(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+</code></pre>
+
+<p>At this point I removed all my previous finaglig with <code>$GOROOT</code> and <code>$GOPATH</code> from my dot files. You can use <code>gvm listall</code> to see all available versions of Go. As of the writing of this blog post, <code>go1.4.1</code> is the latest release; however, <code>go1.4</code> is the most recent release available with <code>gvm</code>. I&rsquo;m not sure when the list is updated, but I have confidence that it is fairly regular. To install a Go and set it as the default Go:</p>
+
+<pre><code class="bash">$ gvm install go1.4 --default
+$ which go
+/home/lrp/.gvm/gos/go1.4/bin/go
+</code></pre>
+
+<h3>Managing Packages</h3>
+
+<p>This is where I come to a fork in the road: <code>gvm</code>, the tool we used to install the desired version of Go, has a concept of pkgset similar to <code>rvm gemset</code>. However, I find the syntax for using a pkgset tiresome every time I come into a directory. I prefer something more automatic. As an additional pain, <code>gvm</code> does not provide a mechanism for installing dependencies from a list of known dependencies. I sought out other tools to address these pains and found <a href="https://github.com/pote/gpm">gpm</a> and <a href="https://github.com/pote/gvp">gvp</a>.</p>
+
+<p><code>gpm</code> is a tool used to manage Go packages. It reads in a file called <code>Godeps</code> which contains a list of packages with versions and can install them from their individual sources. I&rsquo;m currently infatuated with <code>gpm</code> as it addresses a lot of concerns I had when initially learning Go: shared local dependencies, unclear versioning, and installing dependencies from a fresh clone. Install <code>gvm</code> and <code>gvp</code>:</p>
+
+<pre><code class="bash">$ pushd /tmp
+$ git clone https://github.com/pote/gvp.git &amp;&amp; cd gvp
+$ ./configure &amp;&amp; sudo make install
+$ cd /tmp
+$ git clone https://github.com/pote/gpm.git &amp;&amp; cd gpm
+$ ./configure &amp;&amp; sudo make install
+$ popd
+</code></pre>
+
+<p>We can follow two paths here: using <code>gvm pkgset</code> or using a local <code>.godeps</code> directory to store our dependencies discretely. For these examples, I&rsquo;ll create a directory called <code>gotest</code> with a single file in it:</p>
+
+<pre><code class="go hello.go">package main
+
+import "github.com/go-martini/martini"
+
+func main() {
+    server := martini.Classic()
+    server.Get("/", func() string {
+        return "&lt;h1&gt;Hello, world!&lt;/h1&gt;"
+    })
+
+    server.Run()
+}
+</code></pre>
+
+<h4>Method 1: gvm pkgset alongside gpm</h4>
+
+<p>Create and start using a new pkgset:</p>
+
+<pre><code class="bash">$ gvm pkgset create gotest
+$ echo $GOPATH
+/home/lrp/.gvm/pkgsets/go1.4/global
+$ gvm pkgset use gotest
+$ echo $GOPATH
+/home/lrp/.gvm/pkgsets/go1.4/gotest:/home/lrp/.gvm/pkgsets/go1.4/global
+</code></pre>
+
+<p>What this means is that we are now using our <code>gotest</code> pkgset as default, but the global pkgset will be used to dig up any missing packages. In order to install any dependencies, we need to create a <code>Godeps</code> file for <code>gpm</code> to consume. Our application from above has a dependency on <code>go-martini</code>, so let&rsquo;s add a dependency to <code>v1.0</code> in our Godeps file:</p>
+
+<pre><code class="text Godeps">github.com/go-martini/martini v1.0
+</code></pre>
+
+<p>After you run <code>go build</code> to verify that the dependencies aren&rsquo;t installed, run <code>gpm install</code> to pull the required packages into your specified pkgset. Run <code>go build</code> again and revel in your own brilliance.</p>
+
+<p>That was pretty great, right? The only issue is remembering to type <code>gvm pkgset use gotest</code> every time you restart your terminal or switch projects. Otherwise, <code>gvm</code> is practically a replacement for one of my favorite ruby tools <code>rvm</code>.</p>
+
+<h4>Method 2: gpm and gvp</h4>
+
+<p><code>gpm</code> is intended to be similar to <code>npm</code>, a package management tool for NodeJS. The author suggests using a tool called <code>gvp</code> to set the <code>GOPATH</code> without much thought. If we start a fresh terminal in our example directory, we can use <code>gvp</code> to set up our <code>GOPATH</code>:</p>
+
+<pre><code class="bash">$ echo $GOPATH
+/home/lrp/.gvm/pkgsets/go1.4/global
+$ source gvp
+$ echo $GOPATH
+/home/lrp/Projects/2015/gotest/.godeps:/home/lrp/Projects/2015/gotest
+</code></pre>
+
+<p>You can note the difference in our <code>GOPATH</code> here relative to <code>gvm</code>: we will be using our current directory as a source of code in addition to a local <code>.godeps</code> directory. Go ahead and add <code>.godeps</code> to your <code>.gitignore</code> file or equivalent. We can use the same <code>Godeps</code> file as before:</p>
+
+<pre><code class="text Godeps">github.com/go-martini/martini v1.0
+</code></pre>
+
+<p>We run <code>gpm install</code> to install the dependencies to our local <code>.godeps</code> directory.</p>
+
+<p>I prefer this method to using pkgsets. I&rsquo;ve had better luck building projects with complicated structures, and it&rsquo;s a lot easier for me to run <code>source gvp</code> than it is to remember the name of my pkgset. Both methods work pretty well and give me warm fuzzies about managing my dependencies. I&rsquo;m certain that as Go continues to mature more solutions will come available. I&rsquo;ve also been researching using Docker with gpm only, which requires very little tweaking to what I&rsquo;ve already discussed here.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Convincing rvm to let you use ruby 2.1.0]]></title>
+    <link href="https://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/"/>
+    <updated>2014-02-22T16:46:00-05:00</updated>
+    <id>https://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0</id>
+    <content type="html"><![CDATA[<p><a href="//ruby-lang.org/en/news/2013/12/25/ruby-2-1-0-is-released/">Ruby 2.1.0 went stable</a> a few months ago, and <a href="//ruby-lang.org/en/news/2014/01/10/ruby-1-9-3-will-end-on-2015/">Ruby 1.9.3 support</a> will end in a just over a year.</p>
+
+<p>You know what that means: Warplanes in the sky falling to the ground, dogs and cats getting along like old pals, and people wandering aimlessly through the streets trying to remember the last time they saw a green build.</p>
+
+<p>Believe it or not, all of these things can be prevented. Once upon a time, I wrote about <a href="/blog/2013/10/08/rvm-quick-start/">configuring and using rvm</a> to control individual ruby environments for each of your projects. If it&rsquo;s been a while since you installed your copy of <a href="//rvm.io/">rvm</a>, you might have some trouble installing and using newer version of ruby. Lucky for us, those clever rvm developers made it easy to get around this.</p>
+
+<p>In my case, I want to upgrade a project to use <code>ruby 2.1.0</code>. The first time I tried to run <code>rvm install ruby-2.1.0</code>, I ended up installing <code>ruby-2.1.0-preview1</code>. I realized that I had installed rvm on this machine around October 2013, and <code>ruby 2.1.0</code> was released in December 2013, so rvm had no idea that <code>ruby 2.1.0</code> was stable. Updating rvm (in the root of the project directory):</p>
+
+<pre><code class="bash /home/lrp/Projects/2014/projNeedingRuby210">$ rvm get stable
+</code></pre>
+
+<p>There will be some amount of text on the screen if your system needs to be updated. Note that you must be connected to the internet if you want rvm to update. Now we do the install of our brand new ruby:</p>
+
+<pre><code class="bash /home/lrp/Projects/2014/projNeedingRuby210">$ rvm install ruby-2.1.0
+</code></pre>
+
+<p>Again, text on the screen from fetching of data from the internet. But hopefully you see something that tells you the operation was successful. You can also verify which rubies you have installed using the <code>list</code> command:</p>
+
+<pre><code class="bash /home/lrp/Projects/2014/projNeedingRuby210">$ rvm list rubies
+   ruby-1.9.3-p448 [ x86_64 ]
+=&gt; ruby-2.0.0-p247 [ x86_64 ]
+ * ruby-2.1.0 [ x86_64 ]
+
+# =&gt; - current
+# =* - current &amp;&amp; default
+#  * - default
+</code></pre>
+
+<p>Now we tell our current project to use <code>ruby 2.1.0</code>:</p>
+
+<pre><code class="bash /home/lrp/Projects/2014/projNeedingRuby210">$ rm .ruby-version .ruby-gemset
+$ rvm 2.1.0@projNeedingRuby210 --create --ruby-version
+ruby-2.1.0 - #gemset created /home/lrp/.rvm/gems/ruby-2.1.0@projNeedingRuby210
+ruby-2.1.0 - #generating projNeedingRuby210 wrappers.
+$ rvm gemset copy 2.0.0-p247@projNeedingRuby210 2.1.0@projNeedingRuby210
+Copying gemset from 2.0.0-p247@projNeedingRuby210 to 2.1.0@projNeedingRuby210
+Generating gemset wrappers ruby-2.1.0@projNeedingRuby210.
+Making gemset 2.1.0@projNeedingRuby210 pristine.
+$ which ruby
+/home/lrp/.rvm/rubies/ruby-2.1.0/bin/ruby
+</code></pre>
+
+<p>Alright! Crisis averted. If you&rsquo;re using <a href="//bundler.io/">bundler</a> with this project, be sure to change your ruby version (usually located near the top of the <code>Gemfile</code>).</p>
+
+<p>What about setting up a new project using <code>ruby 2.1.0</code>? Easy! Switch to the project directory and:</p>
+
+<pre><code class="bash /home/lrp/Projects/2014/newRubyProject">$ rvm 2.1.0@newRubyProject --create --ruby-version
+</code></pre>
+
+<p>Oh, rvm, you make life <em>too</em> easy sometimes.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Setting up a Go environment in Ubuntu]]></title>
+    <link href="https://larry-price.com/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04/"/>
+    <updated>2013-12-15T18:40:00-06:00</updated>
+    <id>https://larry-price.com/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04</id>
+    <content type="html"><![CDATA[<p><strong><em>Update Jan 17, 2015:</em></strong> <strong>It&rsquo;s 2015 and things are different. Check out my <a href="/blog/2015/01/18/managing-a-go-environment-in-ubuntu">updated post on managing Go dependencies</a> for a better solution.</strong></p>
+
+<p>Some very light cajoling led me to do some investigation into <a href="http://golang.org/">Google Go</a> (often called <strong>golang</strong> for ease of internet search). This is a brief recounting of how I got up and running on <a href="http://ubuntu.com">Ubuntu</a> (first 12.04 and then 13.10). Luckily, this has been made espcially easy for us with the introduction of a <a href="http://packages.ubuntu.com/precise/golang">golang package in the Ubuntu package repositories</a>. There are also <a href="http://golang.org/doc/install">official installation instructions</a> if you don&rsquo;t like mine.</p>
+
+<p>Open up a terminal and let loose:</p>
+
+<pre><code class="bash">$ sudo apt-get install golang
+</code></pre>
+
+<p>The download is pretty heavy, so this step may take some time. Eventually the installer for <code>golang-go</code> will ask you if you want to &ldquo;Report installation of public packages to Go Dashboard.&rdquo; I&rsquo;ve been choosing &ldquo;No&rdquo; to this question and have no complaints.</p>
+
+<p>Now comes the fun part. Serious Go development relies on having a &ldquo;workspace&rdquo; setup involving a specific directory structure including <code>bin/</code>, <code>pkg/</code>, and <code>src/</code> directories. Google&rsquo;s <a href="http://golang.org/doc/code.html">official set-up page</a> contains more information about these workspaces.</p>
+
+<p>I&rsquo;m not a big fan of putting a visible directory in <code>$HOME</code>, so I opted to make a hidden directory called <code>.go</code>. After creating the directory, the environment variable <code>$GOPATH</code> needs to be set and <code>$PATH</code> needs to be adjusted.</p>
+
+<pre><code class="bash">$ mkdir ~/.go
+$ echo "GOPATH=$HOME/.go" &gt;&gt; ~/.bashrc
+$ echo "export GOPATH" &gt;&gt; ~/.bashrc
+$ echo "PATH=\$PATH:\$GOPATH/bin # Add GOPATH/bin to PATH for scripting" &gt;&gt; ~/.bashrc
+$ source ~/.bashrc
+</code></pre>
+
+<p>Now I&rsquo;m going to create a go project and add a link to it in the workspace I just created.</p>
+
+<pre><code class="bash">$ mkdir -p $GOPATH/src/github.com/user
+$ mkdir ~/hello-go
+$ ln -s ~/hello-go ~/.go/src/github.com/user/hello-go
+</code></pre>
+
+<p>For some actual test code, I&rsquo;ll add a file in my <code>hello-go/</code> directory called <code>hello.go</code> with the following code:</p>
+
+<pre><code class="go hello.go">package main
+
+import "fmt"
+
+func main() {
+  fmt.Println("Hello world")
+}
+</code></pre>
+
+<p>Now I&rsquo;m going to install the binary created from compiling this code into my <code>$GOPATH</code> to verify that my workspace is set up correctly, then I&rsquo;ll run it to behold the fruit of my efforts.</p>
+
+<pre><code class="bash">$ go install github.com/user/hello-go
+$ hello-go
+Hello world
+</code></pre>
+
+<p>Installing is not necessary every time I want to test that my code compiles; running <code>go build</code> in the source directory will create a local executable that can be executed for incremental testing.</p>
+
+<p>If you&rsquo;re interested in learning golang, I would recommend doing the <a href="http://tour.golang.org/">go tour</a>. It goes way beyond a trivial hello world program and gives you some insight into many coplex go concepts (I even posted <a href="https://gist.github.com/larryprice/7647808">my solutions as a gist</a>, if you&rsquo;re interested).</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Login shell not sourcing .bashrc: A brief lesson in dot-files]]></title>
+    <link href="https://larry-price.com/blog/2013/12/10/login-shell-not-sourcing-bashrc/"/>
+    <updated>2013-12-10T19:45:00-06:00</updated>
+    <id>https://larry-price.com/blog/2013/12/10/login-shell-not-sourcing-bashrc</id>
+    <content type="html"><![CDATA[<p>I have a confession: I&rsquo;ve been avoiding using <a href="https://rvm.io/">rvm</a> for the past few weeks for stupid reasons.</p>
+
+<p>When using <code>rvm</code> with <code>gnome-terminal</code>, I have to tell <code>gnome-terminal</code> to run as a login shell so that <code>/etc/profile</code> is sourced. The login shell is then supposed to source <code>$HOME/profile</code>, which is then supposed to source <code>$HOME/.bashrc</code>. Installing <code>rvm</code> results in me editing my <code>.bash_profile</code> to add the following line:</p>
+
+<pre><code class="bash .bash_profile">[[ -s "$HOME/.rvm/scripts/rvm" ]] &amp;&amp; source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+</code></pre>
+
+<p>All my <code>rvm</code> environments seem to work, so this is a success, right?</p>
+
+<p>Well, I type the good ol' <code>ls</code> command and I notice that all my colors are missing. I notice that the terminal title no longer reads the present working directory, but instead greets me with a disinterested &ldquo;Terminal.&rdquo; What happened?</p>
+
+<p>Eventually I realized that this was a problem caused by not sourcing my <code>.bashrc</code>. Where did I go wrong?</p>
+
+<p>The login shell sources <code>$HOME/.profile</code> UNLESS <code>$HOME/.bash_profile</code> exists, in which case it only sources the latter. So what are the contents of my <code>$HOME/.profile</code>?</p>
+
+<pre><code class="bash .profile"># ~/.profile: executed by the command interpreter for login shells.
+
+# [cut for brevity]
+
+# if running bash
+if [ -n "$BASH_VERSION" ]; then
+    # include .bashrc if it exists
+    if [ -f "$HOME/.bashrc" ]; then
+      . "$HOME/.bashrc"
+    fi
+fi
+
+# [cut for brevity]
+</code></pre>
+
+<p>Aha! The sneaky dot-file actually sources <code>$HOME/.bashrc</code>, and my shiny new <code>$HOME/.bash_profile</code> doesn&rsquo;t. I fixed this by sourcing <code>$HOME/.profile</code> in <code>$HOME/.bash_profile</code>.</p>
+
+<pre><code class="bash .bash_profile">[ -f "$HOME/.profile" ] &amp;&amp; source "$HOME/.profile"
+[[ -s "$HOME/.rvm/scripts/rvm" ]] &amp;&amp; source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+</code></pre>
+
+<p>For the memory-impaired: <code>.bash_profile</code> sources <code>.profile</code> sources <code>.bashrc</code>.</p>
+
+<p>Re-open <code>gnome-terminal</code> to find my colors are fixed, my title is correct, and <code>rvm</code> plays the right notes. The world is at peace once again, and I don&rsquo;t have to avoid using <code>rvm</code>.</p>
+]]></content>
+  </entry>
+  
+</feed>

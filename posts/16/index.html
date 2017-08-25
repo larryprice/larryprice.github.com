@@ -1,0 +1,736 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Larry Price</title>
+  <meta name="author" content="Larry Price">
+
+  
+  <meta name="description" content="In-line editing is traditionally difficult. Taking a static HTML node and turning it into an editable text field and then sending that data off &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="https://larry-price.com/posts/16">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Larry Price" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='https://fonts.googleapis.com/css?family=Montserrat+Alternates|Marcellus' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35669093-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner" style="background:url(/images/coffee-stain.png) top right no-repeat; background-size: auto 100%;"><hgroup>
+  <h1><a href="/">Larry Price</a></h1>
+  
+    <h2>And The Endless Cup Of Coffee</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:larry-price.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/books">Books</a></li>
+  <li><a href="/blog/projects">Projects</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you/">Using X-editable to Do In-line Editing for You</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-02-22T19:15:00-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2014</span></span> <span class='time'>7:15 pm</span></time>
+        
+           | <a href="/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2014/02/22/using-x-editable-to-do-in-line-editing-for-you/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In-line editing is traditionally difficult. Taking a static HTML node and turning it into an editable text field and then sending that data off somewhere is a little bit more Javascript than I like to write. My team and I came up against a very difficult UX problem which I spent over a week trying to understand. After building and discussing several solutions, we eventually decided to narrow the scope of what the user should be able to change. We would present the user with a table where one of the columns would be editable.</p>
+
+<p>Rather than showing a table with the third column always as a field for text entry, I used the Javascript library <a href="//vitalets.github.io/x-editable/">X-editable</a>. X-editable allows me to display my editable item as a link. When the user clicks the item, the link turns into a text field with a Save/Cancel button (and a &lsquo;clear&rsquo; button as a bonus). The &lsquo;Save&rsquo; button submits an AJAX &lsquo;POST&rsquo; or &lsquo;PUTS&rsquo;, where we are then allowed to validate and save the data. The &lsquo;Cancel&rsquo; button turns the text field back into a link with the original value.</p>
+
+<p>Hooray, someone else has already done the hard work for us! So, what I want to do is dynamically generate a table with objects and allow the user to edit one of the columns. In my case, only the end column is editable, but I could just as easily spread this availability to all my columns. I&rsquo;m using all my favorite tools to create this page, specifically <a href="//ruby-lang.org/en/">ruby</a>, <a href="//sinatrarb.com">Sinatra</a>, <a href="//getbootstrap.com">Twitter Bootstrap</a>, and <a href="//haml.info">HAML</a>.</p>
+
+<p>X-editable has implementations using Bootstrap, jQuery UI, and jQuery. Since I&rsquo;m already using Bootstrap in my app, I&rsquo;m going to go with that version. Note that there are Bootstrap 2 and Bootstrap 3 builds of X-editable, and I&rsquo;m using the Bootstrap 3 variety.</p>
+
+<p>First I include the necessary files at the top of my HAML document.</p>
+
+<figure class='code'><figcaption><span>/views/manage_data.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nt">%script</span><span class="p">{</span><span class="ss">src</span><span class="p">:</span> <span class="s2">&quot;//code.jquery.com/jquery.js&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="nt">%script</span><span class="p">{</span><span class="ss">src</span><span class="p">:</span> <span class="s2">&quot;//getbootstrap.com/dist/js/bootstrap.min.js&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="nt">%link</span><span class="p">{</span><span class="ss">href</span><span class="p">:</span> <span class="s2">&quot;//getbootstrap.com/dist/css/bootstrap.min.css&quot;</span><span class="p">,</span> <span class="ss">rel</span><span class="p">:</span> <span class="s2">&quot;stylesheet&quot;</span><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">%link</span><span class="p">{</span><span class="ss">href</span><span class="p">:</span> <span class="s2">&quot;//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css&quot;</span><span class="p">,</span> <span class="ss">rel</span><span class="p">:</span> <span class="s2">&quot;stylesheet&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="nt">%script</span><span class="p">{</span><span class="ss">src</span><span class="p">:</span> <span class="s2">&quot;//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js&quot;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I&rsquo;m going to dumb my page down so I only have to show the important parts. I&rsquo;m going to create a table from an array of hashes called <code>@options</code>. Each hash has two important fields for this table: Points and Dollars. I will iterate over <code>@options</code>, displaying the <code>points</code> field as plain text and the <code>dollars</code> field as an X-editable link. Each hash also has a <code>value</code> field containing the primary key for the object to be edited.</p>
+
+<figure class='code'><figcaption><span>/views/manage_data.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nc">.container</span>
+</span><span class='line'>  <span class="nc">.row</span>
+</span><span class='line'>    <span class="nc">.col-md-6</span>
+</span><span class='line'>      <span class="nt">%table</span><span class="p">{</span><span class="nb">id</span><span class="p">:</span> <span class="s2">&quot;edit_points_goal&quot;</span><span class="p">,</span> <span class="ss">class</span><span class="p">:</span> <span class="s2">&quot;table table-responsive table-hover table-bordered&quot;</span><span class="p">}</span>
+</span><span class='line'>        <span class="nt">%thead</span>
+</span><span class='line'>          <span class="nt">%tr</span>
+</span><span class='line'>            <span class="nt">%th</span><span class="p">{</span><span class="ss">width</span><span class="p">:</span> <span class="s2">&quot;35%&quot;</span><span class="p">}</span>
+</span><span class='line'>              Points
+</span><span class='line'>            <span class="nt">%th</span><span class="p">{</span><span class="ss">width</span><span class="p">:</span> <span class="s2">&quot;65%&quot;</span><span class="p">}</span>
+</span><span class='line'>              Dollars
+</span><span class='line'>        <span class="nt">%tbody</span>
+</span><span class='line'>          <span class="p">-</span> <span class="vi">@options</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">option</span><span class="o">|</span>
+</span><span class='line'>            <span class="nt">%tr</span>
+</span><span class='line'>              <span class="nt">%td</span><span class="p">{</span><span class="ss">style</span><span class="p">:</span> <span class="s2">&quot;height: 45px; padding: 4px 8px; vertical-align: middle;&quot;</span><span class="p">}</span>
+</span><span class='line'>                <span class="si">#{</span><span class="n">option</span><span class="o">[</span><span class="ss">:points</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>              <span class="nt">%td</span><span class="p">{</span><span class="ss">style</span><span class="p">:</span> <span class="s2">&quot;height: 45px; padding: 4px 8px; vertical-align: middle;&quot;</span><span class="p">}</span>
+</span><span class='line'>                <span class="nt">%a</span><span class="p">{</span><span class="ss">href</span><span class="p">:</span><span class="s2">&quot;javascript:void(0)&quot;</span><span class="p">,</span> <span class="s2">&quot;data-type&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;data-pk&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">option</span><span class="o">[</span><span class="ss">:value</span><span class="o">]</span><span class="si">}</span>&quot;, &quot;data-url&quot;=&gt;&quot;/update&quot;, &quot;data-title&quot;=&gt;&quot;Enter dollar amount&quot;}
+</span><span class='line'>                  <span class="si">#{</span><span class="n">option</span><span class="o">[</span><span class="ss">:dollars</span><span class="o">]</span><span class="si">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The important part is the <code>a</code> tag:</p>
+
+<ul>
+<li><code>href</code> goes nowhere.</li>
+<li><code>data-type</code> tells X-editable how it will edit the presented data. According to the docs, types include text, textarea, select, date, checklist and more.</li>
+<li><code>data-pk</code> is the primary key of our data in the database. In my case, that comes to me stored in the <code>value</code> field of the option hash.</li>
+<li><code>data-url</code> is the <code>post</code> method that will be used to interpret the data.</li>
+<li><code>data-title</code> is used to tell the user what to do.</li>
+</ul>
+
+
+<p>Our code won&rsquo;t do anything yet seeing as it&rsquo;s not connected. We need some Javascript to do that. I put the Javascript at the top of my file, underneath the included files. The first thing we need to do is tell X-editable what type of editing we&rsquo;ll be doing. The options are in-line editing or a pop-up. I want the in-line editing in this case. The second thing I want to do is to set the <code>editable</code> attribute on the appropriate DOM objects. Since I&rsquo;m using an array, I found the easiest way to do this was to start at the table&rsquo;s id (edit_points_goal) and trace down to the <code>a</code> tag.</p>
+
+<figure class='code'><figcaption><span>/views/manage_data.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nd">:javascript</span>
+</span><span class='line'>  <span class="nd">$.fn.editable.defaults.mode = &#39;inline&#39;;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nd">$(document).ready(function() {</span>
+</span><span class='line'>    <span class="nd">if (</span><span class="si">#{</span><span class="n">vm</span><span class="o">.</span><span class="n">editable</span><span class="si">}</span><span class="nd">) {</span>
+</span><span class='line'>      <span class="nd">$(&#39;#edit_points_goal tbody tr td a&#39;).editable();</span>
+</span><span class='line'>    <span class="nd">}</span>
+</span><span class='line'>  <span class="nd">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we need to deal with the <code>post</code> request. If you&rsquo;re really impatient to see things work, you should be able to see your in-line editable code in action, but the <code>post</code> call will fail with a &ldquo;NoMethodError.&rdquo;</p>
+
+<p>Our <code>post</code> is going to be really simple. We verify that we have a non-negative integer and we either save and return 200 or we return 400 with an appropriate message. Our table in this example is just called <code>Data</code>, and we use <code>find</code> to get a value out of the database.</p>
+
+<figure class='code'><figcaption><span>web.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">post</span> <span class="s2">&quot;/update&quot;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">data</span> <span class="o">=</span> <span class="no">Data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="n">params</span><span class="o">[</span><span class="s2">&quot;pk&quot;</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">unless</span> <span class="n">params</span><span class="o">[</span><span class="s2">&quot;value&quot;</span><span class="o">].</span><span class="n">match</span><span class="p">(</span><span class="sr">/[^0-9]/</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">data</span> <span class="o">=</span> <span class="n">params</span><span class="o">[</span><span class="s2">&quot;value&quot;</span><span class="o">].</span><span class="n">to_i</span>
+</span><span class='line'>    <span class="n">data</span><span class="o">.</span><span class="n">save</span>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">200</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="p">{</span><span class="mi">400</span><span class="p">,</span> <span class="o">[]</span><span class="p">,</span> <span class="s2">&quot;Please enter a valid non-negative number&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Things should be working now. When you enter good data and click the &lsquo;Ok&rsquo; button, our <code>post</code> will be called and the text field will turn back into a link. When you enter bad data, you should see our error message below the text field box.</p>
+
+<p>Issues I encountered:</p>
+
+<ul>
+<li>Table column width shifting - Fixed by setting the widths explicitly, as seen above (35% and 65%).</li>
+<li>Table height shifting - Fixed by setting the style of the <code>td</code> as seen above to give a larger height, more padding, and aligning the inner objects explicitly. I would recommend moving this definition to a <code>.css</code> or <code>.scss</code> file.</li>
+<li>&ldquo;NoMethodError&rdquo; after clicking Go - Unfortunately, if you made any coding errors in your route, you won&rsquo;t be able to see the Sinatra error page but will instead you&rsquo;ll be presented with a giant wall of HTML below the text box. Try to parse this error, but if you struggle to find out what went wrong you can always substitute a form-post method in place of the <code>a</code> tag, which may allow you to more easily figure out the problem.</li>
+</ul>
+
+
+<p>The <a href="//vitalets.github.io/x-editable/docs.html">X-editable docs</a> are extremely helpful for beginners. There is even more detail on the X-editable site, including editing multiple items, editing dates, and using a pop-up to edit the data.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/02/22/let-me-be-a-billboard-for-duckduckgo-for-a-few-minutes/">Let Me Be a Billboard for DuckDuckGo for a Few Minutes</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-02-22T17:47:00-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2014</span></span> <span class='time'>5:47 pm</span></time>
+        
+           | <a href="/blog/2014/02/22/let-me-be-a-billboard-for-duckduckgo-for-a-few-minutes/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2014/02/22/let-me-be-a-billboard-for-duckduckgo-for-a-few-minutes/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I would describe my job as 10% cleverness, 10% tenacity, 30% historical knowledge, and 50% searching the internet.</p>
+
+<p>As you can see, a good search engine is extremely important to me. My job depends on it. Opening <a href="//www.chromium.org/Home">Chromium&rsquo;s</a> history, I can see that I have recently searched for microwaves, <a href="//rubygems.org/gems/activesupport">activesupport</a> compatibility in <a href="//www.ruby-lang.org/en/">ruby 2.1.0</a>, deleting branches in git, and glibc backwards compatibility.</p>
+
+<p>I don&rsquo;t use <a href="//google.com">Lord Google</a> as my default search engine. Instead I use <a href="//duckduckgo.com">DuckDuckGo</a>. From <a href="//en.wikipedia.org/wiki/Duck_Duck_Go">Wikipedia</a>:</p>
+
+<blockquote><p>DuckDuckGo is an Internet search engine that emphasizes protecting searchers' privacy and avoiding the &ldquo;filter bubble&rdquo; of personalized search results. DuckDuckGo distinguishes itself from other search engines by not profiling its users and by deliberately showing all users the same search results for a given search term. DuckDuckGo also emphasizes getting information from the best sources rather than the most sources&hellip;.</p></blockquote>
+
+<p>The gist is that DuckDuckGo does not personalize your search results based on demographics or search history. It doesn&rsquo;t store your IP address and it doesn&rsquo;t log your information. You cannot &ldquo;log in&rdquo; to the DuckDuckGo website.</p>
+
+<p>Getting down to brass tacks: How does it do search?</p>
+
+<p>Searching on DuckDuckGo for queries such as &ldquo;Will Ferrell&rdquo; or &ldquo;Markdown&rdquo; will give you a blurb at the top of your search results from Wikipedia about that matching query. Searching programming topics (like &ldquo;ruby random array&rdquo; or &ldquo;asp.net create table&rdquo;) will give you a near-matching StackOverflow answer. Searching for a single word will usually give you the definition.</p>
+
+<p>A query that seems mistyped will ask you if you want to correct it. Search speed is comparable to Google, I&rsquo;ve noticed no difference.</p>
+
+<p>Looking at the result of your query, you get your search results middle-aligned. <strong>Middle. Aligned</strong> I know you probably don&rsquo;t think that&rsquo;s a big deal, but go do a Google search right now. It&rsquo;s left-aligned. Same with <a href="//bing.com">Bing</a>. Do you see what&rsquo;s on the right half of your monitor? <strong>Nothing.</strong> When running a Google search with my 22" monitor (~19" of horizontal space), there are 13" of wasted space. About 9" on Bing.</p>
+
+<p>So, you&rsquo;ve just done a search on DuckDuckGo. Now you can use the Up/Down arrows on your keyboard to navigate the search results. Pressing Enter takes you to the website. I vaguely remember that Google used to allow this, but it seems to have disappeared from the default search results.</p>
+
+<p>Don&rsquo;t like being able to see the combined search results of 50+ search engines? !Bang syntax is the answer.</p>
+
+<p>What is !bang syntax? Let&rsquo;s say you&rsquo;re me and you&rsquo;re looking for over-the range microwaves. I type into my DuckDuckGo search <code>microwaves !a</code> and DuckDuckGo takes me straight to <a href="//amazon.com">Amazon</a>, showing me search results for all those sweet, sweet microwaves. <code>!g</code> takes you to Google, <code>!w</code> takes you to Wikipedia, <code>!gi</code> takes you to Google Images, <code>!yt</code> takes you to Youtube, <code>!lowes</code> takes you to the Lowe&rsquo;s search results, <code>!gog</code> takes you to Good Ol' Games, and <a href="//duckduckgo.com/bang.html">on and on and on and on and on</a>.</p>
+
+<p>There are <a href="//duckduckgo.com/goodies">100s of other goodies</a> as well. Do math using an &ldquo;=&rdquo; sign, like &ldquo;=128*256&rdquo;. Find &ldquo;Hello, World&rdquo; examples by searching for &ldquo;hello world perl&rdquo; or &ldquo;hello world clojure&rdquo;. Do a Twitter hashtag search to find out what &ldquo;#yolo&rdquo; means. Currency conversions. Unit conversions. Convert between timezones.</p>
+
+<p>Okay, enough shameless plugging for my favorite search engine. Give it a chance. Let those Google servers cool down for a few microseconds, they won&rsquo;t mind.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/">Convincing Rvm to Let You Use Ruby 2.1.0</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-02-22T16:46:00-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2014</span></span> <span class='time'>4:46 pm</span></time>
+        
+           | <a href="/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="//ruby-lang.org/en/news/2013/12/25/ruby-2-1-0-is-released/">Ruby 2.1.0 went stable</a> a few months ago, and <a href="//ruby-lang.org/en/news/2014/01/10/ruby-1-9-3-will-end-on-2015/">Ruby 1.9.3 support</a> will end in a just over a year.</p>
+
+<p>You know what that means: Warplanes in the sky falling to the ground, dogs and cats getting along like old pals, and people wandering aimlessly through the streets trying to remember the last time they saw a green build.</p>
+
+<p>Believe it or not, all of these things can be prevented. Once upon a time, I wrote about <a href="/blog/2013/10/08/rvm-quick-start/">configuring and using rvm</a> to control individual ruby environments for each of your projects. If it&rsquo;s been a while since you installed your copy of <a href="//rvm.io/">rvm</a>, you might have some trouble installing and using newer version of ruby. Lucky for us, those clever rvm developers made it easy to get around this.</p>
+
+<p>In my case, I want to upgrade a project to use <code>ruby 2.1.0</code>. The first time I tried to run <code>rvm install ruby-2.1.0</code>, I ended up installing <code>ruby-2.1.0-preview1</code>. I realized that I had installed rvm on this machine around October 2013, and <code>ruby 2.1.0</code> was released in December 2013, so rvm had no idea that <code>ruby 2.1.0</code> was stable. Updating rvm (in the root of the project directory):</p>
+
+<figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm get stable
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There will be some amount of text on the screen if your system needs to be updated. Note that you must be connected to the internet if you want rvm to update. Now we do the install of our brand new ruby:</p>
+
+<figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm install ruby-2.1.0
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Again, text on the screen from fetching of data from the internet. But hopefully you see something that tells you the operation was successful. You can also verify which rubies you have installed using the <code>list</code> command:</p>
+
+<figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm list rubies
+</span><span class='line'>   ruby-1.9.3-p448 <span class="o">[</span> x86_64 <span class="o">]</span>
+</span><span class='line'><span class="o">=</span>&gt; ruby-2.0.0-p247 <span class="o">[</span> x86_64 <span class="o">]</span>
+</span><span class='line'> * ruby-2.1.0 <span class="o">[</span> x86_64 <span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># =&gt; - current</span>
+</span><span class='line'><span class="c"># =* - current &amp;&amp; default</span>
+</span><span class='line'><span class="c">#  * - default</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we tell our current project to use <code>ruby 2.1.0</code>:</p>
+
+<figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rm .ruby-version .ruby-gemset
+</span><span class='line'><span class="nv">$ </span>rvm 2.1.0@projNeedingRuby210 --create --ruby-version
+</span><span class='line'>ruby-2.1.0 - <span class="c">#gemset created /home/lrp/.rvm/gems/ruby-2.1.0@projNeedingRuby210</span>
+</span><span class='line'>ruby-2.1.0 - <span class="c">#generating projNeedingRuby210 wrappers.</span>
+</span><span class='line'><span class="nv">$ </span>rvm gemset copy 2.0.0-p247@projNeedingRuby210 2.1.0@projNeedingRuby210
+</span><span class='line'>Copying gemset from 2.0.0-p247@projNeedingRuby210 to 2.1.0@projNeedingRuby210
+</span><span class='line'>Generating gemset wrappers ruby-2.1.0@projNeedingRuby210.
+</span><span class='line'>Making gemset 2.1.0@projNeedingRuby210 pristine.
+</span><span class='line'><span class="nv">$ </span>which ruby
+</span><span class='line'>/home/lrp/.rvm/rubies/ruby-2.1.0/bin/ruby
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Alright! Crisis averted. If you&rsquo;re using <a href="//bundler.io/">bundler</a> with this project, be sure to change your ruby version (usually located near the top of the <code>Gemfile</code>).</p>
+
+<p>What about setting up a new project using <code>ruby 2.1.0</code>? Easy! Switch to the project directory and:</p>
+
+<figure class='code'><figcaption><span>/home/lrp/Projects/2014/newRubyProject</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm 2.1.0@newRubyProject --create --ruby-version
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Oh, rvm, you make life <em>too</em> easy sometimes.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/">Letting the Browser Decide Betwen HTTP and HTTPS</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-02-13T17:55:00-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>5:55 pm</span></time>
+        
+           | <a href="/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>While working on SEP Labs' <a href="//h2w.cc">Health2Wealth</a> app, I got my first taste of setting up a website to use secure connections. I&rsquo;ve been using the browser extension <a href="//www.eff.org/https-everywhere">HTTPS Everywhere</a> for quite some time now, so all of the web pages that I visit attempt to using <code>HTTPS</code>instead of the standard <code>HTTP</code>. When I inadvertently started testing our app with <code>HTTPS</code>, things got a little weird.</p>
+
+<p>My machine was able to open most of a page, but it wouldn&rsquo;t load some of the graphics or javascript we had embedded in the page. I was the only one able to reproduce it, so we chalked it up to a wonky machine. Then I suddenly remembered that I was using HTTPS Everywhere. I found the area in FireFox that warns you about insecure connections and found that our page was only <em>partially</em> loading on my browser because some of the content was insecure. From there I enabled an option to reveal the insecure elements, which forced my page to load everything correctly. So now we needed to find what was insecure about our page. I trekked through the codebase and found that some of our graphs and links were hard-coded to use <code>HTTP</code>. My initial thought was just to force them to use <code>HTTPS</code>, which is <a href="//lists.w3.org/Archives/Public/ietf-http-wg/2013OctDec/0625.html">almost certainly the impending standard</a>. With a quick search, I found that there exists a <strong>real</strong> solution to this problem.</p>
+
+<p>Let&rsquo;s say I have a very normal web application, so I want to include <a href="//jquery.com">jQuery</a> embedded in my page. I initially copy-paste <code>&lt;script src='http://code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code> right into my <code>&lt;head&gt;</code> node, which normally seems fine. Unfortunately, this is where issues arise. I&rsquo;m now forcing the user to make a connection which may or may not be secure to fetch data from an insecure page.</p>
+
+<p>By removing the <code>http:</code> from the <code>http://</code>, the issue of deciding whether to fetch the file using <code>HTTP</code> or <code>HTTPS</code> is left to the web browser. So my script include becomes <code>&lt;script src='//code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code>. This also works for links, images, and web fonts. In fact, every link included in this post uses the same principal, where I leave the protocol out of what becomes the <code>href</code> tag.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/02/12/custom-domain-with-github-pages/">Custom Domain With Github Pages</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-02-12T21:30:00-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>9:30 pm</span></time>
+        
+           | <a href="/blog/2014/02/12/custom-domain-with-github-pages/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2014/02/12/custom-domain-with-github-pages/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As of today, I&rsquo;m the proud owner of <a href="//larry-price.com">larry-price.com</a>. On the recommendation from a friend, I used <a href="//domainmonster.com">domainmonster.com</a> for it&rsquo;s cost effectiveness and usable toolset. I wanted to link my Github Pages blog (this blog!) to my new site. In case I ever want to do this again, I&rsquo;ve provided myself (and you!) with a step-by-step guide below. Note that Github <a href="//help.github.com/articles/setting-up-a-custom-domain-with-pages">has a page that explains how to do this</a>, but there&rsquo;s some fluff and ordering issues that turned me off from using those instructions as any more than a reference.</p>
+
+<h4>Step 0: Buy your domain</h4>
+
+<p>All sites where you can purchase domains have the same domains available, but at different prices. From the sites I perused, <a href="//godaddy.com">GoDaddy</a> had the best search for domain names, suggesting different variations on the searched domain name. I found that <a href="//domainmonster.com">domainmonster.com</a> had the ugliest UI but the best prices. <a href="//hover.com">Hover.com</a> looked really modern and had moderate prices. Shop around and spend money.</p>
+
+<h4>Step 0.5: Exercise restraint</h4>
+
+<p>At this point in the process, <strong>don&rsquo;t go to your site</strong>.</p>
+
+<p>My guess is you already have. If you don&rsquo;t have the ability to go back in time, don&rsquo;t sweat it, just know that you probably won&rsquo;t be able to verify the fruits of your labor for a few hours.</p>
+
+<h4>Step 1: Setting up an &lsquo;A Record&rsquo;</h4>
+
+<p>Find the ip address where your site is currently hosted. For me (replace URL with your own):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>nslookup larryprice.github.io
+</span><span class='line'>Server:   127.0.1.1
+</span><span class='line'>Address:  127.0.1.1#53
+</span><span class='line'>
+</span><span class='line'>Non-authoritative answer:
+</span><span class='line'>Name: larryprice.github.io
+</span><span class='line'>Address: 199.27.74.133
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You should be able to &ldquo;manage&rdquo; your domain on your domain provider&rsquo;s website. In the &ldquo;management&rdquo; area, you should be able to find a section about &ldquo;DNS&rdquo;. Find something labeled &ldquo;A records.&rdquo; There will likely already be one or two entries here - one for the IP address of your new domain and one with the IP address of your domain with &ldquo;www.&rdquo; prepended.</p>
+
+<p>Modify the entry (or entries) with the IP address found using <code>nslookup</code> (&ldquo;199.27.74.133&rdquo; from the example above). Save your site settings.</p>
+
+<h4>Step 2: Mucking with the &ldquo;www&rdquo; instance</h4>
+
+<p>While we&rsquo;re modifying these settings, we might as well move the &lsquo;www&rsquo; case out of the &ldquo;A records&rdquo;. Go ahead and delete it.</p>
+
+<p>Look for something named &ldquo;CNAME records&rdquo;, or figure out how to add records in general. We&rsquo;re going to add a CNAME record where the &ldquo;Alias&rdquo; is &ldquo;www&rdquo; and the &ldquo;Address&rdquo; is your site&rsquo;s name. In my case, my &ldquo;Alias&rdquo; field is &ldquo;www&rdquo; and my &ldquo;Address&rdquo; field is &ldquo;larry-price.com&rdquo;. Add the record and cross your fingers for success.</p>
+
+<h4>Step 3: Telling Github Pages what to do</h4>
+
+<p>Alhtough Github Pages is magical in its own right, it doesn&rsquo;t know what to do when receiving a request from the &ldquo;A record&rdquo; we created in Step 2 without further instruction.</p>
+
+<p>If you&rsquo;re using Github Pages for a user page, we are going to make this change on the <code>master</code> branch. If this is a project page, do it on the <code>gh-pages</code> branch.</p>
+
+<p>All we have to do is put our new domain into a file in the root folder called <code>CNAME</code>. Let&rsquo;s do it in one fell swoop of the command line.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;larry-price.com&quot;</span> &gt; CNAME
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Push that to Github and wait 0 to 10 minutes for Github to refresh your page.</p>
+
+<p>Note: If you&rsquo;re one of the few, the proud using the brilliant <a href="//octopress.org/">Octopress</a> to generate your blog, you want to make sure to add the <code>CNAME</code> file to the root of your <code>source/</code> directory. That way, when you call <code>deploy</code> your <code>CNAME</code> file will end up in the root of your <code>_deploy</code> directory.</p>
+
+<h4>Step 4: Behold</h4>
+
+<p>Check your Github repository&rsquo;s &ldquo;Settings&rdquo; section. In the &ldquo;GitHub Pages&rdquo; section, you should now see something along the lines of &ldquo;Your site is published at <a href="http://larry-price.com">http://larry-price.com</a>&rdquo;. Go, young one, and visit your new site; and behold the glory you have brought to your family.</p>
+
+<p>I&rsquo;ll note that this is the point where not obeying Step 0.5 will cause issues. Once your internets knows that your page hit a certain DNS, it takes a few hours to refresh. In my case it only took about 2 hours, but it may take between 12 and 48 hours to refresh. A workaround to see if everything is working is to pull out your smart phone and use your carrier&rsquo;s network to check your new site, since that area of the internets is probably still untainted. (All of this paragraph is a simplified thought process on how DNS works, considering that&rsquo;s the level I understand it.)</p>
+
+<p>Now fly, my children, and spread yourself over the internet with dozens of silly domain names!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/posts/17">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/posts/15">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <span class="social-media-bar">
+    <a href="https://github.com/larryprice" title="Github" alt="github profile"><img src="/images/icon_github.png" class="social-media-icon" /></a>
+    <a href="https://launchpad.net/~larryprice" title="Launchpad" alt="launchpad profile"><img src="/images/icon_lp.png" class="social-media-icon" /></a>
+    <a href="https://twitter.com/larryrprice" title="Twitter" alt="Twitter profile"><img src="/images/icon_twitter.png" class="social-media-icon" /></a>
+    <a href="https://www.linkedin.com/pub/larry-price/3a/630/47b" title="LinkedIn" alt="LinkedIn profile"><img src="/images/icon_linkedin.png" class="social-media-icon" /></a>
+    <a href="mailto:larry@larry-price.com" title="Email" alt="email me"><img src="/images/icon_email.png" class="social-media-icon" /></a>
+  </span>
+</section>
+<section>
+  <h1>void* Larry</h1>
+  <p>I'm a codeslinger debugging from the mean streets of Indiana. Welcome to my blog, where I'll tell the tales of wondrous things I discover in the digital jungle.</p>
+</section>
+<section>
+  <h1>Go for Web Development</h1>
+  <p><strong><a href="https://www.packtpub.com/web-development/go-web-development-video" target="blank">Go for Web Development</a></strong> is an online video series designed by me where you'll follow along to build a personal library app in Go. You'll start with a blank slate but quickly learn to take advantage of popular libraries such as gorilla/mux, negroni, gorp, ace, and bcrypt.</p>
+</section>
+<section>
+  <h1>FOSDEM 2017</h1>
+  <p>In 2017, I had the opportunity to give a short talk at FOSDEM in Brussels. I even <strong><a href="https://www.youtube.com/watch?v=FX1fSTOU8Ao&t=1152s" target="blank">recorded an at-home experience</a></strong> with higher quality audio and slides than the livestream.</p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/04/18/on-gender-bias-and-home-improvement/">On Gender Bias and Home Improvement</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/04/11/using-d-bus-signals-in-python/">Using D-Bus Signals in Python</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python/">Creating an Asynchronous D-Bus Service With Python</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/04/04/creating-a-d-bus-service-with-python/">Creating a D-Bus Service With Python</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/02/15/snappy-libertine/">Snappy Libertine</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Tag Cloud</h1>
+    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.75%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.625%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.875%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.5%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.625%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.75%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.5%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 113.125%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.625%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.5%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.875%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.75%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.875%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.875%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.875%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.875%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.875%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.875%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.875%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.625%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.75%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.875%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.875%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 124.375%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 111.25%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.875%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.625%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.625%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.875%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.875%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.875%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.625%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.875%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.875%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.875%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 126.25%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.875%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.625%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.875%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.5%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.875%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.875%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.875%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.875%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.5%'>remote</a> <a href='/blog/categories/retro' style='font-size: 113.125%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.875%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 131.875%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.625%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.875%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.875%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.875%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 115.0%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.875%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.875%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.625%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 115.0%'>testing</a> <a href='/blog/categories/trello' style='font-size: 115.0%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.75%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.75%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.875%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.875%'>upstart</a> <a href='/blog/categories/web' style='font-size: 141.25%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.125%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.875%'>xml</a> </span>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/larryprice">@larryprice</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'larryprice',
+            count: 5,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+  <style>
+    .sidebar-ad { width: 280px; height: 280px; }}
+    @media(min-width: 375px) { .sidebar-ad { width: 350px; height: 90px; } }
+    @media(min-width: 475px) { .sidebar-ad { width: 450px; height: 90px; } }
+    @media(min-width: 575px) { .sidebar-ad { width: 550px; height: 90px; } }
+    @media(min-width: 675px) { .sidebar-ad { width: 650px; height: 90px; } }
+    @media(min-width: 750px) { .sidebar-ad { width: 200px; height: 200px; } }
+    @media(min-width: 768px) { .sidebar-ad { width: 210px; height: 210px; } }
+    @media(min-width: 1280px) { .sidebar-ad { width: 260px; height: 260px; } }
+  </style>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- Sidebar Ad -->
+    <ins class="adsbygoogle sidebar-ad"
+         style="display:inline-block"
+         data-ad-client="ca-pub-6961096698495477"
+         data-ad-slot="8892886941"></ins>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</section>
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  <center>
+	  Copyright &copy; 2017 - Larry Price -
+	  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span><br/>
+	  Note: Views and opinions expressed belong solely to the author and do not represent the views of the any other person or company.
+	</center>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'larryprice';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

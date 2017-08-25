@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: sass | Larry Price]]></title>
+  <link href="https://larry-price.com/blog/categories/sass/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2017-08-25T08:42:34-05:00</updated>
+  <id>https://larry-price.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    <email><![CDATA[larry@larry-price.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Compile Sass with Docker]]></title>
+    <link href="https://larry-price.com/blog/2015/05/17/compile-sass-with-docker/"/>
+    <updated>2015-05-17T16:11:18-04:00</updated>
+    <id>https://larry-price.com/blog/2015/05/17/compile-sass-with-docker</id>
+    <content type="html"><![CDATA[<p><a href="http://sass-lang.com/">SASS</a> is a delightful way to write CSS, but compiling SASS for your web application might not be the most obvious task. There are different installation methods, most of them involving cluttering up your filesystem with external dependencies.  Compiling SASS is easy when you&rsquo;re doing <code>rails</code> or <code>sinatra</code>-work, but I demand to write code in a compiled language. So I created <a href="https://registry.hub.docker.com/u/larryprice/sass/">a docker image</a> to compile SASS code automatically called <code>larryprice/sass</code>.</p>
+
+<p>Running this image is easy. Let&rsquo;s say I have some SASS code:</p>
+
+<pre><code class="sass /home/larry/test-project/public/css/style.scss">.service-home .search-area {
+  margin-top: 0;
+
+  .service-name {
+    font-size: 44px;
+    font-weight: bold;
+  }
+}
+</code></pre>
+
+<p>Given that <a href="https://docs.docker.com/installation/#installation">I have Docker already installed</a>, I&rsquo;ll start up my Docker container:</p>
+
+<pre><code class="bash">$ docker run -v /home/larry/test-project/public/css:/src --rm larryprice/sass
+</code></pre>
+
+<p>That&rsquo;s it. The directory <code>/home/larry/test-project/public/css</code> (containing my SASS code) is now being watched by the SASS compiler. Any time I make a change to a file in that directory, my code will automatically be recompiled. The above command runs the SASS watcher in the foreground, which allows me to see any compile errors in my terminal window. If I wanted to run the SASS compiler in the background, I just have to add the <code>-d</code> flag:</p>
+
+<pre><code class="bash">$ docker run -v /home/larry/test-project/public/css:/src --rm -d larryprice/sass
+</code></pre>
+
+<p>If my project is using <code>docker-compose</code>, I could add an image in my <code>docker-compose.yml</code> to run the SASS compiler alongside my application. For instance, if I&rsquo;m running a web application with <code>go</code>:</p>
+
+<pre><code class="yaml docker-compose.yml">app:
+  image: golang:1.4
+  working_dir: /go/src/simple-golang-app
+  command: go run main.go
+  volumes:
+    - ./simple-golang-app:/go/src/simple-golang-app
+sass:
+  image: larryprice/sass
+  volumes:
+    - ./public/css:/src
+</code></pre>
+
+<p>Now, running <code>docker-compose up</code> would also run the SASS compiler.</p>
+
+<p>I like using <code>docker-compose</code> in these situations as it limits the number of conflicting tools installed on my host machine. If I ever decide that SASS is the worst or that ruby is the devil, all I have to do is <code>docker rmi larryprice/sass</code>. No need to run <code>find</code> commands for every file with <code>sass</code> in the title; just a single, simple command to destroy all evidence.</p>
+]]></content>
+  </entry>
+  
+</feed>

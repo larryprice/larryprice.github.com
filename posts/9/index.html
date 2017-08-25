@@ -1,0 +1,861 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Larry Price</title>
+  <meta name="author" content="Larry Price">
+
+  
+  <meta name="description" content="Ollert, the Trello data analytics tool, has been open sourced under GNU Affero GPL v3.0. The source code can be found on Github and I&rsquo;ve &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="https://larry-price.com/posts/9">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Larry Price" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='https://fonts.googleapis.com/css?family=Montserrat+Alternates|Marcellus' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35669093-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner" style="background:url(/images/coffee-stain.png) top right no-repeat; background-size: auto 100%;"><hgroup>
+  <h1><a href="/">Larry Price</a></h1>
+  
+    <h2>And The Endless Cup Of Coffee</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:larry-price.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/books">Books</a></li>
+  <li><a href="/blog/projects">Projects</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/02/11/ollert-is-now-open-source/">Ollert Is Now Open Source</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-02-11T05:54:26-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>5:54 am</span></time>
+        
+           | <a href="/blog/2015/02/11/ollert-is-now-open-source/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2015/02/11/ollert-is-now-open-source/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="https://ollertapp.com">Ollert</a>, the Trello data analytics tool, has been open sourced under <a href="https://github.com/sep/ollert/blob/master/LICENSE">GNU Affero GPL v3.0</a>. The source code can be found <a href="https://github.com/sep/ollert/">on Github</a> and I&rsquo;ve already accepted several pull requests.</p>
+
+<h4>Why?</h4>
+
+<p>I&rsquo;ve been working towards this for a few months now. Although Ollert was a lot of fun to create and has helped quite a few people learn more about their Trello boards, I&rsquo;ve been having trouble finding the time to write new features in between my other pursuits. Although <a href="http://www.sep.com/">SEP</a> has given me resources in the past, it&rsquo;s not always easy to find people off-project who have the right experience, determination, and time to grok the codebase and start churning out new features.</p>
+
+<p>An interesting pattern started to appear: With every other feature request I received for Ollert, the requestor would add in some other loaded question: Where is the source code? Is there a Github repo so I can add issues? Do you accept pull requests?</p>
+
+<p>Random strangers on the internet wanted to help. These are people with the drive to work with me even though I couldn&rsquo;t give them anything in return. These are people with fresh perspectives on Trello usage which I had never imagined. These are the developers whose help I sorely wanted.</p>
+
+<h4>Feature requests?</h4>
+
+<p>I am still accepting feature requests. Feature requests are now dealt with through our <a href="https://github.com/sep/ollert/issues">issues page</a>.</p>
+
+<h4>Contributing?</h4>
+
+<ul>
+<li>Write tests</li>
+<li>Run tests</li>
+<li>Seriously, the <a href="https://travis-ci.org/sep/ollert">travis-ci build</a> had better be green.</li>
+<li>Follow the currently in-place patterns. If you don&rsquo;t like them, let me know your idea before you work for a week and I deny your changes.</li>
+<li>Create issues for whatever you&rsquo;re working on.</li>
+<li>We do things by pull requests. Make a fork, make a branch, let Github do the rest.</li>
+</ul>
+
+
+<h4>And so, it continues&hellip;</h4>
+
+<p>This does not mean I am abandoning Ollert. Internally we&rsquo;ll still be discussing how to increase traffic and improve user experience. Hopefully, open sourcing Ollert will give us invaluable feedback on the code and fresh perspectives on features. I&rsquo;m looking forward to the future of Ollert.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/01/18/managing-a-go-environment-in-ubuntu/">Managing a Go Environment in Ubuntu</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-01-18T10:58:04-05:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:58 am</span></time>
+        
+           | <a href="/blog/2015/01/18/managing-a-go-environment-in-ubuntu/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2015/01/18/managing-a-go-environment-in-ubuntu/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Many moons ago, I wrote about <a href="/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04">setting up a Go environment in Ubuntu</a>. After writing that post, I dropped Go development for nearly a year. Today I run the <a href="http://www.meetup.com/Indy-Golang/events/219612982/">Indy Golang meetup</a>, and soon I&rsquo;ll be starting a new work project where I&rsquo;ll be recommending a Go-based tech stack. I&rsquo;ve learned a thing or two about Go and managing its dependencies since I wrote that initial blog post, and I intend to give a short presentation to my meetup about my recent findings. Before I do, I thought I&rsquo;d write a preliminary blog post detailing the tools I use to keep my Go environment sane.</p>
+
+<h3>Installing Go</h3>
+
+<p>The easiest way to install Go in Ubuntu is through <code>aptitude</code>. However, the default version in the Ubuntu repos gets stale fast. I found a tool similar to <code>rvm</code> for downloading and installing local versions of Go called <a href="https://github.com/moovweb/gvm">gvm</a>. For better or worse, <code>gvm</code> is installed through a bash script. Fortunately, it doesn&rsquo;t require sudo:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>bash &lt; &lt;<span class="o">(</span>curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>At this point I removed all my previous finaglig with <code>$GOROOT</code> and <code>$GOPATH</code> from my dot files. You can use <code>gvm listall</code> to see all available versions of Go. As of the writing of this blog post, <code>go1.4.1</code> is the latest release; however, <code>go1.4</code> is the most recent release available with <code>gvm</code>. I&rsquo;m not sure when the list is updated, but I have confidence that it is fairly regular. To install a Go and set it as the default Go:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>gvm install go1.4 --default
+</span><span class='line'><span class="nv">$ </span>which go
+</span><span class='line'>/home/lrp/.gvm/gos/go1.4/bin/go
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Managing Packages</h3>
+
+<p>This is where I come to a fork in the road: <code>gvm</code>, the tool we used to install the desired version of Go, has a concept of pkgset similar to <code>rvm gemset</code>. However, I find the syntax for using a pkgset tiresome every time I come into a directory. I prefer something more automatic. As an additional pain, <code>gvm</code> does not provide a mechanism for installing dependencies from a list of known dependencies. I sought out other tools to address these pains and found <a href="https://github.com/pote/gpm">gpm</a> and <a href="https://github.com/pote/gvp">gvp</a>.</p>
+
+<p><code>gpm</code> is a tool used to manage Go packages. It reads in a file called <code>Godeps</code> which contains a list of packages with versions and can install them from their individual sources. I&rsquo;m currently infatuated with <code>gpm</code> as it addresses a lot of concerns I had when initially learning Go: shared local dependencies, unclear versioning, and installing dependencies from a fresh clone. Install <code>gvm</code> and <code>gvp</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">pushd</span> /tmp
+</span><span class='line'><span class="nv">$ </span>git clone https://github.com/pote/gvp.git <span class="o">&amp;&amp;</span> <span class="nb">cd </span>gvp
+</span><span class='line'><span class="nv">$ </span>./configure <span class="o">&amp;&amp;</span> sudo make install
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> /tmp
+</span><span class='line'><span class="nv">$ </span>git clone https://github.com/pote/gpm.git <span class="o">&amp;&amp;</span> <span class="nb">cd </span>gpm
+</span><span class='line'><span class="nv">$ </span>./configure <span class="o">&amp;&amp;</span> sudo make install
+</span><span class='line'><span class="nv">$ </span><span class="nb">popd</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can follow two paths here: using <code>gvm pkgset</code> or using a local <code>.godeps</code> directory to store our dependencies discretely. For these examples, I&rsquo;ll create a directory called <code>gotest</code> with a single file in it:</p>
+
+<figure class='code'><figcaption><span>hello.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">main</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="s">&quot;github.com/go-martini/martini&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">server</span> <span class="o">:=</span> <span class="nx">martini</span><span class="p">.</span><span class="nx">Classic</span><span class="p">()</span>
+</span><span class='line'>    <span class="nx">server</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">,</span> <span class="kd">func</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="s">&quot;&lt;h1&gt;Hello, world!&lt;/h1&gt;&quot;</span>
+</span><span class='line'>    <span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">server</span><span class="p">.</span><span class="nx">Run</span><span class="p">()</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Method 1: gvm pkgset alongside gpm</h4>
+
+<p>Create and start using a new pkgset:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>gvm pkgset create gotest
+</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="nv">$GOPATH</span>
+</span><span class='line'>/home/lrp/.gvm/pkgsets/go1.4/global
+</span><span class='line'><span class="nv">$ </span>gvm pkgset use gotest
+</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="nv">$GOPATH</span>
+</span><span class='line'>/home/lrp/.gvm/pkgsets/go1.4/gotest:/home/lrp/.gvm/pkgsets/go1.4/global
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>What this means is that we are now using our <code>gotest</code> pkgset as default, but the global pkgset will be used to dig up any missing packages. In order to install any dependencies, we need to create a <code>Godeps</code> file for <code>gpm</code> to consume. Our application from above has a dependency on <code>go-martini</code>, so let&rsquo;s add a dependency to <code>v1.0</code> in our Godeps file:</p>
+
+<figure class='code'><figcaption><span>Godeps</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>github.com/go-martini/martini v1.0
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After you run <code>go build</code> to verify that the dependencies aren&rsquo;t installed, run <code>gpm install</code> to pull the required packages into your specified pkgset. Run <code>go build</code> again and revel in your own brilliance.</p>
+
+<p>That was pretty great, right? The only issue is remembering to type <code>gvm pkgset use gotest</code> every time you restart your terminal or switch projects. Otherwise, <code>gvm</code> is practically a replacement for one of my favorite ruby tools <code>rvm</code>.</p>
+
+<h4>Method 2: gpm and gvp</h4>
+
+<p><code>gpm</code> is intended to be similar to <code>npm</code>, a package management tool for NodeJS. The author suggests using a tool called <code>gvp</code> to set the <code>GOPATH</code> without much thought. If we start a fresh terminal in our example directory, we can use <code>gvp</code> to set up our <code>GOPATH</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="nv">$GOPATH</span>
+</span><span class='line'>/home/lrp/.gvm/pkgsets/go1.4/global
+</span><span class='line'><span class="nv">$ </span><span class="nb">source </span>gvp
+</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="nv">$GOPATH</span>
+</span><span class='line'>/home/lrp/Projects/2015/gotest/.godeps:/home/lrp/Projects/2015/gotest
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can note the difference in our <code>GOPATH</code> here relative to <code>gvm</code>: we will be using our current directory as a source of code in addition to a local <code>.godeps</code> directory. Go ahead and add <code>.godeps</code> to your <code>.gitignore</code> file or equivalent. We can use the same <code>Godeps</code> file as before:</p>
+
+<figure class='code'><figcaption><span>Godeps</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>github.com/go-martini/martini v1.0
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We run <code>gpm install</code> to install the dependencies to our local <code>.godeps</code> directory.</p>
+
+<p>I prefer this method to using pkgsets. I&rsquo;ve had better luck building projects with complicated structures, and it&rsquo;s a lot easier for me to run <code>source gvp</code> than it is to remember the name of my pkgset. Both methods work pretty well and give me warm fuzzies about managing my dependencies. I&rsquo;m certain that as Go continues to mature more solutions will come available. I&rsquo;ve also been researching using Docker with gpm only, which requires very little tweaking to what I&rsquo;ve already discussed here.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/01/16/think-like-a-chef/">Think Like a Chef</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-01-16T17:40:45-05:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>5:40 pm</span></time>
+        
+           | <a href="/blog/2015/01/16/think-like-a-chef/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2015/01/16/think-like-a-chef/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>The Gist</h3>
+
+<p>Celebrity chef Tom Colicchio&rsquo;s <a href="http://amzn.to/15faZfN">Think Like a Chef</a> is a recipe-book-slash-culinary-theory hybrid. The reader is taken through a series of basic cooking techniques applied to a plethora of ingredients, followed by a focus on several interesting ingredients used in a variety of recipes, climaxing with a series of three ingredients used to create many interesting meals.</p>
+
+<h3>My Opinion</h3>
+
+<p>This book is designed to not just be about recipes, but instead about taking techniques and ingredients and demonstrating unique and interesting ways to think about them. I&rsquo;ve always liked to think that cooking and software engineering have a lot in common. Chefs and programmers have to juggle whole systems of information in their heads at once to solve the problem at hand. Chefs and programmers follow instructions until it no longer benefits them, at which point they make substitutions to create novel solutions. Chefs and programmers tend to dress a bit strange compared to the average businessman. Not to mention we both have to wear hair nets.</p>
+
+<p>I like to cook. I like to think about how I can create different dishes, how I can utilize aging pantry or freezer items, and how I can perfect spice combinations to build restaurant-quality meals. And I like to eat. So I thought I would like this book. Personally, I found the author to be distractingly arrogant and the book design to be irritatingly repetitive. Although not designed as a simple recipe book, I would have been better served using it as such. However, were I to use this as a recipe book, I would have a lot of issues finding many of the exotic ingredients called for in the middle of Indiana, to say nothing of how expensive all his favorite ingredients are.</p>
+
+<p>The pieces of this book that I really enjoyed were the prose on using one&rsquo;s intuition to substitute ingredients, spices, and cooking styles as appropriate; these seemed like the more intellectual parts of the book that I could actually relate to. As a software engineer, I&rsquo;m often working on a problem that seems like it can be solved by following the standard recipe, but actually requires a level of clever substitution to build it into a new idea entirely. As a home cook, I make a substitution in nearly every recipe I find; sometimes it works, sometimes it doesn&rsquo;t. I would have enjoyed this book much more thoroughly had the focus actually been on intuitive cooking instead of fanciful recipes.</p>
+
+<h3>Who Would Like This</h3>
+
+<p>Are you about to make a lavish dinner to impress house guests? You could probably find some pretty good (and descriptive) recipes in this book. However, I heard of this thing called the internet that has many more recipes and descriptions of cooking styles as well. If you like beautiful pictures of food, you may also eat this book up (though hopefully not literally). If you happen to be a fan of this celebrity clown, maybe you&rsquo;d enjoy his cavalier writing style more than I did.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/01/11/an-example-use-case-for-docker/">An Example Use Case for Docker</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-01-11T19:22:43-05:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>7:22 pm</span></time>
+        
+           | <a href="/blog/2015/01/11/an-example-use-case-for-docker/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2015/01/11/an-example-use-case-for-docker/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I spent a lot of time last week asking questions about Docker. <a href="#whatdocker">What</a> is Docker? How could Docker help me <a href="#whydocker">day-to-day</a>? How easy is Docker to <a href="#howdocker">use</a>? How does Docker like its eggs cooked? Isn&rsquo;t Docker a brand of sneakers?</p>
+
+<h3><a name="whatdocker"></a>What is Docker?</h3>
+
+<p><a href="https://www.docker.com/">Docker</a> is a utility for maintaining system environments. Docker capitalizes on <a href="https://en.wikipedia.org/wiki/LXC">Linux containers</a>, a method of operating system virtualization which isolates multiple process groups on a single host.</p>
+
+<p>Through a series of commands, Docker pulls up a base system image and applies changes to create a custom image. Docker provides the means to access any of these step-level containers for further manipulation. Docker uses a unique layered system such that sibling layers can utilize the same base images, in contrast to a virtual machine which would require multiple copies of things like operating systems, shared libraries, and shared binaries. The image below is an excellent visualization of the difference between a virtual machine and a Docker container.</p>
+
+<p><img src="https://i.imgur.com/Lps6K6y.png?1" alt="VM vs LXC" /></p>
+
+<h3><a name="whydocker"></a>Why use Docker?</h3>
+
+<p>Docker&rsquo;s primary job is to take in a series of commands and spit out a clean environment with those settings. This is especially useful in deployment. I can take the Docker <code>ubuntu</code> image, download and install all my dependencies, copy over my application code, and run my application given some environment variables.</p>
+
+<p>All of that should sound somewhat familiar if you&rsquo;ve ever used <a href="https://heroku.com">heroku</a>. Heroku performs very similar tasks to get your application up and running: take a Linux image, download base tools for ruby/python/nodejs/whatever, install application-specific dependencies (through bundler, flask, npm, etc.), and run your application given some environment. Docker gives you the power of heroku at the development level. &hellip;Sort of.</p>
+
+<p>If I can create a Docker container for my application to run in, I can set up a build server to use a container to run my tests. I can use that same container to build a <em>clean</em> staging environment. I can use the staging container to build an <em>identically clean</em> production environment. With that knowledge in hand, I know the exact state of the production environment every time I deploy and I can reproduce it locally.</p>
+
+<p>Theoretically, I can even use Docker for setting up a development environment, although after a few days of attempting this I still think you&rsquo;re better off running natively.</p>
+
+<p>Of course, Docker keeps <a href="https://www.docker.com/resources/usecases/">a big list of examples</a> from big-name company use-cases if you&rsquo;re interested.</p>
+
+<h3><a name="howdocker"></a>Example Usage</h3>
+
+<p>Brass. Tacks. Let us get down to them, compadre.</p>
+
+<p>You probably want to <a href="https://docs.docker.com/installation/#installation">install Docker</a> first. If you&rsquo;re not using Linux, have fun installing <a href="https://github.com/boot2docker/boot2docker">boot2docker</a>, the rest of us are going to get started without you.</p>
+
+<p>I started by trying to bootstrap my environment for <a href="https://ollertapp.com">Ollert</a> with Docker. Ollert uses ruby-2.2, QtWebkit (in test), and MongoDB. It uses bundler to install any required ruby gems. Not too complicated, but I&rsquo;ve noticed it&rsquo;s never easy to get a new developer&rsquo;s environment quite right.</p>
+
+<p>We start out with the official <a href="https://registry.hub.docker.com/_/ruby/">ruby:2.2.0</a> image from the Docker Hub:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker run ruby:2.2.0 <span class="nb">echo</span> <span class="s2">&quot;B-b-b-b-brass t-t-t-t-tacks!&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>OMG that step will take forever if you&rsquo;ve never downloaded the base <code>debian</code> image. It downloads and sets up quite a few layers. If you&rsquo;re interested in what it&rsquo;s doing behind the scenes and you can read Dockerfiles, <a href="https://github.com/docker-library/ruby/blob/b7fefd2fa79882da90feb0718430680c77c5fa8b/2.2/Dockerfile">this file</a> is what&rsquo;s being executed. Anyway, when it&rsquo;s done you should see a friendly reminder about what we&rsquo;ve gotten down to. We use <code>docker run</code> to run (download first if necessary) an image; in this case, the <code>ruby:2.2.0</code> image. Everything after the image name is the command to run. Now that we&rsquo;ve downloaded some base images, you can check out your available images using <code>docker images</code>.</p>
+
+<p>Now I need to install my system-level dependencies:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker run ruby:2.2.0 apt-get update
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note how this time the base image was already found in your local repository, resulting in a command that ran pretty quickly (based on your internet speeds (sorry Comcast customers!)). But what have we really done so far? We&rsquo;ve created two separate containers: one with our initial echo command (useless) and one with all our updates. To see these containers, use <code>docker ps -a</code>. This will give you output similar to the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker ps -a
+</span><span class='line'>CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                      PORTS             NAMES
+</span><span class='line'>ad5ddd55f2c2        ruby:2.2.0        <span class="s2">&quot;apt-get update&quot;</span>         <span class="m">2</span> seconds ago       Exited <span class="o">(</span>0<span class="o">)</span> <span class="m">2</span> seconds ago                        mad_curie
+</span><span class='line'>10cbaac4488c        ruby:2.2.0        <span class="s2">&quot;echo &#39;B-b-b-b-brass&quot;</span>    <span class="m">15</span> minutes ago      Exited <span class="o">(</span>0<span class="o">)</span> <span class="m">15</span> minutes ago                       mad_perlman
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>These are now the containers available. We can create a new image from the first container using <code>docker commit ad5 rubyapp</code>, which will allow us to use it to create further containers. However, if we were to do this for every command we wanted to execute, we might be here for a while. We could go into <code>bash</code> on the base image and do all of our steps:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker run -it ruby:2.2.0 /bin/bash
+</span><span class='line'>root@1be43510341e:/# apt-get update
+</span><span class='line'>...
+</span><span class='line'>root@1be43510341e:/# apt-get auto-remove
+</span><span class='line'>...
+</span><span class='line'>root@1be43510341e:/# apt-get install -y --force-yes libqtwebkit-dev mongodb
+</span><span class='line'>...
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We could then use this image to run our app - however, this is also tedious and a bad solution. We want something that we can see on a granular level and reproduce every time for a base image. Fortunately, Docker provides us an easy way to do this using a DSL. Introducing the <code>Dockerfile</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='Dockerfile'><span class='line'><span class="c"># base image</span>
+</span><span class='line'><span class="k">FROM</span> ruby:2.2.0
+</span><span class='line'>
+</span><span class='line'><span class="c">#install system-level dependencies</span>
+</span><span class='line'><span class="k">RUN</span> apt-get update <span class="o">&amp;&amp;</span> apt-get autoremove -y <span class="o">&amp;&amp;</span> apt-get install -y --force-yes libqtwebkit-dev mongodb
+</span><span class='line'>
+</span><span class='line'><span class="c"># install gems from /tmp such that bundling is CACHED</span>
+</span><span class='line'><span class="k">WORKDIR</span> /tmp
+</span><span class='line'><span class="k">ADD</span> Gemfile Gemfile
+</span><span class='line'><span class="k">ADD</span> Gemfile.lock Gemfile.lock
+</span><span class='line'><span class="k">ADD</span> .env .env
+</span><span class='line'><span class="k">RUN</span> bundle install
+</span><span class='line'>
+</span><span class='line'><span class="c"># load application source</span>
+</span><span class='line'><span class="k">ADD</span> . /usr/src/app
+</span><span class='line'><span class="k">WORKDIR</span> /usr/src/app
+</span><span class='line'>
+</span><span class='line'><span class="c"># port where application is served</span>
+</span><span class='line'><span class="k">EXPOSE</span> <span class="m">5000</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The syntax is a little different, but all we&rsquo;re doing is telling Docker our base image, issuing commands, and copying files. The <code>ADD</code> command allows us to copy files from our host system. In this case, I copy over <code>.</code> to <code>/usr/src/app</code> in the container. I also copy over my Gemfile separately to <a href="http://ilikestuffblog.com/2014/01/06/how-to-skip-bundle-install-when-deploying-a-rails-app-to-docker/">cache the bundle so it does not install every time</a>. I then expose the port I want my application to use. Run this file as such:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker build -t rubyapp .
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This creates an image called <code>rubyapp</code> and a container for every line of the Dockerfile that is run. Although your first build may take a moment, subsequent builds will be cached and should be significantly faster. Now, if we want to run my application:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker run -d --name rubyappinstance rubyapp foreman start -d /usr/src/app
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I use <code>foreman</code> to start my application from the given directory. I tell Docker that the application will be daemonized using the <code>-d</code> flag. If I check my running containers with <code>docker ps</code>, I&rsquo;ll see my application running. If I want to stop it, I just run <code>docker stop rubyappinstance</code>.</p>
+
+<p>I&rsquo;m going to stop there for now. In order to get Ollert working properly, I also need to <a href="http://docs.docker.com/userguide/dockerlinks/">link a Mongo database</a> and change some environment variables in my application, but those are relatively easy tasks.</p>
+
+<h3>Is it worth it?</h3>
+
+<p>The only conclusion is a definite maybe. Docker is definitely pretty cool. It may be able to help you deploy custom applications easier; for Ollert, it feels like overkill. There is a lot of overhead in downloading core versions of different operating systems, and I already find myself itching to clean up all the leftover Docker images/containers on my machine I used once and never again. After getting the Docker development out of the way (building and testing a Dockerfile), you may save yourself some time in the future if you have to change hosting services or CI environments. Try it out! It&rsquo;s a pretty neat concept and definitely worth your attention in 2015.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/12/31/2014-retrospective/">2014 Retrospective</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-12-31T11:40:00-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>31</span><span class='date-suffix'>st</span>, <span class='date-year'>2014</span></span> <span class='time'>11:40 am</span></time>
+        
+           | <a href="/blog/2014/12/31/2014-retrospective/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2014/12/31/2014-retrospective/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Happy New Year, dear reader.</p>
+
+<p>2014 was a fairly good year for me. I wrote a lot of code, read a lot of books, and published a lot of blog posts.</p>
+
+<h3>Things I got paid to do</h3>
+
+<p>2014 was a reaffirmation of career goals alongside the opportunities to work with several very different clients. In addition to working on cool stuff, I was promoted to Software Engineer 2. During the tail end of the year, I had the chance to work from home part of the week, which was a great experience. A sampling of my professional works this year:</p>
+
+<ul>
+<li>I wrapped up my time writing Qt/C++ for a touch-screen automated-guidance system embedded in heavy machinery. I spent the first two months of the year playing Tech Lead for a small team of misfits leaving the project during an organizational restructure. I had the opportunity to work directly with a project architect to redesign features and guide my fellow developers through the implementation.</li>
+<li>I worked on <a href="https://h2w.cc">Health2Wealth</a>, a ruby application created by some work friends to track Fitbit data and allow an administrator to award monetary rewards for reaching goals.</li>
+<li>I pitched, designed, and implemented a product called <a href="https://ollertapp.com">Ollert</a>, a Trello analysis tool written in ruby. Built during a 48-hour <a href="http://www.sep.com/labs/startupweekend/">SEP Startup Weekend</a>, I led a team of 6 to bring the project to fruition. SEP has fully embraced the product and I continue to work on <a href="/blog/2014/12/02/ollert-6-months-later/">improving it</a> when not on project work. We currently get about 300 sessions a month, and I frequently get emails from users thanking me, reporting bugs, or submitting feature requests.</li>
+<li>I became part of a team of developers working on a modern asset-tracking tool to replace an existing Microsoft Access tool. This was my introduction to C# programming with ASP.NET MVC. The project was short-lived for my team, but sparked my interests in RESTful APIs and Javascript.</li>
+<li>I worked on a rewrite of a huge WebForms e-commerce site. We created a hybrid site running some pages in the WebForms engine and all of our new pages in fresh MVC. We worked with a high-fidelity prototype created by an outside company, which proved at times invaluable and at other times a thorn in our sides. We worked directly with members of the client on-site, who were able to provide us with great insights into the legacy system and helped us work out unclear requirements.</li>
+<li>In December, I had some fun working on a solo proof-of-concept with a new client. This client is planning to do a rewrite of a large application in 2015 and wanted to do some investigation into rules engines, particularly those using Java. I worked through a few libraries and landed on JBoss Drools, an open-source rules engine with an integrated frontend called KIE Workbench. It&rsquo;s been a while since I wrote any Java code, and I&rsquo;d certainly never deployed any Java web applications. After two weeks of work, I was able to launch a web application using Spring MVC and integrate a KIE Workbench instance running on the same Azure virtual machine. The application is able to pick up rule changes from the Workbench automatically, without recompilation or redeployment.</li>
+</ul>
+
+
+<h3>Of my own volition</h3>
+
+<p>I had a lot of fun coding ideas this year, most of them lost to the raptures of time. A few items of note:</p>
+
+<ul>
+<li>BYO Game of Life (<a href="http://byo-game-of-life.herokuapp.com">http://byo-game-of-life.herokuapp.com</a>)
+
+<ul>
+<li>My most recent release - a frontend web client allowing the user to give a URL pointing to a Game of Life backend. I created a <a href="https://github.com/larryprice/game-of-life-impl">Go implementation</a> as part of my presentation for the inaugural <a href="http://www.meetup.com/Indy-Golang/events/219199103/">Indy Golang meetup</a>.</li>
+</ul>
+</li>
+<li>3rd Day Organics
+
+<ul>
+<li>We finally finished version 1.0 of 3DO, a custom e-commerce website for a co-worker&rsquo;s spouse&rsquo;s cooperative food program. We built the whole application from scratch; in hindsight, we should have set something up using <a href="https://spreecommerce.com">spree</a> or another commerce framework.</li>
+</ul>
+</li>
+<li>Fortune Cookie API (<a href="http://fortunecookieapi.com">http://fortunecookieapi.com</a>)
+
+<ul>
+<li>A fairly silly API written using NodeJS to get data associated with fortune cookies: fortunes, lessons in Chinese, and lottery numbers. I implemented a simple application to access the data at <a href="http://demo.fortunecookieapi.com">http://demo.fortunecookieapi.com</a>.</li>
+</ul>
+</li>
+<li>mongoose-simple-random (<a href="https://www.npmjs.com/package/mongoose-simple-random">https://www.npmjs.com/package/mongoose-simple-random</a>)
+
+<ul>
+<li>My foray into NodeJS packages - this is a plugin which adds <code>findRandom</code> and <code>findOneRandom</code> methods to any mongoose schema. Used extensively in the Fortune Cookie API.</li>
+</ul>
+</li>
+<li>Ollert (<a href="https://ollertapp.com">https://ollertapp.com</a>)
+
+<ul>
+<li>I know I listed it under a paid project, but I was putting over 8 hours a week into Ollert between the time it was originally built and the time I was paid to work on it. It&rsquo;s my big pet project, and I&rsquo;m proud of the things that it and I have accomplished. Trello has noted our accomplishments, validating all the hard work and long hours I&rsquo;d sunk into it.</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>Book It - Where&rsquo;s my free pizza?</h3>
+
+<p>I think that I read 11 books this year. See my <a href="/blog/books">books section</a> for a quick check of which books you should be reading. Some of my favorites:</p>
+
+<ul>
+<li><a href="http://amzn.to/14coDAd">Rework</a> and <a href="http://amzn.to/1rzTsZH">Remote</a> by Jason Fried</li>
+<li><a href="http://amzn.to/14coIUG">Punished by Rewards</a> by Alfie Kohn</li>
+<li><a href="http://amzn.to/1tAMWU0">The XX Factor</a> by Alison Wolf</li>
+<li><a href="http://amzn.to/1Ai3mBk">The Lean Startup</a> by Eric Ries</li>
+<li><a href="http://amzn.to/1x4jaXh">Made to Stick</a> by Chip Heath</li>
+</ul>
+
+
+<h3>This blog o' mine</h3>
+
+<p>In reality, I put quite a bit of work into this blog.</p>
+
+<p>I published <strong>24 blog posts in 2013</strong>; I published <strong>37 in 2014</strong> (including this one).</p>
+
+<p>I had <strong>1700 sessions and 2420 pageviews in 2013</strong>. I did almost that well in a single month at the end of 2014. I had <strong>10,194 sessions and 12,997 pageviews in 2014</strong> (as of 10:46AM EST 12/31/2014).</p>
+
+<p>In February, I set up a custom domain at &ldquo;larry-price.com&rdquo;. Since then, <a href="/blog/2014/12/14/migrating-an-octopress-blog-from-github-pages-to-openshift/">I moved from Github Pages to OpenShift</a> and added SSL.</p>
+
+<p>I integrated Google AdSense this summer. Full disclosure: I&rsquo;ve &ldquo;earned&rdquo; $3.78 in the past 6 months. From my perspective, these ads are simply an experiment to see how I could potentially monetize this blog. Another experiment was posting Amazon Associate links with my <a href="/blog/categories/write-ups">write-up posts</a>; I&rsquo;ve gotten 4 clicks and 0 buys.</p>
+
+<p>In an attempt to keep people on the site &ldquo;longer&rdquo;, I added a Related Posts section above the Comments - it makes the blog take forever to generate and has had negligible results. It turns out users are more likely to click the related tags than the related posts. I intend to remove the Related Posts section soon (it may not be there when you read this).</p>
+
+<h3>Hello, 2015</h3>
+
+<p>As I enter the new year, I want to be able to look back next year at a set of naïve goals and wonder why I ever thought they were practical. So here they are:</p>
+
+<ul>
+<li>Contribute meaningful code to several open source projects not created by me</li>
+<li>Read at least 1 book per month</li>
+<li>Attend more meetups
+
+<ul>
+<li>As a note, I am in fact <em>starting</em> a <a href="http://www.meetup.com/Indy-Golang">meetup for Google Go in Indianapolis</a> starting on January 6, 2015. This goal may actually be attainable!</li>
+</ul>
+</li>
+<li>&gt;3000 sessions/month on this blog (currently ~1400)</li>
+<li>Become pro at using chopsticks
+
+<ul>
+<li>I&rsquo;m already pretty good, but by the end of 2015 I will be eating pizza with chopsticks</li>
+</ul>
+</li>
+<li>More effectively conceal emotions when working with peers and clients
+
+<ul>
+<li>Use this energy and passion to put the situation in my control instead</li>
+</ul>
+</li>
+<li>Work remotely more and better</li>
+<li>Obtain more technical leadership roles on projects
+
+<ul>
+<li>Not entirely in my control, I know, but I&rsquo;m hoping that 2015 is a year where I&rsquo;m able to demonstrate both my technical skills and proclivity to command</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>Goodbye, 2014</h3>
+
+<p>Thanks for reading. Have you thought about doing one of these yourself? You really should! There&rsquo;s lots of help out there if you need it - you can even reach out to me, if you like.</p>
+
+<p>As always, may your compile times be short and your error messages meaningful.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/posts/10">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/posts/8">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <span class="social-media-bar">
+    <a href="https://github.com/larryprice" title="Github" alt="github profile"><img src="/images/icon_github.png" class="social-media-icon" /></a>
+    <a href="https://launchpad.net/~larryprice" title="Launchpad" alt="launchpad profile"><img src="/images/icon_lp.png" class="social-media-icon" /></a>
+    <a href="https://twitter.com/larryrprice" title="Twitter" alt="Twitter profile"><img src="/images/icon_twitter.png" class="social-media-icon" /></a>
+    <a href="https://www.linkedin.com/pub/larry-price/3a/630/47b" title="LinkedIn" alt="LinkedIn profile"><img src="/images/icon_linkedin.png" class="social-media-icon" /></a>
+    <a href="mailto:larry@larry-price.com" title="Email" alt="email me"><img src="/images/icon_email.png" class="social-media-icon" /></a>
+  </span>
+</section>
+<section>
+  <h1>void* Larry</h1>
+  <p>I'm a codeslinger debugging from the mean streets of Indiana. Welcome to my blog, where I'll tell the tales of wondrous things I discover in the digital jungle.</p>
+</section>
+<section>
+  <h1>Go for Web Development</h1>
+  <p><strong><a href="https://www.packtpub.com/web-development/go-web-development-video" target="blank">Go for Web Development</a></strong> is an online video series designed by me where you'll follow along to build a personal library app in Go. You'll start with a blank slate but quickly learn to take advantage of popular libraries such as gorilla/mux, negroni, gorp, ace, and bcrypt.</p>
+</section>
+<section>
+  <h1>FOSDEM 2017</h1>
+  <p>In 2017, I had the opportunity to give a short talk at FOSDEM in Brussels. I even <strong><a href="https://www.youtube.com/watch?v=FX1fSTOU8Ao&t=1152s" target="blank">recorded an at-home experience</a></strong> with higher quality audio and slides than the livestream.</p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/04/18/on-gender-bias-and-home-improvement/">On Gender Bias and Home Improvement</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/04/11/using-d-bus-signals-in-python/">Using D-Bus Signals in Python</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python/">Creating an Asynchronous D-Bus Service With Python</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/04/04/creating-a-d-bus-service-with-python/">Creating a D-Bus Service With Python</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/02/15/snappy-libertine/">Snappy Libertine</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Tag Cloud</h1>
+    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.75%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.625%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.875%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.5%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.625%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.75%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.5%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 113.125%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.625%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.5%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.875%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.75%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.875%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.875%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.875%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.875%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.875%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.875%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.875%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.625%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.75%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.875%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.875%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 124.375%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 111.25%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.875%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.625%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.625%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.875%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.875%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.875%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.625%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.875%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.875%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.875%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 126.25%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.875%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.625%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.875%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.5%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.875%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.875%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.875%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.875%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.5%'>remote</a> <a href='/blog/categories/retro' style='font-size: 113.125%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.875%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 131.875%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.625%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.875%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.875%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.875%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 115.0%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.875%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.875%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.625%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 115.0%'>testing</a> <a href='/blog/categories/trello' style='font-size: 115.0%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.75%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.75%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.875%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.875%'>upstart</a> <a href='/blog/categories/web' style='font-size: 141.25%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.125%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.875%'>xml</a> </span>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/larryprice">@larryprice</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'larryprice',
+            count: 5,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+  <style>
+    .sidebar-ad { width: 280px; height: 280px; }}
+    @media(min-width: 375px) { .sidebar-ad { width: 350px; height: 90px; } }
+    @media(min-width: 475px) { .sidebar-ad { width: 450px; height: 90px; } }
+    @media(min-width: 575px) { .sidebar-ad { width: 550px; height: 90px; } }
+    @media(min-width: 675px) { .sidebar-ad { width: 650px; height: 90px; } }
+    @media(min-width: 750px) { .sidebar-ad { width: 200px; height: 200px; } }
+    @media(min-width: 768px) { .sidebar-ad { width: 210px; height: 210px; } }
+    @media(min-width: 1280px) { .sidebar-ad { width: 260px; height: 260px; } }
+  </style>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- Sidebar Ad -->
+    <ins class="adsbygoogle sidebar-ad"
+         style="display:inline-block"
+         data-ad-client="ca-pub-6961096698495477"
+         data-ad-slot="8892886941"></ins>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</section>
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  <center>
+	  Copyright &copy; 2017 - Larry Price -
+	  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span><br/>
+	  Note: Views and opinions expressed belong solely to the author and do not represent the views of the any other person or company.
+	</center>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'larryprice';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

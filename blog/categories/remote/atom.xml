@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: remote | Larry Price]]></title>
+  <link href="https://larry-price.com/blog/categories/remote/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2017-08-25T08:42:34-05:00</updated>
+  <id>https://larry-price.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    <email><![CDATA[larry@larry-price.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Going Remote: 4 Months In, aka Remote Life 4-eva]]></title>
+    <link href="https://larry-price.com/blog/2016/08/04/going-remote-4-months-in/"/>
+    <updated>2016-08-04T20:16:04-04:00</updated>
+    <id>https://larry-price.com/blog/2016/08/04/going-remote-4-months-in</id>
+    <content type="html"><![CDATA[<p><em>This is the third in a series of blog posts detailing my experience acclimating to a fully remote work experience. You may also enjoy my original posts <a href="/blog/2016/04/11/going-remote-1-week/">detailing my first week</a> and <a href="/blog/2016/05/05/going-remote-1-month-in/">my first month</a>.</em></p>
+
+<p>Has it really been 4 months since I started riding the raging river of remote work? After my first month, I felt pretty good about my daily schedule and work/life balance. Since the last post, I&rsquo;ve met many of my co-workers IRL, learned to find my own work, and figured out how to shake things up when I get in a rut.</p>
+
+<h3>But First, Did I Handle My Action Items?</h3>
+
+<p>During my first month, I struggled to figure out what to work on after finishing a task. At this point, it&rsquo;s extremely rare that I don&rsquo;t have a dozen things in the queue like a pile of papers in an In Box about to topple over. I am happily busy all the time, either pulling things off the top of the stack, plucking things from the middle, or coming up with some new feature that I need to add.</p>
+
+<p>I feel a lot more comfortable on chat. Our IRC channels are a bit daunting at first, especially when there&rsquo;s a lot of action going on. I&rsquo;ve learned some good ways to interject or reach out to the people that I need to talk to.</p>
+
+<p>Oh, and I still haven&rsquo;t gotten a new floormat. Yes, this one&rsquo;s still broken. For some reason, it just doesn&rsquo;t annoy me as much as it used to. It&rsquo;s almost endearing: like a three-legged puppy that I roll my chair across and stand on top of for 8 hours a day.</p>
+
+<h3>Meeting IRL</h3>
+
+<blockquote><p>Why would you guys actually meet IRL? - Elliot, <em>Mr Robot</em></p></blockquote>
+
+<p>I know a bunch of my coworkers by IRC nicks, and I see a few of their faces in a Google Hangout for our daily standup. This has been sufficient for me, but we did something truly magical in June. We met IRL.</p>
+
+<p>The team I&rsquo;m on (~10 people) and our sibling team (~10 people) met in Montréal, Québec, Canada, for about a week, and it was unlike any meeting-of-the-minds I&rsquo;ve ever been to. The engineers were largely from the US and Europe. We all stayed in the hotel downtown and used a small conference room to hang out and work all day, every day. We woke up and ate breakfast together, met in the conference room at 9, had snacks and coffee, ate lunch together, stopped working precisely at 6, and met back in the lobby a few minutes later to go out on the town until 11 or midnight. It&rsquo;s a truly intense social experience, especially for a group of people who spend most of their days only interacting with other humans through IRC, <em>especially</em> for a group of people who only meet twice a year or so.</p>
+
+<p>This coming together allowed us to hash out a lot of our plans for the coming months, but I believe the true victory in this type of event is the camaraderie it creates. It&rsquo;s nice to be able to put faces to nicks, think about the inflection in a person&rsquo;s voice coming out in the way they type, and know exactly who I need to ping on IRC to accomplish certain tasks. It&rsquo;s fun to hang out with people from all over the world, and it&rsquo;s fun to go drinking with your coworkers, a thing I had temporarily forgotten.</p>
+
+<p>I&rsquo;ll note that we also happened to be in Montréal during the 23rd annual Mondial de la Biere, a huge international beer festival that lasted several days. I&rsquo;ll also note that it was fun to try to speak little bits of French in Montréal, and I&rsquo;m really looking forward to wherever the next sprint abroad may take us (most likely Europe in October).</p>
+
+<h3>Finding Work</h3>
+
+<p>With a decentralized company, the issue of finding things to work on for new employees can be tough. Do you give them something small and easy and possibly belittling? Do you give them something massive that will leave them scratching their heads for weeks and completely out of touch with the rest of the company? How can you find a good middle ground here?</p>
+
+<p>I&rsquo;d say I was &ldquo;eased in&rdquo; with smaller tasks into my current project. After the first few tasks were completed, it was often unclear to me where I should go next. There was always a list of bugs - was I the right person to work on them? Was there any other impending feature or unlisted bug that I should start looking into instead? These are hard questions for someone who hasn&rsquo;t been around for very long.</p>
+
+<p>Over time, I gained more and more responsibilities. I needed a bug fixed pronto in another project, so I did it myself and submitted an MP. Oh, you understand this codebase? You can be a maintainer now! Oh, I think I remember from your resume that you have some golang experience. We need this fixed ASAP, using SD cards is completely broken without it!</p>
+
+<p>It&rsquo;s all a slippery slope to having a bottomless bucket of super-interesting things to choose from to do work, perform code reviews, and answer community questions. Yet <em>somehow</em> it&rsquo;s all happened in a way that is not overwhelming, but freeing. When I get stuck on a problem or need a short break from my current project, there&rsquo;s plenty of other work to go around. Which leads me to&hellip;</p>
+
+<h3>Shaking Things Up</h3>
+
+<p>Routine can be helpful, but it can also be terrible. For the parts of May and June that I wasn&rsquo;t traveling, I was largely waking up at the same time, making the same lunch, listening to the same music every day, petting the same cats, and picking up the same kinds of tasks from the backlog. None of this was bad <em>per se</em>, but I found myself getting a tad sluggish. It would be harder to work on menial tasks, and easier to come up with elaborate solutions to simple problems. So what did I do?</p>
+
+<p>I started varying my sleep schedule. Some days I get out of bed at 7, other days I get out of bed at 8:45. Because I work from home, I don&rsquo;t have to worry about fighting traffic or skipping breakfast.</p>
+
+<p>I started varying my lunches. I was making some fun rissotto recipes, but since it&rsquo;s summer I&rsquo;ve been mixing up a bunch of different vegetables into a menagerie of salads: sauteed green tomatoes, onions, and zucchini; cukes and onions; pineapple, succotash, and eggs.</p>
+
+<p>As I&rsquo;ve gained more responsibilities for various projects, I&rsquo;ve been able to branch into different kinds of tasks. After finishing up a big rework of one codebase, I can start jumping into bugs somewhere else. I can dig deep somewhere, and pivot when I&rsquo;m ready to go back. There&rsquo;s always something interesting to work on, and I can see the way different tasks help us towards our end goal. Not to mention I can <em>always</em> do bug hunts.</p>
+
+<h3>Remote Life 4-eva</h3>
+
+<p>It&rsquo;s not just working remotely that makes this possible - it&rsquo;s the people, the culture, and the fun and interesting products we&rsquo;re creating. Maybe I&rsquo;ll start blogging more about those things in the future. I don&rsquo;t have much in this area that I&rsquo;m looking to improve on, so this could be the last post in the series. Maybe I&rsquo;ll do one at the 1-year mark to note any new tricks I&rsquo;ve learned. Until then, keep looking our for other non-diary-entry blog posts.</p>
+
+<p>Looking for advice on working remotely? Not sure if you&rsquo;d like it? Do you have a strong disagreement with me as a person or my lifestyle choices? Hit me up and we can chat!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Going Remote: 1 Month In]]></title>
+    <link href="https://larry-price.com/blog/2016/05/05/going-remote-1-month-in/"/>
+    <updated>2016-05-05T20:21:56-04:00</updated>
+    <id>https://larry-price.com/blog/2016/05/05/going-remote-1-month-in</id>
+    <content type="html"><![CDATA[<p><em>This is the second in a series of blog posts detailing my experience migrating from a culture based on co-location to a fully remote environment. You may also enjoy my <a href="/blog/2016/04/11/going-remote-1-week/">original post detailing my first week</a>. Look out for another post in the fall.</em></p>
+
+<p>I&rsquo;ve spent an entire month working remotely. Whereas I spent much of my first week working remotely getting my home office in a working state, the rest of the month was largely spent acclimating to a culture of complete autonomy, getting comfortable with my peers, and finding my way around.</p>
+
+<h3>Attacking My Action Items</h3>
+
+<p>One of my action items from <a href="/blog/2016/04/11/going-remote-1-week/">the week 1 post</a> involved personalizing my workspace. I brought three posters from our second-floor study and planted them on the walls of my new office area downstairs. It makes my new office feel a lot more like my own space and a lot less like the formerly-unused living room. I have a 1994 Ren&amp;Stimpy calendar hanging on the bookshelf as well as a few stickers and other various nerdy hangables. I&rsquo;m fairly happy with the current state of my office.</p>
+
+<p>I&rsquo;ve made a point of exercising more during the work day. I work my biceps and triceps with my handheld weight, as many nose-to-the-ground push-ups as I can, and really hard bicycles until my abs tell me to stop. I&rsquo;ve also been walking outside in the early afternoon to check on the state of my hop garden. Not to mention I&rsquo;m still making significant use of my sit-stand desk.</p>
+
+<p>As far as extracurricular activities go, I think I&rsquo;m keeping steady. I&rsquo;ve been going to my local Code&amp;Coffee, and I just had a monthly meeting of Indy Golang. I&rsquo;ve been reading a bunch of blogs and eating up modern C++ material. I&rsquo;d like to make sure I get to IndySA every now and then, but I usually just whiff the date. I haven&rsquo;t been doing much coding outside of work, but that hasn&rsquo;t been high on my priority list recently. Since I currently work for an open-source company, I am embedded in the world of code all day, and I usually end the day very satisified.</p>
+
+<p>I did not buy a better floormat. Still on the list.</p>
+
+<h3>Acclimation Station</h3>
+
+<p>Although my first week was a success, I&rsquo;ll admit it was still a little awkward. However, I&rsquo;ve found myself significantly more comfortable at the end of my first month.</p>
+
+<p>In this position, there is a level of autonomy unlike any I have ever experienced. No one tells me what to work on next. I figure out what I&rsquo;ll be doing almost entirely based on incoming bug reports, community rumblings, nebulous plans, or simply things that interest and/or annoy me about a project. Priorities are in the eye of the beholder, and it&rsquo;s in my best interest to pick up work that is meaningful and relevant. I complete the task, get it into review, and make sure everybody&rsquo;s happy. Since everyone has a shared goal, it&rsquo;s unusual for developers to be especially nit-picky during reviews, and thus reviews become more focused on correctness, education, and mysterious edge cases.</p>
+
+<p>Talking to people on IRC can be a little daunting because so many of my coworkers are just so good at it. At first, talking to the right people seemed impossible. Eventually, I&rsquo;ve learned to become efficient with my IRC usage and I have certain channels relevant to my current tasks where I hang out. Although I describe our communications as &ldquo;efficient&rdquo;, that&rsquo;s not to say we don&rsquo;t joke around and have a good time. There are people I interact with every day who I consider work-friends even though we&rsquo;ve never spoken face-to-face.</p>
+
+<p>Over the past several weeks we&rsquo;ve held two company-wide events. The first was a remote open forum with our CEO. During the remote forum, the CEO discussed how the company was doing and then she opened the floor for questions. Someone would ask a question in chat, people would vote for those questions, and then we would get an answer. It was done quite well and felt like a great introduction to the CEO and her vision for our company&rsquo;s future. This week was a three-day conference spanning the entire organization. Presenters would share their faces and slides using Hangouts on Air, while attendees watched live and chatted together in a relevant channel. I learned a lot about the wider scope and relevance of my project, and I also got to hear about all the other interesting things going on around the company. I got to hear the founder do a Q&amp;A, which gave rise to many great questions with humble, honest answers which gave me a good idea of what we are all about as an organization. Attendance was optional, so irrelevant presentations could be ignored as easily as closing a tab.</p>
+
+<p>For the first couple weeks, I couldn&rsquo;t figure out how some of my peers could be so busy all the time. Now I understand. I found myself working on projects several dependencies away from my own, adding features and fixing bugs such that our project could integrate with the dependency and we could get features shipped. Due to the nature of everything being open-source, I&rsquo;m constantly working with my peers to figure out where a bug might be stemming from or the appropriate level to inject a feature or even just who to talk to about how things work. You fix a bug in one project and accidentally become a contributor while the project is in desperate need of many code reviews, which you then do and become an even more relevant member to the team.</p>
+
+<p>Oftentimes, traditional office workers will say things to me like, &ldquo;I don&rsquo;t know how you work from home; I&rsquo;d just be distracted all day and wouldn&rsquo;t be able to get anything done.&rdquo; I&rsquo;ve found that to be completely untrue. There are many days where I have trouble not working in the evening. I&rsquo;ll read up on some modern C++ techniques or read some misguided blog post about our projects, and I&rsquo;ll think about jumping on the computer at 9pm just to take a peek. It takes a lot of self-restraint, but I&rsquo;ve thus far been pretty good about not working after work. Hopefully I can keep that up.</p>
+
+<p>In a few weeks, my team is meeting in Montreal to hang out and do code for a week. I&rsquo;m excited for the opportunity to see everyone (not to mention to be in Montreal), and I&rsquo;m certain that it will help me feel even more acclimated to this new environment.</p>
+
+<h3>Some New Action Items</h3>
+
+<ul>
+<li><strong>Better floormat</strong>. Standing on my plastic mat right now, my feet do start to hurt. I need to run to an office supply store and find some rubber padding.</li>
+<li><strong>IRC Champion</strong>. Although I&rsquo;m more comfortable on IRC, I know I could be better about reaching out at the right times to the right people.</li>
+<li><strong>Automaton</strong>. I still grope around for work when I&rsquo;m not sure what to do next. I&rsquo;d like to come up with a process to determine what should be next on the agenda without too much synchronous assistance.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Going Remote: 1 Week In]]></title>
+    <link href="https://larry-price.com/blog/2016/04/11/going-remote-1-week/"/>
+    <updated>2016-04-11T20:40:00-04:00</updated>
+    <id>https://larry-price.com/blog/2016/04/11/going-remote-1-week</id>
+    <content type="html"><![CDATA[<p><em>I would like for this to be the first in a series of blog posts detailing my experience migrating from a culture based on co-location to a fully remote environment. Look out for another post at about the 1-month mark.</em></p>
+
+<p>I&rsquo;ve spent an entire week working remotely. How did it go? I&rsquo;m not going to go into my current job here (if you&rsquo;re curious: I love it), but I&rsquo;m going to try to focus on the aspects of setting up a pleasant environment for working from home and how I coped during my first week.</p>
+
+<h3>But first: some background</h3>
+
+<p>I&rsquo;ve never worked remotely as a professional software engineer for more than one day at a time until now. I&rsquo;ve been a part of an office with traditional cube farms and an office with more modern team spaces. I haven&rsquo;t worked in a <a href="https://twitter.com/ptone/status/582764080219320323">Silicon Valley Sweat Shop</a>, and I&rsquo;ve never had a private office with walls, windows, and that holy grail of office furniture: a door. My past organizations have been nested in a culture of co-location which is, of course, very normal. However, I&rsquo;ve very recently moved to a position at a new organization with cultural values borrowed from the open-source community. About 70% of the 700 employees are full remote.</p>
+
+<p>When I use the term &ldquo;working remotely,&rdquo; I mean that a given employee works from wherever they want. For the majority of people it&rsquo;s their home or apartment, but it could also be a coffee shop, a co-working space, a public park, or anywhere with an internet connection and a nearby power source.</p>
+
+<h3>Setting Up My (Physical) Environment</h3>
+
+<p>Also known as <em>Things I Had to Buy to Make This Work</em>.</p>
+
+<p>To prepare for this new work environment, I did what anyone would do: I started buying things. I bought a <a href="http://amzn.to/1Q3HywG">cool wireless mouse</a> that I could connect to my laptop through it&rsquo;s built-in bluetooth. I bought <a href="http://www.ikea.com/us/en/catalog/products/00103102/#/90289172">a chair with a name from IKEA</a> and one of those cheap plastic carpet protectors. I started looking into motorized sit/stand desks, but didn&rsquo;t purchase one immediately (a mistake I quickly recovered from). I moved a second lamp into my home office and figured I was set up for success.</p>
+
+<p>My first day, poor Markus (the chair) cracked the floor protector in several places, and my carpet is so thick that the chair couldn&rsquo;t roll on its own. I painfully used my laptop&rsquo;s keyboard for about 15 minutes before finding <a href="http://amzn.to/1MqycR8">another mechanical keyboard</a> to use instead which arrived that afternoon. The height of my old desk made sitting for hours super uncomfortable, so I quickly put in an order for a <a href="https://www.myupdesk.com/">sit/stand desk</a> that I could use downstairs where the carpet is thinner.</p>
+
+<p>The next day, my new mechanical keyboard refused to let me type Shift+RightAlt without thinking it was a Meta key, causing all my keyboard shortcuts to be busted. I swapped it out with my old mechanical keyboard that worked just as well, but with a functioning Shift+RightAlt. It was around this time I noticed my WiFi connection was becoming flaky. I cursed my ISP and decided it was fine for the time being.</p>
+
+<p>At some point during the week, the sit/stand desk arrived. Because of the thick carpet and uneven floors upstairs, I decided to start creating my new office downstairs. Unfortunately, my house is extremely poorly lit, so at the end of the day I had to run out to Target to buy a <a href="http://www.target.com/p/threshold-torchiere-floor-lamp-with-alabaster-glass-shade-oil-rubbed-bronze/-/A-14580986">new lamp</a> (and some cream cheese! classic combo!).</p>
+
+<p>By this time it was Friday. My network connection was not just bad, but worse than it ever had been. I started sniffing around the internets and found that <a href="https://www-ssl.intel.com/content/www/us/en/wireless-products/dual-band-wireless-ac-7260-bluetooth.html">my wireless card</a> (a bluetooth/WiFi dual card) was notoriously bad at handling bluetooth and WiFi at the same time on Linux, but sometimes updating the kernel and getting the latest iwlwifi drivers fixed the problem. So I updated to 4.3. No luck, so I updated to 4.4. <em>Still no luck</em>. By the end of things, I had the 4.4.6 kernel and I honestly thought things were a little better. A few hours and a dropped Hangouts call later, I realized I was wrong. However, booting off of a USB with fresh Ubuntu gave me a consistent and fast network connection. After piddling around a bit, I dramatically smacked my forehead. I flipped off the bluetooth connection on my laptop, and my network connection was fast and stable. I had been thwarted by my beautiful bluetooth mouse which, fortunately for me, also came with the usual wireless USB dongle.</p>
+
+<p>At the end of the week, I finally felt like my setup was fine. Network still a little slower than expected, but I fixed that recently by moving the router to higher ground.</p>
+
+<h3>Let me count the ways&hellip;</h3>
+
+<p>OK, so I had some issues getting my home office in working order. But <strong>I love working from home</strong>.</p>
+
+<p>I don&rsquo;t feel rushed when I get out of bed in the morning. I shave, shower, make coffee in the french press, and perfectly toast/cheese my bagel; and I get to enjoy every minute of getting ready for the day. I start when I want, but when I want is a normal time. I&rsquo;m at my desk ready to do my job sometime between 7:30am and 8:30am. The only way I need to let people know I&rsquo;m in the office is by signing into chat.</p>
+
+<p>My house is almost silent except for the noises I make and the infrequent meow of a cat wanting attention. I can focus on what I&rsquo;m doing without being distracted by peers or normal office noises. I don&rsquo;t need to put on headphones when I want solitude, which means I&rsquo;m not distracted by whatever noise is coming out of the headphones. Achieving flow seems to be much easier when there are fewer distractions.</p>
+
+<p><em>Speaking of cats</em>&hellip; I know this will seem silly, but it&rsquo;s quite nice to have my feline companions hanging out with me all day. Usually they&rsquo;re taking naps nearby so I can say &ldquo;d'awwwwwwww&rdquo;, or they&rsquo;re waiting in the kitchen for me to get up so they can get pets. Go <a href="http://www.adoptapet.com/cat-adoption">adopt a cat</a> now.</p>
+
+<p>I can make a healthy meal really easily at lunch. I love being able to pull some frozen veggies out of the freezer, throw them in the skillet with some sauce ingredients, add some protein, and feel like I&rsquo;m eating well in the middle of the day.</p>
+
+<p>All of my communication comes through chat, email, and infrequent Hangouts. We mostly just use Hangouts for our daily standup, and it&rsquo;s a great way to see everyone&rsquo;s faces and feel like a team. Email is pretty much only used for mailing lists, such as new merge proposals, bug reports, and company news; so I only glance at my email a couple times a day, and mark whatever I don&rsquo;t care about as Done. We use Google services to do this, which means I&rsquo;m using Inbox to achieve zero-inbox. Chat is our primary means of communication. Being a remote group, the chat is extremely efficient. There are no graphic memes, and chats never end with &ldquo;let&rsquo;s get a conference room to hash this out.&rdquo; Information is constantly being exchanged through the chat, and I rarely feel dissatisfied with the outcome. It&rsquo;s also interesting to note that when you leave the chat, you do not get to know what happened in your absence. However, this does not seem to be a hindrance to anyone, but almost more of a relief. You don&rsquo;t need to be in-the-know 24/7 to know what&rsquo;s going on.</p>
+
+<h3>Near-Future Goals</h3>
+
+<ul>
+<li><strong>Exercise more</strong>. Although my eating habits feel a little better, my exercise habits have been much worse. I used to meander the office every hour or two to get 10-15 minutes of exercise, or go outside to walk around. I have my sit/stand desk set up now, and I shuffle back and forth based on what I&rsquo;m doing and how my butt feels, but that doesn&rsquo;t count as exercise. I plan to lift my 10lb weights more frequently, and I&rsquo;d like to work out my core with push-ups and bicycles. It would also be great to walk around the neighborhood in the summer.</li>
+<li><strong>Extracurricular</strong>. It&rsquo;s been a while since I&rsquo;ve worked on something meaningful in the evenings, and it&rsquo;s been tough to get started on something since my work office (and computer) is now also my play office. In the next few weeks, I&rsquo;d like to build an Atom.io package to integrate with bzr.</li>
+<li><strong>Personalize workspace</strong>. Since I&rsquo;ve taken over the living room, the decor is mostly a big, decorative clock. I have some wicked posters I&rsquo;d like to put up, but I need to convince my housemate that they won&rsquo;t look too tacky in such a guest-visible area.</li>
+<li><strong>Find a better floormat</strong>. Like I said, this cheap IKEA floormat cracked on the first day. I&rsquo;d like to find something vinyl or closer to rubber that will be more resilient but also more comfortable when I morph into standing mode.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Remote: Office Not Required]]></title>
+    <link href="https://larry-price.com/blog/2014/10/31/remote-office-not-required/"/>
+    <updated>2014-10-31T19:34:13-04:00</updated>
+    <id>https://larry-price.com/blog/2014/10/31/remote-office-not-required</id>
+    <content type="html"><![CDATA[<blockquote><p>The city is the original talent hub. Traditionally, those who ran the engines of capitalism thought: &ldquo;Let&rsquo;s gather a large numberof people in a small grographical are where they must live on top of each other in tight quarters, and we&rsquo;ll be able to find plenty of able bodies to man our factories.&rdquo; Most splendid, Sir Moneybags!</p>
+
+<p>From the section titled &ldquo;End of city monopoly&rdquo;</p></blockquote>
+
+<h3>The Gist</h3>
+
+<p><a href="http://www.amazon.com/gp/product/0804137501/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0804137501&amp;linkCode=as2&amp;tag=larpriandthee-20&amp;linkId=6RSEPWJB4VV7ZUGR"><strong>Remote</strong></a> by Jason Fried and David Hansson of <a href="https://basecamp.com/">BaseCamp</a> (formerly 37signals), similarly to previous entry <a href="http://www.amazon.com/gp/product/0307463745/ref=as_li_qf_sp_asin_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0307463745&amp;linkCode=as2&amp;tag=larpriandthee-20"><strong>Rework</strong></a>, is a book that will surely resonate with most working Americans who despise commuting and the constant distraction of the modern office. <strong>Remote</strong> discusses the pros and cons of working remotely, with a bias towards the positive aspects.</p>
+
+<h3>My Opinion</h3>
+
+<p>I read this book in a day. I don&rsquo;t mean a Saturday or a holiday of some kind (although it was Halloween, I suppose). I mean I read part of it in the morning, drove to the office, returned home in the afternoon, and finished it before dark. I love the authors' down-to-earth tone and I love the idea of telecommuting. There&rsquo;s also lots of pictures. Yea, pictures!</p>
+
+<p>Remote work is not a new concept, but the number of people choosing to telecommute has begun to dramatically increase. This is mostly because we all work with a digital wall in front of us all day called a computer, and many jobs don&rsquo;t require direct contact with human beings the entire work-day. America seems to be coming to terms with the fact that our current corporate system is broken: the offices of 2014 are not the offices of the 1960s, but we still live in a world of endless meetings and sprawling cube farms.</p>
+
+<p>Telecommuting opens up a world of possibilities. Obviously, a company offering remote positions will gain the opportunity to hire new talent from other cities, states, or even countries. Less obviously, current employees can be given the chance to be free from the shackles of a single office buildling in a single city. Instead of a company&rsquo;s top talent leaving the company to go live in New Orleans instead of Chicago, the employee can choose to live wherever she wants and telecommute, keeping all the training and knowledge gained inside the company.</p>
+
+<p>Co-working spaces are becoming much more prevalant in major cities across the US, and are a great home office replacement for those without a spare room. If you haven&rsquo;t visited a local co-working space, I suggest you go visit one! Someone will gladly let you in for a tour and you can see what all the fuss is about. If you&rsquo;re not into paying for an open-space membership, there are always coffee shops and libraries that are happy to house you on a daily basis.</p>
+
+<p>The biggest downside to remote work seems to be in isolation: socializing becomes more of a hobby than a requirement. There may be chats, emails, and the occasional phone call to respond to throughout the day, but none of those can make up for face-time with other humans. Some individuals will have families to socialize with, but you can&rsquo;t put all the burden on the people you love. Hobbies, meetups, and conferences would likely become much more important from a social perspective to an individual working remotely.</p>
+
+<h3>Who Would Like This</h3>
+
+<p>The modern workforce will eat this up. There is no way that millenials will put up with the archaic concept of 9-5 in the office. They (I suppose <em>we</em>, though sometimes it pains me to admit it) never take the status quo as a satisfactory answer.</p>
+
+<p>I think that the blanket term &ldquo;manager&rdquo; would benefit from reading this book, but may be disgruntled by what they find inside. Handling people is not easy, and handling them remotely seems like an unsettling concept.</p>
+]]></content>
+  </entry>
+  
+</feed>

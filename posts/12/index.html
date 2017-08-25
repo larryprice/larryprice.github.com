@@ -1,0 +1,1051 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Larry Price</title>
+  <meta name="author" content="Larry Price">
+
+  
+  <meta name="description" content="During the hardening of Ollert, a Trello data analysis tool I wrote, I started writing acceptance tests. I quickly ran into an issue where the meat &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="https://larry-price.com/posts/12">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Larry Price" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='https://fonts.googleapis.com/css?family=Montserrat+Alternates|Marcellus' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35669093-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner" style="background:url(/images/coffee-stain.png) top right no-repeat; background-size: auto 100%;"><hgroup>
+  <h1><a href="/">Larry Price</a></h1>
+  
+    <h2>And The Endless Cup Of Coffee</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:larry-price.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/books">Books</a></li>
+  <li><a href="/blog/projects">Projects</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit/">Testing Through a Trello Connection With Capybara and Webkit</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-08-07T07:25:11-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>7:25 am</span></time>
+        
+           | <a href="/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>During the hardening of <a href="https://ollertapp.com">Ollert</a>, a Trello data analysis tool I wrote, I started writing acceptance tests. I quickly ran into an issue where the meat of my application requires opening pop-up window, signing into Trello, and allowing my application access.</p>
+
+<p>I created a test user on Trello with a few varied boards to allow for proper testing. In doing this, I store the user&rsquo;s login information in my .env file. For the most part, I can use the steps provided in <a href="https://gist.github.com/larryprice/546d6c029bb3074bd84c">this common web_steps.rb</a>.</p>
+
+<figure class='code'><figcaption><span>Connecting.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Landing</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">Background:</span><span class="nf"></span>
+</span><span class='line'><span class="k">  Given </span><span class="nf">I am on the landing page</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">@javascript</span><span class="nf"></span>
+</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Deny connecting to Trello</span>
+</span><span class='line'><span class="k">  Given </span><span class="nf">I follow &quot;</span><span class="s">Connect to Get Started</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I press &quot;</span><span class="s">Deny</span><span class="nf">&quot; on the Trello popup</span>
+</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">I should be on the landing page</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">@javascript</span><span class="nf"></span>
+</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Allow connecting to Trello</span>
+</span><span class='line'><span class="k">  Given </span><span class="nf">I follow &quot;</span><span class="s">Connect to Get Started</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">When </span><span class="nf">I authorize with Trello as the test user</span>
+</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">I should not see &quot;</span><span class="s">Connecting...</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I should not see &quot;</span><span class="s">Redirecting...</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I should be on the boards page</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When the Trello popup appears, we have to specify the window we&rsquo;re going to use. Since I&rsquo;m using <a href="https://github.com/thoughtbot/capybara-webkit">capybara-webkit</a>, I&rsquo;m going to go ahead and do all of my Trello popup activities in one step, which saves me from writing a lot of unnecessary steps.</p>
+
+<figure class='code'><figcaption><span>trello_popup_steps.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">When</span> <span class="sr">/^I press &quot;(.*?)&quot; on the Trello popup$/</span> <span class="k">do</span> <span class="o">|</span><span class="n">button</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">trello_popup</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">last</span>
+</span><span class='line'>  <span class="n">page</span><span class="o">.</span><span class="n">within_window</span> <span class="n">trello_popup</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">click_button</span> <span class="n">button</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">When</span> <span class="sr">/^I authorize with Trello as the test user$/</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">trello_popup</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">last</span>
+</span><span class='line'>  <span class="n">page</span><span class="o">.</span><span class="n">within_window</span> <span class="n">trello_popup</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">click_link</span> <span class="s2">&quot;Log in&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fill_in</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="ss">with</span><span class="p">:</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;TEST_USER_TRELLO_USERNAME&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="n">fill_in</span> <span class="s2">&quot;password&quot;</span><span class="p">,</span> <span class="ss">with</span><span class="p">:</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;TEST_USER_TRELLO_PASSWORD&#39;</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">click_button</span> <span class="s2">&quot;Log In&quot;</span>
+</span><span class='line'>    <span class="n">click_button</span> <span class="s2">&quot;Allow&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Straightforward so far. We grab the window handle and we click links, fill in fields, and press buttons within that window.</p>
+
+<p>Note that I&rsquo;m using capybara-webkit, a headless web driver, to run my Javascript. Although the first test (&ldquo;Deny&rdquo;) will pass, the &ldquo;Allow&rdquo; test fails ambiguously. This is because capybara-webkit is not recognized as a supported browser by the Trello popup.</p>
+
+<p>Anecdotally, I contacted Trello support about this and received the following response:</p>
+
+<blockquote><p>Currently it is not possible to test this with a headless browser as you are looking to do without getting the unsupported browser message.</p></blockquote>
+
+<p>So I guess we should just give up, right? &hellip;Or we could manipulate the headers we send to load the Trello popup such that Trello <em>thinks</em> we are Google Chromium.</p>
+
+<figure class='code'><figcaption><span>trello_popup_steps.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">When </span><span class="nf">/^I authorize with Trello as the test user$/ do</span>
+</span><span class='line'><span class="nf">  trello_popup = windows.last</span>
+</span><span class='line'><span class="nf">  page.within_window trello_popup do</span>
+</span><span class='line'><span class="nf">    page.driver.header(</span>
+</span><span class='line'><span class="nf">      &quot;</span><span class="s">User-Agent</span><span class="nf">&quot;,</span>
+</span><span class='line'><span class="nf">      &quot;</span><span class="s">Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/34.0.1847.116 Chrome/34.0.1847.116 Safari/537.36</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">    )</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">    click_link &quot;</span><span class="s">Log in</span><span class="nf">&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">    fill_in &quot;</span><span class="s">user</span><span class="nf">&quot;, with: ENV[&#39;TEST_USER_TRELLO_USERNAME&#39;]</span>
+</span><span class='line'><span class="nf">    fill_in &quot;</span><span class="s">password</span><span class="nf">&quot;, with: ENV[&#39;TEST_USER_TRELLO_PASSWORD&#39;]</span>
+</span><span class='line'><span class="nf">    </span>
+</span><span class='line'><span class="nf">    click_button &quot;</span><span class="s">Log In</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">    click_button &quot;</span><span class="s">Allow</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  end</span>
+</span><span class='line'><span class="nf">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Fantastic. Now my tests pass. I can&rsquo;t sleep at night, but my tests pass.</p>
+
+<p>Unfortunately, that won&rsquo;t be the case if I add more tests to this <code>.feature</code> file. Hidden somewhere deep in the browser&rsquo;s cache or cookies or somethings, Trello is remembering that we logged in sometimes. Sometimes it even remembers that someone else has logged in. The UI of the Trello popup changes based on whether it thinks you&rsquo;ve already logged in. In order to keep things consistent, I like to add an if-statement to take care of this case.</p>
+
+<figure class='code'><figcaption><span>trello_popup_steps.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">When </span><span class="nf">/^I authorize with Trello as the test user$/ do</span>
+</span><span class='line'><span class="nf">  trello_popup = windows.last</span>
+</span><span class='line'><span class="nf">  page.within_window trello_popup do</span>
+</span><span class='line'><span class="nf">    page.driver.header(</span>
+</span><span class='line'><span class="nf">      &quot;</span><span class="s">User-Agent</span><span class="nf">&quot;,</span>
+</span><span class='line'><span class="nf">      &quot;</span><span class="s">Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/34.0.1847.116 Chrome/34.0.1847.116 Safari/537.36</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">    )</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">    if page.has_content? &quot;</span><span class="s">Switch Accounts</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">      click_link &quot;</span><span class="s">Switch Accounts</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">    else</span>
+</span><span class='line'><span class="nf">      click_link &quot;</span><span class="s">Log in</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">    end</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">    fill_in &quot;</span><span class="s">user</span><span class="nf">&quot;, with: ENV[&#39;TEST_USER_TRELLO_USERNAME&#39;]</span>
+</span><span class='line'><span class="nf">    fill_in &quot;</span><span class="s">password</span><span class="nf">&quot;, with: ENV[&#39;TEST_USER_TRELLO_PASSWORD&#39;]</span>
+</span><span class='line'><span class="nf">    </span>
+</span><span class='line'><span class="nf">    click_button &quot;</span><span class="s">Log In</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">    click_button &quot;</span><span class="s">Allow</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  end</span>
+</span><span class='line'><span class="nf">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Edge cases addressed. Now I can make connections to Trello and test my application. Be warned, I&rsquo;ve already had these tests break once when Trello updated the UI behind the Trello popup. If Trello ever stops supporting Chromium 34.0, these tests are also likely to stop working. These tests are most useful during development, when we have the potential to break the Trello connection ourselves, and so I think they are well worth the pain of potential future maintenance.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/08/05/javascript-testing-with-capybara-and-cucumber/">Javascript Testing With Capybara and Cucumber</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-08-05T06:40:40-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>6:40 am</span></time>
+        
+           | <a href="/blog/2014/08/05/javascript-testing-with-capybara-and-cucumber/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2014/08/05/javascript-testing-with-capybara-and-cucumber/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In the past, I had written off testing the Javascript in my <a href="http://www.sinatrarb.com/">Sinatra</a> apps as being not worth the pain of setting up. That was pretty naïve of me, as setting up web drivers in <a href="https://github.com/jnicklas/capybara">Capybara</a> is actually pretty easy.</p>
+
+<p>For this post, I assume you already have a capybara-cucumber project set up. If you need help setting up your first tests, consider checking out <a href="/blog/categories/capybara/">some of my other blog posts</a> on the subject.</p>
+
+<h4>Selenium</h4>
+
+<p>Selenium is the default Javascript driver for capybara. To install either run <code>gem install selenium-webdriver</code> or toss <code>selenium-webdriver</code> into your <code>Gemfile</code> and run <code>bundle install</code>.</p>
+
+<p>If you want to run all of your tests with Javascript enabled, you can change the default driver in your <code>env.rb</code> file. For example:</p>
+
+<figure class='code'><figcaption><span>env.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;RACK_ENV&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">require_relative</span> <span class="s1">&#39;../../../web&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;selenium-webdriver&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;capybara/cucumber&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;rspec&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="no">Ollert</span>
+</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">default_wait_time</span> <span class="o">=</span> <span class="mi">10</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># run all tests using Javascript</span>
+</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">default_driver</span> <span class="o">=</span> <span class="ss">:selenium</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">World</span> <span class="k">do</span>
+</span><span class='line'>  <span class="no">Ollert</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>  <span class="no">Mongoid</span><span class="o">.</span><span class="n">purge!</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using Selenium means that your tests will be running using Firefox. Unfortunately, this makes them much, much slower than when you were running the tests using rspec. What I recommend is to limit yourself to only use the Javascript driver when you need to. To accomplish this, we change our <code>env.rb</code> file as such:</p>
+
+<figure class='code'><figcaption><span>env.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;RACK_ENV&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">require_relative</span> <span class="s1">&#39;../../../web&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;selenium-webdriver&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;capybara/cucumber&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;rspec&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="no">Ollert</span>
+</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">default_wait_time</span> <span class="o">=</span> <span class="mi">10</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># use the following web driver to run tests</span>
+</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">javascript_driver</span> <span class="o">=</span> <span class="ss">:selenium</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">World</span> <span class="k">do</span>
+</span><span class='line'>  <span class="no">Ollert</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>  <span class="no">Mongoid</span><span class="o">.</span><span class="n">purge!</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And add the <code>@javascript</code> tag to our Cucumber feature files. I&rsquo;ve written <a href="/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">about using tags in the past</a>, and they are incredibly useful. For example:</p>
+
+<figure class='code'><figcaption><span>DoStuff.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Do Stuff</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Nothing happens with Javascript disbaled</span>
+</span><span class='line'><span class="k">  Given </span><span class="nf">I visit the home page</span>
+</span><span class='line'><span class="nf">  </span><span class="k">When </span><span class="nf">I click &quot;</span><span class="s">Where are they?!</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">I should not see &quot;</span><span class="s">I&#39;m Batman.</span><span class="nf">&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">@javascript</span><span class="nf"></span>
+</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Correct text is displayed with Javascript enabled</span>
+</span><span class='line'><span class="k">  Given </span><span class="nf">I visit the home page</span>
+</span><span class='line'><span class="nf">  </span><span class="k">When </span><span class="nf">I click &quot;</span><span class="s">Where are they?!</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">I should see &quot;</span><span class="s">I&#39;m Batman.</span><span class="nf">&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Assuming there is some Javascript activated by clicking &ldquo;Where are they?!&rdquo; that displays the text &ldquo;I&rsquo;m Batman.&rdquo;, both of the above scenarios will pass. This is because none of the Javascript will run in the first scenario, so the text will not be displayed. In the second scenario, Capybara knows to use the webdriver we set up previously when it sees the <code>@javascript</code> tag.</p>
+
+<h4>Poltergeist</h4>
+
+<p><a href="https://github.com/teampoltergeist/poltergeist">Poltergeist</a> is the first &ldquo;headless&rdquo; web driver I tried. Usage is mostly identical to usage for Selenium, so I&rsquo;ll focus on installation here.</p>
+
+<p>Poltergeist uses <a href="http://phantomjs.org/">PhantomJS</a>, so we need to start by downloading the binary (<a href="https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-i686.tar.bz2">32-bit</a> or <a href="https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-x86_64.tar.bz2">64-bit</a>) and putting it in our path. On my Linux machine, I extracted the contents of the download and copied <code>bin/phantomjs</code> to my <code>/usr/local/bin</code> directory, which I already have in my path. You can also copy it directly to <code>/usr/bin</code> if you like.</p>
+
+<p>On the ruby side, we do that same old song and dance: either do <code>gem install poltergeist</code> or add <code>poltergeist</code> to your <code>Gemfile</code> and run <code>bundle install</code>. Edit your <code>env.rb</code>:</p>
+
+<figure class='code'><figcaption><span>env.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="nf">ENV[&#39;RACK_ENV&#39;] = &#39;test&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">require_relative &#39;../../../web&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">require &#39;capybara/poltergeist&#39;</span>
+</span><span class='line'><span class="nf">require &#39;capybara/cucumber&#39;</span>
+</span><span class='line'><span class="nf">require &#39;rspec&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">Capybara.app = Ollert</span>
+</span><span class='line'><span class="nf">Capybara.default_wait_time = </span><span class="s">10</span><span class="nf"></span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># use the following web driver to run tests</span><span class="nf"></span>
+</span><span class='line'><span class="nf">Capybara.javascript_driver = :poltergeist</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">World do</span>
+</span><span class='line'><span class="nf">  Ollert.new</span>
+</span><span class='line'><span class="nf">  Mongoid.purge!</span>
+</span><span class='line'><span class="nf">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now your Javascript tests should be running using the Poltergeist webdriver. Since Poltergeist is truly headless, your tests will run much faster than they did while using Selenium, but you won&rsquo;t be able to see what&rsquo;s going on while your tests run. There are some slight syntactic differences between the way Poltergeist and Selenium handles separate windows, but other than that they are extremely similar.</p>
+
+<h4>Webkit</h4>
+
+<p><a href="https://github.com/thoughtbot/capybara-webkit">Capybara-webkit</a> is where I eventually landed for running my own tests, after having issues accessing other windows with Poltergeist. Capybara-webkit is also headless and relies on <code>QtWebKit</code> to render pages. So, for starters, you&rsquo;re going to have to install <code>qtwebkit</code>. This has a varied degree of difficulty depending on which operating system you&rsquo;re using, but I didn&rsquo;t have too many problems in Ubuntu once I figured out which library I needed. For help, check <a href="https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit">the guide</a>. On my machine:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install libqtwebkit-dev
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once more: either do <code>gem install capybara-webkit</code> or add <code>capybara-webkit</code> to your <code>Gemfile</code> and run <code>bundle install</code>. Edit your <code>env.rb</code>:</p>
+
+<figure class='code'><figcaption><span>env.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="nf">ENV[&#39;RACK_ENV&#39;] = &#39;test&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">require_relative &#39;../../../web&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">require &#39;capybara/cucumber&#39;</span>
+</span><span class='line'><span class="nf">require &#39;capybara/webkit&#39;</span>
+</span><span class='line'><span class="nf">require &#39;rspec&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">Capybara.app = Ollert</span>
+</span><span class='line'><span class="nf">Capybara.default_wait_time = </span><span class="s">10</span><span class="nf"></span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># use the following web driver to run tests</span><span class="nf"></span>
+</span><span class='line'><span class="nf">Capybara.javascript_driver = :webkit</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">World do</span>
+</span><span class='line'><span class="nf">  Ollert.new</span>
+</span><span class='line'><span class="nf">  Mongoid.purge!</span>
+</span><span class='line'><span class="nf">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Again, you won&rsquo;t be able to see your tests run, but they should be pretty snappy. I was able to use capybara-webkit to tackle some window issues I was having, but (as of this writing) capybara-webkit has not caught up with more modern capybara window-switching syntax. Other than that, the syntax is identical to the other drivers I&rsquo;ve discussed for common cases. If you&rsquo;re running capybara-webkit on a CI server, see <a href="http://blog.55minutes.com/2013/09/running-capybara-webkit-specs-with-jenkins-ci/">this post about using Xvfb</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install/">Use NVM to Manage Your NodeJS Install</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-08-02T20:00:57-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2014</span></span> <span class='time'>8:00 pm</span></time>
+        
+           | <a href="/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&rsquo;ve been trying to get into <a href="http://nodejs.org/">NodeJS</a>, and so my immediate thought is that I want to be able to install different versions for different projects, a la <a href="https://rvm.io">rvm</a> for <a href="https://ruby-lang.org">ruby</a>. Fortunately, this already exists.</p>
+
+<p><a href="https://github.com/creationix/nvm">NVM</a> gives me the equivalent functionality of rvm but for NodeJS, making all my dreams come true. Here&rsquo;s how I installed it on my Linux boxes:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>curl https://raw.githubusercontent.com/creationix/nvm/v0.12.2/install.sh <span class="p">|</span> bash
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>Note: This URL will get you nvm version 0.12.2. This link may not be valid in the future, where you come from. Check out the <a href="https://github.com/creationix/nvm">github repo</a> for any newer versions. If you&rsquo;re brave, trusting, or just really naïve, you can even change <code>v0.12.2</code> above to <code>master</code> to get the bleeding edge install.</em></p>
+
+<p>The above line of code will download the files, install nvm in your home directory, and update your profile to include nvm&rsquo;s current Node version in your path. NVM autocomplete isn&rsquo;t in place by default, but we can enable it by adding the following to the end of our .bash_profile:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[[</span> -r <span class="nv">$NVM_DIR</span>/bash_completion <span class="o">]]</span> <span class="o">&amp;&amp;</span> . <span class="nv">$NVM_DIR</span>/bash_completion
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now it&rsquo;s time to actually install us some Node! You can use <code>nvm ls-remote</code> to list the versions of Node currently available for download. At the time of this writing, the most recent version is <strong>v0.11.13</strong>. Installing is easy (and quick):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>nvm install 0.11.13
+</span><span class='line'>...
+</span><span class='line'><span class="nv">$ </span>nvm use 0.11.13
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Since this is the only Node on my system, I&rsquo;d like to set it as the default.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>nvm <span class="nb">alias </span>default 0.11.13
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>What if I&rsquo;m <code>cd</code>ing out of control and I don&rsquo;t know what Node version I need in my current directory? Create a file called <code>.nvmrc</code> in the directory containing the version number you want nvm to use and then type <code>nvm use</code> ENTER; Now you&rsquo;re using the version of Node you meant to. This also prevents people from using the wrong versions of Node to try to run your code, which would of course be a catastrophe.</p>
+
+<p>PLUS nvm installs the right version of npm whenever you install Node, so there&rsquo;s no need to worry about dealing with your base npm not working with different versions of Node.</p>
+
+<p>Thank <a href="https://en.wikipedia.org/wiki/Free_and_Open_Source_Software">FOSS</a> for nvm. Maybe one day soon I&rsquo;ll do useful things in Node an tell you about them.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards/">Ollert - Reveal the Data Behind Your Trello Boards</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-07-13T17:15:00-04:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>5:15 pm</span></time>
+        
+           | <a href="/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Introducing <a href="https://ollertapp.com">Ollert</a>, a tool to show you what your <a href="//trello.com">Trello</a> boards can&rsquo;t tell you on their own.</p>
+
+<p>Trello does a great job of telling you about the here and now of your Trello boards; who&rsquo;s working on what task and what is the current state of a task. But what if I want to know about the state of the whole project? How many work items have we finished in the past sprint, iteration, or duration of the project? He who does not understand the past is destined to repeat his mistakes ad nauseum.</p>
+
+<p>Ollert is a tool with these ideas in mind. Authorize Ollert access to your Trello account, select the board you would like to learn more about, and see all the battle scars your board has experienced throughout the duration of the project.</p>
+
+<p>Learn about your velocity through a Cumulative Flow Diagram. View your work in progress with a WIP chart. See which labels your team uses most frequently with our label chart. See information about your cards and lists from a historical perspective.</p>
+
+<p><a href="https://ollertapp.com/signup">Create an account</a> with Ollert to show your support. Users who sign up for an Ollert account will have their Trello authorization saved, saving the hassle of authorizing with Trello every time the user visits the site. An Ollert account is perfect for any user who views board progress frequently, or for creating a continuous display on an office monitor.</p>
+
+<p>Since Ollert&rsquo;s initial release <a href="/blog/2014/03/17/sep-startup-weekend-ollert/">several months ago</a>, Ollert now boasts over 4000% faster load times, increased data security using SSL and encrypted cookies, and a more consistent Trello connection experience in all modern web browsers.</p>
+
+<p>Discover Ollert now at <a href="https://ollertapp.com">ollertapp.com</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber/">Testing Automated Emails With Email-spec in Cucumber</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-07-12T07:36:33-04:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>7:36 am</span></time>
+        
+           | <a href="/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Now that <a href="/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/">I send emails using Pony</a>, I want to be able to verify that the emails are being generated correctly. I also don&rsquo;t want to send real emails and have my tests check an inbox somewhere. I found a couple of solutions to do this, including <a href="https://github.com/johnmendonca/pony-test">pony-test</a> and <a href="https://github.com/bmabey/email-spec">email-spec</a>. Although pony-test fits my needs perfectly, the last commit was December 27, 2011 (2.5 years ago at the time of this post), and thus was using an outdated version of <a href="https://github.com/jnicklas/capybara">capybara</a> which I was unwilling to use. Fortunately, pony-spec is mostly just a fork of email-spec with all the non-Pony components ripped out.</p>
+
+<p>I&rsquo;m going to be using Cucumber to test my emails, but email-spec also boasts compatibility with rspec and Turnip. To get started:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>gem install email-spec
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The developers of email-spec were kind enough to give us some free step definitions. If I was using rails, I could just type <code>rails generate email_spec:steps</code>, but since I&rsquo;m using Sinatra I opted just to copy-paste the file into my <code>step_definitions/</code> directory. You can find <code>email_steps.rb</code> <a href="https://raw.githubusercontent.com/bmabey/email-spec/master/lib/generators/email_spec/steps/templates/email_steps.rb">on Github</a>.</p>
+
+<p>In <a href="/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/">my last post about small horses and emails</a>, I used the following code to send a confirmation email on signup:</p>
+
+<figure class='code'><figcaption><span>web.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># ...</span>
+</span><span class='line'><span class="n">post</span> <span class="s1">&#39;/signup&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create!</span> <span class="n">params</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">request</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/account/reset/</span><span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">generate_verification_hash</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="no">Pony</span><span class="o">.</span><span class="n">mail</span><span class="p">(</span>
+</span><span class='line'>    <span class="ss">to</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">from</span><span class="p">:</span> <span class="s2">&quot;MyApp Help Desk &lt;noreply@myapp.com&gt;&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">subject</span><span class="p">:</span> <span class="s2">&quot;MyApp Account Verification&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">body</span><span class="p">:</span> <span class="s2">&quot;A request has been made to verify your MyApp account (https://myapp.com).&quot;</span> <span class="o">+</span>
+</span><span class='line'>          <span class="s2">&quot;If you made this request, go to &quot;</span> <span class="o">+</span> <span class="n">url</span> <span class="o">+</span> <span class="s2">&quot;. If you did not make this request, ignore this email.&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">html_body</span><span class="p">:</span> <span class="n">haml</span><span class="p">(</span>
+</span><span class='line'>      <span class="ss">:verify_account_email</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">layout</span><span class="p">:</span> <span class="kp">false</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">locals</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="ss">email</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">date</span><span class="p">:</span> <span class="no">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S%P %B %d, %Y&quot;</span><span class="p">),</span>
+</span><span class='line'>        <span class="ss">ip</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">ip</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">url</span><span class="p">:</span> <span class="n">url</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>  <span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="c1"># ...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>/views/verify_account_email.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  Hello!
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  An account verification has been requested for your new &lt;a href=&quot;https://myapp.com&quot;&gt;MyApp&lt;/a&gt; account.
+</span><span class='line'>
+</span><span class='line'><span class="nt">%ul</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    Username: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:email</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    Time: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:date</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>  <span class="nt">%li</span>
+</span><span class='line'>    IP address: <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:ip</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  If you made this request, click the link below or copy-paste the following URL into your browser to verify your account:
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  <span class="nt">%a</span><span class="p">{</span><span class="ss">href</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:url</span><span class="o">]</span><span class="si">}</span>&quot;, alt: &quot;Verify&quot;, title: &quot;Click to verify account&quot;}
+</span><span class='line'>    <span class="si">#{</span><span class="n">locals</span><span class="o">[</span><span class="ss">:url</span><span class="o">]</span><span class="si">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  If you did not request this new account, please ignore this email.
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  Sincerely,
+</span><span class='line'>  <span class="nt">%br</span>
+</span><span class='line'>  Team MyApp
+</span><span class='line'>
+</span><span class='line'><span class="nt">%p</span>
+</span><span class='line'>  This email account is not monitored and will not receive replies. For more information, contact &lt;a href=&quot;mailto:connect@myapp.com&quot;&gt;connect@myapp.com&lt;/a&gt;.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Given the pre-defined steps from email-spec, testing that this email gets sent is a breeze. Adding a scenario to my feature file:</p>
+
+<figure class='code'><figcaption><span>features/SignupConfirmation.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='cucumber'><span class='line'><span class="k">Feature:</span><span class="nf"> Signup Confirmation</span>
+</span><span class='line'><span class="nf">  As a new user</span>
+</span><span class='line'><span class="nf">  When I sign up</span>
+</span><span class='line'><span class="nf">  I should receive a confirmation email</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">Background:</span><span class="nf"></span>
+</span><span class='line'><span class="k">  Given </span><span class="nf">a clear email queue</span>
+</span><span class='line'><span class="nf">  </span><span class="k">When </span><span class="nf">I go to the signup page</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I fill in &quot;</span><span class="s">email</span><span class="nf">&quot; with &quot;</span><span class="s">prez@whitehouse.gov</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I fill in &quot;</span><span class="s">password</span><span class="nf">&quot; with &quot;</span><span class="s">bunnies</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">I press &quot;</span><span class="s">Sign Up</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">&quot;</span><span class="s">prez@whitehouse.gov</span><span class="nf">&quot; should receive an email</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">Scenario:</span><span class="nf"> Receives email with correct contents</span>
+</span><span class='line'><span class="k">  When </span><span class="nf">&quot;</span><span class="s">prez@whitehouse.gov</span><span class="nf">&quot; opens the email</span>
+</span><span class='line'><span class="nf">  </span><span class="k">Then </span><span class="nf">they should see the email delivered from &quot;</span><span class="s">MyApp Help Desk </span><span class="nv">&lt;noreply@myapp.com&gt;</span><span class="nf">&quot;</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">they should see &quot;</span><span class="s">MyApp Account Verification</span><span class="nf">&quot; in the email subject</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">they should see &quot;</span><span class="s">Username: prez@whitehouse.gov</span><span class="nf">&quot; in the email body</span>
+</span><span class='line'><span class="nf">  </span><span class="k">And </span><span class="nf">they should see &quot;</span><span class="s">An account verification has been requested</span><span class="nf">&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That&rsquo;s it. Now we know that an email like the one above will be sent during signup. What we can&rsquo;t test here is that our SMTP server (or equivalent) is working, so in reality I&rsquo;m only testing that the email will attempt to send that looks like the one I test against.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/posts/13">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/posts/11">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <span class="social-media-bar">
+    <a href="https://github.com/larryprice" title="Github" alt="github profile"><img src="/images/icon_github.png" class="social-media-icon" /></a>
+    <a href="https://launchpad.net/~larryprice" title="Launchpad" alt="launchpad profile"><img src="/images/icon_lp.png" class="social-media-icon" /></a>
+    <a href="https://twitter.com/larryrprice" title="Twitter" alt="Twitter profile"><img src="/images/icon_twitter.png" class="social-media-icon" /></a>
+    <a href="https://www.linkedin.com/pub/larry-price/3a/630/47b" title="LinkedIn" alt="LinkedIn profile"><img src="/images/icon_linkedin.png" class="social-media-icon" /></a>
+    <a href="mailto:larry@larry-price.com" title="Email" alt="email me"><img src="/images/icon_email.png" class="social-media-icon" /></a>
+  </span>
+</section>
+<section>
+  <h1>void* Larry</h1>
+  <p>I'm a codeslinger debugging from the mean streets of Indiana. Welcome to my blog, where I'll tell the tales of wondrous things I discover in the digital jungle.</p>
+</section>
+<section>
+  <h1>Go for Web Development</h1>
+  <p><strong><a href="https://www.packtpub.com/web-development/go-web-development-video" target="blank">Go for Web Development</a></strong> is an online video series designed by me where you'll follow along to build a personal library app in Go. You'll start with a blank slate but quickly learn to take advantage of popular libraries such as gorilla/mux, negroni, gorp, ace, and bcrypt.</p>
+</section>
+<section>
+  <h1>FOSDEM 2017</h1>
+  <p>In 2017, I had the opportunity to give a short talk at FOSDEM in Brussels. I even <strong><a href="https://www.youtube.com/watch?v=FX1fSTOU8Ao&t=1152s" target="blank">recorded an at-home experience</a></strong> with higher quality audio and slides than the livestream.</p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/04/18/on-gender-bias-and-home-improvement/">On Gender Bias and Home Improvement</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/04/11/using-d-bus-signals-in-python/">Using D-Bus Signals in Python</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python/">Creating an Asynchronous D-Bus Service With Python</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/04/04/creating-a-d-bus-service-with-python/">Creating a D-Bus Service With Python</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/02/15/snappy-libertine/">Snappy Libertine</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Tag Cloud</h1>
+    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.75%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.625%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.875%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.5%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.625%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.75%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.5%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 113.125%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.625%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.5%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.875%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.75%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.875%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.875%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.875%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.875%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.875%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.875%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.875%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.625%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.75%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.875%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.875%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 124.375%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 111.25%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.875%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.625%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.625%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.875%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.875%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.875%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.625%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.875%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.875%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.875%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 126.25%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.875%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.625%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.875%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.5%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.875%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.875%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.875%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.875%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.5%'>remote</a> <a href='/blog/categories/retro' style='font-size: 113.125%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.875%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 131.875%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.625%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.875%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.875%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.875%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 115.0%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.875%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.875%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.625%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 115.0%'>testing</a> <a href='/blog/categories/trello' style='font-size: 115.0%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.75%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.75%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.875%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.875%'>upstart</a> <a href='/blog/categories/web' style='font-size: 141.25%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.125%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.875%'>xml</a> </span>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/larryprice">@larryprice</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'larryprice',
+            count: 5,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+  <style>
+    .sidebar-ad { width: 280px; height: 280px; }}
+    @media(min-width: 375px) { .sidebar-ad { width: 350px; height: 90px; } }
+    @media(min-width: 475px) { .sidebar-ad { width: 450px; height: 90px; } }
+    @media(min-width: 575px) { .sidebar-ad { width: 550px; height: 90px; } }
+    @media(min-width: 675px) { .sidebar-ad { width: 650px; height: 90px; } }
+    @media(min-width: 750px) { .sidebar-ad { width: 200px; height: 200px; } }
+    @media(min-width: 768px) { .sidebar-ad { width: 210px; height: 210px; } }
+    @media(min-width: 1280px) { .sidebar-ad { width: 260px; height: 260px; } }
+  </style>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- Sidebar Ad -->
+    <ins class="adsbygoogle sidebar-ad"
+         style="display:inline-block"
+         data-ad-client="ca-pub-6961096698495477"
+         data-ad-slot="8892886941"></ins>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</section>
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  <center>
+	  Copyright &copy; 2017 - Larry Price -
+	  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span><br/>
+	  Note: Views and opinions expressed belong solely to the author and do not represent the views of the any other person or company.
+	</center>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'larryprice';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

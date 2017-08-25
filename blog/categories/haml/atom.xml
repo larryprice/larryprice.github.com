@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: haml | Larry Price]]></title>
+  <link href="https://larry-price.com/blog/categories/haml/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2017-08-25T08:42:34-05:00</updated>
+  <id>https://larry-price.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    <email><![CDATA[larry@larry-price.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Testing a Sinatra App with Capybara]]></title>
+    <link href="https://larry-price.com/blog/2013/01/19/testing-a-sinatra-app-with-capybara/"/>
+    <updated>2013-01-19T12:20:00-06:00</updated>
+    <id>https://larry-price.com/blog/2013/01/19/testing-a-sinatra-app-with-capybara</id>
+    <content type="html"><![CDATA[<p><em>This is Part 3 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="/blog/categories/pokephile">Pokephile category</a>. Part 3 of this series describes using Capybara to test a Sinatra application. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>, and the final product can be found <a href="http://pokephile.herokuapp.com">here</a>.</em></p>
+
+<p>Now that <a href="/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/">the database is populated</a> with data and I&rsquo;ve switched over to <a href="/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/">a simpler interface with Mongo</a>, I can actually start creating a UI. For simplicity&rsquo;s sake, I like to use Sinatra on small projects. Sinatra makes it easy to create a web application with minimal effort. With an emphasis on testing this <a href="/blog/categories/pokephile">series</a>, I want to be sure to throughly test my UI and any application integration. <a href="http://cukes.info/">Cucumber</a> is a brilliant DSL which allows a programmer to describe in plain English how an application should be behaving. The <a href="https://github.com/jnicklas/capybara">Capybara gem</a> is a Rack app that simulates running your application and performing basic user tasks, such as clicking a button, following a link, or, on a lower level, looking at your HTML source. Install Capybara like so:</p>
+
+<pre><code class="bash">sudo gem install capybara
+</code></pre>
+
+<p>Here&rsquo;s what I want my application to do:</p>
+
+<ul>
+<li>User is on home page.</li>
+<li>User enters name of Pokemon and presses &lsquo;Search&rsquo;.</li>
+<li>User is redirected to search page.</li>
+<li>User can see some information about Pokemon.</li>
+<li>User can repeat the search process.</li>
+</ul>
+
+
+<p>Error scenario:</p>
+
+<ul>
+<li>User enters garbage data.</li>
+<li>User is redirected to search page.</li>
+<li>User sees error message.</li>
+<li>User can repeat search process.</li>
+</ul>
+
+
+<p>So I&rsquo;ll begin by writing my features. Cucumber syntax is meant to be readable by non-technical persons, so the &ldquo;code&rdquo; may look a bit odd. All Cucumber feature files are written something like this:</p>
+
+<pre><code class="Cucumber">Feature: Viewer visits the Home Page
+  In order to read the page
+  As a viewer
+  I want to see the home page of my app
+
+Scenario: View the home page
+    Given I am on the home page
+    Then I should see "Zowee, mama!" on the page
+</code></pre>
+
+<p>The &ldquo;Feature&rdquo; lines are not used in testing; they are simply to give some relevance to the file&rsquo;s feature and to attempt to prevent scope creep in the file. The &ldquo;Scenario&rdquo; lines are what&rsquo;s important. The first line is the test name, the &ldquo;Given&rdquo; line is the pre-condition, and the final line is what should be observed.</p>
+
+<p>In reality, I have only one main feature: &ldquo;Search.&rdquo; One can argue that I also have a feature of &ldquo;seeing&rdquo; my home page and my search page, but those are both trivial cases, so for the purpose of this blog post, I&rsquo;ll skip such tests. Both my success and error case revolves around searching, and there&rsquo;s not really much else to do in the app. I have to create a directory for the cukes, and that directory is called &ldquo;features.&rdquo; I create such a directory in my &ldquo;project/tools/test&rdquo; directory and create a new file called &ldquo;search.feature.&rdquo; Now I&rsquo;ll write the feature:</p>
+
+<pre><code class="Cucumber project/tools/test/features/search.feature">Feature: Viewer vists the page
+    In order to search the page
+    As a visitor
+    I want to search for Pokemon.
+
+Scenario: Find correct Pokemon from home page
+    Given I am on the home page
+    When I type "Bulbasaur" in the search bar
+    And I click "Search"
+    Then I should be on the "search" page
+    And I should see "#001 - Bulbasaur"
+    And I should see an image with url "http://img.pokemondb.net/artwork/bulbasaur.jpg"
+    And I should see "Types: Grass, Poison"
+
+Scenario: Show error text from home page
+    Given I am on the home page
+    When I type "Johnny Bravo" in the search bar
+    And I click "Search"
+    Then I should be on the "search" page
+    And I should see "Lol! Could not find a Pokemon named 'Johnny Bravo.' Try something else!"
+
+Scenario: Find correct Pokemon from search page
+    Given I am on the search page
+    When I type "Bulbasaur" in the search bar
+    And I click "Search"
+    Then I should see "#001 - Bulbasaur"
+    And I should see an image with url "http://img.pokemondb.net/artwork/bulbasaur.jpg"
+    And I should see "Types: Grass, Poison"
+
+Scenario: Show error text from search page
+    Given I am on the search page
+    When I type "Johnny Bravo" in the search bar
+    And I click "Search"
+    Then I should be on the "search" page
+    And I should see "Lol! Could not find a Pokemon named 'Johnny Bravo.' Try something else!"
+</code></pre>
+
+<p>Now I&rsquo;ve overlooked a lot of tests that one would normally write while doing this, such as verifying that the search bar and search buttons exist and are enabled, but I&rsquo;d like to keep it simple for now and just stick to testing my search feature. What do these tests do? The first scenario starts on the home page, enters data in the search box, presses the search button, and then verifies that all expected Pokemon data is visible. When writing cukes, I can append statements with an &ldquo;And&rdquo; statement as seen above. Run Cucumber:</p>
+
+<pre><code class="sh project/tools/test">$ cucumber
+</code></pre>
+
+<p>Cucumber doesn&rsquo;t exactly give us errors, but it also doesn&rsquo;t give us success. Fortunately, what it did give us was sample code for all of the steps we need to write. So, let&rsquo;s perform some copy/paste magic and create a steps file:</p>
+
+<pre><code class="sh project/tools/test">$ mkdir -p features/step_definitions
+$ touch features/step_definitions/search_steps.rb
+</code></pre>
+
+<pre><code class="ruby project/tools/test/features/step_definitions/search_steps.rb">Given /^I am on the home page$/ do
+  pending # express the regexp above with the code you wish you had
+end
+
+When /^I type "(.*?)" in the search bar$/ do |arg1|
+  pending # express the regexp above with the code you wish you had
+end
+
+When /^I click "(.*?)"$/ do |arg1|
+  pending # express the regexp above with the code you wish you had
+end
+
+Then /^I should be on the "(.*?)" page$/ do |arg1|
+  pending # express the regexp above with the code you wish you had
+end
+
+Then /^I should see "(.*?)"$/ do |arg1|
+  pending # express the regexp above with the code you wish you had
+end
+
+Then /^I should see an image with url "(.*?)"$/ do |arg1|
+  pending # express the regexp above with the code you wish you had
+end
+
+Given /^I am on the search page$/ do
+  pending # express the regexp above with the code you wish you had
+end
+</code></pre>
+
+<p>If I futilely run &ldquo;cucumber&rdquo; again now, my tests still don&rsquo;t pass because I haven&rsquo;t actually implemented my steps. This is where Capybara comes in. I found that a <a href="https://gist.github.com/428105">Capybara cheat sheet</a> is quite helpful while writing out my steps. The syntax I&rsquo;m going to use is similar to RSpec, except that it includes some Capybara methods. The first two test steps I want to deal with are the &ldquo;Given&rdquo; steps.</p>
+
+<pre><code class="ruby project/tools/test/features/step_definitions/search_steps.rb">Given /^I am on the home page$/ do
+  visit '/'
+end
+
+Given /^I am on the search page$/ do
+  visit '/'
+  click_button "Search"
+end
+</code></pre>
+
+<p>All these statements are just Regular Expressions, as indicated by the /^$/. The regex acts as a sort of method name that Cucumber finds to run the steps. Given I am on the home page is trivial: just &lsquo;visit&rsquo; the index. Given I am on the search page will first require me to click the &ldquo;search&rdquo; button. This is valid because my spec above says this is how to get to the search page. Now can do the &lsquo;When&rsquo; statements.</p>
+
+<pre><code class="ruby project/tools/test/features/step_definitions/search_steps.rb">When /^I type "(.*?)" in the search bar$/ do |arg1|
+  fill_in "pokemon-input", :with =&gt; arg1
+end
+
+When /^I click "(.*?)"$/ do |arg1|
+  click_button arg1
+end
+</code></pre>
+
+<p>When I click just needs to click a button/link/whatever on the screen. The &ldquo;(.*?)&rdquo; is a regular expression that will match anything in quotes and assign it to the variable &lsquo;arg1.&rsquo; So I can give any button description and Capybara will try to click a button with the given content. When I type in the search bar takes the regex arg1 and uses the &ldquo;fill_in&rdquo; method to fill in a text input with id &ldquo;pokemon-input.&rdquo; The rest of the steps are all about what should be observed after performing the Given/When steps.</p>
+
+<pre><code class="ruby project/tools/test/features/step_definitions/search_steps.rb">Then /^I should be on the "(.*?)" page$/ do |arg1|
+  current_path.should == "/#{arg1}"
+end
+
+Then /^I should see "(.*?)"$/ do |arg1|
+  page.should have_content(arg1)
+end
+
+Then /^I should see an image with url "(.*?)"$/ do |arg1|
+  find(:xpath, "//img[@src='#{arg1}']").should_not be_nil
+end
+</code></pre>
+
+<p>Now I have all of the necessary steps defined! So, I&rsquo;ll run Cucumber and&hellip; Actual errors! None of my four tests made it past the Given step, so I see the output &lsquo;(4 failed, 19 skipped).&rsquo; The only way to fix these errors is to finally start writing a web application. So I&rsquo;ll move back out to the root of my project directory and create a file for my application called &lsquo;app.rb&rsquo; and give it the most basic information to run. And, if you haven&rsquo;t already, install Sinatra.</p>
+
+<pre><code class="bash">$ sudo gem install sinatra
+</code></pre>
+
+<pre><code class="ruby project/app.rb">require 'sinatra'
+require 'haml'
+
+class Application &lt; Sinatra::Base
+    get '/' do
+        haml :index
+    end
+end
+</code></pre>
+
+<p>The Application class inherits from the Sinatra::Base class. This allows me to define a &lsquo;get&rsquo; operation to perform actions and load a web page. &lsquo;get \&rsquo;\&lsquo; do&rsquo; signifies the first page a user sees when they go to my web application, commonly known as a home or index page. I plan to use <a href="http://haml.info">HAML</a> to create my page, so I make a call to haml followed by the name of my HAML document as a symbol. We need to define an &lsquo;index.haml&rsquo; page and stick it in a directory called &lsquo;views&rsquo; for Sinatra to find it.</p>
+
+<pre><code class="bash">$ sudo gem install haml
+</code></pre>
+
+<pre><code class="haml project/views/index.haml">!!!
+%html
+    %head
+        %title Pokemon App
+    %body
+        LOL HAI.
+</code></pre>
+
+<p>Tough work. If you&rsquo;re not familiar with HAML, it&rsquo;s a markup language that is &ldquo;compiled&rdquo; into an HTML page. The main difference between HAML and HTML is that HAML parses white space to figure out where closing tags should be placed. So now I want to run my application. I want to run it using &lsquo;rackup,&rsquo; so I&rsquo;d like to define a &lsquo;config.ru&rsquo; file in the root of my project directory to do all the work for me.</p>
+
+<pre><code class="ruby project/config.ru">require './app'
+
+run Application.new
+</code></pre>
+
+<p>Now we run &lsquo;rackup&rsquo; from the root of my project directory and see the fruits of my labor. Open up a web browser and enter &lsquo;localhost:9292&rsquo; in the address bar. You should see a very simple web page with the content of &ldquo;LOL HAI&rdquo; and a title of &ldquo;Pokemon App.&rdquo; If you view the source, you&rsquo;ll see the HTML the HAML was compiled into. Just beautiful, isn&rsquo;t it? Now if I switch back to my test directory and run Cucumber, what happens? The same result. That&rsquo;s because I need to tell Capybara what to load before trying to run the tests. I do this by defining an &ldquo;env.rb&rdquo; file in a &ldquo;support&rdquo; directory of the features directory.</p>
+
+<pre><code class="ruby project/tools/test/features/support/env.rb">require 'capybara'
+require 'capybara/cucumber'
+
+require_relative "../../../../app"
+
+Capybara.app = Application
+</code></pre>
+
+<p>All I do is require my &ldquo;app.rb&rdquo; file which is seemingly <em>forever</em> away and then set the Capybara.app variable to my Application class. Now I run Cucumber and&hellip; &lsquo;(4 failed, 17 skipped, 2 passed)&rsquo; Two steps passed! Yippee! Now if only the rest passed as well. Looking at my &lsquo;search.feature&rsquo; file, I can see that the first &lsquo;When&rsquo; step is about typing into the search bar. So my first design decision is what kind of search bar I want. I&rsquo;ve opted for the fun way out: using the <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap&rsquo;s</a> <a href="http://twitter.github.com/bootstrap/javascript.html#typeahead">typeahead</a>. The typeahead has functionality to give suggestions while the user types, and the best news is this is already coded for us. Adding the code for my search bar and a search button:</p>
+
+<pre><code class="haml project/views/index.haml">!!!
+%html
+    %head
+        %title Pokemon App
+        %link(rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css")
+    %body
+        %script{:type =&gt; "text/javascript", :src  =&gt; "http://code.jquery.com/jquery.min.js"}
+        %script{:type =&gt; "text/javascript", :src  =&gt; "http://twitter.github.com/bootstrap/assets/js/bootstrap-typeahead.js"}
+        #search{:style =&gt; "position: absolute; width: 100%; text-align: center; top: 10%;"}
+            %form{:action =&gt; "search", :method =&gt; "POST", :id =&gt; "pokemon-search"}
+                %input{:type =&gt; "text", :class =&gt; "input-large", :id =&gt; "pokemon-input", :name =&gt; "pokemon", "data-provide"=&gt;"typeahead", "data-items"=&gt;"10", "autocomplete"=&gt;"off", :autofocus =&gt; "", :placeholder =&gt; "Find a Pokémon...", "data-source" =&gt; Pokemon.only(:name).map {|x| x.name}}
+                %button{:type=&gt;"submit", :class =&gt; "btn btn-small", :style =&gt; "margin-bottom: 10px; font-weight: bold;"}
+                    Search
+</code></pre>
+
+<p>In the \&lt;head> tag, I include a link to the Bootstrap stylesheet. In the \&lt;body> tag, I include a link to the JQuery and Bootstrap Typeahead JavaScript files remotely so I don&rsquo;t have to keep track of them. I then add a \&lt;div> tag called &ldquo;search&rdquo; and center it on the page. Inside the div tag I create a form whose action sends a POST signal to the &ldquo;search&rdquo; action. Inside the form is first the typeahead, then a small submit button. The important parameters in the typeahead are &ldquo;data-items&rdquo; and &ldquo;data-source;&rdquo; &ldquo;data-items&rdquo; tells the JavaScript function how many items to suggest at a time, and &ldquo;data-source&rdquo; is an array of data for the JavaScript to search. Notice that my &ldquo;data-source&rdquo; uses the Pokemon class <a href="/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/">created previously</a>, so I need to be able to set up a <a href="/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/">Mongoid connection</a> to access that data. I&rsquo;ll make this connection in my &ldquo;config.ru&rdquo; file:</p>
+
+<pre><code class="ruby project/config.ru">require './app'
+require 'mongoid'
+
+class Application
+    configure do
+        Mongoid.load! 'mongoid.yml'
+    end
+end
+
+run Application.new
+</code></pre>
+
+<p>I have chosen to extend the Application class in my &ldquo;config.ru&rdquo; file to prevent interference with my test setups later. Taking a look at the application would be a good idea, but if I run &ldquo;rackup&rdquo; now Mongoid will complain about environment setup. By default, &ldquo;Mongoid.load!&rdquo; will try to load the &ldquo;development&rdquo; settings, so I need to include a &ldquo;development&rdquo; setup in my &ldquo;mongoid.yml.&rdquo; For now, it&rsquo;s going to be identical to my &ldquo;test&rdquo; environment setup except for the database name:</p>
+
+<pre><code class="yml project/mongoid.yml">test:
+  sessions:
+    default:
+      database: test
+      hosts:
+        - localhost
+
+development:
+  sessions:
+    default:
+      database: dev
+      hosts:
+        - localhost
+</code></pre>
+
+<p>And ensuring some Pokemon are in the &ldquo;dev&rdquo; database:</p>
+
+<pre><code class="bash Populating the dev database">$ irb
+&gt;&gt; Dir.pwd
+=&gt; "project/tools/populate"
+&gt;&gt; require 'mongoid'
+=&gt; true
+&gt;&gt; Mongoid.load! '../../mongoid.yml'
+=&gt; {"sessions"=&gt;{"default"=&gt;{"database"=&gt;"dev", "hosts"=&gt;["localhost"]}}}
+&gt;&gt; require './populater'
+=&gt; true
+&gt;&gt; Populater.new.add_pokemon 152
+=&gt; nil
+&gt;&gt;
+</code></pre>
+
+<p>And requiring the Pokemon model in app.rb:</p>
+
+<pre><code class="ruby project/app.rb">require 'sinatra'
+require 'haml'
+
+require_relative 'pokemon'
+
+class Application &lt; Sinatra::Base
+    get '/' do
+        haml :index
+    end
+end
+</code></pre>
+
+<p>Finally, run &lsquo;rackup&rsquo; from the root of the &lsquo;project&rsquo; directory and load up the web application at &lsquo;localhost:9292.&rsquo; There&rsquo;s now a typeahead and a search button in the top center of the page, and typing in the &lsquo;Search&rsquo; bar shows up to 10 suggestion Pokemon. Now I&rsquo;ll return to my Cucumber tests. I need to add a line in the &lsquo;env.rb&rsquo; file to set up the Mongoid environment and ensure there are Pokemon in the collection.</p>
+
+<pre><code class="ruby project/tools/test/features/support/env.rb">require 'capybara'
+require 'capybara/cucumber'
+require 'mongoid'
+
+require_relative '../../../populate/populater'
+require_relative "../../../../app"
+
+Mongoid.load! '../../mongoid.yml', :test
+
+Populater.new.add_pokemon(10)
+
+Capybara.app = Application
+</code></pre>
+
+<p>Now I can run Cucumber and see some jovial results: &lsquo;(4 failed, 9 skipped, 10 passed).&rsquo; I now have more steps passing than failing! The root cause of the failures is that there currently is no &ldquo;search&rdquo; page; let&rsquo;s fix that:</p>
+
+<pre><code class="ruby project/app.rb">...
+class Application &lt; Sinatra::Base
+    ...
+    post '/search' do
+        haml :search
+    end
+end
+</code></pre>
+
+<p>I want my search page to have a search bar just like my index page. If I want them to be identical, I want to only have to change that code once. When writing HAML, I can create a &lsquo;layout.haml&rsquo; file to act as a base page for my application and move all the text from &lsquo;index.haml.&rsquo; I&rsquo;ll add a &lsquo;=yield&rsquo; statement where I want the information from &lsquo;index.haml&rsquo; and &lsquo;search.haml&rsquo; to be placed.</p>
+
+<pre><code class="haml project/views/layout.haml">!!!
+%html
+    %head
+        %title Pokemon App
+        %link(rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css")
+    %body
+        %script{:type =&gt; "text/javascript", :src  =&gt; "http://code.jquery.com/jquery.min.js"}
+        %script{:type =&gt; "text/javascript", :src  =&gt; "http://twitter.github.com/bootstrap/assets/js/bootstrap-typeahead.js"}
+        #search{:style =&gt; "position: absolute; width: 100%; text-align: center; top: 10%;"}
+            %form{:action =&gt; "search", :method =&gt; "POST", :id =&gt; "pokemon-search"}
+                %input{:type =&gt; "text", :class =&gt; "input-large", :id =&gt; "pokemon-input", :name =&gt; "pokemon", "data-provide"=&gt;"typeahead", "data-items"=&gt;"10", "autocomplete"=&gt;"off", :autofocus =&gt; "", :placeholder =&gt; "Find a Pokémon...", "data-source" =&gt; Pokemon.only(:name).map {|x| x.name}}
+                %button{:type=&gt;"submit", :class =&gt; "btn btn-small", :style =&gt; "margin-bottom: 10px; font-weight: bold;"}
+                    Search
+        =yield
+</code></pre>
+
+<pre><code class="haml project/views/index.haml">#search-text{:style =&gt; "position: absolute; width: 100%; text-align: center; top: 2%; font-weight: bold;"}
+    Begin typing to search for your Pokemon!
+</code></pre>
+
+<p>At this point, I&rsquo;ll create a &lsquo;search.haml&rsquo; file in the &lsquo;views&rsquo; directory, but leave it empty. Running Cucumber now, I get &lsquo;(4 failed, 4 skipped, 15 passed).&rsquo; Pretty close! All I fail now is actually seeing the desired information on the page. First I want to get access to the Pokemon searched for: I can do that by parsing the params passed to us in app.rb:</p>
+
+<pre><code class="ruby project/app.rb">...
+
+class Application &lt; Sinatra::Base
+    ...
+    post '/search' do
+        @pokemon = Pokemon.where(name: params[:pokemon]).first
+        haml :search
+    end
+end
+</code></pre>
+
+<p>So now on my search page:</p>
+
+<pre><code class="haml project/views/search.haml">#search-text{:style =&gt; "position: absolute; width: 100%; text-align: center; top: 2%; font-weight: bold;"}
+    Search for another Pokemon.
+#search-results{:style =&gt; "position: absolute; width: 100%; text-align: center; top: 20%; font-weight: bold;"}
+    %img{:src =&gt; @pokemon.image, :height =&gt; "250px"}
+    %br
+    = "##{@pokemon.number} - #{@pokemon.name}"
+    %br
+    = "Types: #{@pokemon.types.first}#{@pokemon.types.count &lt; 2 ? ' ' : ', ' + @pokemon.types.last}"
+</code></pre>
+
+<p>I reference the class variable &ldquo;@pokemon&rdquo; and access its data. To output Ruby-formatted strings, I use an &ldquo;=&rdquo; sign. Running Cucumber, I now see &lsquo;(2 failed, 21 passed).&rsquo; 2 of my 4 tests are passing! A trivial amount of investigation reveals that I didn&rsquo;t deal with the situation where the user types in garbage data. That can mostly be done in the HAML file, but I also want a way to get the bad text the user gave me so they can see what was wrong.</p>
+
+<pre><code class="haml project/views/search.haml">#search-text{:style =&gt; "position: absolute; width: 100%; text-align: center; top: 2%; font-weight: bold;"}
+    Search for another Pokemon.
+#search-results{:style =&gt; "position: absolute; width: 100%; text-align: center; top: 20%; font-weight: bold;"}
+    - unless @pokemon.nil?
+        %img{:src =&gt; @pokemon.image, :height =&gt; "250px"}
+        %br
+        = "##{@pokemon.number} - #{@pokemon.name}"
+        %br
+        = "Types: #{@pokemon.types.first}#{@pokemon.types.count &lt; 2 ? ' ' : ', ' + @pokemon.types.last}"
+    - else
+        = "Lol! Could not find a Pokemon named '#{@name}.' Try something else!"
+</code></pre>
+
+<pre><code class="ruby project/app.rb">...
+class Application &lt; Sinatra::Base
+    ...
+    post '/search' do
+        @name = params[:pokemon]
+        @pokemon = Pokemon.where(name: @name).first
+        haml :search
+    end
+end
+</code></pre>
+
+<p>Ruby code with no output is preceded with a &lsquo;-&rsquo; and because HAML is space-sensitive, there&rsquo;s no need to include &lsquo;end&rsquo; statements. Now I run Cucumber and&hellip; 4 scenarios/23 steps passed! I have a functional web application! Of course, the page itself is somewhat bland, some of the styles could be put in a stylesheet and reused, and the only tests I&rsquo;ve written are for super-high-level functionality. Those are all problems someone with infinite time would deal with, so I&rsquo;ll just leave the page is is for now.</p>
+
+<p>The next blog post <a href="/blog/categories/pokephile">in this series</a> will be about deploying this application to the web using Heroku.</p>
+]]></content>
+  </entry>
+  
+</feed>

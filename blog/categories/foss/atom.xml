@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: foss | Larry Price]]></title>
+  <link href="https://larry-price.com/blog/categories/foss/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2017-08-25T08:42:34-05:00</updated>
+  <id>https://larry-price.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    <email><![CDATA[larry@larry-price.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Ollert is now open source]]></title>
+    <link href="https://larry-price.com/blog/2015/02/11/ollert-is-now-open-source/"/>
+    <updated>2015-02-11T05:54:26-05:00</updated>
+    <id>https://larry-price.com/blog/2015/02/11/ollert-is-now-open-source</id>
+    <content type="html"><![CDATA[<p><a href="https://ollertapp.com">Ollert</a>, the Trello data analytics tool, has been open sourced under <a href="https://github.com/sep/ollert/blob/master/LICENSE">GNU Affero GPL v3.0</a>. The source code can be found <a href="https://github.com/sep/ollert/">on Github</a> and I&rsquo;ve already accepted several pull requests.</p>
+
+<h4>Why?</h4>
+
+<p>I&rsquo;ve been working towards this for a few months now. Although Ollert was a lot of fun to create and has helped quite a few people learn more about their Trello boards, I&rsquo;ve been having trouble finding the time to write new features in between my other pursuits. Although <a href="http://www.sep.com/">SEP</a> has given me resources in the past, it&rsquo;s not always easy to find people off-project who have the right experience, determination, and time to grok the codebase and start churning out new features.</p>
+
+<p>An interesting pattern started to appear: With every other feature request I received for Ollert, the requestor would add in some other loaded question: Where is the source code? Is there a Github repo so I can add issues? Do you accept pull requests?</p>
+
+<p>Random strangers on the internet wanted to help. These are people with the drive to work with me even though I couldn&rsquo;t give them anything in return. These are people with fresh perspectives on Trello usage which I had never imagined. These are the developers whose help I sorely wanted.</p>
+
+<h4>Feature requests?</h4>
+
+<p>I am still accepting feature requests. Feature requests are now dealt with through our <a href="https://github.com/sep/ollert/issues">issues page</a>.</p>
+
+<h4>Contributing?</h4>
+
+<ul>
+<li>Write tests</li>
+<li>Run tests</li>
+<li>Seriously, the <a href="https://travis-ci.org/sep/ollert">travis-ci build</a> had better be green.</li>
+<li>Follow the currently in-place patterns. If you don&rsquo;t like them, let me know your idea before you work for a week and I deny your changes.</li>
+<li>Create issues for whatever you&rsquo;re working on.</li>
+<li>We do things by pull requests. Make a fork, make a branch, let Github do the rest.</li>
+</ul>
+
+
+<h4>And so, it continues&hellip;</h4>
+
+<p>This does not mean I am abandoning Ollert. Internally we&rsquo;ll still be discussing how to increase traffic and improve user experience. Hopefully, open sourcing Ollert will give us invaluable feedback on the code and fresh perspectives on features. I&rsquo;m looking forward to the future of Ollert.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hooks in cucumber-cpp]]></title>
+    <link href="https://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp/"/>
+    <updated>2013-11-22T20:40:00-06:00</updated>
+    <id>https://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp</id>
+    <content type="html"><![CDATA[<p>A few months ago <a href="/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">I blogged about tags</a> in <a href="https://github.com/cucumber/cucumber-cpp">cucumber-c++</a>. The scenario I presented involved using tags to call a <code>BEFORE</code> hook before the first scenario and an <code>AFTER</code> hook after the last scenario. The code looked a little bit like this:</p>
+
+<pre><code class="cucumber DoStuff.feature">@first
+Scenario: Do it my way
+  ...
+
+Scenario: Don't do it
+  ...
+
+@last
+Scenario: Do it your way
+  ...
+</code></pre>
+
+<pre><code class="c++ DoStuff_StepDefinitions.cpp">
+BEFORE("@first") { cout &lt;&lt; "This is the first step!" &lt;&lt; endl; }
+
+AFTER("@last") { cout &lt;&lt; "This is the last step!" &lt;&lt; endl; }
+
+...
+</code></pre>
+
+<p>The scnenario labeled <code>@first</code> would call the corresponding <code>BEFORE</code> macro and the <code>@last</code> scenario would call the <code>AFTER</code> macro. If I didn&rsquo;t have tags in place, the macros would have both been invoked before/after each scenario. Macros for <code>BEFORE_STEP</code> and <code>AROUND_STEP</code> are also available; <code>BEFORE_STEP</code> allows you to tag individual steps and <code>AROUND_STEP</code> acts as a before/after for individual steps.</p>
+
+<p>This was a workaround. What I really wanted to do was to not use tags, and instead unconditionally perform an action before the first scenario was run and after the last scenario is complete. Since cucumber-cpp is open source, I decided to implement that a few weeks ago (<a href="https://github.com/cucumber/cucumber-cpp/commit/26e11d0248edf32a8bac17df9d2d4ceb135ed502">see changeset</a>). Now the above example becomes:</p>
+
+<pre><code class="cucumber DoStuff.feature">
+Scenario: Do it my way
+  ...
+
+Scenario: Don't do it
+  ...
+
+Scenario: Do it your way
+  ...
+</code></pre>
+
+<pre><code class="c++ DoStuff_StepDefinitions.cpp">
+BEFORE_ALL() { cout &lt;&lt; "This is the first step!" &lt;&lt; endl; }
+
+AFTER_ALL() { cout &lt;&lt; "This is the last step!" &lt;&lt; endl; }
+
+...
+</code></pre>
+
+<p>This is the same behavior as the first example, except I don&rsquo;t have to force my fellow developers to move tags around when they add/remove scenarios. Also now my fellow developers can stop asking me why I was using tags and why when they added a scenario they couldn&rsquo;t get the tests to pass.</p>
+
+<p>The moral of the story is that you should go implement that feature you want to see in your favorite open source project.</p>
+]]></content>
+  </entry>
+  
+</feed>

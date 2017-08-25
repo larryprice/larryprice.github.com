@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: html5 | Larry Price]]></title>
+  <link href="https://larry-price.com/blog/categories/html5/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2017-08-25T08:42:34-05:00</updated>
+  <id>https://larry-price.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    <email><![CDATA[larry@larry-price.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Muck with History using the HTML5 History API]]></title>
+    <link href="https://larry-price.com/blog/2015/07/19/muck-with-history-using-the-html5-history-api/"/>
+    <updated>2015-07-19T11:00:00-04:00</updated>
+    <id>https://larry-price.com/blog/2015/07/19/muck-with-history-using-the-html5-history-api</id>
+    <content type="html"><![CDATA[<p>Congratulations! You just made a single page web application [SPWA] to do All The Things. What happens when you hit the Back button in the browser? Oops.</p>
+
+<p>The Back button is <a href="http://www.internetnews.com/skerner/2010/07/what-is-the-most-clicked-firef.html">the most used navigation button in the modern browser</a>. SPWA often break the functionality of the Back button. We can fix this using the <a href="http://diveintohtml5.info/history.html">HTML 5 History API</a>.</p>
+
+<p>For this demo, I&rsquo;ll make a simple web page starting with the text &ldquo;Page 1&rdquo; and a &ldquo;Continue&rdquo; button. When I click the &ldquo;Continue&rdquo; button, &ldquo;Welcome&rdquo; will change to &ldquo;Page 1&rdquo;; when I click &ldquo;Page 1&rdquo;, I change to &ldquo;Page 2&rdquo;; ad infinitum. My initial page looks like this:</p>
+
+<pre><code class="html index.html">&lt;span id="content" style="margin-bottom: 1.5em;"&gt;Welcome&lt;/span&gt;
+&lt;button id="continue" onclick="nextPage()"&gt;
+  Continue
+&lt;/button&gt;
+</code></pre>
+
+<pre><code class="javascript index.html">// ...
+function nextPage() {
+  var content = document.getElementById("content");
+  if (content.innerHTML === "Welcome") {
+    updatePageContent(1);
+  } else {
+    updatePageContent(parseInt(content.innerHTML.slice(5))+1);
+  }
+}
+function updatePageContent(pageNumber) {
+  document.getElementById("content").innerHTML = "Page " + pageNumber;
+}
+// ...
+</code></pre>
+
+<p>Running this code and clicking &ldquo;Continue&rdquo;, the user has no way to go back. He or she would need to start over from the beginning, which is bad for the user and bad for us too. We can update the browser&rsquo;s history using <code>pushState</code> and <code>popState</code> commands from the History API. For this contrived example, I&rsquo;ll add my <code>pushState</code> call in the <code>nextPage</code> function:</p>
+
+<pre><code class="javascript index.html">// ...
+function nextPage() {
+  var content = document.getElementById("content"),
+      nextPage = 1;
+  if (content.innerHTML === "Welcome") {
+    updatePageContent(nextPage);
+  } else {
+    nextPage = parseInt(content.innerHTML.slice(5))+1;
+    updatePageContent(nextPage);
+  }
+
+  history.pushState(null, null, "?page=" + nextPage);
+}
+
+// ...
+</code></pre>
+
+<p>Now the site will add <code>?page=</code> to the URL whenever we update the page number. This happens when we call <code>history.pushState</code>. In the call to <code>history.pushState</code>, the first argument is some data identifying the state, the second argument is the <code>title</code> of the new page but is currently unused by all the major browsers, and the third argument is the URL of the new state.</p>
+
+<p>In doing this, the Back button has become enabled in the browser. However, it still doesn&rsquo;t work. That&rsquo;s where <code>popState</code> comes in. <code>popState</code> is the other side of the equation which figures out how to change the page when the user hits the Back button. I&rsquo;ll update the call to <code>pushState</code> to include the page number in the <code>state</code> arugment so we can use it.</p>
+
+<pre><code class="javascript index.html">// ...
+
+function nextPage() {
+  var content = document.getElementById("content"),
+      nextPage = 1;
+  if (content.innerHTML === "Welcome") {
+    updatePageContent(nextPage);
+  } else {
+    nextPage = parseInt(content.innerHTML.slice(5))+1;
+    updatePageContent(nextPage);
+  }
+
+  history.pushState(nextPage, null, "?page=" + nextPage);
+}
+
+function updatePageContent(pageNumber) {
+  var content = document.getElementById("content");
+  if (pageNumber === 0) {
+    content.innerHTML = "Welcome";
+  } else {
+    content.innerHTML = "Page " + pageNumber;
+  }
+}
+
+window.onpopstate = function(event) {
+  updatePageContent(event.state || 0);
+}
+
+// ...
+</code></pre>
+
+<p>Now your history should be <em>mostly</em> working. Hitting Back should take you to the previous page, then hitting Forward should take you to the next page.</p>
+
+<p>There is currently a bug in the version of webkit Safari uses which causes a <code>popstate</code> event to fire on initial page load. We can try to fix this using the <code>replaceState</code> call on page load to set our history&rsquo;s state to the initial value. You can add this event to the bottom of your javascript:</p>
+
+<pre><code class="javascript index.html">// ... 
+
+window.onload = function() {
+  history.replaceState(0, null, "");
+}
+
+// ...
+</code></pre>
+
+<p>Of course, I want my web page to be smarter than this. If the user explicitly visits &ldquo;mysweetpage.com?page=3&rdquo; I want the user to be presented with page 3&rsquo;s epic content. Let&rsquo;s modify that <code>onload</code> function to check the current URL state and figure out which page the user has visited:</p>
+
+<pre><code class="javascript index.html">// ...
+
+window.onload = function() {
+  var currentPage = parseInt(window.location.search.slice(6)) || 0;
+  updatePageContent(currentPage);
+  history.replaceState(currentPage, null, window.location.search);
+}
+
+// ...
+</code></pre>
+
+<p>History changed. Forever. Changing history is a good idea but can easily lead to an even more confusing user scenario. Choose when to change history based on when your application would traditionally need to bring up a new page. Once you have Back working, make sure Forward also acts as expected. Thinking about how you&rsquo;ll integrate the History API into your web application can help you write more sensible, modular code.</p>
+
+<p>If you&rsquo;re looking for the full code that we created above, check out <a href="https://gist.github.com/larryprice/b06dd00c3e7f63ae7954">this gist</a>.</p>
+
+<p>&lt;3 HTML5</p>
+]]></content>
+  </entry>
+  
+</feed>

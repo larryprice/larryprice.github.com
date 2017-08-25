@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: trello | Larry Price]]></title>
+  <link href="https://larry-price.com/blog/categories/trello/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2017-08-25T08:42:34-05:00</updated>
+  <id>https://larry-price.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    <email><![CDATA[larry@larry-price.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Ollert - 6 Months Later]]></title>
+    <link href="https://larry-price.com/blog/2014/12/02/ollert-6-months-later/"/>
+    <updated>2014-12-02T18:54:12-05:00</updated>
+    <id>https://larry-price.com/blog/2014/12/02/ollert-6-months-later</id>
+    <content type="html"><![CDATA[<p><a href="/blog/2014/03/17/sep-startup-weekend-ollert">Nine months ago</a> I brought a team of 6 together to build a data analysis tool called <a href="https://ollertapp.com">Ollert</a>. <a href="/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards">A few months later</a>, I started working with <a href="//sep.com">SEP</a> to find time to make Ollert better. Where do we stand today?</p>
+
+<p>From a traffic perspective, we&rsquo;re doing pretty well. The numbers are increasing steadily over time, as are the number of people who use the application on a near-daily basis. Although we have surpassed our modest initial goals, we would like to build up a larger audience in the coming months.</p>
+
+<p>We&rsquo;ve had about 1800 different users visit the site for a total of over 5000 pageviews. On average, users hit about 2 pages per visit and stay with us for almost 90 seconds at a time. About half of all traffic comes from social media such as Twitter, LinkedIn, and Reddit, but we&rsquo;ve also seen some interesting traffic patterns come out of Trello, <a href="/">my blog</a>, <a href="//sep.com/labs">SEP Labs</a>, and various other blogs.</p>
+
+<p><a href="//trello.com">Trello</a> reached out to us a few months ago to congratulate us on making such a neat application using their API. They sent us some shirts and stickers for our trouble. It was an extremely satisfying moment.</p>
+
+<p>On the technical side of things, we&rsquo;ve made several changes to the application.</p>
+
+<p>We removed the concept of &ldquo;signing up&rdquo; for Ollert, as it was the greatest cause of confusion on the site. I replaced it with a mechanism that &ldquo;automatically&rdquo; signs a user up when they connect to a Trello account using OAuth. This makes our lives easier because we don&rsquo;t have to store passwords, and the lives of users easier because they don&rsquo;t have to come up with and remember another password.</p>
+
+<p>Every aspect of the site has been made faster. Server requests have been made faster by switching to unicorn and utilizing the &ldquo;workers&rdquo; feature. Trello API call times have been slashed - Board fetch time dropped from 1.8s to .18s, Label chart 17.6s down to .426s, WIP chart 18.2s to .221s, CFD 15s to 1s.</p>
+
+<p>We added two highly-requested charts - the Burn Down and Burn Up. It takes a certain type of Trello board to make these useful, and I&rsquo;m looking forward to finding someone one day who&rsquo;s able to make good use of them.</p>
+
+<p>We also improved the look of all pages (most notably the home page) with some help from SEP&rsquo;s UX team.</p>
+
+<p>Oh, and now it works significantly better on mobile.</p>
+
+<p>What does the future hold for Ollert?</p>
+
+<p>In the short term I&rsquo;m looking to implement a Cycle Time chart and add in a baseline for the Burndown chart. Long-term is a little less clear, but we may have a sizable announcement soon.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hotfixing a Bug in Trello's client.js]]></title>
+    <link href="https://larry-price.com/blog/2014/08/22/fixing-some-minor-bugs-in-trellos-client-dot-js/"/>
+    <updated>2014-08-22T06:08:21-04:00</updated>
+    <id>https://larry-price.com/blog/2014/08/22/fixing-some-minor-bugs-in-trellos-client-dot-js</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m a huge fan of <a href="https://trello.com">Trello</a>, and I recently created an app to analyze Trello data called <a href="https://ollertapp.com">Ollert</a>. Ollert makes heavy use of the <a href="http://trello.com/docs">Trello API</a>. I&rsquo;ve written previously about <a href="/blog/2014/03/18/connecting-to-the-trello-api/">using Trello&rsquo;s client.js to connect to the Trello API</a>.</p>
+
+<p>During some ad-hoc testing of opening/closing the Trello authorization popup, I found that clicking &ldquo;Deny&rdquo; on the popup, reopening it, and then clicking &ldquo;Connect&rdquo; resulted in me not being able to connect. I spent some time looking into workarounds and I even contacted Trello support. After studying <a href="https://trello.com/1/client.coffee">client.coffee</a>, I eventually found the problem: the Trello client keeps around an anonymous object called <code>ready</code> that stores some session data. When a user clicks &lsquo;Deny&rsquo;, this <code>ready</code> object remembers. I was able to fix the Deny/Allow issue by pulling down a local copy of client.js and making an interface change to the module:</p>
+
+<pre><code class="javascript client.js">clearReady: function() {
+  ready = {}
+}
+</code></pre>
+
+<p>From <a href="/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">another issue I was having</a>, I already call <code>Trello.deauthorize()</code> before my application attempts to contact Trello, so now I also make a call to <code>Trello.clearReady()</code>. My <code>authorize()</code> function looks like this:</p>
+
+<pre><code class="javascript trello-controller.js">var authorize = function (expires, callback) {
+  Trello.deauthorize();
+  Trello.clearReady();
+
+  Trello.authorize({
+    name: "Ollert",
+    type: "popup",
+    interactive: true,
+    expiration: expires,
+    persist: false,
+    success: callback,
+    scope: {
+      read: true,
+      write: true
+    }
+  });
+}
+</code></pre>
+
+<p>Since I&rsquo;ve pulled client.js locally, I&rsquo;m no longer sending my developer token when I load the file. I manually set my key when the page loads, but this could just as easily be done in my <code>authorize</code> method above.</p>
+
+<pre><code class="javascript layout.haml">:javascript
+  $(document).ready(function() {
+    Trello.setKey("#{ENV['PUBLIC_KEY']}")
+  });
+</code></pre>
+
+<p>You can find a copy of my modified client.js <a href="https://gist.github.com/larryprice/1e67ddcd53c686fbc1de">in this Gist</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Testing through a Trello connection with Capybara and Webkit]]></title>
+    <link href="https://larry-price.com/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit/"/>
+    <updated>2014-08-07T07:25:11-04:00</updated>
+    <id>https://larry-price.com/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit</id>
+    <content type="html"><![CDATA[<p>During the hardening of <a href="https://ollertapp.com">Ollert</a>, a Trello data analysis tool I wrote, I started writing acceptance tests. I quickly ran into an issue where the meat of my application requires opening pop-up window, signing into Trello, and allowing my application access.</p>
+
+<p>I created a test user on Trello with a few varied boards to allow for proper testing. In doing this, I store the user&rsquo;s login information in my .env file. For the most part, I can use the steps provided in <a href="https://gist.github.com/larryprice/546d6c029bb3074bd84c">this common web_steps.rb</a>.</p>
+
+<pre><code class="cucumber Connecting.feature">Feature: Landing
+
+Background:
+  Given I am on the landing page
+
+@javascript
+Scenario: Deny connecting to Trello
+  Given I follow "Connect to Get Started"
+  And I press "Deny" on the Trello popup
+  Then I should be on the landing page
+
+@javascript
+Scenario: Allow connecting to Trello
+  Given I follow "Connect to Get Started"
+  When I authorize with Trello as the test user
+  Then I should not see "Connecting..."
+  And I should not see "Redirecting..."
+  And I should be on the boards page
+</code></pre>
+
+<p>When the Trello popup appears, we have to specify the window we&rsquo;re going to use. Since I&rsquo;m using <a href="https://github.com/thoughtbot/capybara-webkit">capybara-webkit</a>, I&rsquo;m going to go ahead and do all of my Trello popup activities in one step, which saves me from writing a lot of unnecessary steps.</p>
+
+<pre><code class="ruby trello_popup_steps.rb">When /^I press "(.*?)" on the Trello popup$/ do |button|
+  trello_popup = windows.last
+  page.within_window trello_popup do
+    click_button button
+  end
+end
+
+When /^I authorize with Trello as the test user$/ do
+  trello_popup = windows.last
+  page.within_window trello_popup do
+    click_link "Log in"
+
+    fill_in "user", with: ENV['TEST_USER_TRELLO_USERNAME']
+    fill_in "password", with: ENV['TEST_USER_TRELLO_PASSWORD']
+
+    click_button "Log In"
+    click_button "Allow"
+  end
+end
+</code></pre>
+
+<p>Straightforward so far. We grab the window handle and we click links, fill in fields, and press buttons within that window.</p>
+
+<p>Note that I&rsquo;m using capybara-webkit, a headless web driver, to run my Javascript. Although the first test (&ldquo;Deny&rdquo;) will pass, the &ldquo;Allow&rdquo; test fails ambiguously. This is because capybara-webkit is not recognized as a supported browser by the Trello popup.</p>
+
+<p>Anecdotally, I contacted Trello support about this and received the following response:</p>
+
+<blockquote><p>Currently it is not possible to test this with a headless browser as you are looking to do without getting the unsupported browser message.</p></blockquote>
+
+<p>So I guess we should just give up, right? &hellip;Or we could manipulate the headers we send to load the Trello popup such that Trello <em>thinks</em> we are Google Chromium.</p>
+
+<pre><code class="cucumber trello_popup_steps.rb">When /^I authorize with Trello as the test user$/ do
+  trello_popup = windows.last
+  page.within_window trello_popup do
+    page.driver.header(
+      "User-Agent",
+      "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/34.0.1847.116 Chrome/34.0.1847.116 Safari/537.36"
+    )
+
+    click_link "Log in"
+
+    fill_in "user", with: ENV['TEST_USER_TRELLO_USERNAME']
+    fill_in "password", with: ENV['TEST_USER_TRELLO_PASSWORD']
+
+    click_button "Log In"
+    click_button "Allow"
+  end
+end
+</code></pre>
+
+<p>Fantastic. Now my tests pass. I can&rsquo;t sleep at night, but my tests pass.</p>
+
+<p>Unfortunately, that won&rsquo;t be the case if I add more tests to this <code>.feature</code> file. Hidden somewhere deep in the browser&rsquo;s cache or cookies or somethings, Trello is remembering that we logged in sometimes. Sometimes it even remembers that someone else has logged in. The UI of the Trello popup changes based on whether it thinks you&rsquo;ve already logged in. In order to keep things consistent, I like to add an if-statement to take care of this case.</p>
+
+<pre><code class="cucumber trello_popup_steps.rb">When /^I authorize with Trello as the test user$/ do
+  trello_popup = windows.last
+  page.within_window trello_popup do
+    page.driver.header(
+      "User-Agent",
+      "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/34.0.1847.116 Chrome/34.0.1847.116 Safari/537.36"
+    )
+
+    if page.has_content? "Switch Accounts"
+      click_link "Switch Accounts"
+    else
+      click_link "Log in"
+    end
+
+    fill_in "user", with: ENV['TEST_USER_TRELLO_USERNAME']
+    fill_in "password", with: ENV['TEST_USER_TRELLO_PASSWORD']
+
+    click_button "Log In"
+    click_button "Allow"
+  end
+end
+</code></pre>
+
+<p>Edge cases addressed. Now I can make connections to Trello and test my application. Be warned, I&rsquo;ve already had these tests break once when Trello updated the UI behind the Trello popup. If Trello ever stops supporting Chromium 34.0, these tests are also likely to stop working. These tests are most useful during development, when we have the potential to break the Trello connection ourselves, and so I think they are well worth the pain of potential future maintenance.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Ollert - Reveal The Data Behind Your Trello Boards]]></title>
+    <link href="https://larry-price.com/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards/"/>
+    <updated>2014-07-13T17:15:00-04:00</updated>
+    <id>https://larry-price.com/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards</id>
+    <content type="html"><![CDATA[<p>Introducing <a href="https://ollertapp.com">Ollert</a>, a tool to show you what your <a href="//trello.com">Trello</a> boards can&rsquo;t tell you on their own.</p>
+
+<p>Trello does a great job of telling you about the here and now of your Trello boards; who&rsquo;s working on what task and what is the current state of a task. But what if I want to know about the state of the whole project? How many work items have we finished in the past sprint, iteration, or duration of the project? He who does not understand the past is destined to repeat his mistakes ad nauseum.</p>
+
+<p>Ollert is a tool with these ideas in mind. Authorize Ollert access to your Trello account, select the board you would like to learn more about, and see all the battle scars your board has experienced throughout the duration of the project.</p>
+
+<p>Learn about your velocity through a Cumulative Flow Diagram. View your work in progress with a WIP chart. See which labels your team uses most frequently with our label chart. See information about your cards and lists from a historical perspective.</p>
+
+<p><a href="https://ollertapp.com/signup">Create an account</a> with Ollert to show your support. Users who sign up for an Ollert account will have their Trello authorization saved, saving the hassle of authorizing with Trello every time the user visits the site. An Ollert account is perfect for any user who views board progress frequently, or for creating a continuous display on an office monitor.</p>
+
+<p>Since Ollert&rsquo;s initial release <a href="/blog/2014/03/17/sep-startup-weekend-ollert/">several months ago</a>, Ollert now boasts over 4000% faster load times, increased data security using SSL and encrypted cookies, and a more consistent Trello connection experience in all modern web browsers.</p>
+
+<p>Discover Ollert now at <a href="https://ollertapp.com">ollertapp.com</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Deauthorizing Token with the Trello Client]]></title>
+    <link href="https://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client/"/>
+    <updated>2014-07-07T05:59:13-04:00</updated>
+    <id>https://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client</id>
+    <content type="html"><![CDATA[<p>In my <a href="https://ollertapp.com">application</a>, a user can connect to Trello without logging in. Whenever this &ldquo;anonymous&rdquo; user hits the landing page, I attempt to force the <a href="https://trello.com/docs/gettingstarted/clientjs.html">Trello client</a> to authorize the user again. By doing this, the user can return to the landing page whenever he or she likes to switch usernames. My authorize code looks like this:</p>
+
+<pre><code class="javascript">function AuthenticateTrelloAlways() {
+  Trello.authorize({
+    name: "Ollert",
+    type: "popup",
+    interactive: true,
+    expiration: "1hour",
+    persist: false,
+    success: onAuthorizeSuccessful,
+    scope: {
+      read: true
+    },
+  });
+}
+</code></pre>
+
+<p>This works oh-so-wonderfully in Chrome and Firefox, but, even during the hackathon which spawned <a href="https://ollertapp.com">Ollert</a>, we noticed that IE10/11 were causing some unexpected issues. Authorization would work the first time the user hit the landing page, but on subsequent visits telling Trello to Allow or Deny access resulted in the popup showing a white screen and never calling my callback function. Closing and reopening IE would allow me to authorize once, presumably until the &ldquo;1hour&rdquo; that I requested the original token for expired. I also verified this problem existed in IE9.</p>
+
+<p>After several hours tweeting obscenities about IE, I stumbled upon the answer while browsing the source code for Trello&rsquo;s <a href="https://trello.com/1/client.coffee">client.coffee</a>. About one third of the way through the code, I found this function:</p>
+
+<pre><code class="javascript"># Clear any existing authorization
+deauthorize: -&gt;
+  token = null
+  writeStorage("token", token)
+  return
+</code></pre>
+
+<p>All this code does is unset the class variable <code>token</code> and unset the local store variable of the same name. So I changed my <code>AuthenticateTrelloAlways()</code> method:</p>
+
+<pre><code class="javascript">function AuthenticateTrelloAlways() {
+  Trello.deauthorize();
+
+  Trello.authorize({
+    name: "Ollert",
+    type: "popup",
+    interactive: true,
+    expiration: "1hour",
+    persist: false,
+    success: onAuthorizeSuccessful,
+    scope: {
+      read: true
+    },
+  });
+}
+</code></pre>
+
+<p>Voilà. Why does this only happen in IE? I was originally going to blame the local store, but, since I was able to reproduce the defect in IE9 (no HTML5), I no longer believe that to be the case. I&rsquo;m currently resigned to chalk it up as IE just being IE.</p>
+]]></content>
+  </entry>
+  
+</feed>

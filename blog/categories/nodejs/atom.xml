@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: nodejs | Larry Price]]></title>
+  <link href="https://larry-price.com/blog/categories/nodejs/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2017-08-25T08:42:34-05:00</updated>
+  <id>https://larry-price.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    <email><![CDATA[larry@larry-price.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The wisdom of Confucius - now available in an API]]></title>
+    <link href="https://larry-price.com/blog/2014/10/14/the-wisdom-of-confucius-now-available-in-an-api/"/>
+    <updated>2014-10-14T06:03:16-04:00</updated>
+    <id>https://larry-price.com/blog/2014/10/14/the-wisdom-of-confucius-now-available-in-an-api</id>
+    <content type="html"><![CDATA[<p>I make a lot of silly things while learning new technology. In this case I have tapped into the almighty power of <a href="https://en.wikipedia.org/wiki/Confucius">Confucius</a>, a Chinese philosopher from 2500 years ago credited for writing or editing many Chinese classic texts. Growing up as an American child, I associated Confucius with proverbs, and I associated proverbs with that classic after-Chinese-dinner dessert <a href="https://en.wikipedia.org/wiki/Fortune_cookie">the fortune cookie</a>.</p>
+
+<p>Fortune cookies are a pure delight: a message in a bottle from the restaurant&rsquo;s proprietors for you to enjoy as you kindly vacate the facility.</p>
+
+<p>Most fortune cookies that I&rsquo;ve opened recently have three parts: a fortune (generally a proverb), a lesson in simplified Chinese, and a lottery number. So many secrets wrapped up in such a small, golden treasure.</p>
+
+<p>Ever left a Chinese restaurant, gotten in your car, and felt the need to break something only to realize you left your precious fortune cookie on the table? I have built a solution.</p>
+
+<p><a href="http://fortunecookieapi.com/">The Fortune Cookie API</a> is a simple, RESTful API built to generate fortune cookie data. The root URL shows documentation built using <a href="https://apiary.io/">Apiary.io</a>.</p>
+
+<p>How does it work? I need fortunes now!</p>
+
+<p>There are options. You can get <code>fortunes</code> from the <a href="http://fortunecookieapi.com/v1/fortunes">/v1/fortunes</a> endpoint, <code>lessons</code> from the <a href="http://fortunecookieapi.com/v1/lessons">/v1/lessons</a> endpoint, and lottery numbers from the <a href="http://fortunecookieapi.com/v1/lottos">/v1/lottos</a> endpoint. By default you get 100 of any model, but all endpoints include a <code>limit</code> (max 1000), <code>skip</code>, and <code>page</code> parameter to facilitate getting all the lessons and fortunes. For lottery numbers, we approximately build <a href="https://en.wikipedia.org/wiki/Powerball">Powerball</a> numbers except we currently ignore the rule for red balls, which means there are something ike 42 billion different possibilities. Due to the high number of potential lottery numbers, the <code>lottos</code> endpoint also includes a <code>firstId</code> parameter that lets you start from anywhere.</p>
+
+<p>But there&rsquo;s no need to get the individual models (unless you&rsquo;re into that kind of thing)! I also created a <a href="http://fortunecookieapi.com/v1/cookie">/v1/cookie</a> endpoint to retrieve a random fortune, lesson, and lottery number as a single object. Woohoo! You can specify the number of cookies (max 100) with the <code>limit</code> parameter.</p>
+
+<pre><code>GET http://fortunecookieapi.com/v1/cookie
+
+{
+  "fortune": {
+    "id": "53ffcf1d4ea4f76d1b8f223e",
+    "message": "This fortune intentionally left blank"
+  },
+  "lotto": {
+    "id": "001000200030004000500006",
+    "numbers": [10,20,30,40,50,6]
+  },
+  "lesson": {
+    "id": "53ffcf1d4ea4f76d1b8f2241",
+    "chinese": "因特网",
+    "pronunciation": "yintewang",
+    "english": "internet"
+  }
+}
+</code></pre>
+
+<p>Now you can fill that hole in your heart where the fortune cookies are missing. If you&rsquo;re interested in the code, you can <a href="https://github.com/larryprice/fortune-cookie-api">check it out on Github</a>.</p>
+
+<p>UPDATE: I&rsquo;ve registered the domain <a href="http://fortunecookieapi.com">fortunecookieapi.com</a> for the love of fortune cookies. Enjoy.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Fetching Random Mongoose Objects the Simple Way]]></title>
+    <link href="https://larry-price.com/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way/"/>
+    <updated>2014-09-15T20:11:13-04:00</updated>
+    <id>https://larry-price.com/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way</id>
+    <content type="html"><![CDATA[<p>As I venture through the land of <a href="http://nodejs.org/">NodeJS</a>, I&rsquo;ve found the wonder and magic of <a href="http://npmjs.org/">NPM</a>, a package management tool for Javscript similar to <a href="https://www.ruby-lang.org/">ruby</a>&rsquo;s gems. Although there are nearly 100,000 packages on the main npmjs site (94,553 at time-of-writing), it seems there are still niches to be filled.</p>
+
+<p>Recently, while working on a <strong>top secret side-project</strong>, I wanted to grab a random object from a <a href="https://www.mongodb.org/">MongoDB</a> collection. I used the highly-extensible <a href="http://mongoosejs.com/">mongoose</a> to set up my models and just needed to find a package somewhere with the desired functionality. I found such a package called <a href="https://github.com/matomesc/mongoose-random">mongoose-random</a>, but, unfortunately, I was never able to get this plugin to work correctly. The plugin in question also needed to insert new columns on your tables, which I didn&rsquo;t really want. So I decided to create a new package.</p>
+
+<p><a href="https://www.npmjs.org/package/mongoose-simple-random">mongoose-simple-random</a> is an incredibly easy way to include a random accessor on your mongoose models. All that&rsquo;s required is adding the plugin to the schema before compiling the model:</p>
+
+<pre><code class="javascript test.js">var random = require('mongoose-simple-random');
+
+var s = new Schema({
+  message: String
+});
+s.plugin(random);
+
+Test = mongoose.model('Test', s);
+</code></pre>
+
+<p>Now I can ask the model for a single random element of the <code>Test</code> model with a single call to <code>findOneRandom</code>:</p>
+
+<pre><code class="javascript find_one.js">var Test = require('./test');
+
+Test.findOneRandom(function(err, element) {
+  if (err) console.log(err);
+  else console.log(element);
+});
+</code></pre>
+
+<p>Need to find more than one? Use <code>findRandom</code> to get an array:</p>
+
+<pre><code class="javascript find_five.js">var Test = require('./test');
+
+Test.findRandom({}, {}, {count: 5}, function(err, results) {
+  if (err) console.log(err);
+  else console.log(results);
+});
+</code></pre>
+
+<p>Zowee! Just like the default <code>find</code> methods, you can pass in optional filters, fields, and options:</p>
+
+<pre><code class="javascript find_five_with_optionals.js">var Test = require('./test');
+
+var filter = { type: { $in: ['education', 'engineering'] } };
+var fields = { name: 1, description: 0 };
+var options = { skip: 10, limit: 10, count: 5 };
+Test.findRandom(filter, fields, options, function(err, results) {
+  if (err) console.log(err);
+  else console.log(results);
+});
+</code></pre>
+
+<p>Given 1000s of objects, performance is excellent. I haven&rsquo;t tested it on larger-scale databases, but I wouldn&rsquo;t mind seeing some performance tests in the future.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Use NVM to manage your NodeJS install]]></title>
+    <link href="https://larry-price.com/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install/"/>
+    <updated>2014-08-02T20:00:57-04:00</updated>
+    <id>https://larry-price.com/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been trying to get into <a href="http://nodejs.org/">NodeJS</a>, and so my immediate thought is that I want to be able to install different versions for different projects, a la <a href="https://rvm.io">rvm</a> for <a href="https://ruby-lang.org">ruby</a>. Fortunately, this already exists.</p>
+
+<p><a href="https://github.com/creationix/nvm">NVM</a> gives me the equivalent functionality of rvm but for NodeJS, making all my dreams come true. Here&rsquo;s how I installed it on my Linux boxes:</p>
+
+<pre><code class="bash">$ curl https://raw.githubusercontent.com/creationix/nvm/v0.12.2/install.sh | bash
+</code></pre>
+
+<p><em>Note: This URL will get you nvm version 0.12.2. This link may not be valid in the future, where you come from. Check out the <a href="https://github.com/creationix/nvm">github repo</a> for any newer versions. If you&rsquo;re brave, trusting, or just really naïve, you can even change <code>v0.12.2</code> above to <code>master</code> to get the bleeding edge install.</em></p>
+
+<p>The above line of code will download the files, install nvm in your home directory, and update your profile to include nvm&rsquo;s current Node version in your path. NVM autocomplete isn&rsquo;t in place by default, but we can enable it by adding the following to the end of our .bash_profile:</p>
+
+<pre><code class="bash">[[ -r $NVM_DIR/bash_completion ]] &amp;&amp; . $NVM_DIR/bash_completion
+</code></pre>
+
+<p>Now it&rsquo;s time to actually install us some Node! You can use <code>nvm ls-remote</code> to list the versions of Node currently available for download. At the time of this writing, the most recent version is <strong>v0.11.13</strong>. Installing is easy (and quick):</p>
+
+<pre><code class="bash">$ nvm install 0.11.13
+...
+$ nvm use 0.11.13
+</code></pre>
+
+<p>Since this is the only Node on my system, I&rsquo;d like to set it as the default.</p>
+
+<pre><code class="bash">$ nvm alias default 0.11.13
+</code></pre>
+
+<p>What if I&rsquo;m <code>cd</code>ing out of control and I don&rsquo;t know what Node version I need in my current directory? Create a file called <code>.nvmrc</code> in the directory containing the version number you want nvm to use and then type <code>nvm use</code> ENTER; Now you&rsquo;re using the version of Node you meant to. This also prevents people from using the wrong versions of Node to try to run your code, which would of course be a catastrophe.</p>
+
+<p>PLUS nvm installs the right version of npm whenever you install Node, so there&rsquo;s no need to worry about dealing with your base npm not working with different versions of Node.</p>
+
+<p>Thank <a href="https://en.wikipedia.org/wiki/Free_and_Open_Source_Software">FOSS</a> for nvm. Maybe one day soon I&rsquo;ll do useful things in Node an tell you about them.</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: rails | Larry Price]]></title>
+  <link href="https://larry-price.com/blog/categories/rails/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2017-08-25T08:42:34-05:00</updated>
+  <id>https://larry-price.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    <email><![CDATA[larry@larry-price.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[A Hacky Solution to the Unicode data in a Unicode-only collation problem]]></title>
+    <link href="https://larry-price.com/blog/2012/10/19/a-hacky-solution-to-the-unicode-data-in-a-unicode-only-collation-problem/"/>
+    <updated>2012-10-19T17:23:00-05:00</updated>
+    <id>https://larry-price.com/blog/2012/10/19/a-hacky-solution-to-the-unicode-data-in-a-unicode-only-collation-problem</id>
+    <content type="html"><![CDATA[<h2>The Issue Rises <a id="problem"></a></h2>
+
+<p>Earlier this week a defect was found in my application. A defect that I could have sworn I fixed several weeks ago and written about in a <a href="http://nullablevoid.blogspot.com/2012/10/unicode-data-in-unicode-only-collation.html">previous blog post</a>. Let me start from the beginning:</p>
+
+<h4>The Setup</h4>
+
+<p>The application is a web app using Rails 3.2, MSSQL Server for the database, and Tiny-TDS for database communications from the CloudFoundry server. There are three different types of builds and three databases I access: development (for development, obviously), staging (for testing), and production (for the users to complain about, mostly).</p>
+
+<h4>The Original Issue</h4>
+
+<p>I inherited this code and ran it on my dev build with no issues. Upon doing some testing with the staging build, the page crashed. The logs revealed the following (horrible) error:</p>
+
+<pre><code class="ruby Vague error">Unicode data in a Unicode-only collation or ntext data cannot be sent to clients using DB-Library (such as ISQL) or ODBC version 3.7 or earlier.
+</code></pre>
+
+<p>What does this mean? Well. Beats me. <a href="http://dirk.net/2010/09/18/sql-server-with-freetds-unicode-data-error/">Several</a> <a href="http://stackoverflow.com/questions/5414890/mssql-query-issue-in-php-and-querying-text-data">sources</a> had <a href="http://stackoverflow.com/questions/8705008/tiny-tds-error-on-heroku-connecting-to-sqlserver-db">similar</a> <a href="http://findyourscript.com/index.php/2011/05/20/unicode-data-in-a-unicode-only-collation-or-ntext-data-cannot-be-sent-to-clients-using-db-library/">issues</a> and the ones I liked eventually came to the conclusion that ntext and nvarchar variables in the database were ticking off the host server. <a href="http://msdn.microsoft.com/en-us/library/ms186939.aspx">Apparently</a>, text variables are translated to nvarchar(MAX), where MAX is something like 2GB of data. I hunted through my database and, sure enough, the &lsquo;Narrative&rsquo; column was an nvarchar(MAX).</p>
+
+<h4>The Original Fix</h4>
+
+<p>Based on the mighty power of the internet, I decided that the best thing for me to do was to change the variable in the database from a &ldquo;text&rdquo; to a &ldquo;string&rdquo; with a limit of 8000 (which translates to varchar(8000)) using this migration:</p>
+
+<pre><code class="ruby Simple migration">class ChangeNarrativeColumnToVarChar &lt; ActiveRecord::Migration
+  def change
+    change_column :evaluation, :narrative, :string, :limit =&gt; 8000
+  end
+</code></pre>
+
+<p>I ran through my repro steps and&hellip; Drumroll&hellip; Suspense&hellip; It worked! Or so it appeared. I went to the narrative textbox and put some words in it, saved, and confirmed that everything was great. Then I pushed it to production and heard nothing for two weeks.</p>
+
+<h2>Failure Is Always An Option <a id="failure"></a></h2>
+
+<p>Too bad that wasn&rsquo;t the end of the story. This week my users finally started using the app again. They found all kinds of defects, of course, but one in particular that caught me off guard: When viewing the narrative text, which we had &ldquo;fixed&rdquo; using that little migration above, the text cut off to about two lines. Two lines? I never really bothered to test more than a couple words or a short, goofy phrase. So I opened up the app on my dev build and it worked great with up to 8000 characters. I switched over to the staging build and was able to reproduce the error immediately.</p>
+
+<p>At first I thought it was just the test_area, but I was wrong. Even static fields which displayed narrative cut off text. After some testing, the text was always cut off to 255 characters. I watched the SQL logs and confirmed that all 8000 characters would come back from the SQL queries. I looked in the database and verified the data was still present. What was going on?</p>
+
+<h4>Dear Rails: Oh, you</h4>
+
+<p>I thought and eventually realized something: the default of a &ldquo;string&rdquo; in Rails is 255 characters. Rails was cutting off my text. Curse you, Rails, I trusted you with my heart!</p>
+
+<h4>The Fix</h4>
+
+<p>Alright. The fix. Unfortunately, the fix sucks. In my app, I had to get the whole model that contained a narrative. Doing only that, the narrative would be cut short. So then I had to get the narrative again, and this time cast that sucker to a &ldquo;text.&rdquo;</p>
+
+<pre><code class="ruby < 1337 Hax">@eval = Evaluation.find(:id =&gt; id)
+@eval.narrative = Evaluation.select("id as id, CAST(narrative as text) as narrative").where(:id =&gt; id).first.narrative
+</code></pre>
+
+<p>There&rsquo;s a part of me that likes sensible, clean code. This code did not come from that part of me. If you really want, you can do a select and get all the columns of your model, and then case the field in question, but what if your columns change? I didn&rsquo;t want to be responsible for that, especially after I hand this code off to someone else in the coming weeks.</p>
+]]></content>
+  </entry>
+  
+</feed>

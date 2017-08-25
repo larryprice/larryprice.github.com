@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ruby | Larry Price]]></title>
+  <link href="https://larry-price.com/blog/categories/ruby/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2017-08-25T08:42:34-05:00</updated>
+  <id>https://larry-price.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    <email><![CDATA[larry@larry-price.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Deploying an Octopress site to Openshift]]></title>
+    <link href="https://larry-price.com/blog/2014/12/14/migrating-an-octopress-blog-from-github-pages-to-openshift/"/>
+    <updated>2014-12-14T20:15:00-05:00</updated>
+    <id>https://larry-price.com/blog/2014/12/14/migrating-an-octopress-blog-from-github-pages-to-openshift</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ll detail how to take a new or existing GH Pages blog in Octopress and deploy it to OpenShift.</p>
+
+<h3>Why?</h3>
+
+<p>I recently moved my blog from Github Pages to <a href="https://www.openshift.com/">OpenShift Online</a>. I did this because I wanted to utilize SSL with my custom domain - <a href="https://github.com/isaacs/github/issues/156">a feature not currently available on Github Pages</a> (it&rsquo;s 12/14/2014 - let me know when this becomes possible!). OpenShift supports SSL with a free account, so I decided to make the switch. I wanted to use the existing architecture set up by <a href="https://github.com/imathis/octopress">Octopress</a> that built my GH Pages blog. Hopefully you see a little lock icon in your address bar if you&rsquo;re reading this from <a href="/">the site</a>.</p>
+
+<h3><a name="step0"></a>Step 0: Create an OpenShift account</h3>
+
+<p>Here&rsquo;s the link: <a href="https://www.openshift.com/app/account/new">https://www.openshift.com/app/account/new</a>. They&rsquo;re serious about the first and second options being free. The difference is signing up for the second option requires credit card information to give you the possibility of scaling your application. The second option is what allows you to add certs for doing SSL.</p>
+
+<h3><a name="step1"></a>Step 1: Create a Ruby 1.9.3 application</h3>
+
+<p>Octopress still uses ruby 1.9.3; for simplicity&rsquo;s sake, so will we. Assuming you have ruby-1.9.3 installed and the rhc gem installed (gem install rhc), create a new ruby-1.9 application on OpenShift:</p>
+
+<pre><code class="bash">$ rhc app create octopress ruby-1.9
+</code></pre>
+
+<p>replacing &ldquo;octopress&rdquo; with your desired application name. I&rsquo;ve found this action takes some time, usually over a minute, while OpenShift allocates resources. When your application has been created, you should see an <code>ssh://</code> URL for your git repository on OpenShift. Make sure you can get access to this later.</p>
+
+<p>If you&rsquo;re using a custom domain, now is as good a time as any to set it up. OpenShift has <a href="https://blog.openshift.com/custom-url-names-for-your-paas-applications-host-forwarding-and-cnames-the-openshift-way/">its own docs</a> to cover this topic.</p>
+
+<h3><a name="step2"></a>Step 2: Merge in &ldquo;Octoshift&rdquo;</h3>
+
+<p>I&rsquo;ve made some updates to the octopress repo that I haven&rsquo;t requested be pulled into the master branch yet. I&rsquo;ll update this section in the future if necessary.</p>
+
+<p>If you&rsquo;re new to Octopress, clone from the master branch:</p>
+
+<pre><code class="bash">$ git clone git@github.com:imathis/octopress.git
+</code></pre>
+
+<p>Either way, <code>cd</code> into your octopress directory and merge in my fork:</p>
+
+<pre><code class="bash">$ git remote add octoshift git@github.com:larryprice/octopress.git
+$ git pull octoshift master
+</code></pre>
+
+<h3><a name="step3"></a>Step 3: Set up deployment</h3>
+
+<p>There is a rake task for setting up an OpenShift deployment called <code>setup_openshift</code>. This rake task clobbers the <code>_deploy</code> directory and reinitializes it using the URL for your OpenShift repository, which we committed to memory in <a href="#step1">Step 1</a>.</p>
+
+<pre><code class="bash">$ rake setup_openshift["ssh://548e1873e0b8cddccf000094@octopress-username.rhcloud.com/~/git/octopress.git/"]
+rm -rf _deploy
+mkdir -p _deploy/public
+cd _deploy
+Initialized empty Git repository in /home/lrp/Projects/2014/octopress/_deploy/.git/
+remote: Counting objects: 21, done.
+remote: Compressing objects: 100% (14/14), done.
+remote: Total 21 (delta 2), reused 21 (delta 2)
+Unpacking objects: 100% (21/21), done.
+From ssh://octopress-username.rhcloud.com/~/git/octopress
+ * branch            master     -&gt; FETCH_HEAD
+ * [new branch]      master     -&gt; origin/master
+cd -
+cp config.ru _deploy/
+cd _deploy
+[master 5204046] Octopress init
+ 3 files changed, 27 insertions(+), 295 deletions(-)
+ create mode 100644 Gemfile
+ rewrite config.ru (99%)
+ create mode 100644 public/index.html
+cd -
+
+---
+## Now you can deploy to ssh://548e1873e0b8cddccf000094@octopress-username.rhcloud.com/~/git/octopress.git/ with `rake deploy` or `rake openshift` ##
+</code></pre>
+
+<h3><a name="step35"></a>Step 3.5 Set up forcing SSL</h3>
+
+<p>Do you already have SSL for your domain? Bully for you! I&rsquo;ve included an option to <code>setup_openshift</code> to force traffic to use <code>https</code> in a production environment. Just send a second parameter to rake and it&rsquo;ll do the rest.</p>
+
+<pre><code class="bash">$ rake setup_openshift["ssh://548e1873e0b8cddccf000094@octopress-username.rhcloud.com/~/git/octopress.git/",true]
+</code></pre>
+
+<p>Note that you will still need to change your URL in <code>_config.yml</code> if you are using a custom domain.</p>
+
+<h3><a name="step4"></a>Step 4: Deploy</h3>
+
+<p>Now we can just run the <code>openshift</code> or <code>deploy</code> rake tasks to deploy our app to OpenShift. This task verifies we have the latest version of our OpenShift <code>master</code> branch, installs missing gems, copies over your <code>public</code> folder, and pushes the application to OpenShift.</p>
+
+<pre><code class="bash">$ rake deploy
+## Deploying branch to OpenShift
+## Pulling any updates from OpenShift
+cd _deploy
+From ssh://octopress-username.rhcloud.com/~/git/octopress
+ * branch            master     -&gt; FETCH_HEAD
+Already up-to-date.
+Fetching gem metadata from https://rubygems.org/...........
+Resolving dependencies...
+Using rack (1.5.2) 
+Using rack-protection (1.5.3) 
+Using tilt (1.4.1) 
+Using sinatra (1.4.5) 
+Using bundler (1.3.5) 
+Your bundle is complete!
+Use `bundle show [gemname]` to see where a bundled gem is installed.
+cd -
+cd _deploy
+
+## Committing: Site updated at 2014-12-14 23:13:54 UTC
+[master b17225e] Site updated at 2014-12-14 23:13:54 UTC
+ 1 file changed, 17 insertions(+)
+ create mode 100644 Gemfile.lock
+
+## Pushing generated _deploy website
+Counting objects: 9, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (7/7), done.
+Writing objects: 100% (9/9), 1.29 KiB | 0 bytes/s, done.
+Total 9 (delta 1), reused 0 (delta 0)
+remote: Stopping Ruby cartridge
+remote: Waiting for stop to finish
+remote: Building git ref 'master', commit b17225e
+remote: Building Ruby cartridge
+remote: bundle install --deployment --path ./app-root/repo/vendor/bundle
+remote: Fetching gem metadata from https://rubygems.org/..........
+remote: Installing rack (1.5.2) 
+remote: Installing rack-protection (1.5.3) 
+remote: Installing tilt (1.4.1) 
+remote: Installing sinatra (1.4.5) 
+remote: Using bundler (1.3.5) 
+remote: Your bundle is complete!
+remote: It was installed into ./vendor/bundle
+remote: Preparing build for deployment
+remote: Deployment id is b4ef1149
+remote: Activating deployment
+remote: Compilation of assets is disabled or assets not detected.
+remote: Starting Ruby cartridge
+remote: -------------------------
+remote: Git Post-Receive Result: success
+remote: Activation status: success
+remote: Deployment completed with status: success
+To ssh://548e1873e0b8cddccf000094@octopress-username.rhcloud.com/~/git/octopress.git/
+   a5071bb..b17225e  master -&gt; master
+
+## OpenShift deploy complete
+cd -
+</code></pre>
+
+<h3>Fin</h3>
+
+<p>That&rsquo;s that. Treat it as any Octopress install. I&rsquo;ll see if the owners of the octopress repository would be interested in pulling in my customizations and update this blog post as necessary.</p>
+
+<p>As for my switch from GH Pages to OpenShift: I&rsquo;ve found OpenShift to be just as fast as the GH Pages static server, especially when combined with <a href="https://www.cloudflare.com/">Cloudflare&rsquo;s</a> CDN and optimization systems. No regrets so far. Drop me a line in the comments if you have a beef with OpenShift or know of any equivalent alternatives.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Testing through a Trello connection with Capybara and Webkit]]></title>
+    <link href="https://larry-price.com/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit/"/>
+    <updated>2014-08-07T07:25:11-04:00</updated>
+    <id>https://larry-price.com/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit</id>
+    <content type="html"><![CDATA[<p>During the hardening of <a href="https://ollertapp.com">Ollert</a>, a Trello data analysis tool I wrote, I started writing acceptance tests. I quickly ran into an issue where the meat of my application requires opening pop-up window, signing into Trello, and allowing my application access.</p>
+
+<p>I created a test user on Trello with a few varied boards to allow for proper testing. In doing this, I store the user&rsquo;s login information in my .env file. For the most part, I can use the steps provided in <a href="https://gist.github.com/larryprice/546d6c029bb3074bd84c">this common web_steps.rb</a>.</p>
+
+<pre><code class="cucumber Connecting.feature">Feature: Landing
+
+Background:
+  Given I am on the landing page
+
+@javascript
+Scenario: Deny connecting to Trello
+  Given I follow "Connect to Get Started"
+  And I press "Deny" on the Trello popup
+  Then I should be on the landing page
+
+@javascript
+Scenario: Allow connecting to Trello
+  Given I follow "Connect to Get Started"
+  When I authorize with Trello as the test user
+  Then I should not see "Connecting..."
+  And I should not see "Redirecting..."
+  And I should be on the boards page
+</code></pre>
+
+<p>When the Trello popup appears, we have to specify the window we&rsquo;re going to use. Since I&rsquo;m using <a href="https://github.com/thoughtbot/capybara-webkit">capybara-webkit</a>, I&rsquo;m going to go ahead and do all of my Trello popup activities in one step, which saves me from writing a lot of unnecessary steps.</p>
+
+<pre><code class="ruby trello_popup_steps.rb">When /^I press "(.*?)" on the Trello popup$/ do |button|
+  trello_popup = windows.last
+  page.within_window trello_popup do
+    click_button button
+  end
+end
+
+When /^I authorize with Trello as the test user$/ do
+  trello_popup = windows.last
+  page.within_window trello_popup do
+    click_link "Log in"
+
+    fill_in "user", with: ENV['TEST_USER_TRELLO_USERNAME']
+    fill_in "password", with: ENV['TEST_USER_TRELLO_PASSWORD']
+
+    click_button "Log In"
+    click_button "Allow"
+  end
+end
+</code></pre>
+
+<p>Straightforward so far. We grab the window handle and we click links, fill in fields, and press buttons within that window.</p>
+
+<p>Note that I&rsquo;m using capybara-webkit, a headless web driver, to run my Javascript. Although the first test (&ldquo;Deny&rdquo;) will pass, the &ldquo;Allow&rdquo; test fails ambiguously. This is because capybara-webkit is not recognized as a supported browser by the Trello popup.</p>
+
+<p>Anecdotally, I contacted Trello support about this and received the following response:</p>
+
+<blockquote><p>Currently it is not possible to test this with a headless browser as you are looking to do without getting the unsupported browser message.</p></blockquote>
+
+<p>So I guess we should just give up, right? &hellip;Or we could manipulate the headers we send to load the Trello popup such that Trello <em>thinks</em> we are Google Chromium.</p>
+
+<pre><code class="cucumber trello_popup_steps.rb">When /^I authorize with Trello as the test user$/ do
+  trello_popup = windows.last
+  page.within_window trello_popup do
+    page.driver.header(
+      "User-Agent",
+      "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/34.0.1847.116 Chrome/34.0.1847.116 Safari/537.36"
+    )
+
+    click_link "Log in"
+
+    fill_in "user", with: ENV['TEST_USER_TRELLO_USERNAME']
+    fill_in "password", with: ENV['TEST_USER_TRELLO_PASSWORD']
+
+    click_button "Log In"
+    click_button "Allow"
+  end
+end
+</code></pre>
+
+<p>Fantastic. Now my tests pass. I can&rsquo;t sleep at night, but my tests pass.</p>
+
+<p>Unfortunately, that won&rsquo;t be the case if I add more tests to this <code>.feature</code> file. Hidden somewhere deep in the browser&rsquo;s cache or cookies or somethings, Trello is remembering that we logged in sometimes. Sometimes it even remembers that someone else has logged in. The UI of the Trello popup changes based on whether it thinks you&rsquo;ve already logged in. In order to keep things consistent, I like to add an if-statement to take care of this case.</p>
+
+<pre><code class="cucumber trello_popup_steps.rb">When /^I authorize with Trello as the test user$/ do
+  trello_popup = windows.last
+  page.within_window trello_popup do
+    page.driver.header(
+      "User-Agent",
+      "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/34.0.1847.116 Chrome/34.0.1847.116 Safari/537.36"
+    )
+
+    if page.has_content? "Switch Accounts"
+      click_link "Switch Accounts"
+    else
+      click_link "Log in"
+    end
+
+    fill_in "user", with: ENV['TEST_USER_TRELLO_USERNAME']
+    fill_in "password", with: ENV['TEST_USER_TRELLO_PASSWORD']
+
+    click_button "Log In"
+    click_button "Allow"
+  end
+end
+</code></pre>
+
+<p>Edge cases addressed. Now I can make connections to Trello and test my application. Be warned, I&rsquo;ve already had these tests break once when Trello updated the UI behind the Trello popup. If Trello ever stops supporting Chromium 34.0, these tests are also likely to stop working. These tests are most useful during development, when we have the potential to break the Trello connection ourselves, and so I think they are well worth the pain of potential future maintenance.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Javascript testing with Capybara and Cucumber]]></title>
+    <link href="https://larry-price.com/blog/2014/08/05/javascript-testing-with-capybara-and-cucumber/"/>
+    <updated>2014-08-05T06:40:40-04:00</updated>
+    <id>https://larry-price.com/blog/2014/08/05/javascript-testing-with-capybara-and-cucumber</id>
+    <content type="html"><![CDATA[<p>In the past, I had written off testing the Javascript in my <a href="http://www.sinatrarb.com/">Sinatra</a> apps as being not worth the pain of setting up. That was pretty naïve of me, as setting up web drivers in <a href="https://github.com/jnicklas/capybara">Capybara</a> is actually pretty easy.</p>
+
+<p>For this post, I assume you already have a capybara-cucumber project set up. If you need help setting up your first tests, consider checking out <a href="/blog/categories/capybara/">some of my other blog posts</a> on the subject.</p>
+
+<h4>Selenium</h4>
+
+<p>Selenium is the default Javascript driver for capybara. To install either run <code>gem install selenium-webdriver</code> or toss <code>selenium-webdriver</code> into your <code>Gemfile</code> and run <code>bundle install</code>.</p>
+
+<p>If you want to run all of your tests with Javascript enabled, you can change the default driver in your <code>env.rb</code> file. For example:</p>
+
+<pre><code class="ruby env.rb">ENV['RACK_ENV'] = 'test'
+
+require_relative '../../../web'
+
+require 'selenium-webdriver'
+require 'capybara/cucumber'
+require 'rspec'
+
+Capybara.app = Ollert
+Capybara.default_wait_time = 10
+
+# run all tests using Javascript
+Capybara.default_driver = :selenium
+
+World do
+  Ollert.new
+  Mongoid.purge!
+end
+</code></pre>
+
+<p>Using Selenium means that your tests will be running using Firefox. Unfortunately, this makes them much, much slower than when you were running the tests using rspec. What I recommend is to limit yourself to only use the Javascript driver when you need to. To accomplish this, we change our <code>env.rb</code> file as such:</p>
+
+<pre><code class="ruby env.rb">ENV['RACK_ENV'] = 'test'
+
+require_relative '../../../web'
+
+require 'selenium-webdriver'
+require 'capybara/cucumber'
+require 'rspec'
+
+Capybara.app = Ollert
+Capybara.default_wait_time = 10
+
+# use the following web driver to run tests
+Capybara.javascript_driver = :selenium
+
+World do
+  Ollert.new
+  Mongoid.purge!
+end
+</code></pre>
+
+<p>And add the <code>@javascript</code> tag to our Cucumber feature files. I&rsquo;ve written <a href="/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">about using tags in the past</a>, and they are incredibly useful. For example:</p>
+
+<pre><code class="cucumber DoStuff.feature">Feature: Do Stuff
+
+Scenario: Nothing happens with Javascript disbaled
+  Given I visit the home page
+  When I click "Where are they?!"
+  Then I should not see "I'm Batman."
+
+@javascript
+Scenario: Correct text is displayed with Javascript enabled
+  Given I visit the home page
+  When I click "Where are they?!"
+  Then I should see "I'm Batman."
+</code></pre>
+
+<p>Assuming there is some Javascript activated by clicking &ldquo;Where are they?!&rdquo; that displays the text &ldquo;I&rsquo;m Batman.&rdquo;, both of the above scenarios will pass. This is because none of the Javascript will run in the first scenario, so the text will not be displayed. In the second scenario, Capybara knows to use the webdriver we set up previously when it sees the <code>@javascript</code> tag.</p>
+
+<h4>Poltergeist</h4>
+
+<p><a href="https://github.com/teampoltergeist/poltergeist">Poltergeist</a> is the first &ldquo;headless&rdquo; web driver I tried. Usage is mostly identical to usage for Selenium, so I&rsquo;ll focus on installation here.</p>
+
+<p>Poltergeist uses <a href="http://phantomjs.org/">PhantomJS</a>, so we need to start by downloading the binary (<a href="https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-i686.tar.bz2">32-bit</a> or <a href="https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-x86_64.tar.bz2">64-bit</a>) and putting it in our path. On my Linux machine, I extracted the contents of the download and copied <code>bin/phantomjs</code> to my <code>/usr/local/bin</code> directory, which I already have in my path. You can also copy it directly to <code>/usr/bin</code> if you like.</p>
+
+<p>On the ruby side, we do that same old song and dance: either do <code>gem install poltergeist</code> or add <code>poltergeist</code> to your <code>Gemfile</code> and run <code>bundle install</code>. Edit your <code>env.rb</code>:</p>
+
+<pre><code class="cucumber env.rb">ENV['RACK_ENV'] = 'test'
+
+require_relative '../../../web'
+
+require 'capybara/poltergeist'
+require 'capybara/cucumber'
+require 'rspec'
+
+Capybara.app = Ollert
+Capybara.default_wait_time = 10
+
+# use the following web driver to run tests
+Capybara.javascript_driver = :poltergeist
+
+World do
+  Ollert.new
+  Mongoid.purge!
+end
+</code></pre>
+
+<p>Now your Javascript tests should be running using the Poltergeist webdriver. Since Poltergeist is truly headless, your tests will run much faster than they did while using Selenium, but you won&rsquo;t be able to see what&rsquo;s going on while your tests run. There are some slight syntactic differences between the way Poltergeist and Selenium handles separate windows, but other than that they are extremely similar.</p>
+
+<h4>Webkit</h4>
+
+<p><a href="https://github.com/thoughtbot/capybara-webkit">Capybara-webkit</a> is where I eventually landed for running my own tests, after having issues accessing other windows with Poltergeist. Capybara-webkit is also headless and relies on <code>QtWebKit</code> to render pages. So, for starters, you&rsquo;re going to have to install <code>qtwebkit</code>. This has a varied degree of difficulty depending on which operating system you&rsquo;re using, but I didn&rsquo;t have too many problems in Ubuntu once I figured out which library I needed. For help, check <a href="https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit">the guide</a>. On my machine:</p>
+
+<pre><code class="bash">$ sudo apt-get install libqtwebkit-dev
+</code></pre>
+
+<p>Once more: either do <code>gem install capybara-webkit</code> or add <code>capybara-webkit</code> to your <code>Gemfile</code> and run <code>bundle install</code>. Edit your <code>env.rb</code>:</p>
+
+<pre><code class="cucumber env.rb">ENV['RACK_ENV'] = 'test'
+
+require_relative '../../../web'
+
+require 'capybara/cucumber'
+require 'capybara/webkit'
+require 'rspec'
+
+Capybara.app = Ollert
+Capybara.default_wait_time = 10
+
+# use the following web driver to run tests
+Capybara.javascript_driver = :webkit
+
+World do
+  Ollert.new
+  Mongoid.purge!
+end
+</code></pre>
+
+<p>Again, you won&rsquo;t be able to see your tests run, but they should be pretty snappy. I was able to use capybara-webkit to tackle some window issues I was having, but (as of this writing) capybara-webkit has not caught up with more modern capybara window-switching syntax. Other than that, the syntax is identical to the other drivers I&rsquo;ve discussed for common cases. If you&rsquo;re running capybara-webkit on a CI server, see <a href="http://blog.55minutes.com/2013/09/running-capybara-webkit-specs-with-jenkins-ci/">this post about using Xvfb</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Testing automated emails with email-spec in Cucumber]]></title>
+    <link href="https://larry-price.com/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber/"/>
+    <updated>2014-07-12T07:36:33-04:00</updated>
+    <id>https://larry-price.com/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber</id>
+    <content type="html"><![CDATA[<p>Now that <a href="/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/">I send emails using Pony</a>, I want to be able to verify that the emails are being generated correctly. I also don&rsquo;t want to send real emails and have my tests check an inbox somewhere. I found a couple of solutions to do this, including <a href="https://github.com/johnmendonca/pony-test">pony-test</a> and <a href="https://github.com/bmabey/email-spec">email-spec</a>. Although pony-test fits my needs perfectly, the last commit was December 27, 2011 (2.5 years ago at the time of this post), and thus was using an outdated version of <a href="https://github.com/jnicklas/capybara">capybara</a> which I was unwilling to use. Fortunately, pony-spec is mostly just a fork of email-spec with all the non-Pony components ripped out.</p>
+
+<p>I&rsquo;m going to be using Cucumber to test my emails, but email-spec also boasts compatibility with rspec and Turnip. To get started:</p>
+
+<pre><code class="bash">$ gem install email-spec
+</code></pre>
+
+<p>The developers of email-spec were kind enough to give us some free step definitions. If I was using rails, I could just type <code>rails generate email_spec:steps</code>, but since I&rsquo;m using Sinatra I opted just to copy-paste the file into my <code>step_definitions/</code> directory. You can find <code>email_steps.rb</code> <a href="https://raw.githubusercontent.com/bmabey/email-spec/master/lib/generators/email_spec/steps/templates/email_steps.rb">on Github</a>.</p>
+
+<p>In <a href="/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/">my last post about small horses and emails</a>, I used the following code to send a confirmation email on signup:</p>
+
+<pre><code class="ruby web.rb"># ...
+post '/signup' do
+  user = User.create! params
+
+  url = "#{request.base_url}/account/reset/#{user.generate_verification_hash}"
+  Pony.mail(
+    to: user.email,
+    from: "MyApp Help Desk &lt;noreply@myapp.com&gt;",
+    subject: "MyApp Account Verification",
+    body: "A request has been made to verify your MyApp account (https://myapp.com)." +
+          "If you made this request, go to " + url + ". If you did not make this request, ignore this email.",
+    html_body: haml(
+      :verify_account_email,
+      layout: false,
+      locals: {
+        email: user.email,
+        date: DateTime.now.strftime("%H:%M:%S%P %B %d, %Y"),
+        ip: request.ip,
+        url: url
+      }
+    )
+  )
+end
+# ...
+</code></pre>
+
+<pre><code class="haml /views/verify_account_email.haml">%p
+  Hello!
+%p
+  An account verification has been requested for your new &lt;a href="https://myapp.com"&gt;MyApp&lt;/a&gt; account.
+
+%ul
+  %li
+    Username: #{locals[:email]}
+  %li
+    Time: #{locals[:date]}
+  %li
+    IP address: #{locals[:ip]}
+
+%p
+  If you made this request, click the link below or copy-paste the following URL into your browser to verify your account:
+
+%p
+  %a{href: "#{locals[:url]}", alt: "Verify", title: "Click to verify account"}
+    #{locals[:url]}
+
+%p
+  If you did not request this new account, please ignore this email.
+
+%p
+  Sincerely,
+  %br
+  Team MyApp
+
+%p
+  This email account is not monitored and will not receive replies. For more information, contact &lt;a href="mailto:connect@myapp.com"&gt;connect@myapp.com&lt;/a&gt;.
+</code></pre>
+
+<p>Given the pre-defined steps from email-spec, testing that this email gets sent is a breeze. Adding a scenario to my feature file:</p>
+
+<pre><code class="cucumber features/SignupConfirmation.feature">Feature: Signup Confirmation
+  As a new user
+  When I sign up
+  I should receive a confirmation email
+
+Background:
+  Given a clear email queue
+  When I go to the signup page
+  And I fill in "email" with "prez@whitehouse.gov"
+  And I fill in "password" with "bunnies"
+  And I press "Sign Up"
+  Then "prez@whitehouse.gov" should receive an email
+
+Scenario: Receives email with correct contents
+  When "prez@whitehouse.gov" opens the email
+  Then they should see the email delivered from "MyApp Help Desk &lt;noreply@myapp.com&gt;"
+  And they should see "MyApp Account Verification" in the email subject
+  And they should see "Username: prez@whitehouse.gov" in the email body
+  And they should see "An account verification has been requested"
+</code></pre>
+
+<p>That&rsquo;s it. Now we know that an email like the one above will be sent during signup. What we can&rsquo;t test here is that our SMTP server (or equivalent) is working, so in reality I&rsquo;m only testing that the email will attempt to send that looks like the one I test against.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Sending emails with Pony and Sendgrid]]></title>
+    <link href="https://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/"/>
+    <updated>2014-07-08T05:53:26-04:00</updated>
+    <id>https://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid</id>
+    <content type="html"><![CDATA[<p>It&rsquo;s incredible how easy it is to send emails through a web application, there&rsquo;s no wonder we get so much spam. Assuming we have a <a href="http://ruby-lang.org">ruby</a> app using <a href="http://sinatrarb.com">Sinatra</a>, <a href="http://adam.herokuapp.com/past/2008/11/2/pony_the_express_way_to_send_email_from_ruby/">Pony</a> is one of the easiest ways to get started with your own spam empire.</p>
+
+<p>Installation is, as always, trivial with ruby. Install the gem with <code>gem install pony</code> or add <code>gem pony</code> to your <code>Gemfile</code> and run <code>bundle install</code>.</p>
+
+<p>I like to configure Pony in my application&rsquo;s <code>configure</code> block. I could also add it to my <code>config.ru</code>, but I like to keep that file as tiny as posible to avoid having configuration code all over the place.</p>
+
+<pre><code class="ruby web.rb"># ...
+
+require 'pony'
+require 'sinatra/base'
+
+class Application &lt; Sinatra::Base
+  configure do
+    # ...
+
+    Pony.options = {
+      :via =&gt; :smtp,
+      :via_options =&gt; {
+        :address =&gt; 'smtp.sendgrid.net',
+        :port =&gt; '587',
+        :domain =&gt; 'myapp.com',
+        :user_name =&gt; ENV['SENDGRID_USERNAME'],
+        :password =&gt; ENV['SENDGRID_PASSWORD'],
+        :authentication =&gt; :plain,
+        :enable_starttls_auto =&gt; true
+      }
+    }
+  end
+
+  # ...
+end
+</code></pre>
+
+<p>This block tells Pony to use the <a href="http://sendgrid.com/">SendGrid</a> server to send mail, use the &ldquo;myapp.com&rdquo; HELO domain, and dig up the username and password fields from my environment.</p>
+
+<p>If you&rsquo;re using <a href="https://heroku.com">Heroku</a> to host your application, you can <a href="https://addons.heroku.com/sendgrid">sign up for a SendGrid account through your Heroku app</a>, which gives you instant access to your SendGrid account. The <code>username</code> and <code>password</code> field you need to fill in your environment are automatically populated in your Heroku config, which you can view by running <code>heroku config</code> for your application. The free account gets you up to 200 emails a day.</p>
+
+<p>Since I might have multiple developers working in my source code and testing the email-sending functionality, I have all the developers <a href="https://sendgrid.com/user/signup">sign up for their own free SendGrid account</a>. This should help to alleviate some of the email volume from any particular account while developing. After signing up, it took my account nearly 4 hours to be &ldquo;provisioned&rdquo; (see: approved) by the SendGrid team. Once you&rsquo;re approved you can start sending emails using your developer account credentials. I stick my username/password in my local <code>.env</code> file (another reason to make sure you&rsquo;re not storing your environment on your server or in your git repo).</p>
+
+<p>So let&rsquo;s actually send an email. Let&rsquo;s create a route that sends an email to verify a new user account; I&rsquo;ll take some liberties by saying we have a <code>User</code> model defined already that generates a signup verification hash. I can tell pony to send a plaintext body through the <code>body</code> option and an HTML body through the <code>html_body</code> option.</p>
+
+<pre><code class="ruby web.rb"># ...
+post '/signup' do
+  user = User.create! params
+
+  url = "#{request.base_url}/account/reset/#{user.generate_verification_hash}"
+  Pony.mail(
+    to: user.email,
+    from: "MyApp Help Desk &lt;noreply@myapp.com&gt;",
+    subject: "MyApp Account Verification",
+    body: "A request has been made to verify your MyApp account (https://myapp.com)." +
+          "If you made this request, go to " + url + ". If you did not make this request, ignore this email.",
+    html_body: haml(
+      :verify_account_email,
+      layout: false,
+      locals: {
+        email: user.email,
+        date: DateTime.now.strftime("%H:%M:%S%P %B %d, %Y"),
+        ip: request.ip,
+        url: url
+      }
+    )
+  )
+end
+</code></pre>
+
+<pre><code class="haml views/verify_account_email.rb">%p
+  Hello!
+%p
+  An account verification has been requested for your new &lt;a href="https://myapp.com"&gt;MyApp&lt;/a&gt; account.
+
+%ul
+  %li
+    Username: #{locals[:email]}
+  %li
+    Time: #{locals[:date]}
+  %li
+    IP address: #{locals[:ip]}
+
+%p
+  If you made this request, click the link below or copy-paste the following URL into your browser to verify your account:
+
+%p
+  %a{href: "#{locals[:url]}", alt: "Verify", title: "Click to verify account"}
+    #{locals[:url]}
+
+%p
+  If you did not request this new account, please ignore this email.
+
+%p
+  Sincerely,
+  %br
+  Team MyApp
+
+%p
+  This email account is not monitored and will not receive replies. For more information, contact &lt;a href="mailto:connect@myapp.com"&gt;connect@myapp.com&lt;/a&gt;.
+</code></pre>
+
+<p>When you have a user hit this route, an email will be sent to the user with the given subject, to, from, and body fields using the configuration parameters given in the previous <code>configure</code> block. Fast, easy, and, best of all, no <code>sendmail</code> configuration.</p>
+]]></content>
+  </entry>
+  
+</feed>

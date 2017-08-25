@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: snappy | Larry Price]]></title>
+  <link href="https://larry-price.com/blog/categories/snappy/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2017-08-25T08:42:34-05:00</updated>
+  <id>https://larry-price.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    <email><![CDATA[larry@larry-price.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Snappy Libertine]]></title>
+    <link href="https://larry-price.com/blog/2017/02/15/snappy-libertine/"/>
+    <updated>2017-02-15T18:38:44-05:00</updated>
+    <id>https://larry-price.com/blog/2017/02/15/snappy-libertine</id>
+    <content type="html"><![CDATA[<p>Libertine is software suite for runnin X11 apps in non-X11 environments and installing deb-based applications on a system without dpkg. Snappy is a package management system to confine applications from one another. Wouldn&rsquo;t it be cool to run libertine as a snap?</p>
+
+<p>Yes. Yes it would.</p>
+
+<h3>snapd</h3>
+
+<p>The first thing to install is snapd itself. You can find installation instructions for many Linux distros at <a href="https://snapcraft.io/docs/core/install">snapcraft.io</a>, but here&rsquo;s the simple command if you&rsquo;re on a debian-based operating system:</p>
+
+<pre><code class="bash">$ sudo apt install snapd
+</code></pre>
+
+<p>Ubuntu users may be surprised to find that snapd is already installed on their systems. snapd is the daemon for handling all things snappy: installing, removing, handling interface connections, etc.</p>
+
+<h3>lxd</h3>
+
+<p>We use lxd as our container backend for libertine in the snap. lxd is essentially a layer on top of lxc to give a better user experience. Fortunately for us, lxd has a snap all ready to go. Unfortunately, the snap version of lxd is incompatible with the deb-based version, so you&rsquo;ll need to completely remove that before continuing. Skip this step if you never installed lxd:</p>
+
+<pre><code class="bash">$ sudo apt remove --purge lxd lxd-client
+$ sudo zpool destroy lxd                 # if you use zfs
+$ sudo ip link set lxdbr0 down           # take down the bridge (lxdbr0 is the default)
+$ sudo brctl delbr lxdbr0                # delete the bridge
+</code></pre>
+
+<p>For installing, in-depth instructions can be found <a href="https://stgraber.org/2016/10/17/lxd-snap-available/">in this blog post by one of the lxd devs</a>. In short, we&rsquo;re going to create a new group called <code>lxd</code>, add ourselves to it, and then add our own user ID and group ID to map to root within the container.</p>
+
+<pre><code class="bash">$ sudo groupadd --system lxd                      # Create the group on your system
+$ sudo usermod -G lxd -a $USER                    # Add the current user
+$ newgrp lxd                                      # update current session with new group
+$ echo root:`id --user ${USER}`:1 &gt;&gt; /etc/subuid  # Setup subuid to map correctly
+$ echo root:`id --group ${USER}`:1 &gt;&gt; /etc/subgid # Setup subgid to map correctly
+$ sudo snap install lxd                           # actually install the snap!
+</code></pre>
+
+<p>We also need to initialize lxd manually. For me, the defaults all work great. The important pieces here are setting up a new network bridge and a new filestore for lxd to use. You can optionally use zfs if you have it installed (<code>zfsutils-linux</code> should do it on Ubuntu). Generally, I just hit &ldquo;return&rdquo; as fast as the questions show up and everything turns out alright. If anything goes wrong, you may need to manually delete zpools, network bridges, or reinstall the lxd snap. No warranties here.</p>
+
+<pre><code class="bash">$ sudo lxd init
+Do you want to configure a new storage pool (yes/no) [default=yes]?
+Name of the new storage pool [default=default]:
+Name of the storage backend to use (dir or zfs) [default=zfs]:
+Create a new ZFS pool (yes/no) [default=yes]?
+Would you like to use an existing block device (yes/no) [default=no]?
+Would you like LXD to be available over the network (yes/no) [default=no]?
+Would you like stale cached images to be updated automatically (yes/no) [default=yes]?
+Would you like to create a new network bridge (yes/no) [default=yes]?
+What should the new bridge be called [default=lxdbr0]?
+What IPv4 address should be used (CIDR subnet notation, “auto” or “none”) [default=auto]?
+</code></pre>
+
+<p>You should now be able to run <code>lxd.lxc list</code> without errors. It may warn you about running <code>lxd init</code>, but don&rsquo;t worry about that if your initialization succeeded.</p>
+
+<h3>libertine</h3>
+
+<p>Now we&rsquo;re onto the easy part. <code>libertine</code> is only available from <code>edge</code> channels in the app store, but we&rsquo;re fairly close to having a version that we could push into more stable channels. For the latest and greatest libertine:</p>
+
+<pre><code class="bash">$ sudo snap install --edge libertine
+$ sudo snap connect libertine:libertined-client libertine:libertined
+</code></pre>
+
+<p>If we want libertine to work fully, we need to jump through a couple of hoops. For starters, dbus-activation is not fully functional at this time for snaps. Lucky for us, we can fake this by either running the d-bus service manually (<code>/snap/bin/libertined</code>), or by adding this file to <code>/usr/share/dbus-1/services/com.canonical.libertine.Service.service</code></p>
+
+<pre><code class="bash /usr/share/dbus-1/services/com.canonical.libertine.Service.service">[D-BUS Service]
+Name=com.canonical.libertine.Service
+Exec=/snap/bin/libertine.libertined --cache-output
+</code></pre>
+
+<p>Personally, I always create the file, which will allow libertined to start automatically on the session bus whenever a user calls it. Hopefully d-bus activation will be fixed sooner rather than later, but this works fine for now.</p>
+
+<p>Another issue is that existing deb-based libertine binaries may conflict with the snap binaries. We can fix this by adjusting <code>PATH</code> in our <code>.bashrc</code> file:</p>
+
+<pre><code class="bash $HOME/.bashrc"># ...
+export PATH=/snap/bin:$PATH
+</code></pre>
+
+<p>This will give higher priority to snap binaries (which should be the default, IMO). One more thing to fix before running full-force is to add an environment variable to <code>/etc/environment</code> such that the correct libertine binary is picked up in Unity 8:</p>
+
+<pre><code class="bash /etc/environment"># ...
+UBUNTU_APP_LAUNCH_LIBERTINE_LAUNCH=/snap/bin/libertine-launch
+</code></pre>
+
+<p>OK! Now we&rsquo;re finally ready to start creating containers and installing packages:</p>
+
+<pre><code class="bash">$ libertine-container-manager create -i my-container
+# ... (this could take a few minutes)
+$ libertine-container-manager install-package -i my-container -p xterm
+# ... (and any other packages you may want)
+</code></pre>
+
+<p>If you want to launch your apps in Unity 7 (why not?):</p>
+
+<pre><code class="bash">$ libertine-launch -i my-container xterm
+# ... (lots of ourput, hopefully an open window!)
+</code></pre>
+
+<p>When running Unity 8, your apps should show up in the app drawer with all the other applications. This will all depend on libertined running, so make sure that it runs at startup!</p>
+
+<p>I&rsquo;ve been making a lot of improvements on the snap lately, especially as the ecosystem continues to mature. One day we plan for a much smoother experience, but this current setup will let us work out some of the kinks and find issues. If you want to switch back the deb-based libertine, you can just install it through <code>apt</code> and remove the change to <code>/etc/environment</code>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Confining a Snapped X11 Application]]></title>
+    <link href="https://larry-price.com/blog/2016/12/10/confining-a-snapped-x11-application/"/>
+    <updated>2016-12-10T17:30:38-05:00</updated>
+    <id>https://larry-price.com/blog/2016/12/10/confining-a-snapped-x11-application</id>
+    <content type="html"><![CDATA[<p><em>Looking for the code? Look no further: <a href="https://github.com/larryprice/pingus-snap">https://github.com/larryprice/pingus-snap</a></em></p>
+
+<p>In my <a href="/blog/2016/12/07/creating-a-snap-from-existing-deb-packages/">last post</a>, I demonstrated creating a snap package for an application available in the archive. I left that application unconfined, which is taboo in the long run if we want our system to be secure. In a few steps, we can add the necessary components to confine our <code>pingus</code> snap.</p>
+
+<p>For reference, this is the original <code>snapcraft.yaml</code> file for creating a <code>pingus</code> snap, except that we&rsquo;ve updated the <code>confinement</code> property to <code>strict</code>:</p>
+
+<pre><code class="yaml snapcraft.yaml">name: pingus
+version: '0.1'
+summary: Free Lemmings(TM) clone
+description: |
+    Pingus is a free clone of the popular Lemmings game.
+    |
+    Your goal is to guide a horde of penguins through a world full of obstacles
+    and penguin traps to safety. Although penguins (unlike lemmings) are rather
+    smart, they sometimes lack the necessary overview and now rely on you to
+    save them.
+
+grade: devel
+confinement: strict
+
+parts:
+  archives:
+    plugin: nil
+    stage-packages:
+      - pingus
+  env:
+    plugin: dump
+    organize:
+      pingus.wrapper: usr/bin/pingus
+
+apps:
+  pingus:
+    command: pingus
+</code></pre>
+
+<p>If you&rsquo;re feeling bold, you can build and install the snap from here, but be warned that this led me into an ncurses nightmare that I had to forcibly kill. That&rsquo;s largely because <code>pingus</code> depends on X11, which is not available out-of-the-box once we&rsquo;ve confined our snap. If we want to use X11, we&rsquo;re going to need to connect to it using the snap-land concept of <a href="http://snapcraft.io/docs/core/interfaces">interfaces</a>. Interfaces allow us to access shared resources and connections provided by the system or other snaps. There&rsquo;s some terminology to grapple with here, but the bottom line is that a &ldquo;slot&rdquo; provides an interface which a &ldquo;plug&rdquo; connects to. You can see a big list of available interfaces with descriptions <a href="http://snapcraft.io/docs/reference/interfaces">on the wiki</a>. Our <code>pingus</code> app will &ldquo;plug&rdquo; into the X11 interface&rsquo;s &ldquo;slot&rdquo;:</p>
+
+<pre><code class="yaml snapcraft.yaml"># ...
+apps:
+  pingus:
+    command: pingus
+    plugs:
+      - x11
+</code></pre>
+
+<p>You can build and install the new snap with the <code>--dangerous</code> flag for your local confined snap. After that, you can verify the interface connection with the <code>snap interfaces</code> command:</p>
+
+<pre><code class="bash">$ snapcraft
+$ sudo snap install --dangerous pingus_0.1_amd64.snap
+pingus 0.1 installed
+$ snap interfaces
+Slot                     Plug
+:alsa                    -
+# ...
+:upower-observe          -
+:x11                     pingus
+</code></pre>
+
+<p>Now, when we run <code>pingus</code>&hellip; it works! Well, video works. If you want sound, we&rsquo;ll also need the <code>pulseaudio</code> interface:</p>
+
+<pre><code class="yaml snapcraft.yaml"># ...
+apps:
+  pingus:
+    command: pingus
+    plugs:
+      - x11
+      - pulseaudio
+</code></pre>
+
+<p>Once again: build, install, and run&hellip; et voilà! Is it just me, or was that surprisingly painless? Of course, not all applications live such isolated lives. Make note that the x11 interface is supposed to be a transitional interface, meaning that we would rather our app fully transition to Mir or some alternative. To go a step further with this snap, we could create a <code>snapcraft.yaml</code> to build from source to get the absolute latest version of our app. At this point, we can change our <code>grade</code> property to <code>stable</code> and feel good about something that we could push to the store for review.</p>
+
+<p><em>Any code you see here is free software. Find the project here: <a href="https://github.com/larryprice/pingus-snap">https://github.com/larryprice/pingus-snap</a></em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Building Snaps from Archived Packages]]></title>
+    <link href="https://larry-price.com/blog/2016/12/07/creating-a-snap-from-existing-deb-packages/"/>
+    <updated>2016-12-07T22:10:08-05:00</updated>
+    <id>https://larry-price.com/blog/2016/12/07/creating-a-snap-from-existing-deb-packages</id>
+    <content type="html"><![CDATA[<p>If you haven&rsquo;t heard, <a href="//snapcraft.io">snaps</a> are a new, modern packaging format made by the guys at Ubuntu. Snaps give every app a confined environment to live in, making desktops more secure and dependencies less of a hassle. One common way to create a snap is to simply use existing packages from the Ubuntu archives.</p>
+
+<p>Let&rsquo;s try to create a snap for the game <a href="https://lgdb.org/game/pingus">pingus</a>. <code>pingus</code> is a great little Lemmings clone that we can easily convert to a snap. We&rsquo;ll start by installing the necessary dependencies for snap building (see <a href="//snapcraft.io/create/">the snapcraft website</a> for more):</p>
+
+<pre><code class="bash">$ sudo apt install snapcraft
+</code></pre>
+
+<p>Now we can initialize a project directory with snapcraft:</p>
+
+<pre><code class="bash">$ mkdir -p pingus-snap &amp;&amp; cd pingus-snap
+$ snapcraft init
+</code></pre>
+
+<p><code>snapcraft init</code> creates the following sample file to give us an idea of what we&rsquo;ll need to provide.</p>
+
+<pre><code class="yaml snapcraft.yaml">name: my-snap-name # you probably want to 'snapcraft register &lt;name&gt;'
+version: '0.1' # just for humans, typically '1.2+git' or '1.3.2'
+summary: Single-line elevator pitch for your amazing snap # 79 char long summary
+description: |
+  This is my-snap's description. You have a paragraph or two to tell the
+  most important story about your snap. Keep it under 100 words though,
+  we live in tweetspace and your description wants to look good in the snap
+  store.
+
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: devmode # use 'strict' once you have the right plugs and slots
+
+parts:
+  my-part:
+    # See 'snapcraft plugins'
+    plugin: nil
+</code></pre>
+
+<p>Most of these values for our <code>pingus</code> snap should be obvious. The interesting markup here is in <code>parts</code>, which is where we&rsquo;ll describe how to build our snap. We&rsquo;ll start by taking advantage of the <code>nil</code> plugin to simply unpack the <code>pingus</code> deb from the archive. We define our list of debs to install in a list called <code>stage-packages</code>. We&rsquo;ll also define another section, <code>apps</code>, to tell <code>snapcraft</code> what binaries we want to be able to execute. In our case, this will just be the <code>pingus</code> command. Here&rsquo;s what my first draft looks like:</p>
+
+<pre><code class="yaml snapcraft.yaml">name: pingus
+version: '0.1'
+summary: Free Lemmings(TM) clone
+description: |
+    Pingus is a free clone of the popular Lemmings game.
+    |
+    Your goal is to guide a horde of penguins through a world full of obstacles
+    and penguin traps to safety. Although penguins (unlike lemmings) are rather
+    smart, they sometimes lack the necessary overview and now rely on you to
+    save them.
+
+grade: devel
+confinement: devmode
+
+parts:
+  archives:
+    plugin: nil
+    stage-packages:
+      - pingus
+
+apps:
+  pingus:
+    command: usr/games/pingus
+</code></pre>
+
+<p>Nice, right? Building and installing our snap is easy:</p>
+
+<pre><code class="bash">$ snapcraft
+$ sudo snap install --devmode pingus_0.1_amd64.snap
+pingus 0.1 installed
+</code></pre>
+
+<p>We used <code>devmode</code> here because our app will be running unconfined (a topic for another blog post). Now, for the moment of truth! The snap tools automatically put our new app in <code>PATH</code>, so we can just run <code>pingus</code>:</p>
+
+<pre><code class="bash">$ pingus
+/snap/pingus/x2/usr/games/pingus: 2: exec: /usr/lib/games/pingus/pingus: not found
+</code></pre>
+
+<p>¡Ay, caramba! We&rsquo;ve run into a fairly common issue while snapping legacy software: <strong>hardcoded paths</strong>. Fortunately, the corresponding <code>pingus</code> executable is very simple. It&rsquo;s trying to execute a command living in <code>/usr/lib/games/pingus</code>, which is not in our snap&rsquo;s <code>PATH</code>. The easiest way to fix this is to fix the <code>pingus</code> executable. Since we don&rsquo;t want to spend time modifying the upstream to use a relative path, we can create our own version of the <code>pingus</code> wrapper locally and copy it into our snap. The only change to this new wrapper will be prepending the snap&rsquo;s install path <code>$SNAP</code> to the absolute paths:</p>
+
+<pre><code class="bash pingus.wrapper">#!/bin/sh
+exec $SNAP/usr/lib/games/pingus/pingus --datadir $SNAP/usr/share/games/pingus/data $@
+</code></pre>
+
+<p>Now we can update our yaml file with a new part called <code>env</code> which will use the <code>dump</code> plugin to copy our wrapper file into the snap. We&rsquo;ll also update our command to call the wrapper:</p>
+
+<pre><code class="yaml snapcraft.yaml"># ...
+
+parts:
+  archives:
+    plugin: nil
+    stage-packages:
+      - pingus
+  env:
+    plugin: dump
+    organize:
+      pingus.wrapper: usr/bin/pingus
+
+apps:
+  pingus:
+    command: pingus
+</code></pre>
+
+<p>When you run <code>snapcraft</code> this time, the <code>env</code> part will be built. After performing another install, you can run <code>pingus</code>, and you should be greeted with one of the best Lemmings clones available! Because we&rsquo;re running unconfined in devmode, this all just works without any issues. I intend to write another blog post in the near future with the details on confining <code>pingus</code>, so look out for that soon. I may also go into detail on building more complex cases, such as building snaps from source and building custom plugins, or reviewing a case study such as the <code>libertine</code> snap.</p>
+
+<p>For much, much more on snaps, be sure to visit <a href="//snapcraft.io/create/">snapcraft.io</a>. If you&rsquo;re looking for a published version of pingus as a snap, you can try <code>sudo snap install --devmode --beta pingus-game</code>, and you can run the game with <code>pingus-game.pingus</code>.</p>
+
+<p><em>Source code available at <a href="https://github.com/larryprice/pingus-snap">https://github.com/larryprice/pingus-snap</a>.</em></p>
+]]></content>
+  </entry>
+  
+</feed>

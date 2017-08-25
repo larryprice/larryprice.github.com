@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ollert | Larry Price]]></title>
+  <link href="https://larry-price.com/blog/categories/ollert/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2017-08-25T08:42:34-05:00</updated>
+  <id>https://larry-price.com/</id>
+  <author>
+    <name><![CDATA[Larry Price]]></name>
+    <email><![CDATA[larry@larry-price.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Ollert is now open source]]></title>
+    <link href="https://larry-price.com/blog/2015/02/11/ollert-is-now-open-source/"/>
+    <updated>2015-02-11T05:54:26-05:00</updated>
+    <id>https://larry-price.com/blog/2015/02/11/ollert-is-now-open-source</id>
+    <content type="html"><![CDATA[<p><a href="https://ollertapp.com">Ollert</a>, the Trello data analytics tool, has been open sourced under <a href="https://github.com/sep/ollert/blob/master/LICENSE">GNU Affero GPL v3.0</a>. The source code can be found <a href="https://github.com/sep/ollert/">on Github</a> and I&rsquo;ve already accepted several pull requests.</p>
+
+<h4>Why?</h4>
+
+<p>I&rsquo;ve been working towards this for a few months now. Although Ollert was a lot of fun to create and has helped quite a few people learn more about their Trello boards, I&rsquo;ve been having trouble finding the time to write new features in between my other pursuits. Although <a href="http://www.sep.com/">SEP</a> has given me resources in the past, it&rsquo;s not always easy to find people off-project who have the right experience, determination, and time to grok the codebase and start churning out new features.</p>
+
+<p>An interesting pattern started to appear: With every other feature request I received for Ollert, the requestor would add in some other loaded question: Where is the source code? Is there a Github repo so I can add issues? Do you accept pull requests?</p>
+
+<p>Random strangers on the internet wanted to help. These are people with the drive to work with me even though I couldn&rsquo;t give them anything in return. These are people with fresh perspectives on Trello usage which I had never imagined. These are the developers whose help I sorely wanted.</p>
+
+<h4>Feature requests?</h4>
+
+<p>I am still accepting feature requests. Feature requests are now dealt with through our <a href="https://github.com/sep/ollert/issues">issues page</a>.</p>
+
+<h4>Contributing?</h4>
+
+<ul>
+<li>Write tests</li>
+<li>Run tests</li>
+<li>Seriously, the <a href="https://travis-ci.org/sep/ollert">travis-ci build</a> had better be green.</li>
+<li>Follow the currently in-place patterns. If you don&rsquo;t like them, let me know your idea before you work for a week and I deny your changes.</li>
+<li>Create issues for whatever you&rsquo;re working on.</li>
+<li>We do things by pull requests. Make a fork, make a branch, let Github do the rest.</li>
+</ul>
+
+
+<h4>And so, it continues&hellip;</h4>
+
+<p>This does not mean I am abandoning Ollert. Internally we&rsquo;ll still be discussing how to increase traffic and improve user experience. Hopefully, open sourcing Ollert will give us invaluable feedback on the code and fresh perspectives on features. I&rsquo;m looking forward to the future of Ollert.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[An Example Use Case for Docker]]></title>
+    <link href="https://larry-price.com/blog/2015/01/11/an-example-use-case-for-docker/"/>
+    <updated>2015-01-11T19:22:43-05:00</updated>
+    <id>https://larry-price.com/blog/2015/01/11/an-example-use-case-for-docker</id>
+    <content type="html"><![CDATA[<p>I spent a lot of time last week asking questions about Docker. <a href="#whatdocker">What</a> is Docker? How could Docker help me <a href="#whydocker">day-to-day</a>? How easy is Docker to <a href="#howdocker">use</a>? How does Docker like its eggs cooked? Isn&rsquo;t Docker a brand of sneakers?</p>
+
+<h3><a name="whatdocker"></a>What is Docker?</h3>
+
+<p><a href="https://www.docker.com/">Docker</a> is a utility for maintaining system environments. Docker capitalizes on <a href="https://en.wikipedia.org/wiki/LXC">Linux containers</a>, a method of operating system virtualization which isolates multiple process groups on a single host.</p>
+
+<p>Through a series of commands, Docker pulls up a base system image and applies changes to create a custom image. Docker provides the means to access any of these step-level containers for further manipulation. Docker uses a unique layered system such that sibling layers can utilize the same base images, in contrast to a virtual machine which would require multiple copies of things like operating systems, shared libraries, and shared binaries. The image below is an excellent visualization of the difference between a virtual machine and a Docker container.</p>
+
+<p><img src="https://i.imgur.com/Lps6K6y.png?1" alt="VM vs LXC" /></p>
+
+<h3><a name="whydocker"></a>Why use Docker?</h3>
+
+<p>Docker&rsquo;s primary job is to take in a series of commands and spit out a clean environment with those settings. This is especially useful in deployment. I can take the Docker <code>ubuntu</code> image, download and install all my dependencies, copy over my application code, and run my application given some environment variables.</p>
+
+<p>All of that should sound somewhat familiar if you&rsquo;ve ever used <a href="https://heroku.com">heroku</a>. Heroku performs very similar tasks to get your application up and running: take a Linux image, download base tools for ruby/python/nodejs/whatever, install application-specific dependencies (through bundler, flask, npm, etc.), and run your application given some environment. Docker gives you the power of heroku at the development level. &hellip;Sort of.</p>
+
+<p>If I can create a Docker container for my application to run in, I can set up a build server to use a container to run my tests. I can use that same container to build a <em>clean</em> staging environment. I can use the staging container to build an <em>identically clean</em> production environment. With that knowledge in hand, I know the exact state of the production environment every time I deploy and I can reproduce it locally.</p>
+
+<p>Theoretically, I can even use Docker for setting up a development environment, although after a few days of attempting this I still think you&rsquo;re better off running natively.</p>
+
+<p>Of course, Docker keeps <a href="https://www.docker.com/resources/usecases/">a big list of examples</a> from big-name company use-cases if you&rsquo;re interested.</p>
+
+<h3><a name="howdocker"></a>Example Usage</h3>
+
+<p>Brass. Tacks. Let us get down to them, compadre.</p>
+
+<p>You probably want to <a href="https://docs.docker.com/installation/#installation">install Docker</a> first. If you&rsquo;re not using Linux, have fun installing <a href="https://github.com/boot2docker/boot2docker">boot2docker</a>, the rest of us are going to get started without you.</p>
+
+<p>I started by trying to bootstrap my environment for <a href="https://ollertapp.com">Ollert</a> with Docker. Ollert uses ruby-2.2, QtWebkit (in test), and MongoDB. It uses bundler to install any required ruby gems. Not too complicated, but I&rsquo;ve noticed it&rsquo;s never easy to get a new developer&rsquo;s environment quite right.</p>
+
+<p>We start out with the official <a href="https://registry.hub.docker.com/_/ruby/">ruby:2.2.0</a> image from the Docker Hub:</p>
+
+<pre><code class="bash">$ docker run ruby:2.2.0 echo "B-b-b-b-brass t-t-t-t-tacks!"
+</code></pre>
+
+<p>OMG that step will take forever if you&rsquo;ve never downloaded the base <code>debian</code> image. It downloads and sets up quite a few layers. If you&rsquo;re interested in what it&rsquo;s doing behind the scenes and you can read Dockerfiles, <a href="https://github.com/docker-library/ruby/blob/b7fefd2fa79882da90feb0718430680c77c5fa8b/2.2/Dockerfile">this file</a> is what&rsquo;s being executed. Anyway, when it&rsquo;s done you should see a friendly reminder about what we&rsquo;ve gotten down to. We use <code>docker run</code> to run (download first if necessary) an image; in this case, the <code>ruby:2.2.0</code> image. Everything after the image name is the command to run. Now that we&rsquo;ve downloaded some base images, you can check out your available images using <code>docker images</code>.</p>
+
+<p>Now I need to install my system-level dependencies:</p>
+
+<pre><code class="bash">$ docker run ruby:2.2.0 apt-get update
+</code></pre>
+
+<p>Note how this time the base image was already found in your local repository, resulting in a command that ran pretty quickly (based on your internet speeds (sorry Comcast customers!)). But what have we really done so far? We&rsquo;ve created two separate containers: one with our initial echo command (useless) and one with all our updates. To see these containers, use <code>docker ps -a</code>. This will give you output similar to the following:</p>
+
+<pre><code class="bash">$ docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                      PORTS             NAMES
+ad5ddd55f2c2        ruby:2.2.0        "apt-get update"         2 seconds ago       Exited (0) 2 seconds ago                        mad_curie
+10cbaac4488c        ruby:2.2.0        "echo 'B-b-b-b-brass"    15 minutes ago      Exited (0) 15 minutes ago                       mad_perlman
+</code></pre>
+
+<p>These are now the containers available. We can create a new image from the first container using <code>docker commit ad5 rubyapp</code>, which will allow us to use it to create further containers. However, if we were to do this for every command we wanted to execute, we might be here for a while. We could go into <code>bash</code> on the base image and do all of our steps:</p>
+
+<pre><code class="bash">$ docker run -it ruby:2.2.0 /bin/bash
+root@1be43510341e:/# apt-get update
+...
+root@1be43510341e:/# apt-get auto-remove
+...
+root@1be43510341e:/# apt-get install -y --force-yes libqtwebkit-dev mongodb
+...
+</code></pre>
+
+<p>We could then use this image to run our app - however, this is also tedious and a bad solution. We want something that we can see on a granular level and reproduce every time for a base image. Fortunately, Docker provides us an easy way to do this using a DSL. Introducing the <code>Dockerfile</code>:</p>
+
+<pre><code class="Dockerfile"># base image
+FROM ruby:2.2.0
+
+#install system-level dependencies
+RUN apt-get update &amp;&amp; apt-get autoremove -y &amp;&amp; apt-get install -y --force-yes libqtwebkit-dev mongodb
+
+# install gems from /tmp such that bundling is CACHED
+WORKDIR /tmp
+ADD Gemfile Gemfile
+ADD Gemfile.lock Gemfile.lock
+ADD .env .env
+RUN bundle install
+
+# load application source
+ADD . /usr/src/app
+WORKDIR /usr/src/app
+
+# port where application is served
+EXPOSE 5000
+</code></pre>
+
+<p>The syntax is a little different, but all we&rsquo;re doing is telling Docker our base image, issuing commands, and copying files. The <code>ADD</code> command allows us to copy files from our host system. In this case, I copy over <code>.</code> to <code>/usr/src/app</code> in the container. I also copy over my Gemfile separately to <a href="http://ilikestuffblog.com/2014/01/06/how-to-skip-bundle-install-when-deploying-a-rails-app-to-docker/">cache the bundle so it does not install every time</a>. I then expose the port I want my application to use. Run this file as such:</p>
+
+<pre><code class="bash">$ docker build -t rubyapp .
+</code></pre>
+
+<p>This creates an image called <code>rubyapp</code> and a container for every line of the Dockerfile that is run. Although your first build may take a moment, subsequent builds will be cached and should be significantly faster. Now, if we want to run my application:</p>
+
+<pre><code class="bash">$ docker run -d --name rubyappinstance rubyapp foreman start -d /usr/src/app
+</code></pre>
+
+<p>I use <code>foreman</code> to start my application from the given directory. I tell Docker that the application will be daemonized using the <code>-d</code> flag. If I check my running containers with <code>docker ps</code>, I&rsquo;ll see my application running. If I want to stop it, I just run <code>docker stop rubyappinstance</code>.</p>
+
+<p>I&rsquo;m going to stop there for now. In order to get Ollert working properly, I also need to <a href="http://docs.docker.com/userguide/dockerlinks/">link a Mongo database</a> and change some environment variables in my application, but those are relatively easy tasks.</p>
+
+<h3>Is it worth it?</h3>
+
+<p>The only conclusion is a definite maybe. Docker is definitely pretty cool. It may be able to help you deploy custom applications easier; for Ollert, it feels like overkill. There is a lot of overhead in downloading core versions of different operating systems, and I already find myself itching to clean up all the leftover Docker images/containers on my machine I used once and never again. After getting the Docker development out of the way (building and testing a Dockerfile), you may save yourself some time in the future if you have to change hosting services or CI environments. Try it out! It&rsquo;s a pretty neat concept and definitely worth your attention in 2015.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Ollert - 6 Months Later]]></title>
+    <link href="https://larry-price.com/blog/2014/12/02/ollert-6-months-later/"/>
+    <updated>2014-12-02T18:54:12-05:00</updated>
+    <id>https://larry-price.com/blog/2014/12/02/ollert-6-months-later</id>
+    <content type="html"><![CDATA[<p><a href="/blog/2014/03/17/sep-startup-weekend-ollert">Nine months ago</a> I brought a team of 6 together to build a data analysis tool called <a href="https://ollertapp.com">Ollert</a>. <a href="/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards">A few months later</a>, I started working with <a href="//sep.com">SEP</a> to find time to make Ollert better. Where do we stand today?</p>
+
+<p>From a traffic perspective, we&rsquo;re doing pretty well. The numbers are increasing steadily over time, as are the number of people who use the application on a near-daily basis. Although we have surpassed our modest initial goals, we would like to build up a larger audience in the coming months.</p>
+
+<p>We&rsquo;ve had about 1800 different users visit the site for a total of over 5000 pageviews. On average, users hit about 2 pages per visit and stay with us for almost 90 seconds at a time. About half of all traffic comes from social media such as Twitter, LinkedIn, and Reddit, but we&rsquo;ve also seen some interesting traffic patterns come out of Trello, <a href="/">my blog</a>, <a href="//sep.com/labs">SEP Labs</a>, and various other blogs.</p>
+
+<p><a href="//trello.com">Trello</a> reached out to us a few months ago to congratulate us on making such a neat application using their API. They sent us some shirts and stickers for our trouble. It was an extremely satisfying moment.</p>
+
+<p>On the technical side of things, we&rsquo;ve made several changes to the application.</p>
+
+<p>We removed the concept of &ldquo;signing up&rdquo; for Ollert, as it was the greatest cause of confusion on the site. I replaced it with a mechanism that &ldquo;automatically&rdquo; signs a user up when they connect to a Trello account using OAuth. This makes our lives easier because we don&rsquo;t have to store passwords, and the lives of users easier because they don&rsquo;t have to come up with and remember another password.</p>
+
+<p>Every aspect of the site has been made faster. Server requests have been made faster by switching to unicorn and utilizing the &ldquo;workers&rdquo; feature. Trello API call times have been slashed - Board fetch time dropped from 1.8s to .18s, Label chart 17.6s down to .426s, WIP chart 18.2s to .221s, CFD 15s to 1s.</p>
+
+<p>We added two highly-requested charts - the Burn Down and Burn Up. It takes a certain type of Trello board to make these useful, and I&rsquo;m looking forward to finding someone one day who&rsquo;s able to make good use of them.</p>
+
+<p>We also improved the look of all pages (most notably the home page) with some help from SEP&rsquo;s UX team.</p>
+
+<p>Oh, and now it works significantly better on mobile.</p>
+
+<p>What does the future hold for Ollert?</p>
+
+<p>In the short term I&rsquo;m looking to implement a Cycle Time chart and add in a baseline for the Burndown chart. Long-term is a little less clear, but we may have a sizable announcement soon.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hotfixing a Bug in Trello's client.js]]></title>
+    <link href="https://larry-price.com/blog/2014/08/22/fixing-some-minor-bugs-in-trellos-client-dot-js/"/>
+    <updated>2014-08-22T06:08:21-04:00</updated>
+    <id>https://larry-price.com/blog/2014/08/22/fixing-some-minor-bugs-in-trellos-client-dot-js</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m a huge fan of <a href="https://trello.com">Trello</a>, and I recently created an app to analyze Trello data called <a href="https://ollertapp.com">Ollert</a>. Ollert makes heavy use of the <a href="http://trello.com/docs">Trello API</a>. I&rsquo;ve written previously about <a href="/blog/2014/03/18/connecting-to-the-trello-api/">using Trello&rsquo;s client.js to connect to the Trello API</a>.</p>
+
+<p>During some ad-hoc testing of opening/closing the Trello authorization popup, I found that clicking &ldquo;Deny&rdquo; on the popup, reopening it, and then clicking &ldquo;Connect&rdquo; resulted in me not being able to connect. I spent some time looking into workarounds and I even contacted Trello support. After studying <a href="https://trello.com/1/client.coffee">client.coffee</a>, I eventually found the problem: the Trello client keeps around an anonymous object called <code>ready</code> that stores some session data. When a user clicks &lsquo;Deny&rsquo;, this <code>ready</code> object remembers. I was able to fix the Deny/Allow issue by pulling down a local copy of client.js and making an interface change to the module:</p>
+
+<pre><code class="javascript client.js">clearReady: function() {
+  ready = {}
+}
+</code></pre>
+
+<p>From <a href="/blog/2014/07/07/deauthorizing-token-with-the-trello-client/">another issue I was having</a>, I already call <code>Trello.deauthorize()</code> before my application attempts to contact Trello, so now I also make a call to <code>Trello.clearReady()</code>. My <code>authorize()</code> function looks like this:</p>
+
+<pre><code class="javascript trello-controller.js">var authorize = function (expires, callback) {
+  Trello.deauthorize();
+  Trello.clearReady();
+
+  Trello.authorize({
+    name: "Ollert",
+    type: "popup",
+    interactive: true,
+    expiration: expires,
+    persist: false,
+    success: callback,
+    scope: {
+      read: true,
+      write: true
+    }
+  });
+}
+</code></pre>
+
+<p>Since I&rsquo;ve pulled client.js locally, I&rsquo;m no longer sending my developer token when I load the file. I manually set my key when the page loads, but this could just as easily be done in my <code>authorize</code> method above.</p>
+
+<pre><code class="javascript layout.haml">:javascript
+  $(document).ready(function() {
+    Trello.setKey("#{ENV['PUBLIC_KEY']}")
+  });
+</code></pre>
+
+<p>You can find a copy of my modified client.js <a href="https://gist.github.com/larryprice/1e67ddcd53c686fbc1de">in this Gist</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Testing through a Trello connection with Capybara and Webkit]]></title>
+    <link href="https://larry-price.com/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit/"/>
+    <updated>2014-08-07T07:25:11-04:00</updated>
+    <id>https://larry-price.com/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit</id>
+    <content type="html"><![CDATA[<p>During the hardening of <a href="https://ollertapp.com">Ollert</a>, a Trello data analysis tool I wrote, I started writing acceptance tests. I quickly ran into an issue where the meat of my application requires opening pop-up window, signing into Trello, and allowing my application access.</p>
+
+<p>I created a test user on Trello with a few varied boards to allow for proper testing. In doing this, I store the user&rsquo;s login information in my .env file. For the most part, I can use the steps provided in <a href="https://gist.github.com/larryprice/546d6c029bb3074bd84c">this common web_steps.rb</a>.</p>
+
+<pre><code class="cucumber Connecting.feature">Feature: Landing
+
+Background:
+  Given I am on the landing page
+
+@javascript
+Scenario: Deny connecting to Trello
+  Given I follow "Connect to Get Started"
+  And I press "Deny" on the Trello popup
+  Then I should be on the landing page
+
+@javascript
+Scenario: Allow connecting to Trello
+  Given I follow "Connect to Get Started"
+  When I authorize with Trello as the test user
+  Then I should not see "Connecting..."
+  And I should not see "Redirecting..."
+  And I should be on the boards page
+</code></pre>
+
+<p>When the Trello popup appears, we have to specify the window we&rsquo;re going to use. Since I&rsquo;m using <a href="https://github.com/thoughtbot/capybara-webkit">capybara-webkit</a>, I&rsquo;m going to go ahead and do all of my Trello popup activities in one step, which saves me from writing a lot of unnecessary steps.</p>
+
+<pre><code class="ruby trello_popup_steps.rb">When /^I press "(.*?)" on the Trello popup$/ do |button|
+  trello_popup = windows.last
+  page.within_window trello_popup do
+    click_button button
+  end
+end
+
+When /^I authorize with Trello as the test user$/ do
+  trello_popup = windows.last
+  page.within_window trello_popup do
+    click_link "Log in"
+
+    fill_in "user", with: ENV['TEST_USER_TRELLO_USERNAME']
+    fill_in "password", with: ENV['TEST_USER_TRELLO_PASSWORD']
+
+    click_button "Log In"
+    click_button "Allow"
+  end
+end
+</code></pre>
+
+<p>Straightforward so far. We grab the window handle and we click links, fill in fields, and press buttons within that window.</p>
+
+<p>Note that I&rsquo;m using capybara-webkit, a headless web driver, to run my Javascript. Although the first test (&ldquo;Deny&rdquo;) will pass, the &ldquo;Allow&rdquo; test fails ambiguously. This is because capybara-webkit is not recognized as a supported browser by the Trello popup.</p>
+
+<p>Anecdotally, I contacted Trello support about this and received the following response:</p>
+
+<blockquote><p>Currently it is not possible to test this with a headless browser as you are looking to do without getting the unsupported browser message.</p></blockquote>
+
+<p>So I guess we should just give up, right? &hellip;Or we could manipulate the headers we send to load the Trello popup such that Trello <em>thinks</em> we are Google Chromium.</p>
+
+<pre><code class="cucumber trello_popup_steps.rb">When /^I authorize with Trello as the test user$/ do
+  trello_popup = windows.last
+  page.within_window trello_popup do
+    page.driver.header(
+      "User-Agent",
+      "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/34.0.1847.116 Chrome/34.0.1847.116 Safari/537.36"
+    )
+
+    click_link "Log in"
+
+    fill_in "user", with: ENV['TEST_USER_TRELLO_USERNAME']
+    fill_in "password", with: ENV['TEST_USER_TRELLO_PASSWORD']
+
+    click_button "Log In"
+    click_button "Allow"
+  end
+end
+</code></pre>
+
+<p>Fantastic. Now my tests pass. I can&rsquo;t sleep at night, but my tests pass.</p>
+
+<p>Unfortunately, that won&rsquo;t be the case if I add more tests to this <code>.feature</code> file. Hidden somewhere deep in the browser&rsquo;s cache or cookies or somethings, Trello is remembering that we logged in sometimes. Sometimes it even remembers that someone else has logged in. The UI of the Trello popup changes based on whether it thinks you&rsquo;ve already logged in. In order to keep things consistent, I like to add an if-statement to take care of this case.</p>
+
+<pre><code class="cucumber trello_popup_steps.rb">When /^I authorize with Trello as the test user$/ do
+  trello_popup = windows.last
+  page.within_window trello_popup do
+    page.driver.header(
+      "User-Agent",
+      "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/34.0.1847.116 Chrome/34.0.1847.116 Safari/537.36"
+    )
+
+    if page.has_content? "Switch Accounts"
+      click_link "Switch Accounts"
+    else
+      click_link "Log in"
+    end
+
+    fill_in "user", with: ENV['TEST_USER_TRELLO_USERNAME']
+    fill_in "password", with: ENV['TEST_USER_TRELLO_PASSWORD']
+
+    click_button "Log In"
+    click_button "Allow"
+  end
+end
+</code></pre>
+
+<p>Edge cases addressed. Now I can make connections to Trello and test my application. Be warned, I&rsquo;ve already had these tests break once when Trello updated the UI behind the Trello popup. If Trello ever stops supporting Chromium 34.0, these tests are also likely to stop working. These tests are most useful during development, when we have the potential to break the Trello connection ourselves, and so I think they are well worth the pain of potential future maintenance.</p>
+]]></content>
+  </entry>
+  
+</feed>

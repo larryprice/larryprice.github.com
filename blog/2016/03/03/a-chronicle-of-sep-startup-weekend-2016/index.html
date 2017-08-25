@@ -1,0 +1,410 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>A Chronicle of SEP Startup Weekend 2016 - Larry Price</title>
+  <meta name="author" content="Larry Price">
+
+  
+  <meta name="description" content="Last weekend was the 2016 SEP Startup Weekend, a bi-annual hackathon where a few of the engineers get together for 48 hours to build things. As far &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="https://larry-price.com/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Larry Price" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='https://fonts.googleapis.com/css?family=Montserrat+Alternates|Marcellus' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35669093-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner" style="background:url(/images/coffee-stain.png) top right no-repeat; background-size: auto 100%;"><hgroup>
+  <h1><a href="/">Larry Price</a></h1>
+  
+    <h2>And The Endless Cup Of Coffee</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:larry-price.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/books">Books</a></li>
+  <li><a href="/blog/projects">Projects</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">A Chronicle of SEP Startup Weekend 2016</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-03-03T15:16:29-05:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2016</span></span> <span class='time'>3:16 pm</span></time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="https://larry-price.com">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Last weekend was the 2016 SEP Startup Weekend, a bi-annual hackathon where a few of the engineers get together for 48 hours to build things. As far as most people know, we transform massive quantities of beer, coffee, and unhealthy food into cohesive piles of code. Although that about sums it up, I thought it might be nice to chronicle my team&rsquo;s experience of this season&rsquo;s event. Enjoy!</p>
+
+<h3>The Pitch</h3>
+
+<p>In my first startup weekend since <a href="/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards/">Ollert</a>, I pitched an idea for an instant runoff voting platform called RePoll. RePoll would allow users to create polls, rank candidates, and view results in a login-less system via a web portal, Android, and iOS app. To make it all interesting, I wanted to do all of the coding in javascript by using <a href="http://facebook.github.io/react/">React</a> for the web frontend and <a href="https://facebook.github.io/react-native/">React Native</a> for the iOS and Android apps.</p>
+
+<h3>Friday</h3>
+
+<p>I somehow convinced 3 of my coworkers to help me on Friday night, who I&rsquo;ll refer to as H, G, and K, forming teams by combining the letters.</p>
+
+<p>After sending around a few images and documents with my proposed architecture, I had GH start working together to build the Android app in React Native. Unfortunately, we hit a few snags in getting React Native to run an Android app on actual hardware, but late into the evening everything was up and running on a <a href="https://www.genymotion.com/">genymotion simulator</a>. By the end of the night, GH had a good portion of the <a href="https://facebook.github.io/react-native/docs/tutorial.html#content">React Native opening tutorial</a> completed.</p>
+
+<p>In the meantime, K and myself were hard at work building a core web API in NodeJS for all apps to use. We decided to use Mongo so we didn&rsquo;t have to worry about updating schema and initializing databases, and we used <a href="http://www.getpostman.com/">Postman</a> to test our API calls. I may have overarchitected the session/token-based authorization system, but we got over 50% of the way done with the API. In my initial estimates, I wanted to have the API 100% completed by Friday night, but we were all tired and decided to break for the night around 10p.</p>
+
+<p>Although everyone else headed out the door, the garage was packed with cars leaving a fancy-pants event held near our office. I stayed behind for about an hour setting up our API to run on <a href="https://re-poll.herokuapp.com/">heroku with a MongoDB instance</a>, and then configuring DNS for the domain I had already purchased.</p>
+
+<h3>Saturday</h3>
+
+<p>I arrived early and laid down <a href="https://open.spotify.com/album/0XxLqWttW6u6vP3Yz9Sye3">some sweet jams</a>. I continued working on the API alone and had K start working on the iOS app. We added a new teammate, dubbed A, who started work on the web frontend. The API neared completion by the end of the afternoon, and the mobile apps were beginning to hook into the publicly accessible API. During this time, several bugs were found in the initial API code and were fixed. The iOS app was making quick UI progress, but having issues connecting to the API. I started floating between dev teams as I got drowsy, but eventually got a second wind and started helping with the web frontend. The Android and web applications were both able to create polls before everyone went home. A started using a web React datetime component to set start and end dates, while the Android team was figuring out how to use the native calendar and clock to select dates and times.</p>
+
+<p>To store data, the mobile teams started using the <a href="https://facebook.github.io/react-native/docs/asyncstorage.html">Async Storage</a> library which allows for OS-agnostic storage of data in iOS and Android. On the web frontend, we used local storage to keep around any information we might need.</p>
+
+<p>Near the end of the night as I started working on the poll results page on the web frontend, I started finding system-crashing bugs in my interpretation of instant runoff voting, and eventually found that the results weren&rsquo;t always correct.</p>
+
+<p>One item slowing us down Saturday when writing React Native code was its insistence on using syntax defined in ES2015. Our team was largely unfamiliar with this new syntax, so this tripped us up a bit more than expected. All in all, it was a great learning experience to see this cutting edge specification in action.</p>
+
+<h3>Sunday</h3>
+
+<p>Early again, I created a <a href="https://repoll-web.herokuapp.com/">heroku app for our web frontend</a> and set up the DNS appropriately. As the rest of the team started to pile in (and the smells of bacon arose from the Commons), I transitioned to trying to fix the incorrect ballot-counting logic in the API. I ended up rewriting the code several times, but finally found an algorithm that worked correctly. At this point I was kicking myself for not writing tests to verify we were writing good code.</p>
+
+<p>The Android team caught a second wind, finishing the create poll page and started tackling poll lookup. The original plans called for a typeahead, which ended up being tougher to implement than expected, so the Android app instead supplied a simple textbox to attempt to match an existing poll. In doing this, the Android team successfully created an authentication token in the API and was able to display poll candidates in the app before running out of time.</p>
+
+<p>The iOS team continued to have issues with the API, but successfully mocked out most of the rest of the app right before the demos.</p>
+
+<p>Due to familiarity with the tech, the web team was able to get most of the way to a completed layout. I hastily fashioned a dual-list system for seeing candidates and ballot selection, while A transformed that system into a drag and droppable component. We were able to submit updated ballots to the server and fetch previous ballots for our poll tokens. With the updated API, the results page started working and it became possible to view the steps involved in eliminating candidates during the runoff process.</p>
+
+<p>During demos, we presented all three apps and everyone was quite impressed at our javascripting.</p>
+
+<h3>Action Items</h3>
+
+<ul>
+<li><em>General Things</em>
+
+<ul>
+<li><strong>Learn more about React Native.</strong> I was largely shielded from the pain as I was working on the API and React web parts of our project, but from what I&rsquo;ve seen and heard React Native is an incredible framework for getting things done and sharing code and code paradigms.</li>
+<li><strong>Start using ES2015.</strong> Tools like <a href="https://babeljs.io/">Babel</a> allow us to start using next-generation javascript standards to write code now even if the browser support is unavailable.</li>
+<li><strong>Do more with <a href="https://webpack.github.io/">webpack</a> or <a href="http://browserify.org/">browserify</a>.</strong> I want to be able to use these tools to optimize pre-rendering on our site, but we were in such a rush we primarily used webpack to enable us to use several NodeJS dependencies. Still cool, but there&rsquo;s so much else to explore.</li>
+</ul>
+</li>
+<li><em>Startup Weekend</em>
+
+<ul>
+<li><strong>Estimate better.</strong> I drastically underestimated the amount of work needed to get this project completed in a weekend. We would have had a better chance had I pre-built the API. I think doing some pre-work in this case would have been okay, but I also could have asked for more help. Next time I would like to do a better job of figuring out how much work there is and how much time it will take.</li>
+<li><strong>Be an expert.</strong> About half the work we did this weekend was in unknown territory for me. I should have studied further on getting React Native working before the event, and I should have known a little bit more about ES2015 as well. Although the lack of expertise slowed us down a bit, my teammates were extremely adaptive and loved learning the new tech.</li>
+<li><strong>Create and prep the team beforehand.</strong> I had enlisted one engineer before the pitches Friday night, and I ran my presentation through that engineer to verify it all made sense. I should have also run some of my architecture ideas past that engineer to get buy-in. I also wouldn&rsquo;t mind having the team mostly formed before we start, but that&rsquo;s a big commitment to ask of people.</li>
+<li><strong>Take more frequent, shorter breaks.</strong> We hit the Monon Saturday afternoon and walked for 30-40 minutes which ended up making me drowsy. However, the fresh air did us some good and was revitalizing for the project in general. It would be great to have more frequent, 10-15 minute walks, but it&rsquo;s really difficult to find a time when the team is ready to take a group break in such a fast-paced environment.</li>
+</ul>
+</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Larry Price</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2016-03-03T15:16:29-05:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2016</span></span> <span class='time'>3:16 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/react/'>react</a>, <a class='category' href='/blog/categories/retro/'>retro</a>, <a class='category' href='/blog/categories/web/'>web</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="https://larry-price.com/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016/" data-via="larryrprice" data-counturl="https://larry-price.com/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="small"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/02/21/drive/" title="Previous Post: Drive">&laquo; Drive</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2016/03/24/design-for-real-life-writeup/" title="Next Post: Design for Real Life (Writeup)">Design for Real Life (Writeup) &raquo;</a>
+      
+    </p>
+    <div>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- Below Post Responsive -->
+    <ins class="adsbygoogle post-ad"
+         style="display:block; overflow: hidden;"
+         data-ad-client="ca-pub-6961096698495477"
+         data-ad-slot="8491264944"
+         data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+  </footer>
+</article>
+
+  <section>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <span class="social-media-bar">
+    <a href="https://github.com/larryprice" title="Github" alt="github profile"><img src="/images/icon_github.png" class="social-media-icon" /></a>
+    <a href="https://launchpad.net/~larryprice" title="Launchpad" alt="launchpad profile"><img src="/images/icon_lp.png" class="social-media-icon" /></a>
+    <a href="https://twitter.com/larryrprice" title="Twitter" alt="Twitter profile"><img src="/images/icon_twitter.png" class="social-media-icon" /></a>
+    <a href="https://www.linkedin.com/pub/larry-price/3a/630/47b" title="LinkedIn" alt="LinkedIn profile"><img src="/images/icon_linkedin.png" class="social-media-icon" /></a>
+    <a href="mailto:larry@larry-price.com" title="Email" alt="email me"><img src="/images/icon_email.png" class="social-media-icon" /></a>
+  </span>
+</section>
+<section>
+  <h1>void* Larry</h1>
+  <p>I'm a codeslinger debugging from the mean streets of Indiana. Welcome to my blog, where I'll tell the tales of wondrous things I discover in the digital jungle.</p>
+</section>
+<section>
+  <h1>Go for Web Development</h1>
+  <p><strong><a href="https://www.packtpub.com/web-development/go-web-development-video" target="blank">Go for Web Development</a></strong> is an online video series designed by me where you'll follow along to build a personal library app in Go. You'll start with a blank slate but quickly learn to take advantage of popular libraries such as gorilla/mux, negroni, gorp, ace, and bcrypt.</p>
+</section>
+<section>
+  <h1>FOSDEM 2017</h1>
+  <p>In 2017, I had the opportunity to give a short talk at FOSDEM in Brussels. I even <strong><a href="https://www.youtube.com/watch?v=FX1fSTOU8Ao&t=1152s" target="blank">recorded an at-home experience</a></strong> with higher quality audio and slides than the livestream.</p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/04/18/on-gender-bias-and-home-improvement/">On Gender Bias and Home Improvement</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/04/11/using-d-bus-signals-in-python/">Using D-Bus Signals in Python</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python/">Creating an Asynchronous D-Bus Service With Python</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/04/04/creating-a-d-bus-service-with-python/">Creating a D-Bus Service With Python</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/02/15/snappy-libertine/">Snappy Libertine</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Tag Cloud</h1>
+    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.75%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.625%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.875%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.5%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.625%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.75%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.5%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 113.125%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.625%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.5%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.875%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.75%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.875%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.875%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.875%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.875%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.875%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.875%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.875%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.625%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.75%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.875%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.875%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 124.375%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 111.25%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.875%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.625%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.625%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.875%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.875%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.875%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.625%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.875%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.875%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.875%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 126.25%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.875%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.625%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.875%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.5%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.875%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.875%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.875%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.875%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.5%'>remote</a> <a href='/blog/categories/retro' style='font-size: 113.125%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.875%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 131.875%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.625%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.875%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.875%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.875%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 115.0%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.875%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.875%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.625%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 115.0%'>testing</a> <a href='/blog/categories/trello' style='font-size: 115.0%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.75%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.75%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.875%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.875%'>upstart</a> <a href='/blog/categories/web' style='font-size: 141.25%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.125%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.875%'>xml</a> </span>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/larryprice">@larryprice</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'larryprice',
+            count: 5,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+  <style>
+    .sidebar-ad { width: 280px; height: 280px; }}
+    @media(min-width: 375px) { .sidebar-ad { width: 350px; height: 90px; } }
+    @media(min-width: 475px) { .sidebar-ad { width: 450px; height: 90px; } }
+    @media(min-width: 575px) { .sidebar-ad { width: 550px; height: 90px; } }
+    @media(min-width: 675px) { .sidebar-ad { width: 650px; height: 90px; } }
+    @media(min-width: 750px) { .sidebar-ad { width: 200px; height: 200px; } }
+    @media(min-width: 768px) { .sidebar-ad { width: 210px; height: 210px; } }
+    @media(min-width: 1280px) { .sidebar-ad { width: 260px; height: 260px; } }
+  </style>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- Sidebar Ad -->
+    <ins class="adsbygoogle sidebar-ad"
+         style="display:inline-block"
+         data-ad-client="ca-pub-6961096698495477"
+         data-ad-slot="8892886941"></ins>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  <center>
+	  Copyright &copy; 2017 - Larry Price -
+	  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span><br/>
+	  Note: Views and opinions expressed belong solely to the author and do not represent the views of the any other person or company.
+	</center>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'larryprice';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'https://larry-price.com/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016/';
+        var disqus_url = 'https://larry-price.com/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
