@@ -3,8 +3,8 @@ source "https://rubygems.org"
 group :development do
   gem 'rake', '~> 10.0'
   gem 'jekyll', '~> 2.5.0'
-  gem 'octopress-hooks', '~> 2.2'
-  gem 'octopress-date-format', '~> 2.0'
+  gem 'octopress-hooks'
+  gem 'octopress-date-format'
   gem 'jekyll-sitemap'
   gem 'rdiscount', '~> 2.0'
   gem 'RedCloth', '~> 4.2.9'
