@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>https://larry-price.com/blog/2017/08/26/wheres-larry/</loc>
+<lastmod>2017-08-26T18:30:48-05:00</lastmod>
+</url>
+<url>
 <loc>https://larry-price.com/blog/2017/04/18/on-gender-bias-and-home-improvement/</loc>
 <lastmod>2017-04-18T10:42:10-04:00</lastmod>
 </url>
@@ -449,7 +453,7 @@
 <lastmod>2012-10-19T17:23:00-05:00</lastmod>
 </url>
 <url>
-<loc>https://larry-price.com/</loc>
+<loc>https://larry-price.com/blog/projects/</loc>
 </url>
 <url>
 <loc>https://larry-price.com/blog/archives/</loc>
@@ -458,7 +462,7 @@
 <loc>https://larry-price.com/blog/books/</loc>
 </url>
 <url>
-<loc>https://larry-price.com/blog/projects/</loc>
+<loc>https://larry-price.com/</loc>
 </url>
 <url>
 <loc>https://larry-price.com/blog/categories/ruby/</loc>

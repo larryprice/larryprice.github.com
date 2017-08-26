@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="Congratulations! You just made a single page web application [SPWA] to do All The Things. What happens when you hit the Back button in the browser? &hellip;">
+  <meta name="description" content="The Gist Extreme Programming Explained is the de facto book on XP written by Kent Beck. In the world of XP, software development is fun and efficient &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,67 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/08/02/extreme-programming-explained/">Extreme Programming Explained</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-08-02T20:14:49-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2015</span></span> <span class='time'>8:14 pm</span></time>
+        
+           | <a href="/blog/2015/08/02/extreme-programming-explained/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2015/08/02/extreme-programming-explained/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>The Gist</h3>
+
+<p><a href="http://amzn.to/1KKM3Q0"><em>Extreme Programming Explained</em></a> is the <em>de facto</em> book on XP written by Kent Beck. In the world of XP, software development is fun and efficient. Communication is open between all parties, pair programming is mandatory, builds are short, and tests are written before production code. Beck invites the reader to apply bits and pieces of XP to the development process to see incremental improvements, which is a very XP way of implementing XP.</p>
+
+<h3>Takeaways</h3>
+
+<p>XP is about solving people problems. Nearly every challenge we face during software development is caused by dealing with people. Communication is key to fixing most of these problems. On a developer level, pair programming and colocation form closer relationships and cause more conversations to occur.</p>
+
+<p>Do everything in small chunks. Whether you are designing a user experience, architecting a system, or estimating stories you should only address as little as <em>responsible</em> at a time. This means architect a small system first and adapt as a more complex architecture becomes necessary instead of doing it all at once. Create a user interface for the next week&rsquo;s worth of work instead of the whole project. Small chunks means tighter feedback loops and less wasted effort when specs change (and they will change).</p>
+
+<p>Software is built by people. People don&rsquo;t like to be referred to as &ldquo;cogs in a machine.&rdquo; People make mistakes and people create (process) waste. People like to think they are contributing to the success of the company and they like to feel good about what they are creating.</p>
+
+<p>10-minute builds. Beck claims that the perfect build takes 10 minutes; anything more makes people not want to wait for it to finish and anything less isn&rsquo;t enough time to take a coffee break. This concept is not for your constant, at-your-desk 10-second build. When I push my code to the server, it will compile a clean build and run every regression and integration and UX test within 10 minutes. If your regular, 100 times a day desktop build takes more than 10 minutes, you may want to see a shrink.</p>
+
+<p>Teammates should have disagreements but not knife fights (at least not while on the clock). If there are no dissenting opinions about how to implement something you may never find the most efficient answer.</p>
+
+<p>Automated tests are a man&rsquo;s best friend. Tests are a contract describing what the code currently does. Tests can be run by any programmer to verify a working system.</p>
+
+<p>Did I mention test-first development? I&rsquo;ve been through TDD trainings and found testing first difficult to follow strictly. The point of writing your tests first is to prevent any unwanted or undocumented side-effects in the code you just wrote. If you can delete a line of code and the tests still pass, that line of code is either unnecessary or untested.</p>
+
+<p>Taking baby steps is okay. It&rsquo;s unlikely you&rsquo;ll be able to institute all the great changes recommended by XP. Start by figuring out how to get your 15-minute build under 10 minutes. &ldquo;Force&rdquo; your usually unwilling teammate to pair with you when working on a piece of code within said teammate&rsquo;s area of expertise. Take a piece of untested code and wrap it in tests.</p>
+
+<h3>My Action Items</h3>
+
+<ul>
+<li>Write more tests. I&rsquo;ve been having a tough time getting tests written in this current project because it&rsquo;s largely UI and initializing a provided library. This week I want to come out net-positive on tests.</li>
+<li>Test first. I&rsquo;ve accomplished this on a few occasions, including a recent bug fix I pushed to an open-source library I created. But this is hard. I have a tendency to dive in headfirst when a test could help set the stage for a simpler design.</li>
+<li>1-week iterations. I have pushed against 1-week iterations because I often found them to be &ldquo;too short,&rdquo; but I&rsquo;m starting to come around to the idea of getting 1-2 items done per developer (or pair) per iteration. Other benefits include shorter feedback loop and less estimation required. My current project is a team of one, so this action item might have to sit on the backburner for a few months.</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1188,183 +1249,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/05/19/modifying-the-clipboard-in-javascript/">Modifying the Clipboard in Javascript</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-05-19T10:09:56-04:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:09 am</span></time>
-        
-           | <a href="/blog/2015/05/19/modifying-the-clipboard-in-javascript/#disqus_thread"
-             data-disqus-identifier="https://larry-price.com/blog/2015/05/19/modifying-the-clipboard-in-javascript/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>As of the writing of this post, Javascript is not allowed to modify the clipboard directly in modern web browsers. There is an <a href="http://www.w3.org/TR/clipboard-apis/">HTML5 spec in draft</a>, but it&rsquo;s unclear when/if this will become stable. Should we just give up on modifying users' clipboards and possibly violating their privacy? Heck no! We&rsquo;ll just use Flash.</p>
-
-<p><a href="https://github.com/zeroclipboard/zeroclipboard">ZeroClipboard</a> is a library which will create an invisible Flash movie over an HTML element. Does that sound hacky to you? DOESN&rsquo;T MATTER, COPIED TEXT.</p>
-
-<p>ZeroClipboard is super easy to use, the only caveat being in order to use the Flash movie you&rsquo;re going to have to run some kind of web server. For the simple case of this example, I&rsquo;ll use ruby with the following <a href="https://raw.githubusercontent.com/larryprice/zeroclipboard-example/master/config.ru">config.ru</a>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;bundler/setup&#39;</span>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># The project root directory</span>
-</span><span class='line'><span class="vg">$root</span> <span class="o">=</span> <span class="o">::</span><span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">__FILE__</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">SinatraStaticServer</span> <span class="o">&lt;</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Base</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">get</span><span class="p">(</span><span class="sr">/.+/</span><span class="p">)</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">send_sinatra_file</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">path</span><span class="p">)</span> <span class="p">{</span><span class="mi">404</span><span class="p">}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">not_found</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">send_file</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">__FILE__</span><span class="p">),</span> <span class="s1">&#39;public&#39;</span><span class="p">,</span> <span class="s1">&#39;404.html&#39;</span><span class="p">),</span> <span class="p">{</span><span class="ss">:status</span> <span class="o">=&gt;</span> <span class="mi">404</span><span class="p">})</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">send_sinatra_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">missing_file_block</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">file_path</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">__FILE__</span><span class="p">),</span>  <span class="n">path</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">file_path</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;index.html&#39;</span><span class="p">)</span> <span class="k">unless</span> <span class="n">file_path</span> <span class="o">=~</span> <span class="sr">/\.[a-z]+$/i</span>
-</span><span class='line'>    <span class="no">File</span><span class="o">.</span><span class="n">exist?</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> <span class="p">?</span> <span class="n">send_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> <span class="p">:</span> <span class="n">missing_file_block</span><span class="o">.</span><span class="n">call</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">run</span> <span class="no">SinatraStaticServer</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Download <a href="https://raw.githubusercontent.com/larryprice/zeroclipboard-example/master/ZeroClipboard.min.js">ZeroClipboard.js</a> and <a href="https://github.com/larryprice/zeroclipboard-example/raw/master/ZeroClipboard.swf">ZeroClipboard.swf</a> and save them to the base directory. Create a file called <a href="https://github.com/larryprice/zeroclipboard-example/blob/d3a941f6b5783108ebec370d9ae16d1b534bf2ce/index.html">index.html</a>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="cp">&lt;!DOCTYPE html&gt;</span>
-</span><span class='line'><span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">&quot;en&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'><span class="nt">&lt;head&gt;</span>
-</span><span class='line'><span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&quot;utf-8&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'><span class="nt">&lt;style&gt;</span>
-</span><span class='line'>  <span class="nf">#copy</span><span class="nd">:hover</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">cursor</span><span class="o">:</span> <span class="k">pointer</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="nt">&lt;/style&gt;</span>
-</span><span class='line'><span class="nt">&lt;/head&gt;</span>
-</span><span class='line'><span class="nt">&lt;body&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;copy&quot;</span> <span class="na">data-clipboard-text=</span><span class="s">&quot;you should be more careful with your clipboard&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    Copy Something!
-</span><span class='line'>  <span class="nt">&lt;/button&gt;</span>
-</span><span class='line'><span class="nt">&lt;/body&gt;</span>
-</span><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;ZeroClipboard.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</span><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>  <span class="nb">window</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">new</span> <span class="nx">ZeroClipboard</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;copy&quot;</span><span class="p">));</span>
-</span><span class='line'>  <span class="p">};</span>
-</span><span class='line'><span class="nt">&lt;/script&gt;</span>
-</span><span class='line'><span class="nt">&lt;/html&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This use case is simple: I create a button which the user will click to copy text to my keyboard. The text I want to copy is included on the element with the <code>data-clipboard-text</code> attribute. I initialize a ZeroClipboard client with <code>new ZeroClipboard(...)</code>. The application can be run with <code>rackup</code>: try it out for yourself!</p>
-
-<p>Of course, things can always get more complicated. Let&rsquo;s say that I want to copy something dynamic to the clipboard, <a href="https://github.com/larryprice/zeroclipboard-example/blob/5517b52b5713e75a183f6269184231342d561a7e/index.html">like the current state of the seconds hand on the clock</a>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;body&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;copy&quot;</span><span class="nt">&gt;</span>Copy Something!<span class="nt">&lt;/button&gt;</span>
-</span><span class='line'><span class="nt">&lt;/body&gt;</span>
-</span><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;ZeroClipboard.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</span><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>  <span class="nb">window</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">zclip</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ZeroClipboard</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;copy&quot;</span><span class="p">));</span>
-</span><span class='line'>    <span class="nx">zclip</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;ready&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">zclip</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">zclip</span><span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getSeconds</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;&quot;</span><span class="p">);</span>
-</span><span class='line'>      <span class="p">});</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>  <span class="p">};</span>
-</span><span class='line'><span class="nt">&lt;/script&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There are more events to play with, but this is enough to get started. Check out the <a href="https://github.com/zeroclipboard/zeroclipboard/blob/master/docs/instructions.md">ZeroClipboard instructions</a> wiki for more examples.</p>
-
-<p>All of the code in this post can be found <a href="https://github.com/larryprice/zeroclipboard-example">on Github</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/8">&larr; Older</a>
@@ -1403,6 +1287,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2017/08/26/wheres-larry/">Where's Larry?</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2017/04/18/on-gender-bias-and-home-improvement/">On Gender Bias and Home Improvement</a>
       </li>
     
@@ -1418,15 +1306,11 @@
         <a href="/blog/2017/04/04/creating-a-d-bus-service-with-python/">Creating a D-Bus Service With Python</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2017/02/15/snappy-libertine/">Snappy Libertine</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.75%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.625%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.875%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.5%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.625%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.75%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.5%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 113.125%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.625%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.5%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.875%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.75%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.875%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.875%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.875%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.875%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.875%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.875%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.875%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.625%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.75%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.875%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.875%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 124.375%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 111.25%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.875%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.625%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.625%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.875%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.875%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.875%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.625%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.875%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.875%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.875%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 126.25%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.875%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.625%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.875%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.5%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.875%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.875%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.875%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.875%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.5%'>remote</a> <a href='/blog/categories/retro' style='font-size: 113.125%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.875%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 131.875%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.625%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.875%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.875%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.875%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 115.0%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.875%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.875%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.625%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 115.0%'>testing</a> <a href='/blog/categories/trello' style='font-size: 115.0%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.75%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.75%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.875%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.875%'>upstart</a> <a href='/blog/categories/web' style='font-size: 141.25%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.125%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.875%'>xml</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 123.63636363636364%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.45454545454545%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 141.8181818181818%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
 </section>
 
 <section>

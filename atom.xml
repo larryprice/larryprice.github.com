@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="https://larry-price.com/atom.xml" rel="self"/>
   <link href="https://larry-price.com/"/>
-  <updated>2017-08-25T08:42:34-05:00</updated>
+  <updated>2017-08-26T18:48:42-05:00</updated>
   <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,67 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Where's Larry?]]></title>
+    <link href="https://larry-price.com/blog/2017/08/26/wheres-larry/"/>
+    <updated>2017-08-26T18:30:48-05:00</updated>
+    <id>https://larry-price.com/blog/2017/08/26/wheres-larry</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been on hiatus for a few months. Aside from the technical writing I usually do on this blog, I haven&rsquo;t pushed much extracurricular code or read any programming books. So what have I been doing?</p>
+
+<p><em>Warning: This is going to come off as a diary entry about my life and is not intended as a free, highly technical post about programming. Come back later for more of that.</em></p>
+
+<h3>Downhill</h3>
+
+<h4>Old Job</h4>
+
+<p>In mid-April, Canonical went through a major focus shift and with it <a href="https://www.theregister.co.uk/2017/04/12/80_canonical_staff_face_chop/">a major round of layoffs</a>. The company sought to become a more profitable business, and no longer believed the innovative work being done around Unity 8, Mir, and convergence could lead to profitability, and instead decided to focus on snaps and the cloud. Most of us working on the projects I mentioned got the axe, as well as others in various other departments.</p>
+
+<p>To quote Vonnegut: &ldquo;So it goes.&rdquo;</p>
+
+<p>I understand the shift from a business perspective, but have many opinions about the layoff process and the future of Ubuntu. Ticket price is currently set at two whiskey drinks. Ubuntu is shifting to Gnome 3 by default in October, making the line between Ubuntu and Fedora a bit cloudier. The open-source community lost a unique desktop environment, an interesting (if ambitious) vision for the future, and a large number of contributors putting in at least 40 hours a week.</p>
+
+<h4>Wanderer</h4>
+
+<p>In the meantime, my wife had set a date to leave her job and go back to graduate school in another state. We needed to find a new place to live in the next couple months and sell our home in Indiana. Needless to say, losing 2/3 of our income added a little bit of stress to the situation.</p>
+
+<h4>A Matter of Health</h4>
+
+<p>Ever since I got back from FOSDEM in February, I was slowly losing weight. No matter how much I ate, the pounds continued to drop. After the layoff, my health deteriorated quickly. Going to bed each night, I could hear my heart beating way too fast. I got tired walking up the stairs. It literally hurt to sit on my bony behind. With the layoff, my health insurance was also gone unless I wanted to pay $500+ each month to &ldquo;take advantage&rdquo; of COBRA.</p>
+
+<p>So it goes.</p>
+
+<h3>Uphill</h3>
+
+<h4>New Job</h4>
+
+<p>Fortunately, I was able to find a new job fairly quickly. There are lots of companies looking for programmers right now, so I had my pick of interesting domains to apply to. I landed at a company called <a href="http://www.illinoisrocstar.com/">Illinois Rocstar</a> (IR for short) as a <em>Research Engineer</em>, working on SBIR contracts for the Department of Energy and Department of Defense. The company is mostly non-traditional programmers, and I came in with a lot to offer as far as writing software, building applications, and designing processes. It&rsquo;s a fairly unique experience to work in the world of science with co-workers who come from very different backgrounds. I work in an office again, but it&rsquo;s an office of fewer than 20 people in the beautiful University of Illinois Research Park.</p>
+
+<h4>New Bill of Health</h4>
+
+<p>With new job on hand, I acquired new health insurance as quickly as possible and went to see a physician. The diagnosis: adult-onset diabetes. Over the past three months, I have made drastic changes to my diet and significantly improved my health. It&rsquo;s amazing how carb-heavy the American diet is; added sugar pervades practically everything we eat. I currently make most of my own meals at home, and it has intensified my love of the culinary arts.</p>
+
+<h4>Migration</h4>
+
+<p>We found a new home in our new city (Champaign-Urbana, IL) quickly: it&rsquo;s a 1913 arts &amp; crafts style home with a tiny yard, big kitchen, and a basement. It&rsquo;s walking distance to downtown, parks, and grocery stores. We adore this home and were really lucky to find it.</p>
+
+<h3>Flatlander</h3>
+
+<p>For a while, it seemed the pattern was all tragic events followed by a series of purely positive events. But the story is never quite that simple.</p>
+
+<p>While my health has been slowly improving, my great-grandmother passed away naturally, and my parents revealed that they had been secretly dealing with some health issues of my father&rsquo;s. Although I am getting better, I still have a ways to go before I could be described as fully healthy; but I&rsquo;ve found a new physician in Champaign, and we&rsquo;re working on it.</p>
+
+<p>Although we found the new house in Champaign quickly, selling our home in Indiana is another story. With the housing market the way it is right now, every schmuck on the street was telling us we would sell our home the first weekend we listed. The reality is that it took about 80 days to find a buyer, and the closing date is 134 days after listing (still a couple weeks from the date I&rsquo;m writing this post). This meant two mortgages for a couple months, which has forced us to stretch our dollar a bit. The good news, of course, is that I will no longer be a real estate mogul in a short couple of weeks.</p>
+
+<h3>Dear Journal</h3>
+
+<p>Enough of my sob story.</p>
+
+<p>I&rsquo;m just about ready to start looking for opportunities to get involved in programming outside of the office again. I have at least one mobile application in mind, I could blog forever about all the React I&rsquo;ve done and scientific tools I&rsquo;ve learned to use, and I&rsquo;ll be looking for locals to start sharing my experience with.</p>
+
+<p>Time to get back in the game.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[On Gender Bias and Home Improvement]]></title>
@@ -2432,74 +2493,6 @@
 <li>Don&rsquo;t ask so many questions.</li>
 <li>More form fields should be open-answerable. Also more form fields should be optional. Also see previous bullet.</li>
 <li>Streamline the hard stuff. It may not be the most-used feature, but if it&rsquo;s important to a user in emergency mode you can bet it&rsquo;ll be appreciated.</li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A Chronicle of SEP Startup Weekend 2016]]></title>
-    <link href="https://larry-price.com/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016/"/>
-    <updated>2016-03-03T15:16:29-05:00</updated>
-    <id>https://larry-price.com/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016</id>
-    <content type="html"><![CDATA[<p>Last weekend was the 2016 SEP Startup Weekend, a bi-annual hackathon where a few of the engineers get together for 48 hours to build things. As far as most people know, we transform massive quantities of beer, coffee, and unhealthy food into cohesive piles of code. Although that about sums it up, I thought it might be nice to chronicle my team&rsquo;s experience of this season&rsquo;s event. Enjoy!</p>
-
-<h3>The Pitch</h3>
-
-<p>In my first startup weekend since <a href="https://larry-price.com/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards/">Ollert</a>, I pitched an idea for an instant runoff voting platform called RePoll. RePoll would allow users to create polls, rank candidates, and view results in a login-less system via a web portal, Android, and iOS app. To make it all interesting, I wanted to do all of the coding in javascript by using <a href="http://facebook.github.io/react/">React</a> for the web frontend and <a href="https://facebook.github.io/react-native/">React Native</a> for the iOS and Android apps.</p>
-
-<h3>Friday</h3>
-
-<p>I somehow convinced 3 of my coworkers to help me on Friday night, who I&rsquo;ll refer to as H, G, and K, forming teams by combining the letters.</p>
-
-<p>After sending around a few images and documents with my proposed architecture, I had GH start working together to build the Android app in React Native. Unfortunately, we hit a few snags in getting React Native to run an Android app on actual hardware, but late into the evening everything was up and running on a <a href="https://www.genymotion.com/">genymotion simulator</a>. By the end of the night, GH had a good portion of the <a href="https://facebook.github.io/react-native/docs/tutorial.html#content">React Native opening tutorial</a> completed.</p>
-
-<p>In the meantime, K and myself were hard at work building a core web API in NodeJS for all apps to use. We decided to use Mongo so we didn&rsquo;t have to worry about updating schema and initializing databases, and we used <a href="http://www.getpostman.com/">Postman</a> to test our API calls. I may have overarchitected the session/token-based authorization system, but we got over 50% of the way done with the API. In my initial estimates, I wanted to have the API 100% completed by Friday night, but we were all tired and decided to break for the night around 10p.</p>
-
-<p>Although everyone else headed out the door, the garage was packed with cars leaving a fancy-pants event held near our office. I stayed behind for about an hour setting up our API to run on <a href="https://re-poll.herokuapp.com/">heroku with a MongoDB instance</a>, and then configuring DNS for the domain I had already purchased.</p>
-
-<h3>Saturday</h3>
-
-<p>I arrived early and laid down <a href="https://open.spotify.com/album/0XxLqWttW6u6vP3Yz9Sye3">some sweet jams</a>. I continued working on the API alone and had K start working on the iOS app. We added a new teammate, dubbed A, who started work on the web frontend. The API neared completion by the end of the afternoon, and the mobile apps were beginning to hook into the publicly accessible API. During this time, several bugs were found in the initial API code and were fixed. The iOS app was making quick UI progress, but having issues connecting to the API. I started floating between dev teams as I got drowsy, but eventually got a second wind and started helping with the web frontend. The Android and web applications were both able to create polls before everyone went home. A started using a web React datetime component to set start and end dates, while the Android team was figuring out how to use the native calendar and clock to select dates and times.</p>
-
-<p>To store data, the mobile teams started using the <a href="https://facebook.github.io/react-native/docs/asyncstorage.html">Async Storage</a> library which allows for OS-agnostic storage of data in iOS and Android. On the web frontend, we used local storage to keep around any information we might need.</p>
-
-<p>Near the end of the night as I started working on the poll results page on the web frontend, I started finding system-crashing bugs in my interpretation of instant runoff voting, and eventually found that the results weren&rsquo;t always correct.</p>
-
-<p>One item slowing us down Saturday when writing React Native code was its insistence on using syntax defined in ES2015. Our team was largely unfamiliar with this new syntax, so this tripped us up a bit more than expected. All in all, it was a great learning experience to see this cutting edge specification in action.</p>
-
-<h3>Sunday</h3>
-
-<p>Early again, I created a <a href="https://repoll-web.herokuapp.com/">heroku app for our web frontend</a> and set up the DNS appropriately. As the rest of the team started to pile in (and the smells of bacon arose from the Commons), I transitioned to trying to fix the incorrect ballot-counting logic in the API. I ended up rewriting the code several times, but finally found an algorithm that worked correctly. At this point I was kicking myself for not writing tests to verify we were writing good code.</p>
-
-<p>The Android team caught a second wind, finishing the create poll page and started tackling poll lookup. The original plans called for a typeahead, which ended up being tougher to implement than expected, so the Android app instead supplied a simple textbox to attempt to match an existing poll. In doing this, the Android team successfully created an authentication token in the API and was able to display poll candidates in the app before running out of time.</p>
-
-<p>The iOS team continued to have issues with the API, but successfully mocked out most of the rest of the app right before the demos.</p>
-
-<p>Due to familiarity with the tech, the web team was able to get most of the way to a completed layout. I hastily fashioned a dual-list system for seeing candidates and ballot selection, while A transformed that system into a drag and droppable component. We were able to submit updated ballots to the server and fetch previous ballots for our poll tokens. With the updated API, the results page started working and it became possible to view the steps involved in eliminating candidates during the runoff process.</p>
-
-<p>During demos, we presented all three apps and everyone was quite impressed at our javascripting.</p>
-
-<h3>Action Items</h3>
-
-<ul>
-<li><em>General Things</em>
-
-<ul>
-<li><strong>Learn more about React Native.</strong> I was largely shielded from the pain as I was working on the API and React web parts of our project, but from what I&rsquo;ve seen and heard React Native is an incredible framework for getting things done and sharing code and code paradigms.</li>
-<li><strong>Start using ES2015.</strong> Tools like <a href="https://babeljs.io/">Babel</a> allow us to start using next-generation javascript standards to write code now even if the browser support is unavailable.</li>
-<li><strong>Do more with <a href="https://webpack.github.io/">webpack</a> or <a href="http://browserify.org/">browserify</a>.</strong> I want to be able to use these tools to optimize pre-rendering on our site, but we were in such a rush we primarily used webpack to enable us to use several NodeJS dependencies. Still cool, but there&rsquo;s so much else to explore.</li>
-</ul>
-</li>
-<li><em>Startup Weekend</em>
-
-<ul>
-<li><strong>Estimate better.</strong> I drastically underestimated the amount of work needed to get this project completed in a weekend. We would have had a better chance had I pre-built the API. I think doing some pre-work in this case would have been okay, but I also could have asked for more help. Next time I would like to do a better job of figuring out how much work there is and how much time it will take.</li>
-<li><strong>Be an expert.</strong> About half the work we did this weekend was in unknown territory for me. I should have studied further on getting React Native working before the event, and I should have known a little bit more about ES2015 as well. Although the lack of expertise slowed us down a bit, my teammates were extremely adaptive and loved learning the new tech.</li>
-<li><strong>Create and prep the team beforehand.</strong> I had enlisted one engineer before the pitches Friday night, and I ran my presentation through that engineer to verify it all made sense. I should have also run some of my architecture ideas past that engineer to get buy-in. I also wouldn&rsquo;t mind having the team mostly formed before we start, but that&rsquo;s a big commitment to ask of people.</li>
-<li><strong>Take more frequent, shorter breaks.</strong> We hit the Monon Saturday afternoon and walked for 30-40 minutes which ended up making me drowsy. However, the fresh air did us some good and was revitalizing for the project in general. It would be great to have more frequent, 10-15 minute walks, but it&rsquo;s really difficult to find a time when the team is ready to take a group break in such a fast-paced environment.</li>
-</ul>
-</li>
 </ul>
 
 ]]></content>

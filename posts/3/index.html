@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="The release of Ubuntu 16.10 Yakkety Yak in the coming months will bring about the public release of Unity 8 as a pre-installed desktop session ( &hellip;">
+  <meta name="description" content="I currently write a lot of python and C++. Although I religiously unit test my C++ code, I&rsquo;m a bit ashamed to say that I haven&rsquo;t had much &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,286 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/09/07/getting-started-with-python-mocks-from-a-c-plus-plus-perspective/">Getting Started With Python Mocking and Patching</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-09-07T23:00:09-04:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>11:00 pm</span></time>
+        
+           | <a href="/blog/2016/09/07/getting-started-with-python-mocks-from-a-c-plus-plus-perspective/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2016/09/07/getting-started-with-python-mocks-from-a-c-plus-plus-perspective/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I currently write a lot of python and C++. Although I religiously unit test my C++ code, I&rsquo;m a bit ashamed to say that I haven&rsquo;t had much experience with python unit testing until recently. You know how it is - python is one of those interpreted languages, you mostly use it to do quick hacks, it doesn&rsquo;t <em>need</em> tests. Until you&rsquo;ve written your entire D-Bus service using python, and every time you make a code change <em>a literal python</em> appears on the screen to crash your computer. So I&rsquo;ve started writing a bunch of tests and found (as expected) a tangled mess of dependencies and system calls.</p>
+
+<p>In many C-like languages, you can fix most of your dependency problems with <a href="https://stackoverflow.com/questions/346372/whats-the-difference-between-faking-mocking-and-stubbing#answer-346440">The Big Three</a>: mocks, fakes, and stubs. A fake is an actual implementation of an interface used for non-production environments, a stub is an implementation of an interface returning a pre-conceived result, and a mock is a wrapper around an interface allowing a programmer to accurately map what actions were performed on the object. In C-like languages, you use <a href="https://en.wikipedia.org/wiki/Dependency_injection">dependency injection</a> to give our classes fakes, mocks, or stubs instead of real objects during testing.</p>
+
+<p>The good news is that we can also use dependency injection in python! However, I found that relying solely on dependency injection would pile on more dependencies than I wanted and was not going to work to cover all my system calls. But python is a dynamic language. In python, you can literally change the definition of a class inside of another class. We call this operation <strong>patch</strong> and you can use it extensively in testing to do some pretty cool stuff.</p>
+
+<h3>Code Under Test</h3>
+
+<p>Let&rsquo;s define some code to test. For all of these examples, I&rsquo;ll be using python3.5.2 with the <a href="https://docs.python.org/3/library/unittest.html">unittest</a> and <a href="https://docs.python.org/3/library/unittest.mock.html">unittest.mock</a> libs on Ubuntu 16.10. You can the final versions of these code samples <a href="https://github.com/larryprice/python-mocks-blog-post">on github</a>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">randint</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">WorkerStrikeException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">pass</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Worker</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span class='line'>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span class='line'><span class="sd">    A Worker will work a full 40 hour week and then go on strike. Each time</span>
+</span><span class='line'><span class="sd">    a Worker works, they work a random amount of time between 1 and 40.</span>
+</span><span class='line'><span class="sd">    &quot;&quot;&quot;</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">hours_worked</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">work</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class='line'>        <span class="n">timesheet</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">hours_worked</span> <span class="o">+=</span> <span class="n">timesheet</span>
+</span><span class='line'>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hours_worked</span> <span class="o">&gt;</span> <span class="mi">40</span><span class="p">:</span>
+</span><span class='line'>            <span class="k">raise</span> <span class="n">WorkerStrikeException</span><span class="p">(</span><span class="s">&quot;This worker is picketing&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="n">timesheet</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Boss</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span class='line'>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span class='line'><span class="sd">    A Boss makes profit using workers. Bosses squeeze 1000 monies out of a</span>
+</span><span class='line'><span class="sd">    Worker for each hour worked. Workers on strike are instantly replaced.</span>
+</span><span class='line'><span class="sd">    &quot;&quot;&quot;</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worker</span><span class="p">):</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">worker</span> <span class="o">=</span> <span class="n">worker</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">profit</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">make_profit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class='line'>        <span class="k">try</span><span class="p">:</span>
+</span><span class='line'>            <span class="bp">self</span><span class="o">.</span><span class="n">profit</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker</span><span class="o">.</span><span class="n">work</span><span class="p">()</span><span class="o">*</span><span class="mi">1000</span>
+</span><span class='line'>        <span class="k">except</span> <span class="n">WorkerStrikeException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span class='line'>            <span class="k">print</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
+</span><span class='line'>            <span class="bp">self</span><span class="o">.</span><span class="n">worker</span> <span class="o">=</span> <span class="n">Worker</span><span class="p">()</span>
+</span><span class='line'>            <span class="bp">self</span><span class="o">.</span><span class="n">profit</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker</span><span class="o">.</span><span class="n">work</span><span class="p">()</span><span class="o">*</span><span class="mi">1000</span>
+</span><span class='line'>        <span class="k">finally</span><span class="p">:</span>
+</span><span class='line'>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">profit</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>These are two simple classes (and a custom <code>Exception</code>) that we&rsquo;ll use to demonstrate unit testing in python. The first class, <code>Worker</code>, will work a maximum of 40 hours per week before picketing it&rsquo;s corporation. Each time <code>work</code> is called, the <code>Worker</code> will work a random number of hours. The <code>Boss</code> class takes in a <code>Worker</code> object, which it uses as it performs <code>make_profit</code>. The profit is determined by the number of hours worked multiplied by 1000. When the worker starts picketing, the <code>Boss</code> will hire a new <code>Worker</code> to take their place. So it goes.</p>
+
+<h3>Mocking the Worker Class</h3>
+
+<p>Our goal is to fully test the <code>Boss</code> class. We&rsquo;ve left ourselves a dependency to inject in the <code>__init__</code> method, so we could start there. We&rsquo;ll mock the <code>Worker</code> and pass it into the <code>Boss</code> initializer. We&rsquo;ll then set up the <code>Worker.work</code> method to always return a known number so we can test the functionality of <code>make_profit</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">import</span> <span class="nn">unittest.mock</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">unittest</span> <span class="kn">import</span> <span class="n">TestCase</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">from</span> <span class="nn">corp</span> <span class="kn">import</span> <span class="n">work</span>  <span class="c"># your impl file</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">BossTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">test_profit_adds_up</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class='line'>        <span class="n">worker</span> <span class="o">=</span> <span class="n">unittest</span><span class="o">.</span><span class="n">mock</span><span class="o">.</span><span class="n">create_autospec</span><span class="p">(</span><span class="n">work</span><span class="o">.</span><span class="n">Worker</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">worker</span><span class="o">.</span><span class="n">work</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="mi">8</span>
+</span><span class='line'>        <span class="n">boss</span> <span class="o">=</span> <span class="n">work</span><span class="o">.</span><span class="n">Boss</span><span class="p">(</span><span class="n">worker</span><span class="p">)</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">boss</span><span class="o">.</span><span class="n">make_profit</span><span class="p">(),</span> <span class="mi">8000</span><span class="p">)</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">boss</span><span class="o">.</span><span class="n">make_profit</span><span class="p">(),</span> <span class="mi">16000</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">worker</span><span class="o">.</span><span class="n">work</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="mi">10</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">boss</span><span class="o">.</span><span class="n">make_profit</span><span class="p">(),</span> <span class="mi">26000</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">worker</span><span class="o">.</span><span class="n">work</span><span class="o">.</span><span class="n">assert_has_calls</span><span class="p">([</span>
+</span><span class='line'>            <span class="n">unittest</span><span class="o">.</span><span class="n">mock</span><span class="o">.</span><span class="n">call</span><span class="p">(),</span>
+</span><span class='line'>            <span class="n">unittest</span><span class="o">.</span><span class="n">mock</span><span class="o">.</span><span class="n">call</span><span class="p">(),</span>
+</span><span class='line'>            <span class="n">unittest</span><span class="o">.</span><span class="n">mock</span><span class="o">.</span><span class="n">call</span><span class="p">()</span>
+</span><span class='line'>        <span class="p">])</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To run this test, use the command <code>python3 -m testtools.run test</code>, where <code>test</code> is the name of your test file without the <code>.py</code>.</p>
+
+<p>One curiosity here is <code>unittest.mock.create_autospec</code>. Python will also let you directly create a <code>Mock</code>, which will absorb all attribute calls regardless of whether they are defined, and <code>MagicMock</code>, which is like <code>Mock</code> except it also mocks magic methods. <code>create_autospec</code> will create a mock with all of the defined attributes of the given class (in our case <code>work.Worker</code>), and raise an Exception when the attribute is not defined on the specced class. This is really handy, and eliminates the possibility of tests &ldquo;accidentally passing&rdquo; because they are calling default attributes defined by the generic <code>Mock</code> or <code>MagicMock</code> initializers.</p>
+
+<p>We set the return value of the <code>work</code> function with <code>return_value</code>, and we can change it on a whim if we so desire. We then use <code>assertEqual</code> to verify the numbers are crunching as expected. One further thing I&rsquo;ve shown here is <code>assert_has_calls</code>, a mock assertion to verify that <code>work</code> was called 3 times on our mock method.</p>
+
+<p>You may also note that we subclassed <code>TestCase</code> to enable running this class as part of our unit testing framework with the special <code>__main__</code> method definition at the bottom of the file.</p>
+
+<h3>Patching the Worker Class</h3>
+
+<p>Although our first test demonstrates how to <code>make_profit</code> with a happy worker, we also need to verify how the <code>Boss</code> handles workers on strike. Unforunately, the <code>Boss</code> class creates his own <code>Worker</code> internally after learning they can&rsquo;t trust the <code>Worker</code> we gave them in the initializer. We want to create consistent tests, so we can&rsquo;t rely on the random numbers generated by <code>randint</code> in <code>Worker.work</code>. This means we can&rsquo;t just depend on dependency injection to make these tests pass!</p>
+
+<p>At this point we have two options: we can patch the <code>Worker</code> class or we can patch the <code>randint</code> function. Why not both! As luck would have it, there are a few ways to use <a href="https://docs.python.org/3/library/unittest.mock.html#unittest.mock.patch"><code>patch</code></a>, and we can explore a couple of these ways in our two example tests.</p>
+
+<p>We&rsquo;ll patch the <code>randint</code> function using a method decorator. Our intent is to make <code>randint</code> return a static number every time, and then verify that profits keep booming even as we push workers past their limit.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="nd">@unittest.mock.patch</span><span class="p">(</span><span class="s">&#39;corp.work.randint&#39;</span><span class="p">,</span> <span class="n">return_value</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</span><span class='line'><span class="k">def</span> <span class="nf">test_profit_adds_up_despite_turnover</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">randint</span><span class="p">):</span>
+</span><span class='line'>    <span class="n">boss</span> <span class="o">=</span> <span class="n">work</span><span class="o">.</span><span class="n">Boss</span><span class="p">(</span><span class="n">work</span><span class="o">.</span><span class="n">Worker</span><span class="p">())</span>
+</span><span class='line'>    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">boss</span><span class="o">.</span><span class="n">make_profit</span><span class="p">(),</span> <span class="mi">20000</span><span class="p">)</span>
+</span><span class='line'>    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">boss</span><span class="o">.</span><span class="n">make_profit</span><span class="p">(),</span> <span class="mi">40000</span><span class="p">)</span>
+</span><span class='line'>    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">boss</span><span class="o">.</span><span class="n">make_profit</span><span class="p">(),</span> <span class="mi">60000</span><span class="p">)</span>
+</span><span class='line'>    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">boss</span><span class="o">.</span><span class="n">make_profit</span><span class="p">(),</span> <span class="mi">80000</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">randint</span><span class="o">.</span><span class="n">assert_has_calls</span><span class="p">([</span>
+</span><span class='line'>        <span class="n">unittest</span><span class="o">.</span><span class="n">mock</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">40</span><span class="p">),</span> <span class="n">unittest</span><span class="o">.</span><span class="n">mock</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">40</span><span class="p">),</span>
+</span><span class='line'>        <span class="n">unittest</span><span class="o">.</span><span class="n">mock</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">40</span><span class="p">),</span> <span class="n">unittest</span><span class="o">.</span><span class="n">mock</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When calling <code>patch</code>, you must describe the namespace relative to the module you&rsquo;re importing. In our case, we&rsquo;re using <code>randint</code> in the <code>corp.work</code> module, so we use <code>corp.work.randint</code>. We define the <code>return_value</code> of <code>randint</code> to simply be 20. A fine number of hours per day to work an employee, according to the <code>Boss</code>. <code>patch</code> will inject a parameter into the test representing an automatically created mock that will be used in the patch, and we use that to assert that our calls were all made the way we expected.</p>
+
+<p>Since we know the inner workings of the <code>Worker</code> class, we know that this test exercised our code by surpassing a 40-hour work week for our poor <code>Worker</code> and causing the <code>WorkerStrikeException</code> to be raised. In doing so, we&rsquo;re depending on the <code>Worker</code>/<code>Boss</code> implementation to stay in-sync, which is a dangerous assumption. Let&rsquo;s explore patching the <code>Worker</code> class instead.</p>
+
+<p>To spice things up, we&rsquo;ll use the <code>ContextManager</code> syntax when we patch the <code>Worker</code> class. We&rsquo;ll create one mock <code>Worker</code> outside of the context to use for dependency injection, and we&rsquo;ll use this mock to <code>raise</code> the <code>WorkerStrikeException</code> as a side effect of <code>work</code> being called too many times. Then we&rsquo;ll patch the <code>Worker</code> class for newly created instances to return a known timesheet.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">test_profit_adds_up_despite_strikes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class='line'>    <span class="n">worker</span> <span class="o">=</span> <span class="n">unittest</span><span class="o">.</span><span class="n">mock</span><span class="o">.</span><span class="n">create_autospec</span><span class="p">(</span><span class="n">work</span><span class="o">.</span><span class="n">Worker</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">worker</span><span class="o">.</span><span class="n">work</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="mi">12</span>
+</span><span class='line'>    <span class="n">boss</span> <span class="o">=</span> <span class="n">work</span><span class="o">.</span><span class="n">Boss</span><span class="p">(</span><span class="n">worker</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">with</span> <span class="n">unittest</span><span class="o">.</span><span class="n">mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s">&#39;corp.work.Worker&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">MockWorker</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">scrub</span> <span class="o">=</span> <span class="n">MockWorker</span><span class="o">.</span><span class="n">return_value</span>
+</span><span class='line'>        <span class="n">scrub</span><span class="o">.</span><span class="n">work</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="mi">4</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">boss</span><span class="o">.</span><span class="n">make_profit</span><span class="p">(),</span> <span class="mi">12000</span><span class="p">)</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">boss</span><span class="o">.</span><span class="n">make_profit</span><span class="p">(),</span> <span class="mi">24000</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">worker</span><span class="o">.</span><span class="n">work</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="n">work</span><span class="o">.</span><span class="n">WorkerStrikeException</span><span class="p">(</span><span class="s">&#39;Faking a strike!&#39;</span><span class="p">)</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">boss</span><span class="o">.</span><span class="n">make_profit</span><span class="p">(),</span> <span class="mi">28000</span><span class="p">)</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">boss</span><span class="o">.</span><span class="n">make_profit</span><span class="p">(),</span> <span class="mi">32000</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">worker</span><span class="o">.</span><span class="n">work</span><span class="o">.</span><span class="n">assert_has_calls</span><span class="p">([</span>
+</span><span class='line'>            <span class="n">unittest</span><span class="o">.</span><span class="n">mock</span><span class="o">.</span><span class="n">call</span><span class="p">(),</span> <span class="n">unittest</span><span class="o">.</span><span class="n">mock</span><span class="o">.</span><span class="n">call</span><span class="p">(),</span> <span class="n">unittest</span><span class="o">.</span><span class="n">mock</span><span class="o">.</span><span class="n">call</span><span class="p">()</span>
+</span><span class='line'>        <span class="p">])</span>
+</span><span class='line'>        <span class="n">scrub</span><span class="o">.</span><span class="n">work</span><span class="o">.</span><span class="n">assert_has_calls</span><span class="p">([</span>
+</span><span class='line'>            <span class="n">unittest</span><span class="o">.</span><span class="n">mock</span><span class="o">.</span><span class="n">call</span><span class="p">(),</span> <span class="n">unittest</span><span class="o">.</span><span class="n">mock</span><span class="o">.</span><span class="n">call</span><span class="p">()</span>
+</span><span class='line'>        <span class="p">])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After the first <code>Worker</code> throws a <code>WorkerStrikeException</code>, the second <code>Worker</code> (scrub) comes in to replace them. In patching the <code>Worker</code>, we are able to more accurately describe the behavior of <code>Boss</code> regardless of the implementation details behind <code>Worker</code>.</p>
+
+<h3>A Non-Political Conclusion</h3>
+
+<p>I&rsquo;m not saying this is the best way to go about unit testing in python, but it is an option that should help you get started unit testing legacy code. There are certainly those who see this level of micromanaging mocks and objects as tedious, but there is be benefit to defining the way a class acts under exact circumstances. This was a contrived example, and your code may be a little bit harder to wrap with tests.</p>
+
+<p>Now you can go get Hooked on Pythonics!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -534,62 +814,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2016/06/23/ranks-streaks-karma/">Ranks, Streaks, and Karma - a Look at Competitive Contributions</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2016-06-23T21:15:17-04:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2016</span></span> <span class='time'>9:15 pm</span></time>
-        
-           | <a href="/blog/2016/06/23/ranks-streaks-karma/#disqus_thread"
-             data-disqus-identifier="https://larry-price.com/blog/2016/06/23/ranks-streaks-karma/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>If you weren&rsquo;t paying close attention, you may not have noticed that Github has recently <a href="https://github.com/blog/2173-more-contributions-on-your-profile">removed Streaks from profile pages</a> along with a few other changes.</p>
-
-<p>For the uninitiated, Github tracked each user&rsquo;s commit history every day and displayed this information prominently on the user&rsquo;s profile for the past 365 days. When committing multiple days in succession, a &ldquo;streak&rdquo; is started. Your streak resets the next solar day you don&rsquo;t commit to Github.</p>
-
-<p><strong>What was the purpose of the streak?</strong></p>
-
-<p>The streak encouraged developers to contribute public open-source code as frequently as possible. This is a very good thing! Maybe it even influenced some people to contribute to open-source projects that desperately needed help. Maybe it helped some developers explore new codebases and languages they never dreamt of exploring previously.</p>
-
-<p>However, any good feelings that came from the streak are instantly dashed when you take a day off. All those good-feels you get after working hard to get a 10-day streak? Crushed in an instant. Now you need to start over, but you don&rsquo;t bother because every time you feel a streak coming on it&rsquo;s dashed away. This is a painful reminder that life is short, and you&rsquo;ll only be rewarded in the short-term for any effort you put in.</p>
-
-<p><strong>So if the good-feels wasn&rsquo;t the purpose, how about notoriety? Surely someone with a long streak is a good person and a noble developer!</strong></p>
-
-<p>Except for <a href="https://gist.github.com/cirosantilli/4d24fc646ab9aec8def7">gists like this</a> which will help you generate a 100-year streak. Or the fact that you could make empty commits to personal repos and manipulate the streak. Or you could be making minor documentation/newline changes every day. Not only that, but not all developers use Github as their primary source control platform. Developers could be making contributions to Bitbucket as well as Github and not have that reflected in their streak at all.</p>
-
-<p><strong>My theory is that streaks, though well-intended, served no purpose.</strong></p>
-
-<p>They were ripe for abuse and not a very good &ldquo;reward&rdquo; for contributing code on the side, nor a good indicator of how grey a developer&rsquo;s beard is. Not all good developers make commits every day, and encouraging a commit-a-day is getting people trapped in the Silicon Valley bad-habit of never not working. For the time being, good riddance.</p>
-
-<p>At Canonical, we use Launchpad to host most of our source code. Launchpad has this concept of &ldquo;Karma&rdquo; which tracks your commits, code reviews, bug reports, branch merges, etc on Launchpad. Karma decays over time but not immediately, which means that you can take days off and maintain Karma. From this number, you can usually tell if a user is new to the system, highly active recently, or has turned into a manager. For reference, mine is <a href="https://launchpad.net/~larryprice/+karma">a little over 3000</a> as of this blog post. Although I mostly like the way Karma works, I don&rsquo;t think it&rsquo;s the epitome of source code gamification.</p>
-
-<p>As far as I know, sites like Bitbucket and GitLab don&rsquo;t have such a concept of rewarding heavy coders or giving some indication of recent activity outside of a news feed. Maybe a news feed style is enough?</p>
-
-<p>The good people at Github want you to code socially, and I&rsquo;m excited to see if they can come up with a fun and light way to gamify open-source software while avoiding some of the unfun aspects of streaks and the blaisé concept of news feeds.</p>
-
-<p>What do you think? Do you miss streaks? Did streaks motivate you to contribute more frequently? Any ideas for a new system? Tell me in the comments!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/4">&larr; Older</a>
@@ -628,6 +852,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2017/08/26/wheres-larry/">Where's Larry?</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2017/04/18/on-gender-bias-and-home-improvement/">On Gender Bias and Home Improvement</a>
       </li>
     
@@ -643,15 +871,11 @@
         <a href="/blog/2017/04/04/creating-a-d-bus-service-with-python/">Creating a D-Bus Service With Python</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2017/02/15/snappy-libertine/">Snappy Libertine</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.75%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.625%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.875%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.5%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.625%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.75%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.5%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 113.125%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.625%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.5%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.875%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.75%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.875%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.875%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.875%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.875%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.875%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.875%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.875%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.625%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.75%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.875%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.875%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 124.375%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 111.25%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.875%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.625%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.625%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.875%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.875%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.875%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.625%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.875%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.875%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.875%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 126.25%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.875%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.625%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.875%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.5%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.875%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.875%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.875%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.875%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.5%'>remote</a> <a href='/blog/categories/retro' style='font-size: 113.125%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.875%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 131.875%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.625%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.875%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.875%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.875%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 115.0%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.875%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.875%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.625%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 115.0%'>testing</a> <a href='/blog/categories/trello' style='font-size: 115.0%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.75%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.75%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.875%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.875%'>upstart</a> <a href='/blog/categories/web' style='font-size: 141.25%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.125%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.875%'>xml</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 123.63636363636364%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.45454545454545%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 141.8181818181818%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
 </section>
 
 <section>

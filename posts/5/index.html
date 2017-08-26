@@ -9,8 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="Have you ever seen a six-month-old or a three-year-old who’s not curious and self-directed? I haven’t. That’s how we are out of the box.
-&ndash; Dan &hellip;">
+  <meta name="description" content="Last weekend was the 2016 SEP Startup Weekend, a bi-annual hackathon where a few of the engineers get together for 48 hours to build things. As far &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +80,97 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016/">A Chronicle of SEP Startup Weekend 2016</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-03-03T15:16:29-05:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2016</span></span> <span class='time'>3:16 pm</span></time>
+        
+           | <a href="/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Last weekend was the 2016 SEP Startup Weekend, a bi-annual hackathon where a few of the engineers get together for 48 hours to build things. As far as most people know, we transform massive quantities of beer, coffee, and unhealthy food into cohesive piles of code. Although that about sums it up, I thought it might be nice to chronicle my team&rsquo;s experience of this season&rsquo;s event. Enjoy!</p>
+
+<h3>The Pitch</h3>
+
+<p>In my first startup weekend since <a href="/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards/">Ollert</a>, I pitched an idea for an instant runoff voting platform called RePoll. RePoll would allow users to create polls, rank candidates, and view results in a login-less system via a web portal, Android, and iOS app. To make it all interesting, I wanted to do all of the coding in javascript by using <a href="http://facebook.github.io/react/">React</a> for the web frontend and <a href="https://facebook.github.io/react-native/">React Native</a> for the iOS and Android apps.</p>
+
+<h3>Friday</h3>
+
+<p>I somehow convinced 3 of my coworkers to help me on Friday night, who I&rsquo;ll refer to as H, G, and K, forming teams by combining the letters.</p>
+
+<p>After sending around a few images and documents with my proposed architecture, I had GH start working together to build the Android app in React Native. Unfortunately, we hit a few snags in getting React Native to run an Android app on actual hardware, but late into the evening everything was up and running on a <a href="https://www.genymotion.com/">genymotion simulator</a>. By the end of the night, GH had a good portion of the <a href="https://facebook.github.io/react-native/docs/tutorial.html#content">React Native opening tutorial</a> completed.</p>
+
+<p>In the meantime, K and myself were hard at work building a core web API in NodeJS for all apps to use. We decided to use Mongo so we didn&rsquo;t have to worry about updating schema and initializing databases, and we used <a href="http://www.getpostman.com/">Postman</a> to test our API calls. I may have overarchitected the session/token-based authorization system, but we got over 50% of the way done with the API. In my initial estimates, I wanted to have the API 100% completed by Friday night, but we were all tired and decided to break for the night around 10p.</p>
+
+<p>Although everyone else headed out the door, the garage was packed with cars leaving a fancy-pants event held near our office. I stayed behind for about an hour setting up our API to run on <a href="https://re-poll.herokuapp.com/">heroku with a MongoDB instance</a>, and then configuring DNS for the domain I had already purchased.</p>
+
+<h3>Saturday</h3>
+
+<p>I arrived early and laid down <a href="https://open.spotify.com/album/0XxLqWttW6u6vP3Yz9Sye3">some sweet jams</a>. I continued working on the API alone and had K start working on the iOS app. We added a new teammate, dubbed A, who started work on the web frontend. The API neared completion by the end of the afternoon, and the mobile apps were beginning to hook into the publicly accessible API. During this time, several bugs were found in the initial API code and were fixed. The iOS app was making quick UI progress, but having issues connecting to the API. I started floating between dev teams as I got drowsy, but eventually got a second wind and started helping with the web frontend. The Android and web applications were both able to create polls before everyone went home. A started using a web React datetime component to set start and end dates, while the Android team was figuring out how to use the native calendar and clock to select dates and times.</p>
+
+<p>To store data, the mobile teams started using the <a href="https://facebook.github.io/react-native/docs/asyncstorage.html">Async Storage</a> library which allows for OS-agnostic storage of data in iOS and Android. On the web frontend, we used local storage to keep around any information we might need.</p>
+
+<p>Near the end of the night as I started working on the poll results page on the web frontend, I started finding system-crashing bugs in my interpretation of instant runoff voting, and eventually found that the results weren&rsquo;t always correct.</p>
+
+<p>One item slowing us down Saturday when writing React Native code was its insistence on using syntax defined in ES2015. Our team was largely unfamiliar with this new syntax, so this tripped us up a bit more than expected. All in all, it was a great learning experience to see this cutting edge specification in action.</p>
+
+<h3>Sunday</h3>
+
+<p>Early again, I created a <a href="https://repoll-web.herokuapp.com/">heroku app for our web frontend</a> and set up the DNS appropriately. As the rest of the team started to pile in (and the smells of bacon arose from the Commons), I transitioned to trying to fix the incorrect ballot-counting logic in the API. I ended up rewriting the code several times, but finally found an algorithm that worked correctly. At this point I was kicking myself for not writing tests to verify we were writing good code.</p>
+
+<p>The Android team caught a second wind, finishing the create poll page and started tackling poll lookup. The original plans called for a typeahead, which ended up being tougher to implement than expected, so the Android app instead supplied a simple textbox to attempt to match an existing poll. In doing this, the Android team successfully created an authentication token in the API and was able to display poll candidates in the app before running out of time.</p>
+
+<p>The iOS team continued to have issues with the API, but successfully mocked out most of the rest of the app right before the demos.</p>
+
+<p>Due to familiarity with the tech, the web team was able to get most of the way to a completed layout. I hastily fashioned a dual-list system for seeing candidates and ballot selection, while A transformed that system into a drag and droppable component. We were able to submit updated ballots to the server and fetch previous ballots for our poll tokens. With the updated API, the results page started working and it became possible to view the steps involved in eliminating candidates during the runoff process.</p>
+
+<p>During demos, we presented all three apps and everyone was quite impressed at our javascripting.</p>
+
+<h3>Action Items</h3>
+
+<ul>
+<li><em>General Things</em>
+
+<ul>
+<li><strong>Learn more about React Native.</strong> I was largely shielded from the pain as I was working on the API and React web parts of our project, but from what I&rsquo;ve seen and heard React Native is an incredible framework for getting things done and sharing code and code paradigms.</li>
+<li><strong>Start using ES2015.</strong> Tools like <a href="https://babeljs.io/">Babel</a> allow us to start using next-generation javascript standards to write code now even if the browser support is unavailable.</li>
+<li><strong>Do more with <a href="https://webpack.github.io/">webpack</a> or <a href="http://browserify.org/">browserify</a>.</strong> I want to be able to use these tools to optimize pre-rendering on our site, but we were in such a rush we primarily used webpack to enable us to use several NodeJS dependencies. Still cool, but there&rsquo;s so much else to explore.</li>
+</ul>
+</li>
+<li><em>Startup Weekend</em>
+
+<ul>
+<li><strong>Estimate better.</strong> I drastically underestimated the amount of work needed to get this project completed in a weekend. We would have had a better chance had I pre-built the API. I think doing some pre-work in this case would have been okay, but I also could have asked for more help. Next time I would like to do a better job of figuring out how much work there is and how much time it will take.</li>
+<li><strong>Be an expert.</strong> About half the work we did this weekend was in unknown territory for me. I should have studied further on getting React Native working before the event, and I should have known a little bit more about ES2015 as well. Although the lack of expertise slowed us down a bit, my teammates were extremely adaptive and loved learning the new tech.</li>
+<li><strong>Create and prep the team beforehand.</strong> I had enlisted one engineer before the pitches Friday night, and I ran my presentation through that engineer to verify it all made sense. I should have also run some of my architecture ideas past that engineer to get buy-in. I also wouldn&rsquo;t mind having the team mostly formed before we start, but that&rsquo;s a big commitment to ask of people.</li>
+<li><strong>Take more frequent, shorter breaks.</strong> We hit the Monon Saturday afternoon and walked for 30-40 minutes which ended up making me drowsy. However, the fresh air did us some good and was revitalizing for the project in general. It would be great to have more frequent, 10-15 minute walks, but it&rsquo;s really difficult to find a time when the team is ready to take a group break in such a fast-paced environment.</li>
+</ul>
+</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -398,105 +488,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/12/28/javascript-the-good-parts/">Javascript: The Good Parts</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-12-28T20:17:33-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>8:17 pm</span></time>
-        
-           | <a href="/blog/2015/12/28/javascript-the-good-parts/#disqus_thread"
-             data-disqus-identifier="https://larry-price.com/blog/2015/12/28/javascript-the-good-parts/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>The Gist</h3>
-
-<p><a href="http://amzn.to/1OVjj3Z">Javascript: The Good Parts</a> by Douglas Crockford is a short guide to the best parts of the javascript language. Javascript is notorious for being so flexible and feature-rich that many traditional programmers start writing code and completely forget how to program and building a startup based on an idea they got from the <a href="https://twitter.com/boredelonmusk">Bored Elon Musk</a> mock-Twitter account only to wake up a year later cold and alone living in the slums of San Francisco. This book is full of example code with thoughtful explanations to help the average developer write better javascript and leave the web a nicer place.</p>
-
-<h3>Takeaways</h3>
-
-<p>I read this book because I thought the title was too snarky for its own good. Javascript is flexible and capable of doing nearly anything you need but, like any tool, can easily be misused by newcomers. Since javascript is the de facto language of the web, many developers who use javascript are novices or don&rsquo;t think they need to know the language constructs because &ldquo;it&rsquo;s not a real language.&rdquo; Unfortunately, this results in a lot of spaghetti code and insecure javascript being processed by our web browsers.</p>
-
-<p>I studied javascript this past fall to try to hone my skills, and I found that many of the little tricks I picked up through independent study had already been collected in this book. Anyone doing javascript should have a passing knowledge of the contents of this book before they are allowed to push to production.</p>
-
-<p>Now I&rsquo;ll get off my soapbox and point out a few of my favorite points made in this book.</p>
-
-<p>Javascripts most powerful structures are <code>Object</code> and <code>Array</code>. An <code>Array</code> is an <code>Object</code> with properties of type <code>Number</code> cast to integers in sequential order. This means that the <code>Array</code> object <code>[0, 1, "mario", "luigi"]</code> is represented as an <code>Object</code> as <code>{"0": 0, "1": 1, "2": "mario", "3": "luigi"}</code>.</p>
-
-<p><code>Object.hasOwnProperty</code> tells you whether the given property name is on the object&rsquo;s prototype or has been defined on the current object. This is very useful when using a <code>for in</code> loop to filter properties on an object.</p>
-
-<p>Although I&rsquo;ve frequently used the module pattern with a self-executing function to create private scope, I hadn&rsquo;t connected the dots that the reason this magic works is because of closures. Here&rsquo;s an example:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">MyModule</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>  <span class="k">return</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">reset</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">},</span>
-</span><span class='line'>    <span class="k">do</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="o">++</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}());</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">MyModule</span><span class="p">.</span><span class="nx">reset</span><span class="p">();</span>
-</span><span class='line'><span class="nx">MyModule</span><span class="p">.</span><span class="k">do</span><span class="p">();</span>    <span class="c1">// output: 0</span>
-</span><span class='line'><span class="nx">MyModule</span><span class="p">.</span><span class="k">do</span><span class="p">();</span>    <span class="c1">// output: 1</span>
-</span><span class='line'><span class="nx">MyModule</span><span class="p">.</span><span class="k">do</span><span class="p">();</span>    <span class="c1">// output: 2</span>
-</span><span class='line'><span class="nx">MyModule</span><span class="p">.</span><span class="nx">reset</span><span class="p">();</span>
-</span><span class='line'><span class="nx">MyModule</span><span class="p">.</span><span class="k">do</span><span class="p">();</span>    <span class="c1">// output: 0</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>MyModule</code> contains the private variable <code>x</code>, which cannot be accessed by anyone who has a reference to this function. However, the internal functions <code>reset</code> and <code>do</code> do have access to the private variable. Because of this, we know no external code can manipulate our internal value and we can guarantee some amount of consistency in our code given there was no tampering of the source. Of course, closures are useful for far more than just scoping variables.</p>
-
-<p>Although there are many ways to mimic traditional inheritance in javascript with <code>new</code> and defining the <code>constructor</code> method on a prototype, it usually makes more sense to use <em>differential inheritance</em>. Given an object named <code>bird</code>, we&rsquo;ll make a new object named <code>parrot</code> using <code>var parrot = Object.create(bird);</code> and start setting new properties on <code>parrot</code> This type of inheritance uses the basics of the language to our advantage and adheres nicely to the native prototypal constructs.</p>
-
-<h3>Action Items</h3>
-
-<ul>
-<li><strong>Differential inheritance.</strong> I&rsquo;ve always tried to force traditional inheritance into my javascript architecture, and it&rsquo;s always felt wrong. The next time I need inheritance, I will try to use DI to utilize javascript&rsquo;s prototype system better.</li>
-<li><strong>Write more javascript.</strong> It&rsquo;s been a while since I got to write javascript professionally, so I&rsquo;d like to ensure I maintain my knowledge base over the coming months by writing more javascript on the side. As web programming is where I want to be, hopefully I can get back into building for the web before the end of the year.</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/6">&larr; Older</a>
@@ -535,6 +526,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2017/08/26/wheres-larry/">Where's Larry?</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2017/04/18/on-gender-bias-and-home-improvement/">On Gender Bias and Home Improvement</a>
       </li>
     
@@ -550,15 +545,11 @@
         <a href="/blog/2017/04/04/creating-a-d-bus-service-with-python/">Creating a D-Bus Service With Python</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2017/02/15/snappy-libertine/">Snappy Libertine</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.75%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.625%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.875%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.5%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.625%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.75%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.5%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 113.125%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.625%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.5%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.875%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.75%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.875%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.875%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.875%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.875%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.875%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.875%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.875%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.625%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.75%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.875%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.875%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 124.375%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 111.25%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.875%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.625%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.625%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.875%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.875%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.875%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.625%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.875%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.875%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.875%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 126.25%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.875%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.625%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.875%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.5%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.875%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.875%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.875%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.875%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.5%'>remote</a> <a href='/blog/categories/retro' style='font-size: 113.125%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.875%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 131.875%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.625%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.875%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.875%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.875%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 115.0%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.875%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.875%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.625%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 115.0%'>testing</a> <a href='/blog/categories/trello' style='font-size: 115.0%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.75%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.75%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.875%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.875%'>upstart</a> <a href='/blog/categories/web' style='font-size: 141.25%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.125%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.875%'>xml</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 123.63636363636364%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.45454545454545%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 141.8181818181818%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
 </section>
 
 <section>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: non-technical | Larry Price]]></title>
   <link href="https://larry-price.com/blog/categories/non-technical/atom.xml" rel="self"/>
   <link href="https://larry-price.com/"/>
-  <updated>2017-08-25T08:42:34-05:00</updated>
+  <updated>2017-08-26T18:48:42-05:00</updated>
   <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,67 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[where's larry?]]></title>
+    <link href="https://larry-price.com/blog/2017/08/26/wheres-larry/"/>
+    <updated>2017-08-26T18:30:48-05:00</updated>
+    <id>https://larry-price.com/blog/2017/08/26/wheres-larry</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been on hiatus for a few months. Aside from the technical writing I usually do on this blog, I haven&rsquo;t pushed much extracurricular code or read any programming books. So what have I been doing?</p>
+
+<p><em>Warning: This is going to come off as a diary entry about my life and is not intended as a free, highly technical post about programming. Come back later for more of that.</em></p>
+
+<h3>Downhill</h3>
+
+<h4>Old Job</h4>
+
+<p>In mid-April, Canonical went through a major focus shift and with it <a href="https://www.theregister.co.uk/2017/04/12/80_canonical_staff_face_chop/">a major round of layoffs</a>. The company sought to become a more profitable business, and no longer believed the innovative work being done around Unity 8, Mir, and convergence could lead to profitability, and instead decided to focus on snaps and the cloud. Most of us working on the projects I mentioned got the axe, as well as others in various other departments.</p>
+
+<p>To quote Vonnegut: &ldquo;So it goes.&rdquo;</p>
+
+<p>I understand the shift from a business perspective, but have many opinions about the layoff process and the future of Ubuntu. Ticket price is currently set at two whiskey drinks. Ubuntu is shifting to Gnome 3 by default in October, making the line between Ubuntu and Fedora a bit cloudier. The open-source community lost a unique desktop environment, an interesting (if ambitious) vision for the future, and a large number of contributors putting in at least 40 hours a week.</p>
+
+<h4>Wanderer</h4>
+
+<p>In the meantime, my wife had set a date to leave her job and go back to graduate school in another state. We needed to find a new place to live in the next couple months and sell our home in Indiana. Needless to say, losing 2/3 of our income added a little bit of stress to the situation.</p>
+
+<h4>A Matter of Health</h4>
+
+<p>Ever since I got back from FOSDEM in February, I was slowly losing weight. No matter how much I ate, the pounds continued to drop. After the layoff, my health deteriorated quickly. Going to bed each night, I could hear my heart beating way too fast. I got tired walking up the stairs. It literally hurt to sit on my bony behind. With the layoff, my health insurance was also gone unless I wanted to pay $500+ each month to &ldquo;take advantage&rdquo; of COBRA.</p>
+
+<p>So it goes.</p>
+
+<h3>Uphill</h3>
+
+<h4>New Job</h4>
+
+<p>Fortunately, I was able to find a new job fairly quickly. There are lots of companies looking for programmers right now, so I had my pick of interesting domains to apply to. I landed at a company called <a href="http://www.illinoisrocstar.com/">Illinois Rocstar</a> (IR for short) as a <em>Research Engineer</em>, working on SBIR contracts for the Department of Energy and Department of Defense. The company is mostly non-traditional programmers, and I came in with a lot to offer as far as writing software, building applications, and designing processes. It&rsquo;s a fairly unique experience to work in the world of science with co-workers who come from very different backgrounds. I work in an office again, but it&rsquo;s an office of fewer than 20 people in the beautiful University of Illinois Research Park.</p>
+
+<h4>New Bill of Health</h4>
+
+<p>With new job on hand, I acquired new health insurance as quickly as possible and went to see a physician. The diagnosis: adult-onset diabetes. Over the past three months, I have made drastic changes to my diet and significantly improved my health. It&rsquo;s amazing how carb-heavy the American diet is; added sugar pervades practically everything we eat. I currently make most of my own meals at home, and it has intensified my love of the culinary arts.</p>
+
+<h4>Migration</h4>
+
+<p>We found a new home in our new city (Champaign-Urbana, IL) quickly: it&rsquo;s a 1913 arts &amp; crafts style home with a tiny yard, big kitchen, and a basement. It&rsquo;s walking distance to downtown, parks, and grocery stores. We adore this home and were really lucky to find it.</p>
+
+<h3>Flatlander</h3>
+
+<p>For a while, it seemed the pattern was all tragic events followed by a series of purely positive events. But the story is never quite that simple.</p>
+
+<p>While my health has been slowly improving, my great-grandmother passed away naturally, and my parents revealed that they had been secretly dealing with some health issues of my father&rsquo;s. Although I am getting better, I still have a ways to go before I could be described as fully healthy; but I&rsquo;ve found a new physician in Champaign, and we&rsquo;re working on it.</p>
+
+<p>Although we found the new house in Champaign quickly, selling our home in Indiana is another story. With the housing market the way it is right now, every schmuck on the street was telling us we would sell our home the first weekend we listed. The reality is that it took about 80 days to find a buyer, and the closing date is 134 days after listing (still a couple weeks from the date I&rsquo;m writing this post). This meant two mortgages for a couple months, which has forced us to stretch our dollar a bit. The good news, of course, is that I will no longer be a real estate mogul in a short couple of weeks.</p>
+
+<h3>Dear Journal</h3>
+
+<p>Enough of my sob story.</p>
+
+<p>I&rsquo;m just about ready to start looking for opportunities to get involved in programming outside of the office again. I have at least one mobile application in mind, I could blog forever about all the React I&rsquo;ve done and scientific tools I&rsquo;ve learned to use, and I&rsquo;ll be looking for locals to start sharing my experience with.</p>
+
+<p>Time to get back in the game.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[On Gender Bias and Home Improvement]]></title>
@@ -264,52 +325,6 @@
 <p>The good people at Github want you to code socially, and I&rsquo;m excited to see if they can come up with a fun and light way to gamify open-source software while avoiding some of the unfun aspects of streaks and the blaisé concept of news feeds.</p>
 
 <p>What do you think? Do you miss streaks? Did streaks motivate you to contribute more frequently? Any ideas for a new system? Tell me in the comments!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Going Remote: 1 Month In]]></title>
-    <link href="https://larry-price.com/blog/2016/05/05/going-remote-1-month-in/"/>
-    <updated>2016-05-05T20:21:56-04:00</updated>
-    <id>https://larry-price.com/blog/2016/05/05/going-remote-1-month-in</id>
-    <content type="html"><![CDATA[<p><em>This is the second in a series of blog posts detailing my experience migrating from a culture based on co-location to a fully remote environment. You may also enjoy my <a href="/blog/2016/04/11/going-remote-1-week/">original post detailing my first week</a>. Look out for another post in the fall.</em></p>
-
-<p>I&rsquo;ve spent an entire month working remotely. Whereas I spent much of my first week working remotely getting my home office in a working state, the rest of the month was largely spent acclimating to a culture of complete autonomy, getting comfortable with my peers, and finding my way around.</p>
-
-<h3>Attacking My Action Items</h3>
-
-<p>One of my action items from <a href="/blog/2016/04/11/going-remote-1-week/">the week 1 post</a> involved personalizing my workspace. I brought three posters from our second-floor study and planted them on the walls of my new office area downstairs. It makes my new office feel a lot more like my own space and a lot less like the formerly-unused living room. I have a 1994 Ren&amp;Stimpy calendar hanging on the bookshelf as well as a few stickers and other various nerdy hangables. I&rsquo;m fairly happy with the current state of my office.</p>
-
-<p>I&rsquo;ve made a point of exercising more during the work day. I work my biceps and triceps with my handheld weight, as many nose-to-the-ground push-ups as I can, and really hard bicycles until my abs tell me to stop. I&rsquo;ve also been walking outside in the early afternoon to check on the state of my hop garden. Not to mention I&rsquo;m still making significant use of my sit-stand desk.</p>
-
-<p>As far as extracurricular activities go, I think I&rsquo;m keeping steady. I&rsquo;ve been going to my local Code&amp;Coffee, and I just had a monthly meeting of Indy Golang. I&rsquo;ve been reading a bunch of blogs and eating up modern C++ material. I&rsquo;d like to make sure I get to IndySA every now and then, but I usually just whiff the date. I haven&rsquo;t been doing much coding outside of work, but that hasn&rsquo;t been high on my priority list recently. Since I currently work for an open-source company, I am embedded in the world of code all day, and I usually end the day very satisified.</p>
-
-<p>I did not buy a better floormat. Still on the list.</p>
-
-<h3>Acclimation Station</h3>
-
-<p>Although my first week was a success, I&rsquo;ll admit it was still a little awkward. However, I&rsquo;ve found myself significantly more comfortable at the end of my first month.</p>
-
-<p>In this position, there is a level of autonomy unlike any I have ever experienced. No one tells me what to work on next. I figure out what I&rsquo;ll be doing almost entirely based on incoming bug reports, community rumblings, nebulous plans, or simply things that interest and/or annoy me about a project. Priorities are in the eye of the beholder, and it&rsquo;s in my best interest to pick up work that is meaningful and relevant. I complete the task, get it into review, and make sure everybody&rsquo;s happy. Since everyone has a shared goal, it&rsquo;s unusual for developers to be especially nit-picky during reviews, and thus reviews become more focused on correctness, education, and mysterious edge cases.</p>
-
-<p>Talking to people on IRC can be a little daunting because so many of my coworkers are just so good at it. At first, talking to the right people seemed impossible. Eventually, I&rsquo;ve learned to become efficient with my IRC usage and I have certain channels relevant to my current tasks where I hang out. Although I describe our communications as &ldquo;efficient&rdquo;, that&rsquo;s not to say we don&rsquo;t joke around and have a good time. There are people I interact with every day who I consider work-friends even though we&rsquo;ve never spoken face-to-face.</p>
-
-<p>Over the past several weeks we&rsquo;ve held two company-wide events. The first was a remote open forum with our CEO. During the remote forum, the CEO discussed how the company was doing and then she opened the floor for questions. Someone would ask a question in chat, people would vote for those questions, and then we would get an answer. It was done quite well and felt like a great introduction to the CEO and her vision for our company&rsquo;s future. This week was a three-day conference spanning the entire organization. Presenters would share their faces and slides using Hangouts on Air, while attendees watched live and chatted together in a relevant channel. I learned a lot about the wider scope and relevance of my project, and I also got to hear about all the other interesting things going on around the company. I got to hear the founder do a Q&amp;A, which gave rise to many great questions with humble, honest answers which gave me a good idea of what we are all about as an organization. Attendance was optional, so irrelevant presentations could be ignored as easily as closing a tab.</p>
-
-<p>For the first couple weeks, I couldn&rsquo;t figure out how some of my peers could be so busy all the time. Now I understand. I found myself working on projects several dependencies away from my own, adding features and fixing bugs such that our project could integrate with the dependency and we could get features shipped. Due to the nature of everything being open-source, I&rsquo;m constantly working with my peers to figure out where a bug might be stemming from or the appropriate level to inject a feature or even just who to talk to about how things work. You fix a bug in one project and accidentally become a contributor while the project is in desperate need of many code reviews, which you then do and become an even more relevant member to the team.</p>
-
-<p>Oftentimes, traditional office workers will say things to me like, &ldquo;I don&rsquo;t know how you work from home; I&rsquo;d just be distracted all day and wouldn&rsquo;t be able to get anything done.&rdquo; I&rsquo;ve found that to be completely untrue. There are many days where I have trouble not working in the evening. I&rsquo;ll read up on some modern C++ techniques or read some misguided blog post about our projects, and I&rsquo;ll think about jumping on the computer at 9pm just to take a peek. It takes a lot of self-restraint, but I&rsquo;ve thus far been pretty good about not working after work. Hopefully I can keep that up.</p>
-
-<p>In a few weeks, my team is meeting in Montreal to hang out and do code for a week. I&rsquo;m excited for the opportunity to see everyone (not to mention to be in Montreal), and I&rsquo;m certain that it will help me feel even more acclimated to this new environment.</p>
-
-<h3>Some New Action Items</h3>
-
-<ul>
-<li><strong>Better floormat</strong>. Standing on my plastic mat right now, my feet do start to hurt. I need to run to an office supply store and find some rubber padding.</li>
-<li><strong>IRC Champion</strong>. Although I&rsquo;m more comfortable on IRC, I know I could be better about reaching out at the right times to the right people.</li>
-<li><strong>Automaton</strong>. I still grope around for work when I&rsquo;m not sure what to do next. I&rsquo;d like to come up with a process to determine what should be next on the agenda without too much synchronous assistance.</li>
-</ul>
-
 ]]></content>
   </entry>
   
