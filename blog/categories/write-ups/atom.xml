@@ -4,7 +4,7 @@
   <title><![CDATA[Category: write-ups | Larry Price]]></title>
   <link href="https://larry-price.com/blog/categories/write-ups/atom.xml" rel="self"/>
   <link href="https://larry-price.com/"/>
-  <updated>2017-08-26T18:50:11-05:00</updated>
+  <updated>2017-08-31T19:53:36-05:00</updated>
   <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,52 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Demystifying Public Speaking]]></title>
+    <link href="https://larry-price.com/blog/2017/08/31/demystifying-public-speaking/"/>
+    <updated>2017-08-31T19:55:20-05:00</updated>
+    <id>https://larry-price.com/blog/2017/08/31/demystifying-public-speaking</id>
+    <content type="html"><![CDATA[<h3>The Gist</h3>
+
+<p>Public speaking makes me nervous, and I&rsquo;m not alone. A crowd of people is listening to your stutters, nit-picking your errors, and judging your clothing. No one is immune from the fear of public speaking. What can you do about it? Armed with Lara Hogan&rsquo;s <em><a href="https://abookapart.com/products/demystifying-public-speaking">Demystifying Public Speaking</a></em>, we can learn how to make public speaking a bit less stressful. There is no complete answer, but this book is full of tips and guidance for speaking engagements of any size and gravitas.</p>
+
+<h3>Takeaways</h3>
+
+<p>Need ideas for public speaking? Take advantage of the work you do every day. Prepare a presentation for the tough code you wrote last week, the library you found, the Agile processes you use, or how you set up your workstation, favorite tool, or cloud service.</p>
+
+<p>Start small. Run the topic by your coworkers with a rough outline. Run it by your spouse to get an outside perspective. You can tweak your ideas based on the feedback, and then move on to bigger venues. Do a lunch and learn, a lightning talk, or a local meetup.</p>
+
+<p>Your end goal does not have to be a conference. Conferences can be huge events with many attendees, and can be extremely daunting. Many people only go to conferences for the big names, and your talk might be more easily forgotten amongst all the ultra-hyped celebrity talks.</p>
+
+<p>Then again, if that&rsquo;s what you&rsquo;re into, you could become the celebrity after doing a few conference talks. If you do well at one or two conferences, there&rsquo;s a good chance you&rsquo;ll start getting invited to more conferences. These conferences might want you to rehash your past talk (score! minimal effort!), give you a topic, or hand you the reigns to get creative.</p>
+
+<p>Your audience wants you to do well. It&rsquo;s a common misconception that your audience is rooting against you. They want to learn, and they want to believe that what you&rsquo;re telling them is worthwhile. If you make a mistake, you don&rsquo;t need to be embarrassed: everyone knows it&rsquo;s hard to go on-stage in front of a group of people. Just try to correct yourself and move on.</p>
+
+<p>Always include some levity in your presentation. A joke or a cat picture can help reengage an audience that may be succumbing to fatigue. Ask a silly or surprising question, maybe even going so far as to ask for some audience participation.</p>
+
+<p>Presentations with lots of imagery are great, but your presentation style doesn&rsquo;t have to follow any conventions. Some people are comfortable getting their queues from their notes and images, but others may prefer more traditional header and bullet point slides.</p>
+
+<p>If there&rsquo;s going to be a Q&amp;A section, have your coworkers or peers hit you with some potential questions. Maybe you can beef up parts of your presentation that were misinterpreted or underrepresented.</p>
+
+<p>It&rsquo;s okay to say &ldquo;I don&rsquo;t know&rdquo; during a Q&amp;A session. You just laid down a lot of knowledge on your audience, but that doesn&rsquo;t mean you have to know all the answers. Furthermore, if someone &ldquo;stumps&rdquo; you during a Q&amp;A section, just admit it and move on. There&rsquo;s always that one guy who asks a &ldquo;question&rdquo; that he already knows the answer to to make himself appear intelligent. Ignore that guy. He&rsquo;s got issues. Just say &ldquo;OK&rdquo; and move on to the next question.</p>
+
+<p>Do what&rsquo;s comfortable for you. Read directly from your notes. Put comforting reminders in your slides, like pictures of your cats or Superman squashing fascism. Use &ldquo;wizard hands&rdquo; or other embarrassing hand gestures. Let your personality come out, or invent a completely separate stage persona to assume while you&rsquo;re presenting. All that matters is that you accomplish your task of dropping some knowledge bombs on your intended audience.</p>
+
+<p>Remember: you&rsquo;re the expert on this topic. If you weren&rsquo;t, you wouldn&rsquo;t be able to put together that presentation to begin with. Your presentation was chosen because the organizer(s) had confidence in you, your ability, and your knowledge. The audience members are there because they find meaning in your topic and believe you&rsquo;re the right person to transfer that information. You&rsquo;re in control.</p>
+
+<h3>Action Items</h3>
+
+<p>I really only have one action item from this book:</p>
+
+<ul>
+<li><strong>Do some public speaking!</strong></li>
+</ul>
+
+
+<p>I&rsquo;ve moved to a new city this summer, and I&rsquo;m starting to actively seek out local meetup groups. My goal is to find the right opportunity and the courage to participate in some lightning talks or possibly longer presentations.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Effective Modern C++]]></title>
@@ -222,45 +268,6 @@ MyModule.do();    // output: 0
 <ul>
 <li><strong>Differential inheritance.</strong> I&rsquo;ve always tried to force traditional inheritance into my javascript architecture, and it&rsquo;s always felt wrong. The next time I need inheritance, I will try to use DI to utilize javascript&rsquo;s prototype system better.</li>
 <li><strong>Write more javascript.</strong> It&rsquo;s been a while since I got to write javascript professionally, so I&rsquo;d like to ensure I maintain my knowledge base over the coming months by writing more javascript on the side. As web programming is where I want to be, hopefully I can get back into building for the web before the end of the year.</li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Creating Great Teams (Book Writeup)]]></title>
-    <link href="https://larry-price.com/blog/2015/12/28/creating-great-teams-book-writeup/"/>
-    <updated>2015-12-28T13:30:12-05:00</updated>
-    <id>https://larry-price.com/blog/2015/12/28/creating-great-teams-book-writeup</id>
-    <content type="html"><![CDATA[<h3>The Gist</h3>
-
-<p>Building software teams is a very difficult task. In most organizations, managers cobble together teams based primarily on who&rsquo;s available when the team is forming. Since managers can only know so much about the skills and relationships of each engineer, forming teams this way is chaotic and produces inconsistent results. Instead of management selecting teams, what if engineers created their own teams based on need, past experience, relationships, and doing what&rsquo;s best for the company? <em><a href="http://amzn.to/1VmIS2Y">Creating Great Teams</a></em> by Sandy Mamoli and David Mole (published by PragProg) explores the team self-selection process in great details with step-by-step instructions on running one&rsquo;s own self-selection event.</p>
-
-<h3>Takeaways</h3>
-
-<p><em>Managerial selection</em> is the act of management selecting teams. <em>Self-selection</em> is the act of individuals deciding which team to be on</p>
-
-<p>Managerial selection works really well for smaller companies as there are fewer variables. As an organization grows, it&rsquo;s illogical to assume that a single manager forming a team can continue to know every engineer&rsquo;s skills, interests, career path, and personal relationships with all the other engineers and managers in the company. The writers of <em>Creating Great Teams</em> believe that managerial selection can begin to break down with as few as 10 engineers in an organization.</p>
-
-<p>Managerial selection has the tendency to treat people as interchangeable parts. Every engineer has a different personality and skillset. Project A doesn&rsquo;t need &ldquo;Generic Engineer&rdquo;, it needs Sally and her particular brand of software development.</p>
-
-<p>Engineers working on multiple projects is non-optimal. Everyone agrees that there is a cost to context-switching in productivity, but there is also a cost in engineer happiness and energy levels. The concept of putting engineers on multiple projects is guided by utilization numbers. Utilization tells a manager that Joe is 50% on Project A, so the manager also puts him 25% or 50% on Project B. Utilization-based team design treats engineers like computers as opposed to really nerdy, easily-agitated human beings.</p>
-
-<p>Of course, we already know that self-selection has the potential to build really cool software. Every hackathon weekend starts with engineers building self-selected teams, and these teams are able to crank out more code in the course of a weekend than some projects team can in a month. It&rsquo;s not just the lack of rules that&rsquo;s making these teams more productive, but the joy of working with people you like and the motivation of working on something that interests you.</p>
-
-<p>Convincing an organization to try self-selecting teams is an exercise in public relations. Everyone needs to be on-board and no one can undermine the self-selection process. If &ldquo;management&rdquo; decides that Betty would be better off on Project B than on Project A and moves her after the self-selection process, people will lose faith in the whole event.</p>
-
-<p>People will generally do what&rsquo;s best for the company. Self-selection is a socialist process, where everyone will want to feel good about the outcome. If there is a project that doesn&rsquo;t seem very fun but is vital to the organization&rsquo;s success, someone is guaranteed to bite the bullet and put themselves on that project for the sake of the company.</p>
-
-<p>The middle of the book is dedicated to setting up and running a self-selection event. Setting up the event is a tough process and may take several iterations.</p>
-
-<h3>My Action Items</h3>
-
-<ul>
-<li><strong>Perform a trial event.</strong> At some point in the near future, I want to be involved with a trial self-selection event at my current organization. We have several outlets to do this, such as the Leadership Review or a Lunch and Learn. Although it might be difficult to put company-wide self-selected teams into practice at my organization due to the client-based nature of our work, I am positive we would have many wonderful insights from running a trial event.</li>
-<li><strong>Read Daniel Pink&rsquo;s <em>Drive</em>.</strong> <a href="http://amzn.to/1OpbToV"><em>Drive</em></a> is about what motivates people and is cited several times throughout this book. I&rsquo;ve been meaning to do this since I read <em>Punished By Rewards</em>, but now it&rsquo;s officially on my up-next reading list.</li>
-<li><strong>Read <em>Scaling Agile @ Spotify with Tribes, Squads, Chapters, and Guilds</em>.</strong> <a href="https://dl.dropboxusercontent.com/u/1018963/Articles/SpotifyScaling.pdf"><em>Scaling Agile at Spotify</em></a> is a whitepaper by some of the employees at Spotify discussing how Spotify was able to successfully scale Agile within their organization by breaking groups down into smaller and smaller subgroups.</li>
-<li><strong>Talk about it.</strong> I was invited to join a small book group to discuss the implications of this book after the holiday. Hopefully we can find a way to implement some small amount of self-selection within our own organization, or at the very least determine all the current blockers for doing self-selection. I&rsquo;ll note that this book group is a self-selected team.</li>
 </ul>
 
 ]]></content>

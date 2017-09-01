@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="We use git on my current project, and we used to always use remote branches. After doubling the number of developers touching the repo, we found that &hellip;">
+  <meta name="description" content="Jasmine: a headless Javascript testing library written entirely in Javascript. With similarities to rspec, I&rsquo;ve quickly grown attached to this &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,473 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/06/04/jasmine-a-whole-new-world-of-javascript-testing/">Jasmine - a Whole New World of Javascript Testing</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-06-04T06:19:43-04:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>6:19 am</span></time>
+        
+           | <a href="/blog/2014/06/04/jasmine-a-whole-new-world-of-javascript-testing/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2014/06/04/jasmine-a-whole-new-world-of-javascript-testing/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="https://jasmine.github.io/">Jasmine</a>: a headless Javascript testing library written entirely in Javascript. With similarities to <a href="http://rspec.info">rspec</a>, I&rsquo;ve quickly grown attached to this framework and have been looking for opportunities to discuss it. <a href="https://jasmine.github.io/2.0/introduction.html">Version 2.0</a> was recently released, so I&rsquo;ll be focusing on the standalone 2.0 concepts. To get started, download and uncompress <a href="https://github.com/pivotal/jasmine/tree/master/dist">the standalone distribution</a>.</p>
+
+<p>The uncompressed directory structure will have three subdirectories: <code>spec</code>, <code>src</code>, and <code>lib</code>. <code>lib</code> contains all the Jasmine source code. <code>src</code> contains some sample Javascript class that is tested by test files contained in <code>spec</code>. Outside of the subdirectories is the special file <code>SpecRunner.html</code>. This file is how we will run our tests.</p>
+
+<p>Let&rsquo;s start a new pizza place.</p>
+
+<p>We&rsquo;ll need Pizza. A Pizza will need several things: size, style, toppings, and price. We&rsquo;ll have a few styles available, but also allow our guests to request additional toppings. We&rsquo;ll also set the price based on the size and number of toppings. Create the files <code>src/pizza.js</code> and <code>spec/PizzaSpec.js</code> and add them to <code>SpecRunner.html</code>.</p>
+
+<p>We&rsquo;ll start by being able to get the styles from Pizza.</p>
+
+<figure class='code'><figcaption><span>spec/PizzaSpec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s2">&quot;Pizza&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">pizza</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">beforeEach</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">pizza</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Pizza</span><span class="p">();</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;should give a choice of styles&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getStyles</span><span class="p">()).</span><span class="nx">toContain</span><span class="p">(</span><span class="s2">&quot;meat lovers&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getStyles</span><span class="p">()).</span><span class="nx">toContain</span><span class="p">(</span><span class="s2">&quot;veg head&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getStyles</span><span class="p">()).</span><span class="nx">toContain</span><span class="p">(</span><span class="s2">&quot;supreme&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The syntax is just lovely: We use <code>describe</code> to set visual context, <code>beforeEach</code> to perform a task before each spec, and <code>it</code> to encapsulate a test. The results of running <code>SpecRunner.html</code> in my browser:</p>
+
+<figure class='code'><figcaption><span>spec/PizzaSpec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Pizza</span> <span class="nx">should</span> <span class="nx">give</span> <span class="nx">a</span> <span class="nx">choice</span> <span class="nx">of</span> <span class="nx">styles</span>
+</span><span class='line'>  <span class="nx">TypeError</span><span class="o">:</span> <span class="nx">pizza</span><span class="p">.</span><span class="nx">getStyles</span> <span class="nx">is</span> <span class="nx">not</span> <span class="nx">a</span> <span class="kd">function</span> <span class="k">in</span> <span class="nx">file</span><span class="o">:</span><span class="c1">///home/lrp/docs/jasmine/spec/PizzaSpec.js (line 9)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Fixing it:</p>
+
+<figure class='code'><figcaption><span>src/pizza.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">Pizza</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">getStyles</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;meat lovers&quot;</span><span class="p">,</span> <span class="s2">&quot;veg head&quot;</span><span class="p">,</span> <span class="s2">&quot;supreme&quot;</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And the results:</p>
+
+<figure class='code'><figcaption><span>src/pizza.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Pizza</span>
+</span><span class='line'>    <span class="nx">should</span> <span class="nx">give</span> <span class="nx">a</span> <span class="nx">choice</span> <span class="nx">of</span> <span class="nx">styles</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Let&rsquo;s set the toppings:</p>
+
+<figure class='code'><figcaption><span>spec/PizzaSpec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s2">&quot;Pizza&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// ...</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">describe</span><span class="p">(</span><span class="s2">&quot;toppings&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;should have no toppings when no style and no extras given&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">pizza</span><span class="p">.</span><span class="nx">initialize</span><span class="p">();</span>
+</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">().</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;should have only extras when no style and extras given&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">extras</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;pineapple&quot;</span><span class="p">,</span> <span class="s2">&quot;edamame&quot;</span><span class="p">,</span> <span class="s2">&quot;cheeseburger&quot;</span><span class="p">]</span>
+</span><span class='line'>      <span class="nx">pizza</span><span class="p">.</span><span class="nx">initialize</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">extras</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">().</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="nx">extras</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+</span><span class='line'>      <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">extras</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">()).</span><span class="nx">toContain</span><span class="p">(</span><span class="nx">extras</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;should have special toppings when given style and extras&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">extras</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;pineapple&quot;</span><span class="p">,</span> <span class="s2">&quot;edamame&quot;</span><span class="p">,</span> <span class="s2">&quot;cheeseburger&quot;</span><span class="p">];</span>
+</span><span class='line'>      <span class="nx">pizza</span><span class="p">.</span><span class="nx">initialize</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="s2">&quot;veg head&quot;</span><span class="p">,</span> <span class="nx">extras</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">().</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;should have special toppings when given style&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">extras</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;pineapple&quot;</span><span class="p">,</span> <span class="s2">&quot;edamame&quot;</span><span class="p">,</span> <span class="s2">&quot;cheeseburger&quot;</span><span class="p">];</span>
+</span><span class='line'>      <span class="nx">pizza</span><span class="p">.</span><span class="nx">initialize</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="s2">&quot;veg head&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">().</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For these tests, I nested a describe block to give better context to what I&rsquo;m testing. Fixing the tests:</p>
+
+<figure class='code'><figcaption><span>src/pizza.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">Pizza</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// ...</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">size</span><span class="p">,</span> <span class="nx">toppings</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">function</span> <span class="nx">findToppings</span><span class="p">(</span><span class="nx">style</span><span class="p">,</span> <span class="nx">extras</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">toppings</span> <span class="o">=</span> <span class="nx">extras</span> <span class="o">?</span> <span class="nx">extras</span> <span class="o">:</span> <span class="p">[];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">switch</span> <span class="p">(</span><span class="nx">style</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">case</span> <span class="p">(</span><span class="s2">&quot;meat lovers&quot;</span><span class="p">)</span><span class="o">:</span>
+</span><span class='line'>        <span class="nx">toppings</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">&quot;ham&quot;</span><span class="p">,</span> <span class="s2">&quot;pepperoni&quot;</span><span class="p">,</span> <span class="s2">&quot;bacon&quot;</span><span class="p">,</span> <span class="s2">&quot;sausage&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">case</span> <span class="p">(</span><span class="s2">&quot;veg head&quot;</span><span class="p">)</span><span class="o">:</span>
+</span><span class='line'>        <span class="nx">toppings</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">&quot;onion&quot;</span><span class="p">,</span> <span class="s2">&quot;tomato&quot;</span><span class="p">,</span> <span class="s2">&quot;pepper&quot;</span><span class="p">,</span> <span class="s2">&quot;olive&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">case</span> <span class="p">(</span><span class="s2">&quot;supreme&quot;</span><span class="p">)</span><span class="o">:</span>
+</span><span class='line'>        <span class="nx">toppings</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">&quot;pepperoni&quot;</span><span class="p">,</span> <span class="s2">&quot;onion&quot;</span><span class="p">,</span> <span class="s2">&quot;sausage&quot;</span><span class="p">,</span> <span class="s2">&quot;olive&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">getToppings</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">toppings</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">initialize</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">pizzaSize</span><span class="p">,</span> <span class="nx">style</span><span class="p">,</span> <span class="nx">extras</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">size</span> <span class="o">=</span> <span class="nx">pizzaSize</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">findToppings</span><span class="p">(</span><span class="nx">style</span><span class="p">,</span> <span class="nx">extras</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And finally, I&rsquo;ll deal with the cost. I&rsquo;ll come out of scope of the nested <code>describe</code> and nest another <code>describe</code>.</p>
+
+<figure class='code'><figcaption><span>spec/PizzaSpec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s2">&quot;Pizza&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// ...</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">describe</span><span class="p">(</span><span class="s2">&quot;cost&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;is determined by size and number of toppings&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">pizza</span><span class="p">.</span><span class="nx">initialize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;supreme&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">().</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getCost</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="mf">7.00</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;is determined by size and number of toppings including extras&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">pizza</span><span class="p">.</span><span class="nx">initialize</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="s2">&quot;meat lovers&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;gyros&quot;</span><span class="p">,</span> <span class="s2">&quot;panchetta&quot;</span><span class="p">]);</span>
+</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getToppings</span><span class="p">().</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">getCost</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="mf">12.00</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To fix this test, I&rsquo;ll use my handy-dandy pizza-cost formula:</p>
+
+<figure class='code'><figcaption><span>src/pizza.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">Pizza</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'> <span class="c1">// ...</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">getCost</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">size</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="nx">toppings</span><span class="p">.</span><span class="nx">length</span> <span class="o">*</span> <span class="p">.</span><span class="mi">5</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// ...</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is great and all, but a bit simple. What if we wanted to make an ajax call? Fortunately, I can fit that into this example using <a href="http://onlinepizza.se/api/">Online Pizza</a>, the pizza API. Unfortuantely, the API is kind of garbage, but that doesn&rsquo;t make this example any more meaningless. You can <a href="https://github.com/pivotal/jasmine-ajax/raw/master/lib/mock-ajax.js">download jasmine-ajax on Github</a>, and stick it in your <code>spec/</code> directory and add it to <code>SpecRunner.html</code>. At this point I need to include <a href="">jquery</a> as well.</p>
+
+<p>In order to intercept ajax calls, I&rsquo;ll <code>install</code> the ajax mocker in the <code>beforeEach</code> and uninstall it in an <code>afterEach</code>. Then I write my test, which verifies that the ajax call occurred and returns a response.</p>
+
+<figure class='code'><figcaption><span>spec/PizzaSpec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">beforeEach</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">jasmine</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">install</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">pizza</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Pizza</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">afterEach</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">jasmine</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">uninstall</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s2">&quot;sendOrder&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;returns false for bad pizza&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">pizza</span><span class="p">.</span><span class="nx">sendOrder</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">expect</span><span class="p">(</span><span class="nx">jasmine</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">requests</span><span class="p">.</span><span class="nx">mostRecent</span><span class="p">().</span><span class="nx">url</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s2">&quot;http://onlinepizza.se/api/rest?order.send&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">jasmine</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">requests</span><span class="p">.</span><span class="nx">mostRecent</span><span class="p">().</span><span class="nx">response</span><span class="p">({</span>
+</span><span class='line'>      <span class="nx">status</span><span class="o">:</span> <span class="s2">&quot;500&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">contentType</span><span class="o">:</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">responseText</span><span class="o">:</span> <span class="s2">&quot;Invalid pizza&quot;</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">orderSent</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">it</span><span class="p">(</span><span class="s2">&quot;returns true for good pizza&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">pizza</span><span class="p">.</span><span class="nx">sendOrder</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">expect</span><span class="p">(</span><span class="nx">jasmine</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">requests</span><span class="p">.</span><span class="nx">mostRecent</span><span class="p">().</span><span class="nx">url</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s2">&quot;http://onlinepizza.se/api/rest?order.send&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">jasmine</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">requests</span><span class="p">.</span><span class="nx">mostRecent</span><span class="p">().</span><span class="nx">response</span><span class="p">({</span>
+</span><span class='line'>      <span class="nx">status</span><span class="o">:</span> <span class="s2">&quot;200&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">contentType</span><span class="o">:</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">responseText</span><span class="o">:</span> <span class="s2">&quot;OK&quot;</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">expect</span><span class="p">(</span><span class="nx">pizza</span><span class="p">.</span><span class="nx">orderSent</span><span class="p">()).</span><span class="nx">toBe</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To get this to work, I add some logic to the <code>Pizza</code> class to set some state based on what the ajax call returns.</p>
+
+<figure class='code'><figcaption><span>src/pizza.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">orderSuccess</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">this</span><span class="p">.</span><span class="nx">sendOrder</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">orderSuccess</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">url</span><span class="o">:</span> <span class="s2">&quot;http://onlinepizza.se/api/rest?order.send&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">success</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">orderSuccess</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">error</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">orderSuccess</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">this</span><span class="p">.</span><span class="nx">orderSent</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">orderSuccess</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ajax calls tested. By installing Jasmine&rsquo;s ajax mock, all of the ajax calls were intercepted and were not sent to the server at Online Pizza. Any ajax calls that may have been fired by the <code>Pizza</code> class but were not addressed in the spec are ignored. The final test results look something like this:</p>
+
+<figure class='code'><figcaption><span>src/pizza.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Pizza</span>
+</span><span class='line'>    <span class="nx">sendOrder</span>
+</span><span class='line'>        <span class="nx">returns</span> <span class="kc">false</span> <span class="k">for</span> <span class="nx">bad</span> <span class="nx">pizza</span>
+</span><span class='line'>        <span class="nx">returns</span> <span class="kc">true</span> <span class="k">for</span> <span class="nx">good</span> <span class="nx">pizza</span>
+</span><span class='line'>    <span class="nx">styles</span>
+</span><span class='line'>        <span class="nx">should</span> <span class="nx">give</span> <span class="nx">a</span> <span class="nx">choice</span> <span class="nx">of</span> <span class="nx">styles</span>
+</span><span class='line'>    <span class="nx">toppings</span>
+</span><span class='line'>        <span class="nx">should</span> <span class="nx">have</span> <span class="nx">no</span> <span class="nx">toppings</span> <span class="nx">when</span> <span class="nx">no</span> <span class="nx">style</span> <span class="nx">and</span> <span class="nx">no</span> <span class="nx">extras</span> <span class="nx">given</span>
+</span><span class='line'>        <span class="nx">should</span> <span class="nx">have</span> <span class="nx">only</span> <span class="nx">extras</span> <span class="nx">when</span> <span class="nx">no</span> <span class="nx">style</span> <span class="nx">and</span> <span class="nx">extras</span> <span class="nx">given</span>
+</span><span class='line'>        <span class="nx">should</span> <span class="nx">have</span> <span class="nx">special</span> <span class="nx">toppings</span> <span class="nx">when</span> <span class="nx">given</span> <span class="nx">style</span> <span class="nx">and</span> <span class="nx">extras</span>
+</span><span class='line'>        <span class="nx">should</span> <span class="nx">have</span> <span class="nx">special</span> <span class="nx">toppings</span> <span class="nx">when</span> <span class="nx">given</span> <span class="nx">style</span>
+</span><span class='line'>    <span class="nx">cost</span>
+</span><span class='line'>        <span class="nx">is</span> <span class="nx">determined</span> <span class="nx">by</span> <span class="nx">size</span> <span class="nx">and</span> <span class="nx">number</span> <span class="nx">of</span> <span class="nx">toppings</span>
+</span><span class='line'>        <span class="nx">is</span> <span class="nx">determined</span> <span class="nx">by</span> <span class="nx">size</span> <span class="nx">and</span> <span class="nx">number</span> <span class="nx">of</span> <span class="nx">toppings</span> <span class="nx">including</span> <span class="nx">extras</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Full sample code <a href="https://github.com/larryprice/jasmine-pizza">available on Github</a>. There&rsquo;s a lot of other interesting things Jasmine can do that I&rsquo;m still learning about. If applicable, I&rsquo;ll try to create a blog post for advanced Jasmine usage in the future.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -613,126 +1080,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/03/29/using-sqlite-on-heroku/">Using Sqlite on Heroku</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-03-29T11:16:06-04:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>29</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>11:16 am</span></time>
-        
-           | <a href="/blog/2014/03/29/using-sqlite-on-heroku/#disqus_thread"
-             data-disqus-identifier="https://larry-price.com/blog/2014/03/29/using-sqlite-on-heroku/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Or rather, &ldquo;Not Using sqlite on Heroku.&rdquo;</p>
-
-<p><a href="//heroku.com">Heroku</a> does not support <a href="//sqlite.org">sqlite</a>. That doesn&rsquo;t mean we have to stop using sqlite in development, but it does mean we need to put in some workarounds to support our deployment environment. The rest of this article will use <a href="//ruby-lang.org">ruby</a> and <a href="//sinatrarb.com">Sinatra</a>.</p>
-
-<p>Assuming you have a heroku app deployed and you have sqlite already working locally, this only takes a few steps. First we need to add a SQL database to our heroku app. From the project directory, we&rsquo;ll add the <a href="//addons.heroku.com/heroku-postgresql">heroku-postgresql</a> addon to our app.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>heroku addons:add heroku-postgresql:dev
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The <code>dev</code> piece of this command tells heroku we want the small, free database. This database supports up to 10,000 rows and has a 99.5% uptime. Best of all: it&rsquo;s free. Other options have you pay $9/mo for 10,000,000 rows or $50+ for Unlimited usage. I recommend you start small.</p>
-
-<p>Hopefully you got some success statements after adding heroku-postgresql. They should have included some new environment variables, which are links to your new Postgres database. Record these; we&rsquo;ll use them a little later.</p>
-
-<p>Now we need to set up the back-end to be able to access a Postgres database when necessary. Hopefully you&rsquo;re using a decent abstraction library in your app that can access any SQL database. For ruby, I find <a href="//www.sequel.rubyforge.org/">Sequel</a> to be sufficient.</p>
-
-<p>In our Gemfile, we&rsquo;ve probably already included the sqlite gem for use in our local environment. We can go ahead and move that into a <code>development</code> block, and we need to add the <code>pg</code> gem to either <code>production</code> or the global block.</p>
-
-<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">source</span> <span class="s2">&quot;https://rubygems.org&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">ruby</span> <span class="s1">&#39;2.1.0&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;bundler&#39;</span>
-</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;rake&#39;</span>
-</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;sinatra&#39;</span>
-</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;haml&#39;</span>
-</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;sequel&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">group</span> <span class="ss">:production</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;pg&#39;</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">group</span> <span class="ss">:development</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;sqlite3&#39;</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Heroku sets <code>ENV['RACK_ENV']</code> to &ldquo;production&rdquo; for us, which means that the pg gem should get picked up the next time we deploy. Now we need to tell our app which database to use in which situation.</p>
-
-<p>One of the easiest places to make this decision is in Sinatra&rsquo;s <code>configure</code> block. I keep my local db in an environment variable called <code>LOCAL_DATABASE_URL</code>. This is where you use the environment variable heroku set for you when you set up your Postgres database; mine was called <code>HEROKU_POSTGRESQL_MAROON_URL</code>.</p>
-
-<figure class='code'><figcaption><span>web.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">App</span> <span class="o">&lt;</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Base</span>
-</span><span class='line'>  <span class="n">configure</span> <span class="ss">:production</span> <span class="k">do</span>
-</span><span class='line'>    <span class="no">Sequel</span><span class="o">.</span><span class="n">connect</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;HEROKU_POSTGRESQL_MAROON_URL&#39;</span><span class="o">]</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">configure</span> <span class="ss">:development</span> <span class="k">do</span>
-</span><span class='line'>    <span class="no">Sequel</span><span class="o">.</span><span class="n">connect</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;LOCAL_DATABASE_URL&#39;</span><span class="o">]</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This works because the default environment is &ldquo;development.&rdquo; Test locally, and then we can deploy.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git push heroku master
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And enjoy.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/15">&larr; Older</a>
@@ -756,7 +1103,7 @@
 </section>
 <section>
   <h1>void* Larry</h1>
-  <p>I'm a codeslinger debugging from the mean streets of Chambana, IL. Welcome to my blog, where I'll tell the tales of wondrous things I discover in the digital jungle.</p>
+  <p>I'm a codeslinger debugging from the mean streets of Champaign-Urbana, IL. Welcome to my blog, where I'll tell the tales of wondrous things I discover in the digital jungle.</p>
 </section>
 <section>
   <h1>Go for Web Development</h1>
@@ -769,6 +1116,10 @@
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/08/31/demystifying-public-speaking/">Demystifying Public Speaking</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2017/08/26/wheres-larry/">Where's Larry?</a>
@@ -786,15 +1137,11 @@
         <a href="/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python/">Creating an Asynchronous D-Bus Service With Python</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2017/04/04/creating-a-d-bus-service-with-python/">Creating a D-Bus Service With Python</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 123.63636363636364%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.45454545454545%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 141.8181818181818%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 123.63636363636364%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.45454545454545%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.63636363636363%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
 </section>
 
 <section>

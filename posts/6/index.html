@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="The Gist Javascript: The Good Parts by Douglas Crockford is a short guide to the best parts of the javascript language. Javascript is notorious for &hellip;">
+  <meta name="description" content="I have published a video series on building web applications in Go called Go for Web Development. These videos will guide you through the entire &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,46 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/12/30/go-for-web-development/">Go for Web Development</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-30T14:54:11-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>30</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>2:54 pm</span></time>
+        
+           | <a href="/blog/2015/12/30/go-for-web-development/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2015/12/30/go-for-web-development/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have published a video series on building web applications in Go called <em><a href="https://www.packtpub.com/web-development/go-web-development-video">Go for Web Development</a></em>.</p>
+
+<p>These videos will guide you through the entire process of creating a web application in Go, all the way from spinning up a basic web server to multi-user authentication. In the end, you&rsquo;ll learn how to vendor dependencies and deploy the application to heroku. Throughout the course, you&rsquo;ll learn to utilize many of the most popular go packages including gorilla/mux, negroni, gorp, ace, and bcrypt. You&rsquo;ll learn about making asynchronous requests from the browser back to the web server, and you&rsquo;ll learn to access external REST APIs from your web server. You&rsquo;ll use go&rsquo;s struct tags to parse both XML and JSON, and you&rsquo;ll use struct tags to access database entities with gorp.</p>
+
+<p>I spent many late nights creating this course, and I&rsquo;ve learned a lot of lessons about creating screencasts along the way. I was also able to solidify much of my base understanding of the go language and learn about many features I don&rsquo;t often utilize. The videos are published by Packt Publishing, and they were a great help along the way. The most valuable lesson I learned from doing these screencasts is that a quality microphone makes a huge difference, and I would have saved myself a lot of trouble had I used my Rock Band microphone from the beginning. In the end everything turned out great. I&rsquo;m relieved to be finished and excited to have an official ISBN connected to my name.</p>
+
+<p><s>The video is currently only $5 for the holidays, but</s> the regular retail price is set to $75 (which is still a bargain considering all the content).</p>
+
+<p>Link: <a href="https://www.packtpub.com/web-development/go-web-development-video">https://www.packtpub.com/web-development/go-web-development-video</a>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -534,150 +574,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/09/01/noty-for-easy/">Noty for Easy, Breezy, Beautiful Flash Messages</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-09-01T18:29:27-04:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>1</span><span class='date-suffix'>st</span>, <span class='date-year'>2015</span></span> <span class='time'>6:29 pm</span></time>
-        
-           | <a href="/blog/2015/09/01/noty-for-easy/#disqus_thread"
-             data-disqus-identifier="https://larry-price.com/blog/2015/09/01/noty-for-easy/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://ned.im/noty/#/about">Noty</a> is a jQuery plugin for showing flash messages. Noty is easy to use and creates great-looking flash notifications with little customization.</p>
-
-<h4>What&rsquo;s a flash message?</h4>
-
-<p>Flash messages are used to display small bits of information to a user without changing existing page content. If there is an error making an AJAX request, we can display an error flash message to let the user know to try again later. If there is a new shortcut available, we could let the user know with an information flash message.</p>
-
-<h4>Example Time</h4>
-
-<p>You&rsquo;ll need a copy of Noty. As of this time, I haven&rsquo;t seen a CDN hosting the minified version of Noty, so you can download it <a href="https://raw.githubusercontent.com/needim/noty/master/js/noty/packaged/jquery.noty.packaged.min.js">directly from Github</a> and put it somewhere nice. Add a <code>&lt;script&gt;</code> tag to your HTML including the library and let&rsquo;s start using it.</p>
-
-<p>Let&rsquo;s create a single button on our HTML page that, when clicked, will create a new Noty error flash message in the top left.</p>
-
-<iframe style="width: 100%; height: 150px" frameborder="0" seamless="seamless" src="//jsfiddle.net/f14xjf8b/embedded/result,html,js/light/"></iframe>
-
-
-<p>Cool, right? Break it down:</p>
-
-<ul>
-<li>text
-
-<ul>
-<li>Obviously, this is the text that will be displayed</li>
-</ul>
-</li>
-<li>layout
-
-<ul>
-<li>This allows us to change the position of the flash message. In this case I chose <code>topleft</code>, but other options include <code>top</code>, <code>topCenter</code>, <code>topRight</code>, <code>center</code>, <code>centerLeft</code>, <code>centerRight</code>, <code>bottom</code>, <code>bottomLeft</code>, <code>bottomCenter</code>, and <code>bottomRight</code></li>
-</ul>
-</li>
-<li>timeout
-
-<ul>
-<li>How long the notification will stay on the screen (in milliseconds). <code>false</code> for a permanant notification.</li>
-</ul>
-</li>
-<li>type
-
-<ul>
-<li>Style of notification to display. Options include <code>error</code>, <code>success</code>, <code>alert</code>, <code>warning</code>, <code>confirmation</code>, and <code>information</code>.</li>
-</ul>
-</li>
-</ul>
-
-
-<p> Let&rsquo;s add some more so we can see the difference.</p>
-
-<p> <iframe style="width: 100%; height: 150px" frameborder="0" seamless="seamless" src="//jsfiddle.net/f14xjf8b/2/embedded/result,html,js/light/"></iframe></p>
-
-<p> Three notifications, one which stays up for 500ms, one which stays up for 5000ms, and one which stays up indefinitely. I also set the <code>killer</code> property to true on the <code>error</code> notification such that the <code>error</code> notification will close all other notifications. Additionally, I added the <code>closeWith</code> property to the <code>success</code> message to close it by clicking. All of these notifications come up in different locations on the page.</p>
-
-<p> We should also think about theming our notifications. To create a &ldquo;full&rdquo; theme for Noty is a lot of Javascript -  the odds are pretty good you just want to change the color. We can essentially inherit from the default theme and change the colors of the <code>error</code> and <code>information</code> notifictaions in our new theme like this:</p>
-
-<figure class='code'><figcaption><span>testtheme.noty.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">noty</span><span class="p">.</span><span class="nx">themes</span><span class="p">.</span><span class="nx">testtheme</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">noty</span><span class="p">.</span><span class="nx">themes</span><span class="p">.</span><span class="nx">defaultTheme</span><span class="p">);</span>
-</span><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">noty</span><span class="p">.</span><span class="nx">themes</span><span class="p">.</span><span class="nx">testtheme</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;testtheme&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">noty</span><span class="p">.</span><span class="nx">themes</span><span class="p">.</span><span class="nx">testtheme</span><span class="p">.</span><span class="nx">style</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">$</span><span class="p">.</span><span class="nx">noty</span><span class="p">.</span><span class="nx">themes</span><span class="p">.</span><span class="nx">defaultTheme</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-</span><span class='line'>    <span class="k">switch</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">case</span> <span class="s1">&#39;error&#39;</span><span class="o">:</span>
-</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">$bar</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span>
-</span><span class='line'>                <span class="nx">backgroundColor</span><span class="o">:</span> <span class="s1">&#39;#DC569F&#39;</span><span class="p">,</span>
-</span><span class='line'>                <span class="nx">borderColor</span><span class="o">:</span> <span class="s1">&#39;#DC569F&#39;</span><span class="p">,</span>
-</span><span class='line'>                <span class="nx">color</span><span class="o">:</span> <span class="s1">&#39;#F5F5F5&#39;</span>
-</span><span class='line'>            <span class="p">});</span>
-</span><span class='line'>            <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>        <span class="k">case</span> <span class="s1">&#39;information&#39;</span><span class="o">:</span>
-</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">$bar</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span>
-</span><span class='line'>                <span class="nx">backgroundColor</span><span class="o">:</span> <span class="s1">&#39;#ABABAB&#39;</span><span class="p">,</span>
-</span><span class='line'>                <span class="nx">borderColor</span><span class="o">:</span> <span class="s1">&#39;#DC569F&#39;</span><span class="p">,</span>
-</span><span class='line'>                <span class="nx">color</span><span class="o">:</span> <span class="s1">&#39;#F5F5F5&#39;</span>
-</span><span class='line'>            <span class="p">});</span>
-</span><span class='line'>            <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>        <span class="k">default</span><span class="o">:</span>
-</span><span class='line'>          <span class="k">break</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">$message</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span>
-</span><span class='line'>        <span class="nx">fontWeight</span><span class="o">:</span> <span class="s1">&#39;bold&#39;</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p> We create our new theme <code>testtheme</code> from the <code>defaultTheme</code> prototype and change the <code>name</code> and <code>style</code> properties. Within our custom <code>style</code> function, we go ahead and apply the default theme&rsquo;s style. Then we add a few more adjustments based on the current notification type. Thank goodness it&rsquo;s javascript. Don&rsquo;t forget to include your <code>testtheme.noty.js</code> file in a <code>&lt;script&gt;</code> tag in your HTML. We can apply this theme to any of our notifications by adding the <code>theme</code> property to our call to <code>noty</code> with a value of &lsquo;testtheme&rsquo; (which is the name of the theme we just created). Here&rsquo;s the fiddle showing off our new theme:</p>
-
-<p> <iframe style="width: 100%; height: 150px" frameborder="0" seamless="seamless" src="//jsfiddle.net/f14xjf8b/3/embedded/result,html,js/light/"></iframe></p>
-
-<p> There are many other customization options for the brave, including custom animations and callbacks when the notifications are dismissed. See <a href="http://ned.im/noty/#/about">the full documentation site</a> for more details.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/7">&larr; Older</a>
@@ -701,7 +597,7 @@
 </section>
 <section>
   <h1>void* Larry</h1>
-  <p>I'm a codeslinger debugging from the mean streets of Chambana, IL. Welcome to my blog, where I'll tell the tales of wondrous things I discover in the digital jungle.</p>
+  <p>I'm a codeslinger debugging from the mean streets of Champaign-Urbana, IL. Welcome to my blog, where I'll tell the tales of wondrous things I discover in the digital jungle.</p>
 </section>
 <section>
   <h1>Go for Web Development</h1>
@@ -714,6 +610,10 @@
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/08/31/demystifying-public-speaking/">Demystifying Public Speaking</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2017/08/26/wheres-larry/">Where's Larry?</a>
@@ -731,15 +631,11 @@
         <a href="/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python/">Creating an Asynchronous D-Bus Service With Python</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2017/04/04/creating-a-d-bus-service-with-python/">Creating a D-Bus Service With Python</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 123.63636363636364%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.45454545454545%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 141.8181818181818%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 123.63636363636364%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.45454545454545%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.63636363636363%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
 </section>
 
 <section>

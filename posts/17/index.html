@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="As of today, I&rsquo;m the proud owner of larry-price.com. On the recommendation from a friend, I used domainmonster.com for it&rsquo;s cost &hellip;">
+  <meta name="description" content="While working on SEP Labs' Health2Wealth app, I got my first taste of setting up a website to use secure connections. I&rsquo;ve been using the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,44 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/">Letting the Browser Decide Betwen HTTP and HTTPS</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-02-13T17:55:00-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>5:55 pm</span></time>
+        
+           | <a href="/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>While working on SEP Labs' <a href="//h2w.cc">Health2Wealth</a> app, I got my first taste of setting up a website to use secure connections. I&rsquo;ve been using the browser extension <a href="//www.eff.org/https-everywhere">HTTPS Everywhere</a> for quite some time now, so all of the web pages that I visit attempt to using <code>HTTPS</code>instead of the standard <code>HTTP</code>. When I inadvertently started testing our app with <code>HTTPS</code>, things got a little weird.</p>
+
+<p>My machine was able to open most of a page, but it wouldn&rsquo;t load some of the graphics or javascript we had embedded in the page. I was the only one able to reproduce it, so we chalked it up to a wonky machine. Then I suddenly remembered that I was using HTTPS Everywhere. I found the area in FireFox that warns you about insecure connections and found that our page was only <em>partially</em> loading on my browser because some of the content was insecure. From there I enabled an option to reveal the insecure elements, which forced my page to load everything correctly. So now we needed to find what was insecure about our page. I trekked through the codebase and found that some of our graphs and links were hard-coded to use <code>HTTP</code>. My initial thought was just to force them to use <code>HTTPS</code>, which is <a href="//lists.w3.org/Archives/Public/ietf-http-wg/2013OctDec/0625.html">almost certainly the impending standard</a>. With a quick search, I found that there exists a <strong>real</strong> solution to this problem.</p>
+
+<p>Let&rsquo;s say I have a very normal web application, so I want to include <a href="//jquery.com">jQuery</a> embedded in my page. I initially copy-paste <code>&lt;script src='http://code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code> right into my <code>&lt;head&gt;</code> node, which normally seems fine. Unfortunately, this is where issues arise. I&rsquo;m now forcing the user to make a connection which may or may not be secure to fetch data from an insecure page.</p>
+
+<p>By removing the <code>http:</code> from the <code>http://</code>, the issue of deciding whether to fetch the file using <code>HTTP</code> or <code>HTTPS</code> is left to the web browser. So my script include becomes <code>&lt;script src='//code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code>. This also works for links, images, and web fonts. In fact, every link included in this post uses the same principal, where I leave the protocol out of what becomes the <code>href</code> tag.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -569,95 +607,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/12/10/login-shell-not-sourcing-bashrc/">Login Shell Not Sourcing .bashrc: A Brief Lesson in Dot-files</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2013-12-10T19:45:00-06:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>7:45 pm</span></time>
-        
-           | <a href="/blog/2013/12/10/login-shell-not-sourcing-bashrc/#disqus_thread"
-             data-disqus-identifier="https://larry-price.com/blog/2013/12/10/login-shell-not-sourcing-bashrc/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I have a confession: I&rsquo;ve been avoiding using <a href="https://rvm.io/">rvm</a> for the past few weeks for stupid reasons.</p>
-
-<p>When using <code>rvm</code> with <code>gnome-terminal</code>, I have to tell <code>gnome-terminal</code> to run as a login shell so that <code>/etc/profile</code> is sourced. The login shell is then supposed to source <code>$HOME/profile</code>, which is then supposed to source <code>$HOME/.bashrc</code>. Installing <code>rvm</code> results in me editing my <code>.bash_profile</code> to add the following line:</p>
-
-<figure class='code'><figcaption><span>.bash_profile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[[</span> -s <span class="s2">&quot;$HOME/.rvm/scripts/rvm&quot;</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="s2">&quot;$HOME/.rvm/scripts/rvm&quot;</span> <span class="c"># Load RVM into a shell session *as a function*</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>All my <code>rvm</code> environments seem to work, so this is a success, right?</p>
-
-<p>Well, I type the good ol' <code>ls</code> command and I notice that all my colors are missing. I notice that the terminal title no longer reads the present working directory, but instead greets me with a disinterested &ldquo;Terminal.&rdquo; What happened?</p>
-
-<p>Eventually I realized that this was a problem caused by not sourcing my <code>.bashrc</code>. Where did I go wrong?</p>
-
-<p>The login shell sources <code>$HOME/.profile</code> UNLESS <code>$HOME/.bash_profile</code> exists, in which case it only sources the latter. So what are the contents of my <code>$HOME/.profile</code>?</p>
-
-<figure class='code'><figcaption><span>.profile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># ~/.profile: executed by the command interpreter for login shells.</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># [cut for brevity]</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># if running bash</span>
-</span><span class='line'><span class="k">if</span> <span class="o">[</span> -n <span class="s2">&quot;$BASH_VERSION&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-</span><span class='line'>    <span class="c"># include .bashrc if it exists</span>
-</span><span class='line'>    <span class="k">if</span> <span class="o">[</span> -f <span class="s2">&quot;$HOME/.bashrc&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-</span><span class='line'>      . <span class="s2">&quot;$HOME/.bashrc&quot;</span>
-</span><span class='line'>    <span class="k">fi</span>
-</span><span class='line'><span class="k">fi</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># [cut for brevity]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Aha! The sneaky dot-file actually sources <code>$HOME/.bashrc</code>, and my shiny new <code>$HOME/.bash_profile</code> doesn&rsquo;t. I fixed this by sourcing <code>$HOME/.profile</code> in <code>$HOME/.bash_profile</code>.</p>
-
-<figure class='code'><figcaption><span>.bash_profile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span> -f <span class="s2">&quot;$HOME/.profile&quot;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="s2">&quot;$HOME/.profile&quot;</span>
-</span><span class='line'><span class="o">[[</span> -s <span class="s2">&quot;$HOME/.rvm/scripts/rvm&quot;</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="s2">&quot;$HOME/.rvm/scripts/rvm&quot;</span> <span class="c"># Load RVM into a shell session *as a function*</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>For the memory-impaired: <code>.bash_profile</code> sources <code>.profile</code> sources <code>.bashrc</code>.</p>
-
-<p>Re-open <code>gnome-terminal</code> to find my colors are fixed, my title is correct, and <code>rvm</code> plays the right notes. The world is at peace once again, and I don&rsquo;t have to avoid using <code>rvm</code>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/18">&larr; Older</a>
@@ -681,7 +630,7 @@
 </section>
 <section>
   <h1>void* Larry</h1>
-  <p>I'm a codeslinger debugging from the mean streets of Chambana, IL. Welcome to my blog, where I'll tell the tales of wondrous things I discover in the digital jungle.</p>
+  <p>I'm a codeslinger debugging from the mean streets of Champaign-Urbana, IL. Welcome to my blog, where I'll tell the tales of wondrous things I discover in the digital jungle.</p>
 </section>
 <section>
   <h1>Go for Web Development</h1>
@@ -694,6 +643,10 @@
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/08/31/demystifying-public-speaking/">Demystifying Public Speaking</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2017/08/26/wheres-larry/">Where's Larry?</a>
@@ -711,15 +664,11 @@
         <a href="/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python/">Creating an Asynchronous D-Bus Service With Python</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2017/04/04/creating-a-d-bus-service-with-python/">Creating a D-Bus Service With Python</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 123.63636363636364%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.45454545454545%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 141.8181818181818%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 123.63636363636364%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.45454545454545%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.63636363636363%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
 </section>
 
 <section>

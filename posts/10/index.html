@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="Happy New Year, dear reader. 2014 was a fairly good year for me. I wrote a lot of code, read a lot of books, and published a lot of blog posts. &hellip;">
+  <meta name="description" content="I spent a lot of time last week asking questions about Docker. What is Docker? How could Docker help me day-to-day? How easy is Docker to use? How &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,179 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/01/11/an-example-use-case-for-docker/">An Example Use Case for Docker</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-01-11T19:22:43-05:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>7:22 pm</span></time>
+        
+           | <a href="/blog/2015/01/11/an-example-use-case-for-docker/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2015/01/11/an-example-use-case-for-docker/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I spent a lot of time last week asking questions about Docker. <a href="#whatdocker">What</a> is Docker? How could Docker help me <a href="#whydocker">day-to-day</a>? How easy is Docker to <a href="#howdocker">use</a>? How does Docker like its eggs cooked? Isn&rsquo;t Docker a brand of sneakers?</p>
+
+<h3><a name="whatdocker"></a>What is Docker?</h3>
+
+<p><a href="https://www.docker.com/">Docker</a> is a utility for maintaining system environments. Docker capitalizes on <a href="https://en.wikipedia.org/wiki/LXC">Linux containers</a>, a method of operating system virtualization which isolates multiple process groups on a single host.</p>
+
+<p>Through a series of commands, Docker pulls up a base system image and applies changes to create a custom image. Docker provides the means to access any of these step-level containers for further manipulation. Docker uses a unique layered system such that sibling layers can utilize the same base images, in contrast to a virtual machine which would require multiple copies of things like operating systems, shared libraries, and shared binaries. The image below is an excellent visualization of the difference between a virtual machine and a Docker container.</p>
+
+<p><img src="https://i.imgur.com/Lps6K6y.png?1" alt="VM vs LXC" /></p>
+
+<h3><a name="whydocker"></a>Why use Docker?</h3>
+
+<p>Docker&rsquo;s primary job is to take in a series of commands and spit out a clean environment with those settings. This is especially useful in deployment. I can take the Docker <code>ubuntu</code> image, download and install all my dependencies, copy over my application code, and run my application given some environment variables.</p>
+
+<p>All of that should sound somewhat familiar if you&rsquo;ve ever used <a href="https://heroku.com">heroku</a>. Heroku performs very similar tasks to get your application up and running: take a Linux image, download base tools for ruby/python/nodejs/whatever, install application-specific dependencies (through bundler, flask, npm, etc.), and run your application given some environment. Docker gives you the power of heroku at the development level. &hellip;Sort of.</p>
+
+<p>If I can create a Docker container for my application to run in, I can set up a build server to use a container to run my tests. I can use that same container to build a <em>clean</em> staging environment. I can use the staging container to build an <em>identically clean</em> production environment. With that knowledge in hand, I know the exact state of the production environment every time I deploy and I can reproduce it locally.</p>
+
+<p>Theoretically, I can even use Docker for setting up a development environment, although after a few days of attempting this I still think you&rsquo;re better off running natively.</p>
+
+<p>Of course, Docker keeps <a href="https://www.docker.com/resources/usecases/">a big list of examples</a> from big-name company use-cases if you&rsquo;re interested.</p>
+
+<h3><a name="howdocker"></a>Example Usage</h3>
+
+<p>Brass. Tacks. Let us get down to them, compadre.</p>
+
+<p>You probably want to <a href="https://docs.docker.com/installation/#installation">install Docker</a> first. If you&rsquo;re not using Linux, have fun installing <a href="https://github.com/boot2docker/boot2docker">boot2docker</a>, the rest of us are going to get started without you.</p>
+
+<p>I started by trying to bootstrap my environment for <a href="https://ollertapp.com">Ollert</a> with Docker. Ollert uses ruby-2.2, QtWebkit (in test), and MongoDB. It uses bundler to install any required ruby gems. Not too complicated, but I&rsquo;ve noticed it&rsquo;s never easy to get a new developer&rsquo;s environment quite right.</p>
+
+<p>We start out with the official <a href="https://registry.hub.docker.com/_/ruby/">ruby:2.2.0</a> image from the Docker Hub:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker run ruby:2.2.0 <span class="nb">echo</span> <span class="s2">&quot;B-b-b-b-brass t-t-t-t-tacks!&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>OMG that step will take forever if you&rsquo;ve never downloaded the base <code>debian</code> image. It downloads and sets up quite a few layers. If you&rsquo;re interested in what it&rsquo;s doing behind the scenes and you can read Dockerfiles, <a href="https://github.com/docker-library/ruby/blob/b7fefd2fa79882da90feb0718430680c77c5fa8b/2.2/Dockerfile">this file</a> is what&rsquo;s being executed. Anyway, when it&rsquo;s done you should see a friendly reminder about what we&rsquo;ve gotten down to. We use <code>docker run</code> to run (download first if necessary) an image; in this case, the <code>ruby:2.2.0</code> image. Everything after the image name is the command to run. Now that we&rsquo;ve downloaded some base images, you can check out your available images using <code>docker images</code>.</p>
+
+<p>Now I need to install my system-level dependencies:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker run ruby:2.2.0 apt-get update
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note how this time the base image was already found in your local repository, resulting in a command that ran pretty quickly (based on your internet speeds (sorry Comcast customers!)). But what have we really done so far? We&rsquo;ve created two separate containers: one with our initial echo command (useless) and one with all our updates. To see these containers, use <code>docker ps -a</code>. This will give you output similar to the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker ps -a
+</span><span class='line'>CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                      PORTS             NAMES
+</span><span class='line'>ad5ddd55f2c2        ruby:2.2.0        <span class="s2">&quot;apt-get update&quot;</span>         <span class="m">2</span> seconds ago       Exited <span class="o">(</span>0<span class="o">)</span> <span class="m">2</span> seconds ago                        mad_curie
+</span><span class='line'>10cbaac4488c        ruby:2.2.0        <span class="s2">&quot;echo &#39;B-b-b-b-brass&quot;</span>    <span class="m">15</span> minutes ago      Exited <span class="o">(</span>0<span class="o">)</span> <span class="m">15</span> minutes ago                       mad_perlman
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>These are now the containers available. We can create a new image from the first container using <code>docker commit ad5 rubyapp</code>, which will allow us to use it to create further containers. However, if we were to do this for every command we wanted to execute, we might be here for a while. We could go into <code>bash</code> on the base image and do all of our steps:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker run -it ruby:2.2.0 /bin/bash
+</span><span class='line'>root@1be43510341e:/# apt-get update
+</span><span class='line'>...
+</span><span class='line'>root@1be43510341e:/# apt-get auto-remove
+</span><span class='line'>...
+</span><span class='line'>root@1be43510341e:/# apt-get install -y --force-yes libqtwebkit-dev mongodb
+</span><span class='line'>...
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We could then use this image to run our app - however, this is also tedious and a bad solution. We want something that we can see on a granular level and reproduce every time for a base image. Fortunately, Docker provides us an easy way to do this using a DSL. Introducing the <code>Dockerfile</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='Dockerfile'><span class='line'><span class="c"># base image</span>
+</span><span class='line'><span class="k">FROM</span> ruby:2.2.0
+</span><span class='line'>
+</span><span class='line'><span class="c">#install system-level dependencies</span>
+</span><span class='line'><span class="k">RUN</span> apt-get update <span class="o">&amp;&amp;</span> apt-get autoremove -y <span class="o">&amp;&amp;</span> apt-get install -y --force-yes libqtwebkit-dev mongodb
+</span><span class='line'>
+</span><span class='line'><span class="c"># install gems from /tmp such that bundling is CACHED</span>
+</span><span class='line'><span class="k">WORKDIR</span> /tmp
+</span><span class='line'><span class="k">ADD</span> Gemfile Gemfile
+</span><span class='line'><span class="k">ADD</span> Gemfile.lock Gemfile.lock
+</span><span class='line'><span class="k">ADD</span> .env .env
+</span><span class='line'><span class="k">RUN</span> bundle install
+</span><span class='line'>
+</span><span class='line'><span class="c"># load application source</span>
+</span><span class='line'><span class="k">ADD</span> . /usr/src/app
+</span><span class='line'><span class="k">WORKDIR</span> /usr/src/app
+</span><span class='line'>
+</span><span class='line'><span class="c"># port where application is served</span>
+</span><span class='line'><span class="k">EXPOSE</span> <span class="m">5000</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The syntax is a little different, but all we&rsquo;re doing is telling Docker our base image, issuing commands, and copying files. The <code>ADD</code> command allows us to copy files from our host system. In this case, I copy over <code>.</code> to <code>/usr/src/app</code> in the container. I also copy over my Gemfile separately to <a href="http://ilikestuffblog.com/2014/01/06/how-to-skip-bundle-install-when-deploying-a-rails-app-to-docker/">cache the bundle so it does not install every time</a>. I then expose the port I want my application to use. Run this file as such:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker build -t rubyapp .
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This creates an image called <code>rubyapp</code> and a container for every line of the Dockerfile that is run. Although your first build may take a moment, subsequent builds will be cached and should be significantly faster. Now, if we want to run my application:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker run -d --name rubyappinstance rubyapp foreman start -d /usr/src/app
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I use <code>foreman</code> to start my application from the given directory. I tell Docker that the application will be daemonized using the <code>-d</code> flag. If I check my running containers with <code>docker ps</code>, I&rsquo;ll see my application running. If I want to stop it, I just run <code>docker stop rubyappinstance</code>.</p>
+
+<p>I&rsquo;m going to stop there for now. In order to get Ollert working properly, I also need to <a href="http://docs.docker.com/userguide/dockerlinks/">link a Mongo database</a> and change some environment variables in my application, but those are relatively easy tasks.</p>
+
+<h3>Is it worth it?</h3>
+
+<p>The only conclusion is a definite maybe. Docker is definitely pretty cool. It may be able to help you deploy custom applications easier; for Ollert, it feels like overkill. There is a lot of overhead in downloading core versions of different operating systems, and I already find myself itching to clean up all the leftover Docker images/containers on my machine I used once and never again. After getting the Docker development out of the way (building and testing a Dockerfile), you may save yourself some time in the future if you have to change hosting services or CI environments. Try it out! It&rsquo;s a pretty neat concept and definitely worth your attention in 2015.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -606,62 +779,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/10/31/remote-office-not-required/">Remote: Office Not Required</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-10-31T19:34:13-04:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>31</span><span class='date-suffix'>st</span>, <span class='date-year'>2014</span></span> <span class='time'>7:34 pm</span></time>
-        
-           | <a href="/blog/2014/10/31/remote-office-not-required/#disqus_thread"
-             data-disqus-identifier="https://larry-price.com/blog/2014/10/31/remote-office-not-required/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p>The city is the original talent hub. Traditionally, those who ran the engines of capitalism thought: &ldquo;Let&rsquo;s gather a large numberof people in a small grographical are where they must live on top of each other in tight quarters, and we&rsquo;ll be able to find plenty of able bodies to man our factories.&rdquo; Most splendid, Sir Moneybags!</p>
-
-<p>From the section titled &ldquo;End of city monopoly&rdquo;</p></blockquote>
-
-<h3>The Gist</h3>
-
-<p><a href="http://www.amazon.com/gp/product/0804137501/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0804137501&amp;linkCode=as2&amp;tag=larpriandthee-20&amp;linkId=6RSEPWJB4VV7ZUGR"><strong>Remote</strong></a> by Jason Fried and David Hansson of <a href="https://basecamp.com/">BaseCamp</a> (formerly 37signals), similarly to previous entry <a href="http://www.amazon.com/gp/product/0307463745/ref=as_li_qf_sp_asin_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0307463745&amp;linkCode=as2&amp;tag=larpriandthee-20"><strong>Rework</strong></a>, is a book that will surely resonate with most working Americans who despise commuting and the constant distraction of the modern office. <strong>Remote</strong> discusses the pros and cons of working remotely, with a bias towards the positive aspects.</p>
-
-<h3>My Opinion</h3>
-
-<p>I read this book in a day. I don&rsquo;t mean a Saturday or a holiday of some kind (although it was Halloween, I suppose). I mean I read part of it in the morning, drove to the office, returned home in the afternoon, and finished it before dark. I love the authors' down-to-earth tone and I love the idea of telecommuting. There&rsquo;s also lots of pictures. Yea, pictures!</p>
-
-<p>Remote work is not a new concept, but the number of people choosing to telecommute has begun to dramatically increase. This is mostly because we all work with a digital wall in front of us all day called a computer, and many jobs don&rsquo;t require direct contact with human beings the entire work-day. America seems to be coming to terms with the fact that our current corporate system is broken: the offices of 2014 are not the offices of the 1960s, but we still live in a world of endless meetings and sprawling cube farms.</p>
-
-<p>Telecommuting opens up a world of possibilities. Obviously, a company offering remote positions will gain the opportunity to hire new talent from other cities, states, or even countries. Less obviously, current employees can be given the chance to be free from the shackles of a single office buildling in a single city. Instead of a company&rsquo;s top talent leaving the company to go live in New Orleans instead of Chicago, the employee can choose to live wherever she wants and telecommute, keeping all the training and knowledge gained inside the company.</p>
-
-<p>Co-working spaces are becoming much more prevalant in major cities across the US, and are a great home office replacement for those without a spare room. If you haven&rsquo;t visited a local co-working space, I suggest you go visit one! Someone will gladly let you in for a tour and you can see what all the fuss is about. If you&rsquo;re not into paying for an open-space membership, there are always coffee shops and libraries that are happy to house you on a daily basis.</p>
-
-<p>The biggest downside to remote work seems to be in isolation: socializing becomes more of a hobby than a requirement. There may be chats, emails, and the occasional phone call to respond to throughout the day, but none of those can make up for face-time with other humans. Some individuals will have families to socialize with, but you can&rsquo;t put all the burden on the people you love. Hobbies, meetups, and conferences would likely become much more important from a social perspective to an individual working remotely.</p>
-
-<h3>Who Would Like This</h3>
-
-<p>The modern workforce will eat this up. There is no way that millenials will put up with the archaic concept of 9-5 in the office. They (I suppose <em>we</em>, though sometimes it pains me to admit it) never take the status quo as a satisfactory answer.</p>
-
-<p>I think that the blanket term &ldquo;manager&rdquo; would benefit from reading this book, but may be disgruntled by what they find inside. Handling people is not easy, and handling them remotely seems like an unsettling concept.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/11">&larr; Older</a>
@@ -685,7 +802,7 @@
 </section>
 <section>
   <h1>void* Larry</h1>
-  <p>I'm a codeslinger debugging from the mean streets of Chambana, IL. Welcome to my blog, where I'll tell the tales of wondrous things I discover in the digital jungle.</p>
+  <p>I'm a codeslinger debugging from the mean streets of Champaign-Urbana, IL. Welcome to my blog, where I'll tell the tales of wondrous things I discover in the digital jungle.</p>
 </section>
 <section>
   <h1>Go for Web Development</h1>
@@ -698,6 +815,10 @@
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/08/31/demystifying-public-speaking/">Demystifying Public Speaking</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2017/08/26/wheres-larry/">Where's Larry?</a>
@@ -715,15 +836,11 @@
         <a href="/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python/">Creating an Asynchronous D-Bus Service With Python</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2017/04/04/creating-a-d-bus-service-with-python/">Creating a D-Bus Service With Python</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 123.63636363636364%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.45454545454545%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 141.8181818181818%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 123.63636363636364%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.45454545454545%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.63636363636363%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
 </section>
 
 <section>

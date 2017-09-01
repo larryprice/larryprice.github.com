@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="https://larry-price.com/atom.xml" rel="self"/>
   <link href="https://larry-price.com/"/>
-  <updated>2017-08-26T18:50:11-05:00</updated>
+  <updated>2017-08-31T19:53:36-05:00</updated>
   <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,52 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Demystifying Public Speaking]]></title>
+    <link href="https://larry-price.com/blog/2017/08/31/demystifying-public-speaking/"/>
+    <updated>2017-08-31T19:55:20-05:00</updated>
+    <id>https://larry-price.com/blog/2017/08/31/demystifying-public-speaking</id>
+    <content type="html"><![CDATA[<h3>The Gist</h3>
+
+<p>Public speaking makes me nervous, and I&rsquo;m not alone. A crowd of people is listening to your stutters, nit-picking your errors, and judging your clothing. No one is immune from the fear of public speaking. What can you do about it? Armed with Lara Hogan&rsquo;s <em><a href="https://abookapart.com/products/demystifying-public-speaking">Demystifying Public Speaking</a></em>, we can learn how to make public speaking a bit less stressful. There is no complete answer, but this book is full of tips and guidance for speaking engagements of any size and gravitas.</p>
+
+<h3>Takeaways</h3>
+
+<p>Need ideas for public speaking? Take advantage of the work you do every day. Prepare a presentation for the tough code you wrote last week, the library you found, the Agile processes you use, or how you set up your workstation, favorite tool, or cloud service.</p>
+
+<p>Start small. Run the topic by your coworkers with a rough outline. Run it by your spouse to get an outside perspective. You can tweak your ideas based on the feedback, and then move on to bigger venues. Do a lunch and learn, a lightning talk, or a local meetup.</p>
+
+<p>Your end goal does not have to be a conference. Conferences can be huge events with many attendees, and can be extremely daunting. Many people only go to conferences for the big names, and your talk might be more easily forgotten amongst all the ultra-hyped celebrity talks.</p>
+
+<p>Then again, if that&rsquo;s what you&rsquo;re into, you could become the celebrity after doing a few conference talks. If you do well at one or two conferences, there&rsquo;s a good chance you&rsquo;ll start getting invited to more conferences. These conferences might want you to rehash your past talk (score! minimal effort!), give you a topic, or hand you the reigns to get creative.</p>
+
+<p>Your audience wants you to do well. It&rsquo;s a common misconception that your audience is rooting against you. They want to learn, and they want to believe that what you&rsquo;re telling them is worthwhile. If you make a mistake, you don&rsquo;t need to be embarrassed: everyone knows it&rsquo;s hard to go on-stage in front of a group of people. Just try to correct yourself and move on.</p>
+
+<p>Always include some levity in your presentation. A joke or a cat picture can help reengage an audience that may be succumbing to fatigue. Ask a silly or surprising question, maybe even going so far as to ask for some audience participation.</p>
+
+<p>Presentations with lots of imagery are great, but your presentation style doesn&rsquo;t have to follow any conventions. Some people are comfortable getting their queues from their notes and images, but others may prefer more traditional header and bullet point slides.</p>
+
+<p>If there&rsquo;s going to be a Q&amp;A section, have your coworkers or peers hit you with some potential questions. Maybe you can beef up parts of your presentation that were misinterpreted or underrepresented.</p>
+
+<p>It&rsquo;s okay to say &ldquo;I don&rsquo;t know&rdquo; during a Q&amp;A session. You just laid down a lot of knowledge on your audience, but that doesn&rsquo;t mean you have to know all the answers. Furthermore, if someone &ldquo;stumps&rdquo; you during a Q&amp;A section, just admit it and move on. There&rsquo;s always that one guy who asks a &ldquo;question&rdquo; that he already knows the answer to to make himself appear intelligent. Ignore that guy. He&rsquo;s got issues. Just say &ldquo;OK&rdquo; and move on to the next question.</p>
+
+<p>Do what&rsquo;s comfortable for you. Read directly from your notes. Put comforting reminders in your slides, like pictures of your cats or Superman squashing fascism. Use &ldquo;wizard hands&rdquo; or other embarrassing hand gestures. Let your personality come out, or invent a completely separate stage persona to assume while you&rsquo;re presenting. All that matters is that you accomplish your task of dropping some knowledge bombs on your intended audience.</p>
+
+<p>Remember: you&rsquo;re the expert on this topic. If you weren&rsquo;t, you wouldn&rsquo;t be able to put together that presentation to begin with. Your presentation was chosen because the organizer(s) had confidence in you, your ability, and your knowledge. The audience members are there because they find meaning in your topic and believe you&rsquo;re the right person to transfer that information. You&rsquo;re in control.</p>
+
+<h3>Action Items</h3>
+
+<p>I really only have one action item from this book:</p>
+
+<ul>
+<li><strong>Do some public speaking!</strong></li>
+</ul>
+
+
+<p>I&rsquo;ve moved to a new city this summer, and I&rsquo;m starting to actively seek out local meetup groups. My goal is to find the right opportunity and the courage to participate in some lightning talks or possibly longer presentations.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Where's Larry?]]></title>
@@ -2456,43 +2502,6 @@
 <li><strong>Extracurricular</strong>. It&rsquo;s been a while since I&rsquo;ve worked on something meaningful in the evenings, and it&rsquo;s been tough to get started on something since my work office (and computer) is now also my play office. In the next few weeks, I&rsquo;d like to build an Atom.io package to integrate with bzr.</li>
 <li><strong>Personalize workspace</strong>. Since I&rsquo;ve taken over the living room, the decor is mostly a big, decorative clock. I have some wicked posters I&rsquo;d like to put up, but I need to convince my housemate that they won&rsquo;t look too tacky in such a guest-visible area.</li>
 <li><strong>Find a better floormat</strong>. Like I said, this cheap IKEA floormat cracked on the first day. I&rsquo;d like to find something vinyl or closer to rubber that will be more resilient but also more comfortable when I morph into standing mode.</li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Design for Real Life (Writeup)]]></title>
-    <link href="https://larry-price.com/blog/2016/03/24/design-for-real-life-writeup/"/>
-    <updated>2016-03-24T22:00:47-04:00</updated>
-    <id>https://larry-price.com/blog/2016/03/24/design-for-real-life-writeup</id>
-    <content type="html"><![CDATA[<h3>The Gist</h3>
-
-<p>Have you ever tried to buy airline tickets in a hurry? Have you ever had to find directions to the ER on the hospital website during an actual emergency? Have you ever wondered why you have to give a bug tracker your &ldquo;title,&rdquo; &ldquo;gender,&rdquo; or &ldquo;address&rdquo;? <a href="https://abookapart.com/products/design-for-real-life">Design for Real Life</a> written by <a href="http://meyerweb.com/">Eric Meyer</a> and <a href="https://www.sarawb.com/">Sara Wachter-Boettcher</a> explores the pitfalls of designing for the perfect user and the dangers of asking unnecessary or inappropriate questions.</p>
-
-<p>By the way, the means by which I found out this great book existed is by following Sara on Twitter: <a href="https://twitter.com/sara_ann_marie">you should too</a>!</p>
-
-<h3>Takeaways</h3>
-
-<p>We spend a lot of time designing our websites for the perfect persona. Right this minute, you probably have Sam the Salesperson, Hermoine the HR Rep, and Monica the Manager all smiling down upon you from their painter&rsquo;s tape thrones on the wall next to your cubicle. You meet these caricatures at their best: bellies full of coffee, heads full of false worries, plenty of time, and a healthy dose of get-up-and-go in their web browsing digits. These idealized characters are a great way to make a best-case-scenario product, really nailing that &ldquo;90%"of users everyone wants to find.</p>
-
-<p>What about the other 10% of users? At the start of a long and miserable day full of meetings, can someone short on time and patience create yet another calendar event in the few short minutes they have available? Thirty seconds before Polly the Procrastinator&rsquo;s timesheet is due, can she quickly add in her time without filling in meaningless fields? Instead of focusing on the ideal case, we might be better-served using this kind of time-crunched, ambivalent user as one of our personae. By designing for the streamlined user, we&rsquo;ll likely find that we&rsquo;ve also satisfied the needs of our &ldquo;ideal&rdquo; users.</p>
-
-<p>We ask for too much information. Think about how many times you&rsquo;ve just filled in junk information in forms to get through them as fast as possible. It&rsquo;s not shameful; it just wasn&rsquo;t worth your time to fill our information that you knew the application wouldn&rsquo;t use or could potentially use against you. On another note, think about how many times you&rsquo;ve given up filling out a form for a website because it was just too long. Asking for too much information causes user fatigue, and you are guaranteed to lose users when you start asking them for too much. If your website doesn&rsquo;t need to take location, title, or city of birth to get its job done, stop asking for them. If you have a tough time removing these fields, then write some user-visible text explaining why you need this information.</p>
-
-<p>Some questions could cause an unintended emotional response from users. If you&rsquo;re going through a tough time in your marriage or a recent divorce, filling out &ldquo;title&rdquo; or &ldquo;marital status&rdquo; could cause unwanted emotional duress. A &ldquo;gender&rdquo; dropdown with two options is non-inclusive to users with a non-binary gender identity, and may cause users going through a transition to wince at such a question. Someone who has just suffered the loss of a parent, child, or sibling could feel great emotional pain when you, a complete stranger, bring up family members for no reason but to feed to your bottomless data pit. Once again, the first question you ask yourself should be whether or not you absolutely need that information. Again, if you really want it, consider making more fields optional and explaining how this information will help your application.</p>
-
-<p>Do more user interviews before implementing newly-designed features. We can&rsquo;t assume that everyone will use the app the way we think they will, and we&rsquo;ll always be better off for getting more information.</p>
-
-<p>Your app probably doesn&rsquo;t need to be funny. We litter our error messages with &ldquo;Whoopsie!&rdquo; and our log out messages with &ldquo;Sayonara, sucker!&rdquo;, but this is an absolute waste. When errors occur, there&rsquo;s a chance you&rsquo;ve just angered your user. You know what makes them angrier? That error message you wrote that you found funny at the time. Be informative and supportive in your messaging, and your users will be better off for it.</p>
-
-<h3>Action Items</h3>
-
-<ul>
-<li>Stop trying to be funny in the copy. It&rsquo;s only funny when developing. Maybe we should have some sort of i18n setting that shows funny messages during development and English in production.</li>
-<li>Don&rsquo;t ask so many questions.</li>
-<li>More form fields should be open-answerable. Also more form fields should be optional. Also see previous bullet.</li>
-<li>Streamline the hard stuff. It may not be the most-used feature, but if it&rsquo;s important to a user in emergency mode you can bet it&rsquo;ll be appreciated.</li>
 </ul>
 
 ]]></content>

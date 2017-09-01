@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="Last weekend was SEP&rsquo;s 6th Semi-Annual Startup Weekend. For those unfamiliar, software developers pitch ideas Friday evening and developers &hellip;">
+  <meta name="description" content="Trello has a pretty sweet API, which we use extensively in our Trello-analysis app Ollert. Initially connecting to the Trello API took us a few hours &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,97 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/03/18/connecting-to-the-trello-api/">Connecting to the Trello API</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-03-18T20:00:11-04:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>8:00 pm</span></time>
+        
+           | <a href="/blog/2014/03/18/connecting-to-the-trello-api/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2014/03/18/connecting-to-the-trello-api/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="//trello.com">Trello</a> has a <a href="//trello.com/docs/">pretty sweet API</a>, which we use extensively in our Trello-analysis app <a href="//ollert.herokuapp.com">Ollert</a>. Initially connecting to the Trello API took us a few hours, so I&rsquo;d like to make a record of how we managed to connect.</p>
+
+<p>Making a connection to Trello requires two hashcodes: an application key and a Trello member token. You can generate and view your application key by visiting <a href="//trello.com/1/appKey/generate">https://trello.com/1/appKey/generate</a>.</p>
+
+<p>The member token is something we need to get from the user. There are two ways to get a user&rsquo;s member token: through fragments and through a <strong>postMessage</strong>. You can also request different levels of access (read, write, read+write), and different expiration periods (such as 1 day, 30 days, or never) for member tokens. For the remainder of this writing, I&rsquo;ll be accessing a read-only member token that never expires.</p>
+
+<p>We didn&rsquo;t have a lot of luck with fragments, but the concept is simple enough. You have the user click a link that probably says &ldquo;Connect With Trello&rdquo; which is similar to:</p>
+
+<p><code>https://trello.com/1/authorize?key=applicationkey&amp;name=applicationname&amp;expiration=never&amp;response_type=token</code></p>
+
+<p>At this point, the user is redirected to Trello and given the opportunity to Allow or Deny your application access. Once allowed, the user sees a static Trello page with their member token in plain text. Somehow you"re supposed to convey to them that they should copy this token and paste it back to you. This has clear drawbacks in usability.</p>
+
+<p>Using the <strong>postMessage</strong> method of accessing a member token was significantly more fruitful. Trello provides a Javascript file named <a href="https://trello.com/docs/gettingstarted/clientjs.html">client.js</a> that does most of the legwork for you. An example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nt">%script</span><span class="p">{</span><span class="ss">src</span><span class="p">:</span> <span class="s2">&quot;//api.trello.com/1/client.js?key=applicationkey&quot;</span><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>function AuthenticateTrello() {
+</span><span class='line'>  Trello.authorize({
+</span><span class='line'>    name: &quot;YourApplication&quot;,
+</span><span class='line'>    type: &quot;popup&quot;,
+</span><span class='line'>    interactive: true,
+</span><span class='line'>    expiration: &quot;never&quot;,
+</span><span class='line'>    persist: true,
+</span><span class='line'>    success: function () { onAuthorizeSuccessful(); },
+</span><span class='line'>    scope: { write: false, read: true },
+</span><span class='line'>  });
+</span><span class='line'>}
+</span><span class='line'>function onAuthorizeSuccessful() {
+</span><span class='line'>  var token = Trello.token();
+</span><span class='line'>  window.location.replace(&quot;/auth?token=&quot; + token);
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'><span class="nt">%a</span><span class="p">{</span><span class="ss">href</span><span class="p">:</span> <span class="s2">&quot;javascript:void(0)&quot;</span><span class="p">,</span> <span class="ss">onClick</span><span class="p">:</span> <span class="s2">&quot;AuthenticateTrello()&quot;</span><span class="p">}</span>
+</span><span class='line'>  Connect With Trello
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When the user clicks the link, we have Trello set to activate a &ldquo;popup&rdquo; that will ask them to &ldquo;Allow&rdquo; or &ldquo;Deny&rdquo; our app from accessing their data. When the user allows us access, the popup closes and we hit the &ldquo;onAuthorizeSuccessful&rdquo; method. In my method, I simply redirect them to the <code>/auth</code> route with <code>token</code> manually added to the params list. One of the interesting options listed above is the &ldquo;persist&rdquo; option, which tells Trello whether it should prompt the user for his or her token every time. By telling Trello to persist, the user will only be presented with the popup when he or she needs to reauthenticate.</p>
+
+<p>You can learn more about member tokens from <a href="//trello.com/docs/gettingstarted/authorize.html">https://trello.com/docs/gettingstarted/authorize.html</a>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -466,44 +557,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/">Letting the Browser Decide Betwen HTTP and HTTPS</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-02-13T17:55:00-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>5:55 pm</span></time>
-        
-           | <a href="/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/#disqus_thread"
-             data-disqus-identifier="https://larry-price.com/blog/2014/02/13/letting-the-browser-decide-betwen-http-and-https/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>While working on SEP Labs' <a href="//h2w.cc">Health2Wealth</a> app, I got my first taste of setting up a website to use secure connections. I&rsquo;ve been using the browser extension <a href="//www.eff.org/https-everywhere">HTTPS Everywhere</a> for quite some time now, so all of the web pages that I visit attempt to using <code>HTTPS</code>instead of the standard <code>HTTP</code>. When I inadvertently started testing our app with <code>HTTPS</code>, things got a little weird.</p>
-
-<p>My machine was able to open most of a page, but it wouldn&rsquo;t load some of the graphics or javascript we had embedded in the page. I was the only one able to reproduce it, so we chalked it up to a wonky machine. Then I suddenly remembered that I was using HTTPS Everywhere. I found the area in FireFox that warns you about insecure connections and found that our page was only <em>partially</em> loading on my browser because some of the content was insecure. From there I enabled an option to reveal the insecure elements, which forced my page to load everything correctly. So now we needed to find what was insecure about our page. I trekked through the codebase and found that some of our graphs and links were hard-coded to use <code>HTTP</code>. My initial thought was just to force them to use <code>HTTPS</code>, which is <a href="//lists.w3.org/Archives/Public/ietf-http-wg/2013OctDec/0625.html">almost certainly the impending standard</a>. With a quick search, I found that there exists a <strong>real</strong> solution to this problem.</p>
-
-<p>Let&rsquo;s say I have a very normal web application, so I want to include <a href="//jquery.com">jQuery</a> embedded in my page. I initially copy-paste <code>&lt;script src='http://code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code> right into my <code>&lt;head&gt;</code> node, which normally seems fine. Unfortunately, this is where issues arise. I&rsquo;m now forcing the user to make a connection which may or may not be secure to fetch data from an insecure page.</p>
-
-<p>By removing the <code>http:</code> from the <code>http://</code>, the issue of deciding whether to fetch the file using <code>HTTP</code> or <code>HTTPS</code> is left to the web browser. So my script include becomes <code>&lt;script src='//code.jquery.com/jquery.js'&gt;&lt;/script&gt;</code>. This also works for links, images, and web fonts. In fact, every link included in this post uses the same principal, where I leave the protocol out of what becomes the <code>href</code> tag.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/17">&larr; Older</a>
@@ -527,7 +580,7 @@
 </section>
 <section>
   <h1>void* Larry</h1>
-  <p>I'm a codeslinger debugging from the mean streets of Chambana, IL. Welcome to my blog, where I'll tell the tales of wondrous things I discover in the digital jungle.</p>
+  <p>I'm a codeslinger debugging from the mean streets of Champaign-Urbana, IL. Welcome to my blog, where I'll tell the tales of wondrous things I discover in the digital jungle.</p>
 </section>
 <section>
   <h1>Go for Web Development</h1>
@@ -540,6 +593,10 @@
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/08/31/demystifying-public-speaking/">Demystifying Public Speaking</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2017/08/26/wheres-larry/">Where's Larry?</a>
@@ -557,15 +614,11 @@
         <a href="/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python/">Creating an Asynchronous D-Bus Service With Python</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2017/04/04/creating-a-d-bus-service-with-python/">Creating a D-Bus Service With Python</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 123.63636363636364%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.45454545454545%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 141.8181818181818%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 123.63636363636364%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.45454545454545%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.63636363636363%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
 </section>
 
 <section>
