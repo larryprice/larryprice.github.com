@@ -24,7 +24,7 @@ Your audience wants you to do well. It's a common misconception that your audien
 
 Always include some levity in your presentation. A joke or a cat picture can help reengage an audience that may be succumbing to fatigue. Ask a silly or surprising question, maybe even going so far as to ask for some audience participation.
 
-Presentations with lots of imagery are great, but your presentation style doesn't have to follow any conventions. Some people are comfortable getting their queues from their notes and images, but others may prefer more traditional header and bullet point slides.
+Presentations with lots of imagery are great, but your presentation style doesn't have to follow any conventions. Some people are comfortable getting their cues from their notes and images, but others may prefer more traditional header and bullet point slides.
 
 If there's going to be a Q&A section, have your coworkers or peers hit you with some potential questions. Maybe you can beef up parts of your presentation that were misinterpreted or underrepresented.
 
