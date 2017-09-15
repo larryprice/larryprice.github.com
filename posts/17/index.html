@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="While working on SEP Labs' Health2Wealth app, I got my first taste of setting up a website to use secure connections. I&rsquo;ve been using the &hellip;">
+  <meta name="description" content="Ruby 2.1.0 went stable a few months ago, and Ruby 1.9.3 support will end in a just over a year. You know what that means: Warplanes in the sky &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,113 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/">Convincing Rvm to Let You Use Ruby 2.1.0</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-02-22T16:46:00-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2014</span></span> <span class='time'>4:46 pm</span></time>
+        
+           | <a href="/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="//ruby-lang.org/en/news/2013/12/25/ruby-2-1-0-is-released/">Ruby 2.1.0 went stable</a> a few months ago, and <a href="//ruby-lang.org/en/news/2014/01/10/ruby-1-9-3-will-end-on-2015/">Ruby 1.9.3 support</a> will end in a just over a year.</p>
+
+<p>You know what that means: Warplanes in the sky falling to the ground, dogs and cats getting along like old pals, and people wandering aimlessly through the streets trying to remember the last time they saw a green build.</p>
+
+<p>Believe it or not, all of these things can be prevented. Once upon a time, I wrote about <a href="/blog/2013/10/08/rvm-quick-start/">configuring and using rvm</a> to control individual ruby environments for each of your projects. If it&rsquo;s been a while since you installed your copy of <a href="//rvm.io/">rvm</a>, you might have some trouble installing and using newer version of ruby. Lucky for us, those clever rvm developers made it easy to get around this.</p>
+
+<p>In my case, I want to upgrade a project to use <code>ruby 2.1.0</code>. The first time I tried to run <code>rvm install ruby-2.1.0</code>, I ended up installing <code>ruby-2.1.0-preview1</code>. I realized that I had installed rvm on this machine around October 2013, and <code>ruby 2.1.0</code> was released in December 2013, so rvm had no idea that <code>ruby 2.1.0</code> was stable. Updating rvm (in the root of the project directory):</p>
+
+<figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm get stable
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There will be some amount of text on the screen if your system needs to be updated. Note that you must be connected to the internet if you want rvm to update. Now we do the install of our brand new ruby:</p>
+
+<figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm install ruby-2.1.0
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Again, text on the screen from fetching of data from the internet. But hopefully you see something that tells you the operation was successful. You can also verify which rubies you have installed using the <code>list</code> command:</p>
+
+<figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm list rubies
+</span><span class='line'>   ruby-1.9.3-p448 <span class="o">[</span> x86_64 <span class="o">]</span>
+</span><span class='line'><span class="o">=</span>&gt; ruby-2.0.0-p247 <span class="o">[</span> x86_64 <span class="o">]</span>
+</span><span class='line'> * ruby-2.1.0 <span class="o">[</span> x86_64 <span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># =&gt; - current</span>
+</span><span class='line'><span class="c"># =* - current &amp;&amp; default</span>
+</span><span class='line'><span class="c">#  * - default</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we tell our current project to use <code>ruby 2.1.0</code>:</p>
+
+<figure class='code'><figcaption><span>/home/lrp/Projects/2014/projNeedingRuby210</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rm .ruby-version .ruby-gemset
+</span><span class='line'><span class="nv">$ </span>rvm 2.1.0@projNeedingRuby210 --create --ruby-version
+</span><span class='line'>ruby-2.1.0 - <span class="c">#gemset created /home/lrp/.rvm/gems/ruby-2.1.0@projNeedingRuby210</span>
+</span><span class='line'>ruby-2.1.0 - <span class="c">#generating projNeedingRuby210 wrappers.</span>
+</span><span class='line'><span class="nv">$ </span>rvm gemset copy 2.0.0-p247@projNeedingRuby210 2.1.0@projNeedingRuby210
+</span><span class='line'>Copying gemset from 2.0.0-p247@projNeedingRuby210 to 2.1.0@projNeedingRuby210
+</span><span class='line'>Generating gemset wrappers ruby-2.1.0@projNeedingRuby210.
+</span><span class='line'>Making gemset 2.1.0@projNeedingRuby210 pristine.
+</span><span class='line'><span class="nv">$ </span>which ruby
+</span><span class='line'>/home/lrp/.rvm/rubies/ruby-2.1.0/bin/ruby
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Alright! Crisis averted. If you&rsquo;re using <a href="//bundler.io/">bundler</a> with this project, be sure to change your ruby version (usually located near the top of the <code>Gemfile</code>).</p>
+
+<p>What about setting up a new project using <code>ruby 2.1.0</code>? Easy! Switch to the project directory and:</p>
+
+<figure class='code'><figcaption><span>/home/lrp/Projects/2014/newRubyProject</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rvm 2.1.0@newRubyProject --create --ruby-version
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Oh, rvm, you make life <em>too</em> easy sometimes.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -519,94 +626,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/12/12/tell-your-users-when-you-fail/">Tell Your Users When You Fail</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2013-12-12T19:41:00-06:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>7:41 pm</span></time>
-        
-           | <a href="/blog/2013/12/12/tell-your-users-when-you-fail/#disqus_thread"
-             data-disqus-identifier="https://larry-price.com/blog/2013/12/12/tell-your-users-when-you-fail/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Your users put a lot of faith in you. They put up with your terrible design, your horrible taste in color scheme, and your ability to take up over 100% of their computer&rsquo;s memory. With that in mind, don&rsquo;t these poor people deserve a little bit of honesty?</p>
-
-<p>I came across some code recently that irked me. This code asks for a handle to a database abstraction class and then runs a query on it. It looks kinda like this:</p>
-
-<figure class='code'><figcaption><span>settings.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">changeSettings</span><span class="p">(</span><span class="n">newSettings</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">db</span> <span class="o">=</span> <span class="n">dbFactory</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;settings.db&quot;</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">if</span> <span class="o">!</span><span class="n">db</span><span class="o">.</span><span class="n">nil?</span>
-</span><span class='line'>    <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">buildSaveQuery</span><span class="p">(</span><span class="n">newSettings</span><span class="p">))</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>How nice that <code>changeSettings</code> doesn&rsquo;t try to play with a <code>nil</code> database, right? But what about the user&rsquo;s data? It wasn&rsquo;t saved. And no one knows. <em>Not even you</em>. Now, maybe the user will happily continue what he&rsquo;s doing until he notices that his new settings aren&rsquo;t quite right. So he goes back to them again. Same result. Repeat ad infinitum.</p>
-
-<p>How I would initially approach this is to add an <code>else</code> statement that launches a dialog giving some useful data to the user. Whatever you do, for the love of code, DO NOT tell the user that you had database problems. For most applications, the user will have no idea what that means. It might look something like this:</p>
-
-<figure class='code'><figcaption><span>settings.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">changeSettings</span><span class="p">(</span><span class="n">newSettings</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">db</span> <span class="o">=</span> <span class="n">dbFactory</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;settings.db&quot;</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">if</span> <span class="o">!</span><span class="n">db</span><span class="o">.</span><span class="n">nil?</span>
-</span><span class='line'>    <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">buildSaveQuery</span><span class="p">(</span><span class="n">newSettings</span><span class="p">))</span>
-</span><span class='line'>  <span class="k">else</span>
-</span><span class='line'>    <span class="n">showDialog</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Save Failed!&quot;</span><span class="p">,</span>
-</span><span class='line'>               <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;I&#39;m sorry, but your data could not be saved.&quot;</span> <span class="o">+</span>
-</span><span class='line'>                   <span class="s2">&quot;Press &#39;Try Again&#39; to give it another go.&quot;</span> <span class="o">+</span>
-</span><span class='line'>                   <span class="s2">&quot;If the problem persists, restart the application&quot;</span> <span class="o">+</span>
-</span><span class='line'>                   <span class="s2">&quot; or contact system support.&quot;</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This is not a bad solution. But what about all the other places in the code I get the database from the factory? I&rsquo;d have to update those as well. It would be better to be able to code the factory to launch a similar error dialog whenever this happens. Even better, let me hand the factory a reference to an appropriate dialog whenever I call <code>dbFactory.get</code>.</p>
-
-<p>Another much more frightening possibility is to skip the <code>nil</code> check. Can you guarantee that <code>dbFactory.get</code> will never be <code>nil</code>? In that case, this option is actually pretty good.</p>
-
-<p>Even if that&rsquo;s not a guarantee you can make, it may still be a valid solution. <a href="http://www.artima.com/intv/defenseP.html">Crash early before you do too much damage</a>. Now, if there&rsquo;s some kind of crash-handler or global exception-catcher in your application, then you can catch the impending crash and tell the user the application needs to be restarted&hellip; And the app probably needs to be restarted anyway! There&rsquo;s no need to keep running after you&rsquo;ve reached some horrible error state that needs to be addressed.</p>
-
-<p>Just do <em>something</em>! Your users (especially if that happens to include me) will appreciate your honesty, even if it&rsquo;s so brutal that they have to restart the application.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/18">&larr; Older</a>
@@ -645,6 +664,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2017/09/14/promise-youll-call-back/">Promise You'll Call Back</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2017/08/31/demystifying-public-speaking/">Demystifying Public Speaking</a>
       </li>
     
@@ -660,15 +683,11 @@
         <a href="/blog/2017/04/11/using-d-bus-signals-in-python/">Using D-Bus Signals in Python</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python/">Creating an Asynchronous D-Bus Service With Python</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 123.63636363636364%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.45454545454545%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.63636363636363%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 125.45454545454545%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 107.27272727272727%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.63636363636363%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
 </section>
 
 <section>

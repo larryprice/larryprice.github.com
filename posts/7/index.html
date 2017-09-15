@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="Noty is a jQuery plugin for showing flash messages. Noty is easy to use and creates great-looking flash notifications with little customization. What &hellip;">
+  <meta name="description" content="The Gist In this modern age of infinite internet-capable devices, web developers have found a &ldquo;silver bullet&rdquo; which we call responsive &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,68 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/09/15/responsible-responsive-design/">Responsible Responsive Design</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-09-15T22:05:57-04:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:05 pm</span></time>
+        
+           | <a href="/blog/2015/09/15/responsible-responsive-design/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2015/09/15/responsible-responsive-design/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>The Gist</h3>
+
+<p>In this modern age of infinite internet-capable devices, web developers have found a &ldquo;silver bullet&rdquo; which we call responsive design. Unfortunately, responsive design is often coupled with large CSS files, delayed element styling, and an overabundance of javascript. Scott Jehl has penned <a href="//abookapart.com/products/responsible-responsive-design">Responsible Responsive Design</a> to help us make the web better. The strategies outlined in this book will make your web pages smarter, faster, and lighter.</p>
+
+<h3>Takeaways</h3>
+
+<p>We are spoiled by 4G, unlimited data, fiber, and the latest smart devices. Most of the world does not have the same luxury as the majority of web designers. We severely limit our userbase when we consider our own lifestyles as the norm. If you want any chance of obtaining a global audience, your site <em>must</em> be able to deal with slow connections, data limits, small screens, and outdated browsers.</p>
+
+<p>The average site still takes 10 seconds to load. Despite generally better network speeds, we have started delivering more CSS, javascript and markup; bigger, higher res images when they aren&rsquo;t always necessary; and long-running javascript to take advantage of the latest and greatest framework. We can and should work to deliver only the content users need.</p>
+
+<p>We can load the top part of the page a user will see before loading the rest of the page by pulling some of our styles into the <code>&lt;head&gt;</code>. In doing this, we can prevent a Flash of Unstyled Content (FOUC) when the user first visits the page. There are tools to do this mentioned in the book, such as <a href="https://github.com/filamentgroup/criticalcss">criticalcss</a>. You can go a step further and load the rest of your CSS at the end of the event queue. Even better: only deliver that experience the first time the user visits that page, after which the browser will have cached the CSS and you can load it through the usual means.</p>
+
+<p>Design your first drafts as naked HTML and CSS. This will be the base experience for a user having a really bad day. Users using old technology, block or fail to load javascript, or experience a bad connection will be able to experience a decent version of your site. Iterate to add a better experience for users who can load javascript. Iterate again to add HTML5 or CSS3 features which may not be available in all browsers. The important aspect is that the app will always degrade gracefully.</p>
+
+<p>Start with the mobile version. If you can design for a small screen with weird gesture inputs, you should be able to translate that to a tablet and desktop machine. Use <code>@media</code> magic to deliver the right content.</p>
+
+<p>Use HTML5 elements when possible. <code>&lt;picture&gt;</code> and <code>&lt;video&gt;</code> can be very efficient in choosing which images or videos to load from the server, preventing the client from downloading the <code>1x</code>, <code>2x</code>, <code>3x</code> versions of your images. Don&rsquo;t forget about <code>&lt;svg&gt;</code> either for handling vector graphics.</p>
+
+<p>Screen readers read <em>everything visible</em>. This can cause a lot of bad things to happen. Using <code>display: none</code> will prevent screen readers from telling the user about your collapsed items (think of all the wasted hamburgers). Elements strategically hidden with <code>z-index</code> are listed by the screen reader as a visible element, potentially misinterpreting your intent. Markup created dynamically could have a drastic effect on that user&rsquo;s experience. We should be diligent with our markup to remain inclusive.</p>
+
+<p>Polyfill, shims, and shivs are some common terms to refer to libraries which fake modern browser functionality into older browsers. <code>html5shiv</code>, <code>selectivizr</code>, and <code>modernizr</code> can be described by these words.</p>
+
+<h3>My Action Items</h3>
+
+<ul>
+<li><strong>Start Small.</strong> Although I&rsquo;ve had several projects where I/we start out saying we&rsquo;ll be mobile first, I don&rsquo;t believe this has ever actually happened to me. Next time I start a web project I want to start with mobile and expand.</li>
+<li><strong>Degrade Gracefully.</strong> I&rsquo;m notably terrible at this. I don&rsquo;t think I&rsquo;ve ever created a site which will respond well with javascript disabled let alone any HTML5 features which may be missing. I always design my websites with my own devices and connection speeds in mind. For the time being, I will also put this item off until I have the chance to start a project from scratch.</li>
+<li><strong>Pay Attention to Accessibility.</strong> Accessibility hasn&rsquo;t been on my mind much when throwing together web sites. If I get some time, I&rsquo;d like to look into adding better screen reader attributes into a live web application like <a href="//ollertapp.com">Ollert</a>.</li>
+<li><strong>Page load budgets.</strong> Jehl discusses getting strict about page load time. Keep it low and weigh load time effects heavily when deciding to add new features to a site. When I add new features to pages, I intend to keep this in mind. Look for this to affect something like <a href="//ollertapp.com">Ollert</a> if I ever get around to redesigning the dashboard.</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1211,75 +1273,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/06/16/how-i-reactjs/">How to ReactJS</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-06-16T20:03:36-04:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>8:03 pm</span></time>
-        
-           | <a href="/blog/2015/06/16/how-i-reactjs/#disqus_thread"
-             data-disqus-identifier="https://larry-price.com/blog/2015/06/16/how-i-reactjs/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://facebook.github.io/react/">ReactJS</a> is a component-based Javascript library for creating user interfaces. I used it extensively on recent side project <a href="https://www.refer-madness.com">Refer Madness</a> (<a href="https://github.com/larryprice/refermadness">source code</a>). It&rsquo;s pretty neat. Let&rsquo;s build some demos!</p>
-
-<p>We&rsquo;ll start small. We can start with the ReactJS sample and figure out what&rsquo;s going on:</p>
-
-<iframe style="width: 100%; height: 150px" frameborder="0" seamless="seamless" src="//jsfiddle.net/qqaerhp6/embedded/result,html,js/light/"></iframe>
-
-
-<p>We create a React component <code>Hello</code> and we tell it what to render. When we create a <code>Hello</code> component, we take in an attribute called <code>name</code> which we then access in our component with <code>this.props.name</code>. When the page loads, React will render the <code>Hello</code> component in the element with ID &ldquo;container&rdquo;.</p>
-
-<p>Components can have other components.</p>
-
-<iframe style="width: 100%; height: 250px" frameborder="0" seamless="seamless" src="//jsfiddle.net/qqaerhp6/4/embedded/result,html,js/light/"></iframe>
-
-
-<p>I&rsquo;ve created a <code>Name</code> component to show the name. This component uses its children to display any content it needs to. Obviously, this is a bit contrived.</p>
-
-<p>Things get more exciting when we add events. Let&rsquo;s add an event to our <code>Name</code> component: when a user clicks this component, we&rsquo;ll reverse the name.</p>
-
-<iframe style="width: 100%; height: 250px" frameborder="0" seamless="seamless" src="//jsfiddle.net/qqaerhp6/5/embedded/result,html,js/light/"></iframe>
-
-
-<p>I&rsquo;ve introduced state to the component. When I want a React component to use state, I need to implement the <code>getInitialState</code> method to tell React what the state is when the component is created. In this case, I set the <code>name</code> field of the component&rsquo;s state to <code>this.props.children</code>. When I render the component, I use the <code>name</code> variable I set in my state object. I add an <code>onClick</code> event and call a method on the component called <code>clickme</code>. In <code>clickme</code> I call the built-in <code>setState</code> method and update the <code>name</code> variable on my state object. Any other state variables on the component would remain unchanged. Any time <code>setState</code> is called, <code>render</code> is called again for this component and any children which need to be updated will also rerender.</p>
-
-<p>Sometimes something happens on a child component that the parent cares about. This time, I want the parent component to know when the <code>Name</code> component gets a click event.</p>
-
-<iframe style="width: 100%; height: 250px" frameborder="0" seamless="seamless" src="//jsfiddle.net/qqaerhp6/6/embedded/result,html,js/light/"></iframe>
-
-
-<p>I&rsquo;ve told my child component to call the method <code>goodbye</code> on the parent element using the property name <code>onClicked</code>. When the method is called Ichange the state of the <code>Hello</code> component and update the greeting; in this case, the <code>Name</code> component will be reused since it hasn&rsquo;t changed.</p>
-
-<p>Just a reminder that you can have multiple of any component; just be sure to not duplicate IDs!</p>
-
-<iframe style="width: 100%; height: 250px" frameborder="0" seamless="seamless" src="//jsfiddle.net/qqaerhp6/7/embedded/result,html,js/light/"></iframe>
-
-
-<p>I dynamically create as many <code>Name</code> components as I need. I take my list of names and map them all to React components, each of which has a different value. As above, all of these can have events or can call events on the parent component. When we create a list of components, React prefers it when we give them all <code>key</code> attributes. This allows React to cache the components and recreate the appropriate component when states change.</p>
-
-<p>Of course this is just scratching the surface. I used ReactJS because it was fast, stable, and easy to get started learning. It gave me a different way to think about the relationship between my Javascript and the DOM. For a little bit more React you should check out <a href="http://facebook.github.io/react/docs/tutorial.html">the tutorials</a>. If you hadn&rsquo;t noticed, React uses a twist on the Javascript syntax called JSX. If you&rsquo;re into that kind of thing, I&rsquo;ve written about <a href="/blog/2015/06/08/compile-jsx-with-docker/">using Docker to compile your JSX</a> whenever you update your JSX files - very handy IMO.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/8">&larr; Older</a>
@@ -1318,6 +1311,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2017/09/14/promise-youll-call-back/">Promise You'll Call Back</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2017/08/31/demystifying-public-speaking/">Demystifying Public Speaking</a>
       </li>
     
@@ -1333,15 +1330,11 @@
         <a href="/blog/2017/04/11/using-d-bus-signals-in-python/">Using D-Bus Signals in Python</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python/">Creating an Asynchronous D-Bus Service With Python</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 123.63636363636364%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.45454545454545%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.63636363636363%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 125.45454545454545%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 107.27272727272727%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.63636363636363%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
 </section>
 
 <section>

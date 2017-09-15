@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="https://larry-price.com/atom.xml" rel="self"/>
   <link href="https://larry-price.com/"/>
-  <updated>2017-08-31T19:53:36-05:00</updated>
+  <updated>2017-09-14T21:44:10-05:00</updated>
   <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,423 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Promise You'll Call Back]]></title>
+    <link href="https://larry-price.com/blog/2017/09/14/promise-youll-call-back/"/>
+    <updated>2017-09-14T21:45:08-05:00</updated>
+    <id>https://larry-price.com/blog/2017/09/14/promise-youll-call-back</id>
+    <content type="html"><![CDATA[<p><em>This article introduces the Javascript Promise class, and how to use a Promise to perform asynchronous work. At the end of this post, you&rsquo;ll have been exposed to the most important components of the Promise API.</em></p>
+
+<p>Introduced in the <a href="http://www.ecma-international.org/ecma-262/6.0/#sec-promise-objects">ES2015 specification</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">MDN</a> dryly describes a <code>Promise</code> as:</p>
+
+<blockquote><p>The Promise object represents the eventual completion (or failure) of an asynchronous operation, and its resulting value.</p></blockquote>
+
+<p>But&hellip; what exactly does that entail? How does it differ from just using callbacks?</p>
+
+<p>Let&rsquo;s start with a simple example. If I want to perform an operation asynchronously, traditionally I would use <code>setTimeout</code> to do work after the main thread has finished and use a callback parameter to let the caller utilize the results. For example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">const</span> <span class="nx">someAsyncTask</span> <span class="o">=</span> <span class="p">(</span><span class="nx">after</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">after</span><span class="p">(</span><span class="s1">&#39;the task is happening&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;before calling someAsyncTask&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">someAsyncTask</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;after calling someAsyncTask&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Try running this yourself with <code>node</code>, and you&rsquo;ll see that &lsquo;before&hellip;&rsquo; and &lsquo;after&hellip;&rsquo; are printed followed by &lsquo;the task is happening&rsquo;.</p>
+
+<p>This is perfectly valid code, but it&rsquo;s just so <em>unnatural</em> to handle asynchronous tasks this way. There&rsquo;s no standard to which parameter should be the callback, and there&rsquo;s no standard to what arguments will be passed back to a given callback. Let&rsquo;s take a look at the same situation using the new <code>Promise</code> class:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">const</span> <span class="nx">someAsyncTask</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="s1">&#39;the task is happening&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;before calling someAsyncTask&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">someAsyncTask</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;after calling someAsyncTask&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Let&rsquo;s walk through this. In <code>someAsyncTask</code>, we&rsquo;re now returning a call to <code>Promise.resolve</code> with our result. We call <code>then</code> on the result of <code>someAsyncTask</code> and then handle the results. <code>Promise.resolve</code> is returning a resolved <code>Promise</code>, which is run asynchronously after the main thread finishes its initial work (the final <code>console.log</code>, in this case).</p>
+
+<p>Immediately, this feels a lot cleaner to me, but this is a really simple example.</p>
+
+<p>Think about a situation where you need to perform multiple asynchronous callbacks that each depend on the results of the last callback. Here&rsquo;s an example implementation using callbacks;</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">const</span> <span class="nx">getFirstName</span> <span class="o">=</span> <span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">callback</span><span class="p">(</span><span class="s1">&#39;Harry&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">const</span> <span class="nx">getLastName</span> <span class="o">=</span> <span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">callback</span><span class="p">(</span><span class="s1">&#39;Potter&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">const</span> <span class="nx">concatName</span> <span class="o">=</span> <span class="p">(</span><span class="nx">first</span><span class="p">,</span> <span class="nx">last</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">callback</span><span class="p">(</span><span class="err">`</span><span class="nx">$</span><span class="p">{</span><span class="nx">first</span><span class="p">}</span> <span class="nx">$</span><span class="p">{</span><span class="nx">last</span><span class="p">}</span><span class="err">`</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">getFirstName</span><span class="p">((</span><span class="nx">first</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">getLastName</span><span class="p">((</span><span class="nx">last</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">concatName</span><span class="p">(</span><span class="nx">first</span><span class="p">,</span> <span class="nx">last</span><span class="p">,</span> <span class="p">(</span><span class="nx">fullname</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fullname</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I think we can all agree that this is not friendly code. What makes a <code>Promise</code> truly special is its natural chainability. As long as we keep returning <code>Promise</code> objects, we can keep calling <code>then</code> on the results:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">const</span> <span class="nx">getFirstName</span> <span class="o">=</span> <span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="s1">&#39;Harry&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">const</span> <span class="nx">getLastName</span> <span class="o">=</span> <span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="s1">&#39;Potter&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">const</span> <span class="nx">concatName</span> <span class="o">=</span> <span class="p">(</span><span class="nx">first</span><span class="p">,</span> <span class="nx">last</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="err">`</span><span class="nx">$</span><span class="p">{</span><span class="nx">first</span><span class="p">}</span> <span class="nx">$</span><span class="p">{</span><span class="nx">last</span><span class="p">}</span><span class="err">`</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">getFirstName</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">first</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">getLastName</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">last</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">concatName</span><span class="p">(</span><span class="nx">first</span><span class="p">,</span> <span class="nx">last</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">fullname</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fullname</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Since <code>concatName</code> is dependent on the result of both <code>getFirstName</code> and <code>getLastName</code>, we still do a little bit of nesting. However, our final asynchronous action can now occur on the outside of the nesting, which will take advantage of the last returned result of our <code>Promise</code> resolutions.</p>
+
+<p>Error handling is another can of worms in callbacks. Which return value is the error and which is the result? Every level of nesting in a callback has to either handle errors, or maybe the top-most callback has to contain a try-catch block. Here&rsquo;s a particularly nasty example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">const</span> <span class="nx">getFirstName</span> <span class="o">=</span> <span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span> <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="s1">&#39;Sorry, firstName errored&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="s1">&#39;Harry&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">const</span> <span class="nx">getLastName</span> <span class="o">=</span> <span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span> <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="s1">&#39;Sorry, lastName errored&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="s1">&#39;Potter&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">const</span> <span class="nx">concatName</span> <span class="o">=</span> <span class="p">(</span><span class="nx">first</span><span class="p">,</span> <span class="nx">last</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span> <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="s1">&#39;Sorry, fullName errored&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="err">`</span><span class="nx">$</span><span class="p">{</span><span class="nx">first</span><span class="p">}</span> <span class="nx">$</span><span class="p">{</span><span class="nx">last</span><span class="p">}</span><span class="err">`</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">getFirstName</span><span class="p">((</span><span class="nx">err</span><span class="p">,</span> <span class="nx">first</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span> <span class="c1">// no return, will fall through despite error</span>
+</span><span class='line'>  <span class="nx">getLastName</span><span class="p">((</span><span class="nx">err</span><span class="p">,</span> <span class="nx">last</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">return</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">concatName</span><span class="p">(</span><span class="nx">first</span><span class="p">,</span> <span class="nx">last</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">fullname</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">return</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fullname</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Every callback has to check for an individual error, and if any level mishandles the error (note the lack of a return on error after <code>getFirstName</code>), you&rsquo;re guaranteed to end up with undefined behavior. A <code>Promise</code> allows us to handle errors at any level with a <code>catch</code> statement:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">const</span> <span class="nx">getFirstName</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span> <span class="k">return</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="s1">&#39;Sorry, firstName errored&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="s1">&#39;Harry&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">const</span> <span class="nx">getLastName</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span> <span class="k">return</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="s1">&#39;Sorry, lastName errored&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="s1">&#39;Potter&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">const</span> <span class="nx">concatName</span> <span class="o">=</span> <span class="p">(</span><span class="nx">first</span><span class="p">,</span> <span class="nx">last</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span> <span class="k">return</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="s1">&#39;Sorry, fullName errored&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="err">`</span><span class="nx">$</span><span class="p">{</span><span class="nx">first</span><span class="p">}</span> <span class="nx">$</span><span class="p">{</span><span class="nx">last</span><span class="p">}</span><span class="err">`</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">getFirstName</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">first</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">getLastName</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">last</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">concatName</span><span class="p">(</span><span class="nx">first</span><span class="p">,</span> <span class="nx">last</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">fullname</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fullname</span><span class="p">);</span>
+</span><span class='line'><span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">err</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We return the result of <code>Promise.reject</code> to signify that we have an error. We only need to call <code>catch</code> once. Any <code>then</code> statements from unresolved promises will be ignored. A <code>catch</code> could be inserted at any nesting point, which could give you the ability to continue the chain:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// ...</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">getFirstName</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">first</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">getLastName</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">last</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">concatName</span><span class="p">(</span><span class="nx">first</span><span class="p">,</span> <span class="nx">last</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">err</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">concatName</span><span class="p">(</span><span class="nx">first</span><span class="p">,</span> <span class="s1">&#39;Houdini&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">fullname</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fullname</span><span class="p">);</span>
+</span><span class='line'><span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">err</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So far, we&rsquo;ve been returning <code>Promise</code> objects using <code>resolve</code> and <code>reject</code>, but there&rsquo;s also the ability to define our own <code>Promise</code> objects with their own <code>resolve</code> and <code>reject</code> methods. Updating the <code>getFirstName</code> variable:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">const</span> <span class="nx">getFirstName</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="k">new</span> <span class="nx">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span> <span class="k">return</span> <span class="nx">reject</span><span class="p">(</span><span class="s1">&#39;Sorry, firstName errored&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">resolve</span><span class="p">(</span><span class="s1">&#39;Harry&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="c1">// ...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can also run our asynchronous tasks without nesting by using the <code>Promise.all</code> method:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// ...</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Promise</span><span class="p">.</span><span class="nx">all</span><span class="p">([</span><span class="nx">getFirstName</span><span class="p">(),</span> <span class="nx">getLastName</span><span class="p">()]).</span><span class="nx">then</span><span class="p">((</span><span class="nx">names</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">concatName</span><span class="p">(</span><span class="nx">names</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">names</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+</span><span class='line'><span class="p">}).</span><span class="nx">then</span><span class="p">((</span><span class="nx">fullname</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fullname</span><span class="p">);</span>
+</span><span class='line'><span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">err</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Give <code>Promise.all</code> a list of promises and it will call them (in some order) and return all the results in an array (in the order given) as a resolved <code>Promise</code> once all given promises have been resolved. If any of the promises are rejected, the entire <code>Promise</code> will be rejected, resulting in the <code>catch</code> statement.</p>
+
+<p>Sometimes you need to run several methods, and you only care about the first result. <code>Promise.race</code> is similar to <code>Promise.all</code>, but only waits for one of the given promises to return:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">const</span> <span class="nx">func1</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="k">new</span> <span class="nx">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">resolve</span><span class="p">(</span><span class="s1">&#39;func1&#39;</span><span class="p">),</span> <span class="mi">5</span><span class="o">*</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">());</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">const</span> <span class="nx">func2</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="k">new</span> <span class="nx">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">resolve</span><span class="p">(</span><span class="s1">&#39;func2&#39;</span><span class="p">),</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">());</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Promise</span><span class="p">.</span><span class="nx">race</span><span class="p">([</span><span class="nx">func1</span><span class="p">(),</span> <span class="nx">func2</span><span class="p">()]).</span><span class="nx">then</span><span class="p">((</span><span class="nx">name</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+</span><span class='line'><span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">err</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Sometimes, &lsquo;func1&rsquo; will be printed, but most of the time &lsquo;func2&rsquo; will be printed.</p>
+
+<p>&hellip;And that&rsquo;s the basics! Hopefully, you have a better understanding of how a <code>Promise</code> works and the advantages provided over traditional callback architectures. More and more libraries are depending on the <code>Promise</code> class, and you can really clean up your logic by using those methods. As Javascript continues to evolve, hopefully we find ourselves getting more of these well-designed systems to make writing code more pleasant.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Demystifying Public Speaking]]></title>
@@ -36,7 +453,7 @@
 
 <p>Always include some levity in your presentation. A joke or a cat picture can help reengage an audience that may be succumbing to fatigue. Ask a silly or surprising question, maybe even going so far as to ask for some audience participation.</p>
 
-<p>Presentations with lots of imagery are great, but your presentation style doesn&rsquo;t have to follow any conventions. Some people are comfortable getting their queues from their notes and images, but others may prefer more traditional header and bullet point slides.</p>
+<p>Presentations with lots of imagery are great, but your presentation style doesn&rsquo;t have to follow any conventions. Some people are comfortable getting their cues from their notes and images, but others may prefer more traditional header and bullet point slides.</p>
 
 <p>If there&rsquo;s going to be a Q&amp;A section, have your coworkers or peers hit you with some potential questions. Maybe you can beef up parts of your presentation that were misinterpreted or underrepresented.</p>
 
@@ -2447,63 +2864,6 @@
 <p>Think about how much you could get out of this exercise. You&rsquo;ll determine whether the candidate knows what code looks like, knows how to read code, knows how to communicate about code, and knows how to fix bad code. You&rsquo;ll also get a bit of their personality based on how mean they are during the code review sections. Hopefully, you were able to have a real discussion about design decisions and coding during the interview. The candidate will have done very little programming, just like you and me on a normal day. Best of all, you&rsquo;ll only have spent an hour of each other&rsquo;s time trying to figure out if the candidate is competent. Leave time for questions at the end and be done with it.</p>
 
 <p>Of course, I don&rsquo;t currently run a tech company or do much with the interview process. But everyone&rsquo;s been giving their two cents on that issue, and I like to type words on the computer. What do you think? Is whiteboarding during an interview integral to your interview process? Do you need it? Do you hate it? Do you have any alternatives? Let me know in the comments.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Going Remote: 1 Week In]]></title>
-    <link href="https://larry-price.com/blog/2016/04/11/going-remote-1-week/"/>
-    <updated>2016-04-11T20:40:00-04:00</updated>
-    <id>https://larry-price.com/blog/2016/04/11/going-remote-1-week</id>
-    <content type="html"><![CDATA[<p><em>I would like for this to be the first in a series of blog posts detailing my experience migrating from a culture based on co-location to a fully remote environment. Look out for another post at about the 1-month mark.</em></p>
-
-<p>I&rsquo;ve spent an entire week working remotely. How did it go? I&rsquo;m not going to go into my current job here (if you&rsquo;re curious: I love it), but I&rsquo;m going to try to focus on the aspects of setting up a pleasant environment for working from home and how I coped during my first week.</p>
-
-<h3>But first: some background</h3>
-
-<p>I&rsquo;ve never worked remotely as a professional software engineer for more than one day at a time until now. I&rsquo;ve been a part of an office with traditional cube farms and an office with more modern team spaces. I haven&rsquo;t worked in a <a href="https://twitter.com/ptone/status/582764080219320323">Silicon Valley Sweat Shop</a>, and I&rsquo;ve never had a private office with walls, windows, and that holy grail of office furniture: a door. My past organizations have been nested in a culture of co-location which is, of course, very normal. However, I&rsquo;ve very recently moved to a position at a new organization with cultural values borrowed from the open-source community. About 70% of the 700 employees are full remote.</p>
-
-<p>When I use the term &ldquo;working remotely,&rdquo; I mean that a given employee works from wherever they want. For the majority of people it&rsquo;s their home or apartment, but it could also be a coffee shop, a co-working space, a public park, or anywhere with an internet connection and a nearby power source.</p>
-
-<h3>Setting Up My (Physical) Environment</h3>
-
-<p>Also known as <em>Things I Had to Buy to Make This Work</em>.</p>
-
-<p>To prepare for this new work environment, I did what anyone would do: I started buying things. I bought a <a href="http://amzn.to/1Q3HywG">cool wireless mouse</a> that I could connect to my laptop through it&rsquo;s built-in bluetooth. I bought <a href="http://www.ikea.com/us/en/catalog/products/00103102/#/90289172">a chair with a name from IKEA</a> and one of those cheap plastic carpet protectors. I started looking into motorized sit/stand desks, but didn&rsquo;t purchase one immediately (a mistake I quickly recovered from). I moved a second lamp into my home office and figured I was set up for success.</p>
-
-<p>My first day, poor Markus (the chair) cracked the floor protector in several places, and my carpet is so thick that the chair couldn&rsquo;t roll on its own. I painfully used my laptop&rsquo;s keyboard for about 15 minutes before finding <a href="http://amzn.to/1MqycR8">another mechanical keyboard</a> to use instead which arrived that afternoon. The height of my old desk made sitting for hours super uncomfortable, so I quickly put in an order for a <a href="https://www.myupdesk.com/">sit/stand desk</a> that I could use downstairs where the carpet is thinner.</p>
-
-<p>The next day, my new mechanical keyboard refused to let me type Shift+RightAlt without thinking it was a Meta key, causing all my keyboard shortcuts to be busted. I swapped it out with my old mechanical keyboard that worked just as well, but with a functioning Shift+RightAlt. It was around this time I noticed my WiFi connection was becoming flaky. I cursed my ISP and decided it was fine for the time being.</p>
-
-<p>At some point during the week, the sit/stand desk arrived. Because of the thick carpet and uneven floors upstairs, I decided to start creating my new office downstairs. Unfortunately, my house is extremely poorly lit, so at the end of the day I had to run out to Target to buy a <a href="http://www.target.com/p/threshold-torchiere-floor-lamp-with-alabaster-glass-shade-oil-rubbed-bronze/-/A-14580986">new lamp</a> (and some cream cheese! classic combo!).</p>
-
-<p>By this time it was Friday. My network connection was not just bad, but worse than it ever had been. I started sniffing around the internets and found that <a href="https://www-ssl.intel.com/content/www/us/en/wireless-products/dual-band-wireless-ac-7260-bluetooth.html">my wireless card</a> (a bluetooth/WiFi dual card) was notoriously bad at handling bluetooth and WiFi at the same time on Linux, but sometimes updating the kernel and getting the latest iwlwifi drivers fixed the problem. So I updated to 4.3. No luck, so I updated to 4.4. <em>Still no luck</em>. By the end of things, I had the 4.4.6 kernel and I honestly thought things were a little better. A few hours and a dropped Hangouts call later, I realized I was wrong. However, booting off of a USB with fresh Ubuntu gave me a consistent and fast network connection. After piddling around a bit, I dramatically smacked my forehead. I flipped off the bluetooth connection on my laptop, and my network connection was fast and stable. I had been thwarted by my beautiful bluetooth mouse which, fortunately for me, also came with the usual wireless USB dongle.</p>
-
-<p>At the end of the week, I finally felt like my setup was fine. Network still a little slower than expected, but I fixed that recently by moving the router to higher ground.</p>
-
-<h3>Let me count the ways&hellip;</h3>
-
-<p>OK, so I had some issues getting my home office in working order. But <strong>I love working from home</strong>.</p>
-
-<p>I don&rsquo;t feel rushed when I get out of bed in the morning. I shave, shower, make coffee in the french press, and perfectly toast/cheese my bagel; and I get to enjoy every minute of getting ready for the day. I start when I want, but when I want is a normal time. I&rsquo;m at my desk ready to do my job sometime between 7:30am and 8:30am. The only way I need to let people know I&rsquo;m in the office is by signing into chat.</p>
-
-<p>My house is almost silent except for the noises I make and the infrequent meow of a cat wanting attention. I can focus on what I&rsquo;m doing without being distracted by peers or normal office noises. I don&rsquo;t need to put on headphones when I want solitude, which means I&rsquo;m not distracted by whatever noise is coming out of the headphones. Achieving flow seems to be much easier when there are fewer distractions.</p>
-
-<p><em>Speaking of cats</em>&hellip; I know this will seem silly, but it&rsquo;s quite nice to have my feline companions hanging out with me all day. Usually they&rsquo;re taking naps nearby so I can say &ldquo;d'awwwwwwww&rdquo;, or they&rsquo;re waiting in the kitchen for me to get up so they can get pets. Go <a href="http://www.adoptapet.com/cat-adoption">adopt a cat</a> now.</p>
-
-<p>I can make a healthy meal really easily at lunch. I love being able to pull some frozen veggies out of the freezer, throw them in the skillet with some sauce ingredients, add some protein, and feel like I&rsquo;m eating well in the middle of the day.</p>
-
-<p>All of my communication comes through chat, email, and infrequent Hangouts. We mostly just use Hangouts for our daily standup, and it&rsquo;s a great way to see everyone&rsquo;s faces and feel like a team. Email is pretty much only used for mailing lists, such as new merge proposals, bug reports, and company news; so I only glance at my email a couple times a day, and mark whatever I don&rsquo;t care about as Done. We use Google services to do this, which means I&rsquo;m using Inbox to achieve zero-inbox. Chat is our primary means of communication. Being a remote group, the chat is extremely efficient. There are no graphic memes, and chats never end with &ldquo;let&rsquo;s get a conference room to hash this out.&rdquo; Information is constantly being exchanged through the chat, and I rarely feel dissatisfied with the outcome. It&rsquo;s also interesting to note that when you leave the chat, you do not get to know what happened in your absence. However, this does not seem to be a hindrance to anyone, but almost more of a relief. You don&rsquo;t need to be in-the-know 24/7 to know what&rsquo;s going on.</p>
-
-<h3>Near-Future Goals</h3>
-
-<ul>
-<li><strong>Exercise more</strong>. Although my eating habits feel a little better, my exercise habits have been much worse. I used to meander the office every hour or two to get 10-15 minutes of exercise, or go outside to walk around. I have my sit/stand desk set up now, and I shuffle back and forth based on what I&rsquo;m doing and how my butt feels, but that doesn&rsquo;t count as exercise. I plan to lift my 10lb weights more frequently, and I&rsquo;d like to work out my core with push-ups and bicycles. It would also be great to walk around the neighborhood in the summer.</li>
-<li><strong>Extracurricular</strong>. It&rsquo;s been a while since I&rsquo;ve worked on something meaningful in the evenings, and it&rsquo;s been tough to get started on something since my work office (and computer) is now also my play office. In the next few weeks, I&rsquo;d like to build an Atom.io package to integrate with bzr.</li>
-<li><strong>Personalize workspace</strong>. Since I&rsquo;ve taken over the living room, the decor is mostly a big, decorative clock. I have some wicked posters I&rsquo;d like to put up, but I need to convince my housemate that they won&rsquo;t look too tacky in such a guest-visible area.</li>
-<li><strong>Find a better floormat</strong>. Like I said, this cheap IKEA floormat cracked on the first day. I&rsquo;d like to find something vinyl or closer to rubber that will be more resilient but also more comfortable when I morph into standing mode.</li>
-</ul>
-
 ]]></content>
   </entry>
   

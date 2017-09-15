@@ -4,7 +4,7 @@
   <title><![CDATA[Category: nodejs | Larry Price]]></title>
   <link href="https://larry-price.com/blog/categories/nodejs/atom.xml" rel="self"/>
   <link href="https://larry-price.com/"/>
-  <updated>2017-08-31T19:53:36-05:00</updated>
+  <updated>2017-09-14T21:44:10-05:00</updated>
   <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,244 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Promise you'll call back]]></title>
+    <link href="https://larry-price.com/blog/2017/09/14/promise-youll-call-back/"/>
+    <updated>2017-09-14T21:45:08-05:00</updated>
+    <id>https://larry-price.com/blog/2017/09/14/promise-youll-call-back</id>
+    <content type="html"><![CDATA[<p><em>This article introduces the Javascript Promise class, and how to use a Promise to perform asynchronous work. At the end of this post, you&rsquo;ll have been exposed to the most important components of the Promise API.</em></p>
+
+<p>Introduced in the <a href="http://www.ecma-international.org/ecma-262/6.0/#sec-promise-objects">ES2015 specification</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">MDN</a> dryly describes a <code>Promise</code> as:</p>
+
+<blockquote><p>The Promise object represents the eventual completion (or failure) of an asynchronous operation, and its resulting value.</p></blockquote>
+
+<p>But&hellip; what exactly does that entail? How does it differ from just using callbacks?</p>
+
+<p>Let&rsquo;s start with a simple example. If I want to perform an operation asynchronously, traditionally I would use <code>setTimeout</code> to do work after the main thread has finished and use a callback parameter to let the caller utilize the results. For example:</p>
+
+<pre><code class="javascript">const someAsyncTask = (after) =&gt; {
+  return setTimeout(() =&gt; {
+    after('the task is happening');
+  }, 0);
+};
+
+console.log('before calling someAsyncTask');
+
+someAsyncTask((result) =&gt; {
+  console.log(result);
+});
+
+console.log('after calling someAsyncTask');
+</code></pre>
+
+<p>Try running this yourself with <code>node</code>, and you&rsquo;ll see that &lsquo;before&hellip;&rsquo; and &lsquo;after&hellip;&rsquo; are printed followed by &lsquo;the task is happening&rsquo;.</p>
+
+<p>This is perfectly valid code, but it&rsquo;s just so <em>unnatural</em> to handle asynchronous tasks this way. There&rsquo;s no standard to which parameter should be the callback, and there&rsquo;s no standard to what arguments will be passed back to a given callback. Let&rsquo;s take a look at the same situation using the new <code>Promise</code> class:</p>
+
+<pre><code class="javascript">const someAsyncTask = () =&gt; {
+  return Promise.resolve('the task is happening');
+};
+
+console.log('before calling someAsyncTask');
+
+someAsyncTask().then((result) =&gt; {
+  console.log(result);
+});
+
+console.log('after calling someAsyncTask');
+</code></pre>
+
+<p>Let&rsquo;s walk through this. In <code>someAsyncTask</code>, we&rsquo;re now returning a call to <code>Promise.resolve</code> with our result. We call <code>then</code> on the result of <code>someAsyncTask</code> and then handle the results. <code>Promise.resolve</code> is returning a resolved <code>Promise</code>, which is run asynchronously after the main thread finishes its initial work (the final <code>console.log</code>, in this case).</p>
+
+<p>Immediately, this feels a lot cleaner to me, but this is a really simple example.</p>
+
+<p>Think about a situation where you need to perform multiple asynchronous callbacks that each depend on the results of the last callback. Here&rsquo;s an example implementation using callbacks;</p>
+
+<pre><code class="javascript">const getFirstName = (callback) =&gt; {
+  return setTimeout(() =&gt; {
+    callback('Harry');
+  }, 0);
+};
+
+const getLastName = (callback) =&gt; {
+  return setTimeout(() =&gt; {
+    callback('Potter');
+  }, 0);
+};
+
+const concatName = (first, last, callback) =&gt; {
+  return setTimeout(() =&gt; {
+    callback(`${first} ${last}`);
+  }, 0);
+}
+
+getFirstName((first) =&gt; {
+  getLastName((last) =&gt; {
+    concatName(first, last, (fullname) =&gt; {
+      console.log(fullname);
+    });
+  });
+});
+</code></pre>
+
+<p>I think we can all agree that this is not friendly code. What makes a <code>Promise</code> truly special is its natural chainability. As long as we keep returning <code>Promise</code> objects, we can keep calling <code>then</code> on the results:</p>
+
+<pre><code class="javascript">const getFirstName = (callback) =&gt; {
+  return Promise.resolve('Harry');
+};
+
+const getLastName = (callback) =&gt; {
+  return Promise.resolve('Potter');
+};
+
+const concatName = (first, last, callback) =&gt; {
+  return Promise.resolve(`${first} ${last}`);
+}
+
+getFirstName().then((first) =&gt; {
+  return getLastName().then((last) =&gt; {
+    return concatName(first, last);
+  });
+}).then((fullname) =&gt; {
+  console.log(fullname);
+});
+</code></pre>
+
+<p>Since <code>concatName</code> is dependent on the result of both <code>getFirstName</code> and <code>getLastName</code>, we still do a little bit of nesting. However, our final asynchronous action can now occur on the outside of the nesting, which will take advantage of the last returned result of our <code>Promise</code> resolutions.</p>
+
+<p>Error handling is another can of worms in callbacks. Which return value is the error and which is the result? Every level of nesting in a callback has to either handle errors, or maybe the top-most callback has to contain a try-catch block. Here&rsquo;s a particularly nasty example:</p>
+
+<pre><code class="javascript">const getFirstName = (callback) =&gt; {
+  return setTimeout(() =&gt; {
+    if (Math.random() &gt; 0.5) return callback('Sorry, firstName errored');
+    callback(null, 'Harry');
+  }, 0);
+};
+
+const getLastName = (callback) =&gt; {
+  return setTimeout(() =&gt; {
+    if (Math.random() &gt; 0.5) return callback('Sorry, lastName errored');
+    callback(null, 'Potter');
+  }, 0);
+};
+
+const concatName = (first, last, callback) =&gt; {
+  return setTimeout(() =&gt; {
+    if (Math.random() &gt; 0.5) return callback('Sorry, fullName errored');
+    callback(null, `${first} ${last}`);
+  }, 0);
+}
+
+getFirstName((err, first) =&gt; {
+  if (err) console.error(err); // no return, will fall through despite error
+  getLastName((err, last) =&gt; {
+    if (err) return console.error(err);
+    concatName(first, last, (err, fullname) =&gt; {
+      if (err) return console.error(err);
+      console.log(fullname);
+    });
+  });
+});
+</code></pre>
+
+<p>Every callback has to check for an individual error, and if any level mishandles the error (note the lack of a return on error after <code>getFirstName</code>), you&rsquo;re guaranteed to end up with undefined behavior. A <code>Promise</code> allows us to handle errors at any level with a <code>catch</code> statement:</p>
+
+<pre><code class="javascript">const getFirstName = () =&gt; {
+  if (Math.random() &gt; 0.5) return Promise.reject('Sorry, firstName errored');
+  return Promise.resolve('Harry');
+};
+
+const getLastName = () =&gt; {
+  if (Math.random() &gt; 0.5) return Promise.reject('Sorry, lastName errored');
+  return Promise.resolve('Potter');
+};
+
+const concatName = (first, last) =&gt; {
+  if (Math.random() &gt; 0.5) return Promise.reject('Sorry, fullName errored');
+  return Promise.resolve(`${first} ${last}`);
+}
+
+getFirstName().then((first) =&gt; {
+  return getLastName().then((last) =&gt; {
+    return concatName(first, last);
+  });
+}).then((fullname) =&gt; {
+  console.log(fullname);
+}).catch((err) =&gt; {
+  console.error(err);
+});
+</code></pre>
+
+<p>We return the result of <code>Promise.reject</code> to signify that we have an error. We only need to call <code>catch</code> once. Any <code>then</code> statements from unresolved promises will be ignored. A <code>catch</code> could be inserted at any nesting point, which could give you the ability to continue the chain:</p>
+
+<pre><code class="javascript">// ...
+
+getFirstName().then((first) =&gt; {
+  return getLastName().then((last) =&gt; {
+    return concatName(first, last);
+  }).catch((err) =&gt; {
+    return concatName(first, 'Houdini');
+  });
+}).then((fullname) =&gt; {
+  console.log(fullname);
+}).catch((err) =&gt; {
+  console.error(err);
+});
+</code></pre>
+
+<p>So far, we&rsquo;ve been returning <code>Promise</code> objects using <code>resolve</code> and <code>reject</code>, but there&rsquo;s also the ability to define our own <code>Promise</code> objects with their own <code>resolve</code> and <code>reject</code> methods. Updating the <code>getFirstName</code> variable:</p>
+
+<pre><code class="javascript">const getFirstName = () =&gt; {
+  return new Promise((resolve, reject) =&gt; {
+    if (Math.random() &gt; 0.5) return reject('Sorry, firstName errored');
+    return resolve('Harry');
+  });
+}
+// ...
+</code></pre>
+
+<p>We can also run our asynchronous tasks without nesting by using the <code>Promise.all</code> method:</p>
+
+<pre><code class="javascript">// ...
+
+Promise.all([getFirstName(), getLastName()]).then((names) =&gt; {
+  return concatName(names[0], names[1]);
+}).then((fullname) =&gt; {
+  console.log(fullname);
+}).catch((err) =&gt; {
+  console.error(err);
+});
+</code></pre>
+
+<p>Give <code>Promise.all</code> a list of promises and it will call them (in some order) and return all the results in an array (in the order given) as a resolved <code>Promise</code> once all given promises have been resolved. If any of the promises are rejected, the entire <code>Promise</code> will be rejected, resulting in the <code>catch</code> statement.</p>
+
+<p>Sometimes you need to run several methods, and you only care about the first result. <code>Promise.race</code> is similar to <code>Promise.all</code>, but only waits for one of the given promises to return:</p>
+
+<pre><code class="javascript">const func1 = () =&gt; {
+  return new Promise((resolve, reject) =&gt; {
+    setTimeout(() =&gt; resolve('func1'), 5*Math.random());
+  });
+}
+
+const func2 = () =&gt; {
+  return new Promise((resolve, reject) =&gt; {
+    setTimeout(() =&gt; resolve('func2'), Math.random());
+  });
+}
+
+Promise.race([func1(), func2()]).then((name) =&gt; {
+  console.log(name);
+}).catch((err) =&gt; {
+  console.error(err);
+});
+</code></pre>
+
+<p>Sometimes, &lsquo;func1&rsquo; will be printed, but most of the time &lsquo;func2&rsquo; will be printed.</p>
+
+<p>&hellip;And that&rsquo;s the basics! Hopefully, you have a better understanding of how a <code>Promise</code> works and the advantages provided over traditional callback architectures. More and more libraries are depending on the <code>Promise</code> class, and you can really clean up your logic by using those methods. As Javascript continues to evolve, hopefully we find ourselves getting more of these well-designed systems to make writing code more pleasant.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The wisdom of Confucius - now available in an API]]></title>

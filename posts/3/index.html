@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="Whether I&rsquo;m adding dependencies, updating package names, or creating new package spins, I always have issues testing my debian packages. &hellip;">
+  <meta name="description" content="If you haven&rsquo;t heard, snaps are a new, modern packaging format made by the guys at Ubuntu. Snaps give every app a confined environment to live &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,212 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/12/07/creating-a-snap-from-existing-deb-packages/">Building Snaps From Archived Packages</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-12-07T22:10:08-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>10:10 pm</span></time>
+        
+           | <a href="/blog/2016/12/07/creating-a-snap-from-existing-deb-packages/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2016/12/07/creating-a-snap-from-existing-deb-packages/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>If you haven&rsquo;t heard, <a href="//snapcraft.io">snaps</a> are a new, modern packaging format made by the guys at Ubuntu. Snaps give every app a confined environment to live in, making desktops more secure and dependencies less of a hassle. One common way to create a snap is to simply use existing packages from the Ubuntu archives.</p>
+
+<p>Let&rsquo;s try to create a snap for the game <a href="https://lgdb.org/game/pingus">pingus</a>. <code>pingus</code> is a great little Lemmings clone that we can easily convert to a snap. We&rsquo;ll start by installing the necessary dependencies for snap building (see <a href="//snapcraft.io/create/">the snapcraft website</a> for more):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt install snapcraft
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we can initialize a project directory with snapcraft:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mkdir -p pingus-snap <span class="o">&amp;&amp;</span> <span class="nb">cd </span>pingus-snap
+</span><span class='line'><span class="nv">$ </span>snapcraft init
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>snapcraft init</code> creates the following sample file to give us an idea of what we&rsquo;ll need to provide.</p>
+
+<figure class='code'><figcaption><span>snapcraft.yaml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">my-snap-name</span> <span class="c1"># you probably want to &#39;snapcraft register &lt;name&gt;&#39;</span>
+</span><span class='line'><span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="s">&#39;0.1&#39;</span> <span class="c1"># just for humans, typically &#39;1.2+git&#39; or &#39;1.3.2&#39;</span>
+</span><span class='line'><span class="l-Scalar-Plain">summary</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Single-line elevator pitch for your amazing snap</span> <span class="c1"># 79 char long summary</span>
+</span><span class='line'><span class="l-Scalar-Plain">description</span><span class="p-Indicator">:</span> <span class="p-Indicator">|</span>
+</span><span class='line'>  <span class="no">This is my-snap&#39;s description. You have a paragraph or two to tell the</span>
+</span><span class='line'>  <span class="no">most important story about your snap. Keep it under 100 words though,</span>
+</span><span class='line'>  <span class="no">we live in tweetspace and your description wants to look good in the snap</span>
+</span><span class='line'>  <span class="no">store.</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">grade</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">devel</span> <span class="c1"># must be &#39;stable&#39; to release into candidate/stable channels</span>
+</span><span class='line'><span class="l-Scalar-Plain">confinement</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">devmode</span> <span class="c1"># use &#39;strict&#39; once you have the right plugs and slots</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">parts</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">my-part</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="c1"># See &#39;snapcraft plugins&#39;</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">plugin</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">nil</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Most of these values for our <code>pingus</code> snap should be obvious. The interesting markup here is in <code>parts</code>, which is where we&rsquo;ll describe how to build our snap. We&rsquo;ll start by taking advantage of the <code>nil</code> plugin to simply unpack the <code>pingus</code> deb from the archive. We define our list of debs to install in a list called <code>stage-packages</code>. We&rsquo;ll also define another section, <code>apps</code>, to tell <code>snapcraft</code> what binaries we want to be able to execute. In our case, this will just be the <code>pingus</code> command. Here&rsquo;s what my first draft looks like:</p>
+
+<figure class='code'><figcaption><span>snapcraft.yaml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">pingus</span>
+</span><span class='line'><span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="s">&#39;0.1&#39;</span>
+</span><span class='line'><span class="l-Scalar-Plain">summary</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Free Lemmings(TM) clone</span>
+</span><span class='line'><span class="l-Scalar-Plain">description</span><span class="p-Indicator">:</span> <span class="p-Indicator">|</span>
+</span><span class='line'>    <span class="no">Pingus is a free clone of the popular Lemmings game.</span>
+</span><span class='line'>    <span class="no">|</span>
+</span><span class='line'>    <span class="no">Your goal is to guide a horde of penguins through a world full of obstacles</span>
+</span><span class='line'>    <span class="no">and penguin traps to safety. Although penguins (unlike lemmings) are rather</span>
+</span><span class='line'>    <span class="no">smart, they sometimes lack the necessary overview and now rely on you to</span>
+</span><span class='line'>    <span class="no">save them.</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">grade</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">devel</span>
+</span><span class='line'><span class="l-Scalar-Plain">confinement</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">devmode</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">parts</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">archives</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">plugin</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">nil</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">stage-packages</span><span class="p-Indicator">:</span>
+</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">pingus</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">apps</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">pingus</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">command</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">usr/games/pingus</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Nice, right? Building and installing our snap is easy:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>snapcraft
+</span><span class='line'><span class="nv">$ </span>sudo snap install --devmode pingus_0.1_amd64.snap
+</span><span class='line'>pingus 0.1 installed
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We used <code>devmode</code> here because our app will be running unconfined (a topic for another blog post). Now, for the moment of truth! The snap tools automatically put our new app in <code>PATH</code>, so we can just run <code>pingus</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>pingus
+</span><span class='line'>/snap/pingus/x2/usr/games/pingus: 2: <span class="nb">exec</span>: /usr/lib/games/pingus/pingus: not found
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>¡Ay, caramba! We&rsquo;ve run into a fairly common issue while snapping legacy software: <strong>hardcoded paths</strong>. Fortunately, the corresponding <code>pingus</code> executable is very simple. It&rsquo;s trying to execute a command living in <code>/usr/lib/games/pingus</code>, which is not in our snap&rsquo;s <code>PATH</code>. The easiest way to fix this is to fix the <code>pingus</code> executable. Since we don&rsquo;t want to spend time modifying the upstream to use a relative path, we can create our own version of the <code>pingus</code> wrapper locally and copy it into our snap. The only change to this new wrapper will be prepending the snap&rsquo;s install path <code>$SNAP</code> to the absolute paths:</p>
+
+<figure class='code'><figcaption><span>pingus.wrapper</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/sh</span>
+</span><span class='line'><span class="nb">exec</span> <span class="nv">$SNAP</span>/usr/lib/games/pingus/pingus --datadir <span class="nv">$SNAP</span>/usr/share/games/pingus/data <span class="nv">$@</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we can update our yaml file with a new part called <code>env</code> which will use the <code>dump</code> plugin to copy our wrapper file into the snap. We&rsquo;ll also update our command to call the wrapper:</p>
+
+<figure class='code'><figcaption><span>snapcraft.yaml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="c1"># ...</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">parts</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">archives</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">plugin</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">nil</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">stage-packages</span><span class="p-Indicator">:</span>
+</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">pingus</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">env</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">plugin</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">dump</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">organize</span><span class="p-Indicator">:</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">pingus.wrapper</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">usr/bin/pingus</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">apps</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">pingus</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">command</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">pingus</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When you run <code>snapcraft</code> this time, the <code>env</code> part will be built. After performing another install, you can run <code>pingus</code>, and you should be greeted with one of the best Lemmings clones available! Because we&rsquo;re running unconfined in devmode, this all just works without any issues. I intend to write another blog post in the near future with the details on confining <code>pingus</code>, so look out for that soon. I may also go into detail on building more complex cases, such as building snaps from source and building custom plugins, or reviewing a case study such as the <code>libertine</code> snap.</p>
+
+<p>For much, much more on snaps, be sure to visit <a href="//snapcraft.io/create/">snapcraft.io</a>. If you&rsquo;re looking for a published version of pingus as a snap, you can try <code>sudo snap install --devmode --beta pingus-game</code>, and you can run the game with <code>pingus-game.pingus</code>.</p>
+
+<p><em>Source code available at <a href="https://github.com/larryprice/pingus-snap">https://github.com/larryprice/pingus-snap</a>.</em></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -728,122 +934,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2016/07/07/writing-a-go-slash-qml-convergent-ubuntu-app/">Writing Go/QML Convergent Ubuntu Apps</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2016-07-07T16:31:23-04:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>4:31 pm</span></time>
-        
-           | <a href="/blog/2016/07/07/writing-a-go-slash-qml-convergent-ubuntu-app/#disqus_thread"
-             data-disqus-identifier="https://larry-price.com/blog/2016/07/07/writing-a-go-slash-qml-convergent-ubuntu-app/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Thinking about writing an Ubuntu application that will work in Unity 8? You&rsquo;ll be writing a &ldquo;convergent&rdquo; app, which is an application that can respond to touch or mouse, and will adapt appropriately to a phone, tablet, or desktop screen. It will even be able to update its display on-the-fly if, say, you plug your phone into a monitor or bluetooth keyboard.</p>
-
-<p>There are <em>lots</em> of ways to write a convergent application with the <a href="https://developer.ubuntu.com/en/phone/platform/sdk/">Ubuntu SDK</a>. You can build apps in pure QML, C++ with QML, QtQuick, pure HTML5/Javascript, or even <strong>Golang with QML</strong>. We&rsquo;ll be focusing on go apps for the rest of this post.</p>
-
-<p>Go is a young language, and the recent release of <a href="https://blog.golang.org/go1.6">go 1.6</a> has introduced some nasty changes particularly involving cgo. It has also introduced vendoring by default, which is a welcome change.</p>
-
-<p>I&rsquo;m using go 1.6.2. For me, the current project template provided by the Ubuntu SDK feels quite broken. I can&rsquo;t get things to build locally, and furthermore I see no options for pushing an ARM build to my device.</p>
-
-<p>Fortunately, I found this <a href="https://github.com/nikwen/ubuntu-go-qml-template">ubuntu-go-qml-template</a> which is a template to enable running/building a go/qml application locally while also supporting building/installing onto an arm device. The kicker? This tool was designed to work for go 1.3.3. Sigh! Since I&rsquo;m unwilling to compromise and use old technology, I <a href="https://github.com/larryprice/ubuntu-go-qml-template">forked the project</a> and updated it to fit my more modern needs.</p>
-
-<p>Because our go template will depend on QML, we depend on the <a href="https://github.com/go-qml/qml">go-qml</a> project to create the necessary C bindings to allow us to use QML. However, with the update to go 1.6, the current version (revision 2ee7e5f) of go-qml will give a runtime error from cgo with the wonderfully helpful <code>panic: runtime error: cgo argument has Go pointer to Go pointer</code>. Another thorn in our side. Fortunately, this issue is in previously tread-upon ground and there is a <a href="https://github.com/sjb/qml/tree/go1.6-port">fork of go-qml</a> with enough of the cgo issues fixed to run our application with no problems. In the <code>ubuntu-go-qml-template</code> I forked above, I&rsquo;ve gone ahead and vendored this fork of <code>go-qml</code>. It all works because of the default vendoring available in go 1.6.</p>
-
-<p>With that background out of the way, let&rsquo;s run through getting a project started:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install golang g++ qtdeclarative5-dev qtbase5-private-dev <span class="se">\</span>
-</span><span class='line'>                       qtdeclarative5-private-dev libqt5opengl5-dev <span class="se">\</span>
-</span><span class='line'>                                           qtdeclarative5-qtquick2-plugin
-</span><span class='line'><span class="c"># installing dependencies...</span>
-</span><span class='line'><span class="nv">$ </span>git clone https://github.com/larryprice/ubuntu-go-qml-template.git your-project-name
-</span><span class='line'><span class="c"># cloning repo...</span>
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>your-project-name
-</span><span class='line'><span class="nv">$ </span>chroot-scripts/setup-chroot.sh
-</span><span class='line'><span class="c"># building a chroot for ubuntu-sdk-15.04</span>
-</span><span class='line'><span class="c"># distro=vivid, arch=arm</span>
-</span><span class='line'><span class="c"># with go 1.6.2 with armhf compilation support</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You may need to have other dependencies including <code>click</code> or <code>phablet-tools</code>. The above commands installed dependencies, cloned the repo, and built and/or updated a chroot for building our source for arm.</p>
-
-<p>Next you&rsquo;ll want to setup the project for your own needs. The original template creator included a nifty <code>setup</code> script to get this done:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>ruby setup.rb -v -n your-project-name -a <span class="s2">&quot;Your Name&quot;</span> -e <span class="s2">&quot;your.email@example.com&quot;</span> <span class="se">\</span>
-</span><span class='line'>                   -d <span class="s2">&quot;your-developer-namespace&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This will do some fancy gsub and file renaming to make the template your own.</p>
-
-<p>If you check <code>src/</code>, you&rsquo;ll find a <code>main.go</code> file ready for your use. You&rsquo;ll also find a <code>main.qml</code> file in <code>share/qml/</code>. You can vendor all of your dependencies in <code>vendor/</code>, where you&rsquo;ll already find the <code>qml</code> package.</p>
-
-<p>As far as getting your application to work, there are more scripts available:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>./build.sh
-</span><span class='line'><span class="c"># this will build your project locally</span>
-</span><span class='line'><span class="nv">$ </span>./run.sh
-</span><span class='line'><span class="c"># this will build your project locally and then run it on the desktop</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The best part about this template is the ability to build for arm and load your applications onto a device:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>./build-in-chroot.sh
-</span><span class='line'><span class="c"># builds the package using the vivid+armhf chroot we set up previously</span>
-</span><span class='line'><span class="nv">$ </span>./install-on-device.sh
-</span><span class='line'><span class="c"># builds for vivid+armhf and installs the click directly on</span>
-</span><span class='line'><span class="c"># the first USB-connected Ubuntu Touch device</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now you can run and install go/qml applications on desktop or on devices. Time to go build something cool!</p>
-
-<p><em>Disclaimer: In the future, this template will likely need to be updated for new go versions or new default versions of the Ubuntu SDK. Don&rsquo;t be afraid to make a comment below or submit a PR.</em></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/4">&larr; Older</a>
@@ -882,6 +972,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2017/09/14/promise-youll-call-back/">Promise You'll Call Back</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2017/08/31/demystifying-public-speaking/">Demystifying Public Speaking</a>
       </li>
     
@@ -897,15 +991,11 @@
         <a href="/blog/2017/04/11/using-d-bus-signals-in-python/">Using D-Bus Signals in Python</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python/">Creating an Asynchronous D-Bus Service With Python</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 123.63636363636364%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 105.45454545454545%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.63636363636363%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 125.45454545454545%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 107.27272727272727%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.63636363636363%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
 </section>
 
 <section>

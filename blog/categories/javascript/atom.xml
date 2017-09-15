@@ -4,7 +4,7 @@
   <title><![CDATA[Category: javascript | Larry Price]]></title>
   <link href="https://larry-price.com/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="https://larry-price.com/"/>
-  <updated>2017-08-31T19:53:36-05:00</updated>
+  <updated>2017-09-14T21:44:10-05:00</updated>
   <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,244 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Promise you'll call back]]></title>
+    <link href="https://larry-price.com/blog/2017/09/14/promise-youll-call-back/"/>
+    <updated>2017-09-14T21:45:08-05:00</updated>
+    <id>https://larry-price.com/blog/2017/09/14/promise-youll-call-back</id>
+    <content type="html"><![CDATA[<p><em>This article introduces the Javascript Promise class, and how to use a Promise to perform asynchronous work. At the end of this post, you&rsquo;ll have been exposed to the most important components of the Promise API.</em></p>
+
+<p>Introduced in the <a href="http://www.ecma-international.org/ecma-262/6.0/#sec-promise-objects">ES2015 specification</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">MDN</a> dryly describes a <code>Promise</code> as:</p>
+
+<blockquote><p>The Promise object represents the eventual completion (or failure) of an asynchronous operation, and its resulting value.</p></blockquote>
+
+<p>But&hellip; what exactly does that entail? How does it differ from just using callbacks?</p>
+
+<p>Let&rsquo;s start with a simple example. If I want to perform an operation asynchronously, traditionally I would use <code>setTimeout</code> to do work after the main thread has finished and use a callback parameter to let the caller utilize the results. For example:</p>
+
+<pre><code class="javascript">const someAsyncTask = (after) =&gt; {
+  return setTimeout(() =&gt; {
+    after('the task is happening');
+  }, 0);
+};
+
+console.log('before calling someAsyncTask');
+
+someAsyncTask((result) =&gt; {
+  console.log(result);
+});
+
+console.log('after calling someAsyncTask');
+</code></pre>
+
+<p>Try running this yourself with <code>node</code>, and you&rsquo;ll see that &lsquo;before&hellip;&rsquo; and &lsquo;after&hellip;&rsquo; are printed followed by &lsquo;the task is happening&rsquo;.</p>
+
+<p>This is perfectly valid code, but it&rsquo;s just so <em>unnatural</em> to handle asynchronous tasks this way. There&rsquo;s no standard to which parameter should be the callback, and there&rsquo;s no standard to what arguments will be passed back to a given callback. Let&rsquo;s take a look at the same situation using the new <code>Promise</code> class:</p>
+
+<pre><code class="javascript">const someAsyncTask = () =&gt; {
+  return Promise.resolve('the task is happening');
+};
+
+console.log('before calling someAsyncTask');
+
+someAsyncTask().then((result) =&gt; {
+  console.log(result);
+});
+
+console.log('after calling someAsyncTask');
+</code></pre>
+
+<p>Let&rsquo;s walk through this. In <code>someAsyncTask</code>, we&rsquo;re now returning a call to <code>Promise.resolve</code> with our result. We call <code>then</code> on the result of <code>someAsyncTask</code> and then handle the results. <code>Promise.resolve</code> is returning a resolved <code>Promise</code>, which is run asynchronously after the main thread finishes its initial work (the final <code>console.log</code>, in this case).</p>
+
+<p>Immediately, this feels a lot cleaner to me, but this is a really simple example.</p>
+
+<p>Think about a situation where you need to perform multiple asynchronous callbacks that each depend on the results of the last callback. Here&rsquo;s an example implementation using callbacks;</p>
+
+<pre><code class="javascript">const getFirstName = (callback) =&gt; {
+  return setTimeout(() =&gt; {
+    callback('Harry');
+  }, 0);
+};
+
+const getLastName = (callback) =&gt; {
+  return setTimeout(() =&gt; {
+    callback('Potter');
+  }, 0);
+};
+
+const concatName = (first, last, callback) =&gt; {
+  return setTimeout(() =&gt; {
+    callback(`${first} ${last}`);
+  }, 0);
+}
+
+getFirstName((first) =&gt; {
+  getLastName((last) =&gt; {
+    concatName(first, last, (fullname) =&gt; {
+      console.log(fullname);
+    });
+  });
+});
+</code></pre>
+
+<p>I think we can all agree that this is not friendly code. What makes a <code>Promise</code> truly special is its natural chainability. As long as we keep returning <code>Promise</code> objects, we can keep calling <code>then</code> on the results:</p>
+
+<pre><code class="javascript">const getFirstName = (callback) =&gt; {
+  return Promise.resolve('Harry');
+};
+
+const getLastName = (callback) =&gt; {
+  return Promise.resolve('Potter');
+};
+
+const concatName = (first, last, callback) =&gt; {
+  return Promise.resolve(`${first} ${last}`);
+}
+
+getFirstName().then((first) =&gt; {
+  return getLastName().then((last) =&gt; {
+    return concatName(first, last);
+  });
+}).then((fullname) =&gt; {
+  console.log(fullname);
+});
+</code></pre>
+
+<p>Since <code>concatName</code> is dependent on the result of both <code>getFirstName</code> and <code>getLastName</code>, we still do a little bit of nesting. However, our final asynchronous action can now occur on the outside of the nesting, which will take advantage of the last returned result of our <code>Promise</code> resolutions.</p>
+
+<p>Error handling is another can of worms in callbacks. Which return value is the error and which is the result? Every level of nesting in a callback has to either handle errors, or maybe the top-most callback has to contain a try-catch block. Here&rsquo;s a particularly nasty example:</p>
+
+<pre><code class="javascript">const getFirstName = (callback) =&gt; {
+  return setTimeout(() =&gt; {
+    if (Math.random() &gt; 0.5) return callback('Sorry, firstName errored');
+    callback(null, 'Harry');
+  }, 0);
+};
+
+const getLastName = (callback) =&gt; {
+  return setTimeout(() =&gt; {
+    if (Math.random() &gt; 0.5) return callback('Sorry, lastName errored');
+    callback(null, 'Potter');
+  }, 0);
+};
+
+const concatName = (first, last, callback) =&gt; {
+  return setTimeout(() =&gt; {
+    if (Math.random() &gt; 0.5) return callback('Sorry, fullName errored');
+    callback(null, `${first} ${last}`);
+  }, 0);
+}
+
+getFirstName((err, first) =&gt; {
+  if (err) console.error(err); // no return, will fall through despite error
+  getLastName((err, last) =&gt; {
+    if (err) return console.error(err);
+    concatName(first, last, (err, fullname) =&gt; {
+      if (err) return console.error(err);
+      console.log(fullname);
+    });
+  });
+});
+</code></pre>
+
+<p>Every callback has to check for an individual error, and if any level mishandles the error (note the lack of a return on error after <code>getFirstName</code>), you&rsquo;re guaranteed to end up with undefined behavior. A <code>Promise</code> allows us to handle errors at any level with a <code>catch</code> statement:</p>
+
+<pre><code class="javascript">const getFirstName = () =&gt; {
+  if (Math.random() &gt; 0.5) return Promise.reject('Sorry, firstName errored');
+  return Promise.resolve('Harry');
+};
+
+const getLastName = () =&gt; {
+  if (Math.random() &gt; 0.5) return Promise.reject('Sorry, lastName errored');
+  return Promise.resolve('Potter');
+};
+
+const concatName = (first, last) =&gt; {
+  if (Math.random() &gt; 0.5) return Promise.reject('Sorry, fullName errored');
+  return Promise.resolve(`${first} ${last}`);
+}
+
+getFirstName().then((first) =&gt; {
+  return getLastName().then((last) =&gt; {
+    return concatName(first, last);
+  });
+}).then((fullname) =&gt; {
+  console.log(fullname);
+}).catch((err) =&gt; {
+  console.error(err);
+});
+</code></pre>
+
+<p>We return the result of <code>Promise.reject</code> to signify that we have an error. We only need to call <code>catch</code> once. Any <code>then</code> statements from unresolved promises will be ignored. A <code>catch</code> could be inserted at any nesting point, which could give you the ability to continue the chain:</p>
+
+<pre><code class="javascript">// ...
+
+getFirstName().then((first) =&gt; {
+  return getLastName().then((last) =&gt; {
+    return concatName(first, last);
+  }).catch((err) =&gt; {
+    return concatName(first, 'Houdini');
+  });
+}).then((fullname) =&gt; {
+  console.log(fullname);
+}).catch((err) =&gt; {
+  console.error(err);
+});
+</code></pre>
+
+<p>So far, we&rsquo;ve been returning <code>Promise</code> objects using <code>resolve</code> and <code>reject</code>, but there&rsquo;s also the ability to define our own <code>Promise</code> objects with their own <code>resolve</code> and <code>reject</code> methods. Updating the <code>getFirstName</code> variable:</p>
+
+<pre><code class="javascript">const getFirstName = () =&gt; {
+  return new Promise((resolve, reject) =&gt; {
+    if (Math.random() &gt; 0.5) return reject('Sorry, firstName errored');
+    return resolve('Harry');
+  });
+}
+// ...
+</code></pre>
+
+<p>We can also run our asynchronous tasks without nesting by using the <code>Promise.all</code> method:</p>
+
+<pre><code class="javascript">// ...
+
+Promise.all([getFirstName(), getLastName()]).then((names) =&gt; {
+  return concatName(names[0], names[1]);
+}).then((fullname) =&gt; {
+  console.log(fullname);
+}).catch((err) =&gt; {
+  console.error(err);
+});
+</code></pre>
+
+<p>Give <code>Promise.all</code> a list of promises and it will call them (in some order) and return all the results in an array (in the order given) as a resolved <code>Promise</code> once all given promises have been resolved. If any of the promises are rejected, the entire <code>Promise</code> will be rejected, resulting in the <code>catch</code> statement.</p>
+
+<p>Sometimes you need to run several methods, and you only care about the first result. <code>Promise.race</code> is similar to <code>Promise.all</code>, but only waits for one of the given promises to return:</p>
+
+<pre><code class="javascript">const func1 = () =&gt; {
+  return new Promise((resolve, reject) =&gt; {
+    setTimeout(() =&gt; resolve('func1'), 5*Math.random());
+  });
+}
+
+const func2 = () =&gt; {
+  return new Promise((resolve, reject) =&gt; {
+    setTimeout(() =&gt; resolve('func2'), Math.random());
+  });
+}
+
+Promise.race([func1(), func2()]).then((name) =&gt; {
+  console.log(name);
+}).catch((err) =&gt; {
+  console.error(err);
+});
+</code></pre>
+
+<p>Sometimes, &lsquo;func1&rsquo; will be printed, but most of the time &lsquo;func2&rsquo; will be printed.</p>
+
+<p>&hellip;And that&rsquo;s the basics! Hopefully, you have a better understanding of how a <code>Promise</code> works and the advantages provided over traditional callback architectures. More and more libraries are depending on the <code>Promise</code> class, and you can really clean up your logic by using those methods. As Javascript continues to evolve, hopefully we find ourselves getting more of these well-designed systems to make writing code more pleasant.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[A Chronicle of SEP Startup Weekend 2016]]></title>
@@ -269,63 +507,6 @@ $.noty.themes.testtheme.style = function () {
 <p>I dynamically create as many <code>Name</code> components as I need. I take my list of names and map them all to React components, each of which has a different value. As above, all of these can have events or can call events on the parent component. When we create a list of components, React prefers it when we give them all <code>key</code> attributes. This allows React to cache the components and recreate the appropriate component when states change.</p>
 
 <p>Of course this is just scratching the surface. I used ReactJS because it was fast, stable, and easy to get started learning. It gave me a different way to think about the relationship between my Javascript and the DOM. For a little bit more React you should check out <a href="http://facebook.github.io/react/docs/tutorial.html">the tutorials</a>. If you hadn&rsquo;t noticed, React uses a twist on the Javascript syntax called JSX. If you&rsquo;re into that kind of thing, I&rsquo;ve written about <a href="/blog/2015/06/08/compile-jsx-with-docker/">using Docker to compile your JSX</a> whenever you update your JSX files - very handy IMO.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Compile JSX with Docker]]></title>
-    <link href="https://larry-price.com/blog/2015/06/08/compile-jsx-with-docker/"/>
-    <updated>2015-06-08T12:45:51-04:00</updated>
-    <id>https://larry-price.com/blog/2015/06/08/compile-jsx-with-docker</id>
-    <content type="html"><![CDATA[<p>Users of <a href="https://facebook.github.io/react/index.html">ReactJS</a> may be familiar with <a href="https://facebook.github.io/react/docs/jsx-in-depth.html">JSX</a>, &ldquo;a Javascript syntax extension that looks similar to XML.&rdquo; JSX makes writing React components a little bit easier. I wrote a bunch of JSX components when I built <a href="https://www.refer-madness.com">Refer Madness</a>, and I wanted to find a sane way to compile my JSX files into plain JS files. As I was already using Docker to run my server-side and my <a href="/blog/2015/05/17/compile-sass-with-docker/">compile my SASS</a>, I created <a href="https://registry.hub.docker.com/u/larryprice/jsx/">a Docker image to compile my JSX code</a> whenever file changes were detected.</p>
-
-<p>I have a simple JSX file:</p>
-
-<pre><code class="javascript login.jsx">var LoginButton = React.createClass({
-  togglePanel: function() {
-    if (window.location.pathname === "/") {
-      $(".title").toggleClass("shrink fast");
-    }
-    $("#authenticate-panel").collapse('toggle');
-  },
-  render: function() {
-    return (
-      &lt;div className="col-xs-12 col-sm-2 text-center"&gt;
-        &lt;button className="login-btn btn btn-default" data-toggle="collapse" onClick={this.togglePanel}
-                aria-expanded="false" aria-controls="authenticate-panel"&gt;
-          &lt;span className="glyphicon glyphicon-lock"&gt;&lt;/span&gt;
-          Sign Up or Log In
-        &lt;/button&gt;
-      &lt;/div&gt;
-    )
-  }
-});
-</code></pre>
-
-<p>With <a href="https://docs.docker.com/installation/#installation">Docker already installed</a>, I fire up a new container:</p>
-
-<pre><code class="bash">$ docker run -v $PWD:/src --rm larryprice/jsx
-</code></pre>
-
-<p>In this case, <code>$PWD</code> is the directory where my JSX files live. The <code>-v</code> flag creates a volume in my container. The <code>--rm</code> flag will remove the container when I&rsquo;m finished using it (for convenience). <code>larryprice/jsx</code> is the image I want to use. This command will watch the current directory and compile the JSX whenever it detects a file change. The generated files will be created next to the JSX files.</p>
-
-<p>What&rsquo;s in the image, you ask? It&rsquo;s just the <code>node:latest</code> image with <code>react-tools</code> installed which automatically runs the command <code>jsx --extension jsx --watch src/ src/</code>. It&rsquo;s fairly simple, but way easier than having to do all this myself.</p>
-
-<p>If I want to use the JSX image with docker-compose alongside the rest of a web application, I might have something like this:</p>
-
-<pre><code class="yaml docker-compose.yml">app:
-  image: golang:1.4
-  working_dir: /go/src/simple-golang-app
-  command: go run main.go
-  volumes:
-    - ./simple-golang-app:/go/src/simple-golang-app
-jsx:
-  image: larryprice/jsx
-  volumes:
-    - ./public/scripts:/src
-</code></pre>
-
-<p>It means not having to install Node or npm on your system if you don&rsquo;t already have it. Being able to compile my SCSS, JSX, and Go code all in once command was a lifesaver, and being able to recreate this environment anywhere meant keeping my computers in-sync was simple. Life, love, and Docker.</p>
 ]]></content>
   </entry>
   
