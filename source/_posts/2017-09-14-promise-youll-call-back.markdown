@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Promise you'll call back"
+title: "Promise you'll call back: A guide to the Javascript Promise class"
 date: 2017-09-14 21:45:08 -0500
 comments: true
 categories: javascript nodejs
