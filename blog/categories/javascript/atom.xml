@@ -4,7 +4,7 @@
   <title><![CDATA[Category: javascript | Larry Price]]></title>
   <link href="https://larry-price.com/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="https://larry-price.com/"/>
-  <updated>2017-09-14T21:44:10-05:00</updated>
+  <updated>2018-02-02T16:22:12-06:00</updated>
   <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -14,7 +14,128 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Promise you'll call back]]></title>
+    <title type="html"><![CDATA[Async and Await - A New Promise]]></title>
+    <link href="https://larry-price.com/blog/2018/02/02/async-and-await-a-new-promise/"/>
+    <updated>2018-02-02T15:19:48-06:00</updated>
+    <id>https://larry-price.com/blog/2018/02/02/async-and-await-a-new-promise</id>
+    <content type="html"><![CDATA[<p>In my <a href="/blog/2017/09/14/promise-youll-call-back/">last post</a>, I discussed the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">ES2015 concept of a <code>Promise</code></a>. A <code>Promise</code> provides a simplified mechanism for performing asynchronous work in JavaScript without using the classic <code>setTimeout</code>-callback approach. Seeing as it&rsquo;s been about 4 months since my previous post, a new asynchronous concept is on the rise as part of the <a href="https://tc39.github.io/ecma262/2017/#sec-async-function-definitions">ES2017 specification</a>: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function"><code>async</code> and <code>await</code></a>.</p>
+
+<p>I became aware of <code>async</code> and <code>await</code> after reading <a href="https://davidwalsh.name/async-await">David Walsh&rsquo;s blog</a>, at which point I disregarded the new features as being &ldquo;too soon&rdquo; and &ldquo;not different enough&rdquo; from a <code>Promise</code> to warrant a second thought. Then, yesterday, I used them, and my life was, once again, forever changed.</p>
+
+<p><code>await</code> is used to essentially wait for a <code>Promise</code> to finish. Instead of using a callback with a <code>then</code> clause, <code>await</code> allows you to perform the action and/or store the result like you&rsquo;re within a synchronous function.</p>
+
+<p><code>async</code> is a keyword identifier used on functions to specify that that function will use <code>await</code>. Try to call <code>await</code> in a function not labeled as <code>async</code> and you&rsquo;re going to have a bad time. Any <code>async</code> function returns a <code>Promise</code>.</p>
+
+<p>Let&rsquo;s see an example:</p>
+
+<pre><code class="javascript">function getFirstName() { return Promise.resolve('Charles'); }
+function getMiddleName() { return Promise.resolve('Entertainment'); }
+function getLastName() { return Promise.resolve('Cheese'); }
+
+async function getName() {
+  const first = await getFirstName();
+  const middle = await getMiddleName();
+  const last = await getLastName();
+
+  return `${first} ${middle} ${last}`;
+}
+
+getName().then((name) =&gt; {
+  console.log(name);
+});
+
+console.log('My next guest needs no introduction:');
+
+// Result:
+//   My next guest needs no introduction:
+//   Charles Entertainment Cheese
+</code></pre>
+
+<p>We have three functions which each return a <code>Promise</code>, and an <code>async</code> function which calls those functions sequentially and uses the results to construct a string. We call the <code>getName</code> function (which is <code>async</code> and therefore returns a <code>Promise</code>) and log the results. Our last command logs a special message. Due to the asynchronous nature of the <code>getName</code> function, our special message is logged first, and then the result of <code>getName</code>.</p>
+
+<p>This comes in handy when you&rsquo;re depending on the results of a <code>Promise</code> to do some work or pass into another asynchronous call. But, in the case of our <code>getName</code> function above, we could be getting all three of the names at once. This calls for the brilliant <code>Promise.all</code> method, which can also be used with <code>async</code>. Let&rsquo;s modify our sub-name functions to all use <code>async</code> and then fetch them all at once:</p>
+
+<pre><code class="javascript">async function getFirstName() { return 'Charles'; }
+async function getMiddleName() { return 'Entertainment'; }
+async function getLastName() { return 'Cheese'; }
+
+async function getName() {
+  const names = await Promise.all([getFirstName(), getMiddleName(), getLastName()]);
+
+  return `${names[0]} ${names[1]} ${names[2]}`;
+}
+
+getName().then((name) =&gt; {
+  console.log(name);
+});
+
+console.log('My next guest needs no introduction:');
+
+// Result:
+//   My next guest needs no introduction:
+//   Charles Entertainment Cheese
+</code></pre>
+
+<p>Since an <code>async</code> function just returns a <code>Promise</code>, we can directly use (and even inter-mix) <code>async</code> functions inside <code>Promise.all</code>, and the results come back in an ordered array.</p>
+
+<p>OK, what if we want to fire off some long-running task and do some other work in the meantime? We can defer our use of <code>await</code> until after we&rsquo;ve performed all the intermediate work:</p>
+
+<pre><code class="javascript">async function getFirstName() { return 'Charles'; }
+async function getMiddleName() { return 'Entertainment'; }
+async function getLastName() { return 'Cheese'; }
+
+async function getName() {
+  const first  = getFirstName();  // first, middle, and last will all
+  const middle = getMiddleName(); // be pending Promises at this
+  const last   = getLastName();   // point, to be resolved in time
+
+  const title = Math.random() &gt; .5 ? 'Sr.' : 'Esq.';
+
+  return `${await first} ${await middle} ${await last}, ${title}`;
+}
+
+getName().then((name) =&gt; {
+  console.log(name);
+});
+
+console.log('My next guest needs no introduction:');
+
+// Result will be quasi-random:
+//   My next guest needs no introduction:
+//   Charles Entertainment Cheese, (Esq.|Sr.)
+</code></pre>
+
+<p>This example reiterates that you can use <code>async</code> functions just like you would a <code>Promise</code>, but with the added benefit of using <code>await</code> to wait for the results when necessary.</p>
+
+<p>I know what you&rsquo;re thinking: &ldquo;All these positives, Larry! Is there nothing negative about <code>async</code>/<code>await</code>?&rdquo; As always, there are a couple of pitfalls to using these functions. The biggest nuisance for me is the loss of the <code>catch</code> block when converting from a <code>Promise</code> chain. In order to catch errors with <code>async</code>/<code>await</code>, you&rsquo;ll have to go back to traditional <code>try/catch</code> statements:</p>
+
+<pre><code class="javascript">async function checkStatus() { throw 'The Cheese is displeased!'; }
+
+async function checks() {
+  try {
+    await checkStatus();
+    return 'No problems.';
+  } catch (e) {
+    return e;
+  }
+}
+
+checks().then((status) =&gt; {
+  console.log(status)
+})
+console.log('Current status:');
+
+// Result will be quasi-random:
+//   Current status:
+//   The Cheese is displeased!
+</code></pre>
+
+<p>The only other real downside is that <code>async</code> and <code>await</code> may not be fully supported in your users' browsers or your version of Node.JS. There are plenty of ways to get around this with Babel and polyfills, but, to be honest, I dedicated a large chunk of time yesterday afternoon to upgrading all of our libraries and babel versions to get this to work properly everywhere. Your mileage may vary, and, if you&rsquo;re reading this 6 months from when it was posted, I&rsquo;m sure it will be available by default in any implementations of ECMAScript.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Promise you'll call back: A guide to the Javascript Promise class]]></title>
     <link href="https://larry-price.com/blog/2017/09/14/promise-youll-call-back/"/>
     <updated>2017-09-14T21:45:08-05:00</updated>
     <id>https://larry-price.com/blog/2017/09/14/promise-youll-call-back</id>
@@ -466,47 +587,6 @@ $.noty.themes.testtheme.style = function () {
 <p> <iframe style="width: 100%; height: 150px" frameborder="0" seamless="seamless" src="//jsfiddle.net/f14xjf8b/3/embedded/result,html,js/light/"></iframe></p>
 
 <p> There are many other customization options for the brave, including custom animations and callbacks when the notifications are dismissed. See <a href="http://ned.im/noty/#/about">the full documentation site</a> for more details.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How To ReactJS]]></title>
-    <link href="https://larry-price.com/blog/2015/06/16/how-i-reactjs/"/>
-    <updated>2015-06-16T20:03:36-04:00</updated>
-    <id>https://larry-price.com/blog/2015/06/16/how-i-reactjs</id>
-    <content type="html"><![CDATA[<p><a href="http://facebook.github.io/react/">ReactJS</a> is a component-based Javascript library for creating user interfaces. I used it extensively on recent side project <a href="https://www.refer-madness.com">Refer Madness</a> (<a href="https://github.com/larryprice/refermadness">source code</a>). It&rsquo;s pretty neat. Let&rsquo;s build some demos!</p>
-
-<p>We&rsquo;ll start small. We can start with the ReactJS sample and figure out what&rsquo;s going on:</p>
-
-<p><iframe style="width: 100%; height: 150px" frameborder="0" seamless="seamless" src="//jsfiddle.net/qqaerhp6/embedded/result,html,js/light/"></iframe></p>
-
-<p>We create a React component <code>Hello</code> and we tell it what to render. When we create a <code>Hello</code> component, we take in an attribute called <code>name</code> which we then access in our component with <code>this.props.name</code>. When the page loads, React will render the <code>Hello</code> component in the element with ID &ldquo;container&rdquo;.</p>
-
-<p>Components can have other components.</p>
-
-<p><iframe style="width: 100%; height: 250px" frameborder="0" seamless="seamless" src="//jsfiddle.net/qqaerhp6/4/embedded/result,html,js/light/"></iframe></p>
-
-<p>I&rsquo;ve created a <code>Name</code> component to show the name. This component uses its children to display any content it needs to. Obviously, this is a bit contrived.</p>
-
-<p>Things get more exciting when we add events. Let&rsquo;s add an event to our <code>Name</code> component: when a user clicks this component, we&rsquo;ll reverse the name.</p>
-
-<p><iframe style="width: 100%; height: 250px" frameborder="0" seamless="seamless" src="//jsfiddle.net/qqaerhp6/5/embedded/result,html,js/light/"></iframe></p>
-
-<p>I&rsquo;ve introduced state to the component. When I want a React component to use state, I need to implement the <code>getInitialState</code> method to tell React what the state is when the component is created. In this case, I set the <code>name</code> field of the component&rsquo;s state to <code>this.props.children</code>. When I render the component, I use the <code>name</code> variable I set in my state object. I add an <code>onClick</code> event and call a method on the component called <code>clickme</code>. In <code>clickme</code> I call the built-in <code>setState</code> method and update the <code>name</code> variable on my state object. Any other state variables on the component would remain unchanged. Any time <code>setState</code> is called, <code>render</code> is called again for this component and any children which need to be updated will also rerender.</p>
-
-<p>Sometimes something happens on a child component that the parent cares about. This time, I want the parent component to know when the <code>Name</code> component gets a click event.</p>
-
-<p><iframe style="width: 100%; height: 250px" frameborder="0" seamless="seamless" src="//jsfiddle.net/qqaerhp6/6/embedded/result,html,js/light/"></iframe></p>
-
-<p>I&rsquo;ve told my child component to call the method <code>goodbye</code> on the parent element using the property name <code>onClicked</code>. When the method is called Ichange the state of the <code>Hello</code> component and update the greeting; in this case, the <code>Name</code> component will be reused since it hasn&rsquo;t changed.</p>
-
-<p>Just a reminder that you can have multiple of any component; just be sure to not duplicate IDs!</p>
-
-<p><iframe style="width: 100%; height: 250px" frameborder="0" seamless="seamless" src="//jsfiddle.net/qqaerhp6/7/embedded/result,html,js/light/"></iframe></p>
-
-<p>I dynamically create as many <code>Name</code> components as I need. I take my list of names and map them all to React components, each of which has a different value. As above, all of these can have events or can call events on the parent component. When we create a list of components, React prefers it when we give them all <code>key</code> attributes. This allows React to cache the components and recreate the appropriate component when states change.</p>
-
-<p>Of course this is just scratching the surface. I used ReactJS because it was fast, stable, and easy to get started learning. It gave me a different way to think about the relationship between my Javascript and the DOM. For a little bit more React you should check out <a href="http://facebook.github.io/react/docs/tutorial.html">the tutorials</a>. If you hadn&rsquo;t noticed, React uses a twist on the Javascript syntax called JSX. If you&rsquo;re into that kind of thing, I&rsquo;ve written about <a href="/blog/2015/06/08/compile-jsx-with-docker/">using Docker to compile your JSX</a> whenever you update your JSX files - very handy IMO.</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="https://larry-price.com/atom.xml" rel="self"/>
   <link href="https://larry-price.com/"/>
-  <updated>2017-09-14T21:44:10-05:00</updated>
+  <updated>2018-02-02T16:22:12-06:00</updated>
   <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -14,7 +14,214 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Promise You'll Call Back]]></title>
+    <title type="html"><![CDATA[Async and Await - a New Promise]]></title>
+    <link href="https://larry-price.com/blog/2018/02/02/async-and-await-a-new-promise/"/>
+    <updated>2018-02-02T15:19:48-06:00</updated>
+    <id>https://larry-price.com/blog/2018/02/02/async-and-await-a-new-promise</id>
+    <content type="html"><![CDATA[<p>In my <a href="https://larry-price.com/blog/2017/09/14/promise-youll-call-back/">last post</a>, I discussed the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">ES2015 concept of a <code>Promise</code></a>. A <code>Promise</code> provides a simplified mechanism for performing asynchronous work in JavaScript without using the classic <code>setTimeout</code>-callback approach. Seeing as it&rsquo;s been about 4 months since my previous post, a new asynchronous concept is on the rise as part of the <a href="https://tc39.github.io/ecma262/2017/#sec-async-function-definitions">ES2017 specification</a>: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function"><code>async</code> and <code>await</code></a>.</p>
+
+<p>I became aware of <code>async</code> and <code>await</code> after reading <a href="https://davidwalsh.name/async-await">David Walsh&rsquo;s blog</a>, at which point I disregarded the new features as being &ldquo;too soon&rdquo; and &ldquo;not different enough&rdquo; from a <code>Promise</code> to warrant a second thought. Then, yesterday, I used them, and my life was, once again, forever changed.</p>
+
+<p><code>await</code> is used to essentially wait for a <code>Promise</code> to finish. Instead of using a callback with a <code>then</code> clause, <code>await</code> allows you to perform the action and/or store the result like you&rsquo;re within a synchronous function.</p>
+
+<p><code>async</code> is a keyword identifier used on functions to specify that that function will use <code>await</code>. Try to call <code>await</code> in a function not labeled as <code>async</code> and you&rsquo;re going to have a bad time. Any <code>async</code> function returns a <code>Promise</code>.</p>
+
+<p>Let&rsquo;s see an example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">getFirstName</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="s1">&#39;Charles&#39;</span><span class="p">);</span> <span class="p">}</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">getMiddleName</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="s1">&#39;Entertainment&#39;</span><span class="p">);</span> <span class="p">}</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">getLastName</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="s1">&#39;Cheese&#39;</span><span class="p">);</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">async</span> <span class="kd">function</span> <span class="nx">getName</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kr">const</span> <span class="nx">first</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">getFirstName</span><span class="p">();</span>
+</span><span class='line'>  <span class="kr">const</span> <span class="nx">middle</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">getMiddleName</span><span class="p">();</span>
+</span><span class='line'>  <span class="kr">const</span> <span class="nx">last</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">getLastName</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="err">`</span><span class="nx">$</span><span class="p">{</span><span class="nx">first</span><span class="p">}</span> <span class="nx">$</span><span class="p">{</span><span class="nx">middle</span><span class="p">}</span> <span class="nx">$</span><span class="p">{</span><span class="nx">last</span><span class="p">}</span><span class="err">`</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">getName</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">name</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;My next guest needs no introduction:&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Result:</span>
+</span><span class='line'><span class="c1">//   My next guest needs no introduction:</span>
+</span><span class='line'><span class="c1">//   Charles Entertainment Cheese</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We have three functions which each return a <code>Promise</code>, and an <code>async</code> function which calls those functions sequentially and uses the results to construct a string. We call the <code>getName</code> function (which is <code>async</code> and therefore returns a <code>Promise</code>) and log the results. Our last command logs a special message. Due to the asynchronous nature of the <code>getName</code> function, our special message is logged first, and then the result of <code>getName</code>.</p>
+
+<p>This comes in handy when you&rsquo;re depending on the results of a <code>Promise</code> to do some work or pass into another asynchronous call. But, in the case of our <code>getName</code> function above, we could be getting all three of the names at once. This calls for the brilliant <code>Promise.all</code> method, which can also be used with <code>async</code>. Let&rsquo;s modify our sub-name functions to all use <code>async</code> and then fetch them all at once:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">async</span> <span class="kd">function</span> <span class="nx">getFirstName</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="s1">&#39;Charles&#39;</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="nx">async</span> <span class="kd">function</span> <span class="nx">getMiddleName</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="s1">&#39;Entertainment&#39;</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="nx">async</span> <span class="kd">function</span> <span class="nx">getLastName</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="s1">&#39;Cheese&#39;</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">async</span> <span class="kd">function</span> <span class="nx">getName</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kr">const</span> <span class="nx">names</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">all</span><span class="p">([</span><span class="nx">getFirstName</span><span class="p">(),</span> <span class="nx">getMiddleName</span><span class="p">(),</span> <span class="nx">getLastName</span><span class="p">()]);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="err">`</span><span class="nx">$</span><span class="p">{</span><span class="nx">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]}</span> <span class="nx">$</span><span class="p">{</span><span class="nx">names</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span> <span class="nx">$</span><span class="p">{</span><span class="nx">names</span><span class="p">[</span><span class="mi">2</span><span class="p">]}</span><span class="err">`</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">getName</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">name</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;My next guest needs no introduction:&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Result:</span>
+</span><span class='line'><span class="c1">//   My next guest needs no introduction:</span>
+</span><span class='line'><span class="c1">//   Charles Entertainment Cheese</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Since an <code>async</code> function just returns a <code>Promise</code>, we can directly use (and even inter-mix) <code>async</code> functions inside <code>Promise.all</code>, and the results come back in an ordered array.</p>
+
+<p>OK, what if we want to fire off some long-running task and do some other work in the meantime? We can defer our use of <code>await</code> until after we&rsquo;ve performed all the intermediate work:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">async</span> <span class="kd">function</span> <span class="nx">getFirstName</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="s1">&#39;Charles&#39;</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="nx">async</span> <span class="kd">function</span> <span class="nx">getMiddleName</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="s1">&#39;Entertainment&#39;</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="nx">async</span> <span class="kd">function</span> <span class="nx">getLastName</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="s1">&#39;Cheese&#39;</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">async</span> <span class="kd">function</span> <span class="nx">getName</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kr">const</span> <span class="nx">first</span>  <span class="o">=</span> <span class="nx">getFirstName</span><span class="p">();</span>  <span class="c1">// first, middle, and last will all</span>
+</span><span class='line'>  <span class="kr">const</span> <span class="nx">middle</span> <span class="o">=</span> <span class="nx">getMiddleName</span><span class="p">();</span> <span class="c1">// be pending Promises at this</span>
+</span><span class='line'>  <span class="kr">const</span> <span class="nx">last</span>   <span class="o">=</span> <span class="nx">getLastName</span><span class="p">();</span>   <span class="c1">// point, to be resolved in time</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kr">const</span> <span class="nx">title</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="p">.</span><span class="mi">5</span> <span class="o">?</span> <span class="s1">&#39;Sr.&#39;</span> <span class="o">:</span> <span class="s1">&#39;Esq.&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="err">`</span><span class="nx">$</span><span class="p">{</span><span class="nx">await</span> <span class="nx">first</span><span class="p">}</span> <span class="nx">$</span><span class="p">{</span><span class="nx">await</span> <span class="nx">middle</span><span class="p">}</span> <span class="nx">$</span><span class="p">{</span><span class="nx">await</span> <span class="nx">last</span><span class="p">},</span> <span class="nx">$</span><span class="p">{</span><span class="nx">title</span><span class="p">}</span><span class="err">`</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">getName</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">name</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;My next guest needs no introduction:&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Result will be quasi-random:</span>
+</span><span class='line'><span class="c1">//   My next guest needs no introduction:</span>
+</span><span class='line'><span class="c1">//   Charles Entertainment Cheese, (Esq.|Sr.)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This example reiterates that you can use <code>async</code> functions just like you would a <code>Promise</code>, but with the added benefit of using <code>await</code> to wait for the results when necessary.</p>
+
+<p>I know what you&rsquo;re thinking: &ldquo;All these positives, Larry! Is there nothing negative about <code>async</code>/<code>await</code>?&rdquo; As always, there are a couple of pitfalls to using these functions. The biggest nuisance for me is the loss of the <code>catch</code> block when converting from a <code>Promise</code> chain. In order to catch errors with <code>async</code>/<code>await</code>, you&rsquo;ll have to go back to traditional <code>try/catch</code> statements:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">async</span> <span class="kd">function</span> <span class="nx">checkStatus</span><span class="p">()</span> <span class="p">{</span> <span class="k">throw</span> <span class="s1">&#39;The Cheese is displeased!&#39;</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">async</span> <span class="kd">function</span> <span class="nx">checks</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">try</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">await</span> <span class="nx">checkStatus</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s1">&#39;No problems.&#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">e</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">checks</span><span class="p">().</span><span class="nx">then</span><span class="p">((</span><span class="nx">status</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">status</span><span class="p">)</span>
+</span><span class='line'><span class="p">})</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Current status:&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Result will be quasi-random:</span>
+</span><span class='line'><span class="c1">//   Current status:</span>
+</span><span class='line'><span class="c1">//   The Cheese is displeased!</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The only other real downside is that <code>async</code> and <code>await</code> may not be fully supported in your users' browsers or your version of Node.JS. There are plenty of ways to get around this with Babel and polyfills, but, to be honest, I dedicated a large chunk of time yesterday afternoon to upgrading all of our libraries and babel versions to get this to work properly everywhere. Your mileage may vary, and, if you&rsquo;re reading this 6 months from when it was posted, I&rsquo;m sure it will be available by default in any implementations of ECMAScript.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Promise You'll Call Back: A Guide to the Javascript Promise Class]]></title>
     <link href="https://larry-price.com/blog/2017/09/14/promise-youll-call-back/"/>
     <updated>2017-09-14T21:45:08-05:00</updated>
     <id>https://larry-price.com/blog/2017/09/14/promise-youll-call-back</id>
@@ -2833,37 +3040,6 @@
 <li><strong>Automaton</strong>. I still grope around for work when I&rsquo;m not sure what to do next. I&rsquo;d like to come up with a process to determine what should be next on the agenda without too much synchronous assistance.</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Everybody's Talking About Whiteboard Problems]]></title>
-    <link href="https://larry-price.com/blog/2016/04/30/everybodys-talking-about-whiteboard-problems/"/>
-    <updated>2016-04-30T22:00:00-04:00</updated>
-    <id>https://larry-price.com/blog/2016/04/30/everybodys-talking-about-whiteboard-problems</id>
-    <content type="html"><![CDATA[<p>Interviews suck, amirite? Recently, there&rsquo;s been a rise in posts discussing how harmful whiteboard problems are. Let&rsquo;s chat about how the internet works, and then we&rsquo;ll discuss where I land on this issue.</p>
-
-<p>You&rsquo;ve got one group of people who love whiteboarding. Whiteboarding allows interviewers to see how a candidate thinks. Whiteboarding gives the illusion of programming without the fear of compiler errors. Solving a problem algorithmically on a whiteboard is the same as programming.</p>
-
-<p>And you&rsquo;ve got the people who think whiteboarding during interviews is just as terrible as waterboarding a candidate. Whiteboard problems cause interviewers to become smug, sexist, and xenophobic. Candidates are forced to sweat bullets at a whiteboard while a death panel of interviewers silently judge them. Whiteboarding a programming problem is entirely different from computer programming.</p>
-
-<p>Between you and me, I don&rsquo;t believe it&rsquo;s all so black and white. Like most things in this world, whiteboarding falls into a somewhat uncomfortable grey area. There are certainly things which can be gained by whiteboarding, but it&rsquo;s also in no way indicative of programming strength or culture fit. There are literally classes teaching people how to be pro at whiteboarding.</p>
-
-<p>One of the main problems is that this is not how you work in real life. You don&rsquo;t put together code on a whiteboard while a group of strangers stares intently waiting for you to screw up so they can mark points off your score. Your day is largely spent reading other people&rsquo;s code to figure out how you can force whatever new feature or bug fix you need to implement into their code as easily, quickly, and cleanly as possible, and then you&rsquo;re usually put into a position where you have to sacrifice the easy, quick, or clean part of that plan. Along the way, you usually get to fight the compiler or search the internet for any relevant APIs, StackOverflow questions, or existing libraries. You&rsquo;re probably also a member of a team with varying experience levels in the current codebase, so you&rsquo;ll spend another big part of your day asking/answering questions on group chat and gatekeeping the codebase from code that is unreadable, unchangeable, or just plain questionable via code reviews.</p>
-
-<p>But if this is the way we do our jobs, why do we ask candidates to reimplement underscore&rsquo;s debounce function, create all the possible words from a telephone number, or generate roman numerals from an integer?</p>
-
-<p>Some organizations have moved to systems of making the candidate solve a multi-hour problem in their free time, or come into the office and spend a day (or more) pairing with their future teammates. Although I think these ideas are founded on a solid base of logic, they are terrible. A large number of worthy candidates already have full-time jobs to deal with, and many of them have other commitments during the evening hours. The perfect candidate may have recently found themself with a new child, and every non-9-5 hour is no longer available to create a reverse binary tree. Adding more work and stress to an interview is not the right way to go.</p>
-
-<p>How could we possibly find the perfect candidate without stressing them out and giving them standardized tests?</p>
-
-<p><strong>Let&rsquo;s make them work like we do, but only for a reasonable amount of time.</strong> Come up with a medium-difficulty coding problem and <em>write it yourself</em>. But don&rsquo;t make it clean. <em>Make it sloppy</em>. Make <em>a ripe mess</em> of that code. Add an obvious bug or two.</p>
-
-<p>Now, when you bring in an interviewer or talk to them on a video call, show them this code. <em>Can they figure out what it does</em>? <em>Can they find the bugs</em>? Ask them to code review it. <em>Do they see all the terrible things you&rsquo;ve done</em>? <em>Can they tell you how to make it better</em>? <em>Can they do it without being condescending</em> (news flash: most full-time programmers cannot do this)? This should all be a back-and-forth, with the (lone) interviewer working with the candidate to discuss any issues. If you have time, ask them to actually correct and refactor some of the code. If you&rsquo;re into that kind of thing, work with them to write some test cases for the bugs you&rsquo;ve fixed. If for some reason you still don&rsquo;t know whether or not you like this person, have them add some functionality to the codebase. Then code review their code and see how they handle your suggestions. <strong>You should limit this exercise to an hour</strong>, maybe two if you&rsquo;re a sadist. Do not make this an all day thing.</p>
-
-<p>Think about how much you could get out of this exercise. You&rsquo;ll determine whether the candidate knows what code looks like, knows how to read code, knows how to communicate about code, and knows how to fix bad code. You&rsquo;ll also get a bit of their personality based on how mean they are during the code review sections. Hopefully, you were able to have a real discussion about design decisions and coding during the interview. The candidate will have done very little programming, just like you and me on a normal day. Best of all, you&rsquo;ll only have spent an hour of each other&rsquo;s time trying to figure out if the candidate is competent. Leave time for questions at the end and be done with it.</p>
-
-<p>Of course, I don&rsquo;t currently run a tech company or do much with the interview process. But everyone&rsquo;s been giving their two cents on that issue, and I like to type words on the computer. What do you think? Is whiteboarding during an interview integral to your interview process? Do you need it? Do you hate it? Do you have any alternatives? Let me know in the comments.</p>
 ]]></content>
   </entry>
   

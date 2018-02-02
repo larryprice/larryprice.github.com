@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="The Gist In this modern age of infinite internet-capable devices, web developers have found a &ldquo;silver bullet&rdquo; which we call responsive &hellip;">
+  <meta name="description" content="Need to parse an XML file in go? XML (en|de)coding is build into go&rsquo;s standard library. Basic parsing of nodes and embedded nodes is &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,236 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/12/04/xml-parsing-in-go/">XML Parsing in Go</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-04T15:30:14-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>3:30 pm</span></time>
+        
+           | <a href="/blog/2015/12/04/xml-parsing-in-go/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2015/12/04/xml-parsing-in-go/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Need to parse an XML file in go? XML (en|de)coding is build into go&rsquo;s standard library. Basic parsing of nodes and embedded nodes is straightforward, but there are some interesting things to think about when you need to parse attributes, lists, and if you don&rsquo;t want to create new structs all over the place.</p>
+
+<p>For this exercise, let&rsquo;s look at the following XML document:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;person&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;name&gt;</span>Luann Van Houten<span class="nt">&lt;/name&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;addresses&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;address</span> <span class="na">type=</span><span class="s">&quot;secondary&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;street&gt;</span>321 MadeUp Lane<span class="nt">&lt;/street&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;city&gt;</span>Shelbyville<span class="nt">&lt;/city&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/address&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;address</span> <span class="na">type=</span><span class="s">&quot;primary&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;street&gt;</span>123 Fake St<span class="nt">&lt;/street&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;city&gt;</span>Springfield<span class="nt">&lt;/city&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/address&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/addresses&gt;</span>
+</span><span class='line'><span class="nt">&lt;/person&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Defining a Data Structure</h3>
+
+<p>The simplest node to parse is going to be <code>&lt;name&gt;</code>. We&rsquo;ll need an object to unmarshal the XML into, which we&rsquo;ll call <code>Person</code>. Every field on <code>Person</code> will be evaluated by the XML encoder to be populated based on the field&rsquo;s name. However, our struct field names and node names don&rsquo;t usually correspond that simply. Because of this, we&rsquo;ll use <code>xml</code> struct tags to identify how to map each node to a go field. Here&rsquo;s an example for <code>&lt;name&gt;</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kd">type</span> <span class="nx">Person</span> <span class="kd">struct</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">Name</span> <span class="kt">string</span> <span class="s">`xml:&quot;name&quot;`</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The next node contains a list of <code>&lt;address&gt;</code> nodes. For an address node, we&rsquo;ll have to create a similar struct with <code>City</code> and <code>Street</code> fields:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kd">type</span> <span class="nx">Address</span> <span class="kd">struct</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">Street</span> <span class="kt">string</span> <span class="s">`xml:&quot;street&quot;`</span>
+</span><span class='line'>  <span class="nx">City</span> <span class="kt">string</span>   <span class="s">`xml:&quot;city&quot;`</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>While parsing each <code>Address</code>, we also want to find the <code>type</code> of address, which can be found as an attribute on the <code>&lt;address&gt;</code> node. By adding <code>attr</code> to our XML struct tag, we can properly parse the <code>type</code> field as well:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kd">type</span> <span class="nx">Address</span> <span class="kd">struct</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">Street</span> <span class="kt">string</span> <span class="s">`xml:&quot;street&quot;`</span>
+</span><span class='line'>  <span class="nx">City</span> <span class="kt">string</span>   <span class="s">`xml:&quot;city&quot;`</span>
+</span><span class='line'>  <span class="nx">Type</span> <span class="kt">string</span>   <span class="s">`xml:&quot;type,attr&quot;`</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A <code>Person</code> has a list of <code>Address</code>es. Since we know that <code>address</code> is a direct descendant, we can use the <code>&gt;</code> keyword to parse each <code>&lt;address&gt;</code> from <code>&lt;addresses&gt;</code> into an embedded struct on our <code>Person</code> struct.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kd">type</span> <span class="nx">Person</span> <span class="kd">struct</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">Name</span> <span class="kt">string</span>         <span class="s">`xml:&quot;name&quot;`</span>
+</span><span class='line'>  <span class="nx">Addresses</span> <span class="p">[]</span><span class="nx">Address</span> <span class="s">`xml:&quot;addresses&gt;address&quot;`</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This code will work to parse the original document, but do we really need to define a formal struct for addresses? If there was only one address, we could put all the fields directly on the <code>Person</code> struct. However, since we&rsquo;re dealing with a list, our best option is to use an anonymous struct:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kd">type</span> <span class="nx">Person</span> <span class="kd">struct</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">Name</span>      <span class="kt">string</span> <span class="s">`xml:&quot;name&quot;`</span>
+</span><span class='line'>  <span class="nx">Addresses</span> <span class="p">[]</span><span class="kd">struct</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">Street</span> <span class="kt">string</span> <span class="s">`xml:&quot;street&quot;`</span>
+</span><span class='line'>      <span class="nx">City</span>   <span class="kt">string</span> <span class="s">`xml:&quot;city&quot;`</span>
+</span><span class='line'>      <span class="nx">Type</span>   <span class="kt">string</span> <span class="s">`xml:&quot;type,attr&quot;`</span>
+</span><span class='line'>  <span class="p">}</span> <span class="s">`xml:&quot;addresses&gt;address&quot;`</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Binding the Data Structure</h3>
+
+<p>We can use the <a href="https://golang.org/pkg/encoding/xml/">encoding/xml</a> package to decode the given XML. Given that our raw XML document is stored in a <code>[]byte</code> called <code>document</code>, we&rsquo;ll use <code>xml.Unmarshal</code> to bind our data structure to the XML document:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kd">var</span> <span class="nx">luann</span> <span class="nx">Person</span>
+</span><span class='line'><span class="nx">xml</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">document</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">luann</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Final Code</h3>
+
+<p>Let&rsquo;s put it all together, including a <code>main</code> function that will use <code>fmt.Println</code> to print the results of binding the data structure to the XML document. <code>Unmarshal</code> could return an error, but we&rsquo;ll ignore it in this case.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">main</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="p">(</span>
+</span><span class='line'>  <span class="s">&quot;encoding/xml&quot;</span>
+</span><span class='line'>  <span class="s">&quot;fmt&quot;</span>
+</span><span class='line'><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">personXML</span> <span class="p">=</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">`</span>
+</span><span class='line'><span class="s">&lt;person&gt;</span>
+</span><span class='line'><span class="s">  &lt;name&gt;Luann Van Houten&lt;/name&gt;</span>
+</span><span class='line'><span class="s">  &lt;addresses&gt;</span>
+</span><span class='line'><span class="s">      &lt;address type=&quot;secondary&quot;&gt;</span>
+</span><span class='line'><span class="s">          &lt;street&gt;321 MadeUp Lane&lt;/street&gt;</span>
+</span><span class='line'><span class="s">          &lt;city&gt;Shelbyville&lt;/city&gt;</span>
+</span><span class='line'><span class="s">      &lt;/address&gt;</span>
+</span><span class='line'><span class="s">      &lt;address type=&quot;primary&quot;&gt;</span>
+</span><span class='line'><span class="s">          &lt;street&gt;123 Fake St&lt;/street&gt;</span>
+</span><span class='line'><span class="s">          &lt;city&gt;Springfield&lt;/city&gt;</span>
+</span><span class='line'><span class="s">      &lt;/address&gt;</span>
+</span><span class='line'><span class="s">  &lt;/addresses&gt;</span>
+</span><span class='line'><span class="s">&lt;/person&gt;`</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">type</span> <span class="nx">Person</span> <span class="kd">struct</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">Name</span>      <span class="kt">string</span> <span class="s">`xml:&quot;name&quot;`</span>
+</span><span class='line'>  <span class="nx">Addresses</span> <span class="p">[]</span><span class="kd">struct</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">Street</span> <span class="kt">string</span> <span class="s">`xml:&quot;street&quot;`</span>
+</span><span class='line'>      <span class="nx">City</span>   <span class="kt">string</span> <span class="s">`xml:&quot;city&quot;`</span>
+</span><span class='line'>      <span class="nx">Type</span>   <span class="kt">string</span> <span class="s">`xml:&quot;type,attr&quot;`</span>
+</span><span class='line'>  <span class="p">}</span> <span class="s">`xml:&quot;addresses&gt;address&quot;`</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">luann</span> <span class="nx">Person</span>
+</span><span class='line'>  <span class="nx">xml</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">personXML</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">luann</span><span class="p">)</span>
+</span><span class='line'>  <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">luann</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I&rsquo;ve posted this code as <a href="https://gist.github.com/larryprice/204fec2e8d33979f8cac">a gist</a> in <a href="https://play.golang.org/p/qiSoxxb5tp">the go playground</a> so you can see it in action.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -576,703 +806,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/06/25/architecture-for-a-golang-web-app/">Architecture for a Golang Web App</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-06-25T07:24:27-04:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>7:24 am</span></time>
-        
-           | <a href="/blog/2015/06/25/architecture-for-a-golang-web-app/#disqus_thread"
-             data-disqus-identifier="https://larry-price.com/blog/2015/06/25/architecture-for-a-golang-web-app/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Setting up a web application in Golang can be a daunting task. If you&rsquo;re used to rails, you probably miss having your hand held at this point. I&rsquo;m using this architecture on <a href="https://www.refer-madness.com">Refer Madness</a> [<a href="https://github.com/larryprice/refermadness">source</a>]. Here&rsquo;s my directory structure:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>-public/
-</span><span class='line'>-views/
-</span><span class='line'>-models/
-</span><span class='line'>-utils/
-</span><span class='line'>-controllers/
-</span><span class='line'>-web/
-</span><span class='line'>-main.go</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I&rsquo;ll break this down architecturally. At each directory level, files are only allowed to access code from directories at the same or a higher level. This means that <code>utils</code> can access itself and <code>models</code>; <code>web</code> can access itself, <code>controllers</code>, <code>utils</code>, and <code>models</code>; and <code>models</code> can only access itself. I do this to keep a thick line between all the layers and to avoid recursive dependencies. Let&rsquo;s talk about each level individually!</p>
-
-<h4>main.go</h4>
-
-<p><code>main.go</code> is my main file in charge of creating dependencies, discovering environment variables, and starting the web server. Here&rsquo;s a sample:</p>
-
-<figure class='code'><figcaption><span>main.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">main</span>
-</span><span class='line'>
-</span><span class='line'><span class="kn">import</span> <span class="p">(</span>
-</span><span class='line'>  <span class="s">&quot;github.com/larryprice/refermadness/utils&quot;</span>
-</span><span class='line'>  <span class="s">&quot;github.com/larryprice/refermadness/web&quot;</span>
-</span><span class='line'>  <span class="s">&quot;github.com/stretchr/graceful&quot;</span>
-</span><span class='line'>  <span class="s">&quot;os&quot;</span>
-</span><span class='line'><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">isDevelopment</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nx">Getenv</span><span class="p">(</span><span class="s">&quot;ENVIRONMENT&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s">&quot;development&quot;</span>
-</span><span class='line'>  <span class="nx">dbURL</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nx">Getenv</span><span class="p">(</span><span class="s">&quot;MONGOLAB_URI&quot;</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">if</span> <span class="nx">isDevelopment</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">dbURL</span> <span class="p">=</span> <span class="nx">os</span><span class="p">.</span><span class="nx">Getenv</span><span class="p">(</span><span class="s">&quot;DB_PORT_27017_TCP_ADDR&quot;</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">dbAccessor</span> <span class="o">:=</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">NewDatabaseAccessor</span><span class="p">(</span><span class="nx">dbURL</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nx">Getenv</span><span class="p">(</span><span class="s">&quot;DATABASE_NAME&quot;</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>  <span class="nx">cuAccessor</span> <span class="o">:=</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">NewCurrentUserAccessor</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>  <span class="nx">s</span> <span class="o">:=</span> <span class="nx">web</span><span class="p">.</span><span class="nx">NewServer</span><span class="p">(</span><span class="o">*</span><span class="nx">dbAccessor</span><span class="p">,</span> <span class="o">*</span><span class="nx">cuAccessor</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nx">Getenv</span><span class="p">(</span><span class="s">&quot;GOOGLE_OAUTH2_CLIENT_ID&quot;</span><span class="p">),</span>
-</span><span class='line'>    <span class="nx">os</span><span class="p">.</span><span class="nx">Getenv</span><span class="p">(</span><span class="s">&quot;GOOGLE_OAUTH2_CLIENT_SECRET&quot;</span><span class="p">),</span> <span class="nx">os</span><span class="p">.</span><span class="nx">Getenv</span><span class="p">(</span><span class="s">&quot;SESSION_SECRET&quot;</span><span class="p">),</span>
-</span><span class='line'>    <span class="nx">isDevelopment</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nx">Getenv</span><span class="p">(</span><span class="s">&quot;GOOGLE_ANALYTICS_KEY&quot;</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">port</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nx">Getenv</span><span class="p">(</span><span class="s">&quot;PORT&quot;</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">if</span> <span class="nx">port</span> <span class="o">==</span> <span class="s">&quot;&quot;</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">port</span> <span class="p">=</span> <span class="s">&quot;3000&quot;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">graceful</span><span class="p">.</span><span class="nx">Run</span><span class="p">(</span><span class="s">&quot;:&quot;</span><span class="o">+</span><span class="nx">port</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">s</span><span class="p">)</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Since <code>main.go</code> is on the lowest level, it has access to every other directory: in this case, <code>utils</code> and <code>web</code>. I grab all the environment variables and inject them where necessary. I create the server, injecting dependencies, and then start it on the port I want.</p>
-
-<h4>web</h4>
-
-<p>I keep my server code in the <code>web</code> directory, which includes some web middleware. Here&rsquo;s the internal structure of the <code>web</code> directory:</p>
-
-<figure class='code'><figcaption><span>main.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="o">-</span><span class="nx">web</span><span class="o">/</span>
-</span><span class='line'><span class="p">|</span><span class="o">-</span><span class="nx">middleware</span><span class="o">/</span>
-</span><span class='line'><span class="p">|</span><span class="o">-</span><span class="nx">server</span><span class="p">.</span><span class="k">go</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>server.go</code> contains the definition of my web server. The web server creates all my web controllers and adds middleware to my negroni server. Here&rsquo;s an excerpt:</p>
-
-<figure class='code'><figcaption><span>web/server.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">web</span>
-</span><span class='line'>
-</span><span class='line'><span class="kn">import</span> <span class="p">(</span>
-</span><span class='line'>  <span class="s">&quot;github.com/codegangsta/negroni&quot;</span>
-</span><span class='line'>  <span class="s">&quot;github.com/goincremental/negroni-sessions&quot;</span>
-</span><span class='line'>  <span class="s">&quot;github.com/goincremental/negroni-sessions/cookiestore&quot;</span>
-</span><span class='line'>  <span class="s">&quot;github.com/gorilla/mux&quot;</span>
-</span><span class='line'>  <span class="s">&quot;github.com/larryprice/refermadness/controllers&quot;</span>
-</span><span class='line'>  <span class="s">&quot;github.com/larryprice/refermadness/utils&quot;</span>
-</span><span class='line'>  <span class="s">&quot;github.com/larryprice/refermadness/web/middleware&quot;</span>
-</span><span class='line'>  <span class="s">&quot;github.com/unrolled/secure&quot;</span>
-</span><span class='line'>  <span class="s">&quot;gopkg.in/unrolled/render.v1&quot;</span>
-</span><span class='line'>  <span class="s">&quot;html/template&quot;</span>
-</span><span class='line'>  <span class="s">&quot;net/http&quot;</span>
-</span><span class='line'><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">type</span> <span class="nx">Server</span> <span class="kd">struct</span> <span class="p">{</span>
-</span><span class='line'>  <span class="o">*</span><span class="nx">negroni</span><span class="p">.</span><span class="nx">Negroni</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="nx">NewServer</span><span class="p">(</span><span class="nx">dba</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">DatabaseAccessor</span><span class="p">,</span> <span class="nx">cua</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">CurrentUserAccessor</span><span class="p">,</span> <span class="nx">clientID</span><span class="p">,</span> <span class="nx">clientSecret</span><span class="p">,</span>
-</span><span class='line'>  <span class="nx">sessionSecret</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">isDevelopment</span> <span class="kt">bool</span><span class="p">,</span> <span class="nx">gaKey</span> <span class="kt">string</span><span class="p">)</span> <span class="o">*</span><span class="nx">Server</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">s</span> <span class="o">:=</span> <span class="nx">Server</span><span class="p">{</span><span class="nx">negroni</span><span class="p">.</span><span class="nx">Classic</span><span class="p">()}</span>
-</span><span class='line'>  <span class="nx">session</span> <span class="o">:=</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">NewSessionManager</span><span class="p">()</span>
-</span><span class='line'>  <span class="nx">basePage</span> <span class="o">:=</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">NewBasePageCreator</span><span class="p">(</span><span class="nx">cua</span><span class="p">,</span> <span class="nx">gaKey</span><span class="p">)</span>
-</span><span class='line'>  <span class="nx">renderer</span> <span class="o">:=</span> <span class="nx">render</span><span class="p">.</span><span class="nx">New</span><span class="p">()</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">router</span> <span class="o">:=</span> <span class="nx">mux</span><span class="p">.</span><span class="nx">NewRouter</span><span class="p">()</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// ...</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">accountController</span> <span class="o">:=</span> <span class="nx">controllers</span><span class="p">.</span><span class="nx">NewAccountController</span><span class="p">(</span><span class="nx">clientID</span><span class="p">,</span> <span class="nx">clientSecret</span><span class="p">,</span> <span class="nx">isDevelopment</span><span class="p">,</span> <span class="nx">session</span><span class="p">,</span> <span class="nx">dba</span><span class="p">,</span> <span class="nx">cua</span><span class="p">,</span> <span class="nx">basePage</span><span class="p">,</span> <span class="nx">renderer</span><span class="p">)</span>
-</span><span class='line'>  <span class="nx">accountController</span><span class="p">.</span><span class="nx">Register</span><span class="p">(</span><span class="nx">router</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// ...</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">s</span><span class="p">.</span><span class="nx">Use</span><span class="p">(</span><span class="nx">sessions</span><span class="p">.</span><span class="nx">Sessions</span><span class="p">(</span><span class="s">&quot;refermadness&quot;</span><span class="p">,</span> <span class="nx">cookiestore</span><span class="p">.</span><span class="nx">New</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">sessionSecret</span><span class="p">))))</span>
-</span><span class='line'>  <span class="nx">s</span><span class="p">.</span><span class="nx">Use</span><span class="p">(</span><span class="nx">middleware</span><span class="p">.</span><span class="nx">NewAuthenticator</span><span class="p">(</span><span class="nx">dba</span><span class="p">,</span> <span class="nx">session</span><span class="p">,</span> <span class="nx">cua</span><span class="p">).</span><span class="nx">Middleware</span><span class="p">())</span>
-</span><span class='line'>  <span class="nx">s</span><span class="p">.</span><span class="nx">UseHandler</span><span class="p">(</span><span class="nx">router</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">return</span> <span class="o">&amp;</span><span class="nx">s</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>A <code>server</code> struct is a <code>negroni.Negroni</code> web server. I create some dependencies from <code>utils</code> and external packages, create a router, create controllers with the dependencies, and register the router with my controllers. I also add in any middleware I may need. Speaking of middleware, here&rsquo;s an example:</p>
-
-<figure class='code'><figcaption><span>web/middleware/database.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">middleware</span>
-</span><span class='line'>
-</span><span class='line'><span class="kn">import</span> <span class="p">(</span>
-</span><span class='line'>  <span class="s">&quot;github.com/codegangsta/negroni&quot;</span>
-</span><span class='line'>  <span class="s">&quot;github.com/larryprice/refermadness/utils&quot;</span>
-</span><span class='line'>  <span class="s">&quot;net/http&quot;</span>
-</span><span class='line'><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">type</span> <span class="nx">Database</span> <span class="kd">struct</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">da</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">DatabaseAccessor</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="nx">NewDatabase</span><span class="p">(</span><span class="nx">da</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">DatabaseAccessor</span><span class="p">)</span> <span class="o">*</span><span class="nx">Database</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="o">&amp;</span><span class="nx">Database</span><span class="p">{</span><span class="nx">da</span><span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">d</span> <span class="o">*</span><span class="nx">Database</span><span class="p">)</span> <span class="nx">Middleware</span><span class="p">()</span> <span class="nx">negroni</span><span class="p">.</span><span class="nx">HandlerFunc</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">rw</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span> <span class="nx">next</span> <span class="nx">http</span><span class="p">.</span><span class="nx">HandlerFunc</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">reqSession</span> <span class="o">:=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">da</span><span class="p">.</span><span class="nx">Clone</span><span class="p">()</span>
-</span><span class='line'>    <span class="k">defer</span> <span class="nx">reqSession</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span>
-</span><span class='line'>    <span class="nx">d</span><span class="p">.</span><span class="nx">da</span><span class="p">.</span><span class="nx">Set</span><span class="p">(</span><span class="nx">r</span><span class="p">,</span> <span class="nx">reqSession</span><span class="p">)</span>
-</span><span class='line'>    <span class="nx">next</span><span class="p">(</span><span class="nx">rw</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This is a standard middleware definition for accessing a database session from an HTTP route. The base of this file was taken from <a href="http://modocache.svbtle.com/restful-go">Brian Gesiak&rsquo;s blog post on RESTful Go</a> and was modifiedto fit my needs.</p>
-
-<h4>controllers/</h4>
-
-<p>A controller is similar to the controller concept found in Rails. A controller registers its own route with the router provided and then sets up function calls. An abbreviated example:</p>
-
-<figure class='code'><figcaption><span>controllers/service_controller.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">controllers</span>
-</span><span class='line'>
-</span><span class='line'><span class="kn">import</span> <span class="p">(</span>
-</span><span class='line'>  <span class="s">&quot;encoding/json&quot;</span>
-</span><span class='line'>  <span class="s">&quot;errors&quot;</span>
-</span><span class='line'>  <span class="s">&quot;github.com/gorilla/mux&quot;</span>
-</span><span class='line'>  <span class="s">&quot;github.com/larryprice/refermadness/models&quot;</span>
-</span><span class='line'>  <span class="s">&quot;github.com/larryprice/refermadness/utils&quot;</span>
-</span><span class='line'>  <span class="s">&quot;gopkg.in/mgo.v2/bson&quot;</span>
-</span><span class='line'>  <span class="s">&quot;gopkg.in/unrolled/render.v1&quot;</span>
-</span><span class='line'>  <span class="s">&quot;html/template&quot;</span>
-</span><span class='line'>  <span class="s">&quot;net/http&quot;</span>
-</span><span class='line'>  <span class="s">&quot;strings&quot;</span>
-</span><span class='line'><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">type</span> <span class="nx">ServiceControllerImpl</span> <span class="kd">struct</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">currentUser</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">CurrentUserAccessor</span>
-</span><span class='line'>  <span class="nx">basePage</span>    <span class="nx">utils</span><span class="p">.</span><span class="nx">BasePageCreator</span>
-</span><span class='line'>  <span class="nx">renderer</span>    <span class="o">*</span><span class="nx">render</span><span class="p">.</span><span class="nx">Render</span>
-</span><span class='line'>  <span class="nx">database</span>    <span class="nx">utils</span><span class="p">.</span><span class="nx">DatabaseAccessor</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="nx">NewServiceController</span><span class="p">(</span><span class="nx">currentUser</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">CurrentUserAccessor</span><span class="p">,</span> <span class="nx">basePage</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">BasePageCreator</span><span class="p">,</span>
-</span><span class='line'>  <span class="nx">renderer</span> <span class="o">*</span><span class="nx">render</span><span class="p">.</span><span class="nx">Render</span><span class="p">,</span> <span class="nx">database</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">DatabaseAccessor</span><span class="p">)</span> <span class="o">*</span><span class="nx">ServiceControllerImpl</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="o">&amp;</span><span class="nx">ServiceControllerImpl</span><span class="p">{</span>
-</span><span class='line'>    <span class="nx">currentUser</span><span class="p">:</span> <span class="nx">currentUser</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">basePage</span><span class="p">:</span>    <span class="nx">basePage</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">renderer</span><span class="p">:</span>    <span class="nx">renderer</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">database</span><span class="p">:</span>    <span class="nx">database</span><span class="p">,</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">sc</span> <span class="o">*</span><span class="nx">ServiceControllerImpl</span><span class="p">)</span> <span class="nx">Register</span><span class="p">(</span><span class="nx">router</span> <span class="o">*</span><span class="nx">mux</span><span class="p">.</span><span class="nx">Router</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">router</span><span class="p">.</span><span class="nx">HandleFunc</span><span class="p">(</span><span class="s">&quot;/service/{id}&quot;</span><span class="p">,</span> <span class="nx">sc</span><span class="p">.</span><span class="nx">single</span><span class="p">)</span>
-</span><span class='line'>  <span class="c1">// ...</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// ...</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">type</span> <span class="nx">serviceResult</span> <span class="kd">struct</span> <span class="p">{</span>
-</span><span class='line'>  <span class="o">*</span><span class="nx">models</span><span class="p">.</span><span class="nx">Service</span>
-</span><span class='line'>  <span class="nx">RandomCode</span> <span class="o">*</span><span class="nx">models</span><span class="p">.</span><span class="nx">ReferralCode</span>
-</span><span class='line'>  <span class="nx">UserCode</span>   <span class="o">*</span><span class="nx">models</span><span class="p">.</span><span class="nx">ReferralCode</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">type</span> <span class="nx">servicePage</span> <span class="kd">struct</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">utils</span><span class="p">.</span><span class="nx">BasePage</span>
-</span><span class='line'>  <span class="nx">ResultString</span> <span class="kt">string</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">sc</span> <span class="o">*</span><span class="nx">ServiceControllerImpl</span><span class="p">)</span> <span class="nx">single</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">data</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">sc</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">Header</span><span class="p">[</span><span class="s">&quot;Content-Type&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">Contains</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">Header</span><span class="p">[</span><span class="s">&quot;Content-Type&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;application/json&quot;</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">sc</span><span class="p">.</span><span class="nx">renderer</span><span class="p">.</span><span class="nx">JSON</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">http</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">,</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
-</span><span class='line'>        <span class="s">&quot;error&quot;</span><span class="p">:</span> <span class="nx">err</span><span class="p">.</span><span class="nx">Error</span><span class="p">(),</span>
-</span><span class='line'>      <span class="p">})</span>
-</span><span class='line'>      <span class="k">return</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="nx">sc</span><span class="p">.</span><span class="nx">renderer</span><span class="p">.</span><span class="nx">JSON</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">http</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">return</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">http</span><span class="p">.</span><span class="nx">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">err</span><span class="p">.</span><span class="nx">Error</span><span class="p">(),</span> <span class="nx">http</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">resultString</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nx">Marshal</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
-</span><span class='line'>  <span class="nx">t</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nx">ParseFiles</span><span class="p">(</span><span class="s">&quot;views/layout.html&quot;</span><span class="p">,</span> <span class="s">&quot;views/service.html&quot;</span><span class="p">)</span>
-</span><span class='line'>  <span class="nx">t</span><span class="p">.</span><span class="nx">Execute</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">servicePage</span><span class="p">{</span><span class="nx">sc</span><span class="p">.</span><span class="nx">basePage</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="nx">r</span><span class="p">),</span> <span class="nb">string</span><span class="p">(</span><span class="nx">resultString</span><span class="p">)})</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// ...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>utils/</h4>
-
-<p>Files that belong in the <code>utils</code> directory provide small levels of functionality to support the rest of the codebase. In my case, I have structs which access the request context, manipulate the session, and define a base page for specific pages to inherit. Here&rsquo;s where I access the context to set the user:</p>
-
-<figure class='code'><figcaption><span>utils/current_user_accessor.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">utils</span>
-</span><span class='line'>
-</span><span class='line'><span class="kn">import</span> <span class="p">(</span>
-</span><span class='line'>  <span class="s">&quot;github.com/gorilla/context&quot;</span>
-</span><span class='line'>  <span class="s">&quot;github.com/larryprice/refermadness/models&quot;</span>
-</span><span class='line'>  <span class="s">&quot;net/http&quot;</span>
-</span><span class='line'><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">type</span> <span class="nx">CurrentUserAccessor</span> <span class="kd">struct</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">key</span> <span class="kt">int</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="nx">NewCurrentUserAccessor</span><span class="p">(</span><span class="nx">key</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="nx">CurrentUserAccessor</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="o">&amp;</span><span class="nx">CurrentUserAccessor</span><span class="p">{</span><span class="nx">key</span><span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">cua</span> <span class="o">*</span><span class="nx">CurrentUserAccessor</span><span class="p">)</span> <span class="nx">Set</span><span class="p">(</span><span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">,</span> <span class="nx">user</span> <span class="o">*</span><span class="nx">models</span><span class="p">.</span><span class="nx">User</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">context</span><span class="p">.</span><span class="nx">Set</span><span class="p">(</span><span class="nx">r</span><span class="p">,</span> <span class="nx">cua</span><span class="p">.</span><span class="nx">key</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">cua</span> <span class="o">*</span><span class="nx">CurrentUserAccessor</span><span class="p">)</span> <span class="nx">Clear</span><span class="p">(</span><span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">context</span><span class="p">.</span><span class="nx">Delete</span><span class="p">(</span><span class="nx">r</span><span class="p">,</span> <span class="nx">cua</span><span class="p">.</span><span class="nx">key</span><span class="p">)</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">cua</span> <span class="o">*</span><span class="nx">CurrentUserAccessor</span><span class="p">)</span> <span class="nx">Get</span><span class="p">(</span><span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="o">*</span><span class="nx">models</span><span class="p">.</span><span class="nx">User</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">if</span> <span class="nx">rv</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="nx">r</span><span class="p">,</span> <span class="nx">cua</span><span class="p">.</span><span class="nx">key</span><span class="p">);</span> <span class="nx">rv</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nx">rv</span><span class="p">.(</span><span class="o">*</span><span class="nx">models</span><span class="p">.</span><span class="nx">User</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="k">return</span> <span class="kc">nil</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>models/</h4>
-
-<p>Models are data structures for representing my database concepts. I use my models to access the database - I create an empty model and then populate it with a database query. Here&rsquo;s an example of a model I use:</p>
-
-<figure class='code'><figcaption><span>models/service.go</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">models</span>
-</span><span class='line'>
-</span><span class='line'><span class="kn">import</span> <span class="p">(</span>
-</span><span class='line'>  <span class="s">&quot;gopkg.in/mgo.v2&quot;</span>
-</span><span class='line'>  <span class="s">&quot;gopkg.in/mgo.v2/bson&quot;</span>
-</span><span class='line'>  <span class="s">&quot;strings&quot;</span>
-</span><span class='line'>  <span class="s">&quot;time&quot;</span>
-</span><span class='line'><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">type</span> <span class="nx">Service</span> <span class="kd">struct</span> <span class="p">{</span>
-</span><span class='line'>  <span class="c1">// identification information</span>
-</span><span class='line'>  <span class="nx">ID</span>          <span class="nx">bson</span><span class="p">.</span><span class="nx">ObjectId</span> <span class="s">`bson:&quot;_id&quot;`</span>
-</span><span class='line'>  <span class="nx">Name</span>        <span class="kt">string</span>        <span class="s">`bson:&quot;name&quot;`</span>
-</span><span class='line'>  <span class="nx">Description</span> <span class="kt">string</span>        <span class="s">`bson:&quot;description&quot;`</span>
-</span><span class='line'>  <span class="nx">URL</span>         <span class="kt">string</span>        <span class="s">`bson:&quot;url&quot;`</span>
-</span><span class='line'>  <span class="nx">Search</span>      <span class="kt">string</span>        <span class="s">`bson:&quot;search&quot;`</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="nx">NewService</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">description</span><span class="p">,</span> <span class="nx">url</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">creatorID</span> <span class="nx">bson</span><span class="p">.</span><span class="nx">ObjectId</span><span class="p">)</span> <span class="o">*</span><span class="nx">Service</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">url</span> <span class="p">=</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">TrimPrefix</span><span class="p">(</span><span class="nx">strings</span><span class="p">.</span><span class="nx">TrimPrefix</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="s">&quot;http://&quot;</span><span class="p">),</span> <span class="s">&quot;https://&quot;</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">return</span> <span class="o">&amp;</span><span class="nx">Service</span><span class="p">{</span>
-</span><span class='line'>    <span class="nx">ID</span><span class="p">:</span>            <span class="nx">bson</span><span class="p">.</span><span class="nx">NewObjectId</span><span class="p">(),</span>
-</span><span class='line'>    <span class="nx">Name</span><span class="p">:</span>          <span class="nx">name</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">URL</span><span class="p">:</span>           <span class="nx">url</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">Description</span><span class="p">:</span>   <span class="nx">description</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">Search</span><span class="p">:</span>        <span class="nx">strings</span><span class="p">.</span><span class="nx">ToLower</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;;&quot;</span> <span class="o">+</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">ToLower</span><span class="p">(</span><span class="nx">description</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;;&quot;</span> <span class="o">+</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">ToLower</span><span class="p">(</span><span class="nx">url</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Service</span><span class="p">)</span> <span class="nx">Save</span><span class="p">(</span><span class="nx">db</span> <span class="o">*</span><span class="nx">mgo</span><span class="p">.</span><span class="nx">Database</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">coll</span><span class="p">(</span><span class="nx">db</span><span class="p">).</span><span class="nx">UpsertId</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">ID</span><span class="p">,</span> <span class="nx">s</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">err</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Service</span><span class="p">)</span> <span class="nx">FindByID</span><span class="p">(</span><span class="nx">id</span> <span class="nx">bson</span><span class="p">.</span><span class="nx">ObjectId</span><span class="p">,</span> <span class="nx">db</span> <span class="o">*</span><span class="nx">mgo</span><span class="p">.</span><span class="nx">Database</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">s</span><span class="p">.</span><span class="nx">coll</span><span class="p">(</span><span class="nx">db</span><span class="p">).</span><span class="nx">FindId</span><span class="p">(</span><span class="nx">id</span><span class="p">).</span><span class="nx">One</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="o">*</span><span class="nx">Service</span><span class="p">)</span> <span class="nx">coll</span><span class="p">(</span><span class="nx">db</span> <span class="o">*</span><span class="nx">mgo</span><span class="p">.</span><span class="nx">Database</span><span class="p">)</span> <span class="o">*</span><span class="nx">mgo</span><span class="p">.</span><span class="nx">Collection</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">db</span><span class="p">.</span><span class="nx">C</span><span class="p">(</span><span class="s">&quot;service&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">type</span> <span class="nx">Services</span> <span class="p">[]</span><span class="nx">Service</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Services</span><span class="p">)</span> <span class="nx">FindByIDs</span><span class="p">(</span><span class="nx">ids</span> <span class="p">[]</span><span class="nx">bson</span><span class="p">.</span><span class="nx">ObjectId</span><span class="p">,</span> <span class="nx">db</span> <span class="o">*</span><span class="nx">mgo</span><span class="p">.</span><span class="nx">Database</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">s</span><span class="p">.</span><span class="nx">coll</span><span class="p">(</span><span class="nx">db</span><span class="p">).</span><span class="nx">Find</span><span class="p">(</span><span class="nx">bson</span><span class="p">.</span><span class="nx">M</span><span class="p">{</span><span class="s">&quot;_id&quot;</span><span class="p">:</span> <span class="nx">bson</span><span class="p">.</span><span class="nx">M</span><span class="p">{</span><span class="s">&quot;$in&quot;</span><span class="p">:</span> <span class="nx">ids</span><span class="p">}}).</span><span class="nx">Sort</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">).</span><span class="nx">All</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="p">(</span><span class="o">*</span><span class="nx">Services</span><span class="p">)</span> <span class="nx">coll</span><span class="p">(</span><span class="nx">db</span> <span class="o">*</span><span class="nx">mgo</span><span class="p">.</span><span class="nx">Database</span><span class="p">)</span> <span class="o">*</span><span class="nx">mgo</span><span class="p">.</span><span class="nx">Collection</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">db</span><span class="p">.</span><span class="nx">C</span><span class="p">(</span><span class="s">&quot;service&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// ...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>views/</h4>
-
-<p>I keep my goalng templates in the <code>views</code> directory. Pretty basic - whatever templating engine I use, I throw it into this <code>views</code> directory.</p>
-
-<h4>public/</h4>
-
-<p>As usual, this directory is all my public files - <code>css</code>, <code>img</code>, <code>scripts</code>.</p>
-
-<h3>That&rsquo;s cool - how do I run this?</h3>
-
-<p>It&rsquo;s no secret that I like <a href="https://www.docker.com/">docker</a>, so that&rsquo;s my preferred method of running this application. If I wanted to run this without docker, I would throw the root of this directory into <code>$GOPATH/src/github.com/larryprice/refermadness</code>. Running <code>go get</code> will fetch all the missing dependencies and running <code>go run main.go</code> or <code>go build; ./refermadness</code> should run the file. If you do want to use docker (and you know I do), I start with a <code>Dockerfile</code>:</p>
-
-<figure class='code'><figcaption><span>Dockerfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='docker'><span class='line'><span class="k">FROM</span> golang:1.4
-</span><span class='line'>
-</span><span class='line'><span class="k">RUN</span> go get github.com/codegangsta/gin
-</span><span class='line'>
-</span><span class='line'><span class="k">ADD</span> . /go/src/github.com/larryprice/refermadness
-</span><span class='line'><span class="k">WORKDIR</span> /go/src/github.com/larryprice/refermadness
-</span><span class='line'><span class="k">RUN</span> go get
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And, since I also love <a href="https://github.com/docker/compose">compose</a>, I run everything with a compose file. I use a JSC transformer, a SASS transpiler, and a mongo database, so my <code>docker-compose.yml</code> file looks like:</p>
-
-<figure class='code'><figcaption><span>docker-compose.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">main</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">build</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">.</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">command</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">gin run</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">env_file</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">.env</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">./:/go/src/github.com/larryprice/refermadness</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">working_dir</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/go/src/github.com/larryprice/refermadness</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="s">&quot;3000:3000&quot;</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">links</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">db</span>
-</span><span class='line'><span class="l-Scalar-Plain">sass</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">larryprice/sass</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">./public/css:/src</span>
-</span><span class='line'><span class="l-Scalar-Plain">jsx</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">larryprice/jsx</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">./public/scripts:/src</span>
-</span><span class='line'><span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">mongo:3.0</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">command</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">mongod --smallfiles --quiet --logpath=/dev/null</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">volumes_from</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">dbvolume</span>
-</span><span class='line'><span class="l-Scalar-Plain">dbvolume</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">busybox:ubuntu-14.04</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">/data/db</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And then run <code>docker-compose up</code> to run all the containers and start up the server.</p>
-
-<p>&hellip;And that&rsquo;s that! I like setting my code up this way as a compromise between idiomatic Go and ruby on rails. I inject parameters whrever possible to keep things testable. I keep my concerns separated as much as possible. Go is fast and the syntax is clean, but there aren&rsquo;t enough examples of creating full-blown web applications available. At this point, we don&rsquo;t know the future of Go, but I anticipate it becoming big. Hopefully this architecture overview can help someone get started making the transition from a more traditional MVC framework to golang.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/8">&larr; Older</a>
@@ -1311,7 +844,11 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2017/09/14/promise-youll-call-back/">Promise You'll Call Back</a>
+        <a href="/blog/2018/02/02/async-and-await-a-new-promise/">Async and Await - a New Promise</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/09/14/promise-youll-call-back/">Promise You'll Call Back: A Guide to the Javascript Promise Class</a>
       </li>
     
       <li class="post">
@@ -1326,15 +863,11 @@
         <a href="/blog/2017/04/18/on-gender-bias-and-home-improvement/">On Gender Bias and Home Improvement</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2017/04/11/using-d-bus-signals-in-python/">Using D-Bus Signals in Python</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 125.45454545454545%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 107.27272727272727%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.63636363636363%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 127.27272727272728%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 109.0909090909091%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.63636363636363%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
 </section>
 
 <section>
@@ -1394,7 +927,7 @@
   </div>
   <footer role="contentinfo"><p>
   <center>
-	  Copyright &copy; 2017 - Larry Price -
+	  Copyright &copy; 2018 - Larry Price -
 	  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span><br/>
 	  Note: Views and opinions expressed belong solely to the author and do not represent the views of the any other person or company.
 	</center>

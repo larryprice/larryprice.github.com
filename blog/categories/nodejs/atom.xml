@@ -4,7 +4,7 @@
   <title><![CDATA[Category: nodejs | Larry Price]]></title>
   <link href="https://larry-price.com/blog/categories/nodejs/atom.xml" rel="self"/>
   <link href="https://larry-price.com/"/>
-  <updated>2017-09-14T21:44:10-05:00</updated>
+  <updated>2018-02-02T16:22:12-06:00</updated>
   <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -14,7 +14,128 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Promise you'll call back]]></title>
+    <title type="html"><![CDATA[Async and Await - A New Promise]]></title>
+    <link href="https://larry-price.com/blog/2018/02/02/async-and-await-a-new-promise/"/>
+    <updated>2018-02-02T15:19:48-06:00</updated>
+    <id>https://larry-price.com/blog/2018/02/02/async-and-await-a-new-promise</id>
+    <content type="html"><![CDATA[<p>In my <a href="/blog/2017/09/14/promise-youll-call-back/">last post</a>, I discussed the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">ES2015 concept of a <code>Promise</code></a>. A <code>Promise</code> provides a simplified mechanism for performing asynchronous work in JavaScript without using the classic <code>setTimeout</code>-callback approach. Seeing as it&rsquo;s been about 4 months since my previous post, a new asynchronous concept is on the rise as part of the <a href="https://tc39.github.io/ecma262/2017/#sec-async-function-definitions">ES2017 specification</a>: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function"><code>async</code> and <code>await</code></a>.</p>
+
+<p>I became aware of <code>async</code> and <code>await</code> after reading <a href="https://davidwalsh.name/async-await">David Walsh&rsquo;s blog</a>, at which point I disregarded the new features as being &ldquo;too soon&rdquo; and &ldquo;not different enough&rdquo; from a <code>Promise</code> to warrant a second thought. Then, yesterday, I used them, and my life was, once again, forever changed.</p>
+
+<p><code>await</code> is used to essentially wait for a <code>Promise</code> to finish. Instead of using a callback with a <code>then</code> clause, <code>await</code> allows you to perform the action and/or store the result like you&rsquo;re within a synchronous function.</p>
+
+<p><code>async</code> is a keyword identifier used on functions to specify that that function will use <code>await</code>. Try to call <code>await</code> in a function not labeled as <code>async</code> and you&rsquo;re going to have a bad time. Any <code>async</code> function returns a <code>Promise</code>.</p>
+
+<p>Let&rsquo;s see an example:</p>
+
+<pre><code class="javascript">function getFirstName() { return Promise.resolve('Charles'); }
+function getMiddleName() { return Promise.resolve('Entertainment'); }
+function getLastName() { return Promise.resolve('Cheese'); }
+
+async function getName() {
+  const first = await getFirstName();
+  const middle = await getMiddleName();
+  const last = await getLastName();
+
+  return `${first} ${middle} ${last}`;
+}
+
+getName().then((name) =&gt; {
+  console.log(name);
+});
+
+console.log('My next guest needs no introduction:');
+
+// Result:
+//   My next guest needs no introduction:
+//   Charles Entertainment Cheese
+</code></pre>
+
+<p>We have three functions which each return a <code>Promise</code>, and an <code>async</code> function which calls those functions sequentially and uses the results to construct a string. We call the <code>getName</code> function (which is <code>async</code> and therefore returns a <code>Promise</code>) and log the results. Our last command logs a special message. Due to the asynchronous nature of the <code>getName</code> function, our special message is logged first, and then the result of <code>getName</code>.</p>
+
+<p>This comes in handy when you&rsquo;re depending on the results of a <code>Promise</code> to do some work or pass into another asynchronous call. But, in the case of our <code>getName</code> function above, we could be getting all three of the names at once. This calls for the brilliant <code>Promise.all</code> method, which can also be used with <code>async</code>. Let&rsquo;s modify our sub-name functions to all use <code>async</code> and then fetch them all at once:</p>
+
+<pre><code class="javascript">async function getFirstName() { return 'Charles'; }
+async function getMiddleName() { return 'Entertainment'; }
+async function getLastName() { return 'Cheese'; }
+
+async function getName() {
+  const names = await Promise.all([getFirstName(), getMiddleName(), getLastName()]);
+
+  return `${names[0]} ${names[1]} ${names[2]}`;
+}
+
+getName().then((name) =&gt; {
+  console.log(name);
+});
+
+console.log('My next guest needs no introduction:');
+
+// Result:
+//   My next guest needs no introduction:
+//   Charles Entertainment Cheese
+</code></pre>
+
+<p>Since an <code>async</code> function just returns a <code>Promise</code>, we can directly use (and even inter-mix) <code>async</code> functions inside <code>Promise.all</code>, and the results come back in an ordered array.</p>
+
+<p>OK, what if we want to fire off some long-running task and do some other work in the meantime? We can defer our use of <code>await</code> until after we&rsquo;ve performed all the intermediate work:</p>
+
+<pre><code class="javascript">async function getFirstName() { return 'Charles'; }
+async function getMiddleName() { return 'Entertainment'; }
+async function getLastName() { return 'Cheese'; }
+
+async function getName() {
+  const first  = getFirstName();  // first, middle, and last will all
+  const middle = getMiddleName(); // be pending Promises at this
+  const last   = getLastName();   // point, to be resolved in time
+
+  const title = Math.random() &gt; .5 ? 'Sr.' : 'Esq.';
+
+  return `${await first} ${await middle} ${await last}, ${title}`;
+}
+
+getName().then((name) =&gt; {
+  console.log(name);
+});
+
+console.log('My next guest needs no introduction:');
+
+// Result will be quasi-random:
+//   My next guest needs no introduction:
+//   Charles Entertainment Cheese, (Esq.|Sr.)
+</code></pre>
+
+<p>This example reiterates that you can use <code>async</code> functions just like you would a <code>Promise</code>, but with the added benefit of using <code>await</code> to wait for the results when necessary.</p>
+
+<p>I know what you&rsquo;re thinking: &ldquo;All these positives, Larry! Is there nothing negative about <code>async</code>/<code>await</code>?&rdquo; As always, there are a couple of pitfalls to using these functions. The biggest nuisance for me is the loss of the <code>catch</code> block when converting from a <code>Promise</code> chain. In order to catch errors with <code>async</code>/<code>await</code>, you&rsquo;ll have to go back to traditional <code>try/catch</code> statements:</p>
+
+<pre><code class="javascript">async function checkStatus() { throw 'The Cheese is displeased!'; }
+
+async function checks() {
+  try {
+    await checkStatus();
+    return 'No problems.';
+  } catch (e) {
+    return e;
+  }
+}
+
+checks().then((status) =&gt; {
+  console.log(status)
+})
+console.log('Current status:');
+
+// Result will be quasi-random:
+//   Current status:
+//   The Cheese is displeased!
+</code></pre>
+
+<p>The only other real downside is that <code>async</code> and <code>await</code> may not be fully supported in your users' browsers or your version of Node.JS. There are plenty of ways to get around this with Babel and polyfills, but, to be honest, I dedicated a large chunk of time yesterday afternoon to upgrading all of our libraries and babel versions to get this to work properly everywhere. Your mileage may vary, and, if you&rsquo;re reading this 6 months from when it was posted, I&rsquo;m sure it will be available by default in any implementations of ECMAScript.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Promise you'll call back: A guide to the Javascript Promise class]]></title>
     <link href="https://larry-price.com/blog/2017/09/14/promise-youll-call-back/"/>
     <updated>2017-09-14T21:45:08-05:00</updated>
     <id>https://larry-price.com/blog/2017/09/14/promise-youll-call-back</id>
