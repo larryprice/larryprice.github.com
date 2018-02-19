@@ -6,8 +6,17 @@ p code {
   border: 0;
 }
 
+b {
+  font-weight: bold;
+}
+
+#patreon-plug {
+  text-align: center;
+}
+
 aside {
   &.sidebar {
+
     .social-media-bar {
       display: block;
       text-align: center;
