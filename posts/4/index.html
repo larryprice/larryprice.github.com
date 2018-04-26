@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="This is the third in a series of blog posts detailing my experience acclimating to a fully remote work experience. You may also enjoy my original &hellip;">
+  <meta name="description" content="The release of Ubuntu 16.10 Yakkety Yak in the coming months will bring about the public release of Unity 8 as a pre-installed desktop session ( &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,142 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/08/24/running-x-applications-in-unity-8/">Maintaining X Applications in Unity 8</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-08-24T17:29:59-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>5:29 pm</span></time>
+        
+           | <a href="/blog/2016/08/24/running-x-applications-in-unity-8/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2016/08/24/running-x-applications-in-unity-8/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The release of Ubuntu 16.10 Yakkety Yak in the coming months will bring about the public release of Unity 8 as a pre-installed desktop session (though not as the default session). It&rsquo;s been a long time coming, and there&rsquo;s a lot of new features which will break older applications. Canonical has unveiled <a href="http://snapcraft.io">snappy</a> as the preferred packaging system for Unity 8, but what about all those old deb packages?</p>
+
+<p>There have been a few other good posts about X applications on Unity 8 including <a href="http://mhall119.com/2016/05/dogfooding-unity-8/">this one on dogfooding</a>, <a href="https://kylenubuntu.blogspot.no/2016/07/running-x-apps-on-ubuntu-devices.html">this one on Ubuntu Touch</a>, and <a href="https://bregmatter.wordpress.com/2016/07/04/x11-applications-and-unity-8/">this one on how it works under the covers</a>. This blog post is explicitly about Unity 8 on desktop using the Libertine CLI, though can be applied to most devices running Ubuntu Touch.</p>
+
+<p><em>Disclaimer: I work for Canonical on one of the teams making all of this fancy stuff work.</em></p>
+
+<h3>A (Very) Brief Explanation</h3>
+
+<p>The toolchain we&rsquo;ll be relying on is called <code>libertine</code>, and it&rsquo;s essentially a wrapper around unprivileged LXC and chroot-based containers. We prefer to use LXC containers on newer OSes, but we must continue supporting chroot containers on many devices due to kernel limitations.</p>
+
+<h3>What You&rsquo;ll Need</h3>
+
+<p>For desktop Unity 8, you&rsquo;ll need the packages for <code>libertine</code>, <code>libertine-tools</code>, and <code>lxc</code> to get started. This will install a CLI and GUI for maintaining Libertine containers and applications.</p>
+
+<p>If you&rsquo;re running Wily or newer, you can just run the following in your terminal:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt install libertine
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Otherwise, you&rsquo;ll need to add the stable overlay PPA first:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo add-apt-repository ppa:ci-train-ppa-service/stable-phone-overlay
+</span><span class='line'><span class="nv">$ </span>sudo apt-get update
+</span><span class='line'><span class="nv">$ </span>sudo apt-get install libertine
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>The GUI</h3>
+
+<p>At this point, if you&rsquo;re on desktop you can open up the GUI which will guide you through creating a new container and installing applications. Search the Dash (or Apps scope) for <code>libertine</code> and, given that we haven&rsquo;t pushed a buggy version recently, you&rsquo;ll be presented with a Qt application for maintaining containers. I highly recommend using the GUI, because then you are guaranteed not to be following out-of-date console commands.</p>
+
+<p>&hellip;But maybe you prefer the terminal. Or maybe you&rsquo;re secretly SSH&rsquo;d into the target machine or Ubuntu Touch device and need to use the terminal. If so&hellip;</p>
+
+<h3>The CLI</h3>
+
+<p>The CLI we&rsquo;ll be using is <code>libertine-container-manager</code>. It has a <code>manpage</code>, a <code>--help</code> option, and autocomplete to help you out in a jam.</p>
+
+<p>The first thing you&rsquo;ll want to do is create a container. There are a lot of options, but to create an optimal container for your current machine you only need to specify the <code>id</code> and <code>name</code> parameters:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>libertine-container-manager create --id desktopapps --name <span class="s2">&quot;Desktop Applications&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A couple of things to note here: Your <code>id</code> must be unique and conform to the simple click name regex - this is what will identify your container on a system level. The <code>name</code> should be human-readable so you can easily identify what might be inside your container. If you don&rsquo;t specify a <code>name</code>, your <code>id</code> will be used. The CLI will likely ask you for a password to use in the container in case you ever need it. You can leave this blank if you&rsquo;re not concerned with that kind of thing.</p>
+
+<p>At this point, a bunch of things should be happening in your terminal. This will pull a container image for your current distro and install all the requirements to get started maintaining and running X apps. This could take anywhere from a few minutes to the next hour depending on your network and disk speeds. Once you&rsquo;re done, you can use the <code>list</code> subcommand to list all installed containers (note you probably just have one at this point). If you ever want to delete your container, you can run <code>libertine-container-manager destroy -i desktopapps</code>.</p>
+
+<p>Once that&rsquo;s finished, we can start installing apps. To find apps available, you can use the <code>search-cache</code> subcommand:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>libertine-container-manager search-cache --id desktopapps --search-string <span class="s2">&quot;office&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will return a few strings from the apt-cache of the container with <code>id</code> &ldquo;desktopapps&rdquo; that match &ldquo;office&rdquo;. Now, if you want to install &ldquo;libreoffice&rdquo;:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>libertine-container-manager install-package --id desktopapps --package libreoffice
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will install the full libreoffice suite. Nice! Similarly, you can use the <code>remove-package</code> subcommand to remove applications. Don&rsquo;t remember what apps you&rsquo;ve installed? Use the <code>list-apps</code> command:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>libertine-container-manager list-apps --id desktopapps
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Maybe you&rsquo;re an avid Steam for Linux gamer and want to try to get some games working. Since Steam still only comes in a 32-bit binary, you&rsquo;ll need to enable the multiarch repos, and then you can just install Steam like any other app:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>libertine-container-manager configure --id desktopapps --multiarch <span class="nb">enable</span>
+</span><span class='line'>...
+</span><span class='line'><span class="nv">$ </span>libertine-container-manager install-package --id desktopapps --package steam
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Steam will ask you to agree to their user agreement from the command line, which you should be able to do easily. If you need to use the <code>readline</code> frontend for dpkg, you can append <code>--readline</code> to the <code>install-package</code> command to enable it.</p>
+
+<p>There are many other commands to explore to maintain your container, but for now I&rsquo;ll let you check the manpage or open the GUI to explore further.</p>
+
+<h3>Running Apps</h3>
+
+<p>Now that you&rsquo;ve installed some apps, you probably want to run them. You can install the Libertine Scope, which will allow you to peruse your installed apps in a Unity 8 session. You can either install it from the App Store on a device (search for &ldquo;Desktop Apps Scope&rdquo;) or through <code>apt</code> on desktop with:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt install libertine-scope
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In a Unity 8 session, you can now find the scope and click on apps to run them. Note that there are many apps which still don&rsquo;t work, such as those requiring a terminal or <code>sudo</code>; consider these a work in progress.</p>
+
+<h3>The Future</h3>
+
+<p>I&rsquo;ve been toiling away the past few weeks getting a scope ready which can be used explicitly to install/remove X apps in Unity 8, like the current Ubuntu Software Center (or app store on Touch devices). This scope should be available anywhere the libertine scope is available, meaning that it will alleviate a lot of the pain associated with installing/removing apps for a large chunk of users. Using the Libertine GUI or Libertine CLI will still allow for much more customization, but those tools are largely designed with power users in mind.</p>
+
+<p>Are you able to get libertine working on your system? Can you launch X applications to your heart&rsquo;s content? Let me know in the comments!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -454,75 +590,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2016/05/05/going-remote-1-month-in/">Going Remote: 1 Month In</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2016-05-05T20:21:56-04:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>8:21 pm</span></time>
-        
-           | <a href="/blog/2016/05/05/going-remote-1-month-in/#disqus_thread"
-             data-disqus-identifier="https://larry-price.com/blog/2016/05/05/going-remote-1-month-in/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><em>This is the second in a series of blog posts detailing my experience migrating from a culture based on co-location to a fully remote environment. You may also enjoy my <a href="/blog/2016/04/11/going-remote-1-week/">original post detailing my first week</a>. Look out for another post in the fall.</em></p>
-
-<p>I&rsquo;ve spent an entire month working remotely. Whereas I spent much of my first week working remotely getting my home office in a working state, the rest of the month was largely spent acclimating to a culture of complete autonomy, getting comfortable with my peers, and finding my way around.</p>
-
-<h3>Attacking My Action Items</h3>
-
-<p>One of my action items from <a href="/blog/2016/04/11/going-remote-1-week/">the week 1 post</a> involved personalizing my workspace. I brought three posters from our second-floor study and planted them on the walls of my new office area downstairs. It makes my new office feel a lot more like my own space and a lot less like the formerly-unused living room. I have a 1994 Ren&amp;Stimpy calendar hanging on the bookshelf as well as a few stickers and other various nerdy hangables. I&rsquo;m fairly happy with the current state of my office.</p>
-
-<p>I&rsquo;ve made a point of exercising more during the work day. I work my biceps and triceps with my handheld weight, as many nose-to-the-ground push-ups as I can, and really hard bicycles until my abs tell me to stop. I&rsquo;ve also been walking outside in the early afternoon to check on the state of my hop garden. Not to mention I&rsquo;m still making significant use of my sit-stand desk.</p>
-
-<p>As far as extracurricular activities go, I think I&rsquo;m keeping steady. I&rsquo;ve been going to my local Code&amp;Coffee, and I just had a monthly meeting of Indy Golang. I&rsquo;ve been reading a bunch of blogs and eating up modern C++ material. I&rsquo;d like to make sure I get to IndySA every now and then, but I usually just whiff the date. I haven&rsquo;t been doing much coding outside of work, but that hasn&rsquo;t been high on my priority list recently. Since I currently work for an open-source company, I am embedded in the world of code all day, and I usually end the day very satisified.</p>
-
-<p>I did not buy a better floormat. Still on the list.</p>
-
-<h3>Acclimation Station</h3>
-
-<p>Although my first week was a success, I&rsquo;ll admit it was still a little awkward. However, I&rsquo;ve found myself significantly more comfortable at the end of my first month.</p>
-
-<p>In this position, there is a level of autonomy unlike any I have ever experienced. No one tells me what to work on next. I figure out what I&rsquo;ll be doing almost entirely based on incoming bug reports, community rumblings, nebulous plans, or simply things that interest and/or annoy me about a project. Priorities are in the eye of the beholder, and it&rsquo;s in my best interest to pick up work that is meaningful and relevant. I complete the task, get it into review, and make sure everybody&rsquo;s happy. Since everyone has a shared goal, it&rsquo;s unusual for developers to be especially nit-picky during reviews, and thus reviews become more focused on correctness, education, and mysterious edge cases.</p>
-
-<p>Talking to people on IRC can be a little daunting because so many of my coworkers are just so good at it. At first, talking to the right people seemed impossible. Eventually, I&rsquo;ve learned to become efficient with my IRC usage and I have certain channels relevant to my current tasks where I hang out. Although I describe our communications as &ldquo;efficient&rdquo;, that&rsquo;s not to say we don&rsquo;t joke around and have a good time. There are people I interact with every day who I consider work-friends even though we&rsquo;ve never spoken face-to-face.</p>
-
-<p>Over the past several weeks we&rsquo;ve held two company-wide events. The first was a remote open forum with our CEO. During the remote forum, the CEO discussed how the company was doing and then she opened the floor for questions. Someone would ask a question in chat, people would vote for those questions, and then we would get an answer. It was done quite well and felt like a great introduction to the CEO and her vision for our company&rsquo;s future. This week was a three-day conference spanning the entire organization. Presenters would share their faces and slides using Hangouts on Air, while attendees watched live and chatted together in a relevant channel. I learned a lot about the wider scope and relevance of my project, and I also got to hear about all the other interesting things going on around the company. I got to hear the founder do a Q&amp;A, which gave rise to many great questions with humble, honest answers which gave me a good idea of what we are all about as an organization. Attendance was optional, so irrelevant presentations could be ignored as easily as closing a tab.</p>
-
-<p>For the first couple weeks, I couldn&rsquo;t figure out how some of my peers could be so busy all the time. Now I understand. I found myself working on projects several dependencies away from my own, adding features and fixing bugs such that our project could integrate with the dependency and we could get features shipped. Due to the nature of everything being open-source, I&rsquo;m constantly working with my peers to figure out where a bug might be stemming from or the appropriate level to inject a feature or even just who to talk to about how things work. You fix a bug in one project and accidentally become a contributor while the project is in desperate need of many code reviews, which you then do and become an even more relevant member to the team.</p>
-
-<p>Oftentimes, traditional office workers will say things to me like, &ldquo;I don&rsquo;t know how you work from home; I&rsquo;d just be distracted all day and wouldn&rsquo;t be able to get anything done.&rdquo; I&rsquo;ve found that to be completely untrue. There are many days where I have trouble not working in the evening. I&rsquo;ll read up on some modern C++ techniques or read some misguided blog post about our projects, and I&rsquo;ll think about jumping on the computer at 9pm just to take a peek. It takes a lot of self-restraint, but I&rsquo;ve thus far been pretty good about not working after work. Hopefully I can keep that up.</p>
-
-<p>In a few weeks, my team is meeting in Montreal to hang out and do code for a week. I&rsquo;m excited for the opportunity to see everyone (not to mention to be in Montreal), and I&rsquo;m certain that it will help me feel even more acclimated to this new environment.</p>
-
-<h3>Some New Action Items</h3>
-
-<ul>
-<li><strong>Better floormat</strong>. Standing on my plastic mat right now, my feet do start to hurt. I need to run to an office supply store and find some rubber padding.</li>
-<li><strong>IRC Champion</strong>. Although I&rsquo;m more comfortable on IRC, I know I could be better about reaching out at the right times to the right people.</li>
-<li><strong>Automaton</strong>. I still grope around for work when I&rsquo;m not sure what to do next. I&rsquo;d like to come up with a process to determine what should be next on the agenda without too much synchronous assistance.</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/5">&larr; Older</a>
@@ -566,6 +633,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2018/04/25/redirecting-to-your-main-site-with-heroku/">Redirecting to Your Main Site With Heroku</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2018/02/02/async-and-await-a-new-promise/">Async and Await - a New Promise</a>
       </li>
     
@@ -581,15 +652,11 @@
         <a href="/blog/2017/08/26/wheres-larry/">Where's Larry?</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2017/04/18/on-gender-bias-and-home-improvement/">On Gender Bias and Home Improvement</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 127.27272727272728%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 109.0909090909091%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.63636363636363%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 107.27272727272727%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 127.27272727272728%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 109.0909090909091%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/php' style='font-size: 101.81818181818181%'>php</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 141.8181818181818%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.63636363636363%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
 </section>
 
 <section>

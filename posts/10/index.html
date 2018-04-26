@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="Many moons ago, I wrote about setting up a Go environment in Ubuntu. After writing that post, I dropped Go development for nearly a year. Today I run &hellip;">
+  <meta name="description" content="Ollert, the Trello data analytics tool, has been open sourced under GNU Affero GPL v3.0. The source code can be found on Github and I&rsquo;ve &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,66 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/02/11/ollert-is-now-open-source/">Ollert Is Now Open Source</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-02-11T05:54:26-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>5:54 am</span></time>
+        
+           | <a href="/blog/2015/02/11/ollert-is-now-open-source/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2015/02/11/ollert-is-now-open-source/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="https://ollertapp.com">Ollert</a>, the Trello data analytics tool, has been open sourced under <a href="https://github.com/sep/ollert/blob/master/LICENSE">GNU Affero GPL v3.0</a>. The source code can be found <a href="https://github.com/sep/ollert/">on Github</a> and I&rsquo;ve already accepted several pull requests.</p>
+
+<h4>Why?</h4>
+
+<p>I&rsquo;ve been working towards this for a few months now. Although Ollert was a lot of fun to create and has helped quite a few people learn more about their Trello boards, I&rsquo;ve been having trouble finding the time to write new features in between my other pursuits. Although <a href="http://www.sep.com/">SEP</a> has given me resources in the past, it&rsquo;s not always easy to find people off-project who have the right experience, determination, and time to grok the codebase and start churning out new features.</p>
+
+<p>An interesting pattern started to appear: With every other feature request I received for Ollert, the requestor would add in some other loaded question: Where is the source code? Is there a Github repo so I can add issues? Do you accept pull requests?</p>
+
+<p>Random strangers on the internet wanted to help. These are people with the drive to work with me even though I couldn&rsquo;t give them anything in return. These are people with fresh perspectives on Trello usage which I had never imagined. These are the developers whose help I sorely wanted.</p>
+
+<h4>Feature requests?</h4>
+
+<p>I am still accepting feature requests. Feature requests are now dealt with through our <a href="https://github.com/sep/ollert/issues">issues page</a>.</p>
+
+<h4>Contributing?</h4>
+
+<ul>
+<li>Write tests</li>
+<li>Run tests</li>
+<li>Seriously, the <a href="https://travis-ci.org/sep/ollert">travis-ci build</a> had better be green.</li>
+<li>Follow the currently in-place patterns. If you don&rsquo;t like them, let me know your idea before you work for a week and I deny your changes.</li>
+<li>Create issues for whatever you&rsquo;re working on.</li>
+<li>We do things by pull requests. Make a fork, make a branch, let Github do the rest.</li>
+</ul>
+
+
+<h4>And so, it continues&hellip;</h4>
+
+<p>This does not mean I am abandoning Ollert. Internally we&rsquo;ll still be discussing how to increase traffic and improve user experience. Hopefully, open sourcing Ollert will give us invaluable feedback on the code and fresh perspectives on features. I&rsquo;m looking forward to the future of Ollert.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -617,272 +677,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/12/14/migrating-an-octopress-blog-from-github-pages-to-openshift/">Deploying an Octopress Site to Openshift</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-12-14T20:15:00-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>8:15 pm</span></time>
-        
-           | <a href="/blog/2014/12/14/migrating-an-octopress-blog-from-github-pages-to-openshift/#disqus_thread"
-             data-disqus-identifier="https://larry-price.com/blog/2014/12/14/migrating-an-octopress-blog-from-github-pages-to-openshift/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&rsquo;ll detail how to take a new or existing GH Pages blog in Octopress and deploy it to OpenShift.</p>
-
-<h3>Why?</h3>
-
-<p>I recently moved my blog from Github Pages to <a href="https://www.openshift.com/">OpenShift Online</a>. I did this because I wanted to utilize SSL with my custom domain - <a href="https://github.com/isaacs/github/issues/156">a feature not currently available on Github Pages</a> (it&rsquo;s 12/14/2014 - let me know when this becomes possible!). OpenShift supports SSL with a free account, so I decided to make the switch. I wanted to use the existing architecture set up by <a href="https://github.com/imathis/octopress">Octopress</a> that built my GH Pages blog. Hopefully you see a little lock icon in your address bar if you&rsquo;re reading this from <a href="/">the site</a>.</p>
-
-<h3><a name="step0"></a>Step 0: Create an OpenShift account</h3>
-
-<p>Here&rsquo;s the link: <a href="https://www.openshift.com/app/account/new">https://www.openshift.com/app/account/new</a>. They&rsquo;re serious about the first and second options being free. The difference is signing up for the second option requires credit card information to give you the possibility of scaling your application. The second option is what allows you to add certs for doing SSL.</p>
-
-<h3><a name="step1"></a>Step 1: Create a Ruby 1.9.3 application</h3>
-
-<p>Octopress still uses ruby 1.9.3; for simplicity&rsquo;s sake, so will we. Assuming you have ruby-1.9.3 installed and the rhc gem installed (gem install rhc), create a new ruby-1.9 application on OpenShift:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rhc app create octopress ruby-1.9
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>replacing &ldquo;octopress&rdquo; with your desired application name. I&rsquo;ve found this action takes some time, usually over a minute, while OpenShift allocates resources. When your application has been created, you should see an <code>ssh://</code> URL for your git repository on OpenShift. Make sure you can get access to this later.</p>
-
-<p>If you&rsquo;re using a custom domain, now is as good a time as any to set it up. OpenShift has <a href="https://blog.openshift.com/custom-url-names-for-your-paas-applications-host-forwarding-and-cnames-the-openshift-way/">its own docs</a> to cover this topic.</p>
-
-<h3><a name="step2"></a>Step 2: Merge in &ldquo;Octoshift&rdquo;</h3>
-
-<p>I&rsquo;ve made some updates to the octopress repo that I haven&rsquo;t requested be pulled into the master branch yet. I&rsquo;ll update this section in the future if necessary.</p>
-
-<p>If you&rsquo;re new to Octopress, clone from the master branch:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone git@github.com:imathis/octopress.git
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Either way, <code>cd</code> into your octopress directory and merge in my fork:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git remote add octoshift git@github.com:larryprice/octopress.git
-</span><span class='line'><span class="nv">$ </span>git pull octoshift master
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3><a name="step3"></a>Step 3: Set up deployment</h3>
-
-<p>There is a rake task for setting up an OpenShift deployment called <code>setup_openshift</code>. This rake task clobbers the <code>_deploy</code> directory and reinitializes it using the URL for your OpenShift repository, which we committed to memory in <a href="#step1">Step 1</a>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rake setup_openshift<span class="o">[</span><span class="s2">&quot;ssh://548e1873e0b8cddccf000094@octopress-username.rhcloud.com/~/git/octopress.git/&quot;</span><span class="o">]</span>
-</span><span class='line'>rm -rf _deploy
-</span><span class='line'>mkdir -p _deploy/public
-</span><span class='line'><span class="nb">cd </span>_deploy
-</span><span class='line'>Initialized empty Git repository in /home/lrp/Projects/2014/octopress/_deploy/.git/
-</span><span class='line'>remote: Counting objects: 21, <span class="k">done</span>.
-</span><span class='line'>remote: Compressing objects: 100% <span class="o">(</span>14/14<span class="o">)</span>, <span class="k">done</span>.
-</span><span class='line'>remote: Total <span class="m">21</span> <span class="o">(</span>delta 2<span class="o">)</span>, reused <span class="m">21</span> <span class="o">(</span>delta 2<span class="o">)</span>
-</span><span class='line'>Unpacking objects: 100% <span class="o">(</span>21/21<span class="o">)</span>, <span class="k">done</span>.
-</span><span class='line'>From ssh://octopress-username.rhcloud.com/~/git/octopress
-</span><span class='line'> * branch            master     -&gt; FETCH_HEAD
-</span><span class='line'> * <span class="o">[</span>new branch<span class="o">]</span>      master     -&gt; origin/master
-</span><span class='line'><span class="nb">cd</span> -
-</span><span class='line'>cp config.ru _deploy/
-</span><span class='line'><span class="nb">cd </span>_deploy
-</span><span class='line'><span class="o">[</span>master 5204046<span class="o">]</span> Octopress init
-</span><span class='line'> <span class="m">3</span> files changed, <span class="m">27</span> insertions<span class="o">(</span>+<span class="o">)</span>, <span class="m">295</span> deletions<span class="o">(</span>-<span class="o">)</span>
-</span><span class='line'> create mode <span class="m">100644</span> Gemfile
-</span><span class='line'> rewrite config.ru <span class="o">(</span>99%<span class="o">)</span>
-</span><span class='line'> create mode <span class="m">100644</span> public/index.html
-</span><span class='line'><span class="nb">cd</span> -
-</span><span class='line'>
-</span><span class='line'>---
-</span><span class='line'><span class="c">## Now you can deploy to ssh://548e1873e0b8cddccf000094@octopress-username.rhcloud.com/~/git/octopress.git/ with `rake deploy` or `rake openshift` ##</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3><a name="step35"></a>Step 3.5 Set up forcing SSL</h3>
-
-<p>Do you already have SSL for your domain? Bully for you! I&rsquo;ve included an option to <code>setup_openshift</code> to force traffic to use <code>https</code> in a production environment. Just send a second parameter to rake and it&rsquo;ll do the rest.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rake setup_openshift<span class="o">[</span><span class="s2">&quot;ssh://548e1873e0b8cddccf000094@octopress-username.rhcloud.com/~/git/octopress.git/&quot;</span>,true<span class="o">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Note that you will still need to change your URL in <code>_config.yml</code> if you are using a custom domain.</p>
-
-<h3><a name="step4"></a>Step 4: Deploy</h3>
-
-<p>Now we can just run the <code>openshift</code> or <code>deploy</code> rake tasks to deploy our app to OpenShift. This task verifies we have the latest version of our OpenShift <code>master</code> branch, installs missing gems, copies over your <code>public</code> folder, and pushes the application to OpenShift.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rake deploy
-</span><span class='line'><span class="c">## Deploying branch to OpenShift</span>
-</span><span class='line'><span class="c">## Pulling any updates from OpenShift</span>
-</span><span class='line'><span class="nb">cd </span>_deploy
-</span><span class='line'>From ssh://octopress-username.rhcloud.com/~/git/octopress
-</span><span class='line'> * branch            master     -&gt; FETCH_HEAD
-</span><span class='line'>Already up-to-date.
-</span><span class='line'>Fetching gem metadata from https://rubygems.org/...........
-</span><span class='line'>Resolving dependencies...
-</span><span class='line'>Using rack <span class="o">(</span>1.5.2<span class="o">)</span>
-</span><span class='line'>Using rack-protection <span class="o">(</span>1.5.3<span class="o">)</span>
-</span><span class='line'>Using tilt <span class="o">(</span>1.4.1<span class="o">)</span>
-</span><span class='line'>Using sinatra <span class="o">(</span>1.4.5<span class="o">)</span>
-</span><span class='line'>Using bundler <span class="o">(</span>1.3.5<span class="o">)</span>
-</span><span class='line'>Your bundle is <span class="nb">complete</span>!
-</span><span class='line'>Use <span class="sb">`</span>bundle show <span class="o">[</span>gemname<span class="o">]</span><span class="sb">`</span> to see where a bundled gem is installed.
-</span><span class='line'><span class="nb">cd</span> -
-</span><span class='line'><span class="nb">cd </span>_deploy
-</span><span class='line'>
-</span><span class='line'><span class="c">## Committing: Site updated at 2014-12-14 23:13:54 UTC</span>
-</span><span class='line'><span class="o">[</span>master b17225e<span class="o">]</span> Site updated at 2014-12-14 23:13:54 UTC
-</span><span class='line'> <span class="m">1</span> file changed, <span class="m">17</span> insertions<span class="o">(</span>+<span class="o">)</span>
-</span><span class='line'> create mode <span class="m">100644</span> Gemfile.lock
-</span><span class='line'>
-</span><span class='line'><span class="c">## Pushing generated _deploy website</span>
-</span><span class='line'>Counting objects: 9, <span class="k">done</span>.
-</span><span class='line'>Delta compression using up to <span class="m">8</span> threads.
-</span><span class='line'>Compressing objects: 100% <span class="o">(</span>7/7<span class="o">)</span>, <span class="k">done</span>.
-</span><span class='line'>Writing objects: 100% <span class="o">(</span>9/9<span class="o">)</span>, 1.29 KiB <span class="p">|</span> <span class="m">0</span> bytes/s, <span class="k">done</span>.
-</span><span class='line'>Total <span class="m">9</span> <span class="o">(</span>delta 1<span class="o">)</span>, reused <span class="m">0</span> <span class="o">(</span>delta 0<span class="o">)</span>
-</span><span class='line'>remote: Stopping Ruby cartridge
-</span><span class='line'>remote: Waiting <span class="k">for</span> stop to finish
-</span><span class='line'>remote: Building git ref <span class="s1">&#39;master&#39;</span>, commit b17225e
-</span><span class='line'>remote: Building Ruby cartridge
-</span><span class='line'>remote: bundle install --deployment --path ./app-root/repo/vendor/bundle
-</span><span class='line'>remote: Fetching gem metadata from https://rubygems.org/..........
-</span><span class='line'>remote: Installing rack <span class="o">(</span>1.5.2<span class="o">)</span>
-</span><span class='line'>remote: Installing rack-protection <span class="o">(</span>1.5.3<span class="o">)</span>
-</span><span class='line'>remote: Installing tilt <span class="o">(</span>1.4.1<span class="o">)</span>
-</span><span class='line'>remote: Installing sinatra <span class="o">(</span>1.4.5<span class="o">)</span>
-</span><span class='line'>remote: Using bundler <span class="o">(</span>1.3.5<span class="o">)</span>
-</span><span class='line'>remote: Your bundle is <span class="nb">complete</span>!
-</span><span class='line'>remote: It was installed into ./vendor/bundle
-</span><span class='line'>remote: Preparing build <span class="k">for</span> deployment
-</span><span class='line'>remote: Deployment id is b4ef1149
-</span><span class='line'>remote: Activating deployment
-</span><span class='line'>remote: Compilation of assets is disabled or assets not detected.
-</span><span class='line'>remote: Starting Ruby cartridge
-</span><span class='line'>remote: -------------------------
-</span><span class='line'>remote: Git Post-Receive Result: success
-</span><span class='line'>remote: Activation status: success
-</span><span class='line'>remote: Deployment completed with status: success
-</span><span class='line'>To ssh://548e1873e0b8cddccf000094@octopress-username.rhcloud.com/~/git/octopress.git/
-</span><span class='line'>   a5071bb..b17225e  master -&gt; master
-</span><span class='line'>
-</span><span class='line'><span class="c">## OpenShift deploy complete</span>
-</span><span class='line'><span class="nb">cd</span> -
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Fin</h3>
-
-<p>That&rsquo;s that. Treat it as any Octopress install. I&rsquo;ll see if the owners of the octopress repository would be interested in pulling in my customizations and update this blog post as necessary.</p>
-
-<p>As for my switch from GH Pages to OpenShift: I&rsquo;ve found OpenShift to be just as fast as the GH Pages static server, especially when combined with <a href="https://www.cloudflare.com/">Cloudflare&rsquo;s</a> CDN and optimization systems. No regrets so far. Drop me a line in the comments if you have a beef with OpenShift or know of any equivalent alternatives.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/11">&larr; Older</a>
@@ -926,6 +720,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2018/04/25/redirecting-to-your-main-site-with-heroku/">Redirecting to Your Main Site With Heroku</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2018/02/02/async-and-await-a-new-promise/">Async and Await - a New Promise</a>
       </li>
     
@@ -941,15 +739,11 @@
         <a href="/blog/2017/08/26/wheres-larry/">Where's Larry?</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2017/04/18/on-gender-bias-and-home-improvement/">On Gender Bias and Home Improvement</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 105.45454545454545%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 127.27272727272728%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 109.0909090909091%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.63636363636363%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 101.81818181818181%'>go</a> <a href='/blog/categories/golang' style='font-size: 116.36363636363636%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 107.27272727272727%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 127.27272727272728%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 109.0909090909091%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/php' style='font-size: 101.81818181818181%'>php</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 141.8181818181818%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.63636363636363%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
 </section>
 
 <section>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: web | Larry Price]]></title>
   <link href="https://larry-price.com/blog/categories/web/atom.xml" rel="self"/>
   <link href="https://larry-price.com/"/>
-  <updated>2018-02-19T12:50:34-06:00</updated>
+  <updated>2018-04-25T20:56:55-05:00</updated>
   <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,64 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Redirecting To Your Main Site With Heroku]]></title>
+    <link href="https://larry-price.com/blog/2018/04/25/redirecting-to-your-main-site-with-heroku/"/>
+    <updated>2018-04-25T20:52:19-05:00</updated>
+    <id>https://larry-price.com/blog/2018/04/25/redirecting-to-your-main-site-with-heroku</id>
+    <content type="html"><![CDATA[<p>We have a lot of domains that we want to redirect to the same server, but we use a DNS service that does not allow doing a domain forward, and we&rsquo;re not allowed to upgrade. I wanted to do this in the simplest way possible, so I created a workaround using a PHP script and Heroku. The source discussed in detail in this post is available on GitHub: <a href="https://github.com/larryprice/simple-heroku-redirect-app">https://github.com/larryprice/simple-heroku-redirect-app</a>.</p>
+
+<p>The goal here is for users to visit a page and then be immediately redirected to the new site. I&rsquo;ve defined two environment variables to be used in this project: <code>SITENAME</code>, a human-readable name for our website, and <code>SITEURL</code>, the full URL that we actually want the user to end up on. I&rsquo;ve defined a PHP file called <code>index.php</code>:</p>
+
+<pre><code class="php index.php">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;&lt;?php echo getenv('SITENAME') ?&gt; - You will be redirected shortly...&lt;/title&gt;
+    &lt;meta http-equiv="refresh" content="0;URL='&lt;?php echo getenv('SITEURL') ?&gt;'" /&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;p&gt;Please visit the official &lt;?php echo getenv('SITENAME') ?&gt; site at &lt;a href="&lt;?php echo getenv('SITEURL') ?&gt;"&gt;&lt;?php echo getenv('SITEURL') ?&gt;&lt;/a&gt;.&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>The important piece here is the <code>&lt;meta&gt;</code> tag, which actually does the redirect for us. The only PHP code here are <code>echo getenv</code> commands that render our environment variables in the template. Since I&rsquo;m a PHP novice, there may be a better way to do this, but the <code>echo</code> works just fine.</p>
+
+<p>We also need to tell Apache how to serve the application. We want to match any routes and render our <code>index.php</code>. So we create an <code>.htcaccess</code> file:</p>
+
+<pre><code class="sh .htaccess">RewriteEngine on
+RewriteRule . index.php [L]
+</code></pre>
+
+<p>To satisfy Heroku, we need to list the dependencies for our PHP application. Fortunately for us, we don&rsquo;t have any dependencies that Heroku does not provide by default. We&rsquo;ll just create a <code>composer.json</code> file in the root of our project with an empty object:</p>
+
+<pre><code class="json composer.json">{}
+</code></pre>
+
+<p>That&rsquo;s everything we need. You could recreate the project, but you could also just pull down the project listed above and push it up to Heroku:</p>
+
+<pre><code class="bash">$ git clone https://github.com/larryprice/simple-heroku-redirect-app.git
+$ cd simple-heroku-redirect-app
+$ heroku create
+$ git push heroku master
+</code></pre>
+
+<p>With your application available on Heroku, we still need to set the environment variables described earlier as <a href="https://devcenter.heroku.com/articles/config-vars">config variables</a>:</p>
+
+<pre><code class="bash">$ heroku config:set SITENAME=yourgooddomain.com
+$ heroku config:set "SITEURL=Your Good Domain's Website Name"
+</code></pre>
+
+<p>Now tell Heroku all <a href="https://devcenter.heroku.com/articles/custom-domains">the domains</a> that will be accessing this application. These are the domains you want users <em>not</em> to use:</p>
+
+<pre><code class="bash">$ heroku domains:add yourbaddomain.com
+$ heroku domains:add www.yourbaddomain.com
+</code></pre>
+
+<p>Now you just need to add the records indicated by the above command to your DNS records. These will probably be CNAME records pointing from <code>@</code> to <code>yourbaddomain.com.herokudns.com</code> or <code>www</code> to <code>yourbaddomain.com.herokudns.com</code>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[A Chronicle of SEP Startup Weekend 2016]]></title>
@@ -348,377 +406,6 @@ window.onload = function() {
 <p>If you&rsquo;re looking for the full code that we created above, check out <a href="https://gist.github.com/larryprice/b06dd00c3e7f63ae7954">this gist</a>.</p>
 
 <p>&lt;3 HTML5</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Architecture for a Golang Web App]]></title>
-    <link href="https://larry-price.com/blog/2015/06/25/architecture-for-a-golang-web-app/"/>
-    <updated>2015-06-25T07:24:27-04:00</updated>
-    <id>https://larry-price.com/blog/2015/06/25/architecture-for-a-golang-web-app</id>
-    <content type="html"><![CDATA[<p>Setting up a web application in Golang can be a daunting task. If you&rsquo;re used to rails, you probably miss having your hand held at this point. I&rsquo;m using this architecture on <a href="https://www.refer-madness.com">Refer Madness</a> [<a href="https://github.com/larryprice/refermadness">source</a>]. Here&rsquo;s my directory structure:</p>
-
-<pre><code>-public/
--views/
--models/
--utils/
--controllers/
--web/
--main.go
-</code></pre>
-
-<p>I&rsquo;ll break this down architecturally. At each directory level, files are only allowed to access code from directories at the same or a higher level. This means that <code>utils</code> can access itself and <code>models</code>; <code>web</code> can access itself, <code>controllers</code>, <code>utils</code>, and <code>models</code>; and <code>models</code> can only access itself. I do this to keep a thick line between all the layers and to avoid recursive dependencies. Let&rsquo;s talk about each level individually!</p>
-
-<h4>main.go</h4>
-
-<p><code>main.go</code> is my main file in charge of creating dependencies, discovering environment variables, and starting the web server. Here&rsquo;s a sample:</p>
-
-<pre><code class="go main.go">package main
-
-import (
-  "github.com/larryprice/refermadness/utils"
-  "github.com/larryprice/refermadness/web"
-  "github.com/stretchr/graceful"
-  "os"
-)
-
-func main() {
-  isDevelopment := os.Getenv("ENVIRONMENT") == "development"
-  dbURL := os.Getenv("MONGOLAB_URI")
-  if isDevelopment {
-    dbURL = os.Getenv("DB_PORT_27017_TCP_ADDR")
-  }
-
-  dbAccessor := utils.NewDatabaseAccessor(dbURL, os.Getenv("DATABASE_NAME"), 0)
-  cuAccessor := utils.NewCurrentUserAccessor(1)
-  s := web.NewServer(*dbAccessor, *cuAccessor, os.Getenv("GOOGLE_OAUTH2_CLIENT_ID"),
-    os.Getenv("GOOGLE_OAUTH2_CLIENT_SECRET"), os.Getenv("SESSION_SECRET"),
-    isDevelopment, os.Getenv("GOOGLE_ANALYTICS_KEY"))
-
-  port := os.Getenv("PORT")
-  if port == "" {
-    port = "3000"
-  }
-
-  graceful.Run(":"+port, 0, s)
-}
-</code></pre>
-
-<p>Since <code>main.go</code> is on the lowest level, it has access to every other directory: in this case, <code>utils</code> and <code>web</code>. I grab all the environment variables and inject them where necessary. I create the server, injecting dependencies, and then start it on the port I want.</p>
-
-<h4>web</h4>
-
-<p>I keep my server code in the <code>web</code> directory, which includes some web middleware. Here&rsquo;s the internal structure of the <code>web</code> directory:</p>
-
-<pre><code>-web/
-|-middleware/
-|-server.go
-</code></pre>
-
-<p><code>server.go</code> contains the definition of my web server. The web server creates all my web controllers and adds middleware to my negroni server. Here&rsquo;s an excerpt:</p>
-
-<pre><code class="go web/server.go">package web
-
-import (
-  "github.com/codegangsta/negroni"
-  "github.com/goincremental/negroni-sessions"
-  "github.com/goincremental/negroni-sessions/cookiestore"
-  "github.com/gorilla/mux"
-  "github.com/larryprice/refermadness/controllers"
-  "github.com/larryprice/refermadness/utils"
-  "github.com/larryprice/refermadness/web/middleware"
-  "github.com/unrolled/secure"
-  "gopkg.in/unrolled/render.v1"
-  "html/template"
-  "net/http"
-)
-
-type Server struct {
-  *negroni.Negroni
-}
-
-func NewServer(dba utils.DatabaseAccessor, cua utils.CurrentUserAccessor, clientID, clientSecret,
-  sessionSecret string, isDevelopment bool, gaKey string) *Server {
-  s := Server{negroni.Classic()}
-  session := utils.NewSessionManager()
-  basePage := utils.NewBasePageCreator(cua, gaKey)
-  renderer := render.New()
-
-  router := mux.NewRouter()
-
-  // ...
-
-  accountController := controllers.NewAccountController(clientID, clientSecret, isDevelopment, session, dba, cua, basePage, renderer)
-  accountController.Register(router)
-
-  // ...
-
-  s.Use(sessions.Sessions("refermadness", cookiestore.New([]byte(sessionSecret))))
-  s.Use(middleware.NewAuthenticator(dba, session, cua).Middleware())
-  s.UseHandler(router)
-  return &amp;s
-}
-</code></pre>
-
-<p>A <code>server</code> struct is a <code>negroni.Negroni</code> web server. I create some dependencies from <code>utils</code> and external packages, create a router, create controllers with the dependencies, and register the router with my controllers. I also add in any middleware I may need. Speaking of middleware, here&rsquo;s an example:</p>
-
-<pre><code class="go web/middleware/database.go">package middleware
-
-import (
-  "github.com/codegangsta/negroni"
-  "github.com/larryprice/refermadness/utils"
-  "net/http"
-)
-
-type Database struct {
-  da utils.DatabaseAccessor
-}
-
-func NewDatabase(da utils.DatabaseAccessor) *Database {
-  return &amp;Database{da}
-}
-
-func (d *Database) Middleware() negroni.HandlerFunc {
-  return func(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
-    reqSession := d.da.Clone()
-    defer reqSession.Close()
-    d.da.Set(r, reqSession)
-    next(rw, r)
-  }
-}
-</code></pre>
-
-<p>This is a standard middleware definition for accessing a database session from an HTTP route. The base of this file was taken from <a href="http://modocache.svbtle.com/restful-go">Brian Gesiak&rsquo;s blog post on RESTful Go</a> and was modifiedto fit my needs.</p>
-
-<h4>controllers/</h4>
-
-<p>A controller is similar to the controller concept found in Rails. A controller registers its own route with the router provided and then sets up function calls. An abbreviated example:</p>
-
-<pre><code class="go controllers/service_controller.go">package controllers
-
-import (
-  "encoding/json"
-  "errors"
-  "github.com/gorilla/mux"
-  "github.com/larryprice/refermadness/models"
-  "github.com/larryprice/refermadness/utils"
-  "gopkg.in/mgo.v2/bson"
-  "gopkg.in/unrolled/render.v1"
-  "html/template"
-  "net/http"
-  "strings"
-)
-
-type ServiceControllerImpl struct {
-  currentUser utils.CurrentUserAccessor
-  basePage    utils.BasePageCreator
-  renderer    *render.Render
-  database    utils.DatabaseAccessor
-}
-
-func NewServiceController(currentUser utils.CurrentUserAccessor, basePage utils.BasePageCreator,
-  renderer *render.Render, database utils.DatabaseAccessor) *ServiceControllerImpl {
-  return &amp;ServiceControllerImpl{
-    currentUser: currentUser,
-    basePage:    basePage,
-    renderer:    renderer,
-    database:    database,
-  }
-}
-
-func (sc *ServiceControllerImpl) Register(router *mux.Router) {
-  router.HandleFunc("/service/{id}", sc.single)
-  // ...
-}
-
-// ...
-
-type serviceResult struct {
-  *models.Service
-  RandomCode *models.ReferralCode
-  UserCode   *models.ReferralCode
-}
-
-type servicePage struct {
-  utils.BasePage
-  ResultString string
-}
-
-func (sc *ServiceControllerImpl) single(w http.ResponseWriter, r *http.Request) {
-  data, err := sc.get(w, r)
-
-  if len(r.Header["Content-Type"]) == 1 &amp;&amp; strings.Contains(r.Header["Content-Type"][0], "application/json") {
-    if err != nil {
-      sc.renderer.JSON(w, http.StatusBadRequest, map[string]string{
-        "error": err.Error(),
-      })
-      return
-    }
-    sc.renderer.JSON(w, http.StatusOK, data)
-    return
-  } else if err != nil {
-    http.Error(w, err.Error(), http.StatusBadRequest)
-  }
-
-  resultString, _ := json.Marshal(data)
-  t, _ := template.ParseFiles("views/layout.html", "views/service.html")
-  t.Execute(w, servicePage{sc.basePage.Get(r), string(resultString)})
-}
-
-// ...
-</code></pre>
-
-<h4>utils/</h4>
-
-<p>Files that belong in the <code>utils</code> directory provide small levels of functionality to support the rest of the codebase. In my case, I have structs which access the request context, manipulate the session, and define a base page for specific pages to inherit. Here&rsquo;s where I access the context to set the user:</p>
-
-<pre><code class="go utils/current_user_accessor.go">package utils
-
-import (
-  "github.com/gorilla/context"
-  "github.com/larryprice/refermadness/models"
-  "net/http"
-)
-
-type CurrentUserAccessor struct {
-  key int
-}
-
-func NewCurrentUserAccessor(key int) *CurrentUserAccessor {
-  return &amp;CurrentUserAccessor{key}
-}
-
-func (cua *CurrentUserAccessor) Set(r *http.Request, user *models.User) {
-  context.Set(r, cua.key, user)
-}
-
-func (cua *CurrentUserAccessor) Clear(r *http.Request) {
-  context.Delete(r, cua.key)
-}
-
-func (cua *CurrentUserAccessor) Get(r *http.Request) *models.User {
-  if rv := context.Get(r, cua.key); rv != nil {
-    return rv.(*models.User)
-  }
-  return nil
-}
-</code></pre>
-
-<h4>models/</h4>
-
-<p>Models are data structures for representing my database concepts. I use my models to access the database - I create an empty model and then populate it with a database query. Here&rsquo;s an example of a model I use:</p>
-
-<pre><code class="go models/service.go">package models
-
-import (
-  "gopkg.in/mgo.v2"
-  "gopkg.in/mgo.v2/bson"
-  "strings"
-  "time"
-)
-
-type Service struct {
-  // identification information
-  ID          bson.ObjectId `bson:"_id"`
-  Name        string        `bson:"name"`
-  Description string        `bson:"description"`
-  URL         string        `bson:"url"`
-  Search      string        `bson:"search"`
-}
-
-func NewService(name, description, url string, creatorID bson.ObjectId) *Service {
-  url = strings.TrimPrefix(strings.TrimPrefix(url, "http://"), "https://")
-  return &amp;Service{
-    ID:            bson.NewObjectId(),
-    Name:          name,
-    URL:           url,
-    Description:   description,
-    Search:        strings.ToLower(name) + ";" + strings.ToLower(description) + ";" + strings.ToLower(url),
-  }
-}
-
-func (s *Service) Save(db *mgo.Database) error {
-  _, err := s.coll(db).UpsertId(s.ID, s)
-  return err
-}
-
-func (s *Service) FindByID(id bson.ObjectId, db *mgo.Database) error {
-  return s.coll(db).FindId(id).One(s)
-}
-
-func (*Service) coll(db *mgo.Database) *mgo.Collection {
-  return db.C("service")
-}
-
-type Services []Service
-
-func (s *Services) FindByIDs(ids []bson.ObjectId, db *mgo.Database) error {
-  return s.coll(db).Find(bson.M{"_id": bson.M{"$in": ids}}).Sort("name").All(s)
-}
-
-func (*Services) coll(db *mgo.Database) *mgo.Collection {
-  return db.C("service")
-}
-
-// ...
-</code></pre>
-
-<h4>views/</h4>
-
-<p>I keep my goalng templates in the <code>views</code> directory. Pretty basic - whatever templating engine I use, I throw it into this <code>views</code> directory.</p>
-
-<h4>public/</h4>
-
-<p>As usual, this directory is all my public files - <code>css</code>, <code>img</code>, <code>scripts</code>.</p>
-
-<h3>That&rsquo;s cool - how do I run this?</h3>
-
-<p>It&rsquo;s no secret that I like <a href="https://www.docker.com/">docker</a>, so that&rsquo;s my preferred method of running this application. If I wanted to run this without docker, I would throw the root of this directory into <code>$GOPATH/src/github.com/larryprice/refermadness</code>. Running <code>go get</code> will fetch all the missing dependencies and running <code>go run main.go</code> or <code>go build; ./refermadness</code> should run the file. If you do want to use docker (and you know I do), I start with a <code>Dockerfile</code>:</p>
-
-<pre><code class="docker Dockerfile">FROM golang:1.4
-
-RUN go get github.com/codegangsta/gin
-
-ADD . /go/src/github.com/larryprice/refermadness
-WORKDIR /go/src/github.com/larryprice/refermadness
-RUN go get
-</code></pre>
-
-<p>And, since I also love <a href="https://github.com/docker/compose">compose</a>, I run everything with a compose file. I use a JSC transformer, a SASS transpiler, and a mongo database, so my <code>docker-compose.yml</code> file looks like:</p>
-
-<pre><code class="yml docker-compose.yml">main:
-  build: .
-  command: gin run
-  env_file: .env
-  volumes:
-    - ./:/go/src/github.com/larryprice/refermadness
-  working_dir: /go/src/github.com/larryprice/refermadness
-  ports:
-    - "3000:3000"
-  links:
-    - db
-sass:
-  image: larryprice/sass
-  volumes: 
-    - ./public/css:/src
-jsx:
-  image: larryprice/jsx
-  volumes: 
-    - ./public/scripts:/src
-db:
-  image: mongo:3.0
-  command: mongod --smallfiles --quiet --logpath=/dev/null
-  volumes_from:
-    - dbvolume
-dbvolume:
-  image: busybox:ubuntu-14.04
-  volumes:
-    - /data/db
-</code></pre>
-
-<p>And then run <code>docker-compose up</code> to run all the containers and start up the server.</p>
-
-<p>&hellip;And that&rsquo;s that! I like setting my code up this way as a compromise between idiomatic Go and ruby on rails. I inject parameters whrever possible to keep things testable. I keep my concerns separated as much as possible. Go is fast and the syntax is clean, but there aren&rsquo;t enough examples of creating full-blown web applications available. At this point, we don&rsquo;t know the future of Go, but I anticipate it becoming big. Hopefully this architecture overview can help someone get started making the transition from a more traditional MVC framework to golang.</p>
 ]]></content>
   </entry>
   

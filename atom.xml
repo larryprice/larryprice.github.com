@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="https://larry-price.com/atom.xml" rel="self"/>
   <link href="https://larry-price.com/"/>
-  <updated>2018-02-19T12:50:34-06:00</updated>
+  <updated>2018-04-25T20:56:55-05:00</updated>
   <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,91 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Redirecting to Your Main Site With Heroku]]></title>
+    <link href="https://larry-price.com/blog/2018/04/25/redirecting-to-your-main-site-with-heroku/"/>
+    <updated>2018-04-25T20:52:19-05:00</updated>
+    <id>https://larry-price.com/blog/2018/04/25/redirecting-to-your-main-site-with-heroku</id>
+    <content type="html"><![CDATA[<p>We have a lot of domains that we want to redirect to the same server, but we use a DNS service that does not allow doing a domain forward, and we&rsquo;re not allowed to upgrade. I wanted to do this in the simplest way possible, so I created a workaround using a PHP script and Heroku. The source discussed in detail in this post is available on GitHub: <a href="https://github.com/larryprice/simple-heroku-redirect-app">https://github.com/larryprice/simple-heroku-redirect-app</a>.</p>
+
+<p>The goal here is for users to visit a page and then be immediately redirected to the new site. I&rsquo;ve defined two environment variables to be used in this project: <code>SITENAME</code>, a human-readable name for our website, and <code>SITEURL</code>, the full URL that we actually want the user to end up on. I&rsquo;ve defined a PHP file called <code>index.php</code>:</p>
+
+<figure class='code'><figcaption><span>index.php</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;!</span><span class="nx">DOCTYPE</span> <span class="nx">html</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">html</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="o">&lt;</span><span class="nx">head</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="nx">title</span><span class="o">&gt;&lt;?</span><span class="nx">php</span> <span class="k">echo</span> <span class="nb">getenv</span><span class="p">(</span><span class="s1">&#39;SITENAME&#39;</span><span class="p">)</span> <span class="cp">?&gt;</span><span class="x"> - You will be redirected shortly...&lt;/title&gt;</span>
+</span><span class='line'><span class="x">    &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;URL=&#39;</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nb">getenv</span><span class="p">(</span><span class="s1">&#39;SITEURL&#39;</span><span class="p">)</span> <span class="cp">?&gt;</span><span class="x">&#39;&quot; /&gt;</span>
+</span><span class='line'><span class="x">  &lt;/head&gt;</span>
+</span><span class='line'><span class="x">  &lt;body&gt;</span>
+</span><span class='line'><span class="x">    &lt;p&gt;Please visit the official </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nb">getenv</span><span class="p">(</span><span class="s1">&#39;SITENAME&#39;</span><span class="p">)</span> <span class="cp">?&gt;</span><span class="x"> site at &lt;a href=&quot;</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nb">getenv</span><span class="p">(</span><span class="s1">&#39;SITEURL&#39;</span><span class="p">)</span> <span class="cp">?&gt;</span><span class="x">&quot;&gt;</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nb">getenv</span><span class="p">(</span><span class="s1">&#39;SITEURL&#39;</span><span class="p">)</span> <span class="cp">?&gt;</span><span class="x">&lt;/a&gt;.&lt;/p&gt;</span>
+</span><span class='line'><span class="x">  &lt;/body&gt;</span>
+</span><span class='line'><span class="x">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The important piece here is the <code>&lt;meta&gt;</code> tag, which actually does the redirect for us. The only PHP code here are <code>echo getenv</code> commands that render our environment variables in the template. Since I&rsquo;m a PHP novice, there may be a better way to do this, but the <code>echo</code> works just fine.</p>
+
+<p>We also need to tell Apache how to serve the application. We want to match any routes and render our <code>index.php</code>. So we create an <code>.htcaccess</code> file:</p>
+
+<figure class='code'><figcaption><span>.htaccess</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>RewriteEngine on
+</span><span class='line'>RewriteRule . index.php <span class="o">[</span>L<span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To satisfy Heroku, we need to list the dependencies for our PHP application. Fortunately for us, we don&rsquo;t have any dependencies that Heroku does not provide by default. We&rsquo;ll just create a <code>composer.json</code> file in the root of our project with an empty object:</p>
+
+<figure class='code'><figcaption><span>composer.json</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That&rsquo;s everything we need. You could recreate the project, but you could also just pull down the project listed above and push it up to Heroku:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone https://github.com/larryprice/simple-heroku-redirect-app.git
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>simple-heroku-redirect-app
+</span><span class='line'><span class="nv">$ </span>heroku create
+</span><span class='line'><span class="nv">$ </span>git push heroku master
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>With your application available on Heroku, we still need to set the environment variables described earlier as <a href="https://devcenter.heroku.com/articles/config-vars">config variables</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>heroku config:set <span class="nv">SITENAME</span><span class="o">=</span>yourgooddomain.com
+</span><span class='line'><span class="nv">$ </span>heroku config:set <span class="s2">&quot;SITEURL=Your Good Domain&#39;s Website Name&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now tell Heroku all <a href="https://devcenter.heroku.com/articles/custom-domains">the domains</a> that will be accessing this application. These are the domains you want users <em>not</em> to use:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>heroku domains:add yourbaddomain.com
+</span><span class='line'><span class="nv">$ </span>heroku domains:add www.yourbaddomain.com
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you just need to add the records indicated by the above command to your DNS records. These will probably be CNAME records pointing from <code>@</code> to <code>yourbaddomain.com.herokudns.com</code> or <code>www</code> to <code>yourbaddomain.com.herokudns.com</code>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Async and Await - a New Promise]]></title>
@@ -2994,52 +3079,6 @@
 <p>The good people at Github want you to code socially, and I&rsquo;m excited to see if they can come up with a fun and light way to gamify open-source software while avoiding some of the unfun aspects of streaks and the blaisé concept of news feeds.</p>
 
 <p>What do you think? Do you miss streaks? Did streaks motivate you to contribute more frequently? Any ideas for a new system? Tell me in the comments!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Going Remote: 1 Month In]]></title>
-    <link href="https://larry-price.com/blog/2016/05/05/going-remote-1-month-in/"/>
-    <updated>2016-05-05T20:21:56-04:00</updated>
-    <id>https://larry-price.com/blog/2016/05/05/going-remote-1-month-in</id>
-    <content type="html"><![CDATA[<p><em>This is the second in a series of blog posts detailing my experience migrating from a culture based on co-location to a fully remote environment. You may also enjoy my <a href="https://larry-price.com/blog/2016/04/11/going-remote-1-week/">original post detailing my first week</a>. Look out for another post in the fall.</em></p>
-
-<p>I&rsquo;ve spent an entire month working remotely. Whereas I spent much of my first week working remotely getting my home office in a working state, the rest of the month was largely spent acclimating to a culture of complete autonomy, getting comfortable with my peers, and finding my way around.</p>
-
-<h3>Attacking My Action Items</h3>
-
-<p>One of my action items from <a href="https://larry-price.com/blog/2016/04/11/going-remote-1-week/">the week 1 post</a> involved personalizing my workspace. I brought three posters from our second-floor study and planted them on the walls of my new office area downstairs. It makes my new office feel a lot more like my own space and a lot less like the formerly-unused living room. I have a 1994 Ren&amp;Stimpy calendar hanging on the bookshelf as well as a few stickers and other various nerdy hangables. I&rsquo;m fairly happy with the current state of my office.</p>
-
-<p>I&rsquo;ve made a point of exercising more during the work day. I work my biceps and triceps with my handheld weight, as many nose-to-the-ground push-ups as I can, and really hard bicycles until my abs tell me to stop. I&rsquo;ve also been walking outside in the early afternoon to check on the state of my hop garden. Not to mention I&rsquo;m still making significant use of my sit-stand desk.</p>
-
-<p>As far as extracurricular activities go, I think I&rsquo;m keeping steady. I&rsquo;ve been going to my local Code&amp;Coffee, and I just had a monthly meeting of Indy Golang. I&rsquo;ve been reading a bunch of blogs and eating up modern C++ material. I&rsquo;d like to make sure I get to IndySA every now and then, but I usually just whiff the date. I haven&rsquo;t been doing much coding outside of work, but that hasn&rsquo;t been high on my priority list recently. Since I currently work for an open-source company, I am embedded in the world of code all day, and I usually end the day very satisified.</p>
-
-<p>I did not buy a better floormat. Still on the list.</p>
-
-<h3>Acclimation Station</h3>
-
-<p>Although my first week was a success, I&rsquo;ll admit it was still a little awkward. However, I&rsquo;ve found myself significantly more comfortable at the end of my first month.</p>
-
-<p>In this position, there is a level of autonomy unlike any I have ever experienced. No one tells me what to work on next. I figure out what I&rsquo;ll be doing almost entirely based on incoming bug reports, community rumblings, nebulous plans, or simply things that interest and/or annoy me about a project. Priorities are in the eye of the beholder, and it&rsquo;s in my best interest to pick up work that is meaningful and relevant. I complete the task, get it into review, and make sure everybody&rsquo;s happy. Since everyone has a shared goal, it&rsquo;s unusual for developers to be especially nit-picky during reviews, and thus reviews become more focused on correctness, education, and mysterious edge cases.</p>
-
-<p>Talking to people on IRC can be a little daunting because so many of my coworkers are just so good at it. At first, talking to the right people seemed impossible. Eventually, I&rsquo;ve learned to become efficient with my IRC usage and I have certain channels relevant to my current tasks where I hang out. Although I describe our communications as &ldquo;efficient&rdquo;, that&rsquo;s not to say we don&rsquo;t joke around and have a good time. There are people I interact with every day who I consider work-friends even though we&rsquo;ve never spoken face-to-face.</p>
-
-<p>Over the past several weeks we&rsquo;ve held two company-wide events. The first was a remote open forum with our CEO. During the remote forum, the CEO discussed how the company was doing and then she opened the floor for questions. Someone would ask a question in chat, people would vote for those questions, and then we would get an answer. It was done quite well and felt like a great introduction to the CEO and her vision for our company&rsquo;s future. This week was a three-day conference spanning the entire organization. Presenters would share their faces and slides using Hangouts on Air, while attendees watched live and chatted together in a relevant channel. I learned a lot about the wider scope and relevance of my project, and I also got to hear about all the other interesting things going on around the company. I got to hear the founder do a Q&amp;A, which gave rise to many great questions with humble, honest answers which gave me a good idea of what we are all about as an organization. Attendance was optional, so irrelevant presentations could be ignored as easily as closing a tab.</p>
-
-<p>For the first couple weeks, I couldn&rsquo;t figure out how some of my peers could be so busy all the time. Now I understand. I found myself working on projects several dependencies away from my own, adding features and fixing bugs such that our project could integrate with the dependency and we could get features shipped. Due to the nature of everything being open-source, I&rsquo;m constantly working with my peers to figure out where a bug might be stemming from or the appropriate level to inject a feature or even just who to talk to about how things work. You fix a bug in one project and accidentally become a contributor while the project is in desperate need of many code reviews, which you then do and become an even more relevant member to the team.</p>
-
-<p>Oftentimes, traditional office workers will say things to me like, &ldquo;I don&rsquo;t know how you work from home; I&rsquo;d just be distracted all day and wouldn&rsquo;t be able to get anything done.&rdquo; I&rsquo;ve found that to be completely untrue. There are many days where I have trouble not working in the evening. I&rsquo;ll read up on some modern C++ techniques or read some misguided blog post about our projects, and I&rsquo;ll think about jumping on the computer at 9pm just to take a peek. It takes a lot of self-restraint, but I&rsquo;ve thus far been pretty good about not working after work. Hopefully I can keep that up.</p>
-
-<p>In a few weeks, my team is meeting in Montreal to hang out and do code for a week. I&rsquo;m excited for the opportunity to see everyone (not to mention to be in Montreal), and I&rsquo;m certain that it will help me feel even more acclimated to this new environment.</p>
-
-<h3>Some New Action Items</h3>
-
-<ul>
-<li><strong>Better floormat</strong>. Standing on my plastic mat right now, my feet do start to hurt. I need to run to an office supply store and find some rubber padding.</li>
-<li><strong>IRC Champion</strong>. Although I&rsquo;m more comfortable on IRC, I know I could be better about reaching out at the right times to the right people.</li>
-<li><strong>Automaton</strong>. I still grope around for work when I&rsquo;m not sure what to do next. I&rsquo;d like to come up with a process to determine what should be next on the agenda without too much synchronous assistance.</li>
-</ul>
-
 ]]></content>
   </entry>
   
