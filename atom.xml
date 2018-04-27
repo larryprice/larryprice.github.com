@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="https://larry-price.com/atom.xml" rel="self"/>
   <link href="https://larry-price.com/"/>
-  <updated>2018-04-25T20:56:55-05:00</updated>
+  <updated>2018-04-26T20:11:35-05:00</updated>
   <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,61 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Quick Start to Vendor Go Dependencies With Govendor]]></title>
+    <link href="https://larry-price.com/blog/2018/04/26/quick-start-to-vendor-go-dependencies-with-govendor/"/>
+    <updated>2018-04-26T19:34:04-05:00</updated>
+    <id>https://larry-price.com/blog/2018/04/26/quick-start-to-vendor-go-dependencies-with-govendor</id>
+    <content type="html"><![CDATA[<p>I recently spent a few days adapting my <a href="https://www.packtpub.com/web-development/go-web-development-video">Go for Web Development video series</a> into a text-based course. In doing so, I had the chance to investigate some of the new vendoring tools available in Go. As of Go 1.5, &ldquo;vendoring&rdquo; dependencies has become the norm. Vendoring means tracking your dependencies and their versions and including those dependencies as part of your project.</p>
+
+<p>In particular, I explored the uses of the <a href="https://github.com/kardianos/govendor">govendor</a> package, mostly because it&rsquo;s supported by default by Heroku. The docs on the GitHub are a lot more thorough than what I&rsquo;ll go over here.</p>
+
+<p><code>govendor</code> is easily installed within the go ecosystem. Assuming that <code>$GOPATH/bin</code> is in your path:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>go get -u github.com/kardianos/govendor
+</span><span class='line'><span class="nv">$ </span>which govendor
+</span><span class='line'>/home/lrp/go/bin/govendor
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we just initialize the <code>govendor</code> directory and start installing dependencies. The <code>govendor fetch</code> command is pretty much all you&rsquo;ll need:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>govendor init
+</span><span class='line'><span class="nv">$ </span>govendor fetch github.com/jinzhu/gorm
+</span><span class='line'><span class="nv">$ </span>govendor fetch golang.org/x/crypto/bcrypt
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>init</code> will create a <code>vendor</code> directory in your project path. Go will check this directory for any packages as though they were in your <code>$GOPATH/src</code> directory. The <code>fetch</code> calls will add new packages or update the given package in your <code>vendor</code> directory; in this case, I&rsquo;ve fetched the latest versions of <code>gorm</code> and <code>bcrypt</code>.</p>
+
+<p>This might seem painful, but the thing to do next is to commit everything in the vendor directory to your repository. Now you have it forever! This means that anyone who wants to run this version of your code in the future doesn&rsquo;t have to worry about dependency versions and can instantly run your package with a valid go install.</p>
+
+<p>If you don&rsquo;t want to add all these packages to your repository, I don&rsquo;t blame you. You can get around this by committing just your <code>vendor/vendor.json</code> file and then using <code>govendor sync</code> to install the missing packages after downloading your source code. This should be familiar to anyone who&rsquo;s used <code>bundler</code> in ruby, <code>virtualenv</code> in python, or <code>npm</code> in Node.JS. If you&rsquo;re using git, you&rsquo;ll want a <code>.gitignore</code> with the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vendor/*
+</span><span class='line'>!vendor/vendor.json
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will ignore everything in <code>vendor/</code> except for the <code>vendor.json</code> file which lists all your packages and their corresponding versions. Now, to install any packages from <code>vendor.json</code> that you don&rsquo;t already have in your <code>vendor</code> directory:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>govendor sync
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>govendor</code> is a pretty powerful tool for vendoring your go dependencies and getting your application Heroku-ready, and I recommend <a href="https://github.com/kardianos/govendor">checking out the docs</a> for a more advanced overview. There are also many other vendoring options available, including an official go vendoring tool called <a href="https://github.com/golang/dep">dep</a> that works with go 1.9+. <code>dep</code> will most definitely play a big role in refining the ideas that these third-party tools have created and the go ecosystem will become more stable.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Redirecting to Your Main Site With Heroku]]></title>
@@ -3046,39 +3101,6 @@
 <li>Enable C++14 in a project</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Ranks, Streaks, and Karma - a Look at Competitive Contributions]]></title>
-    <link href="https://larry-price.com/blog/2016/06/23/ranks-streaks-karma/"/>
-    <updated>2016-06-23T21:15:17-04:00</updated>
-    <id>https://larry-price.com/blog/2016/06/23/ranks-streaks-karma</id>
-    <content type="html"><![CDATA[<p>If you weren&rsquo;t paying close attention, you may not have noticed that Github has recently <a href="https://github.com/blog/2173-more-contributions-on-your-profile">removed Streaks from profile pages</a> along with a few other changes.</p>
-
-<p>For the uninitiated, Github tracked each user&rsquo;s commit history every day and displayed this information prominently on the user&rsquo;s profile for the past 365 days. When committing multiple days in succession, a &ldquo;streak&rdquo; is started. Your streak resets the next solar day you don&rsquo;t commit to Github.</p>
-
-<p><strong>What was the purpose of the streak?</strong></p>
-
-<p>The streak encouraged developers to contribute public open-source code as frequently as possible. This is a very good thing! Maybe it even influenced some people to contribute to open-source projects that desperately needed help. Maybe it helped some developers explore new codebases and languages they never dreamt of exploring previously.</p>
-
-<p>However, any good feelings that came from the streak are instantly dashed when you take a day off. All those good-feels you get after working hard to get a 10-day streak? Crushed in an instant. Now you need to start over, but you don&rsquo;t bother because every time you feel a streak coming on it&rsquo;s dashed away. This is a painful reminder that life is short, and you&rsquo;ll only be rewarded in the short-term for any effort you put in.</p>
-
-<p><strong>So if the good-feels wasn&rsquo;t the purpose, how about notoriety? Surely someone with a long streak is a good person and a noble developer!</strong></p>
-
-<p>Except for <a href="https://gist.github.com/cirosantilli/4d24fc646ab9aec8def7">gists like this</a> which will help you generate a 100-year streak. Or the fact that you could make empty commits to personal repos and manipulate the streak. Or you could be making minor documentation/newline changes every day. Not only that, but not all developers use Github as their primary source control platform. Developers could be making contributions to Bitbucket as well as Github and not have that reflected in their streak at all.</p>
-
-<p><strong>My theory is that streaks, though well-intended, served no purpose.</strong></p>
-
-<p>They were ripe for abuse and not a very good &ldquo;reward&rdquo; for contributing code on the side, nor a good indicator of how grey a developer&rsquo;s beard is. Not all good developers make commits every day, and encouraging a commit-a-day is getting people trapped in the Silicon Valley bad-habit of never not working. For the time being, good riddance.</p>
-
-<p>At Canonical, we use Launchpad to host most of our source code. Launchpad has this concept of &ldquo;Karma&rdquo; which tracks your commits, code reviews, bug reports, branch merges, etc on Launchpad. Karma decays over time but not immediately, which means that you can take days off and maintain Karma. From this number, you can usually tell if a user is new to the system, highly active recently, or has turned into a manager. For reference, mine is <a href="https://launchpad.net/~larryprice/+karma">a little over 3000</a> as of this blog post. Although I mostly like the way Karma works, I don&rsquo;t think it&rsquo;s the epitome of source code gamification.</p>
-
-<p>As far as I know, sites like Bitbucket and GitLab don&rsquo;t have such a concept of rewarding heavy coders or giving some indication of recent activity outside of a news feed. Maybe a news feed style is enough?</p>
-
-<p>The good people at Github want you to code socially, and I&rsquo;m excited to see if they can come up with a fun and light way to gamify open-source software while avoiding some of the unfun aspects of streaks and the blaisé concept of news feeds.</p>
-
-<p>What do you think? Do you miss streaks? Did streaks motivate you to contribute more frequently? Any ideas for a new system? Tell me in the comments!</p>
 ]]></content>
   </entry>
   

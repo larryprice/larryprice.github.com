@@ -4,7 +4,7 @@
   <title><![CDATA[Category: go | Larry Price]]></title>
   <link href="https://larry-price.com/blog/categories/go/atom.xml" rel="self"/>
   <link href="https://larry-price.com/"/>
-  <updated>2018-04-25T20:56:55-05:00</updated>
+  <updated>2018-04-26T20:11:35-05:00</updated>
   <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,48 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Quick Start to Vendor Go Dependencies with govendor]]></title>
+    <link href="https://larry-price.com/blog/2018/04/26/quick-start-to-vendor-go-dependencies-with-govendor/"/>
+    <updated>2018-04-26T19:34:04-05:00</updated>
+    <id>https://larry-price.com/blog/2018/04/26/quick-start-to-vendor-go-dependencies-with-govendor</id>
+    <content type="html"><![CDATA[<p>I recently spent a few days adapting my <a href="https://www.packtpub.com/web-development/go-web-development-video">Go for Web Development video series</a> into a text-based course. In doing so, I had the chance to investigate some of the new vendoring tools available in Go. As of Go 1.5, &ldquo;vendoring&rdquo; dependencies has become the norm. Vendoring means tracking your dependencies and their versions and including those dependencies as part of your project.</p>
+
+<p>In particular, I explored the uses of the <a href="https://github.com/kardianos/govendor">govendor</a> package, mostly because it&rsquo;s supported by default by Heroku. The docs on the GitHub are a lot more thorough than what I&rsquo;ll go over here.</p>
+
+<p><code>govendor</code> is easily installed within the go ecosystem. Assuming that <code>$GOPATH/bin</code> is in your path:</p>
+
+<pre><code class="bash">$ go get -u github.com/kardianos/govendor
+$ which govendor
+/home/lrp/go/bin/govendor
+</code></pre>
+
+<p>Now we just initialize the <code>govendor</code> directory and start installing dependencies. The <code>govendor fetch</code> command is pretty much all you&rsquo;ll need:</p>
+
+<pre><code class="bash">$ govendor init
+$ govendor fetch github.com/jinzhu/gorm
+$ govendor fetch golang.org/x/crypto/bcrypt
+</code></pre>
+
+<p><code>init</code> will create a <code>vendor</code> directory in your project path. Go will check this directory for any packages as though they were in your <code>$GOPATH/src</code> directory. The <code>fetch</code> calls will add new packages or update the given package in your <code>vendor</code> directory; in this case, I&rsquo;ve fetched the latest versions of <code>gorm</code> and <code>bcrypt</code>.</p>
+
+<p>This might seem painful, but the thing to do next is to commit everything in the vendor directory to your repository. Now you have it forever! This means that anyone who wants to run this version of your code in the future doesn&rsquo;t have to worry about dependency versions and can instantly run your package with a valid go install.</p>
+
+<p>If you don&rsquo;t want to add all these packages to your repository, I don&rsquo;t blame you. You can get around this by committing just your <code>vendor/vendor.json</code> file and then using <code>govendor sync</code> to install the missing packages after downloading your source code. This should be familiar to anyone who&rsquo;s used <code>bundler</code> in ruby, <code>virtualenv</code> in python, or <code>npm</code> in Node.JS. If you&rsquo;re using git, you&rsquo;ll want a <code>.gitignore</code> with the following:</p>
+
+<pre><code>vendor/*
+!vendor/vendor.json
+</code></pre>
+
+<p>This will ignore everything in <code>vendor/</code> except for the <code>vendor.json</code> file which lists all your packages and their corresponding versions. Now, to install any packages from <code>vendor.json</code> that you don&rsquo;t already have in your <code>vendor</code> directory:</p>
+
+<pre><code class="bash">$ govendor sync
+</code></pre>
+
+<p><code>govendor</code> is a pretty powerful tool for vendoring your go dependencies and getting your application Heroku-ready, and I recommend <a href="https://github.com/kardianos/govendor">checking out the docs</a> for a more advanced overview. There are also many other vendoring options available, including an official go vendoring tool called <a href="https://github.com/golang/dep">dep</a> that works with go 1.9+. <code>dep</code> will most definitely play a big role in refining the ideas that these third-party tools have created and the go ecosystem will become more stable.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[XML Parsing in Go]]></title>

@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Golang - Larry Price</title>
+  <title>Quick Start to Vendor Go Dependencies With Govendor - Larry Price</title>
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="Category: golang">
+  <meta name="description" content="I recently spent a few days adapting my Go for Web Development video series into a text-based course. In doing so, I had the chance to investigate &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="https://larry-price.com/blog/categories/golang">
+  <link rel="canonical" href="https://larry-price.com/blog/2018/04/26/quick-start-to-vendor-go-dependencies-with-govendor">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Larry Price" type="application/atom+xml">
@@ -79,174 +79,140 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Golang</h1>
+    
+      <h1 class="entry-title">Quick Start to Vendor Go Dependencies With Govendor</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2018-04-26T19:34:04-05:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2018</span></span> <span class='time'>7:34 pm</span></time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="https://larry-price.com">Comments</a>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>I recently spent a few days adapting my <a href="https://www.packtpub.com/web-development/go-web-development-video">Go for Web Development video series</a> into a text-based course. In doing so, I had the chance to investigate some of the new vendoring tools available in Go. As of Go 1.5, &ldquo;vendoring&rdquo; dependencies has become the norm. Vendoring means tracking your dependencies and their versions and including those dependencies as part of your project.</p>
 
-  
-  <h2>2018</h2>
+<p>In particular, I explored the uses of the <a href="https://github.com/kardianos/govendor">govendor</a> package, mostly because it&rsquo;s supported by default by Heroku. The docs on the GitHub are a lot more thorough than what I&rsquo;ll go over here.</p>
 
-<article>
-  
-<h1><a href="/blog/2018/04/26/quick-start-to-vendor-go-dependencies-with-govendor/">Quick Start to Vendor Go Dependencies With Govendor</a></h1>
-<time datetime="2018-04-26T19:34:04-05:00" pubdate><span class='month'>Apr</span> <span class='day'>26</span> <span class='year'>2018</span></time>
+<p><code>govendor</code> is easily installed within the go ecosystem. Assuming that <code>$GOPATH/bin</code> is in your path:</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/go/'>go</a>, <a class='category' href='/blog/categories/golang/'>golang</a></span>
-</footer>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>go get -u github.com/kardianos/govendor
+</span><span class='line'><span class="nv">$ </span>which govendor
+</span><span class='line'>/home/lrp/go/bin/govendor
+</span></code></pre></td></tr></table></div></figure>
 
 
-</article>
+<p>Now we just initialize the <code>govendor</code> directory and start installing dependencies. The <code>govendor fetch</code> command is pretty much all you&rsquo;ll need:</p>
 
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>govendor init
+</span><span class='line'><span class="nv">$ </span>govendor fetch github.com/jinzhu/gorm
+</span><span class='line'><span class="nv">$ </span>govendor fetch golang.org/x/crypto/bcrypt
+</span></code></pre></td></tr></table></div></figure>
 
 
-  
-  <h2>2016</h2>
+<p><code>init</code> will create a <code>vendor</code> directory in your project path. Go will check this directory for any packages as though they were in your <code>$GOPATH/src</code> directory. The <code>fetch</code> calls will add new packages or update the given package in your <code>vendor</code> directory; in this case, I&rsquo;ve fetched the latest versions of <code>gorm</code> and <code>bcrypt</code>.</p>
 
-<article>
-  
-<h1><a href="/blog/2016/07/07/writing-a-go-slash-qml-convergent-ubuntu-app/">Writing Go/QML Convergent Ubuntu Apps</a></h1>
-<time datetime="2016-07-07T16:31:23-04:00" pubdate><span class='month'>Jul</span> <span class='day'>07</span> <span class='year'>2016</span></time>
+<p>This might seem painful, but the thing to do next is to commit everything in the vendor directory to your repository. Now you have it forever! This means that anyone who wants to run this version of your code in the future doesn&rsquo;t have to worry about dependency versions and can instantly run your package with a valid go install.</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/golang/'>golang</a>, <a class='category' href='/blog/categories/ubuntu/'>ubuntu</a></span>
-</footer>
+<p>If you don&rsquo;t want to add all these packages to your repository, I don&rsquo;t blame you. You can get around this by committing just your <code>vendor/vendor.json</code> file and then using <code>govendor sync</code> to install the missing packages after downloading your source code. This should be familiar to anyone who&rsquo;s used <code>bundler</code> in ruby, <code>virtualenv</code> in python, or <code>npm</code> in Node.JS. If you&rsquo;re using git, you&rsquo;ll want a <code>.gitignore</code> with the following:</p>
 
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vendor/*
+</span><span class='line'>!vendor/vendor.json
+</span></code></pre></td></tr></table></div></figure>
 
-</article>
 
+<p>This will ignore everything in <code>vendor/</code> except for the <code>vendor.json</code> file which lists all your packages and their corresponding versions. Now, to install any packages from <code>vendor.json</code> that you don&rsquo;t already have in your <code>vendor</code> directory:</p>
 
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>govendor sync
+</span></code></pre></td></tr></table></div></figure>
 
-<article>
-  
-<h1><a href="/blog/2016/01/21/go-for-web-development-50-percent-off-sale/">Go for Web Development 50% Off Sale</a></h1>
-<time datetime="2016-01-21T10:51:22-05:00" pubdate><span class='month'>Jan</span> <span class='day'>21</span> <span class='year'>2016</span></time>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/ads/'>ads</a>, <a class='category' href='/blog/categories/golang/'>golang</a></span>
-</footer>
-
-
-</article>
-
-
-
-  
-  <h2>2015</h2>
-
-<article>
-  
-<h1><a href="/blog/2015/12/30/go-for-web-development/">Go for Web Development</a></h1>
-<time datetime="2015-12-30T14:54:11-05:00" pubdate><span class='month'>Dec</span> <span class='day'>30</span> <span class='year'>2015</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/ads/'>ads</a>, <a class='category' href='/blog/categories/golang/'>golang</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2015/12/04/xml-parsing-in-go/">XML Parsing in Go</a></h1>
-<time datetime="2015-12-04T15:30:14-05:00" pubdate><span class='month'>Dec</span> <span class='day'>04</span> <span class='year'>2015</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/go/'>go</a>, <a class='category' href='/blog/categories/golang/'>golang</a>, <a class='category' href='/blog/categories/xml/'>xml</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2015/06/25/architecture-for-a-golang-web-app/">Architecture for a Golang Web App</a></h1>
-<time datetime="2015-06-25T07:24:27-04:00" pubdate><span class='month'>Jun</span> <span class='day'>25</span> <span class='year'>2015</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/golang/'>golang</a>, <a class='category' href='/blog/categories/web/'>web</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2015/01/18/managing-a-go-environment-in-ubuntu/">Managing a Go Environment in Ubuntu</a></h1>
-<time datetime="2015-01-18T10:58:04-05:00" pubdate><span class='month'>Jan</span> <span class='day'>18</span> <span class='year'>2015</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/golang/'>golang</a>, <a class='category' href='/blog/categories/linux/'>linux</a></span>
-</footer>
-
-
-</article>
-
-
-
-  
-  <h2>2014</h2>
-
-<article>
-  
-<h1><a href="/blog/2014/05/13/better-testing-in-go-with-gocheck/">Better Testing in Go With Gocheck</a></h1>
-<time datetime="2014-05-13T21:14:39-04:00" pubdate><span class='month'>May</span> <span class='day'>13</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/golang/'>golang</a>, <a class='category' href='/blog/categories/testing/'>testing</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2014/01/07/finishing-the-google-go-writing-web-applications-tutorial/">Finishing the Google Go Writing Web Applications Tutorial</a></h1>
-<time datetime="2014-01-07T22:45:03-05:00" pubdate><span class='month'>Jan</span> <span class='day'>07</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/golang/'>golang</a>, <a class='category' href='/blog/categories/web/'>web</a></span>
-</footer>
-
-
-</article>
-
-
-
-  
-  <h2>2013</h2>
-
-<article>
-  
-<h1><a href="/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04/">Setting Up a Go Environment in Ubuntu</a></h1>
-<time datetime="2013-12-15T18:40:00-06:00" pubdate><span class='month'>Dec</span> <span class='day'>15</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/golang/'>golang</a>, <a class='category' href='/blog/categories/linux/'>linux</a></span>
-</footer>
-
-
-</article>
-
+<p><code>govendor</code> is a pretty powerful tool for vendoring your go dependencies and getting your application Heroku-ready, and I recommend <a href="https://github.com/kardianos/govendor">checking out the docs</a> for a more advanced overview. There are also many other vendoring options available, including an official go vendoring tool called <a href="https://github.com/golang/dep">dep</a> that works with go 1.9+. <code>dep</code> will most definitely play a big role in refining the ideas that these third-party tools have created and the go ecosystem will become more stable.</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Larry Price</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2018-04-26T19:34:04-05:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2018</span></span> <span class='time'>7:34 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/go/'>go</a>, <a class='category' href='/blog/categories/golang/'>golang</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2018/04/25/redirecting-to-your-main-site-with-heroku/" title="Previous Post: Redirecting To Your Main Site With Heroku">&laquo; Redirecting To Your Main Site With Heroku</a>
+      
+      
+    </p>
+    <div>
+  <p id="patreon-plug">Like what I'm doing? <b><a href="https://www.patreon.com/larryprice">Fund me on Patreon</a></b> so I can keep doing it and remove ads!</p>
+</div>
+
+    <div>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- Below Post Responsive -->
+    <ins class="adsbygoogle post-ad"
+         style="display:block; overflow: hidden;"
+         data-ad-client="ca-pub-6961096698495477"
+         data-ad-slot="8491264944"
+         data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+
+  </footer>
 </article>
+
+  <section>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -380,7 +346,10 @@
       var disqus_shortname = 'larryprice';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'https://larry-price.com/blog/2018/04/26/quick-start-to-vendor-go-dependencies-with-govendor/';
+        var disqus_url = 'https://larry-price.com/blog/2018/04/26/quick-start-to-vendor-go-dependencies-with-govendor/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
