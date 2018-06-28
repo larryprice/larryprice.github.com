@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="https://larry-price.com/atom.xml" rel="self"/>
   <link href="https://larry-price.com/"/>
-  <updated>2018-04-26T20:11:35-05:00</updated>
+  <updated>2018-06-27T19:07:28-05:00</updated>
   <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,177 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How to Use getDerivedStateFromProps in React 16.3+]]></title>
+    <link href="https://larry-price.com/blog/2018/06/27/how-to-use-getderivedstatefromprops-in-react-16-dot-3-plus/"/>
+    <updated>2018-06-27T15:12:09-05:00</updated>
+    <id>https://larry-price.com/blog/2018/06/27/how-to-use-getderivedstatefromprops-in-react-16-dot-3-plus</id>
+    <content type="html"><![CDATA[<p>From <a href="https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html">a blog post in late March 2018</a>, it was announced that the React lifecycle methods <code>componentWillReceiveProps</code>, <code>componentWillMount</code>, and <code>componentWillUpdate</code> will be deprecated in a future version of React. This is because of the eventual migration of React to async rendering; these lifecycle methods will become unreliable when async rendering is made default.</p>
+
+<p>In place of these methods, the new <strong>static</strong> method <code>getDerivedStateFromProps</code> was introduced. My team and I struggled at first in wrapping our heads around how to migrate our many uses of <code>componentWillReceiveProps</code> to this new method. It&rsquo;s generally easier than you think, but you need to keep in mind that the new method is <strong>static</strong>, and therefore does not have access to the <code>this</code> context that the old lifecycle methods provided.</p>
+
+<p><code>getDerivedStateFromProps</code> is invoked every time a component is rendered. It takes in two arguments: the next <code>props</code> object (which may be the same as the previous object) and the previous <code>state</code> object of the component in question. When implementing this method, we need to return the changes to our component <code>state</code> or <code>null</code> (or <code>{}</code>) if no changes need to be made.</p>
+
+<h3>componentWillReceiveProps</h3>
+
+<p>Here&rsquo;s a pattern we were using in many components throughout our codebase:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">componentWillReceiveProps</span><span class="p">(</span><span class="nx">nextProps</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">nextProps</span><span class="p">.</span><span class="nx">selectedTab</span> <span class="o">!==</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">selectedTab</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="k">return</span> <span class="p">{</span><span class="nx">selectedTab</span><span class="o">:</span> <span class="nx">nextProps</span><span class="p">.</span><span class="nx">selectedTab</span><span class="p">}</span> <span class="p">})</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This lifecycle method fired when we were about to receive new <code>props</code> in our component, passing in the new value as the first argument. We needed to check whether the new <code>props</code> indicated a change in the state of our tab bar, which we stored in <code>state</code>. This is one of the simplest patterns to address with <code>getDerivedStateFromProps</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">static</span> <span class="nx">getDerivedStateFromProps</span><span class="p">(</span><span class="nx">nextProps</span><span class="p">,</span> <span class="nx">prevState</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">nextProps</span><span class="p">.</span><span class="nx">selectedTab</span> <span class="o">===</span> <span class="nx">prevState</span><span class="p">.</span><span class="nx">selectedTab</span>
+</span><span class='line'>    <span class="o">?</span> <span class="p">{}</span>
+</span><span class='line'>    <span class="o">:</span> <span class="p">{</span><span class="nx">selectedTab</span><span class="o">:</span> <span class="nx">nextProps</span><span class="p">.</span><span class="nx">selectedTab</span><span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This code works in exactly the same way, but, since it&rsquo;s <strong>static</strong>, we no longer use the context provided by <code>this</code>. Instead, we return any state changes. In this case, I&rsquo;ve returned an empty object (<code>{}</code>) to indicate no state change when the tabs are identical; otherwise, I return an object with the new <code>selectedTab</code> value.</p>
+
+<p>Sometimes you may have to perform some operations on the new <code>props</code>, but then you can still just compare the result to your previous state to figure out if anything changed. There may be other areas where you need to store some extra state duplicating your old <code>props</code> to make this work, but that may also be an indication that you need to use an alternative method.</p>
+
+<h3>componentWillMount</h3>
+
+<p>We also needed to replace calls to <code>componentWillMount</code>. I found that these calls were usually directly replaceable by <code>componentDidMount</code>, which will allow your component to perform an initial render and then execute blocking tasks. This may also require adding some loading-style capacity to your component, but will be better than a hanging app.</p>
+
+<p>Here&rsquo;s an example of a <code>componentWillMount</code> we had originally that blocked render until after an API call was made:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">componentWillMount</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">loading</span><span class="o">:</span> <span class="s1">&#39;Loading tool info&#39;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">})</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">getTool</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">match</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">).</span><span class="nx">then</span><span class="p">((</span><span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">tool</span><span class="o">:</span> <span class="nx">res</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">loading</span><span class="o">:</span> <span class="kc">null</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">})</span>
+</span><span class='line'>  <span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">err</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">api</span><span class="p">.</span><span class="nx">errors</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">loading</span><span class="o">:</span> <span class="kc">null</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">})</span>
+</span><span class='line'>  <span class="p">})</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Afterwards, I changed the state to show the component as loading on initial render and replaced the <code>componentWillMount</code> with <code>componentDidMount</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">tool</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">loading</span><span class="o">:</span> <span class="s1">&#39;Loading tool info&#39;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">componentDidMount</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">getTool</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">match</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">).</span><span class="nx">then</span><span class="p">((</span><span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="k">return</span> <span class="p">{</span><span class="nx">tool</span><span class="o">:</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">loading</span><span class="o">:</span> <span class="kc">null</span><span class="p">}</span> <span class="p">})</span>
+</span><span class='line'>  <span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">err</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">api</span><span class="p">.</span><span class="nx">errors</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="k">return</span> <span class="p">{</span><span class="nx">loading</span><span class="o">:</span> <span class="kc">null</span><span class="p">}</span> <span class="p">})</span>
+</span><span class='line'>  <span class="p">})</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>componentWillUpdate</h3>
+
+<p>Very similar to the methods discussed above, <code>componentWillUpdate</code> is invoked when a component is about to receive new props and the <code>render</code> method is definitely going to be called. Here&rsquo;s an example of something we were doing previously:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">componentWillUpdate</span><span class="p">(</span><span class="nx">nextProps</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">nextProps</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">isLogged</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">nextProps</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">authenticating</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">router</span><span class="p">.</span><span class="nx">history</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And, replacing that usage with <code>componentDidUpdate</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">componentDidUpdate</span><span class="p">(</span><span class="cm">/*prevProps, prevState*/</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">isLogged</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">authenticating</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">router</span><span class="p">.</span><span class="nx">history</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>componentDidUpdate</code> is similar to <code>componentDidMount</code> except that is caused after a change in state or props occurs instead of just on initial mount. As opposed to <code>getDerivedStateFromProps</code>, we have access to the context provided by <code>this</code>. Note that this method also has arguments for <code>prevProps</code> and <code>prevState</code>, which provides the previous versions of the component&rsquo;s <code>props</code> and <code>state</code> for comparison to the current values.</p>
+
+<h3>Conclusion</h3>
+
+<p>The deprecation of these lifecycle methods won&rsquo;t happen until React 17, but it&rsquo;s always good to plan ahead. Many of the ways my team was using these deprecated methods could be considered an anti-pattern, and I suspect that your team may be in the same predicament.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Quick Start to Vendor Go Dependencies With Govendor]]></title>
@@ -3003,104 +3174,6 @@
 <p>Now you can run and install go/qml applications on desktop or on devices. Time to go build something cool!</p>
 
 <p><em>Disclaimer: In the future, this template will likely need to be updated for new go versions or new default versions of the Ubuntu SDK. Don&rsquo;t be afraid to make a comment below or submit a PR.</em></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Effective Modern C++]]></title>
-    <link href="https://larry-price.com/blog/2016/06/29/effective-modern-c-plus-plus/"/>
-    <updated>2016-06-29T20:35:23-04:00</updated>
-    <id>https://larry-price.com/blog/2016/06/29/effective-modern-c-plus-plus</id>
-    <content type="html"><![CDATA[<h3>The Gist</h3>
-
-<p>How can one man give the world so much? Scott Meyers transformed my understanding of C++ with <a href="https://larry-price.com/blog/2013/07/16/effective-c-plus-plus/"><em>Effective C++</em></a>, a book which not only teaches good C++ practices and principles, but also explains what&rsquo;s going on behind the scenes to make those efforts so effectual. <a href="http://amzn.to/29dU9FO"><em>Effective Modern C++</em></a> is the same book aimed at a different audience. The audience of <em>Effective C++</em> was the developer who could use C++ to build a humble home of straw or wood, but didn&rsquo;t know that C++ was born to create homes of brick and mortar. <em>Effective Modern C++</em> is for the seasoned developer who knows the brick home they built with C++98 can stand tall, but is bewildered by the plethora of modern amenities available in the top-floor penthouse that is C++11.</p>
-
-<h3>Takeaways</h3>
-
-<p>Even when first introduced to the language, it seemed the mentality around C++ was that it was simple, baremetal, and robust. It didn&rsquo;t need garbage collection. It didn&rsquo;t need decent threading (fork that). Lambdas? Type deduction? Go talk to a language specification who cares!</p>
-
-<p>But here we are. C++11 can now act a little bit more like its cousins C# and Java, but run fast like its pappy C. I have been on a number of projects where C++11 is king for the last 3 months. The last time I had been on a C++ project, we seemed to be stuck in the ice age. As I first started reading this book, I would read one of the items and apply it directly to the code I was working on literally the following morning. This new C++ is downright <em>luxurious</em> compared to the old one.</p>
-
-<p>C++11 gives us the <code>auto</code> pointer for type deduction, similar to <code>var</code> in C#. Some examples:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="k">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>                 <span class="c1">// x is int</span>
-</span><span class='line'><span class="k">auto</span> <span class="n">y</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Thing</span><span class="p">();</span>       <span class="c1">// y is Thing*</span>
-</span><span class='line'><span class="k">const</span> <span class="k">auto</span> <span class="n">z</span> <span class="o">=</span> <span class="s">&quot;the thing&quot;</span><span class="p">;</span> <span class="c1">// z is a const char*</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>C++11 also has new loop syntax for iterators:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">{</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="nl">value</span><span class="p">:</span> <span class="n">v</span><span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">value</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span>
-</span><span class='line'><span class="c1">// prints 46033</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You may notice in the above code the use of curly braces to initalize the std::vector. Braced initialization allows us to use a <code>std::initalizer_list</code> to initalize STL objects, but it also allows basic construction.</p>
-
-<p>There are now lambdas: function handles defined dynamically which can capture other variables (called a closure).</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="k">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
-</span><span class='line'><span class="k">auto</span> <span class="n">my_func</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">x</span><span class="p">](</span><span class="kt">int</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">;};</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">my_func</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span> <span class="c1">// 10</span>
-</span><span class='line'><span class="n">my_func</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span> <span class="c1">// 8</span>
-</span><span class='line'><span class="n">x</span> <span class="o">=</span> <span class="mi">11</span><span class="p">;</span>
-</span><span class='line'><span class="n">my_func</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span> <span class="c1">// 16</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In the above example, x is captured by reference. You could also copy-capture x by excluding the <code>&amp;</code>.</p>
-
-<p>You like garbage collection? We got you covered. There&rsquo;s <code>std::unique_ptr</code> to represent one-shot memory that should be deleted when the pointer goes out of scope, and there&rsquo;s <code>std::shared_ptr</code> which is reference counted and will be deleted when all references to the shared_ptr go out of scope. These language enhancements are essential, and anyone well-versed in the usage of <code>boost::scoped_ptr</code> and <code>boost::shared_ptr</code> will have no trouble getting the hang of these.</p>
-
-<p>The concurrency API is pretty neat, though I haven&rsquo;t had much chance to play with it. <code>std::atomic</code> allows you to create objects which are guaranteed to be read/write thread-safely. <code>std::future</code> allows you to fire off a command in another thread and continue after it&rsquo;s completion.</p>
-
-<p>Looking to override a method? You can indicate an intentional override with the <code>override</code> keyword to tell the reader and the compiler you&rsquo;re intending to override a parent method. Comes in handy.</p>
-
-<p>Another nice construct is <code>nullptr</code>. In C++, <code>NULL</code> is actually just 0. Because of this you might even see your fellow developers comparing pointers to 0 while you try to determine their intent. We can now compare and set our NULL pointers to <code>nullptr</code>: an improvement soft in functionality, but noticeable in readability.</p>
-
-<p>Although I loved reading about C++ in bite-sized chunks throughout this book, there were a few things that went over my head (not just the first time). A major point of friction between myself and the author were universal references (<code>&amp;&amp;</code>) and the <code>move</code> operator. These concepts were new to me and difficult to grasp the first few times they were brought up in this book. It may have been the order they were presented, or it may have been my lack of contact with them in the real world, but I would recommend having some level of understanding for universal references before reading those parts of this book.</p>
-
-<p>The <code>move</code> operation moves the contents of memory from one object into another, as opposed to a copy operation which will duplicate that memory. A universal reference is, in some sense, a way to allow either a <code>copy</code> or <code>move</code> to be called based on whether an lvalue or an rvalue is being passed in. There are lots of rules involved, and sometimes <code>move</code> is faster than <code>copy</code> but other times it isn&rsquo;t. For me (and I assume many others), this confusion will lead me to largely ignore this feature for now.</p>
-
-<p>There is also quite a bit of discussion early in the book about using type deduction in templates with <code>auto</code> and <code>decltype</code>, but this discussion made my head hurt and made me glad I don&rsquo;t do much template metaprogramming.</p>
-
-<p>On top of all this goodness (and more I didn&rsquo;t mention), C++14 includes a lot of bonus features that make C++ even a little sweeter. Here&rsquo;s a <a href="https://en.wikipedia.org/wiki/C%2B%2B14">shortlist</a>. (Looking for a list of C++11 features? <a href="https://en.wikipedia.org/wiki/C%2B%2B11">Here you go</a>.)</p>
-
-<h3>Action Items</h3>
-
-<ul>
-<li>Read <a href="http://thbecker.net/articles/rvalue_references/section_01.html">Thomas Becker&rsquo;s overview of universal references</a></li>
-<li>Buy the <em>Effective</em> books missing from my collection</li>
-<li>Keep coding with C++</li>
-<li>Enable C++14 in a project</li>
-</ul>
-
 ]]></content>
   </entry>
   

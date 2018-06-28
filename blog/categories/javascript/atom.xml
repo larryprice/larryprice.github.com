@@ -4,7 +4,7 @@
   <title><![CDATA[Category: javascript | Larry Price]]></title>
   <link href="https://larry-price.com/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="https://larry-price.com/"/>
-  <updated>2018-04-26T20:11:35-05:00</updated>
+  <updated>2018-06-27T19:07:28-05:00</updated>
   <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,116 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How to Use getDerivedStateFromProps in React 16.3+]]></title>
+    <link href="https://larry-price.com/blog/2018/06/27/how-to-use-getderivedstatefromprops-in-react-16-dot-3-plus/"/>
+    <updated>2018-06-27T15:12:09-05:00</updated>
+    <id>https://larry-price.com/blog/2018/06/27/how-to-use-getderivedstatefromprops-in-react-16-dot-3-plus</id>
+    <content type="html"><![CDATA[<p>From <a href="https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html">a blog post in late March 2018</a>, it was announced that the React lifecycle methods <code>componentWillReceiveProps</code>, <code>componentWillMount</code>, and <code>componentWillUpdate</code> will be deprecated in a future version of React. This is because of the eventual migration of React to async rendering; these lifecycle methods will become unreliable when async rendering is made default.</p>
+
+<p>In place of these methods, the new <strong>static</strong> method <code>getDerivedStateFromProps</code> was introduced. My team and I struggled at first in wrapping our heads around how to migrate our many uses of <code>componentWillReceiveProps</code> to this new method. It&rsquo;s generally easier than you think, but you need to keep in mind that the new method is <strong>static</strong>, and therefore does not have access to the <code>this</code> context that the old lifecycle methods provided.</p>
+
+<p><code>getDerivedStateFromProps</code> is invoked every time a component is rendered. It takes in two arguments: the next <code>props</code> object (which may be the same as the previous object) and the previous <code>state</code> object of the component in question. When implementing this method, we need to return the changes to our component <code>state</code> or <code>null</code> (or <code>{}</code>) if no changes need to be made.</p>
+
+<h3>componentWillReceiveProps</h3>
+
+<p>Here&rsquo;s a pattern we were using in many components throughout our codebase:</p>
+
+<pre><code class="javascript">componentWillReceiveProps(nextProps) {
+  if (nextProps.selectedTab !== this.state.selectedTab) {
+    this.setState(() =&gt; { return {selectedTab: nextProps.selectedTab} })
+  }
+}
+</code></pre>
+
+<p>This lifecycle method fired when we were about to receive new <code>props</code> in our component, passing in the new value as the first argument. We needed to check whether the new <code>props</code> indicated a change in the state of our tab bar, which we stored in <code>state</code>. This is one of the simplest patterns to address with <code>getDerivedStateFromProps</code>:</p>
+
+<pre><code class="javascript">static getDerivedStateFromProps(nextProps, prevState) {
+  return nextProps.selectedTab === prevState.selectedTab
+    ? {}
+    : {selectedTab: nextProps.selectedTab}
+}
+</code></pre>
+
+<p>This code works in exactly the same way, but, since it&rsquo;s <strong>static</strong>, we no longer use the context provided by <code>this</code>. Instead, we return any state changes. In this case, I&rsquo;ve returned an empty object (<code>{}</code>) to indicate no state change when the tabs are identical; otherwise, I return an object with the new <code>selectedTab</code> value.</p>
+
+<p>Sometimes you may have to perform some operations on the new <code>props</code>, but then you can still just compare the result to your previous state to figure out if anything changed. There may be other areas where you need to store some extra state duplicating your old <code>props</code> to make this work, but that may also be an indication that you need to use an alternative method.</p>
+
+<h3>componentWillMount</h3>
+
+<p>We also needed to replace calls to <code>componentWillMount</code>. I found that these calls were usually directly replaceable by <code>componentDidMount</code>, which will allow your component to perform an initial render and then execute blocking tasks. This may also require adding some loading-style capacity to your component, but will be better than a hanging app.</p>
+
+<p>Here&rsquo;s an example of a <code>componentWillMount</code> we had originally that blocked render until after an API call was made:</p>
+
+<pre><code class="javascript">componentWillMount() {
+  this.setState(() =&gt; {
+    return {
+      loading: 'Loading tool info'
+    }
+  })
+  return getTool(this.props.match.params.id).then((res) =&gt; {
+    this.setState(() =&gt; {
+      return {
+        tool: res,
+        loading: null
+      }
+    })
+  }).catch((err) =&gt; {
+    api.errors.put(err)
+    this.setState(() =&gt; {
+      return {
+        loading: null
+      }
+    })
+  })
+}
+</code></pre>
+
+<p>Afterwards, I changed the state to show the component as loading on initial render and replaced the <code>componentWillMount</code> with <code>componentDidMount</code>:</p>
+
+<pre><code class="javascript">state = {
+  tool: null,
+  loading: 'Loading tool info'
+}
+
+componentDidMount() {
+  return getTool(this.props.match.params.id).then((res) =&gt; {
+    this.setState(() =&gt; { return {tool: res, loading: null} })
+  }).catch((err) =&gt; {
+    api.errors.put(err)
+    this.setState(() =&gt; { return {loading: null} })
+  })
+}
+</code></pre>
+
+<h3>componentWillUpdate</h3>
+
+<p>Very similar to the methods discussed above, <code>componentWillUpdate</code> is invoked when a component is about to receive new props and the <code>render</code> method is definitely going to be called. Here&rsquo;s an example of something we were doing previously:</p>
+
+<pre><code class="javascript">componentWillUpdate(nextProps) {
+  if (!nextProps.user.isLogged &amp;&amp; !nextProps.user.authenticating) {
+    this.context.router.history.push('/')
+  }
+}
+</code></pre>
+
+<p>And, replacing that usage with <code>componentDidUpdate</code>:</p>
+
+<pre><code class="javascript">componentDidUpdate(/*prevProps, prevState*/) {
+  if (!this.props.user.isLogged &amp;&amp; !this.props.user.authenticating) {
+    this.context.router.history.push('/')
+  }
+}
+</code></pre>
+
+<p><code>componentDidUpdate</code> is similar to <code>componentDidMount</code> except that is caused after a change in state or props occurs instead of just on initial mount. As opposed to <code>getDerivedStateFromProps</code>, we have access to the context provided by <code>this</code>. Note that this method also has arguments for <code>prevProps</code> and <code>prevState</code>, which provides the previous versions of the component&rsquo;s <code>props</code> and <code>state</code> for comparison to the current values.</p>
+
+<h3>Conclusion</h3>
+
+<p>The deprecation of these lifecycle methods won&rsquo;t happen until React 17, but it&rsquo;s always good to plan ahead. Many of the ways my team was using these deprecated methods could be considered an anti-pattern, and I suspect that your team may be in the same predicament.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Async and Await - A New Promise]]></title>
@@ -494,99 +604,6 @@ MyModule.do();    // output: 0
 <li><strong>Write more javascript.</strong> It&rsquo;s been a while since I got to write javascript professionally, so I&rsquo;d like to ensure I maintain my knowledge base over the coming months by writing more javascript on the side. As web programming is where I want to be, hopefully I can get back into building for the web before the end of the year.</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Noty for Easy, Breezy, Beautiful Flash Messages]]></title>
-    <link href="https://larry-price.com/blog/2015/09/01/noty-for-easy/"/>
-    <updated>2015-09-01T18:29:27-04:00</updated>
-    <id>https://larry-price.com/blog/2015/09/01/noty-for-easy</id>
-    <content type="html"><![CDATA[<p><a href="http://ned.im/noty/#/about">Noty</a> is a jQuery plugin for showing flash messages. Noty is easy to use and creates great-looking flash notifications with little customization.</p>
-
-<h4>What&rsquo;s a flash message?</h4>
-
-<p>Flash messages are used to display small bits of information to a user without changing existing page content. If there is an error making an AJAX request, we can display an error flash message to let the user know to try again later. If there is a new shortcut available, we could let the user know with an information flash message.</p>
-
-<h4>Example Time</h4>
-
-<p>You&rsquo;ll need a copy of Noty. As of this time, I haven&rsquo;t seen a CDN hosting the minified version of Noty, so you can download it <a href="https://raw.githubusercontent.com/needim/noty/master/js/noty/packaged/jquery.noty.packaged.min.js">directly from Github</a> and put it somewhere nice. Add a <code>&lt;script&gt;</code> tag to your HTML including the library and let&rsquo;s start using it.</p>
-
-<p>Let&rsquo;s create a single button on our HTML page that, when clicked, will create a new Noty error flash message in the top left.</p>
-
-<p><iframe style="width: 100%; height: 150px" frameborder="0" seamless="seamless" src="//jsfiddle.net/f14xjf8b/embedded/result,html,js/light/"></iframe></p>
-
-<p>Cool, right? Break it down:</p>
-
-<ul>
-<li>text
-
-<ul>
-<li>Obviously, this is the text that will be displayed</li>
-</ul>
-</li>
-<li>layout
-
-<ul>
-<li>This allows us to change the position of the flash message. In this case I chose <code>topleft</code>, but other options include <code>top</code>, <code>topCenter</code>, <code>topRight</code>, <code>center</code>, <code>centerLeft</code>, <code>centerRight</code>, <code>bottom</code>, <code>bottomLeft</code>, <code>bottomCenter</code>, and <code>bottomRight</code></li>
-</ul>
-</li>
-<li>timeout
-
-<ul>
-<li>How long the notification will stay on the screen (in milliseconds). <code>false</code> for a permanant notification.</li>
-</ul>
-</li>
-<li>type
-
-<ul>
-<li>Style of notification to display. Options include <code>error</code>, <code>success</code>, <code>alert</code>, <code>warning</code>, <code>confirmation</code>, and <code>information</code>.</li>
-</ul>
-</li>
-</ul>
-
-
-<p> Let&rsquo;s add some more so we can see the difference.</p>
-
-<p> <iframe style="width: 100%; height: 150px" frameborder="0" seamless="seamless" src="//jsfiddle.net/f14xjf8b/2/embedded/result,html,js/light/"></iframe></p>
-
-<p> Three notifications, one which stays up for 500ms, one which stays up for 5000ms, and one which stays up indefinitely. I also set the <code>killer</code> property to true on the <code>error</code> notification such that the <code>error</code> notification will close all other notifications. Additionally, I added the <code>closeWith</code> property to the <code>success</code> message to close it by clicking. All of these notifications come up in different locations on the page.</p>
-
-<p> We should also think about theming our notifications. To create a &ldquo;full&rdquo; theme for Noty is a lot of Javascript -  the odds are pretty good you just want to change the color. We can essentially inherit from the default theme and change the colors of the <code>error</code> and <code>information</code> notifictaions in our new theme like this:</p>
-
-<pre><code class="javascript testtheme.noty.js">$.noty.themes.testtheme = Object.create($.noty.themes.defaultTheme);
-$.noty.themes.testtheme.name = 'testtheme';
-$.noty.themes.testtheme.style = function () {
-    $.noty.themes.defaultTheme.style.apply(this);
-    switch (this.options.type) {
-        case 'error':
-            this.$bar.css({
-                backgroundColor: '#DC569F',
-                borderColor: '#DC569F',
-                color: '#F5F5F5'
-            });
-            break;
-        case 'information':
-            this.$bar.css({
-                backgroundColor: '#ABABAB',
-                borderColor: '#DC569F',
-                color: '#F5F5F5'
-            });
-            break;
-        default:
-          break;
-    }
-    this.$message.css({
-        fontWeight: 'bold'
-    });
-};
-</code></pre>
-
-<p> We create our new theme <code>testtheme</code> from the <code>defaultTheme</code> prototype and change the <code>name</code> and <code>style</code> properties. Within our custom <code>style</code> function, we go ahead and apply the default theme&rsquo;s style. Then we add a few more adjustments based on the current notification type. Thank goodness it&rsquo;s javascript. Don&rsquo;t forget to include your <code>testtheme.noty.js</code> file in a <code>&lt;script&gt;</code> tag in your HTML. We can apply this theme to any of our notifications by adding the <code>theme</code> property to our call to <code>noty</code> with a value of &lsquo;testtheme&rsquo; (which is the name of the theme we just created). Here&rsquo;s the fiddle showing off our new theme:</p>
-
-<p> <iframe style="width: 100%; height: 150px" frameborder="0" seamless="seamless" src="//jsfiddle.net/f14xjf8b/3/embedded/result,html,js/light/"></iframe></p>
-
-<p> There are many other customization options for the brave, including custom animations and callbacks when the notifications are dismissed. See <a href="http://ned.im/noty/#/about">the full documentation site</a> for more details.</p>
 ]]></content>
   </entry>
   
