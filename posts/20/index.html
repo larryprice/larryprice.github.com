@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="When I was working on a few different projects at once, I started running into issues where my Ruby gem versions would start to mismatch. How did I &hellip;">
+  <meta name="description" content="I started trying to work on an open-source project and found that I needed to install googletest and googlemock on my home machine. Seemed easy &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,80 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/">Installing GTest and GMock Libs in Ubuntu 13.04</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-10-13T11:02:00-05:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>11:02 am</span></time>
+        
+           | <a href="/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I started trying to work on an open-source project and found that I needed to install <a href="https://code.google.com/p/googletest/">googletest</a> and <a href="https://code.google.com/p/googlemock/">googlemock</a> on my home machine. Seemed easy enough, I found a package called <code>google-mock</code> in the <a href="http://packages.ubuntu.com/raring/google-mock">Raring</a> repositories which depends on a package called <code>libgtest-dev</code>. So I install it:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install -y google-mock
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And the CMake file I was running before tells me that I have gmock, but I&rsquo;m still missing gtest. What&rsquo;s going on here?</p>
+
+<p>Well, there was a changeset applied in Ubuntu 12.04 (Precise) with the following text (<a href="http://www.ubuntuupdates.org/package/core/precise/universe/base/gtest">source</a>):</p>
+
+<blockquote><p>  Stop distributing static library (although still build it, to ensure gtest
+  works). Upstream recommends against shipping the libary at all, just the
+  source. (See: <a href="http://code.google.com/p/googletest/wiki/FAQ">http://code.google.com/p/googletest/wiki/FAQ</a>)
+  The Debian maintainer plans to do this also (see BTS: 639795); do it in
+  Ubuntu now to fulfil MIR requirements.</p>
+
+<p>&ndash; Christopher James Halse Rogers Thu, 08 Mar 2012 17:45:29 +1100</p></blockquote>
+
+<p>What does that mean? That means we get to build and &ldquo;install&rdquo; the gtest libs ourselves. The source is conveniently installed in <code>/usr/src</code> after installing <code>libgtest-dev</code> (which we automatically got when we installed <code>google-mock</code>).</p>
+
+<figure class='code'><figcaption><span>Installing gtest libs</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install -y cmake --quiet
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> /usr/src/gtest
+</span><span class='line'><span class="nv">$ </span>sudo cmake -E make_directory build
+</span><span class='line'><span class="nv">$ </span>sudo cmake -E chdir build cmake .. &gt;&gt; /dev/null
+</span><span class='line'><span class="nv">$ </span>sudo cmake --build build &gt;&gt; /dev/null
+</span><span class='line'><span class="nv">$ </span>ls build/libgtest*
+</span><span class='line'>build/libgtest.a  build/libgtest_main.a
+</span><span class='line'><span class="nv">$ </span>sudo cp build/libgtest* /usr/local/lib/
+</span><span class='line'><span class="nv">$ </span>sudo rm -rf build
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>&gt;&gt; /dev/null</code> can be dropped if you would like to see the output of these commands when successful, any error text will still show up with this redirect in place. I like to move all my personally-compiled libraries (and includes) to <code>/usr/local</code>, but you could just as easily copy them over to <code>/usr/lib</code>. All of this could also be done in <code>/tmp</code> if you&rsquo;re so inclined.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -419,84 +493,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/08/22/beware-of-group-projects/">Beware of Group Projects</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2013-08-22T21:22:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2013</span></span> <span class='time'>9:22 pm</span></time>
-        
-           | <a href="/blog/2013/08/22/beware-of-group-projects/#disqus_thread"
-             data-disqus-identifier="https://larry-price.com/blog/2013/08/22/beware-of-group-projects/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Relying on other people is hard. I&rsquo;ve always found it difficult to understand that other people aren&rsquo;t me. Don&rsquo;t get me wrong, working with others can be really rewarding. Maybe &ldquo;Beware of Group Projects&rdquo; is not the best title. More like &ldquo;Be Wary that Working with Others is Not the Same as Working with Yourself.&rdquo; But that&rsquo;s a pretty long title, and reading (like working with others) is hard.</p>
-
-<p>I&rsquo;ve been spending a lot of my spare time collaborating on a project with a small group of other developers. I normally do this kind of thing on my own. I started thinking about the differences in working by myself and collaborating with other devs. Then I decided that it would look good in a list format comparing each circumstance from both sides. I was wrong, but couldn&rsquo;t think of a better way to present it.</p>
-
-<h2>Let&rsquo;s Start a New Project!</h2>
-
-<p><strong>As an Individual</strong>: This project is going to help me! I can use this new technology and I&rsquo;ll learn so much!<br/>
-<strong>As a Group</strong>: This project is going to help our customer! We can use this new technology and everyone will learn so much!</p>
-
-<h2>Let&rsquo;s Work!</h2>
-
-<p><strong>As an Individual</strong>: I&rsquo;ve got 5 minutes, that&rsquo;s enough time to make those adjustments I&rsquo;ve been thinking about&hellip;<br/>
-<strong>As a Group</strong>: We&rsquo;ve got 5 minutes, but once we find a conference room, set up the projector, and update our branch I&rsquo;ll have to go pick up my wife. Pass.</p>
-
-<h2>Let&rsquo;s Not Work</h2>
-
-<p><strong>As an Individual</strong>: I could work, or I could just play Prison Architect all weekend. &hellip;I&rsquo;ll have the happiest inmates this side of Alcatraz by Monday morning!<br/>
-<strong>As a Group</strong>: We&rsquo;ve set aside these times to meet, you should come help! There might be pizza if you stay long enough.</p>
-
-<h2>Knowledge</h2>
-
-<p><strong>As an Individual</strong>: Now I know how to do X.<br/>
-<strong>As a Group</strong>: Now I know how to do X. Now you know how to do X, and you know how to do X, and you know how to do X! I&rsquo;m the Oprah of Knowing X!</p>
-
-<h2>Coding Standards</h2>
-
-<p><strong>As an Individual</strong>: Whoops, I mixed camelCase and under_scores when naming my classes. Oh well.<br/>
-<strong>As a Group</strong>: For the love of Linux Torvalds, how do you not remember to prefix your public member variables with &lsquo;pub_&rsquo; and postfix your private member variables with &lsquo;_private&rsquo;?</p>
-
-<h2>Testing</h2>
-
-<p><strong>As an Individual</strong>: Pfft.<br/>
-<strong>As a Group</strong>: TEST ALL THE THINGS! It&rsquo;s the best way we can guarantee that our code changes don&rsquo;t break existing functionality.</p>
-
-<h2>I&rsquo;m Bored</h2>
-
-<p><strong>As an Individual</strong>: Forget the months of work spent on X, I think I&rsquo;ll work on Y now.<br/>
-<strong>As a Group</strong>: If we finish, we&rsquo;ll have made something useful. Someone needs us this! You&rsquo;ll be happy you kept working on it in a few weeks.</p>
-
-<h2>We&rsquo;re Done!</h2>
-
-<p><strong>As an Individual</strong>: I made an app that let&rsquo;s you draw circles. A job well done, if I do say so myself. I believe I&rsquo;ll have a beer.<br/>
-<strong>As a Group</strong>: We invented the warp drive, but it hits a theoretical limit at approximately 9.5 warp. Beer all around! We start work on version 2.0 next week!</p>
-
-<p>The point is that working with others is not bad. In fact, working with others helps give me a sense of responsibility in what I&rsquo;m working on, and motivates me to continue even when I&rsquo;m in a lull. I&rsquo;ve thrown out so many individual side-projects because I just wasn&rsquo;t motivated, or was no longer convinced of its usefulness. It&rsquo;s also (theoretically) easier to build bigger projects with groups because there are more arms to swing more hammers.</p>
-
-<p>&ldquo;Beware of Group Projects&rdquo; if you don&rsquo;t have time, or if you can&rsquo;t compromise, or if you don&rsquo;t care. Otherwise, just be wary that working with others is not the same as working with yourself.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/21">&larr; Older</a>
@@ -540,6 +536,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2018/10/27/notes-from-all-things-open-2018/">Notes From All Things Open 2018</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2018/06/27/how-to-use-getderivedstatefromprops-in-react-16-dot-3-plus/">How to Use getDerivedStateFromProps in React 16.3+</a>
       </li>
     
@@ -553,10 +553,6 @@
     
       <li class="post">
         <a href="/blog/2018/02/02/async-and-await-a-new-promise/">Async and Await - a New Promise</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2017/09/14/promise-youll-call-back/">Promise You'll Call Back: A Guide to the Javascript Promise Class</a>
       </li>
     
   </ul>

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>https://larry-price.com/blog/2018/10/27/notes-from-all-things-open-2018/</loc>
+<lastmod>2018-10-27T15:56:45-05:00</lastmod>
+</url>
+<url>
 <loc>https://larry-price.com/blog/2018/06/27/how-to-use-getderivedstatefromprops-in-react-16-dot-3-plus/</loc>
 <lastmod>2018-06-27T15:12:09-05:00</lastmod>
 </url>
@@ -477,7 +481,7 @@
 <lastmod>2012-10-19T17:23:00-05:00</lastmod>
 </url>
 <url>
-<loc>https://larry-price.com/</loc>
+<loc>https://larry-price.com/blog/projects/</loc>
 </url>
 <url>
 <loc>https://larry-price.com/blog/archives/</loc>
@@ -486,7 +490,7 @@
 <loc>https://larry-price.com/blog/books/</loc>
 </url>
 <url>
-<loc>https://larry-price.com/blog/projects/</loc>
+<loc>https://larry-price.com/</loc>
 </url>
 <url>
 <loc>https://larry-price.com/blog/categories/ruby/</loc>

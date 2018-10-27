@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="https://larry-price.com/atom.xml" rel="self"/>
   <link href="https://larry-price.com/"/>
-  <updated>2018-06-27T19:07:28-05:00</updated>
+  <updated>2018-10-27T15:58:29-05:00</updated>
   <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,73 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Notes From All Things Open 2018]]></title>
+    <link href="https://larry-price.com/blog/2018/10/27/notes-from-all-things-open-2018/"/>
+    <updated>2018-10-27T15:56:45-05:00</updated>
+    <id>https://larry-price.com/blog/2018/10/27/notes-from-all-things-open-2018</id>
+    <content type="html"><![CDATA[<p>This is a brief overview of the talks I sat through while attending <a href="https://allthingsopen.org/">All Things Open 2018</a> in Raleigh, NC.</p>
+
+<h3>Day 1</h3>
+
+<p>First day was okay, but I had trouble finding sessions that interested me and weren&rsquo;t geared towards introductory use.</p>
+
+<h4>Keynotes</h4>
+
+<p>The first keynote, &ldquo;The Next Billion Internet Users&rdquo; by Angela Oduor Lungati, described the rapid rise in internet users in Africa and Asia. Her team made their app mobile-first, as many users only have access to the internet on a smart device. This allowed the app to be used in many different and unexpected situations. Increased connectivity also allows more people to participate in the world of software. According to a recent GitHub survey, Asia is opening the largest number of repos on the site.</p>
+
+<p>Burr Sutter of Red Hat talked about Istio, Red Hat&rsquo;s &ldquo;service mesh&rdquo; system. It&rsquo;s a pretty neat way to manage services with k8s and OpenShift. Users can launch multiple service containers with different features and seamlessly direct traffic to these containers based on certain rules. Users could even direct traffic to a new and old version of a container to determine how a new version interacts with a production environment, with end-users only ever interacting with the old version.</p>
+
+<p>&ldquo;The Next Big Wave&rdquo; (Zaheda Bhorat) mostly focused on how to create a welcoming open-source project that&rsquo;s easy to contribute to, especially in a rapidly more connected world. As usual, READMEs and CONTRIBUTING docs are king, as well as good tutorials, wikis, and getting started guides.</p>
+
+<p>In &ldquo;Design in Open Source&rdquo;, Una Kravets discusssed how Design Thinking can benefit open-source projects. Unfortunately, it&rsquo;s really difficult to get designers to participate.</p>
+
+<h4>Track Sessions</h4>
+
+<p>&ldquo;Turning &lsquo;Wat&rsquo; into &lsquo;Why&rsquo;&rdquo; (Katie McLaughlin) brought up a few idiosyncrasies from many different languages and discussed <em>why</em> the language behaves in that manner. No blame; just curiosity.</p>
+
+<p>&ldquo;Why Modern Apps Need a New Application Server&rdquo; (Nick Shadrin) was an overview of the new Nginx Unit project, iterating on <code>nginx</code> with a focus on microservice architectures. This system actually launches applications, and several libraries/packages/modules are available for things like NodeJS and Go to enable this functionality. Configuration of any language was nearly identical, and defining the number of running instances was really easy through JSON endpoints. Auto-scaling was also included out-of-the-box.</p>
+
+<p>&ldquo;Open Data: Notes from the Field&rdquo; was a panel discussion on how the Research Triangle uses citizens' data to make decisions. Much of the data used is decided upon on a municipal level as opposed to federal or state.</p>
+
+<p>&ldquo;Using Open Source for Large Scale Simulation in Robotic and Autonomous Driving Applications&rdquo; (Nate Koenig) was largely a discussion about tools used to simulate robots. Obviously, testing robots in real life can be dangerous and expensive, so advanced simulation technology is crucial to iterating fast on this kind of hardware.</p>
+
+<p>&ldquo;React Already Did That&rdquo; (Dylan Schiemann) hit on how React has evolved our ecosystem; components and functional programming will leave a permanent mark on JS development. Although React may not be around in 5 years, it is highly likely that the popular frameworks at that time will be fairly similar (think: Vue, Ionic, Svelte). This talk sort of devolved into a discussion of the speaker&rsquo;s &ldquo;competing&rdquo; technology Dojo, which was somewhat of a precursor to React. It also uses TypeScript, which reminds me a lot of the tech stack we use at Granular.</p>
+
+<p>&ldquo;You XSS Your Life! How do we keep failing at security on the web?&rdquo; (David Rogers) was an overview of how easy it is to fall for cross-site scripting attacks in modern web applications. Malicious user input could take down our system or reveal user data, so we should be scrubbing data anywhere it gets entered. Lots of tools available. Although this is touched upon a lot, I know that I&rsquo;m guilty of just taking user input and using it unthinkingly.</p>
+
+<h3>Day 2</h3>
+
+<p>I found more relevant sessions to go to during the second day, which surprised me as normally the &ldquo;last&rdquo; day of a conference is worse than the first.</p>
+
+<h4>Keynotes</h4>
+
+<p>&ldquo;Five Things You Didn&rsquo;t Know Python Can Do!&rdquo; by Nina Zakharenko went over things I already knew Python could do. Python runs important code in all industries, and has found itself indispensable in the world of science.</p>
+
+<p>Babel developer Henry Zhu gave a talk titled &ldquo;Maintainer&rsquo;s Virtual&rdquo; describing the world of full-time open-source development. Zhu left his job and works on Babel based on donations from the community. He talked about the guilt associated with taking breaks when people are donating their money to you, and how that easily leads to burnout. He talked about trying not to put too much pressure on yourself to be constantly contributing.</p>
+
+<p>The final keynote, &ldquo;Money as an Open Protocol&rdquo; by Andreas Antonopoulos, was&hellip; interesting. A dash of conspiracy theory and anarchism made this talk a little uncomfortable. Big banks are not our friends, and this speaker was adamant that we would see the fall of centralized banking in the next 20 years. Bitcoin and friends are the predecessor to a new global digital currency. The choice we&rsquo;ll be facing soon is whether we have a decentralized open currency akin to Bitcoin as our primary form of money or something more insidious such as &ldquo;Facebook Coin&rdquo;, &ldquo;Google Coin&rdquo;, &ldquo;Apple Coin&rdquo;, or &ldquo;America Coin.&rdquo; A fun quote from this talk was &ldquo;The opposite of authority is autonomy.&rdquo; Also &ldquo;If money is the root of all evil, then <code>sudo evil</code>.&rdquo; Although this talk was captivating, it felt like a pitch for a dystopian novel. Crowd ate it up.</p>
+
+<h4>Track Sessions</h4>
+
+<p>Kyle Simpson&rsquo;s &ldquo;Keep Betting on JavaScript&rdquo; was probably my favorite session. Kyle gave a brief history of JavaScript, from its creation through its stagnation to the rapidly-evolving language we all know and love today. JavaScript&rsquo;s failures to change in the 00s was largely due to a lack of unity in the community, ultimately leading to a spec that was thrown away. Other languages began to appear that looked like they would leave JS in the dust. Just as JS was on the brink of death, the community united, new features were specced out, and JS rose from the ashes. Many people still hate on JavaScript, and this is largely due to the fact that they are &ldquo;emotionally attached to the idea that JavaScript sucks.&rdquo; JavaScript is lingua franca in programming; it&rsquo;s readable by developers of many languages, and ideas can easily be expressed. Kyle was very much into progressive web applications, with native apps becoming an unnecessary part of the ecosystem. Every app should have at least one ServiceWorker to guarantee that a tab will continue to exist, even after we get on an airplane. &ldquo;TypeScript is a really intelligent linter&rdquo;, Kyle says, but aside from that, can begin to confuse the world we live in if we use too many extended features. Transforming our code with all of these tools can make debugging harder, and can make it difficult for other developers to figure out what we&rsquo;ve done using &ldquo;View Source.&rdquo; &ldquo;View Source&rdquo; is the ultimate tool in a new developer&rsquo;s toolkit, allowing them to see how a site works and helping them develop new ideas. Kyle was weary of many of the new JavaScript features that are machine-centric; code features that will only be used by libraries and generators and never by an everyday programmer. Kyle insists that we should focus on developers first. Even WebAssembly and simimlar ideas are going to make web development a more complicated landscape to enter. Kyle started early and ended late. Further reading: Alan Kay, Douglas Englebart, Tom Dale.</p>
+
+<p>&ldquo;Cross-Platform Desktop Apps with Electron&rdquo; (David Neal) was an introductory guide to using Electron, the cross-platform desktop UI technology behind Atom, VSCode, and the Slack desktop app. Starting in Electron seems easier than I expected. Architecture is similar to developing for the web, where we have server-side code and client-side code. It&rsquo;s better to make calls to the server than to run on the UI thread. Pretty much anything that you can install with npm can readily be used in Electron, including UI frameworks such as React and testing tools such as mocha.</p>
+
+<p>I watched some lightning talks during lunch. Raspberry Pi celebrates their 6th year, something something Blockchain databases, jump-starting an open-source career via blogging or speaking, examples of unconscious bias in AI datasets, all the wrong ways to pronounce &ldquo;kubectl&rdquo;, more on Red Hat&rsquo;s Istio service mesh framework, and ideas for replacing <code>docker</code> with other container tools.</p>
+
+<p>&ldquo;Framework Free – Building a Single Page Application Without a JS Framework&rdquo; (Ryan Miller) described the way we used to make websites in 2013 without frameworks, but with all the nice HTML5 features. It&rsquo;s somewhat important to know how all of these things work under the covers, especially if you have to debug in the browser. It&rsquo;s not always necessary to have a big, hefty framework. I was somewhat horrified by the number of people in the audience who didn&rsquo;t know what jQuery was.</p>
+
+<p>In &ldquo;Intro to SVG&rdquo;, Tanner Hodges explained the basics of SVGs, when to use them, and when to seek alternatives. Interesting cases included textured content (which rendered significantly smaller as a PNG over an SVG), content that included text (which needed to be checked to verify that the text was rendered as native SVG elements), and photography (which, when rendered to SVG, literally included a data hash of the original image at high resolution, creating a massive file). He also touted the importance of new standards such as <code>webp</code> and <code>webv</code> when displaying content on the web.</p>
+
+<p>In &ldquo;WTH is JWT&rdquo;, Joel Lord broke down how JWTs are constructed by combining the encryption method, the payload (basic user information), and a secret key. Although the key can be deserialized and parsed to get to the information, the secret at the end is determined by hashing the key and the payload, so would-be attackers cannot simply change the JWT to gain access to the system without knowing the secret key. Of course, more security measures are necessary to keep intruders from gaining access, such as encrypted sessions and auth servers. The JWT Spec is still in the <a href="https://tools.ietf.org/html/rfc7519">proposal period</a>, so its definition may still change before finalization.</p>
+
+<h3>Conclusion</h3>
+
+<p>Pretty good conference. I made a few interesting connections. I learned that a lot of people are in love with Vue right now, TypeScript is still popular, and microservices are the only way to build an application. My biggest complaint was that coffee was hard to come by.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to Use getDerivedStateFromProps in React 16.3+]]></title>
@@ -3081,99 +3148,6 @@
 <p>It&rsquo;s not just working remotely that makes this possible - it&rsquo;s the people, the culture, and the fun and interesting products we&rsquo;re creating. Maybe I&rsquo;ll start blogging more about those things in the future. I don&rsquo;t have much in this area that I&rsquo;m looking to improve on, so this could be the last post in the series. Maybe I&rsquo;ll do one at the 1-year mark to note any new tricks I&rsquo;ve learned. Until then, keep looking our for other non-diary-entry blog posts.</p>
 
 <p>Looking for advice on working remotely? Not sure if you&rsquo;d like it? Do you have a strong disagreement with me as a person or my lifestyle choices? Hit me up and we can chat!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Writing Go/QML Convergent Ubuntu Apps]]></title>
-    <link href="https://larry-price.com/blog/2016/07/07/writing-a-go-slash-qml-convergent-ubuntu-app/"/>
-    <updated>2016-07-07T16:31:23-04:00</updated>
-    <id>https://larry-price.com/blog/2016/07/07/writing-a-go-slash-qml-convergent-ubuntu-app</id>
-    <content type="html"><![CDATA[<p>Thinking about writing an Ubuntu application that will work in Unity 8? You&rsquo;ll be writing a &ldquo;convergent&rdquo; app, which is an application that can respond to touch or mouse, and will adapt appropriately to a phone, tablet, or desktop screen. It will even be able to update its display on-the-fly if, say, you plug your phone into a monitor or bluetooth keyboard.</p>
-
-<p>There are <em>lots</em> of ways to write a convergent application with the <a href="https://developer.ubuntu.com/en/phone/platform/sdk/">Ubuntu SDK</a>. You can build apps in pure QML, C++ with QML, QtQuick, pure HTML5/Javascript, or even <strong>Golang with QML</strong>. We&rsquo;ll be focusing on go apps for the rest of this post.</p>
-
-<p>Go is a young language, and the recent release of <a href="https://blog.golang.org/go1.6">go 1.6</a> has introduced some nasty changes particularly involving cgo. It has also introduced vendoring by default, which is a welcome change.</p>
-
-<p>I&rsquo;m using go 1.6.2. For me, the current project template provided by the Ubuntu SDK feels quite broken. I can&rsquo;t get things to build locally, and furthermore I see no options for pushing an ARM build to my device.</p>
-
-<p>Fortunately, I found this <a href="https://github.com/nikwen/ubuntu-go-qml-template">ubuntu-go-qml-template</a> which is a template to enable running/building a go/qml application locally while also supporting building/installing onto an arm device. The kicker? This tool was designed to work for go 1.3.3. Sigh! Since I&rsquo;m unwilling to compromise and use old technology, I <a href="https://github.com/larryprice/ubuntu-go-qml-template">forked the project</a> and updated it to fit my more modern needs.</p>
-
-<p>Because our go template will depend on QML, we depend on the <a href="https://github.com/go-qml/qml">go-qml</a> project to create the necessary C bindings to allow us to use QML. However, with the update to go 1.6, the current version (revision 2ee7e5f) of go-qml will give a runtime error from cgo with the wonderfully helpful <code>panic: runtime error: cgo argument has Go pointer to Go pointer</code>. Another thorn in our side. Fortunately, this issue is in previously tread-upon ground and there is a <a href="https://github.com/sjb/qml/tree/go1.6-port">fork of go-qml</a> with enough of the cgo issues fixed to run our application with no problems. In the <code>ubuntu-go-qml-template</code> I forked above, I&rsquo;ve gone ahead and vendored this fork of <code>go-qml</code>. It all works because of the default vendoring available in go 1.6.</p>
-
-<p>With that background out of the way, let&rsquo;s run through getting a project started:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install golang g++ qtdeclarative5-dev qtbase5-private-dev <span class="se">\</span>
-</span><span class='line'>                       qtdeclarative5-private-dev libqt5opengl5-dev <span class="se">\</span>
-</span><span class='line'>                                           qtdeclarative5-qtquick2-plugin
-</span><span class='line'><span class="c"># installing dependencies...</span>
-</span><span class='line'><span class="nv">$ </span>git clone https://github.com/larryprice/ubuntu-go-qml-template.git your-project-name
-</span><span class='line'><span class="c"># cloning repo...</span>
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>your-project-name
-</span><span class='line'><span class="nv">$ </span>chroot-scripts/setup-chroot.sh
-</span><span class='line'><span class="c"># building a chroot for ubuntu-sdk-15.04</span>
-</span><span class='line'><span class="c"># distro=vivid, arch=arm</span>
-</span><span class='line'><span class="c"># with go 1.6.2 with armhf compilation support</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You may need to have other dependencies including <code>click</code> or <code>phablet-tools</code>. The above commands installed dependencies, cloned the repo, and built and/or updated a chroot for building our source for arm.</p>
-
-<p>Next you&rsquo;ll want to setup the project for your own needs. The original template creator included a nifty <code>setup</code> script to get this done:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>ruby setup.rb -v -n your-project-name -a <span class="s2">&quot;Your Name&quot;</span> -e <span class="s2">&quot;your.email@example.com&quot;</span> <span class="se">\</span>
-</span><span class='line'>                   -d <span class="s2">&quot;your-developer-namespace&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This will do some fancy gsub and file renaming to make the template your own.</p>
-
-<p>If you check <code>src/</code>, you&rsquo;ll find a <code>main.go</code> file ready for your use. You&rsquo;ll also find a <code>main.qml</code> file in <code>share/qml/</code>. You can vendor all of your dependencies in <code>vendor/</code>, where you&rsquo;ll already find the <code>qml</code> package.</p>
-
-<p>As far as getting your application to work, there are more scripts available:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>./build.sh
-</span><span class='line'><span class="c"># this will build your project locally</span>
-</span><span class='line'><span class="nv">$ </span>./run.sh
-</span><span class='line'><span class="c"># this will build your project locally and then run it on the desktop</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The best part about this template is the ability to build for arm and load your applications onto a device:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>./build-in-chroot.sh
-</span><span class='line'><span class="c"># builds the package using the vivid+armhf chroot we set up previously</span>
-</span><span class='line'><span class="nv">$ </span>./install-on-device.sh
-</span><span class='line'><span class="c"># builds for vivid+armhf and installs the click directly on</span>
-</span><span class='line'><span class="c"># the first USB-connected Ubuntu Touch device</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now you can run and install go/qml applications on desktop or on devices. Time to go build something cool!</p>
-
-<p><em>Disclaimer: In the future, this template will likely need to be updated for new go versions or new default versions of the Ubuntu SDK. Don&rsquo;t be afraid to make a comment below or submit a PR.</em></p>
 ]]></content>
   </entry>
   

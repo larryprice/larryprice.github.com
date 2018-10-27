@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="The Gist How can one man give the world so much? Scott Meyers transformed my understanding of C++ with Effective C++, a book which not only teaches &hellip;">
+  <meta name="description" content="Thinking about writing an Ubuntu application that will work in Unity 8? You&rsquo;ll be writing a &ldquo;convergent&rdquo; app, which is an &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,122 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/07/07/writing-a-go-slash-qml-convergent-ubuntu-app/">Writing Go/QML Convergent Ubuntu Apps</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-07-07T16:31:23-04:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>4:31 pm</span></time>
+        
+           | <a href="/blog/2016/07/07/writing-a-go-slash-qml-convergent-ubuntu-app/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2016/07/07/writing-a-go-slash-qml-convergent-ubuntu-app/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Thinking about writing an Ubuntu application that will work in Unity 8? You&rsquo;ll be writing a &ldquo;convergent&rdquo; app, which is an application that can respond to touch or mouse, and will adapt appropriately to a phone, tablet, or desktop screen. It will even be able to update its display on-the-fly if, say, you plug your phone into a monitor or bluetooth keyboard.</p>
+
+<p>There are <em>lots</em> of ways to write a convergent application with the <a href="https://developer.ubuntu.com/en/phone/platform/sdk/">Ubuntu SDK</a>. You can build apps in pure QML, C++ with QML, QtQuick, pure HTML5/Javascript, or even <strong>Golang with QML</strong>. We&rsquo;ll be focusing on go apps for the rest of this post.</p>
+
+<p>Go is a young language, and the recent release of <a href="https://blog.golang.org/go1.6">go 1.6</a> has introduced some nasty changes particularly involving cgo. It has also introduced vendoring by default, which is a welcome change.</p>
+
+<p>I&rsquo;m using go 1.6.2. For me, the current project template provided by the Ubuntu SDK feels quite broken. I can&rsquo;t get things to build locally, and furthermore I see no options for pushing an ARM build to my device.</p>
+
+<p>Fortunately, I found this <a href="https://github.com/nikwen/ubuntu-go-qml-template">ubuntu-go-qml-template</a> which is a template to enable running/building a go/qml application locally while also supporting building/installing onto an arm device. The kicker? This tool was designed to work for go 1.3.3. Sigh! Since I&rsquo;m unwilling to compromise and use old technology, I <a href="https://github.com/larryprice/ubuntu-go-qml-template">forked the project</a> and updated it to fit my more modern needs.</p>
+
+<p>Because our go template will depend on QML, we depend on the <a href="https://github.com/go-qml/qml">go-qml</a> project to create the necessary C bindings to allow us to use QML. However, with the update to go 1.6, the current version (revision 2ee7e5f) of go-qml will give a runtime error from cgo with the wonderfully helpful <code>panic: runtime error: cgo argument has Go pointer to Go pointer</code>. Another thorn in our side. Fortunately, this issue is in previously tread-upon ground and there is a <a href="https://github.com/sjb/qml/tree/go1.6-port">fork of go-qml</a> with enough of the cgo issues fixed to run our application with no problems. In the <code>ubuntu-go-qml-template</code> I forked above, I&rsquo;ve gone ahead and vendored this fork of <code>go-qml</code>. It all works because of the default vendoring available in go 1.6.</p>
+
+<p>With that background out of the way, let&rsquo;s run through getting a project started:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo apt-get install golang g++ qtdeclarative5-dev qtbase5-private-dev <span class="se">\</span>
+</span><span class='line'>                       qtdeclarative5-private-dev libqt5opengl5-dev <span class="se">\</span>
+</span><span class='line'>                                           qtdeclarative5-qtquick2-plugin
+</span><span class='line'><span class="c"># installing dependencies...</span>
+</span><span class='line'><span class="nv">$ </span>git clone https://github.com/larryprice/ubuntu-go-qml-template.git your-project-name
+</span><span class='line'><span class="c"># cloning repo...</span>
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>your-project-name
+</span><span class='line'><span class="nv">$ </span>chroot-scripts/setup-chroot.sh
+</span><span class='line'><span class="c"># building a chroot for ubuntu-sdk-15.04</span>
+</span><span class='line'><span class="c"># distro=vivid, arch=arm</span>
+</span><span class='line'><span class="c"># with go 1.6.2 with armhf compilation support</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You may need to have other dependencies including <code>click</code> or <code>phablet-tools</code>. The above commands installed dependencies, cloned the repo, and built and/or updated a chroot for building our source for arm.</p>
+
+<p>Next you&rsquo;ll want to setup the project for your own needs. The original template creator included a nifty <code>setup</code> script to get this done:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>ruby setup.rb -v -n your-project-name -a <span class="s2">&quot;Your Name&quot;</span> -e <span class="s2">&quot;your.email@example.com&quot;</span> <span class="se">\</span>
+</span><span class='line'>                   -d <span class="s2">&quot;your-developer-namespace&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will do some fancy gsub and file renaming to make the template your own.</p>
+
+<p>If you check <code>src/</code>, you&rsquo;ll find a <code>main.go</code> file ready for your use. You&rsquo;ll also find a <code>main.qml</code> file in <code>share/qml/</code>. You can vendor all of your dependencies in <code>vendor/</code>, where you&rsquo;ll already find the <code>qml</code> package.</p>
+
+<p>As far as getting your application to work, there are more scripts available:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>./build.sh
+</span><span class='line'><span class="c"># this will build your project locally</span>
+</span><span class='line'><span class="nv">$ </span>./run.sh
+</span><span class='line'><span class="c"># this will build your project locally and then run it on the desktop</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The best part about this template is the ability to build for arm and load your applications onto a device:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>./build-in-chroot.sh
+</span><span class='line'><span class="c"># builds the package using the vivid+armhf chroot we set up previously</span>
+</span><span class='line'><span class="nv">$ </span>./install-on-device.sh
+</span><span class='line'><span class="c"># builds for vivid+armhf and installs the click directly on</span>
+</span><span class='line'><span class="c"># the first USB-connected Ubuntu Touch device</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you can run and install go/qml applications on desktop or on devices. Time to go build something cool!</p>
+
+<p><em>Disclaimer: In the future, this template will likely need to be updated for new go versions or new default versions of the Ubuntu SDK. Don&rsquo;t be afraid to make a comment below or submit a PR.</em></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -381,86 +497,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2016/04/11/going-remote-1-week/">Going Remote: 1 Week In</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2016-04-11T20:40:00-04:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>8:40 pm</span></time>
-        
-           | <a href="/blog/2016/04/11/going-remote-1-week/#disqus_thread"
-             data-disqus-identifier="https://larry-price.com/blog/2016/04/11/going-remote-1-week/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><em>I would like for this to be the first in a series of blog posts detailing my experience migrating from a culture based on co-location to a fully remote environment. Look out for another post at about the 1-month mark.</em></p>
-
-<p>I&rsquo;ve spent an entire week working remotely. How did it go? I&rsquo;m not going to go into my current job here (if you&rsquo;re curious: I love it), but I&rsquo;m going to try to focus on the aspects of setting up a pleasant environment for working from home and how I coped during my first week.</p>
-
-<h3>But first: some background</h3>
-
-<p>I&rsquo;ve never worked remotely as a professional software engineer for more than one day at a time until now. I&rsquo;ve been a part of an office with traditional cube farms and an office with more modern team spaces. I haven&rsquo;t worked in a <a href="https://twitter.com/ptone/status/582764080219320323">Silicon Valley Sweat Shop</a>, and I&rsquo;ve never had a private office with walls, windows, and that holy grail of office furniture: a door. My past organizations have been nested in a culture of co-location which is, of course, very normal. However, I&rsquo;ve very recently moved to a position at a new organization with cultural values borrowed from the open-source community. About 70% of the 700 employees are full remote.</p>
-
-<p>When I use the term &ldquo;working remotely,&rdquo; I mean that a given employee works from wherever they want. For the majority of people it&rsquo;s their home or apartment, but it could also be a coffee shop, a co-working space, a public park, or anywhere with an internet connection and a nearby power source.</p>
-
-<h3>Setting Up My (Physical) Environment</h3>
-
-<p>Also known as <em>Things I Had to Buy to Make This Work</em>.</p>
-
-<p>To prepare for this new work environment, I did what anyone would do: I started buying things. I bought a <a href="http://amzn.to/1Q3HywG">cool wireless mouse</a> that I could connect to my laptop through it&rsquo;s built-in bluetooth. I bought <a href="http://www.ikea.com/us/en/catalog/products/00103102/#/90289172">a chair with a name from IKEA</a> and one of those cheap plastic carpet protectors. I started looking into motorized sit/stand desks, but didn&rsquo;t purchase one immediately (a mistake I quickly recovered from). I moved a second lamp into my home office and figured I was set up for success.</p>
-
-<p>My first day, poor Markus (the chair) cracked the floor protector in several places, and my carpet is so thick that the chair couldn&rsquo;t roll on its own. I painfully used my laptop&rsquo;s keyboard for about 15 minutes before finding <a href="http://amzn.to/1MqycR8">another mechanical keyboard</a> to use instead which arrived that afternoon. The height of my old desk made sitting for hours super uncomfortable, so I quickly put in an order for a <a href="https://www.myupdesk.com/">sit/stand desk</a> that I could use downstairs where the carpet is thinner.</p>
-
-<p>The next day, my new mechanical keyboard refused to let me type Shift+RightAlt without thinking it was a Meta key, causing all my keyboard shortcuts to be busted. I swapped it out with my old mechanical keyboard that worked just as well, but with a functioning Shift+RightAlt. It was around this time I noticed my WiFi connection was becoming flaky. I cursed my ISP and decided it was fine for the time being.</p>
-
-<p>At some point during the week, the sit/stand desk arrived. Because of the thick carpet and uneven floors upstairs, I decided to start creating my new office downstairs. Unfortunately, my house is extremely poorly lit, so at the end of the day I had to run out to Target to buy a <a href="http://www.target.com/p/threshold-torchiere-floor-lamp-with-alabaster-glass-shade-oil-rubbed-bronze/-/A-14580986">new lamp</a> (and some cream cheese! classic combo!).</p>
-
-<p>By this time it was Friday. My network connection was not just bad, but worse than it ever had been. I started sniffing around the internets and found that <a href="https://www-ssl.intel.com/content/www/us/en/wireless-products/dual-band-wireless-ac-7260-bluetooth.html">my wireless card</a> (a bluetooth/WiFi dual card) was notoriously bad at handling bluetooth and WiFi at the same time on Linux, but sometimes updating the kernel and getting the latest iwlwifi drivers fixed the problem. So I updated to 4.3. No luck, so I updated to 4.4. <em>Still no luck</em>. By the end of things, I had the 4.4.6 kernel and I honestly thought things were a little better. A few hours and a dropped Hangouts call later, I realized I was wrong. However, booting off of a USB with fresh Ubuntu gave me a consistent and fast network connection. After piddling around a bit, I dramatically smacked my forehead. I flipped off the bluetooth connection on my laptop, and my network connection was fast and stable. I had been thwarted by my beautiful bluetooth mouse which, fortunately for me, also came with the usual wireless USB dongle.</p>
-
-<p>At the end of the week, I finally felt like my setup was fine. Network still a little slower than expected, but I fixed that recently by moving the router to higher ground.</p>
-
-<h3>Let me count the ways&hellip;</h3>
-
-<p>OK, so I had some issues getting my home office in working order. But <strong>I love working from home</strong>.</p>
-
-<p>I don&rsquo;t feel rushed when I get out of bed in the morning. I shave, shower, make coffee in the french press, and perfectly toast/cheese my bagel; and I get to enjoy every minute of getting ready for the day. I start when I want, but when I want is a normal time. I&rsquo;m at my desk ready to do my job sometime between 7:30am and 8:30am. The only way I need to let people know I&rsquo;m in the office is by signing into chat.</p>
-
-<p>My house is almost silent except for the noises I make and the infrequent meow of a cat wanting attention. I can focus on what I&rsquo;m doing without being distracted by peers or normal office noises. I don&rsquo;t need to put on headphones when I want solitude, which means I&rsquo;m not distracted by whatever noise is coming out of the headphones. Achieving flow seems to be much easier when there are fewer distractions.</p>
-
-<p><em>Speaking of cats</em>&hellip; I know this will seem silly, but it&rsquo;s quite nice to have my feline companions hanging out with me all day. Usually they&rsquo;re taking naps nearby so I can say &ldquo;d'awwwwwwww&rdquo;, or they&rsquo;re waiting in the kitchen for me to get up so they can get pets. Go <a href="http://www.adoptapet.com/cat-adoption">adopt a cat</a> now.</p>
-
-<p>I can make a healthy meal really easily at lunch. I love being able to pull some frozen veggies out of the freezer, throw them in the skillet with some sauce ingredients, add some protein, and feel like I&rsquo;m eating well in the middle of the day.</p>
-
-<p>All of my communication comes through chat, email, and infrequent Hangouts. We mostly just use Hangouts for our daily standup, and it&rsquo;s a great way to see everyone&rsquo;s faces and feel like a team. Email is pretty much only used for mailing lists, such as new merge proposals, bug reports, and company news; so I only glance at my email a couple times a day, and mark whatever I don&rsquo;t care about as Done. We use Google services to do this, which means I&rsquo;m using Inbox to achieve zero-inbox. Chat is our primary means of communication. Being a remote group, the chat is extremely efficient. There are no graphic memes, and chats never end with &ldquo;let&rsquo;s get a conference room to hash this out.&rdquo; Information is constantly being exchanged through the chat, and I rarely feel dissatisfied with the outcome. It&rsquo;s also interesting to note that when you leave the chat, you do not get to know what happened in your absence. However, this does not seem to be a hindrance to anyone, but almost more of a relief. You don&rsquo;t need to be in-the-know 24/7 to know what&rsquo;s going on.</p>
-
-<h3>Near-Future Goals</h3>
-
-<ul>
-<li><strong>Exercise more</strong>. Although my eating habits feel a little better, my exercise habits have been much worse. I used to meander the office every hour or two to get 10-15 minutes of exercise, or go outside to walk around. I have my sit/stand desk set up now, and I shuffle back and forth based on what I&rsquo;m doing and how my butt feels, but that doesn&rsquo;t count as exercise. I plan to lift my 10lb weights more frequently, and I&rsquo;d like to work out my core with push-ups and bicycles. It would also be great to walk around the neighborhood in the summer.</li>
-<li><strong>Extracurricular</strong>. It&rsquo;s been a while since I&rsquo;ve worked on something meaningful in the evenings, and it&rsquo;s been tough to get started on something since my work office (and computer) is now also my play office. In the next few weeks, I&rsquo;d like to build an Atom.io package to integrate with bzr.</li>
-<li><strong>Personalize workspace</strong>. Since I&rsquo;ve taken over the living room, the decor is mostly a big, decorative clock. I have some wicked posters I&rsquo;d like to put up, but I need to convince my housemate that they won&rsquo;t look too tacky in such a guest-visible area.</li>
-<li><strong>Find a better floormat</strong>. Like I said, this cheap IKEA floormat cracked on the first day. I&rsquo;d like to find something vinyl or closer to rubber that will be more resilient but also more comfortable when I morph into standing mode.</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/6">&larr; Older</a>
@@ -504,6 +540,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2018/10/27/notes-from-all-things-open-2018/">Notes From All Things Open 2018</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2018/06/27/how-to-use-getderivedstatefromprops-in-react-16-dot-3-plus/">How to Use getDerivedStateFromProps in React 16.3+</a>
       </li>
     
@@ -517,10 +557,6 @@
     
       <li class="post">
         <a href="/blog/2018/02/02/async-and-await-a-new-promise/">Async and Await - a New Promise</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2017/09/14/promise-youll-call-back/">Promise You'll Call Back: A Guide to the Javascript Promise Class</a>
       </li>
     
   </ul>

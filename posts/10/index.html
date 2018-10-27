@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="Have you used Docker yet? Docker is awesome! Docker is a tool for managing isolated system environments. I have started using Docker for everything. &hellip;">
+  <meta name="description" content="I just discovered CSS3 Animation and I am quickly becoming obsessed. CSS3 makes DOM animations really easy. I can move things around, shrink or &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,182 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/04/06/i-am-an-artist-now-css3-transitions/">I Am an Artist Now: CSS3 Transitions</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-04-06T18:57:36-04:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>6:57 pm</span></time>
+        
+           | <a href="/blog/2015/04/06/i-am-an-artist-now-css3-transitions/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2015/04/06/i-am-an-artist-now-css3-transitions/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I just discovered <a href="//www.w3.org/TR/css3-animations/">CSS3 Animation</a> and I am quickly becoming obsessed.</p>
+
+<p><a name="infinite-ball"></a></p>
+
+<iframe style="width: 100%; height: 150px" frameborder="0" seamless="seamless" src="//jsfiddle.net/9uny3mb1/7/embedded/result,html,css/light/"></iframe>
+
+
+<p>CSS3 makes DOM animations really easy. I can move things around, shrink or enlarge text and images, make buttons and links &ldquo;pop&rdquo; on hover, and help the user focus on the most relevant information. This can all be done through CSS3.</p>
+
+<p><strong>DISCLAIMER</strong>: Contrary to the title of this article, I am less of a Picasso and more of a dog making &ldquo;art&rdquo; all over your brand new rug.</p>
+
+<h3>Animation</h3>
+
+<p>Do you see that ball <a href="#infinite-ball">up there</a>? If you can&rsquo;t, go check out the <a href="//jsfiddle.net/9uny3mb1/7">jsfiddle</a>. The concepts are so simple an embedded programmer could do it. Let&rsquo;s look at the <code>animation-</code> tags on the ball first:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.ball</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c">/* ... */</span>
+</span><span class='line'>  <span class="n">animation</span><span class="o">-</span><span class="n">duration</span><span class="o">:</span> <span class="m">10s</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">animation</span><span class="o">-</span><span class="n">name</span><span class="o">:</span> <span class="n">rollout</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">animation</span><span class="o">-</span><span class="n">iteration</span><span class="o">-</span><span class="n">count</span><span class="o">:</span> <span class="n">infinite</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><code>animation-duration</code>
+
+<ul>
+<li>The length of time the animation will take to complete.</li>
+<li>Example: 10s</li>
+</ul>
+</li>
+<li><code>animation-name</code>
+
+<ul>
+<li>A unique name for the animation we want to use. If you write good animations, you might be able to reuse them later.</li>
+<li>Example: rollout</li>
+</ul>
+</li>
+<li><code>animation-iteration-count</code>
+
+<ul>
+<li>The number of times the animation should run. Default 1.</li>
+<li>Example: infinite</li>
+</ul>
+</li>
+</ul>
+
+
+<p>Note that there are several other <code>animation-</code> attributes to give you more control, but we only need a few in this case. For a more in-depth look at these attributes and their constituents, I advise you to check out <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Using_CSS_animations">this MDN article</a>. Also, note that at this point Google&rsquo;s Chrome browser still requires <code>-webkit-</code> prefixes on animation objects. Hopefully they join the rest of the modern world soon.</p>
+
+<p>The <code>animation-</code> attributes let us configure our usage of an animation, but the real guts of the animation come from the definition inside a <code>@keyframes</code> tag.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.ball</span> <span class="p">{</span> <span class="c">/* ... */</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@keyframes</span> <span class="nt">rollout</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nt">25</span><span class="o">%</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">margin-left</span><span class="o">:</span> <span class="m">47%</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="nt">50</span><span class="o">%</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">margin-left</span><span class="o">:</span> <span class="m">94%</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="nt">75</span><span class="o">%</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">margin-left</span><span class="o">:</span> <span class="m">47%</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="nt">100</span><span class="o">%</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">margin-left</span><span class="o">:</span> <span class="m">0%</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note the name <code>rollout</code> is the same as the <code>animation-name</code> attribute we set on <code>.ball</code> previously. This is the definition of our animation at different timeframes. What this says:</p>
+
+<ol>
+<li><strong>25%</strong> of the way through the animation, the object should have <code>margin-left</code> of <strong>47%</strong>, putting it in the middle of the page.</li>
+<li><strong>50%</strong> of the way through the animation, the object should have <code>margin-left</code> of <strong>94%</strong>, putting it at the far right of the page.</li>
+<li><strong>75%</strong> of the way through the animation, the object should have <code>margin-left</code> of <strong>47%</strong>, putting it in the middle of the page again.</li>
+<li><strong>100%</strong> of the way through the animation, the object should have <code>margin-left</code> of <strong>0%</strong>, putting it back where it started.</li>
+</ol>
+
+
+<p>This is easy and relatively readable. I can see exactly what is supposed to be going on and when.</p>
+
+<h3>Transition</h3>
+
+<p>Although the <code>animation-</code> attributes give you a lot of control over animations, there are several other tools available. <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Using_CSS_transitions">CSS Transitions</a> are animations that are performed <a href="//stackoverflow.com/questions/20586143/css-animation-vs-transition#20590319">between two distinct states</a>. This is especially helpful when you want to run an animation after some event happens. When I click this button, I add a class to my ball to make it move to the right. I click it again and the ball moves to the left. You can see <a href="#ball-click">the fiddle below</a> or view it on <a href="//jsfiddle.net/9uny3mb1/4/">jsfiddle</a>.</p>
+
+<p><a name="ball-click"></a></p>
+
+<iframe style="width: 100%; height: 150px" frameborder="0" seamless="seamless" src="//jsfiddle.net/9uny3mb1/4/embedded/result,html,css,js/light/"></iframe>
+
+
+<p>The important CSS here is <code>transition</code> and the <code>margin-left</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.ball</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c">/* ... */</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">transition</span><span class="o">:</span> <span class="k">margin-left</span> <span class="m">3s</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">margin-left</span><span class="o">:</span> <span class="m">0%</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.rollout</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">margin-left</span><span class="o">:</span> <span class="m">94%</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When my DOM object has the <code>ball</code> class, a transition will begin to set the <code>margin-left</code> to <strong>0%</strong> over a period of 3 seconds. When the <code>rollout</code> class is applied, a transition begins which brings the <code>margin-left</code> to <strong>94%</strong> over another 3 seconds. The transition knows to apply the given CSS attribute as found in the last-applicable style definition.</p>
+
+<p>Transitions are really great for single page applications - as I switch contexts in my application, I move my DOM elements around or I gradually hide them from view. When I get time to release my next homemade application, expect to see lots of little animations. Probably way more animations than necessary - just bear with me.</p>
+
+<p>There are many other CSS animation topics, but I don&rsquo;t quite have the experience to elaborate. <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Using_CSS_transforms">Transforms</a> give you really easy ways to rotate, skew, and translate objects, even allowing for the creation of 3-dimensional CSS objects. The <code>to</code> and <code>from</code> shorthand in <code>@keyframes</code> elements can make reading animations even easier. I may be a little late to the party, but the world created by CSS3 and HTML5 is a much better one for programmers and (hopefully) for end-users.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -646,52 +822,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/01/16/think-like-a-chef/">Think Like a Chef</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-01-16T17:40:45-05:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>5:40 pm</span></time>
-        
-           | <a href="/blog/2015/01/16/think-like-a-chef/#disqus_thread"
-             data-disqus-identifier="https://larry-price.com/blog/2015/01/16/think-like-a-chef/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>The Gist</h3>
-
-<p>Celebrity chef Tom Colicchio&rsquo;s <a href="http://amzn.to/15faZfN">Think Like a Chef</a> is a recipe-book-slash-culinary-theory hybrid. The reader is taken through a series of basic cooking techniques applied to a plethora of ingredients, followed by a focus on several interesting ingredients used in a variety of recipes, climaxing with a series of three ingredients used to create many interesting meals.</p>
-
-<h3>My Opinion</h3>
-
-<p>This book is designed to not just be about recipes, but instead about taking techniques and ingredients and demonstrating unique and interesting ways to think about them. I&rsquo;ve always liked to think that cooking and software engineering have a lot in common. Chefs and programmers have to juggle whole systems of information in their heads at once to solve the problem at hand. Chefs and programmers follow instructions until it no longer benefits them, at which point they make substitutions to create novel solutions. Chefs and programmers tend to dress a bit strange compared to the average businessman. Not to mention we both have to wear hair nets.</p>
-
-<p>I like to cook. I like to think about how I can create different dishes, how I can utilize aging pantry or freezer items, and how I can perfect spice combinations to build restaurant-quality meals. And I like to eat. So I thought I would like this book. Personally, I found the author to be distractingly arrogant and the book design to be irritatingly repetitive. Although not designed as a simple recipe book, I would have been better served using it as such. However, were I to use this as a recipe book, I would have a lot of issues finding many of the exotic ingredients called for in the middle of Indiana, to say nothing of how expensive all his favorite ingredients are.</p>
-
-<p>The pieces of this book that I really enjoyed were the prose on using one&rsquo;s intuition to substitute ingredients, spices, and cooking styles as appropriate; these seemed like the more intellectual parts of the book that I could actually relate to. As a software engineer, I&rsquo;m often working on a problem that seems like it can be solved by following the standard recipe, but actually requires a level of clever substitution to build it into a new idea entirely. As a home cook, I make a substitution in nearly every recipe I find; sometimes it works, sometimes it doesn&rsquo;t. I would have enjoyed this book much more thoroughly had the focus actually been on intuitive cooking instead of fanciful recipes.</p>
-
-<h3>Who Would Like This</h3>
-
-<p>Are you about to make a lavish dinner to impress house guests? You could probably find some pretty good (and descriptive) recipes in this book. However, I heard of this thing called the internet that has many more recipes and descriptions of cooking styles as well. If you like beautiful pictures of food, you may also eat this book up (though hopefully not literally). If you happen to be a fan of this celebrity clown, maybe you&rsquo;d enjoy his cavalier writing style more than I did.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/11">&larr; Older</a>
@@ -735,6 +865,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2018/10/27/notes-from-all-things-open-2018/">Notes From All Things Open 2018</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2018/06/27/how-to-use-getderivedstatefromprops-in-react-16-dot-3-plus/">How to Use getDerivedStateFromProps in React 16.3+</a>
       </li>
     
@@ -748,10 +882,6 @@
     
       <li class="post">
         <a href="/blog/2018/02/02/async-and-await-a-new-promise/">Async and Await - a New Promise</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2017/09/14/promise-youll-call-back/">Promise You'll Call Back: A Guide to the Javascript Promise Class</a>
       </li>
     
   </ul>

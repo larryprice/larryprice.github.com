@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="Or rather, &ldquo;Not Using sqlite on Heroku.&rdquo; Heroku does not support sqlite. That doesn&rsquo;t mean we have to stop using sqlite in &hellip;">
+  <meta name="description" content="If you cannot fail, you cannot learn. The Gist The Lean Startup by Eric Ries explains how Lean methodlogies are not only meaningful for startups, but &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,58 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/04/the-lean-startup/">The Lean Startup</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-04-04T21:22:02-04:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>9:22 pm</span></time>
+        
+           | <a href="/blog/2014/04/04/the-lean-startup/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2014/04/04/the-lean-startup/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p>If you cannot fail, you cannot learn.</p></blockquote>
+
+<h3>The Gist</h3>
+
+<p><a href="http://ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&amp;Operation=GetAdHtml&amp;ID=OneJS&amp;OneJS=1&amp;source=ac&amp;ref=qf_sp_asin_til&amp;ad_type=product_link&amp;tracking_id=larpriandthee-20&amp;marketplace=amazon&amp;region=US&amp;placement=0307887898&amp;asins=0307887898&amp;show_border=true&amp;link_opens_in_new_window=true&amp;MarketPlace=US"><em>The Lean Startup</em></a> by Eric Ries explains how Lean methodlogies are not only meaningful for startups, but can also be used to create innovation within large organizations.</p>
+
+<h3>What I Think</h3>
+
+<p>If I had a nickel for every time the word &ldquo;entrepreneur&rdquo; showed up in this book&hellip;</p>
+
+<p>Besides that, this book is highly insightful with many great examples of companies, small and large, that have built great products using Lean processes.</p>
+
+<p>Part of what makes this book readable is the credibility of the author, a founder of several startups who has seen failure and success. I wasn&rsquo;t convinced that I would enjoy this book until I read Eric&rsquo;s story about IMVU&rsquo;s initial failures and how those failures were overcome. I won&rsquo;t spoil too much for anyone currently reading the book, but IMVU does eventually figure out what customers want, thanks in no small part to rethinking the way that the company develops software.</p>
+
+<p>The majority of this book focuses on creating a minimal viable product. Creating an MVP is difficult from a developer&rsquo;s perspective, and the author touches on this quite a bit. Developers don&rsquo;t like to release products that may contain bugs or may not contain all the &ldquo;essential&rdquo; features, but an MVP is not about feature-completeness, it&rsquo;s about getting the product to users as quickly as possible to accelerate the &ldquo;build-measure-learn&rdquo; process.</p>
+
+<p>Once again, I&rsquo;d like to stress that the real-world experiences described in this book are what makes it so convincing. Stories about IMVU, Intuit, and Toyota makes these concepts seem obtainable for a company of any size.</p>
+
+<h3>Who Should Read This</h3>
+
+<p>You should read this if you&rsquo;re not sure how to get your company thinking about Lean processes. You should also read this if you want to eliminate waste on your project and learn how to get the most out of customer feedback. Open mind required to teach old dogs new tricks.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -422,164 +474,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/03/20/using-the-trello-api-in-ruby/">Using the Trello API in Ruby</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-03-20T19:37:36-04:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>7:37 pm</span></time>
-        
-           | <a href="/blog/2014/03/20/using-the-trello-api-in-ruby/#disqus_thread"
-             data-disqus-identifier="https://larry-price.com/blog/2014/03/20/using-the-trello-api-in-ruby/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>So, you want to gather data using the <a href="//trello.com">Trello</a> API so that you can <a href="//ollert.herokuapp.com">do something cool with it</a>? And you&rsquo;re using <a href="//ruby-lang.org">Ruby</a>? Enter <a href="//github.com/jeremytregunna/ruby-trello">ruby-trello</a>. Install!</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>gem install ruby-trello
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We&rsquo;ll start off easy, and assume that we&rsquo;re writing a personal application where we only need to access data for one user at a time. We start by configuring ruby-trello. I&rsquo;m going to assume that you&rsquo;ve already generated a public key and received a member token and stored them in your environment.</p>
-
-<figure class='code'><figcaption><span>global_config_test.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;trello&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">Trello</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
-</span><span class='line'>  <span class="c1"># API key generated by visiting https://trello.com/1/appKey/generate</span>
-</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">developer_public_key</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;PUBLIC_KEY&#39;</span><span class="o">]</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Member token</span>
-</span><span class='line'>  <span class="c1"># larry-price.com/blog/2014/03/18/connecting-to-the-trello-api/</span>
-</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">member_token</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;MEMBER_TOKEN&#39;</span><span class="o">]</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This connects me to a specific member as found through <code>ENV['MEMBER_TOKEN']</code>. I previously wrote <a href="/blog/2014/03/18/connecting-to-the-trello-api/">another post</a> about getting a member token from a user.</p>
-
-<p>For demonstration, I&rsquo;ll find myself, grab my first board, and then display the name, names of lists, members who have worked on the project, and some numbers about each of the cards in the board. This is essentially my proof of concept for a <a href="/blog/2014/03/17/sep-startup-weekend-ollert/">super-cool web-app I wrote</a> called <a href="//ollert.herokuapp.com">Ollert</a>.</p>
-
-<figure class='code'><figcaption><span>global_config_test.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># find myself</span>
-</span><span class='line'><span class="n">me</span> <span class="o">=</span> <span class="no">Trello</span><span class="o">::</span><span class="no">Member</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_larryprice&quot;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># find first board</span>
-</span><span class='line'><span class="n">board</span> <span class="o">=</span> <span class="n">me</span><span class="o">.</span><span class="n">boards</span><span class="o">.</span><span class="n">first</span>
-</span><span class='line'><span class="nb">puts</span> <span class="n">board</span><span class="o">.</span><span class="n">name</span>
-</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;Lists: </span><span class="si">#{</span><span class="n">board</span><span class="o">.</span><span class="n">lists</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.join(&#39;, &#39;)}&quot;</span>
-</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;Members: </span><span class="si">#{</span><span class="n">board</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">.</span><span class="n">full_name</span><span class="si">}</span><span class="s2">.join(&#39;, &#39;)}&quot;</span>
-</span><span class='line'><span class="n">board</span><span class="o">.</span><span class="n">cards</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">card</span><span class="o">|</span>
-</span><span class='line'>      <span class="nb">puts</span> <span class="s2">&quot;- </span><span class="se">\&quot;</span><span class="si">#{</span><span class="n">card</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span>
-</span><span class='line'>      <span class="nb">puts</span> <span class="s2">&quot;-- Actions: </span><span class="si">#{</span><span class="n">card</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">nil?</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="n">card</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>      <span class="nb">puts</span> <span class="s2">&quot;-- Members: </span><span class="si">#{</span><span class="n">card</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>      <span class="nb">puts</span> <span class="s2">&quot;-- Labels: </span><span class="si">#{</span><span class="n">card</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Wow, cool! Such data! This is really great for a single user because we only have to make the connection to Trello once (which is not incredibly fast). However, this won&rsquo;t work in a multi-user environment since we configured ruby-trello to use a specific member token. So how do we connect to multiple members at a time? Let&rsquo;s print out the same data we did above for a single user, but using <code>Trello::Client</code> to connect to Trello.</p>
-
-<figure class='code'><figcaption><span>client_test.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;trello&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">me</span> <span class="o">=</span> <span class="no">Trello</span><span class="o">::</span><span class="no">Client</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
-</span><span class='line'>  <span class="ss">:developer_public_key</span> <span class="o">=&gt;</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;PUBLIC_KEY&#39;</span><span class="o">]</span><span class="p">,</span>
-</span><span class='line'>  <span class="ss">:member_token</span> <span class="o">=&gt;</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;MY_MEMBER_TOKEN&#39;</span><span class="o">]</span>
-</span><span class='line'><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">you</span> <span class="o">=</span> <span class="no">Trello</span><span class="o">::</span><span class="no">Client</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
-</span><span class='line'>  <span class="ss">:developer_public_key</span> <span class="o">=&gt;</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;PUBLIC_KEY&#39;</span><span class="o">]</span><span class="p">,</span>
-</span><span class='line'>  <span class="ss">:member_token</span> <span class="o">=&gt;</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;YOUR_MEMBER_TOKEN&#39;</span><span class="o">]</span>
-</span><span class='line'><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">[</span><span class="n">me</span><span class="p">,</span> <span class="n">you</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">user</span><span class="o">|</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="n">user</span><span class="o">.</span><span class="n">fullname</span>
-</span><span class='line'>  <span class="n">board</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">boards</span><span class="o">.</span><span class="n">first</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="n">board</span><span class="o">.</span><span class="n">name</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;Lists: </span><span class="si">#{</span><span class="n">board</span><span class="o">.</span><span class="n">lists</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.join(&#39;, &#39;)}&quot;</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;Members: </span><span class="si">#{</span><span class="n">board</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">.</span><span class="n">full_name</span><span class="si">}</span><span class="s2">.join(&#39;, &#39;)}&quot;</span>
-</span><span class='line'>  <span class="n">board</span><span class="o">.</span><span class="n">cards</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">card</span><span class="o">|</span>
-</span><span class='line'>        <span class="nb">puts</span> <span class="s2">&quot;- </span><span class="se">\&quot;</span><span class="si">#{</span><span class="n">card</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span>
-</span><span class='line'>        <span class="nb">puts</span> <span class="s2">&quot;-- Actions: </span><span class="si">#{</span><span class="n">card</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">nil?</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="n">card</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>        <span class="nb">puts</span> <span class="s2">&quot;-- Members: </span><span class="si">#{</span><span class="n">card</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>        <span class="nb">puts</span> <span class="s2">&quot;-- Labels: </span><span class="si">#{</span><span class="n">card</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now, as your friend and teacher, I command you to use this knowledge to go <a href="//ollert.herokuapp.com">do cool stuff</a> with Trello!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/17">&larr; Older</a>
@@ -623,6 +517,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2018/10/27/notes-from-all-things-open-2018/">Notes From All Things Open 2018</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2018/06/27/how-to-use-getderivedstatefromprops-in-react-16-dot-3-plus/">How to Use getDerivedStateFromProps in React 16.3+</a>
       </li>
     
@@ -636,10 +534,6 @@
     
       <li class="post">
         <a href="/blog/2018/02/02/async-and-await-a-new-promise/">Async and Await - a New Promise</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2017/09/14/promise-youll-call-back/">Promise You'll Call Back: A Guide to the Javascript Promise Class</a>
       </li>
     
   </ul>
