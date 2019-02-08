@@ -3,7 +3,7 @@ layout: post
 title: "How to Use getDerivedStateFromProps in React 16.3+"
 date: 2018-06-27 15:12:09 -0500
 comments: true
-categories: react javascript
+categories: reactjs javascript
 ---
 
 From [a blog post in late March 2018](https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html), it was announced that the React lifecycle methods `componentWillReceiveProps`, `componentWillMount`, and `componentWillUpdate` will be deprecated in a future version of React. This is because of the eventual migration of React to async rendering; these lifecycle methods will become unreliable when async rendering is made default.
