@@ -4,7 +4,7 @@
   <title><![CDATA[Category: reactjs | Larry Price]]></title>
   <link href="https://larry-price.com/blog/categories/reactjs/atom.xml" rel="self"/>
   <link href="https://larry-price.com/"/>
-  <updated>2018-10-27T15:58:29-05:00</updated>
+  <updated>2019-02-09T13:14:01-06:00</updated>
   <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,292 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Getting Started with React Hooks]]></title>
+    <link href="https://larry-price.com/blog/2019/02/09/getting-started-with-react-hooks/"/>
+    <updated>2019-02-09T13:10:46-06:00</updated>
+    <id>https://larry-price.com/blog/2019/02/09/getting-started-with-react-hooks</id>
+    <content type="html"><![CDATA[<p><a href="https://reactjs.org/docs/hooks-intro.html">React Hooks</a> are a new feature allowing developers to use state in functional components officially released in <a href="https://reactjs.org/blog/2019/02/06/react-v16.8.0.html">React 16.8</a>. I am in love with the idea of Hooks, so much so that I&rsquo;m giving an introductory talk on the topic at an <a href="https://www.meetup.com/C-U-JavaScript/events/258294308/">upcoming local JavaScript meetup</a>.</p>
+
+<p>All code from this post can be found in a <a href="https://codepen.io/collection/XMoJzy/">codepen collection</a>.</p>
+
+<h3>Functional Components</h3>
+
+<p>A functional component (also sometimes referred to as a &ldquo;stateless&rdquo; component) is a method of defining React components with only a render method. These components still take in readonly props and return some JSX, but until now have had no means to perform any stateful logic. The following is a simple functional component that creates a button for canceling a user&rsquo;s account:</p>
+
+<pre><code class="javascript https://codepen.io/larryprice/pen/BMJYwe">const CancelAccountDeletion = ({onClick}) =&gt; (
+  &lt;button className="btn btn-default btn-lg cancel-account-deletion" onClick={onClick}&gt;
+    &lt;span className="glyphicon glyphicon glyphicon-ban-circle"&gt;&lt;/span&gt;
+    Cancel Account
+  &lt;/button&gt;
+);
+</code></pre>
+
+<p>The component takes in a single prop <code>onClick</code> that is called when the button is clicked.</p>
+
+<h3>Adding Stateful Logic The Old Way</h3>
+
+<p>Let&rsquo;s say that we want to add some stateful logic to that component. Marketing has started complaining that users clicking our current &ldquo;Cancel Account&rdquo; button contribute to a loss of revenue, and we need to slow that loss down to appease investors this quarter. We get design involved and decide to prompt the user several times to confirm their cancellation. We&rsquo;ll need to keep track of the number of clicks and the current prompt in state.</p>
+
+<p>Here&rsquo;s how we might do that on February 5th, 2019, using class components:</p>
+
+<pre><code class="javascript https://codepen.io/larryprice/pen/XOgKYd">const messages = ['Really?', 'Don\'t leave me!', 'OK, fine!'];
+class CancelAccountDeletion extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      buttonText: 'Cancel',
+      clicks: 0,
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.clicks !== this.state.clicks) {
+      if (this.state.clicks &lt; messages.length) {
+        return this.setState((prevState) =&gt; ({
+          buttonText: messages[prevState.clicks],
+        }));
+      }
+
+      return this.props.onClick();
+    }
+  }
+
+  render() {
+    return (
+      &lt;button className="btn btn-default btn-lg cancel-account-deletion"
+          onClick={() =&gt; this.setState((prevState) =&gt; ({
+            clicks: prevState.clicks + 1,
+          }))}&gt;
+        &lt;span className="glyphicon glyphicon glyphicon-ban-circle"&gt;&lt;/span&gt;
+        {this.state.buttonText}
+      &lt;/button&gt;
+    );
+  }
+}
+</code></pre>
+
+<p>Wow! We&rsquo;ve nearly tripled the size of our original component here. In this stateful world, we needed to extend the <code>React.Component</code> class, define a constructor to set our initial state, update our state when the button is clicked, and add the <code>componentDidUpdate</code> lifecycle method. The <code>componentDidUpdate</code> method is called on every re-render, so we first check to see if the number of <code>clicks</code> changed before taking any action. If it did, we check to see if we have more messages than clicks and update the prompt text; otherwise, we call the original <code>onClick</code> function from our props and, unfortunately for our sales goals, churn another user.</p>
+
+<p>This is a lot of boilerplate and has a tendency to get complex really fast. If only there was another way!</p>
+
+<p>&ldquo;Well, actually, Papa Larry,&rdquo; I hear you interjecting from behind your monitor, &ldquo;we could do this without a lifecycle method and only one piece of state.&rdquo; My dear friend. Yes, this code is slightly contrived so that I can show you all the main features of hooks with a fairly straightforward example. Just keep your susurruses to yourself until after the show.</p>
+
+<h3>Adding Stateful Logic the New Way</h3>
+
+<p>This is where Hooks come into play. Let&rsquo;s fast-forward from early evening in the American Midwest on February 5th, 2019, to late evening, when suddenly React 16.8 was released and it was officially titled &ldquo;The One With Hooks.&rdquo;</p>
+
+<p>Let&rsquo;s take our original functional component and add state with Hooks:</p>
+
+<pre><code class="javascript https://codepen.io/larryprice/pen/vbgwGx">const messages = ['Cancel', 'Really?', 'Don\'t leave me!', 'OK, fine!'];
+const CancelAccountDeletion = ({onClick}) =&gt; {
+  const [clicks, setClicks] = useState(0);
+  const [buttonText, setButtonText] = useState();
+
+  useEffect(() =&gt; {
+    if (clicks &lt; messages.length) {
+      return setButtonText(messages[clicks]);
+    }
+    return onClick();
+  }, [clicks]);
+
+  return (
+    &lt;button onClick={() =&gt; setClicks(clicks+1)}
+        className="btn btn-default btn-lg cancel-account-deletion"&gt;
+      &lt;span className="glyphicon glyphicon glyphicon-ban-circle"&gt;&lt;/span&gt;
+      {buttonText}
+    &lt;/button&gt;
+  );
+};
+</code></pre>
+
+<p>Our Hooks implementation is about half as long as our class implementation. I would argue that it&rsquo;s also significantly easier to read. Let&rsquo;s break this down bit-by-bit to discuss each piece of the hooks API:</p>
+
+<pre><code class="javascript">const [clicks, setClicks] = useState(0);
+const [buttonText, setButtonText] = useState();
+</code></pre>
+
+<p>At the top of our function, we call the <code>useState</code> method to declare two state variables: <code>clicks</code> and <code>buttonText</code>. <code>useState</code> takes in an initial value and returns a state variable and setter method, which we access locally using array destructuring. In this case, we set the initial state of <code>clicks</code> to <code>0</code> and leave <code>buttonText</code> empty.</p>
+
+<p>Behind-the-scenes, React is using our component&rsquo;s scope to create and track these state variables. We <em>must</em> always define these variables in the same order when this function is executed, or we&rsquo;ll get our variables all mixed up and our logic won&rsquo;t make any sense.</p>
+
+<pre><code class="javascript">useEffect(() =&gt; {
+  if (clicks &lt; messages.length) {
+    return setButtonText(messages[clicks]);
+  }
+  return onClick();
+}, [clicks]);
+</code></pre>
+
+<p>The <code>useEffect</code> method is essentially a replacement for the <code>componentDidMount</code> and <code>componentDidUpdate</code> lifecycle methods. It takes in a function that will be called after every render. Here we take advantage of closures to test the value of our <code>clicks</code> state variable and use <code>setButtonText</code> to update our <code>buttonText</code> state variable. The second argument to <code>useEffect</code> is an array of state variables to check - if none of the given state variables were changed, the effect will be skipped.</p>
+
+<p>We can call <code>useEffect</code> as many times as we want in our component. This allows us to create a clear separation of concerns if we need to define several different effects.</p>
+
+<pre><code class="javascript">return (
+  &lt;button onClick={() =&gt; setClicks(clicks+1)}
+      className="btn btn-default btn-lg cancel-account-deletion"&gt;
+    &lt;span className="glyphicon glyphicon glyphicon-ban-circle"&gt;&lt;/span&gt;
+    {buttonText}
+  &lt;/button&gt;
+);
+</code></pre>
+
+<p>This is our same old render logic, but in this case we&rsquo;re using the <code>setClicks</code> function returned to us by <code>useState</code>.</p>
+
+<h3>Custom Hooks</h3>
+
+<p>Design and marketing like this concept of delaying an action and just changing the text so much that they want to use it all over the site. Now we have stateful logic that needs to be reused. This is where the concept of &ldquo;Custom Hooks&rdquo; comes in:</p>
+
+<pre><code class="javascript https://codepen.io/larryprice/pen/GzENrZ">const useTextByCount = (count, messages, onFinished) =&gt; {
+  const [text, setText] = useState(messages[0]);
+
+  useEffect(() =&gt; {
+    if (count &lt; messages.length) {
+      return setText(messages[count]);
+    }
+    return onFinished();
+  }, [count]);
+
+  return text;
+};
+
+const messages = ['Cancel', 'Really?', 'Don\'t leave me!', 'OK, fine!']
+const CancelAccountDeletion = ({onClick}) =&gt; {
+  const [clicks, setClicks] = useState(0);
+  const buttonText = useTextByCount(clicks, messages, onClick);
+
+  return (
+    &lt;button onClick={() =&gt; setClicks(clicks+1)}
+        className="btn btn-default btn-lg cancel-account-deletion"&gt;
+      &lt;span className="glyphicon glyphicon glyphicon-ban-circle"&gt;&lt;/span&gt;
+      {buttonText}
+    &lt;/button&gt;
+  )
+};
+</code></pre>
+
+<p>Here I&rsquo;ve created my own hook called <code>useTextByCount</code> that abstracts away the entire concept of the <code>buttonText</code> state variable. We can use this custom hook in any functional component. Abstracting stateful logic is a tall task in class components, but it&rsquo;s completely natural using Hooks.</p>
+
+<h3>Conclusion</h3>
+
+<p>Hooks are the result of the React maintainers responding to the way React developers want to write code, enabling us to use powerful stateful concepts in a cleaner, functional system. This is a natural next step for the React API, but it&rsquo;s not going to deprecate all your class components. Hooks are completely optional and backwards compatible with current React concepts, so there&rsquo;s no need to make a Jira ticket to refactor all your components tomorrow morning. Hooks are here to help you write new components faster and better, giving you new options when you need to start adding state to that simple button component.</p>
+
+<p>Check out the <a href="https://reactjs.org/docs/hooks-intro.html">Hooks Guide</a> and the <a href="https://reactjs.org/docs/hooks-rules.html">Rules of Hooks</a> for more information.</p>
+
+<p>Happy hooking!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How to Use getDerivedStateFromProps in React 16.3+]]></title>
+    <link href="https://larry-price.com/blog/2018/06/27/how-to-use-getderivedstatefromprops-in-react-16-dot-3-plus/"/>
+    <updated>2018-06-27T15:12:09-05:00</updated>
+    <id>https://larry-price.com/blog/2018/06/27/how-to-use-getderivedstatefromprops-in-react-16-dot-3-plus</id>
+    <content type="html"><![CDATA[<p>From <a href="https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html">a blog post in late March 2018</a>, it was announced that the React lifecycle methods <code>componentWillReceiveProps</code>, <code>componentWillMount</code>, and <code>componentWillUpdate</code> will be deprecated in a future version of React. This is because of the eventual migration of React to async rendering; these lifecycle methods will become unreliable when async rendering is made default.</p>
+
+<p>In place of these methods, the new <strong>static</strong> method <code>getDerivedStateFromProps</code> was introduced. My team and I struggled at first in wrapping our heads around how to migrate our many uses of <code>componentWillReceiveProps</code> to this new method. It&rsquo;s generally easier than you think, but you need to keep in mind that the new method is <strong>static</strong>, and therefore does not have access to the <code>this</code> context that the old lifecycle methods provided.</p>
+
+<p><code>getDerivedStateFromProps</code> is invoked every time a component is rendered. It takes in two arguments: the next <code>props</code> object (which may be the same as the previous object) and the previous <code>state</code> object of the component in question. When implementing this method, we need to return the changes to our component <code>state</code> or <code>null</code> (or <code>{}</code>) if no changes need to be made.</p>
+
+<h3>componentWillReceiveProps</h3>
+
+<p>Here&rsquo;s a pattern we were using in many components throughout our codebase:</p>
+
+<pre><code class="javascript">componentWillReceiveProps(nextProps) {
+  if (nextProps.selectedTab !== this.state.selectedTab) {
+    this.setState(() =&gt; { return {selectedTab: nextProps.selectedTab} })
+  }
+}
+</code></pre>
+
+<p>This lifecycle method fired when we were about to receive new <code>props</code> in our component, passing in the new value as the first argument. We needed to check whether the new <code>props</code> indicated a change in the state of our tab bar, which we stored in <code>state</code>. This is one of the simplest patterns to address with <code>getDerivedStateFromProps</code>:</p>
+
+<pre><code class="javascript">static getDerivedStateFromProps(nextProps, prevState) {
+  return nextProps.selectedTab === prevState.selectedTab
+    ? {}
+    : {selectedTab: nextProps.selectedTab}
+}
+</code></pre>
+
+<p>This code works in exactly the same way, but, since it&rsquo;s <strong>static</strong>, we no longer use the context provided by <code>this</code>. Instead, we return any state changes. In this case, I&rsquo;ve returned an empty object (<code>{}</code>) to indicate no state change when the tabs are identical; otherwise, I return an object with the new <code>selectedTab</code> value.</p>
+
+<p>Sometimes you may have to perform some operations on the new <code>props</code>, but then you can still just compare the result to your previous state to figure out if anything changed. There may be other areas where you need to store some extra state duplicating your old <code>props</code> to make this work, but that may also be an indication that you need to use an alternative method.</p>
+
+<h3>componentWillMount</h3>
+
+<p>We also needed to replace calls to <code>componentWillMount</code>. I found that these calls were usually directly replaceable by <code>componentDidMount</code>, which will allow your component to perform an initial render and then execute blocking tasks. This may also require adding some loading-style capacity to your component, but will be better than a hanging app.</p>
+
+<p>Here&rsquo;s an example of a <code>componentWillMount</code> we had originally that blocked render until after an API call was made:</p>
+
+<pre><code class="javascript">componentWillMount() {
+  this.setState(() =&gt; {
+    return {
+      loading: 'Loading tool info'
+    }
+  })
+  return getTool(this.props.match.params.id).then((res) =&gt; {
+    this.setState(() =&gt; {
+      return {
+        tool: res,
+        loading: null
+      }
+    })
+  }).catch((err) =&gt; {
+    api.errors.put(err)
+    this.setState(() =&gt; {
+      return {
+        loading: null
+      }
+    })
+  })
+}
+</code></pre>
+
+<p>Afterwards, I changed the state to show the component as loading on initial render and replaced the <code>componentWillMount</code> with <code>componentDidMount</code>:</p>
+
+<pre><code class="javascript">state = {
+  tool: null,
+  loading: 'Loading tool info'
+}
+
+componentDidMount() {
+  return getTool(this.props.match.params.id).then((res) =&gt; {
+    this.setState(() =&gt; { return {tool: res, loading: null} })
+  }).catch((err) =&gt; {
+    api.errors.put(err)
+    this.setState(() =&gt; { return {loading: null} })
+  })
+}
+</code></pre>
+
+<h3>componentWillUpdate</h3>
+
+<p>Very similar to the methods discussed above, <code>componentWillUpdate</code> is invoked when a component is about to receive new props and the <code>render</code> method is definitely going to be called. Here&rsquo;s an example of something we were doing previously:</p>
+
+<pre><code class="javascript">componentWillUpdate(nextProps) {
+  if (!nextProps.user.isLogged &amp;&amp; !nextProps.user.authenticating) {
+    this.context.router.history.push('/')
+  }
+}
+</code></pre>
+
+<p>And, replacing that usage with <code>componentDidUpdate</code>:</p>
+
+<pre><code class="javascript">componentDidUpdate(/*prevProps, prevState*/) {
+  if (!this.props.user.isLogged &amp;&amp; !this.props.user.authenticating) {
+    this.context.router.history.push('/')
+  }
+}
+</code></pre>
+
+<p><code>componentDidUpdate</code> is similar to <code>componentDidMount</code> except that is caused after a change in state or props occurs instead of just on initial mount. As opposed to <code>getDerivedStateFromProps</code>, we have access to the context provided by <code>this</code>. Note that this method also has arguments for <code>prevProps</code> and <code>prevState</code>, which provides the previous versions of the component&rsquo;s <code>props</code> and <code>state</code> for comparison to the current values.</p>
+
+<h3>Conclusion</h3>
+
+<p>The deprecation of these lifecycle methods won&rsquo;t happen until React 17, but it&rsquo;s always good to plan ahead. Many of the ways my team was using these deprecated methods could be considered an anti-pattern, and I suspect that your team may be in the same predicament.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How To ReactJS]]></title>

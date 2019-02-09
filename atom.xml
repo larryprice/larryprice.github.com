@@ -4,7 +4,7 @@
   <title><![CDATA[Larry Price]]></title>
   <link href="https://larry-price.com/atom.xml" rel="self"/>
   <link href="https://larry-price.com/"/>
-  <updated>2018-10-27T15:58:29-05:00</updated>
+  <updated>2019-02-09T13:14:01-06:00</updated>
   <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,290 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Getting Started With React Hooks]]></title>
+    <link href="https://larry-price.com/blog/2019/02/09/getting-started-with-react-hooks/"/>
+    <updated>2019-02-09T13:10:46-06:00</updated>
+    <id>https://larry-price.com/blog/2019/02/09/getting-started-with-react-hooks</id>
+    <content type="html"><![CDATA[<p><a href="https://reactjs.org/docs/hooks-intro.html">React Hooks</a> are a new feature allowing developers to use state in functional components officially released in <a href="https://reactjs.org/blog/2019/02/06/react-v16.8.0.html">React 16.8</a>. I am in love with the idea of Hooks, so much so that I&rsquo;m giving an introductory talk on the topic at an <a href="https://www.meetup.com/C-U-JavaScript/events/258294308/">upcoming local JavaScript meetup</a>.</p>
+
+<p>All code from this post can be found in a <a href="https://codepen.io/collection/XMoJzy/">codepen collection</a>.</p>
+
+<h3>Functional Components</h3>
+
+<p>A functional component (also sometimes referred to as a &ldquo;stateless&rdquo; component) is a method of defining React components with only a render method. These components still take in readonly props and return some JSX, but until now have had no means to perform any stateful logic. The following is a simple functional component that creates a button for canceling a user&rsquo;s account:</p>
+
+<figure class='code'><figcaption><span>https://codepen.io/larryprice/pen/BMJYwe</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">const</span> <span class="nx">CancelAccountDeletion</span> <span class="o">=</span> <span class="p">({</span><span class="nx">onClick</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="p">(</span>
+</span><span class='line'>  <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;btn btn-default btn-lg cancel-account-deletion&quot;</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="nx">onClick</span><span class="p">}</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="nx">span</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;glyphicon glyphicon glyphicon-ban-circle&quot;</span><span class="o">&gt;&lt;</span><span class="err">/span&gt;</span>
+</span><span class='line'>    <span class="nx">Cancel</span> <span class="nx">Account</span>
+</span><span class='line'>  <span class="o">&lt;</span><span class="err">/button&gt;</span>
+</span><span class='line'><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The component takes in a single prop <code>onClick</code> that is called when the button is clicked.</p>
+
+<h3>Adding Stateful Logic The Old Way</h3>
+
+<p>Let&rsquo;s say that we want to add some stateful logic to that component. Marketing has started complaining that users clicking our current &ldquo;Cancel Account&rdquo; button contribute to a loss of revenue, and we need to slow that loss down to appease investors this quarter. We get design involved and decide to prompt the user several times to confirm their cancellation. We&rsquo;ll need to keep track of the number of clicks and the current prompt in state.</p>
+
+<p>Here&rsquo;s how we might do that on February 5th, 2019, using class components:</p>
+
+<figure class='code'><figcaption><span>https://codepen.io/larryprice/pen/XOgKYd</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">const</span> <span class="nx">messages</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Really?&#39;</span><span class="p">,</span> <span class="s1">&#39;Don\&#39;t leave me!&#39;</span><span class="p">,</span> <span class="s1">&#39;OK, fine!&#39;</span><span class="p">];</span>
+</span><span class='line'><span class="kr">class</span> <span class="nx">CancelAccountDeletion</span> <span class="kr">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kr">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">buttonText</span><span class="o">:</span> <span class="s1">&#39;Cancel&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">clicks</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">componentDidUpdate</span><span class="p">(</span><span class="nx">prevProps</span><span class="p">,</span> <span class="nx">prevState</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">prevState</span><span class="p">.</span><span class="nx">clicks</span> <span class="o">!==</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">clicks</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">clicks</span> <span class="o">&lt;</span> <span class="nx">messages</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">((</span><span class="nx">prevState</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">({</span>
+</span><span class='line'>          <span class="nx">buttonText</span><span class="o">:</span> <span class="nx">messages</span><span class="p">[</span><span class="nx">prevState</span><span class="p">.</span><span class="nx">clicks</span><span class="p">],</span>
+</span><span class='line'>        <span class="p">}));</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">onClick</span><span class="p">();</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">(</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;btn btn-default btn-lg cancel-account-deletion&quot;</span>
+</span><span class='line'>          <span class="nx">onClick</span><span class="o">=</span><span class="p">{()</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">((</span><span class="nx">prevState</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">({</span>
+</span><span class='line'>            <span class="nx">clicks</span><span class="o">:</span> <span class="nx">prevState</span><span class="p">.</span><span class="nx">clicks</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>          <span class="p">}))}</span><span class="o">&gt;</span>
+</span><span class='line'>        <span class="o">&lt;</span><span class="nx">span</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;glyphicon glyphicon glyphicon-ban-circle&quot;</span><span class="o">&gt;&lt;</span><span class="err">/span&gt;</span>
+</span><span class='line'>        <span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">buttonText</span><span class="p">}</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="err">/button&gt;</span>
+</span><span class='line'>    <span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Wow! We&rsquo;ve nearly tripled the size of our original component here. In this stateful world, we needed to extend the <code>React.Component</code> class, define a constructor to set our initial state, update our state when the button is clicked, and add the <code>componentDidUpdate</code> lifecycle method. The <code>componentDidUpdate</code> method is called on every re-render, so we first check to see if the number of <code>clicks</code> changed before taking any action. If it did, we check to see if we have more messages than clicks and update the prompt text; otherwise, we call the original <code>onClick</code> function from our props and, unfortunately for our sales goals, churn another user.</p>
+
+<p>This is a lot of boilerplate and has a tendency to get complex really fast. If only there was another way!</p>
+
+<p>&ldquo;Well, actually, Papa Larry,&rdquo; I hear you interjecting from behind your monitor, &ldquo;we could do this without a lifecycle method and only one piece of state.&rdquo; My dear friend. Yes, this code is slightly contrived so that I can show you all the main features of hooks with a fairly straightforward example. Just keep your susurruses to yourself until after the show.</p>
+
+<h3>Adding Stateful Logic the New Way</h3>
+
+<p>This is where Hooks come into play. Let&rsquo;s fast-forward from early evening in the American Midwest on February 5th, 2019, to late evening, when suddenly React 16.8 was released and it was officially titled &ldquo;The One With Hooks.&rdquo;</p>
+
+<p>Let&rsquo;s take our original functional component and add state with Hooks:</p>
+
+<figure class='code'><figcaption><span>https://codepen.io/larryprice/pen/vbgwGx</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">const</span> <span class="nx">messages</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Cancel&#39;</span><span class="p">,</span> <span class="s1">&#39;Really?&#39;</span><span class="p">,</span> <span class="s1">&#39;Don\&#39;t leave me!&#39;</span><span class="p">,</span> <span class="s1">&#39;OK, fine!&#39;</span><span class="p">];</span>
+</span><span class='line'><span class="kr">const</span> <span class="nx">CancelAccountDeletion</span> <span class="o">=</span> <span class="p">({</span><span class="nx">onClick</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kr">const</span> <span class="p">[</span><span class="nx">clicks</span><span class="p">,</span> <span class="nx">setClicks</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>  <span class="kr">const</span> <span class="p">[</span><span class="nx">buttonText</span><span class="p">,</span> <span class="nx">setButtonText</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">useEffect</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">clicks</span> <span class="o">&lt;</span> <span class="nx">messages</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nx">setButtonText</span><span class="p">(</span><span class="nx">messages</span><span class="p">[</span><span class="nx">clicks</span><span class="p">]);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">onClick</span><span class="p">();</span>
+</span><span class='line'>  <span class="p">},</span> <span class="p">[</span><span class="nx">clicks</span><span class="p">]);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="p">(</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{()</span> <span class="o">=&gt;</span> <span class="nx">setClicks</span><span class="p">(</span><span class="nx">clicks</span><span class="o">+</span><span class="mi">1</span><span class="p">)}</span>
+</span><span class='line'>        <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;btn btn-default btn-lg cancel-account-deletion&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="nx">span</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;glyphicon glyphicon glyphicon-ban-circle&quot;</span><span class="o">&gt;&lt;</span><span class="err">/span&gt;</span>
+</span><span class='line'>      <span class="p">{</span><span class="nx">buttonText</span><span class="p">}</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="err">/button&gt;</span>
+</span><span class='line'>  <span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Our Hooks implementation is about half as long as our class implementation. I would argue that it&rsquo;s also significantly easier to read. Let&rsquo;s break this down bit-by-bit to discuss each piece of the hooks API:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">const</span> <span class="p">[</span><span class="nx">clicks</span><span class="p">,</span> <span class="nx">setClicks</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="kr">const</span> <span class="p">[</span><span class="nx">buttonText</span><span class="p">,</span> <span class="nx">setButtonText</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>At the top of our function, we call the <code>useState</code> method to declare two state variables: <code>clicks</code> and <code>buttonText</code>. <code>useState</code> takes in an initial value and returns a state variable and setter method, which we access locally using array destructuring. In this case, we set the initial state of <code>clicks</code> to <code>0</code> and leave <code>buttonText</code> empty.</p>
+
+<p>Behind-the-scenes, React is using our component&rsquo;s scope to create and track these state variables. We <em>must</em> always define these variables in the same order when this function is executed, or we&rsquo;ll get our variables all mixed up and our logic won&rsquo;t make any sense.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">useEffect</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">clicks</span> <span class="o">&lt;</span> <span class="nx">messages</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">setButtonText</span><span class="p">(</span><span class="nx">messages</span><span class="p">[</span><span class="nx">clicks</span><span class="p">]);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">onClick</span><span class="p">();</span>
+</span><span class='line'><span class="p">},</span> <span class="p">[</span><span class="nx">clicks</span><span class="p">]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>useEffect</code> method is essentially a replacement for the <code>componentDidMount</code> and <code>componentDidUpdate</code> lifecycle methods. It takes in a function that will be called after every render. Here we take advantage of closures to test the value of our <code>clicks</code> state variable and use <code>setButtonText</code> to update our <code>buttonText</code> state variable. The second argument to <code>useEffect</code> is an array of state variables to check - if none of the given state variables were changed, the effect will be skipped.</p>
+
+<p>We can call <code>useEffect</code> as many times as we want in our component. This allows us to create a clear separation of concerns if we need to define several different effects.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="k">return</span> <span class="p">(</span>
+</span><span class='line'>  <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{()</span> <span class="o">=&gt;</span> <span class="nx">setClicks</span><span class="p">(</span><span class="nx">clicks</span><span class="o">+</span><span class="mi">1</span><span class="p">)}</span>
+</span><span class='line'>      <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;btn btn-default btn-lg cancel-account-deletion&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="nx">span</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;glyphicon glyphicon glyphicon-ban-circle&quot;</span><span class="o">&gt;&lt;</span><span class="err">/span&gt;</span>
+</span><span class='line'>    <span class="p">{</span><span class="nx">buttonText</span><span class="p">}</span>
+</span><span class='line'>  <span class="o">&lt;</span><span class="err">/button&gt;</span>
+</span><span class='line'><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is our same old render logic, but in this case we&rsquo;re using the <code>setClicks</code> function returned to us by <code>useState</code>.</p>
+
+<h3>Custom Hooks</h3>
+
+<p>Design and marketing like this concept of delaying an action and just changing the text so much that they want to use it all over the site. Now we have stateful logic that needs to be reused. This is where the concept of &ldquo;Custom Hooks&rdquo; comes in:</p>
+
+<figure class='code'><figcaption><span>https://codepen.io/larryprice/pen/GzENrZ</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">const</span> <span class="nx">useTextByCount</span> <span class="o">=</span> <span class="p">(</span><span class="nx">count</span><span class="p">,</span> <span class="nx">messages</span><span class="p">,</span> <span class="nx">onFinished</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kr">const</span> <span class="p">[</span><span class="nx">text</span><span class="p">,</span> <span class="nx">setText</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">(</span><span class="nx">messages</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">useEffect</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">count</span> <span class="o">&lt;</span> <span class="nx">messages</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nx">setText</span><span class="p">(</span><span class="nx">messages</span><span class="p">[</span><span class="nx">count</span><span class="p">]);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">onFinished</span><span class="p">();</span>
+</span><span class='line'>  <span class="p">},</span> <span class="p">[</span><span class="nx">count</span><span class="p">]);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">text</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">const</span> <span class="nx">messages</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Cancel&#39;</span><span class="p">,</span> <span class="s1">&#39;Really?&#39;</span><span class="p">,</span> <span class="s1">&#39;Don\&#39;t leave me!&#39;</span><span class="p">,</span> <span class="s1">&#39;OK, fine!&#39;</span><span class="p">]</span>
+</span><span class='line'><span class="kr">const</span> <span class="nx">CancelAccountDeletion</span> <span class="o">=</span> <span class="p">({</span><span class="nx">onClick</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kr">const</span> <span class="p">[</span><span class="nx">clicks</span><span class="p">,</span> <span class="nx">setClicks</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>  <span class="kr">const</span> <span class="nx">buttonText</span> <span class="o">=</span> <span class="nx">useTextByCount</span><span class="p">(</span><span class="nx">clicks</span><span class="p">,</span> <span class="nx">messages</span><span class="p">,</span> <span class="nx">onClick</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="p">(</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{()</span> <span class="o">=&gt;</span> <span class="nx">setClicks</span><span class="p">(</span><span class="nx">clicks</span><span class="o">+</span><span class="mi">1</span><span class="p">)}</span>
+</span><span class='line'>        <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;btn btn-default btn-lg cancel-account-deletion&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="nx">span</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&quot;glyphicon glyphicon glyphicon-ban-circle&quot;</span><span class="o">&gt;&lt;</span><span class="err">/span&gt;</span>
+</span><span class='line'>      <span class="p">{</span><span class="nx">buttonText</span><span class="p">}</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="err">/button&gt;</span>
+</span><span class='line'>  <span class="p">)</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here I&rsquo;ve created my own hook called <code>useTextByCount</code> that abstracts away the entire concept of the <code>buttonText</code> state variable. We can use this custom hook in any functional component. Abstracting stateful logic is a tall task in class components, but it&rsquo;s completely natural using Hooks.</p>
+
+<h3>Conclusion</h3>
+
+<p>Hooks are the result of the React maintainers responding to the way React developers want to write code, enabling us to use powerful stateful concepts in a cleaner, functional system. This is a natural next step for the React API, but it&rsquo;s not going to deprecate all your class components. Hooks are completely optional and backwards compatible with current React concepts, so there&rsquo;s no need to make a Jira ticket to refactor all your components tomorrow morning. Hooks are here to help you write new components faster and better, giving you new options when you need to start adding state to that simple button component.</p>
+
+<p>Check out the <a href="https://reactjs.org/docs/hooks-intro.html">Hooks Guide</a> and the <a href="https://reactjs.org/docs/hooks-rules.html">Rules of Hooks</a> for more information.</p>
+
+<p>Happy hooking!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Notes From All Things Open 2018]]></title>
@@ -3091,63 +3375,6 @@
 <p>I&rsquo;ve been toiling away the past few weeks getting a scope ready which can be used explicitly to install/remove X apps in Unity 8, like the current Ubuntu Software Center (or app store on Touch devices). This scope should be available anywhere the libertine scope is available, meaning that it will alleviate a lot of the pain associated with installing/removing apps for a large chunk of users. Using the Libertine GUI or Libertine CLI will still allow for much more customization, but those tools are largely designed with power users in mind.</p>
 
 <p>Are you able to get libertine working on your system? Can you launch X applications to your heart&rsquo;s content? Let me know in the comments!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Going Remote: 4 Months in, Aka Remote Life 4-eva]]></title>
-    <link href="https://larry-price.com/blog/2016/08/04/going-remote-4-months-in/"/>
-    <updated>2016-08-04T20:16:04-04:00</updated>
-    <id>https://larry-price.com/blog/2016/08/04/going-remote-4-months-in</id>
-    <content type="html"><![CDATA[<p><em>This is the third in a series of blog posts detailing my experience acclimating to a fully remote work experience. You may also enjoy my original posts <a href="https://larry-price.com/blog/2016/04/11/going-remote-1-week/">detailing my first week</a> and <a href="https://larry-price.com/blog/2016/05/05/going-remote-1-month-in/">my first month</a>.</em></p>
-
-<p>Has it really been 4 months since I started riding the raging river of remote work? After my first month, I felt pretty good about my daily schedule and work/life balance. Since the last post, I&rsquo;ve met many of my co-workers IRL, learned to find my own work, and figured out how to shake things up when I get in a rut.</p>
-
-<h3>But First, Did I Handle My Action Items?</h3>
-
-<p>During my first month, I struggled to figure out what to work on after finishing a task. At this point, it&rsquo;s extremely rare that I don&rsquo;t have a dozen things in the queue like a pile of papers in an In Box about to topple over. I am happily busy all the time, either pulling things off the top of the stack, plucking things from the middle, or coming up with some new feature that I need to add.</p>
-
-<p>I feel a lot more comfortable on chat. Our IRC channels are a bit daunting at first, especially when there&rsquo;s a lot of action going on. I&rsquo;ve learned some good ways to interject or reach out to the people that I need to talk to.</p>
-
-<p>Oh, and I still haven&rsquo;t gotten a new floormat. Yes, this one&rsquo;s still broken. For some reason, it just doesn&rsquo;t annoy me as much as it used to. It&rsquo;s almost endearing: like a three-legged puppy that I roll my chair across and stand on top of for 8 hours a day.</p>
-
-<h3>Meeting IRL</h3>
-
-<blockquote><p>Why would you guys actually meet IRL? - Elliot, <em>Mr Robot</em></p></blockquote>
-
-<p>I know a bunch of my coworkers by IRC nicks, and I see a few of their faces in a Google Hangout for our daily standup. This has been sufficient for me, but we did something truly magical in June. We met IRL.</p>
-
-<p>The team I&rsquo;m on (~10 people) and our sibling team (~10 people) met in Montréal, Québec, Canada, for about a week, and it was unlike any meeting-of-the-minds I&rsquo;ve ever been to. The engineers were largely from the US and Europe. We all stayed in the hotel downtown and used a small conference room to hang out and work all day, every day. We woke up and ate breakfast together, met in the conference room at 9, had snacks and coffee, ate lunch together, stopped working precisely at 6, and met back in the lobby a few minutes later to go out on the town until 11 or midnight. It&rsquo;s a truly intense social experience, especially for a group of people who spend most of their days only interacting with other humans through IRC, <em>especially</em> for a group of people who only meet twice a year or so.</p>
-
-<p>This coming together allowed us to hash out a lot of our plans for the coming months, but I believe the true victory in this type of event is the camaraderie it creates. It&rsquo;s nice to be able to put faces to nicks, think about the inflection in a person&rsquo;s voice coming out in the way they type, and know exactly who I need to ping on IRC to accomplish certain tasks. It&rsquo;s fun to hang out with people from all over the world, and it&rsquo;s fun to go drinking with your coworkers, a thing I had temporarily forgotten.</p>
-
-<p>I&rsquo;ll note that we also happened to be in Montréal during the 23rd annual Mondial de la Biere, a huge international beer festival that lasted several days. I&rsquo;ll also note that it was fun to try to speak little bits of French in Montréal, and I&rsquo;m really looking forward to wherever the next sprint abroad may take us (most likely Europe in October).</p>
-
-<h3>Finding Work</h3>
-
-<p>With a decentralized company, the issue of finding things to work on for new employees can be tough. Do you give them something small and easy and possibly belittling? Do you give them something massive that will leave them scratching their heads for weeks and completely out of touch with the rest of the company? How can you find a good middle ground here?</p>
-
-<p>I&rsquo;d say I was &ldquo;eased in&rdquo; with smaller tasks into my current project. After the first few tasks were completed, it was often unclear to me where I should go next. There was always a list of bugs - was I the right person to work on them? Was there any other impending feature or unlisted bug that I should start looking into instead? These are hard questions for someone who hasn&rsquo;t been around for very long.</p>
-
-<p>Over time, I gained more and more responsibilities. I needed a bug fixed pronto in another project, so I did it myself and submitted an MP. Oh, you understand this codebase? You can be a maintainer now! Oh, I think I remember from your resume that you have some golang experience. We need this fixed ASAP, using SD cards is completely broken without it!</p>
-
-<p>It&rsquo;s all a slippery slope to having a bottomless bucket of super-interesting things to choose from to do work, perform code reviews, and answer community questions. Yet <em>somehow</em> it&rsquo;s all happened in a way that is not overwhelming, but freeing. When I get stuck on a problem or need a short break from my current project, there&rsquo;s plenty of other work to go around. Which leads me to&hellip;</p>
-
-<h3>Shaking Things Up</h3>
-
-<p>Routine can be helpful, but it can also be terrible. For the parts of May and June that I wasn&rsquo;t traveling, I was largely waking up at the same time, making the same lunch, listening to the same music every day, petting the same cats, and picking up the same kinds of tasks from the backlog. None of this was bad <em>per se</em>, but I found myself getting a tad sluggish. It would be harder to work on menial tasks, and easier to come up with elaborate solutions to simple problems. So what did I do?</p>
-
-<p>I started varying my sleep schedule. Some days I get out of bed at 7, other days I get out of bed at 8:45. Because I work from home, I don&rsquo;t have to worry about fighting traffic or skipping breakfast.</p>
-
-<p>I started varying my lunches. I was making some fun rissotto recipes, but since it&rsquo;s summer I&rsquo;ve been mixing up a bunch of different vegetables into a menagerie of salads: sauteed green tomatoes, onions, and zucchini; cukes and onions; pineapple, succotash, and eggs.</p>
-
-<p>As I&rsquo;ve gained more responsibilities for various projects, I&rsquo;ve been able to branch into different kinds of tasks. After finishing up a big rework of one codebase, I can start jumping into bugs somewhere else. I can dig deep somewhere, and pivot when I&rsquo;m ready to go back. There&rsquo;s always something interesting to work on, and I can see the way different tasks help us towards our end goal. Not to mention I can <em>always</em> do bug hunts.</p>
-
-<h3>Remote Life 4-eva</h3>
-
-<p>It&rsquo;s not just working remotely that makes this possible - it&rsquo;s the people, the culture, and the fun and interesting products we&rsquo;re creating. Maybe I&rsquo;ll start blogging more about those things in the future. I don&rsquo;t have much in this area that I&rsquo;m looking to improve on, so this could be the last post in the series. Maybe I&rsquo;ll do one at the 1-year mark to note any new tricks I&rsquo;ve learned. Until then, keep looking our for other non-diary-entry blog posts.</p>
-
-<p>Looking for advice on working remotely? Not sure if you&rsquo;d like it? Do you have a strong disagreement with me as a person or my lifestyle choices? Hit me up and we can chat!</p>
 ]]></content>
   </entry>
   

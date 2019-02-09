@@ -4,7 +4,7 @@
   <title><![CDATA[Category: react | Larry Price]]></title>
   <link href="https://larry-price.com/blog/categories/react/atom.xml" rel="self"/>
   <link href="https://larry-price.com/"/>
-  <updated>2018-10-27T15:58:29-05:00</updated>
+  <updated>2019-02-09T13:14:01-06:00</updated>
   <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,116 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[How to Use getDerivedStateFromProps in React 16.3+]]></title>
-    <link href="https://larry-price.com/blog/2018/06/27/how-to-use-getderivedstatefromprops-in-react-16-dot-3-plus/"/>
-    <updated>2018-06-27T15:12:09-05:00</updated>
-    <id>https://larry-price.com/blog/2018/06/27/how-to-use-getderivedstatefromprops-in-react-16-dot-3-plus</id>
-    <content type="html"><![CDATA[<p>From <a href="https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html">a blog post in late March 2018</a>, it was announced that the React lifecycle methods <code>componentWillReceiveProps</code>, <code>componentWillMount</code>, and <code>componentWillUpdate</code> will be deprecated in a future version of React. This is because of the eventual migration of React to async rendering; these lifecycle methods will become unreliable when async rendering is made default.</p>
-
-<p>In place of these methods, the new <strong>static</strong> method <code>getDerivedStateFromProps</code> was introduced. My team and I struggled at first in wrapping our heads around how to migrate our many uses of <code>componentWillReceiveProps</code> to this new method. It&rsquo;s generally easier than you think, but you need to keep in mind that the new method is <strong>static</strong>, and therefore does not have access to the <code>this</code> context that the old lifecycle methods provided.</p>
-
-<p><code>getDerivedStateFromProps</code> is invoked every time a component is rendered. It takes in two arguments: the next <code>props</code> object (which may be the same as the previous object) and the previous <code>state</code> object of the component in question. When implementing this method, we need to return the changes to our component <code>state</code> or <code>null</code> (or <code>{}</code>) if no changes need to be made.</p>
-
-<h3>componentWillReceiveProps</h3>
-
-<p>Here&rsquo;s a pattern we were using in many components throughout our codebase:</p>
-
-<pre><code class="javascript">componentWillReceiveProps(nextProps) {
-  if (nextProps.selectedTab !== this.state.selectedTab) {
-    this.setState(() =&gt; { return {selectedTab: nextProps.selectedTab} })
-  }
-}
-</code></pre>
-
-<p>This lifecycle method fired when we were about to receive new <code>props</code> in our component, passing in the new value as the first argument. We needed to check whether the new <code>props</code> indicated a change in the state of our tab bar, which we stored in <code>state</code>. This is one of the simplest patterns to address with <code>getDerivedStateFromProps</code>:</p>
-
-<pre><code class="javascript">static getDerivedStateFromProps(nextProps, prevState) {
-  return nextProps.selectedTab === prevState.selectedTab
-    ? {}
-    : {selectedTab: nextProps.selectedTab}
-}
-</code></pre>
-
-<p>This code works in exactly the same way, but, since it&rsquo;s <strong>static</strong>, we no longer use the context provided by <code>this</code>. Instead, we return any state changes. In this case, I&rsquo;ve returned an empty object (<code>{}</code>) to indicate no state change when the tabs are identical; otherwise, I return an object with the new <code>selectedTab</code> value.</p>
-
-<p>Sometimes you may have to perform some operations on the new <code>props</code>, but then you can still just compare the result to your previous state to figure out if anything changed. There may be other areas where you need to store some extra state duplicating your old <code>props</code> to make this work, but that may also be an indication that you need to use an alternative method.</p>
-
-<h3>componentWillMount</h3>
-
-<p>We also needed to replace calls to <code>componentWillMount</code>. I found that these calls were usually directly replaceable by <code>componentDidMount</code>, which will allow your component to perform an initial render and then execute blocking tasks. This may also require adding some loading-style capacity to your component, but will be better than a hanging app.</p>
-
-<p>Here&rsquo;s an example of a <code>componentWillMount</code> we had originally that blocked render until after an API call was made:</p>
-
-<pre><code class="javascript">componentWillMount() {
-  this.setState(() =&gt; {
-    return {
-      loading: 'Loading tool info'
-    }
-  })
-  return getTool(this.props.match.params.id).then((res) =&gt; {
-    this.setState(() =&gt; {
-      return {
-        tool: res,
-        loading: null
-      }
-    })
-  }).catch((err) =&gt; {
-    api.errors.put(err)
-    this.setState(() =&gt; {
-      return {
-        loading: null
-      }
-    })
-  })
-}
-</code></pre>
-
-<p>Afterwards, I changed the state to show the component as loading on initial render and replaced the <code>componentWillMount</code> with <code>componentDidMount</code>:</p>
-
-<pre><code class="javascript">state = {
-  tool: null,
-  loading: 'Loading tool info'
-}
-
-componentDidMount() {
-  return getTool(this.props.match.params.id).then((res) =&gt; {
-    this.setState(() =&gt; { return {tool: res, loading: null} })
-  }).catch((err) =&gt; {
-    api.errors.put(err)
-    this.setState(() =&gt; { return {loading: null} })
-  })
-}
-</code></pre>
-
-<h3>componentWillUpdate</h3>
-
-<p>Very similar to the methods discussed above, <code>componentWillUpdate</code> is invoked when a component is about to receive new props and the <code>render</code> method is definitely going to be called. Here&rsquo;s an example of something we were doing previously:</p>
-
-<pre><code class="javascript">componentWillUpdate(nextProps) {
-  if (!nextProps.user.isLogged &amp;&amp; !nextProps.user.authenticating) {
-    this.context.router.history.push('/')
-  }
-}
-</code></pre>
-
-<p>And, replacing that usage with <code>componentDidUpdate</code>:</p>
-
-<pre><code class="javascript">componentDidUpdate(/*prevProps, prevState*/) {
-  if (!this.props.user.isLogged &amp;&amp; !this.props.user.authenticating) {
-    this.context.router.history.push('/')
-  }
-}
-</code></pre>
-
-<p><code>componentDidUpdate</code> is similar to <code>componentDidMount</code> except that is caused after a change in state or props occurs instead of just on initial mount. As opposed to <code>getDerivedStateFromProps</code>, we have access to the context provided by <code>this</code>. Note that this method also has arguments for <code>prevProps</code> and <code>prevState</code>, which provides the previous versions of the component&rsquo;s <code>props</code> and <code>state</code> for comparison to the current values.</p>
-
-<h3>Conclusion</h3>
-
-<p>The deprecation of these lifecycle methods won&rsquo;t happen until React 17, but it&rsquo;s always good to plan ahead. Many of the ways my team was using these deprecated methods could be considered an anti-pattern, and I suspect that your team may be in the same predicament.</p>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[A Chronicle of SEP Startup Weekend 2016]]></title>

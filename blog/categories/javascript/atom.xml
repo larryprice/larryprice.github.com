@@ -4,7 +4,7 @@
   <title><![CDATA[Category: javascript | Larry Price]]></title>
   <link href="https://larry-price.com/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="https://larry-price.com/"/>
-  <updated>2018-10-27T15:58:29-05:00</updated>
+  <updated>2019-02-09T13:14:01-06:00</updated>
   <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
@@ -12,6 +12,182 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Getting Started with React Hooks]]></title>
+    <link href="https://larry-price.com/blog/2019/02/09/getting-started-with-react-hooks/"/>
+    <updated>2019-02-09T13:10:46-06:00</updated>
+    <id>https://larry-price.com/blog/2019/02/09/getting-started-with-react-hooks</id>
+    <content type="html"><![CDATA[<p><a href="https://reactjs.org/docs/hooks-intro.html">React Hooks</a> are a new feature allowing developers to use state in functional components officially released in <a href="https://reactjs.org/blog/2019/02/06/react-v16.8.0.html">React 16.8</a>. I am in love with the idea of Hooks, so much so that I&rsquo;m giving an introductory talk on the topic at an <a href="https://www.meetup.com/C-U-JavaScript/events/258294308/">upcoming local JavaScript meetup</a>.</p>
+
+<p>All code from this post can be found in a <a href="https://codepen.io/collection/XMoJzy/">codepen collection</a>.</p>
+
+<h3>Functional Components</h3>
+
+<p>A functional component (also sometimes referred to as a &ldquo;stateless&rdquo; component) is a method of defining React components with only a render method. These components still take in readonly props and return some JSX, but until now have had no means to perform any stateful logic. The following is a simple functional component that creates a button for canceling a user&rsquo;s account:</p>
+
+<pre><code class="javascript https://codepen.io/larryprice/pen/BMJYwe">const CancelAccountDeletion = ({onClick}) =&gt; (
+  &lt;button className="btn btn-default btn-lg cancel-account-deletion" onClick={onClick}&gt;
+    &lt;span className="glyphicon glyphicon glyphicon-ban-circle"&gt;&lt;/span&gt;
+    Cancel Account
+  &lt;/button&gt;
+);
+</code></pre>
+
+<p>The component takes in a single prop <code>onClick</code> that is called when the button is clicked.</p>
+
+<h3>Adding Stateful Logic The Old Way</h3>
+
+<p>Let&rsquo;s say that we want to add some stateful logic to that component. Marketing has started complaining that users clicking our current &ldquo;Cancel Account&rdquo; button contribute to a loss of revenue, and we need to slow that loss down to appease investors this quarter. We get design involved and decide to prompt the user several times to confirm their cancellation. We&rsquo;ll need to keep track of the number of clicks and the current prompt in state.</p>
+
+<p>Here&rsquo;s how we might do that on February 5th, 2019, using class components:</p>
+
+<pre><code class="javascript https://codepen.io/larryprice/pen/XOgKYd">const messages = ['Really?', 'Don\'t leave me!', 'OK, fine!'];
+class CancelAccountDeletion extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      buttonText: 'Cancel',
+      clicks: 0,
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.clicks !== this.state.clicks) {
+      if (this.state.clicks &lt; messages.length) {
+        return this.setState((prevState) =&gt; ({
+          buttonText: messages[prevState.clicks],
+        }));
+      }
+
+      return this.props.onClick();
+    }
+  }
+
+  render() {
+    return (
+      &lt;button className="btn btn-default btn-lg cancel-account-deletion"
+          onClick={() =&gt; this.setState((prevState) =&gt; ({
+            clicks: prevState.clicks + 1,
+          }))}&gt;
+        &lt;span className="glyphicon glyphicon glyphicon-ban-circle"&gt;&lt;/span&gt;
+        {this.state.buttonText}
+      &lt;/button&gt;
+    );
+  }
+}
+</code></pre>
+
+<p>Wow! We&rsquo;ve nearly tripled the size of our original component here. In this stateful world, we needed to extend the <code>React.Component</code> class, define a constructor to set our initial state, update our state when the button is clicked, and add the <code>componentDidUpdate</code> lifecycle method. The <code>componentDidUpdate</code> method is called on every re-render, so we first check to see if the number of <code>clicks</code> changed before taking any action. If it did, we check to see if we have more messages than clicks and update the prompt text; otherwise, we call the original <code>onClick</code> function from our props and, unfortunately for our sales goals, churn another user.</p>
+
+<p>This is a lot of boilerplate and has a tendency to get complex really fast. If only there was another way!</p>
+
+<p>&ldquo;Well, actually, Papa Larry,&rdquo; I hear you interjecting from behind your monitor, &ldquo;we could do this without a lifecycle method and only one piece of state.&rdquo; My dear friend. Yes, this code is slightly contrived so that I can show you all the main features of hooks with a fairly straightforward example. Just keep your susurruses to yourself until after the show.</p>
+
+<h3>Adding Stateful Logic the New Way</h3>
+
+<p>This is where Hooks come into play. Let&rsquo;s fast-forward from early evening in the American Midwest on February 5th, 2019, to late evening, when suddenly React 16.8 was released and it was officially titled &ldquo;The One With Hooks.&rdquo;</p>
+
+<p>Let&rsquo;s take our original functional component and add state with Hooks:</p>
+
+<pre><code class="javascript https://codepen.io/larryprice/pen/vbgwGx">const messages = ['Cancel', 'Really?', 'Don\'t leave me!', 'OK, fine!'];
+const CancelAccountDeletion = ({onClick}) =&gt; {
+  const [clicks, setClicks] = useState(0);
+  const [buttonText, setButtonText] = useState();
+
+  useEffect(() =&gt; {
+    if (clicks &lt; messages.length) {
+      return setButtonText(messages[clicks]);
+    }
+    return onClick();
+  }, [clicks]);
+
+  return (
+    &lt;button onClick={() =&gt; setClicks(clicks+1)}
+        className="btn btn-default btn-lg cancel-account-deletion"&gt;
+      &lt;span className="glyphicon glyphicon glyphicon-ban-circle"&gt;&lt;/span&gt;
+      {buttonText}
+    &lt;/button&gt;
+  );
+};
+</code></pre>
+
+<p>Our Hooks implementation is about half as long as our class implementation. I would argue that it&rsquo;s also significantly easier to read. Let&rsquo;s break this down bit-by-bit to discuss each piece of the hooks API:</p>
+
+<pre><code class="javascript">const [clicks, setClicks] = useState(0);
+const [buttonText, setButtonText] = useState();
+</code></pre>
+
+<p>At the top of our function, we call the <code>useState</code> method to declare two state variables: <code>clicks</code> and <code>buttonText</code>. <code>useState</code> takes in an initial value and returns a state variable and setter method, which we access locally using array destructuring. In this case, we set the initial state of <code>clicks</code> to <code>0</code> and leave <code>buttonText</code> empty.</p>
+
+<p>Behind-the-scenes, React is using our component&rsquo;s scope to create and track these state variables. We <em>must</em> always define these variables in the same order when this function is executed, or we&rsquo;ll get our variables all mixed up and our logic won&rsquo;t make any sense.</p>
+
+<pre><code class="javascript">useEffect(() =&gt; {
+  if (clicks &lt; messages.length) {
+    return setButtonText(messages[clicks]);
+  }
+  return onClick();
+}, [clicks]);
+</code></pre>
+
+<p>The <code>useEffect</code> method is essentially a replacement for the <code>componentDidMount</code> and <code>componentDidUpdate</code> lifecycle methods. It takes in a function that will be called after every render. Here we take advantage of closures to test the value of our <code>clicks</code> state variable and use <code>setButtonText</code> to update our <code>buttonText</code> state variable. The second argument to <code>useEffect</code> is an array of state variables to check - if none of the given state variables were changed, the effect will be skipped.</p>
+
+<p>We can call <code>useEffect</code> as many times as we want in our component. This allows us to create a clear separation of concerns if we need to define several different effects.</p>
+
+<pre><code class="javascript">return (
+  &lt;button onClick={() =&gt; setClicks(clicks+1)}
+      className="btn btn-default btn-lg cancel-account-deletion"&gt;
+    &lt;span className="glyphicon glyphicon glyphicon-ban-circle"&gt;&lt;/span&gt;
+    {buttonText}
+  &lt;/button&gt;
+);
+</code></pre>
+
+<p>This is our same old render logic, but in this case we&rsquo;re using the <code>setClicks</code> function returned to us by <code>useState</code>.</p>
+
+<h3>Custom Hooks</h3>
+
+<p>Design and marketing like this concept of delaying an action and just changing the text so much that they want to use it all over the site. Now we have stateful logic that needs to be reused. This is where the concept of &ldquo;Custom Hooks&rdquo; comes in:</p>
+
+<pre><code class="javascript https://codepen.io/larryprice/pen/GzENrZ">const useTextByCount = (count, messages, onFinished) =&gt; {
+  const [text, setText] = useState(messages[0]);
+
+  useEffect(() =&gt; {
+    if (count &lt; messages.length) {
+      return setText(messages[count]);
+    }
+    return onFinished();
+  }, [count]);
+
+  return text;
+};
+
+const messages = ['Cancel', 'Really?', 'Don\'t leave me!', 'OK, fine!']
+const CancelAccountDeletion = ({onClick}) =&gt; {
+  const [clicks, setClicks] = useState(0);
+  const buttonText = useTextByCount(clicks, messages, onClick);
+
+  return (
+    &lt;button onClick={() =&gt; setClicks(clicks+1)}
+        className="btn btn-default btn-lg cancel-account-deletion"&gt;
+      &lt;span className="glyphicon glyphicon glyphicon-ban-circle"&gt;&lt;/span&gt;
+      {buttonText}
+    &lt;/button&gt;
+  )
+};
+</code></pre>
+
+<p>Here I&rsquo;ve created my own hook called <code>useTextByCount</code> that abstracts away the entire concept of the <code>buttonText</code> state variable. We can use this custom hook in any functional component. Abstracting stateful logic is a tall task in class components, but it&rsquo;s completely natural using Hooks.</p>
+
+<h3>Conclusion</h3>
+
+<p>Hooks are the result of the React maintainers responding to the way React developers want to write code, enabling us to use powerful stateful concepts in a cleaner, functional system. This is a natural next step for the React API, but it&rsquo;s not going to deprecate all your class components. Hooks are completely optional and backwards compatible with current React concepts, so there&rsquo;s no need to make a Jira ticket to refactor all your components tomorrow morning. Hooks are here to help you write new components faster and better, giving you new options when you need to start adding state to that simple button component.</p>
+
+<p>Check out the <a href="https://reactjs.org/docs/hooks-intro.html">Hooks Guide</a> and the <a href="https://reactjs.org/docs/hooks-rules.html">Rules of Hooks</a> for more information.</p>
+
+<p>Happy hooking!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to Use getDerivedStateFromProps in React 16.3+]]></title>
@@ -545,63 +721,6 @@ Promise.race([func1(), func2()]).then((name) =&gt; {
 <li><strong>Take more frequent, shorter breaks.</strong> We hit the Monon Saturday afternoon and walked for 30-40 minutes which ended up making me drowsy. However, the fresh air did us some good and was revitalizing for the project in general. It would be great to have more frequent, 10-15 minute walks, but it&rsquo;s really difficult to find a time when the team is ready to take a group break in such a fast-paced environment.</li>
 </ul>
 </li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Javascript: The Good Parts]]></title>
-    <link href="https://larry-price.com/blog/2015/12/28/javascript-the-good-parts/"/>
-    <updated>2015-12-28T20:17:33-05:00</updated>
-    <id>https://larry-price.com/blog/2015/12/28/javascript-the-good-parts</id>
-    <content type="html"><![CDATA[<h3>The Gist</h3>
-
-<p><a href="http://amzn.to/1OVjj3Z">Javascript: The Good Parts</a> by Douglas Crockford is a short guide to the best parts of the javascript language. Javascript is notorious for being so flexible and feature-rich that many traditional programmers start writing code and completely forget how to program and building a startup based on an idea they got from the <a href="https://twitter.com/boredelonmusk">Bored Elon Musk</a> mock-Twitter account only to wake up a year later cold and alone living in the slums of San Francisco. This book is full of example code with thoughtful explanations to help the average developer write better javascript and leave the web a nicer place.</p>
-
-<h3>Takeaways</h3>
-
-<p>I read this book because I thought the title was too snarky for its own good. Javascript is flexible and capable of doing nearly anything you need but, like any tool, can easily be misused by newcomers. Since javascript is the de facto language of the web, many developers who use javascript are novices or don&rsquo;t think they need to know the language constructs because &ldquo;it&rsquo;s not a real language.&rdquo; Unfortunately, this results in a lot of spaghetti code and insecure javascript being processed by our web browsers.</p>
-
-<p>I studied javascript this past fall to try to hone my skills, and I found that many of the little tricks I picked up through independent study had already been collected in this book. Anyone doing javascript should have a passing knowledge of the contents of this book before they are allowed to push to production.</p>
-
-<p>Now I&rsquo;ll get off my soapbox and point out a few of my favorite points made in this book.</p>
-
-<p>Javascripts most powerful structures are <code>Object</code> and <code>Array</code>. An <code>Array</code> is an <code>Object</code> with properties of type <code>Number</code> cast to integers in sequential order. This means that the <code>Array</code> object <code>[0, 1, "mario", "luigi"]</code> is represented as an <code>Object</code> as <code>{"0": 0, "1": 1, "2": "mario", "3": "luigi"}</code>.</p>
-
-<p><code>Object.hasOwnProperty</code> tells you whether the given property name is on the object&rsquo;s prototype or has been defined on the current object. This is very useful when using a <code>for in</code> loop to filter properties on an object.</p>
-
-<p>Although I&rsquo;ve frequently used the module pattern with a self-executing function to create private scope, I hadn&rsquo;t connected the dots that the reason this magic works is because of closures. Here&rsquo;s an example:</p>
-
-<pre><code class="javascript">var MyModule = (function() {
-  var x = 0;
-  return {
-    reset: function() {
-      x = 0;
-    },
-    do: function() {
-      console.log(x++);
-    }
-  }
-}());
-
-MyModule.reset();
-MyModule.do();    // output: 0
-MyModule.do();    // output: 1
-MyModule.do();    // output: 2
-MyModule.reset();
-MyModule.do();    // output: 0
-</code></pre>
-
-<p><code>MyModule</code> contains the private variable <code>x</code>, which cannot be accessed by anyone who has a reference to this function. However, the internal functions <code>reset</code> and <code>do</code> do have access to the private variable. Because of this, we know no external code can manipulate our internal value and we can guarantee some amount of consistency in our code given there was no tampering of the source. Of course, closures are useful for far more than just scoping variables.</p>
-
-<p>Although there are many ways to mimic traditional inheritance in javascript with <code>new</code> and defining the <code>constructor</code> method on a prototype, it usually makes more sense to use <em>differential inheritance</em>. Given an object named <code>bird</code>, we&rsquo;ll make a new object named <code>parrot</code> using <code>var parrot = Object.create(bird);</code> and start setting new properties on <code>parrot</code> This type of inheritance uses the basics of the language to our advantage and adheres nicely to the native prototypal constructs.</p>
-
-<h3>Action Items</h3>
-
-<ul>
-<li><strong>Differential inheritance.</strong> I&rsquo;ve always tried to force traditional inheritance into my javascript architecture, and it&rsquo;s always felt wrong. The next time I need inheritance, I will try to use DI to utilize javascript&rsquo;s prototype system better.</li>
-<li><strong>Write more javascript.</strong> It&rsquo;s been a while since I got to write javascript professionally, so I&rsquo;d like to ensure I maintain my knowledge base over the coming months by writing more javascript on the side. As web programming is where I want to be, hopefully I can get back into building for the web before the end of the year.</li>
 </ul>
 
 ]]></content>

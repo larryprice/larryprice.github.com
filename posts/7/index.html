@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="Another year gone. What I Wanted from 2015 I set some arbitrary goals for myself at the end of 2014, and I sort of accomplished most of them. Here& &hellip;">
+  <meta name="description" content="At the end of 2015, I published a video course on getting started with web development in Go. For the next two weeks, you can get it for 50% off &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,44 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/01/21/go-for-web-development-50-percent-off-sale/">Go for Web Development 50% Off Sale</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-01-21T10:51:22-05:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2016</span></span> <span class='time'>10:51 am</span></time>
+        
+           | <a href="/blog/2016/01/21/go-for-web-development-50-percent-off-sale/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2016/01/21/go-for-web-development-50-percent-off-sale/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>At the end of 2015, I published a video course on getting started with web development in Go. For the next two weeks, you can get it for 50% off using this link: <a href="http://bit.ly/1PEubnd">http://bit.ly/1PEubnd</a>. With over 2 hours of content for just over $20, it&rsquo;s a great deal. The sale runs from 21 Jan until 4 Feb 2016.</p>
+
+<p><a href="http://bit.ly/1PEubnd"><img src="https://i.imgur.com/tTPQj2b.png" /></a></p>
+
+<p>The video takes the student through every step of creating a personal library web application from scratch, covering concepts such as routing, database access, and authentication. It&rsquo;s a great introduction to go, and an excellent primer to starting your own go-based web project.</p>
+
+<p>All this comes with the added benefit of supporting me: your local developer. :)</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -454,236 +492,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/12/04/xml-parsing-in-go/">XML Parsing in Go</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-12-04T15:30:14-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>3:30 pm</span></time>
-        
-           | <a href="/blog/2015/12/04/xml-parsing-in-go/#disqus_thread"
-             data-disqus-identifier="https://larry-price.com/blog/2015/12/04/xml-parsing-in-go/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Need to parse an XML file in go? XML (en|de)coding is build into go&rsquo;s standard library. Basic parsing of nodes and embedded nodes is straightforward, but there are some interesting things to think about when you need to parse attributes, lists, and if you don&rsquo;t want to create new structs all over the place.</p>
-
-<p>For this exercise, let&rsquo;s look at the following XML document:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;person&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;name&gt;</span>Luann Van Houten<span class="nt">&lt;/name&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;addresses&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;address</span> <span class="na">type=</span><span class="s">&quot;secondary&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>          <span class="nt">&lt;street&gt;</span>321 MadeUp Lane<span class="nt">&lt;/street&gt;</span>
-</span><span class='line'>          <span class="nt">&lt;city&gt;</span>Shelbyville<span class="nt">&lt;/city&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;/address&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;address</span> <span class="na">type=</span><span class="s">&quot;primary&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>          <span class="nt">&lt;street&gt;</span>123 Fake St<span class="nt">&lt;/street&gt;</span>
-</span><span class='line'>          <span class="nt">&lt;city&gt;</span>Springfield<span class="nt">&lt;/city&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;/address&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/addresses&gt;</span>
-</span><span class='line'><span class="nt">&lt;/person&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Defining a Data Structure</h3>
-
-<p>The simplest node to parse is going to be <code>&lt;name&gt;</code>. We&rsquo;ll need an object to unmarshal the XML into, which we&rsquo;ll call <code>Person</code>. Every field on <code>Person</code> will be evaluated by the XML encoder to be populated based on the field&rsquo;s name. However, our struct field names and node names don&rsquo;t usually correspond that simply. Because of this, we&rsquo;ll use <code>xml</code> struct tags to identify how to map each node to a go field. Here&rsquo;s an example for <code>&lt;name&gt;</code>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kd">type</span> <span class="nx">Person</span> <span class="kd">struct</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">Name</span> <span class="kt">string</span> <span class="s">`xml:&quot;name&quot;`</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The next node contains a list of <code>&lt;address&gt;</code> nodes. For an address node, we&rsquo;ll have to create a similar struct with <code>City</code> and <code>Street</code> fields:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kd">type</span> <span class="nx">Address</span> <span class="kd">struct</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">Street</span> <span class="kt">string</span> <span class="s">`xml:&quot;street&quot;`</span>
-</span><span class='line'>  <span class="nx">City</span> <span class="kt">string</span>   <span class="s">`xml:&quot;city&quot;`</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>While parsing each <code>Address</code>, we also want to find the <code>type</code> of address, which can be found as an attribute on the <code>&lt;address&gt;</code> node. By adding <code>attr</code> to our XML struct tag, we can properly parse the <code>type</code> field as well:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kd">type</span> <span class="nx">Address</span> <span class="kd">struct</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">Street</span> <span class="kt">string</span> <span class="s">`xml:&quot;street&quot;`</span>
-</span><span class='line'>  <span class="nx">City</span> <span class="kt">string</span>   <span class="s">`xml:&quot;city&quot;`</span>
-</span><span class='line'>  <span class="nx">Type</span> <span class="kt">string</span>   <span class="s">`xml:&quot;type,attr&quot;`</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>A <code>Person</code> has a list of <code>Address</code>es. Since we know that <code>address</code> is a direct descendant, we can use the <code>&gt;</code> keyword to parse each <code>&lt;address&gt;</code> from <code>&lt;addresses&gt;</code> into an embedded struct on our <code>Person</code> struct.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kd">type</span> <span class="nx">Person</span> <span class="kd">struct</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">Name</span> <span class="kt">string</span>         <span class="s">`xml:&quot;name&quot;`</span>
-</span><span class='line'>  <span class="nx">Addresses</span> <span class="p">[]</span><span class="nx">Address</span> <span class="s">`xml:&quot;addresses&gt;address&quot;`</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This code will work to parse the original document, but do we really need to define a formal struct for addresses? If there was only one address, we could put all the fields directly on the <code>Person</code> struct. However, since we&rsquo;re dealing with a list, our best option is to use an anonymous struct:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kd">type</span> <span class="nx">Person</span> <span class="kd">struct</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">Name</span>      <span class="kt">string</span> <span class="s">`xml:&quot;name&quot;`</span>
-</span><span class='line'>  <span class="nx">Addresses</span> <span class="p">[]</span><span class="kd">struct</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">Street</span> <span class="kt">string</span> <span class="s">`xml:&quot;street&quot;`</span>
-</span><span class='line'>      <span class="nx">City</span>   <span class="kt">string</span> <span class="s">`xml:&quot;city&quot;`</span>
-</span><span class='line'>      <span class="nx">Type</span>   <span class="kt">string</span> <span class="s">`xml:&quot;type,attr&quot;`</span>
-</span><span class='line'>  <span class="p">}</span> <span class="s">`xml:&quot;addresses&gt;address&quot;`</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Binding the Data Structure</h3>
-
-<p>We can use the <a href="https://golang.org/pkg/encoding/xml/">encoding/xml</a> package to decode the given XML. Given that our raw XML document is stored in a <code>[]byte</code> called <code>document</code>, we&rsquo;ll use <code>xml.Unmarshal</code> to bind our data structure to the XML document:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kd">var</span> <span class="nx">luann</span> <span class="nx">Person</span>
-</span><span class='line'><span class="nx">xml</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">document</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">luann</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Final Code</h3>
-
-<p>Let&rsquo;s put it all together, including a <code>main</code> function that will use <code>fmt.Println</code> to print the results of binding the data structure to the XML document. <code>Unmarshal</code> could return an error, but we&rsquo;ll ignore it in this case.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">main</span>
-</span><span class='line'>
-</span><span class='line'><span class="kn">import</span> <span class="p">(</span>
-</span><span class='line'>  <span class="s">&quot;encoding/xml&quot;</span>
-</span><span class='line'>  <span class="s">&quot;fmt&quot;</span>
-</span><span class='line'><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">var</span> <span class="nx">personXML</span> <span class="p">=</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">`</span>
-</span><span class='line'><span class="s">&lt;person&gt;</span>
-</span><span class='line'><span class="s">  &lt;name&gt;Luann Van Houten&lt;/name&gt;</span>
-</span><span class='line'><span class="s">  &lt;addresses&gt;</span>
-</span><span class='line'><span class="s">      &lt;address type=&quot;secondary&quot;&gt;</span>
-</span><span class='line'><span class="s">          &lt;street&gt;321 MadeUp Lane&lt;/street&gt;</span>
-</span><span class='line'><span class="s">          &lt;city&gt;Shelbyville&lt;/city&gt;</span>
-</span><span class='line'><span class="s">      &lt;/address&gt;</span>
-</span><span class='line'><span class="s">      &lt;address type=&quot;primary&quot;&gt;</span>
-</span><span class='line'><span class="s">          &lt;street&gt;123 Fake St&lt;/street&gt;</span>
-</span><span class='line'><span class="s">          &lt;city&gt;Springfield&lt;/city&gt;</span>
-</span><span class='line'><span class="s">      &lt;/address&gt;</span>
-</span><span class='line'><span class="s">  &lt;/addresses&gt;</span>
-</span><span class='line'><span class="s">&lt;/person&gt;`</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">type</span> <span class="nx">Person</span> <span class="kd">struct</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">Name</span>      <span class="kt">string</span> <span class="s">`xml:&quot;name&quot;`</span>
-</span><span class='line'>  <span class="nx">Addresses</span> <span class="p">[]</span><span class="kd">struct</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">Street</span> <span class="kt">string</span> <span class="s">`xml:&quot;street&quot;`</span>
-</span><span class='line'>      <span class="nx">City</span>   <span class="kt">string</span> <span class="s">`xml:&quot;city&quot;`</span>
-</span><span class='line'>      <span class="nx">Type</span>   <span class="kt">string</span> <span class="s">`xml:&quot;type,attr&quot;`</span>
-</span><span class='line'>  <span class="p">}</span> <span class="s">`xml:&quot;addresses&gt;address&quot;`</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">luann</span> <span class="nx">Person</span>
-</span><span class='line'>  <span class="nx">xml</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">personXML</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">luann</span><span class="p">)</span>
-</span><span class='line'>  <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">luann</span><span class="p">)</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I&rsquo;ve posted this code as <a href="https://gist.github.com/larryprice/204fec2e8d33979f8cac">a gist</a> in <a href="https://play.golang.org/p/qiSoxxb5tp">the go playground</a> so you can see it in action.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/8">&larr; Older</a>
@@ -727,6 +535,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2019/02/09/getting-started-with-react-hooks/">Getting Started With React Hooks</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2018/10/27/notes-from-all-things-open-2018/">Notes From All Things Open 2018</a>
       </li>
     
@@ -742,15 +554,11 @@
         <a href="/blog/2018/04/25/redirecting-to-your-main-site-with-heroku/">Redirecting to Your Main Site With Heroku</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2018/02/02/async-and-await-a-new-promise/">Async and Await - a New Promise</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 103.63636363636364%'>go</a> <a href='/blog/categories/golang' style='font-size: 118.18181818181819%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 107.27272727272727%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 129.0909090909091%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 109.0909090909091%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/php' style='font-size: 101.81818181818181%'>php</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 103.63636363636364%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 141.8181818181818%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.63636363636363%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 103.63636363636364%'>go</a> <a href='/blog/categories/golang' style='font-size: 118.18181818181819%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 107.27272727272727%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 130.9090909090909%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 109.0909090909091%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/php' style='font-size: 101.81818181818181%'>php</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 105.45454545454545%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 141.8181818181818%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.63636363636363%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
 </section>
 
 <section>
@@ -810,7 +618,7 @@
   </div>
   <footer role="contentinfo"><p>
   <center>
-	  Copyright &copy; 2018 - Larry Price -
+	  Copyright &copy; 2019 - Larry Price -
 	  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span><br/>
 	  Note: Views and opinions expressed belong solely to the author and do not represent the views of the any other person or company.
 	</center>

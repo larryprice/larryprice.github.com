@@ -9,7 +9,7 @@
   <meta name="author" content="Larry Price">
 
   
-  <meta name="description" content="If you haven&rsquo;t heard, snaps are a new, modern packaging format made by the guys at Ubuntu. Snaps give every app a confined environment to live &hellip;">
+  <meta name="description" content="Looking for the code? Look no further: https://github.com/larryprice/pingus-snap In my last post, I demonstrated creating a snap package for an &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,162 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/12/10/confining-a-snapped-x11-application/">Confining a Snapped X11 Application</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-12-10T17:30:38-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>5:30 pm</span></time>
+        
+           | <a href="/blog/2016/12/10/confining-a-snapped-x11-application/#disqus_thread"
+             data-disqus-identifier="https://larry-price.com/blog/2016/12/10/confining-a-snapped-x11-application/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><em>Looking for the code? Look no further: <a href="https://github.com/larryprice/pingus-snap">https://github.com/larryprice/pingus-snap</a></em></p>
+
+<p>In my <a href="/blog/2016/12/07/creating-a-snap-from-existing-deb-packages/">last post</a>, I demonstrated creating a snap package for an application available in the archive. I left that application unconfined, which is taboo in the long run if we want our system to be secure. In a few steps, we can add the necessary components to confine our <code>pingus</code> snap.</p>
+
+<p>For reference, this is the original <code>snapcraft.yaml</code> file for creating a <code>pingus</code> snap, except that we&rsquo;ve updated the <code>confinement</code> property to <code>strict</code>:</p>
+
+<figure class='code'><figcaption><span>snapcraft.yaml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">pingus</span>
+</span><span class='line'><span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="s">&#39;0.1&#39;</span>
+</span><span class='line'><span class="l-Scalar-Plain">summary</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Free Lemmings(TM) clone</span>
+</span><span class='line'><span class="l-Scalar-Plain">description</span><span class="p-Indicator">:</span> <span class="p-Indicator">|</span>
+</span><span class='line'>    <span class="no">Pingus is a free clone of the popular Lemmings game.</span>
+</span><span class='line'>    <span class="no">|</span>
+</span><span class='line'>    <span class="no">Your goal is to guide a horde of penguins through a world full of obstacles</span>
+</span><span class='line'>    <span class="no">and penguin traps to safety. Although penguins (unlike lemmings) are rather</span>
+</span><span class='line'>    <span class="no">smart, they sometimes lack the necessary overview and now rely on you to</span>
+</span><span class='line'>    <span class="no">save them.</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">grade</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">devel</span>
+</span><span class='line'><span class="l-Scalar-Plain">confinement</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">strict</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">parts</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">archives</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">plugin</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">nil</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">stage-packages</span><span class="p-Indicator">:</span>
+</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">pingus</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">env</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">plugin</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">dump</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">organize</span><span class="p-Indicator">:</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">pingus.wrapper</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">usr/bin/pingus</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">apps</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">pingus</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">command</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">pingus</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you&rsquo;re feeling bold, you can build and install the snap from here, but be warned that this led me into an ncurses nightmare that I had to forcibly kill. That&rsquo;s largely because <code>pingus</code> depends on X11, which is not available out-of-the-box once we&rsquo;ve confined our snap. If we want to use X11, we&rsquo;re going to need to connect to it using the snap-land concept of <a href="http://snapcraft.io/docs/core/interfaces">interfaces</a>. Interfaces allow us to access shared resources and connections provided by the system or other snaps. There&rsquo;s some terminology to grapple with here, but the bottom line is that a &ldquo;slot&rdquo; provides an interface which a &ldquo;plug&rdquo; connects to. You can see a big list of available interfaces with descriptions <a href="http://snapcraft.io/docs/reference/interfaces">on the wiki</a>. Our <code>pingus</code> app will &ldquo;plug&rdquo; into the X11 interface&rsquo;s &ldquo;slot&rdquo;:</p>
+
+<figure class='code'><figcaption><span>snapcraft.yaml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="c1"># ...</span>
+</span><span class='line'><span class="l-Scalar-Plain">apps</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">pingus</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">command</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">pingus</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">plugs</span><span class="p-Indicator">:</span>
+</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">x11</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can build and install the new snap with the <code>--dangerous</code> flag for your local confined snap. After that, you can verify the interface connection with the <code>snap interfaces</code> command:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>snapcraft
+</span><span class='line'><span class="nv">$ </span>sudo snap install --dangerous pingus_0.1_amd64.snap
+</span><span class='line'>pingus 0.1 installed
+</span><span class='line'><span class="nv">$ </span>snap interfaces
+</span><span class='line'>Slot                     Plug
+</span><span class='line'>:alsa                    -
+</span><span class='line'><span class="c"># ...</span>
+</span><span class='line'>:upower-observe          -
+</span><span class='line'>:x11                     pingus
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, when we run <code>pingus</code>&hellip; it works! Well, video works. If you want sound, we&rsquo;ll also need the <code>pulseaudio</code> interface:</p>
+
+<figure class='code'><figcaption><span>snapcraft.yaml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="c1"># ...</span>
+</span><span class='line'><span class="l-Scalar-Plain">apps</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">pingus</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">command</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">pingus</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">plugs</span><span class="p-Indicator">:</span>
+</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">x11</span>
+</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">pulseaudio</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once again: build, install, and run&hellip; et voilà! Is it just me, or was that surprisingly painless? Of course, not all applications live such isolated lives. Make note that the x11 interface is supposed to be a transitional interface, meaning that we would rather our app fully transition to Mir or some alternative. To go a step further with this snap, we could create a <code>snapcraft.yaml</code> to build from source to get the absolute latest version of our app. At this point, we can change our <code>grade</code> property to <code>stable</code> and feel good about something that we could push to the store for review.</p>
+
+<p><em>Any code you see here is free software. Find the project here: <a href="https://github.com/larryprice/pingus-snap">https://github.com/larryprice/pingus-snap</a></em></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -854,86 +1010,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2016/08/04/going-remote-4-months-in/">Going Remote: 4 Months in, Aka Remote Life 4-eva</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2016-08-04T20:16:04-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>8:16 pm</span></time>
-        
-           | <a href="/blog/2016/08/04/going-remote-4-months-in/#disqus_thread"
-             data-disqus-identifier="https://larry-price.com/blog/2016/08/04/going-remote-4-months-in/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><em>This is the third in a series of blog posts detailing my experience acclimating to a fully remote work experience. You may also enjoy my original posts <a href="/blog/2016/04/11/going-remote-1-week/">detailing my first week</a> and <a href="/blog/2016/05/05/going-remote-1-month-in/">my first month</a>.</em></p>
-
-<p>Has it really been 4 months since I started riding the raging river of remote work? After my first month, I felt pretty good about my daily schedule and work/life balance. Since the last post, I&rsquo;ve met many of my co-workers IRL, learned to find my own work, and figured out how to shake things up when I get in a rut.</p>
-
-<h3>But First, Did I Handle My Action Items?</h3>
-
-<p>During my first month, I struggled to figure out what to work on after finishing a task. At this point, it&rsquo;s extremely rare that I don&rsquo;t have a dozen things in the queue like a pile of papers in an In Box about to topple over. I am happily busy all the time, either pulling things off the top of the stack, plucking things from the middle, or coming up with some new feature that I need to add.</p>
-
-<p>I feel a lot more comfortable on chat. Our IRC channels are a bit daunting at first, especially when there&rsquo;s a lot of action going on. I&rsquo;ve learned some good ways to interject or reach out to the people that I need to talk to.</p>
-
-<p>Oh, and I still haven&rsquo;t gotten a new floormat. Yes, this one&rsquo;s still broken. For some reason, it just doesn&rsquo;t annoy me as much as it used to. It&rsquo;s almost endearing: like a three-legged puppy that I roll my chair across and stand on top of for 8 hours a day.</p>
-
-<h3>Meeting IRL</h3>
-
-<blockquote><p>Why would you guys actually meet IRL? - Elliot, <em>Mr Robot</em></p></blockquote>
-
-<p>I know a bunch of my coworkers by IRC nicks, and I see a few of their faces in a Google Hangout for our daily standup. This has been sufficient for me, but we did something truly magical in June. We met IRL.</p>
-
-<p>The team I&rsquo;m on (~10 people) and our sibling team (~10 people) met in Montréal, Québec, Canada, for about a week, and it was unlike any meeting-of-the-minds I&rsquo;ve ever been to. The engineers were largely from the US and Europe. We all stayed in the hotel downtown and used a small conference room to hang out and work all day, every day. We woke up and ate breakfast together, met in the conference room at 9, had snacks and coffee, ate lunch together, stopped working precisely at 6, and met back in the lobby a few minutes later to go out on the town until 11 or midnight. It&rsquo;s a truly intense social experience, especially for a group of people who spend most of their days only interacting with other humans through IRC, <em>especially</em> for a group of people who only meet twice a year or so.</p>
-
-<p>This coming together allowed us to hash out a lot of our plans for the coming months, but I believe the true victory in this type of event is the camaraderie it creates. It&rsquo;s nice to be able to put faces to nicks, think about the inflection in a person&rsquo;s voice coming out in the way they type, and know exactly who I need to ping on IRC to accomplish certain tasks. It&rsquo;s fun to hang out with people from all over the world, and it&rsquo;s fun to go drinking with your coworkers, a thing I had temporarily forgotten.</p>
-
-<p>I&rsquo;ll note that we also happened to be in Montréal during the 23rd annual Mondial de la Biere, a huge international beer festival that lasted several days. I&rsquo;ll also note that it was fun to try to speak little bits of French in Montréal, and I&rsquo;m really looking forward to wherever the next sprint abroad may take us (most likely Europe in October).</p>
-
-<h3>Finding Work</h3>
-
-<p>With a decentralized company, the issue of finding things to work on for new employees can be tough. Do you give them something small and easy and possibly belittling? Do you give them something massive that will leave them scratching their heads for weeks and completely out of touch with the rest of the company? How can you find a good middle ground here?</p>
-
-<p>I&rsquo;d say I was &ldquo;eased in&rdquo; with smaller tasks into my current project. After the first few tasks were completed, it was often unclear to me where I should go next. There was always a list of bugs - was I the right person to work on them? Was there any other impending feature or unlisted bug that I should start looking into instead? These are hard questions for someone who hasn&rsquo;t been around for very long.</p>
-
-<p>Over time, I gained more and more responsibilities. I needed a bug fixed pronto in another project, so I did it myself and submitted an MP. Oh, you understand this codebase? You can be a maintainer now! Oh, I think I remember from your resume that you have some golang experience. We need this fixed ASAP, using SD cards is completely broken without it!</p>
-
-<p>It&rsquo;s all a slippery slope to having a bottomless bucket of super-interesting things to choose from to do work, perform code reviews, and answer community questions. Yet <em>somehow</em> it&rsquo;s all happened in a way that is not overwhelming, but freeing. When I get stuck on a problem or need a short break from my current project, there&rsquo;s plenty of other work to go around. Which leads me to&hellip;</p>
-
-<h3>Shaking Things Up</h3>
-
-<p>Routine can be helpful, but it can also be terrible. For the parts of May and June that I wasn&rsquo;t traveling, I was largely waking up at the same time, making the same lunch, listening to the same music every day, petting the same cats, and picking up the same kinds of tasks from the backlog. None of this was bad <em>per se</em>, but I found myself getting a tad sluggish. It would be harder to work on menial tasks, and easier to come up with elaborate solutions to simple problems. So what did I do?</p>
-
-<p>I started varying my sleep schedule. Some days I get out of bed at 7, other days I get out of bed at 8:45. Because I work from home, I don&rsquo;t have to worry about fighting traffic or skipping breakfast.</p>
-
-<p>I started varying my lunches. I was making some fun rissotto recipes, but since it&rsquo;s summer I&rsquo;ve been mixing up a bunch of different vegetables into a menagerie of salads: sauteed green tomatoes, onions, and zucchini; cukes and onions; pineapple, succotash, and eggs.</p>
-
-<p>As I&rsquo;ve gained more responsibilities for various projects, I&rsquo;ve been able to branch into different kinds of tasks. After finishing up a big rework of one codebase, I can start jumping into bugs somewhere else. I can dig deep somewhere, and pivot when I&rsquo;m ready to go back. There&rsquo;s always something interesting to work on, and I can see the way different tasks help us towards our end goal. Not to mention I can <em>always</em> do bug hunts.</p>
-
-<h3>Remote Life 4-eva</h3>
-
-<p>It&rsquo;s not just working remotely that makes this possible - it&rsquo;s the people, the culture, and the fun and interesting products we&rsquo;re creating. Maybe I&rsquo;ll start blogging more about those things in the future. I don&rsquo;t have much in this area that I&rsquo;m looking to improve on, so this could be the last post in the series. Maybe I&rsquo;ll do one at the 1-year mark to note any new tricks I&rsquo;ve learned. Until then, keep looking our for other non-diary-entry blog posts.</p>
-
-<p>Looking for advice on working remotely? Not sure if you&rsquo;d like it? Do you have a strong disagreement with me as a person or my lifestyle choices? Hit me up and we can chat!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/5">&larr; Older</a>
@@ -977,6 +1053,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2019/02/09/getting-started-with-react-hooks/">Getting Started With React Hooks</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2018/10/27/notes-from-all-things-open-2018/">Notes From All Things Open 2018</a>
       </li>
     
@@ -992,15 +1072,11 @@
         <a href="/blog/2018/04/25/redirecting-to-your-main-site-with-heroku/">Redirecting to Your Main Site With Heroku</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2018/02/02/async-and-await-a-new-promise/">Async and Await - a New Promise</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 103.63636363636364%'>go</a> <a href='/blog/categories/golang' style='font-size: 118.18181818181819%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 107.27272727272727%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 129.0909090909091%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 109.0909090909091%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/php' style='font-size: 101.81818181818181%'>php</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 103.63636363636364%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 101.81818181818181%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 141.8181818181818%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.63636363636363%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/ads' style='font-size: 103.63636363636364%'>ads</a> <a href='/blog/categories/agile' style='font-size: 105.45454545454545%'>agile</a> <a href='/blog/categories/api' style='font-size: 101.81818181818181%'>api</a> <a href='/blog/categories/c-plus-plus' style='font-size: 107.27272727272727%'>c++</a> <a href='/blog/categories/capybara' style='font-size: 105.45454545454545%'>capybara</a> <a href='/blog/categories/css' style='font-size: 103.63636363636364%'>css</a> <a href='/blog/categories/cucumber' style='font-size: 107.27272727272727%'>cucumber</a> <a href='/blog/categories/database' style='font-size: 112.72727272727272%'>database</a> <a href='/blog/categories/dbus' style='font-size: 105.45454545454545%'>dbus</a> <a href='/blog/categories/docker' style='font-size: 107.27272727272727%'>docker</a> <a href='/blog/categories/foreman' style='font-size: 101.81818181818181%'>foreman</a> <a href='/blog/categories/foss' style='font-size: 103.63636363636364%'>foss</a> <a href='/blog/categories/git' style='font-size: 101.81818181818181%'>git</a> <a href='/blog/categories/gmock' style='font-size: 101.81818181818181%'>gmock</a> <a href='/blog/categories/go' style='font-size: 103.63636363636364%'>go</a> <a href='/blog/categories/golang' style='font-size: 118.18181818181819%'>golang</a> <a href='/blog/categories/gtest' style='font-size: 101.81818181818181%'>gtest</a> <a href='/blog/categories/hacks' style='font-size: 101.81818181818181%'>hacks</a> <a href='/blog/categories/haml' style='font-size: 101.81818181818181%'>haml</a> <a href='/blog/categories/heroku' style='font-size: 107.27272727272727%'>heroku</a> <a href='/blog/categories/html' style='font-size: 103.63636363636364%'>html</a> <a href='/blog/categories/html5' style='font-size: 101.81818181818181%'>html5</a> <a href='/blog/categories/internet' style='font-size: 101.81818181818181%'>internet</a> <a href='/blog/categories/javascript' style='font-size: 130.9090909090909%'>javascript</a> <a href='/blog/categories/linux' style='font-size: 110.9090909090909%'>linux</a> <a href='/blog/categories/mongo' style='font-size: 101.81818181818181%'>mongo</a> <a href='/blog/categories/mongodb' style='font-size: 105.45454545454545%'>mongodb</a> <a href='/blog/categories/mongoid' style='font-size: 105.45454545454545%'>mongoid</a> <a href='/blog/categories/mongolab' style='font-size: 101.81818181818181%'>mongolab</a> <a href='/blog/categories/mongoose' style='font-size: 101.81818181818181%'>mongoose</a> <a href='/blog/categories/mvc' style='font-size: 101.81818181818181%'>mvc</a> <a href='/blog/categories/nodejs' style='font-size: 109.0909090909091%'>nodejs</a> <a href='/blog/categories/non-technical' style='font-size: 160.0%'>non-technical</a> <a href='/blog/categories/nosql' style='font-size: 101.81818181818181%'>nosql</a> <a href='/blog/categories/nvm' style='font-size: 101.81818181818181%'>nvm</a> <a href='/blog/categories/octopress' style='font-size: 101.81818181818181%'>octopress</a> <a href='/blog/categories/ollert' style='font-size: 125.45454545454545%'>ollert</a> <a href='/blog/categories/openshift' style='font-size: 101.81818181818181%'>openshift</a> <a href='/blog/categories/php' style='font-size: 101.81818181818181%'>php</a> <a href='/blog/categories/pokephile' style='font-size: 105.45454545454545%'>pokephile</a> <a href='/blog/categories/pony' style='font-size: 101.81818181818181%'>pony</a> <a href='/blog/categories/python' style='font-size: 107.27272727272727%'>python</a> <a href='/blog/categories/qt' style='font-size: 101.81818181818181%'>qt</a> <a href='/blog/categories/rails' style='font-size: 101.81818181818181%'>rails</a> <a href='/blog/categories/react' style='font-size: 101.81818181818181%'>react</a> <a href='/blog/categories/reactjs' style='font-size: 105.45454545454545%'>reactjs</a> <a href='/blog/categories/remote' style='font-size: 107.27272727272727%'>remote</a> <a href='/blog/categories/retro' style='font-size: 112.72727272727272%'>retro</a> <a href='/blog/categories/rspec' style='font-size: 101.81818181818181%'>rspec</a> <a href='/blog/categories/ruby' style='font-size: 130.9090909090909%'>ruby</a> <a href='/blog/categories/rvm' style='font-size: 105.45454545454545%'>rvm</a> <a href='/blog/categories/sass' style='font-size: 101.81818181818181%'>sass</a> <a href='/blog/categories/satire' style='font-size: 101.81818181818181%'>satire</a> <a href='/blog/categories/sendgrid' style='font-size: 101.81818181818181%'>sendgrid</a> <a href='/blog/categories/sep-blog-battle' style='font-size: 114.54545454545455%'>sep-blog-battle</a> <a href='/blog/categories/sequel' style='font-size: 101.81818181818181%'>sequel</a> <a href='/blog/categories/sinatra' style='font-size: 116.36363636363636%'>sinatra</a> <a href='/blog/categories/snappy' style='font-size: 105.45454545454545%'>snappy</a> <a href='/blog/categories/testing' style='font-size: 114.54545454545455%'>testing</a> <a href='/blog/categories/trello' style='font-size: 114.54545454545455%'>trello</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 103.63636363636364%'>twitter-bootstrap</a> <a href='/blog/categories/ubuntu' style='font-size: 118.18181818181819%'>ubuntu</a> <a href='/blog/categories/unity' style='font-size: 101.81818181818181%'>unity</a> <a href='/blog/categories/upstart' style='font-size: 101.81818181818181%'>upstart</a> <a href='/blog/categories/web' style='font-size: 141.8181818181818%'>web</a> <a href='/blog/categories/write-ups' style='font-size: 143.63636363636363%'>write-ups</a> <a href='/blog/categories/xml' style='font-size: 101.81818181818181%'>xml</a> </span>
 </section>
 
 <section>
@@ -1060,7 +1136,7 @@
   </div>
   <footer role="contentinfo"><p>
   <center>
-	  Copyright &copy; 2018 - Larry Price -
+	  Copyright &copy; 2019 - Larry Price -
 	  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span><br/>
 	  Note: Views and opinions expressed belong solely to the author and do not represent the views of the any other person or company.
 	</center>
