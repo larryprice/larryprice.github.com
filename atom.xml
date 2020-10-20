@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Larry Price]]></title>
-  <link href="https://larry-price.com/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2019-02-09T13:14:01-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="http://larry-price.com/atom.xml" rel="self"/>
+  <link href="http://larry-price.com/"/>
+  <updated>2020-10-19T20:41:40-05:00</updated>
+  <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Getting Started With React Hooks]]></title>
-    <link href="https://larry-price.com/blog/2019/02/09/getting-started-with-react-hooks/"/>
+    <link href="http://larry-price.com/blog/2019/02/09/getting-started-with-react-hooks/"/>
     <updated>2019-02-09T13:10:46-06:00</updated>
-    <id>https://larry-price.com/blog/2019/02/09/getting-started-with-react-hooks</id>
+    <id>http://larry-price.com/blog/2019/02/09/getting-started-with-react-hooks</id>
     <content type="html"><![CDATA[<p><a href="https://reactjs.org/docs/hooks-intro.html">React Hooks</a> are a new feature allowing developers to use state in functional components officially released in <a href="https://reactjs.org/blog/2019/02/06/react-v16.8.0.html">React 16.8</a>. I am in love with the idea of Hooks, so much so that I&rsquo;m giving an introductory talk on the topic at an <a href="https://www.meetup.com/C-U-JavaScript/events/258294308/">upcoming local JavaScript meetup</a>.</p>
 
 <p>All code from this post can be found in a <a href="https://codepen.io/collection/XMoJzy/">codepen collection</a>.</p>
@@ -299,9 +299,9 @@
   
   <entry>
     <title type="html"><![CDATA[Notes From All Things Open 2018]]></title>
-    <link href="https://larry-price.com/blog/2018/10/27/notes-from-all-things-open-2018/"/>
+    <link href="http://larry-price.com/blog/2018/10/27/notes-from-all-things-open-2018/"/>
     <updated>2018-10-27T15:56:45-05:00</updated>
-    <id>https://larry-price.com/blog/2018/10/27/notes-from-all-things-open-2018</id>
+    <id>http://larry-price.com/blog/2018/10/27/notes-from-all-things-open-2018</id>
     <content type="html"><![CDATA[<p>This is a brief overview of the talks I sat through while attending <a href="https://allthingsopen.org/">All Things Open 2018</a> in Raleigh, NC.</p>
 
 <h3>Day 1</h3>
@@ -366,9 +366,9 @@
   
   <entry>
     <title type="html"><![CDATA[How to Use getDerivedStateFromProps in React 16.3+]]></title>
-    <link href="https://larry-price.com/blog/2018/06/27/how-to-use-getderivedstatefromprops-in-react-16-dot-3-plus/"/>
+    <link href="http://larry-price.com/blog/2018/06/27/how-to-use-getderivedstatefromprops-in-react-16-dot-3-plus/"/>
     <updated>2018-06-27T15:12:09-05:00</updated>
-    <id>https://larry-price.com/blog/2018/06/27/how-to-use-getderivedstatefromprops-in-react-16-dot-3-plus</id>
+    <id>http://larry-price.com/blog/2018/06/27/how-to-use-getderivedstatefromprops-in-react-16-dot-3-plus</id>
     <content type="html"><![CDATA[<p>From <a href="https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html">a blog post in late March 2018</a>, it was announced that the React lifecycle methods <code>componentWillReceiveProps</code>, <code>componentWillMount</code>, and <code>componentWillUpdate</code> will be deprecated in a future version of React. This is because of the eventual migration of React to async rendering; these lifecycle methods will become unreliable when async rendering is made default.</p>
 
 <p>In place of these methods, the new <strong>static</strong> method <code>getDerivedStateFromProps</code> was introduced. My team and I struggled at first in wrapping our heads around how to migrate our many uses of <code>componentWillReceiveProps</code> to this new method. It&rsquo;s generally easier than you think, but you need to keep in mind that the new method is <strong>static</strong>, and therefore does not have access to the <code>this</code> context that the old lifecycle methods provided.</p>
@@ -537,9 +537,9 @@
   
   <entry>
     <title type="html"><![CDATA[Quick Start to Vendor Go Dependencies With Govendor]]></title>
-    <link href="https://larry-price.com/blog/2018/04/26/quick-start-to-vendor-go-dependencies-with-govendor/"/>
+    <link href="http://larry-price.com/blog/2018/04/26/quick-start-to-vendor-go-dependencies-with-govendor/"/>
     <updated>2018-04-26T19:34:04-05:00</updated>
-    <id>https://larry-price.com/blog/2018/04/26/quick-start-to-vendor-go-dependencies-with-govendor</id>
+    <id>http://larry-price.com/blog/2018/04/26/quick-start-to-vendor-go-dependencies-with-govendor</id>
     <content type="html"><![CDATA[<p>I recently spent a few days adapting my <a href="https://www.packtpub.com/web-development/go-web-development-video">Go for Web Development video series</a> into a text-based course. In doing so, I had the chance to investigate some of the new vendoring tools available in Go. As of Go 1.5, &ldquo;vendoring&rdquo; dependencies has become the norm. Vendoring means tracking your dependencies and their versions and including those dependencies as part of your project.</p>
 
 <p>In particular, I explored the uses of the <a href="https://github.com/kardianos/govendor">govendor</a> package, mostly because it&rsquo;s supported by default by Heroku. The docs on the GitHub are a lot more thorough than what I&rsquo;ll go over here.</p>
@@ -592,9 +592,9 @@
   
   <entry>
     <title type="html"><![CDATA[Redirecting to Your Main Site With Heroku]]></title>
-    <link href="https://larry-price.com/blog/2018/04/25/redirecting-to-your-main-site-with-heroku/"/>
+    <link href="http://larry-price.com/blog/2018/04/25/redirecting-to-your-main-site-with-heroku/"/>
     <updated>2018-04-25T20:52:19-05:00</updated>
-    <id>https://larry-price.com/blog/2018/04/25/redirecting-to-your-main-site-with-heroku</id>
+    <id>http://larry-price.com/blog/2018/04/25/redirecting-to-your-main-site-with-heroku</id>
     <content type="html"><![CDATA[<p>We have a lot of domains that we want to redirect to the same server, but we use a DNS service that does not allow doing a domain forward, and we&rsquo;re not allowed to upgrade. I wanted to do this in the simplest way possible, so I created a workaround using a PHP script and Heroku. The source discussed in detail in this post is available on GitHub: <a href="https://github.com/larryprice/simple-heroku-redirect-app">https://github.com/larryprice/simple-heroku-redirect-app</a>.</p>
 
 <p>The goal here is for users to visit a page and then be immediately redirected to the new site. I&rsquo;ve defined two environment variables to be used in this project: <code>SITENAME</code>, a human-readable name for our website, and <code>SITEURL</code>, the full URL that we actually want the user to end up on. I&rsquo;ve defined a PHP file called <code>index.php</code>:</p>
@@ -677,10 +677,10 @@
   
   <entry>
     <title type="html"><![CDATA[Async and Await - a New Promise]]></title>
-    <link href="https://larry-price.com/blog/2018/02/02/async-and-await-a-new-promise/"/>
+    <link href="http://larry-price.com/blog/2018/02/02/async-and-await-a-new-promise/"/>
     <updated>2018-02-02T15:19:48-06:00</updated>
-    <id>https://larry-price.com/blog/2018/02/02/async-and-await-a-new-promise</id>
-    <content type="html"><![CDATA[<p>In my <a href="https://larry-price.com/blog/2017/09/14/promise-youll-call-back/">last post</a>, I discussed the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">ES2015 concept of a <code>Promise</code></a>. A <code>Promise</code> provides a simplified mechanism for performing asynchronous work in JavaScript without using the classic <code>setTimeout</code>-callback approach. Seeing as it&rsquo;s been about 4 months since my previous post, a new asynchronous concept is on the rise as part of the <a href="https://tc39.github.io/ecma262/2017/#sec-async-function-definitions">ES2017 specification</a>: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function"><code>async</code> and <code>await</code></a>.</p>
+    <id>http://larry-price.com/blog/2018/02/02/async-and-await-a-new-promise</id>
+    <content type="html"><![CDATA[<p>In my <a href="http://larry-price.com/blog/2017/09/14/promise-youll-call-back/">last post</a>, I discussed the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">ES2015 concept of a <code>Promise</code></a>. A <code>Promise</code> provides a simplified mechanism for performing asynchronous work in JavaScript without using the classic <code>setTimeout</code>-callback approach. Seeing as it&rsquo;s been about 4 months since my previous post, a new asynchronous concept is on the rise as part of the <a href="https://tc39.github.io/ecma262/2017/#sec-async-function-definitions">ES2017 specification</a>: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function"><code>async</code> and <code>await</code></a>.</p>
 
 <p>I became aware of <code>async</code> and <code>await</code> after reading <a href="https://davidwalsh.name/async-await">David Walsh&rsquo;s blog</a>, at which point I disregarded the new features as being &ldquo;too soon&rdquo; and &ldquo;not different enough&rdquo; from a <code>Promise</code> to warrant a second thought. Then, yesterday, I used them, and my life was, once again, forever changed.</p>
 
@@ -884,9 +884,9 @@
   
   <entry>
     <title type="html"><![CDATA[Promise You'll Call Back: A Guide to the Javascript Promise Class]]></title>
-    <link href="https://larry-price.com/blog/2017/09/14/promise-youll-call-back/"/>
+    <link href="http://larry-price.com/blog/2017/09/14/promise-youll-call-back/"/>
     <updated>2017-09-14T21:45:08-05:00</updated>
-    <id>https://larry-price.com/blog/2017/09/14/promise-youll-call-back</id>
+    <id>http://larry-price.com/blog/2017/09/14/promise-youll-call-back</id>
     <content type="html"><![CDATA[<p><em>This article introduces the Javascript Promise class, and how to use a Promise to perform asynchronous work. At the end of this post, you&rsquo;ll have been exposed to the most important components of the Promise API.</em></p>
 
 <p>Introduced in the <a href="http://www.ecma-international.org/ecma-262/6.0/#sec-promise-objects">ES2015 specification</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">MDN</a> dryly describes a <code>Promise</code> as:</p>
@@ -1301,9 +1301,9 @@
   
   <entry>
     <title type="html"><![CDATA[Demystifying Public Speaking]]></title>
-    <link href="https://larry-price.com/blog/2017/08/31/demystifying-public-speaking/"/>
+    <link href="http://larry-price.com/blog/2017/08/31/demystifying-public-speaking/"/>
     <updated>2017-08-31T19:55:20-05:00</updated>
-    <id>https://larry-price.com/blog/2017/08/31/demystifying-public-speaking</id>
+    <id>http://larry-price.com/blog/2017/08/31/demystifying-public-speaking</id>
     <content type="html"><![CDATA[<h3>The Gist</h3>
 
 <p>Public speaking makes me nervous, and I&rsquo;m not alone. A crowd of people is listening to your stutters, nit-picking your errors, and judging your clothing. No one is immune from the fear of public speaking. What can you do about it? Armed with Lara Hogan&rsquo;s <em><a href="https://abookapart.com/products/demystifying-public-speaking">Demystifying Public Speaking</a></em>, we can learn how to make public speaking a bit less stressful. There is no complete answer, but this book is full of tips and guidance for speaking engagements of any size and gravitas.</p>
@@ -1347,9 +1347,9 @@
   
   <entry>
     <title type="html"><![CDATA[Where's Larry?]]></title>
-    <link href="https://larry-price.com/blog/2017/08/26/wheres-larry/"/>
+    <link href="http://larry-price.com/blog/2017/08/26/wheres-larry/"/>
     <updated>2017-08-26T18:30:48-05:00</updated>
-    <id>https://larry-price.com/blog/2017/08/26/wheres-larry</id>
+    <id>http://larry-price.com/blog/2017/08/26/wheres-larry</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been on hiatus for a few months. Aside from the technical writing I usually do on this blog, I haven&rsquo;t pushed much extracurricular code or read any programming books. So what have I been doing?</p>
 
 <p><em>Warning: This is going to come off as a diary entry about my life and is not intended as a free, highly technical post about programming. Come back later for more of that.</em></p>
@@ -1408,9 +1408,9 @@
   
   <entry>
     <title type="html"><![CDATA[On Gender Bias and Home Improvement]]></title>
-    <link href="https://larry-price.com/blog/2017/04/18/on-gender-bias-and-home-improvement/"/>
+    <link href="http://larry-price.com/blog/2017/04/18/on-gender-bias-and-home-improvement/"/>
     <updated>2017-04-18T10:42:10-04:00</updated>
-    <id>https://larry-price.com/blog/2017/04/18/on-gender-bias-and-home-improvement</id>
+    <id>http://larry-price.com/blog/2017/04/18/on-gender-bias-and-home-improvement</id>
     <content type="html"><![CDATA[<p>Instead of a highly technical guide, today I have a short anecdote of some recent electrical work we did in the master bathroom.</p>
 
 <p>I met my wife when I joined my high school robotics team. I was a hammer: with no singular skill that I wanted to focus on, I was thrown into painting, cutting, drilling, electrical, lifting, sanding, building the website, and even marketing. Funnily enough, I never actually worked on programming the robot. As far as I knew at the time, my wife was doing similar work with more focus on marketing and operating the robot.</p>
@@ -1431,10 +1431,10 @@
   
   <entry>
     <title type="html"><![CDATA[Using D-Bus Signals in Python]]></title>
-    <link href="https://larry-price.com/blog/2017/04/11/using-d-bus-signals-in-python/"/>
+    <link href="http://larry-price.com/blog/2017/04/11/using-d-bus-signals-in-python/"/>
     <updated>2017-04-11T15:30:58-04:00</updated>
-    <id>https://larry-price.com/blog/2017/04/11/using-d-bus-signals-in-python</id>
-    <content type="html"><![CDATA[<p><em>This is the third in a series of blog posts on creating an asynchronous D-Bus service in python. For the inital entry, <a href="https://larry-price.com/blog/2017/04/04/creating-a-d-bus-service-with-python/">go here</a>. For the previous entry, <a href="https://larry-price.com/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python/">go here</a></em></p>
+    <id>http://larry-price.com/blog/2017/04/11/using-d-bus-signals-in-python</id>
+    <content type="html"><![CDATA[<p><em>This is the third in a series of blog posts on creating an asynchronous D-Bus service in python. For the inital entry, <a href="http://larry-price.com/blog/2017/04/04/creating-a-d-bus-service-with-python/">go here</a>. For the previous entry, <a href="http://larry-price.com/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python/">go here</a></em></p>
 
 <p>Last time we transformed our base synchronous D-Bus service to include asynchronous calls in a rather naive way. In this post, we&rsquo;ll refactor those asynchronous calls to include D-Bus signals; codewise, we&rsquo;ll pick up right where we left off after part 2: <a href="https://github.com/larryprice/python-dbus-blog-series/tree/part2">https://github.com/larryprice/python-dbus-blog-series/tree/part2</a>. Of course, all of today&rsquo;s code can be found in the same project with the part3 tag: <a href="https://github.com/larryprice/python-dbus-blog-series/tree/part3">https://github.com/larryprice/python-dbus-blog-series/tree/part3</a>.</p>
 
@@ -1688,10 +1688,10 @@
   
   <entry>
     <title type="html"><![CDATA[Creating an Asynchronous D-Bus Service With Python]]></title>
-    <link href="https://larry-price.com/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python/"/>
+    <link href="http://larry-price.com/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python/"/>
     <updated>2017-04-05T15:41:56-04:00</updated>
-    <id>https://larry-price.com/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python</id>
-    <content type="html"><![CDATA[<p><em>This is the second in a series of blog posts on creating an asynchronous D-Bus service in python. For part 1, <a href="https://larry-price.com/blog/2017/04/04/creating-a-d-bus-service-with-python/">go here</a>.</em></p>
+    <id>http://larry-price.com/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python</id>
+    <content type="html"><![CDATA[<p><em>This is the second in a series of blog posts on creating an asynchronous D-Bus service in python. For part 1, <a href="http://larry-price.com/blog/2017/04/04/creating-a-d-bus-service-with-python/">go here</a>.</em></p>
 
 <p>Last time we created a base for our asynchronous D-Bus service with a simple synchronous server/client. In this post, we&rsquo;ll start from that base which can be found on Github: <a href="https://github.com/larryprice/python-dbus-blog-series/tree/part1">https://github.com/larryprice/python-dbus-blog-series/tree/part1</a>. Of course, all of today&rsquo;s code can be found in the same project with the part2 tag: <a href="https://github.com/larryprice/python-dbus-blog-series/tree/part2">https://github.com/larryprice/python-dbus-blog-series/tree/part2</a>.</p>
 
@@ -2046,9 +2046,9 @@
   
   <entry>
     <title type="html"><![CDATA[Creating a D-Bus Service With Python]]></title>
-    <link href="https://larry-price.com/blog/2017/04/04/creating-a-d-bus-service-with-python/"/>
+    <link href="http://larry-price.com/blog/2017/04/04/creating-a-d-bus-service-with-python/"/>
     <updated>2017-04-04T21:40:49-04:00</updated>
-    <id>https://larry-price.com/blog/2017/04/04/creating-a-d-bus-service-with-python</id>
+    <id>http://larry-price.com/blog/2017/04/04/creating-a-d-bus-service-with-python</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been working on a d-bus service to replace some of the management guts of my project for a while now. We started out creating a simple service, but some of our management processes take a long time to run, causing a timeout error when calling these methods. I needed a way to run these tasks in the background and report status to any possible clients. I&rsquo;d like to outline my approach to making this possible. This will be a multi-part blog series starting from the bottom: a very simple, synchronous d-bus service. By the end of this series, we&rsquo;ll have a small codebase with asynchronous tasks which can be interacted with (input/output) from D-Bus clients.</p>
 
 <p>All of this code is written with python3.5 on Ubuntu 17.04 (beta), is MIT licensed, and can be found on Github: <a href="https://github.com/larryprice/python-dbus-blog-series/tree/part1">https://github.com/larryprice/python-dbus-blog-series/tree/part1</a>.</p>
@@ -2274,9 +2274,9 @@
   
   <entry>
     <title type="html"><![CDATA[Snappy Libertine]]></title>
-    <link href="https://larry-price.com/blog/2017/02/15/snappy-libertine/"/>
+    <link href="http://larry-price.com/blog/2017/02/15/snappy-libertine/"/>
     <updated>2017-02-15T18:38:44-05:00</updated>
-    <id>https://larry-price.com/blog/2017/02/15/snappy-libertine</id>
+    <id>http://larry-price.com/blog/2017/02/15/snappy-libertine</id>
     <content type="html"><![CDATA[<p>Libertine is software suite for runnin X11 apps in non-X11 environments and installing deb-based applications on a system without dpkg. Snappy is a package management system to confine applications from one another. Wouldn&rsquo;t it be cool to run libertine as a snap?</p>
 
 <p>Yes. Yes it would.</p>
@@ -2425,10 +2425,10 @@
   
   <entry>
     <title type="html"><![CDATA[2016 Retrospective]]></title>
-    <link href="https://larry-price.com/blog/2016/12/27/2016-year-in-review/"/>
+    <link href="http://larry-price.com/blog/2016/12/27/2016-year-in-review/"/>
     <updated>2016-12-27T13:35:56-05:00</updated>
-    <id>https://larry-price.com/blog/2016/12/27/2016-year-in-review</id>
-    <content type="html"><![CDATA[<p>This has been a unique year for me, and I wanted to quickly lay out what I&rsquo;ve accomplished and where I think I&rsquo;m going for the coming year. This is now officially a tradition at three posts (see: <a href="https://larry-price.com/blog/2014/12/31/2014-retrospective/">2014</a> and <a href="https://larry-price.com/blog/2016/01/03/2015-year-in-review/">2015</a>).</p>
+    <id>http://larry-price.com/blog/2016/12/27/2016-year-in-review</id>
+    <content type="html"><![CDATA[<p>This has been a unique year for me, and I wanted to quickly lay out what I&rsquo;ve accomplished and where I think I&rsquo;m going for the coming year. This is now officially a tradition at three posts (see: <a href="http://larry-price.com/blog/2014/12/31/2014-retrospective/">2014</a> and <a href="http://larry-price.com/blog/2016/01/03/2015-year-in-review/">2015</a>).</p>
 
 <h3>Revisiting 2016&rsquo;s Goals</h3>
 
@@ -2566,12 +2566,12 @@
   
   <entry>
     <title type="html"><![CDATA[Confining a Snapped X11 Application]]></title>
-    <link href="https://larry-price.com/blog/2016/12/10/confining-a-snapped-x11-application/"/>
+    <link href="http://larry-price.com/blog/2016/12/10/confining-a-snapped-x11-application/"/>
     <updated>2016-12-10T17:30:38-05:00</updated>
-    <id>https://larry-price.com/blog/2016/12/10/confining-a-snapped-x11-application</id>
+    <id>http://larry-price.com/blog/2016/12/10/confining-a-snapped-x11-application</id>
     <content type="html"><![CDATA[<p><em>Looking for the code? Look no further: <a href="https://github.com/larryprice/pingus-snap">https://github.com/larryprice/pingus-snap</a></em></p>
 
-<p>In my <a href="https://larry-price.com/blog/2016/12/07/creating-a-snap-from-existing-deb-packages/">last post</a>, I demonstrated creating a snap package for an application available in the archive. I left that application unconfined, which is taboo in the long run if we want our system to be secure. In a few steps, we can add the necessary components to confine our <code>pingus</code> snap.</p>
+<p>In my <a href="http://larry-price.com/blog/2016/12/07/creating-a-snap-from-existing-deb-packages/">last post</a>, I demonstrated creating a snap package for an application available in the archive. I left that application unconfined, which is taboo in the long run if we want our system to be secure. In a few steps, we can add the necessary components to confine our <code>pingus</code> snap.</p>
 
 <p>For reference, this is the original <code>snapcraft.yaml</code> file for creating a <code>pingus</code> snap, except that we&rsquo;ve updated the <code>confinement</code> property to <code>strict</code>:</p>
 
@@ -2699,9 +2699,9 @@
   
   <entry>
     <title type="html"><![CDATA[Building Snaps From Archived Packages]]></title>
-    <link href="https://larry-price.com/blog/2016/12/07/creating-a-snap-from-existing-deb-packages/"/>
+    <link href="http://larry-price.com/blog/2016/12/07/creating-a-snap-from-existing-deb-packages/"/>
     <updated>2016-12-07T22:10:08-05:00</updated>
-    <id>https://larry-price.com/blog/2016/12/07/creating-a-snap-from-existing-deb-packages</id>
+    <id>http://larry-price.com/blog/2016/12/07/creating-a-snap-from-existing-deb-packages</id>
     <content type="html"><![CDATA[<p>If you haven&rsquo;t heard, <a href="//snapcraft.io">snaps</a> are a new, modern packaging format made by the guys at Ubuntu. Snaps give every app a confined environment to live in, making desktops more secure and dependencies less of a hassle. One common way to create a snap is to simply use existing packages from the Ubuntu archives.</p>
 
 <p>Let&rsquo;s try to create a snap for the game <a href="https://lgdb.org/game/pingus">pingus</a>. <code>pingus</code> is a great little Lemmings clone that we can easily convert to a snap. We&rsquo;ll start by installing the necessary dependencies for snap building (see <a href="//snapcraft.io/create/">the snapcraft website</a> for more):</p>
@@ -2882,9 +2882,9 @@
   
   <entry>
     <title type="html"><![CDATA[Clean Package Building With Pbuilder]]></title>
-    <link href="https://larry-price.com/blog/2016/09/27/clean-package-building-with-pbuilder/"/>
+    <link href="http://larry-price.com/blog/2016/09/27/clean-package-building-with-pbuilder/"/>
     <updated>2016-09-27T21:50:00-04:00</updated>
-    <id>https://larry-price.com/blog/2016/09/27/clean-package-building-with-pbuilder</id>
+    <id>http://larry-price.com/blog/2016/09/27/clean-package-building-with-pbuilder</id>
     <content type="html"><![CDATA[<p>Whether I&rsquo;m adding dependencies, updating package names, or creating new package spins, I always have issues testing my debian packages. Something will work locally, only to fail on jenkins under a clean environment. Fortunately, there&rsquo;s a nifty tool called <code>pbuilder</code> that exists to help out in these situations. <code>pbuilder</code> uses a chroot to set up a clean environment to build packages, and can even be used to build packages for systems with architectures different from your own.</p>
 
 <p><em>Note: All code samples were originally written from a machine running Ubuntu 16.10 64-bit. Your mileage may vary.</em></p>
@@ -3010,9 +3010,9 @@
   
   <entry>
     <title type="html"><![CDATA[Getting Started With Python Mocking and Patching]]></title>
-    <link href="https://larry-price.com/blog/2016/09/07/getting-started-with-python-mocks-from-a-c-plus-plus-perspective/"/>
+    <link href="http://larry-price.com/blog/2016/09/07/getting-started-with-python-mocks-from-a-c-plus-plus-perspective/"/>
     <updated>2016-09-07T23:00:09-04:00</updated>
-    <id>https://larry-price.com/blog/2016/09/07/getting-started-with-python-mocks-from-a-c-plus-plus-perspective</id>
+    <id>http://larry-price.com/blog/2016/09/07/getting-started-with-python-mocks-from-a-c-plus-plus-perspective</id>
     <content type="html"><![CDATA[<p>I currently write a lot of python and C++. Although I religiously unit test my C++ code, I&rsquo;m a bit ashamed to say that I haven&rsquo;t had much experience with python unit testing until recently. You know how it is - python is one of those interpreted languages, you mostly use it to do quick hacks, it doesn&rsquo;t <em>need</em> tests. Until you&rsquo;ve written your entire D-Bus service using python, and every time you make a code change <em>a literal python</em> appears on the screen to crash your computer. So I&rsquo;ve started writing a bunch of tests and found (as expected) a tangled mess of dependencies and system calls.</p>
 
 <p>In many C-like languages, you can fix most of your dependency problems with <a href="https://stackoverflow.com/questions/346372/whats-the-difference-between-faking-mocking-and-stubbing#answer-346440">The Big Three</a>: mocks, fakes, and stubs. A fake is an actual implementation of an interface used for non-production environments, a stub is an implementation of an interface returning a pre-conceived result, and a mock is a wrapper around an interface allowing a programmer to accurately map what actions were performed on the object. In C-like languages, you use <a href="https://en.wikipedia.org/wiki/Dependency_injection">dependency injection</a> to give our classes fakes, mocks, or stubs instead of real objects during testing.</p>
@@ -3267,9 +3267,9 @@
   
   <entry>
     <title type="html"><![CDATA[Maintaining X Applications in Unity 8]]></title>
-    <link href="https://larry-price.com/blog/2016/08/24/running-x-applications-in-unity-8/"/>
+    <link href="http://larry-price.com/blog/2016/08/24/running-x-applications-in-unity-8/"/>
     <updated>2016-08-24T17:29:59-04:00</updated>
-    <id>https://larry-price.com/blog/2016/08/24/running-x-applications-in-unity-8</id>
+    <id>http://larry-price.com/blog/2016/08/24/running-x-applications-in-unity-8</id>
     <content type="html"><![CDATA[<p>The release of Ubuntu 16.10 Yakkety Yak in the coming months will bring about the public release of Unity 8 as a pre-installed desktop session (though not as the default session). It&rsquo;s been a long time coming, and there&rsquo;s a lot of new features which will break older applications. Canonical has unveiled <a href="http://snapcraft.io">snappy</a> as the preferred packaging system for Unity 8, but what about all those old deb packages?</p>
 
 <p>There have been a few other good posts about X applications on Unity 8 including <a href="http://mhall119.com/2016/05/dogfooding-unity-8/">this one on dogfooding</a>, <a href="https://kylenubuntu.blogspot.no/2016/07/running-x-apps-on-ubuntu-devices.html">this one on Ubuntu Touch</a>, and <a href="https://bregmatter.wordpress.com/2016/07/04/x11-applications-and-unity-8/">this one on how it works under the covers</a>. This blog post is explicitly about Unity 8 on desktop using the Libertine CLI, though can be applied to most devices running Ubuntu Touch.</p>

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: python | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/python/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2019-02-09T13:14:01-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="http://larry-price.com/blog/categories/python/atom.xml" rel="self"/>
+  <link href="http://larry-price.com/"/>
+  <updated>2020-10-19T20:41:40-05:00</updated>
+  <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Using D-Bus Signals in Python]]></title>
-    <link href="https://larry-price.com/blog/2017/04/11/using-d-bus-signals-in-python/"/>
+    <link href="http://larry-price.com/blog/2017/04/11/using-d-bus-signals-in-python/"/>
     <updated>2017-04-11T15:30:58-04:00</updated>
-    <id>https://larry-price.com/blog/2017/04/11/using-d-bus-signals-in-python</id>
+    <id>http://larry-price.com/blog/2017/04/11/using-d-bus-signals-in-python</id>
     <content type="html"><![CDATA[<p><em>This is the third in a series of blog posts on creating an asynchronous D-Bus service in python. For the inital entry, <a href="/blog/2017/04/04/creating-a-d-bus-service-with-python/">go here</a>. For the previous entry, <a href="/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python/">go here</a></em></p>
 
 <p>Last time we transformed our base synchronous D-Bus service to include asynchronous calls in a rather naive way. In this post, we&rsquo;ll refactor those asynchronous calls to include D-Bus signals; codewise, we&rsquo;ll pick up right where we left off after part 2: <a href="https://github.com/larryprice/python-dbus-blog-series/tree/part2">https://github.com/larryprice/python-dbus-blog-series/tree/part2</a>. Of course, all of today&rsquo;s code can be found in the same project with the part3 tag: <a href="https://github.com/larryprice/python-dbus-blog-series/tree/part3">https://github.com/larryprice/python-dbus-blog-series/tree/part3</a>.</p>
@@ -165,9 +165,9 @@ with RandomDataClient() as client:
   
   <entry>
     <title type="html"><![CDATA[Creating an Asynchronous D-Bus Service with Python]]></title>
-    <link href="https://larry-price.com/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python/"/>
+    <link href="http://larry-price.com/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python/"/>
     <updated>2017-04-05T15:41:56-04:00</updated>
-    <id>https://larry-price.com/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python</id>
+    <id>http://larry-price.com/blog/2017/04/05/creating-an-asynchronous-d-bus-service-with-python</id>
     <content type="html"><![CDATA[<p><em>This is the second in a series of blog posts on creating an asynchronous D-Bus service in python. For part 1, <a href="/blog/2017/04/04/creating-a-d-bus-service-with-python/">go here</a>.</em></p>
 
 <p>Last time we created a base for our asynchronous D-Bus service with a simple synchronous server/client. In this post, we&rsquo;ll start from that base which can be found on Github: <a href="https://github.com/larryprice/python-dbus-blog-series/tree/part1">https://github.com/larryprice/python-dbus-blog-series/tree/part1</a>. Of course, all of today&rsquo;s code can be found in the same project with the part2 tag: <a href="https://github.com/larryprice/python-dbus-blog-series/tree/part2">https://github.com/larryprice/python-dbus-blog-series/tree/part2</a>.</p>
@@ -367,9 +367,9 @@ $ ./client 16 --slow
   
   <entry>
     <title type="html"><![CDATA[Creating a D-Bus Service with Python]]></title>
-    <link href="https://larry-price.com/blog/2017/04/04/creating-a-d-bus-service-with-python/"/>
+    <link href="http://larry-price.com/blog/2017/04/04/creating-a-d-bus-service-with-python/"/>
     <updated>2017-04-04T21:40:49-04:00</updated>
-    <id>https://larry-price.com/blog/2017/04/04/creating-a-d-bus-service-with-python</id>
+    <id>http://larry-price.com/blog/2017/04/04/creating-a-d-bus-service-with-python</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been working on a d-bus service to replace some of the management guts of my project for a while now. We started out creating a simple service, but some of our management processes take a long time to run, causing a timeout error when calling these methods. I needed a way to run these tasks in the background and report status to any possible clients. I&rsquo;d like to outline my approach to making this possible. This will be a multi-part blog series starting from the bottom: a very simple, synchronous d-bus service. By the end of this series, we&rsquo;ll have a small codebase with asynchronous tasks which can be interacted with (input/output) from D-Bus clients.</p>
 
 <p>All of this code is written with python3.5 on Ubuntu 17.04 (beta), is MIT licensed, and can be found on Github: <a href="https://github.com/larryprice/python-dbus-blog-series/tree/part1">https://github.com/larryprice/python-dbus-blog-series/tree/part1</a>.</p>
@@ -507,9 +507,9 @@ input argument must be integer
   
   <entry>
     <title type="html"><![CDATA[Getting Started with Python Mocking and Patching]]></title>
-    <link href="https://larry-price.com/blog/2016/09/07/getting-started-with-python-mocks-from-a-c-plus-plus-perspective/"/>
+    <link href="http://larry-price.com/blog/2016/09/07/getting-started-with-python-mocks-from-a-c-plus-plus-perspective/"/>
     <updated>2016-09-07T23:00:09-04:00</updated>
-    <id>https://larry-price.com/blog/2016/09/07/getting-started-with-python-mocks-from-a-c-plus-plus-perspective</id>
+    <id>http://larry-price.com/blog/2016/09/07/getting-started-with-python-mocks-from-a-c-plus-plus-perspective</id>
     <content type="html"><![CDATA[<p>I currently write a lot of python and C++. Although I religiously unit test my C++ code, I&rsquo;m a bit ashamed to say that I haven&rsquo;t had much experience with python unit testing until recently. You know how it is - python is one of those interpreted languages, you mostly use it to do quick hacks, it doesn&rsquo;t <em>need</em> tests. Until you&rsquo;ve written your entire D-Bus service using python, and every time you make a code change <em>a literal python</em> appears on the screen to crash your computer. So I&rsquo;ve started writing a bunch of tests and found (as expected) a tangled mess of dependencies and system calls.</p>
 
 <p>In many C-like languages, you can fix most of your dependency problems with <a href="https://stackoverflow.com/questions/346372/whats-the-difference-between-faking-mocking-and-stubbing#answer-346440">The Big Three</a>: mocks, fakes, and stubs. A fake is an actual implementation of an interface used for non-production environments, a stub is an implementation of an interface returning a pre-conceived result, and a mock is a wrapper around an interface allowing a programmer to accurately map what actions were performed on the object. In C-like languages, you use <a href="https://en.wikipedia.org/wiki/Dependency_injection">dependency injection</a> to give our classes fakes, mocks, or stubs instead of real objects during testing.</p>

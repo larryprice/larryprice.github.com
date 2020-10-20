@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: php | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/php/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2019-02-09T13:14:01-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="http://larry-price.com/blog/categories/php/atom.xml" rel="self"/>
+  <link href="http://larry-price.com/"/>
+  <updated>2020-10-19T20:41:40-05:00</updated>
+  <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Redirecting To Your Main Site With Heroku]]></title>
-    <link href="https://larry-price.com/blog/2018/04/25/redirecting-to-your-main-site-with-heroku/"/>
+    <link href="http://larry-price.com/blog/2018/04/25/redirecting-to-your-main-site-with-heroku/"/>
     <updated>2018-04-25T20:52:19-05:00</updated>
-    <id>https://larry-price.com/blog/2018/04/25/redirecting-to-your-main-site-with-heroku</id>
+    <id>http://larry-price.com/blog/2018/04/25/redirecting-to-your-main-site-with-heroku</id>
     <content type="html"><![CDATA[<p>We have a lot of domains that we want to redirect to the same server, but we use a DNS service that does not allow doing a domain forward, and we&rsquo;re not allowed to upgrade. I wanted to do this in the simplest way possible, so I created a workaround using a PHP script and Heroku. The source discussed in detail in this post is available on GitHub: <a href="https://github.com/larryprice/simple-heroku-redirect-app">https://github.com/larryprice/simple-heroku-redirect-app</a>.</p>
 
 <p>The goal here is for users to visit a page and then be immediately redirected to the new site. I&rsquo;ve defined two environment variables to be used in this project: <code>SITENAME</code>, a human-readable name for our website, and <code>SITEURL</code>, the full URL that we actually want the user to end up on. I&rsquo;ve defined a PHP file called <code>index.php</code>:</p>

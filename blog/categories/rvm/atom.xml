@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: rvm | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/rvm/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2019-02-09T13:14:01-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="http://larry-price.com/blog/categories/rvm/atom.xml" rel="self"/>
+  <link href="http://larry-price.com/"/>
+  <updated>2020-10-19T20:41:40-05:00</updated>
+  <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Convincing rvm to let you use ruby 2.1.0]]></title>
-    <link href="https://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/"/>
+    <link href="http://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/"/>
     <updated>2014-02-22T16:46:00-05:00</updated>
-    <id>https://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0</id>
+    <id>http://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0</id>
     <content type="html"><![CDATA[<p><a href="//ruby-lang.org/en/news/2013/12/25/ruby-2-1-0-is-released/">Ruby 2.1.0 went stable</a> a few months ago, and <a href="//ruby-lang.org/en/news/2014/01/10/ruby-1-9-3-will-end-on-2015/">Ruby 1.9.3 support</a> will end in a just over a year.</p>
 
 <p>You know what that means: Warplanes in the sky falling to the ground, dogs and cats getting along like old pals, and people wandering aimlessly through the streets trying to remember the last time they saw a green build.</p>
@@ -73,9 +73,9 @@ $ which ruby
   
   <entry>
     <title type="html"><![CDATA[Login shell not sourcing .bashrc: A brief lesson in dot-files]]></title>
-    <link href="https://larry-price.com/blog/2013/12/10/login-shell-not-sourcing-bashrc/"/>
+    <link href="http://larry-price.com/blog/2013/12/10/login-shell-not-sourcing-bashrc/"/>
     <updated>2013-12-10T19:45:00-06:00</updated>
-    <id>https://larry-price.com/blog/2013/12/10/login-shell-not-sourcing-bashrc</id>
+    <id>http://larry-price.com/blog/2013/12/10/login-shell-not-sourcing-bashrc</id>
     <content type="html"><![CDATA[<p>I have a confession: I&rsquo;ve been avoiding using <a href="https://rvm.io/">rvm</a> for the past few weeks for stupid reasons.</p>
 
 <p>When using <code>rvm</code> with <code>gnome-terminal</code>, I have to tell <code>gnome-terminal</code> to run as a login shell so that <code>/etc/profile</code> is sourced. The login shell is then supposed to source <code>$HOME/profile</code>, which is then supposed to source <code>$HOME/.bashrc</code>. Installing <code>rvm</code> results in me editing my <code>.bash_profile</code> to add the following line:</p>
@@ -120,9 +120,9 @@ fi
   
   <entry>
     <title type="html"><![CDATA[RVM Quick Start]]></title>
-    <link href="https://larry-price.com/blog/2013/10/08/rvm-quick-start/"/>
+    <link href="http://larry-price.com/blog/2013/10/08/rvm-quick-start/"/>
     <updated>2013-10-08T22:10:00-05:00</updated>
-    <id>https://larry-price.com/blog/2013/10/08/rvm-quick-start</id>
+    <id>http://larry-price.com/blog/2013/10/08/rvm-quick-start</id>
     <content type="html"><![CDATA[<p>When I was working on a few different projects at once, I started running into issues where my Ruby gem versions would start to mismatch. How did I fix that issue? Naively. I adjusted the versions as necessary so my gems were always the same version. That was&hellip; pretty dumb. To make up for my past ignorance, I&rsquo;ve been exploring ways to manage my Ruby versions and my gems intelligently. Enter <a href="https://rvm.io/">RVM</a>.</p>
 
 <p>RVM is a simple tool to solve just problems. And it works pretty well. I hit some kinks along the way, but my installation pleases me well enough. Getting RVM is not for the faint of heart. Maybe there are better ways to do it, but the website says to execute the following:</p>

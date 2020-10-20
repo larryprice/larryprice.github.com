@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: remote | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/remote/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2019-02-09T13:14:01-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="http://larry-price.com/blog/categories/remote/atom.xml" rel="self"/>
+  <link href="http://larry-price.com/"/>
+  <updated>2020-10-19T20:41:40-05:00</updated>
+  <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Going Remote: 4 Months In, aka Remote Life 4-eva]]></title>
-    <link href="https://larry-price.com/blog/2016/08/04/going-remote-4-months-in/"/>
+    <link href="http://larry-price.com/blog/2016/08/04/going-remote-4-months-in/"/>
     <updated>2016-08-04T20:16:04-04:00</updated>
-    <id>https://larry-price.com/blog/2016/08/04/going-remote-4-months-in</id>
+    <id>http://larry-price.com/blog/2016/08/04/going-remote-4-months-in</id>
     <content type="html"><![CDATA[<p><em>This is the third in a series of blog posts detailing my experience acclimating to a fully remote work experience. You may also enjoy my original posts <a href="/blog/2016/04/11/going-remote-1-week/">detailing my first week</a> and <a href="/blog/2016/05/05/going-remote-1-month-in/">my first month</a>.</em></p>
 
 <p>Has it really been 4 months since I started riding the raging river of remote work? After my first month, I felt pretty good about my daily schedule and work/life balance. Since the last post, I&rsquo;ve met many of my co-workers IRL, learned to find my own work, and figured out how to shake things up when I get in a rut.</p>
@@ -72,9 +72,9 @@
   
   <entry>
     <title type="html"><![CDATA[Going Remote: 1 Month In]]></title>
-    <link href="https://larry-price.com/blog/2016/05/05/going-remote-1-month-in/"/>
+    <link href="http://larry-price.com/blog/2016/05/05/going-remote-1-month-in/"/>
     <updated>2016-05-05T20:21:56-04:00</updated>
-    <id>https://larry-price.com/blog/2016/05/05/going-remote-1-month-in</id>
+    <id>http://larry-price.com/blog/2016/05/05/going-remote-1-month-in</id>
     <content type="html"><![CDATA[<p><em>This is the second in a series of blog posts detailing my experience migrating from a culture based on co-location to a fully remote environment. You may also enjoy my <a href="/blog/2016/04/11/going-remote-1-week/">original post detailing my first week</a>. Look out for another post in the fall.</em></p>
 
 <p>I&rsquo;ve spent an entire month working remotely. Whereas I spent much of my first week working remotely getting my home office in a working state, the rest of the month was largely spent acclimating to a culture of complete autonomy, getting comfortable with my peers, and finding my way around.</p>
@@ -118,9 +118,9 @@
   
   <entry>
     <title type="html"><![CDATA[Going Remote: 1 Week In]]></title>
-    <link href="https://larry-price.com/blog/2016/04/11/going-remote-1-week/"/>
+    <link href="http://larry-price.com/blog/2016/04/11/going-remote-1-week/"/>
     <updated>2016-04-11T20:40:00-04:00</updated>
-    <id>https://larry-price.com/blog/2016/04/11/going-remote-1-week</id>
+    <id>http://larry-price.com/blog/2016/04/11/going-remote-1-week</id>
     <content type="html"><![CDATA[<p><em>I would like for this to be the first in a series of blog posts detailing my experience migrating from a culture based on co-location to a fully remote environment. Look out for another post at about the 1-month mark.</em></p>
 
 <p>I&rsquo;ve spent an entire week working remotely. How did it go? I&rsquo;m not going to go into my current job here (if you&rsquo;re curious: I love it), but I&rsquo;m going to try to focus on the aspects of setting up a pleasant environment for working from home and how I coped during my first week.</p>
@@ -175,9 +175,9 @@
   
   <entry>
     <title type="html"><![CDATA[Remote: Office Not Required]]></title>
-    <link href="https://larry-price.com/blog/2014/10/31/remote-office-not-required/"/>
+    <link href="http://larry-price.com/blog/2014/10/31/remote-office-not-required/"/>
     <updated>2014-10-31T19:34:13-04:00</updated>
-    <id>https://larry-price.com/blog/2014/10/31/remote-office-not-required</id>
+    <id>http://larry-price.com/blog/2014/10/31/remote-office-not-required</id>
     <content type="html"><![CDATA[<blockquote><p>The city is the original talent hub. Traditionally, those who ran the engines of capitalism thought: &ldquo;Let&rsquo;s gather a large numberof people in a small grographical are where they must live on top of each other in tight quarters, and we&rsquo;ll be able to find plenty of able bodies to man our factories.&rdquo; Most splendid, Sir Moneybags!</p>
 
 <p>From the section titled &ldquo;End of city monopoly&rdquo;</p></blockquote>

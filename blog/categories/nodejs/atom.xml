@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: nodejs | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/nodejs/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2019-02-09T13:14:01-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="http://larry-price.com/blog/categories/nodejs/atom.xml" rel="self"/>
+  <link href="http://larry-price.com/"/>
+  <updated>2020-10-19T20:41:40-05:00</updated>
+  <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Async and Await - A New Promise]]></title>
-    <link href="https://larry-price.com/blog/2018/02/02/async-and-await-a-new-promise/"/>
+    <link href="http://larry-price.com/blog/2018/02/02/async-and-await-a-new-promise/"/>
     <updated>2018-02-02T15:19:48-06:00</updated>
-    <id>https://larry-price.com/blog/2018/02/02/async-and-await-a-new-promise</id>
+    <id>http://larry-price.com/blog/2018/02/02/async-and-await-a-new-promise</id>
     <content type="html"><![CDATA[<p>In my <a href="/blog/2017/09/14/promise-youll-call-back/">last post</a>, I discussed the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">ES2015 concept of a <code>Promise</code></a>. A <code>Promise</code> provides a simplified mechanism for performing asynchronous work in JavaScript without using the classic <code>setTimeout</code>-callback approach. Seeing as it&rsquo;s been about 4 months since my previous post, a new asynchronous concept is on the rise as part of the <a href="https://tc39.github.io/ecma262/2017/#sec-async-function-definitions">ES2017 specification</a>: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function"><code>async</code> and <code>await</code></a>.</p>
 
 <p>I became aware of <code>async</code> and <code>await</code> after reading <a href="https://davidwalsh.name/async-await">David Walsh&rsquo;s blog</a>, at which point I disregarded the new features as being &ldquo;too soon&rdquo; and &ldquo;not different enough&rdquo; from a <code>Promise</code> to warrant a second thought. Then, yesterday, I used them, and my life was, once again, forever changed.</p>
@@ -136,9 +136,9 @@ console.log('Current status:');
   
   <entry>
     <title type="html"><![CDATA[Promise you'll call back: A guide to the Javascript Promise class]]></title>
-    <link href="https://larry-price.com/blog/2017/09/14/promise-youll-call-back/"/>
+    <link href="http://larry-price.com/blog/2017/09/14/promise-youll-call-back/"/>
     <updated>2017-09-14T21:45:08-05:00</updated>
-    <id>https://larry-price.com/blog/2017/09/14/promise-youll-call-back</id>
+    <id>http://larry-price.com/blog/2017/09/14/promise-youll-call-back</id>
     <content type="html"><![CDATA[<p><em>This article introduces the Javascript Promise class, and how to use a Promise to perform asynchronous work. At the end of this post, you&rsquo;ll have been exposed to the most important components of the Promise API.</em></p>
 
 <p>Introduced in the <a href="http://www.ecma-international.org/ecma-262/6.0/#sec-promise-objects">ES2015 specification</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">MDN</a> dryly describes a <code>Promise</code> as:</p>
@@ -374,9 +374,9 @@ Promise.race([func1(), func2()]).then((name) =&gt; {
   
   <entry>
     <title type="html"><![CDATA[The wisdom of Confucius - now available in an API]]></title>
-    <link href="https://larry-price.com/blog/2014/10/14/the-wisdom-of-confucius-now-available-in-an-api/"/>
+    <link href="http://larry-price.com/blog/2014/10/14/the-wisdom-of-confucius-now-available-in-an-api/"/>
     <updated>2014-10-14T06:03:16-04:00</updated>
-    <id>https://larry-price.com/blog/2014/10/14/the-wisdom-of-confucius-now-available-in-an-api</id>
+    <id>http://larry-price.com/blog/2014/10/14/the-wisdom-of-confucius-now-available-in-an-api</id>
     <content type="html"><![CDATA[<p>I make a lot of silly things while learning new technology. In this case I have tapped into the almighty power of <a href="https://en.wikipedia.org/wiki/Confucius">Confucius</a>, a Chinese philosopher from 2500 years ago credited for writing or editing many Chinese classic texts. Growing up as an American child, I associated Confucius with proverbs, and I associated proverbs with that classic after-Chinese-dinner dessert <a href="https://en.wikipedia.org/wiki/Fortune_cookie">the fortune cookie</a>.</p>
 
 <p>Fortune cookies are a pure delight: a message in a bottle from the restaurant&rsquo;s proprietors for you to enjoy as you kindly vacate the facility.</p>
@@ -421,9 +421,9 @@ Promise.race([func1(), func2()]).then((name) =&gt; {
   
   <entry>
     <title type="html"><![CDATA[Fetching Random Mongoose Objects the Simple Way]]></title>
-    <link href="https://larry-price.com/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way/"/>
+    <link href="http://larry-price.com/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way/"/>
     <updated>2014-09-15T20:11:13-04:00</updated>
-    <id>https://larry-price.com/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way</id>
+    <id>http://larry-price.com/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way</id>
     <content type="html"><![CDATA[<p>As I venture through the land of <a href="http://nodejs.org/">NodeJS</a>, I&rsquo;ve found the wonder and magic of <a href="http://npmjs.org/">NPM</a>, a package management tool for Javscript similar to <a href="https://www.ruby-lang.org/">ruby</a>&rsquo;s gems. Although there are nearly 100,000 packages on the main npmjs site (94,553 at time-of-writing), it seems there are still niches to be filled.</p>
 
 <p>Recently, while working on a <strong>top secret side-project</strong>, I wanted to grab a random object from a <a href="https://www.mongodb.org/">MongoDB</a> collection. I used the highly-extensible <a href="http://mongoosejs.com/">mongoose</a> to set up my models and just needed to find a package somewhere with the desired functionality. I found such a package called <a href="https://github.com/matomesc/mongoose-random">mongoose-random</a>, but, unfortunately, I was never able to get this plugin to work correctly. The plugin in question also needed to insert new columns on your tables, which I didn&rsquo;t really want. So I decided to create a new package.</p>
@@ -479,9 +479,9 @@ Test.findRandom(filter, fields, options, function(err, results) {
   
   <entry>
     <title type="html"><![CDATA[Use NVM to manage your NodeJS install]]></title>
-    <link href="https://larry-price.com/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install/"/>
+    <link href="http://larry-price.com/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install/"/>
     <updated>2014-08-02T20:00:57-04:00</updated>
-    <id>https://larry-price.com/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install</id>
+    <id>http://larry-price.com/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been trying to get into <a href="http://nodejs.org/">NodeJS</a>, and so my immediate thought is that I want to be able to install different versions for different projects, a la <a href="https://rvm.io">rvm</a> for <a href="https://ruby-lang.org">ruby</a>. Fortunately, this already exists.</p>
 
 <p><a href="https://github.com/creationix/nvm">NVM</a> gives me the equivalent functionality of rvm but for NodeJS, making all my dreams come true. Here&rsquo;s how I installed it on my Linux boxes:</p>

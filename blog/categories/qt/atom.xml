@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: qt | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/qt/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2019-02-09T13:14:01-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="http://larry-price.com/blog/categories/qt/atom.xml" rel="self"/>
+  <link href="http://larry-price.com/"/>
+  <updated>2020-10-19T20:41:40-05:00</updated>
+  <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Copy Data Using qmake]]></title>
-    <link href="https://larry-price.com/blog/2013/11/14/copy-data-using-qmake/"/>
+    <link href="http://larry-price.com/blog/2013/11/14/copy-data-using-qmake/"/>
     <updated>2013-11-14T21:24:00-06:00</updated>
-    <id>https://larry-price.com/blog/2013/11/14/copy-data-using-qmake</id>
+    <id>http://larry-price.com/blog/2013/11/14/copy-data-using-qmake</id>
     <content type="html"><![CDATA[<p>I&rsquo;ll take things that should be really easy but are in fact impossible for $1000, Mr Trebek.</p>
 
 <p>I have a <a href="https://qt-project.org/wiki/Qt_5.0">Qt</a> desktop app that uses <a href="https://qt-project.org/doc/qt-4.8/qmake-manual.html">qmake</a>. I have tests. I have test data that I need to copy to my build directory. Not only that, but I want to copy a whole directory recursively. In Linux <em>and</em> Windows. You must be thinking to yourself, &lsquo;There&rsquo;s no way that&rsquo;s possible, leave me out of your crazy plans!&rsquo; Well to that I say nay. Nay indeed.</p>

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: foss | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/foss/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2019-02-09T13:14:01-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="http://larry-price.com/blog/categories/foss/atom.xml" rel="self"/>
+  <link href="http://larry-price.com/"/>
+  <updated>2020-10-19T20:41:40-05:00</updated>
+  <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Ollert is now open source]]></title>
-    <link href="https://larry-price.com/blog/2015/02/11/ollert-is-now-open-source/"/>
+    <link href="http://larry-price.com/blog/2015/02/11/ollert-is-now-open-source/"/>
     <updated>2015-02-11T05:54:26-05:00</updated>
-    <id>https://larry-price.com/blog/2015/02/11/ollert-is-now-open-source</id>
+    <id>http://larry-price.com/blog/2015/02/11/ollert-is-now-open-source</id>
     <content type="html"><![CDATA[<p><a href="https://ollertapp.com">Ollert</a>, the Trello data analytics tool, has been open sourced under <a href="https://github.com/sep/ollert/blob/master/LICENSE">GNU Affero GPL v3.0</a>. The source code can be found <a href="https://github.com/sep/ollert/">on Github</a> and I&rsquo;ve already accepted several pull requests.</p>
 
 <h4>Why?</h4>
@@ -52,9 +52,9 @@
   
   <entry>
     <title type="html"><![CDATA[Hooks in cucumber-cpp]]></title>
-    <link href="https://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp/"/>
+    <link href="http://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp/"/>
     <updated>2013-11-22T20:40:00-06:00</updated>
-    <id>https://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp</id>
+    <id>http://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp</id>
     <content type="html"><![CDATA[<p>A few months ago <a href="/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">I blogged about tags</a> in <a href="https://github.com/cucumber/cucumber-cpp">cucumber-c++</a>. The scenario I presented involved using tags to call a <code>BEFORE</code> hook before the first scenario and an <code>AFTER</code> hook after the last scenario. The code looked a little bit like this:</p>
 
 <pre><code class="cucumber DoStuff.feature">@first

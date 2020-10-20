@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: agile | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/agile/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2019-02-09T13:14:01-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="http://larry-price.com/blog/categories/agile/atom.xml" rel="self"/>
+  <link href="http://larry-price.com/"/>
+  <updated>2020-10-19T20:41:40-05:00</updated>
+  <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Creating Great Teams (Book Writeup)]]></title>
-    <link href="https://larry-price.com/blog/2015/12/28/creating-great-teams-book-writeup/"/>
+    <link href="http://larry-price.com/blog/2015/12/28/creating-great-teams-book-writeup/"/>
     <updated>2015-12-28T13:30:12-05:00</updated>
-    <id>https://larry-price.com/blog/2015/12/28/creating-great-teams-book-writeup</id>
+    <id>http://larry-price.com/blog/2015/12/28/creating-great-teams-book-writeup</id>
     <content type="html"><![CDATA[<h3>The Gist</h3>
 
 <p>Building software teams is a very difficult task. In most organizations, managers cobble together teams based primarily on who&rsquo;s available when the team is forming. Since managers can only know so much about the skills and relationships of each engineer, forming teams this way is chaotic and produces inconsistent results. Instead of management selecting teams, what if engineers created their own teams based on need, past experience, relationships, and doing what&rsquo;s best for the company? <em><a href="http://amzn.to/1VmIS2Y">Creating Great Teams</a></em> by Sandy Mamoli and David Mole (published by PragProg) explores the team self-selection process in great details with step-by-step instructions on running one&rsquo;s own self-selection event.</p>
@@ -54,9 +54,9 @@
   
   <entry>
     <title type="html"><![CDATA[My Battle With Hour-Based Estimation]]></title>
-    <link href="https://larry-price.com/blog/2014/10/29/the-epic-battle-between-estimates-and-getting-work-done/"/>
+    <link href="http://larry-price.com/blog/2014/10/29/the-epic-battle-between-estimates-and-getting-work-done/"/>
     <updated>2014-10-29T18:33:27-04:00</updated>
-    <id>https://larry-price.com/blog/2014/10/29/the-epic-battle-between-estimates-and-getting-work-done</id>
+    <id>http://larry-price.com/blog/2014/10/29/the-epic-battle-between-estimates-and-getting-work-done</id>
     <content type="html"><![CDATA[<p>I despise estimating in hours. Hours are too granular. Hours are too difficult to distinguish from hours on a clock (<em>they&rsquo;re even spelled the same</em>).</p>
 
 <p>In any project where we work in hours, we always desparately task out stories in hours fill our capacity. <em>Which is also measured in hours</em>. We take people&rsquo;s days off and we estimate that developers spend about &frac34; of the day watching Youtube videos and reading Hacker News. So a developer works <strong>about 6 clock hours</strong> in a given day.</p>
@@ -93,9 +93,9 @@
   
   <entry>
     <title type="html"><![CDATA[Takeaways From AgileIndy 2014]]></title>
-    <link href="https://larry-price.com/blog/2014/05/14/takeaways-from-agileindy-2014/"/>
+    <link href="http://larry-price.com/blog/2014/05/14/takeaways-from-agileindy-2014/"/>
     <updated>2014-05-14T20:59:00-04:00</updated>
-    <id>https://larry-price.com/blog/2014/05/14/takeaways-from-agileindy-2014</id>
+    <id>http://larry-price.com/blog/2014/05/14/takeaways-from-agileindy-2014</id>
     <content type="html"><![CDATA[<p><a href="//agileindy.org/conference/">The AgileIndy Conference 2014</a> has come and gone. I wasn&rsquo;t sure what to expect, since it was my first conference, but I came out of it feeling rather positive.</p>
 
 <p>A short list of my favorite things from this year&rsquo;s AgileIndy:</p>

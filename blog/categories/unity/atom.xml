@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: unity | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/unity/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2019-02-09T13:14:01-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="http://larry-price.com/blog/categories/unity/atom.xml" rel="self"/>
+  <link href="http://larry-price.com/"/>
+  <updated>2020-10-19T20:41:40-05:00</updated>
+  <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Maintaining X Applications in Unity 8]]></title>
-    <link href="https://larry-price.com/blog/2016/08/24/running-x-applications-in-unity-8/"/>
+    <link href="http://larry-price.com/blog/2016/08/24/running-x-applications-in-unity-8/"/>
     <updated>2016-08-24T17:29:59-04:00</updated>
-    <id>https://larry-price.com/blog/2016/08/24/running-x-applications-in-unity-8</id>
+    <id>http://larry-price.com/blog/2016/08/24/running-x-applications-in-unity-8</id>
     <content type="html"><![CDATA[<p>The release of Ubuntu 16.10 Yakkety Yak in the coming months will bring about the public release of Unity 8 as a pre-installed desktop session (though not as the default session). It&rsquo;s been a long time coming, and there&rsquo;s a lot of new features which will break older applications. Canonical has unveiled <a href="http://snapcraft.io">snappy</a> as the preferred packaging system for Unity 8, but what about all those old deb packages?</p>
 
 <p>There have been a few other good posts about X applications on Unity 8 including <a href="http://mhall119.com/2016/05/dogfooding-unity-8/">this one on dogfooding</a>, <a href="https://kylenubuntu.blogspot.no/2016/07/running-x-apps-on-ubuntu-devices.html">this one on Ubuntu Touch</a>, and <a href="https://bregmatter.wordpress.com/2016/07/04/x11-applications-and-unity-8/">this one on how it works under the covers</a>. This blog post is explicitly about Unity 8 on desktop using the Libertine CLI, though can be applied to most devices running Ubuntu Touch.</p>

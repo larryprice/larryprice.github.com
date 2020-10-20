@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: xml | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/xml/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2019-02-09T13:14:01-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="http://larry-price.com/blog/categories/xml/atom.xml" rel="self"/>
+  <link href="http://larry-price.com/"/>
+  <updated>2020-10-19T20:41:40-05:00</updated>
+  <id>http://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[XML Parsing in Go]]></title>
-    <link href="https://larry-price.com/blog/2015/12/04/xml-parsing-in-go/"/>
+    <link href="http://larry-price.com/blog/2015/12/04/xml-parsing-in-go/"/>
     <updated>2015-12-04T15:30:14-05:00</updated>
-    <id>https://larry-price.com/blog/2015/12/04/xml-parsing-in-go</id>
+    <id>http://larry-price.com/blog/2015/12/04/xml-parsing-in-go</id>
     <content type="html"><![CDATA[<p>Need to parse an XML file in go? XML (en|de)coding is build into go&rsquo;s standard library. Basic parsing of nodes and embedded nodes is straightforward, but there are some interesting things to think about when you need to parse attributes, lists, and if you don&rsquo;t want to create new structs all over the place.</p>
 
 <p>For this exercise, let&rsquo;s look at the following XML document:</p>
