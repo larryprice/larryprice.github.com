@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: git | Larry Price]]></title>
-  <link href="http://larry-price.com/blog/categories/git/atom.xml" rel="self"/>
-  <link href="http://larry-price.com/"/>
-  <updated>2020-10-19T20:41:40-05:00</updated>
-  <id>http://larry-price.com/</id>
+  <link href="https://larry-price.com/blog/categories/git/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2020-11-03T11:30:15-06:00</updated>
+  <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Git out the Way - Rebase Workflow]]></title>
-    <link href="http://larry-price.com/blog/2014/05/25/git-out-the-way-rebase-workflow/"/>
+    <link href="https://larry-price.com/blog/2014/05/25/git-out-the-way-rebase-workflow/"/>
     <updated>2014-05-25T15:44:55-04:00</updated>
-    <id>http://larry-price.com/blog/2014/05/25/git-out-the-way-rebase-workflow</id>
+    <id>https://larry-price.com/blog/2014/05/25/git-out-the-way-rebase-workflow</id>
     <content type="html"><![CDATA[<p>We use <a href="http://www.git-scm.com/">git</a> on my current project, and we used to always use remote branches. After doubling the number of developers touching the repo, we found that remote feature branches led to merge conflicts, stale branches, and hidden code. We&rsquo;ve switched away from using remote feature branches, favoring instead to commit directly to <code>origin/master</code>, making remote feature branches the exception. We do this using a simple method called <code>rebase</code>.</p>
 
 <p>What does it mean to <code>rebase</code>?</p>

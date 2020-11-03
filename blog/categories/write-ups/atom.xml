@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: write-ups | Larry Price]]></title>
-  <link href="http://larry-price.com/blog/categories/write-ups/atom.xml" rel="self"/>
-  <link href="http://larry-price.com/"/>
-  <updated>2020-10-19T20:41:40-05:00</updated>
-  <id>http://larry-price.com/</id>
+  <link href="https://larry-price.com/blog/categories/write-ups/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2020-11-03T11:30:15-06:00</updated>
+  <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Demystifying Public Speaking]]></title>
-    <link href="http://larry-price.com/blog/2017/08/31/demystifying-public-speaking/"/>
+    <link href="https://larry-price.com/blog/2017/08/31/demystifying-public-speaking/"/>
     <updated>2017-08-31T19:55:20-05:00</updated>
-    <id>http://larry-price.com/blog/2017/08/31/demystifying-public-speaking</id>
+    <id>https://larry-price.com/blog/2017/08/31/demystifying-public-speaking</id>
     <content type="html"><![CDATA[<h3>The Gist</h3>
 
 <p>Public speaking makes me nervous, and I&rsquo;m not alone. A crowd of people is listening to your stutters, nit-picking your errors, and judging your clothing. No one is immune from the fear of public speaking. What can you do about it? Armed with Lara Hogan&rsquo;s <em><a href="https://abookapart.com/products/demystifying-public-speaking">Demystifying Public Speaking</a></em>, we can learn how to make public speaking a bit less stressful. There is no complete answer, but this book is full of tips and guidance for speaking engagements of any size and gravitas.</p>
@@ -61,9 +61,9 @@
   
   <entry>
     <title type="html"><![CDATA[Effective Modern C++]]></title>
-    <link href="http://larry-price.com/blog/2016/06/29/effective-modern-c-plus-plus/"/>
+    <link href="https://larry-price.com/blog/2016/06/29/effective-modern-c-plus-plus/"/>
     <updated>2016-06-29T20:35:23-04:00</updated>
-    <id>http://larry-price.com/blog/2016/06/29/effective-modern-c-plus-plus</id>
+    <id>https://larry-price.com/blog/2016/06/29/effective-modern-c-plus-plus</id>
     <content type="html"><![CDATA[<h3>The Gist</h3>
 
 <p>How can one man give the world so much? Scott Meyers transformed my understanding of C++ with <a href="/blog/2013/07/16/effective-c-plus-plus/"><em>Effective C++</em></a>, a book which not only teaches good C++ practices and principles, but also explains what&rsquo;s going on behind the scenes to make those efforts so effectual. <a href="http://amzn.to/29dU9FO"><em>Effective Modern C++</em></a> is the same book aimed at a different audience. The audience of <em>Effective C++</em> was the developer who could use C++ to build a humble home of straw or wood, but didn&rsquo;t know that C++ was born to create homes of brick and mortar. <em>Effective Modern C++</em> is for the seasoned developer who knows the brick home they built with C++98 can stand tall, but is bewildered by the plethora of modern amenities available in the top-floor penthouse that is C++11.</p>
@@ -138,9 +138,9 @@ my_func(5); // 16
   
   <entry>
     <title type="html"><![CDATA[Design for Real Life (Writeup)]]></title>
-    <link href="http://larry-price.com/blog/2016/03/24/design-for-real-life-writeup/"/>
+    <link href="https://larry-price.com/blog/2016/03/24/design-for-real-life-writeup/"/>
     <updated>2016-03-24T22:00:47-04:00</updated>
-    <id>http://larry-price.com/blog/2016/03/24/design-for-real-life-writeup</id>
+    <id>https://larry-price.com/blog/2016/03/24/design-for-real-life-writeup</id>
     <content type="html"><![CDATA[<h3>The Gist</h3>
 
 <p>Have you ever tried to buy airline tickets in a hurry? Have you ever had to find directions to the ER on the hospital website during an actual emergency? Have you ever wondered why you have to give a bug tracker your &ldquo;title,&rdquo; &ldquo;gender,&rdquo; or &ldquo;address&rdquo;? <a href="https://abookapart.com/products/design-for-real-life">Design for Real Life</a> written by <a href="http://meyerweb.com/">Eric Meyer</a> and <a href="https://www.sarawb.com/">Sara Wachter-Boettcher</a> explores the pitfalls of designing for the perfect user and the dangers of asking unnecessary or inappropriate questions.</p>
@@ -175,9 +175,9 @@ my_func(5); // 16
   
   <entry>
     <title type="html"><![CDATA[Drive]]></title>
-    <link href="http://larry-price.com/blog/2016/02/21/drive/"/>
+    <link href="https://larry-price.com/blog/2016/02/21/drive/"/>
     <updated>2016-02-21T11:38:22-05:00</updated>
-    <id>http://larry-price.com/blog/2016/02/21/drive</id>
+    <id>https://larry-price.com/blog/2016/02/21/drive</id>
     <content type="html"><![CDATA[<blockquote><p>Have you ever seen a six-month-old or a three-year-old who’s not curious and self-directed? I haven’t. That’s how we are out of the box.<br/>
 &ndash; Dan Pink</p></blockquote>
 
@@ -218,9 +218,9 @@ my_func(5); // 16
   
   <entry>
     <title type="html"><![CDATA[Javascript: The Good Parts]]></title>
-    <link href="http://larry-price.com/blog/2015/12/28/javascript-the-good-parts/"/>
+    <link href="https://larry-price.com/blog/2015/12/28/javascript-the-good-parts/"/>
     <updated>2015-12-28T20:17:33-05:00</updated>
-    <id>http://larry-price.com/blog/2015/12/28/javascript-the-good-parts</id>
+    <id>https://larry-price.com/blog/2015/12/28/javascript-the-good-parts</id>
     <content type="html"><![CDATA[<h3>The Gist</h3>
 
 <p><a href="http://amzn.to/1OVjj3Z">Javascript: The Good Parts</a> by Douglas Crockford is a short guide to the best parts of the javascript language. Javascript is notorious for being so flexible and feature-rich that many traditional programmers start writing code and completely forget how to program and building a startup based on an idea they got from the <a href="https://twitter.com/boredelonmusk">Bored Elon Musk</a> mock-Twitter account only to wake up a year later cold and alone living in the slums of San Francisco. This book is full of example code with thoughtful explanations to help the average developer write better javascript and leave the web a nicer place.</p>

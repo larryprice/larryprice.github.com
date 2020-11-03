@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: heroku | Larry Price]]></title>
-  <link href="http://larry-price.com/blog/categories/heroku/atom.xml" rel="self"/>
-  <link href="http://larry-price.com/"/>
-  <updated>2020-10-19T20:41:40-05:00</updated>
-  <id>http://larry-price.com/</id>
+  <link href="https://larry-price.com/blog/categories/heroku/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2020-11-03T11:30:15-06:00</updated>
+  <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Redirecting To Your Main Site With Heroku]]></title>
-    <link href="http://larry-price.com/blog/2018/04/25/redirecting-to-your-main-site-with-heroku/"/>
+    <link href="https://larry-price.com/blog/2018/04/25/redirecting-to-your-main-site-with-heroku/"/>
     <updated>2018-04-25T20:52:19-05:00</updated>
-    <id>http://larry-price.com/blog/2018/04/25/redirecting-to-your-main-site-with-heroku</id>
+    <id>https://larry-price.com/blog/2018/04/25/redirecting-to-your-main-site-with-heroku</id>
     <content type="html"><![CDATA[<p>We have a lot of domains that we want to redirect to the same server, but we use a DNS service that does not allow doing a domain forward, and we&rsquo;re not allowed to upgrade. I wanted to do this in the simplest way possible, so I created a workaround using a PHP script and Heroku. The source discussed in detail in this post is available on GitHub: <a href="https://github.com/larryprice/simple-heroku-redirect-app">https://github.com/larryprice/simple-heroku-redirect-app</a>.</p>
 
 <p>The goal here is for users to visit a page and then be immediately redirected to the new site. I&rsquo;ve defined two environment variables to be used in this project: <code>SITENAME</code>, a human-readable name for our website, and <code>SITEURL</code>, the full URL that we actually want the user to end up on. I&rsquo;ve defined a PHP file called <code>index.php</code>:</p>
@@ -73,9 +73,9 @@ $ heroku domains:add www.yourbaddomain.com
   
   <entry>
     <title type="html"><![CDATA[Sending emails with Pony and Sendgrid]]></title>
-    <link href="http://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/"/>
+    <link href="https://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/"/>
     <updated>2014-07-08T05:53:26-04:00</updated>
-    <id>http://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid</id>
+    <id>https://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid</id>
     <content type="html"><![CDATA[<p>It&rsquo;s incredible how easy it is to send emails through a web application, there&rsquo;s no wonder we get so much spam. Assuming we have a <a href="http://ruby-lang.org">ruby</a> app using <a href="http://sinatrarb.com">Sinatra</a>, <a href="http://adam.herokuapp.com/past/2008/11/2/pony_the_express_way_to_send_email_from_ruby/">Pony</a> is one of the easiest ways to get started with your own spam empire.</p>
 
 <p>Installation is, as always, trivial with ruby. Install the gem with <code>gem install pony</code> or add <code>gem pony</code> to your <code>Gemfile</code> and run <code>bundle install</code>.</p>
@@ -180,9 +180,9 @@ end
   
   <entry>
     <title type="html"><![CDATA[Using sqlite on Heroku]]></title>
-    <link href="http://larry-price.com/blog/2014/03/29/using-sqlite-on-heroku/"/>
+    <link href="https://larry-price.com/blog/2014/03/29/using-sqlite-on-heroku/"/>
     <updated>2014-03-29T11:16:06-04:00</updated>
-    <id>http://larry-price.com/blog/2014/03/29/using-sqlite-on-heroku</id>
+    <id>https://larry-price.com/blog/2014/03/29/using-sqlite-on-heroku</id>
     <content type="html"><![CDATA[<p>Or rather, &ldquo;Not Using sqlite on Heroku.&rdquo;</p>
 
 <p><a href="//heroku.com">Heroku</a> does not support <a href="//sqlite.org">sqlite</a>. That doesn&rsquo;t mean we have to stop using sqlite in development, but it does mean we need to put in some workarounds to support our deployment environment. The rest of this article will use <a href="//ruby-lang.org">ruby</a> and <a href="//sinatrarb.com">Sinatra</a>.</p>
@@ -245,9 +245,9 @@ end
   
   <entry>
     <title type="html"><![CDATA[Pushing an Application to Heroku that Uses Ruby and Mongo]]></title>
-    <link href="http://larry-price.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo/"/>
+    <link href="https://larry-price.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo/"/>
     <updated>2013-01-20T11:55:00-06:00</updated>
-    <id>http://larry-price.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo</id>
+    <id>https://larry-price.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo</id>
     <content type="html"><![CDATA[<p><em>This is Part 3 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="/blog/categories/pokephile">Pokephile category</a>. Part 4 of this series details moving from a development environment to a production environment using <a href="http://heroku.com/">Heroku</a>. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>, and the final product can be found <a href="http://pokephile.herokuapp.com">here</a>.</em></p>
 
 <p><a href="http://heroku.com/">Heroku</a> is a hosting service for different types of web applications. The best thing about Heroku is it&rsquo;s free, you get a decent subdomain for your application, and there&rsquo;s no spam email. Go ahead and <a href="http://api.heroku.com/signup">sign up</a> if you don&rsquo;t already have an account.</p>

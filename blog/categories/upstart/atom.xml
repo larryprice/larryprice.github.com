@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: upstart | Larry Price]]></title>
-  <link href="http://larry-price.com/blog/categories/upstart/atom.xml" rel="self"/>
-  <link href="http://larry-price.com/"/>
-  <updated>2020-10-19T20:41:40-05:00</updated>
-  <id>http://larry-price.com/</id>
+  <link href="https://larry-price.com/blog/categories/upstart/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2020-11-03T11:30:15-06:00</updated>
+  <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Using Foreman to Create an Upstart Service]]></title>
-    <link href="http://larry-price.com/blog/2013/08/31/using-foreman-to-create-an-upstart-service/"/>
+    <link href="https://larry-price.com/blog/2013/08/31/using-foreman-to-create-an-upstart-service/"/>
     <updated>2013-08-31T17:05:00-05:00</updated>
-    <id>http://larry-price.com/blog/2013/08/31/using-foreman-to-create-an-upstart-service</id>
+    <id>https://larry-price.com/blog/2013/08/31/using-foreman-to-create-an-upstart-service</id>
     <content type="html"><![CDATA[<p>I just finished my first attempt at deploying a web app to run automatically in the background on a friend&rsquo;s server. Pretty easy, really. The first thing I did was install <a href="https://github.com/ddollar/foreman">foreman</a>. Assuming you have ruby and rubygems installed:</p>
 
 <pre><code class="bash">$ sudo gem install foreman

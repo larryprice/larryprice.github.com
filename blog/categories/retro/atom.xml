@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: retro | Larry Price]]></title>
-  <link href="http://larry-price.com/blog/categories/retro/atom.xml" rel="self"/>
-  <link href="http://larry-price.com/"/>
-  <updated>2020-10-19T20:41:40-05:00</updated>
-  <id>http://larry-price.com/</id>
+  <link href="https://larry-price.com/blog/categories/retro/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2020-11-03T11:30:15-06:00</updated>
+  <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[2016 Retrospective]]></title>
-    <link href="http://larry-price.com/blog/2016/12/27/2016-year-in-review/"/>
+    <link href="https://larry-price.com/blog/2016/12/27/2016-year-in-review/"/>
     <updated>2016-12-27T13:35:56-05:00</updated>
-    <id>http://larry-price.com/blog/2016/12/27/2016-year-in-review</id>
+    <id>https://larry-price.com/blog/2016/12/27/2016-year-in-review</id>
     <content type="html"><![CDATA[<p>This has been a unique year for me, and I wanted to quickly lay out what I&rsquo;ve accomplished and where I think I&rsquo;m going for the coming year. This is now officially a tradition at three posts (see: <a href="/blog/2014/12/31/2014-retrospective/">2014</a> and <a href="/blog/2016/01/03/2015-year-in-review/">2015</a>).</p>
 
 <h3>Revisiting 2016&rsquo;s Goals</h3>
@@ -156,9 +156,9 @@
   
   <entry>
     <title type="html"><![CDATA[A Chronicle of SEP Startup Weekend 2016]]></title>
-    <link href="http://larry-price.com/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016/"/>
+    <link href="https://larry-price.com/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016/"/>
     <updated>2016-03-03T15:16:29-05:00</updated>
-    <id>http://larry-price.com/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016</id>
+    <id>https://larry-price.com/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016</id>
     <content type="html"><![CDATA[<p>Last weekend was the 2016 SEP Startup Weekend, a bi-annual hackathon where a few of the engineers get together for 48 hours to build things. As far as most people know, we transform massive quantities of beer, coffee, and unhealthy food into cohesive piles of code. Although that about sums it up, I thought it might be nice to chronicle my team&rsquo;s experience of this season&rsquo;s event. Enjoy!</p>
 
 <h3>The Pitch</h3>
@@ -224,9 +224,9 @@
   
   <entry>
     <title type="html"><![CDATA[2015 Retrospective]]></title>
-    <link href="http://larry-price.com/blog/2016/01/03/2015-year-in-review/"/>
+    <link href="https://larry-price.com/blog/2016/01/03/2015-year-in-review/"/>
     <updated>2016-01-03T15:25:41-05:00</updated>
-    <id>http://larry-price.com/blog/2016/01/03/2015-year-in-review</id>
+    <id>https://larry-price.com/blog/2016/01/03/2015-year-in-review</id>
     <content type="html"><![CDATA[<p>Another year gone.</p>
 
 <h3>What I Wanted from 2015</h3>
@@ -373,9 +373,9 @@
   
   <entry>
     <title type="html"><![CDATA[2014 Retrospective]]></title>
-    <link href="http://larry-price.com/blog/2014/12/31/2014-retrospective/"/>
+    <link href="https://larry-price.com/blog/2014/12/31/2014-retrospective/"/>
     <updated>2014-12-31T11:40:00-05:00</updated>
-    <id>http://larry-price.com/blog/2014/12/31/2014-retrospective</id>
+    <id>https://larry-price.com/blog/2014/12/31/2014-retrospective</id>
     <content type="html"><![CDATA[<p>Happy New Year, dear reader.</p>
 
 <p>2014 was a fairly good year for me. I wrote a lot of code, read a lot of books, and published a lot of blog posts.</p>
@@ -505,9 +505,9 @@
   
   <entry>
     <title type="html"><![CDATA[Takeaways From AgileIndy 2014]]></title>
-    <link href="http://larry-price.com/blog/2014/05/14/takeaways-from-agileindy-2014/"/>
+    <link href="https://larry-price.com/blog/2014/05/14/takeaways-from-agileindy-2014/"/>
     <updated>2014-05-14T20:59:00-04:00</updated>
-    <id>http://larry-price.com/blog/2014/05/14/takeaways-from-agileindy-2014</id>
+    <id>https://larry-price.com/blog/2014/05/14/takeaways-from-agileindy-2014</id>
     <content type="html"><![CDATA[<p><a href="//agileindy.org/conference/">The AgileIndy Conference 2014</a> has come and gone. I wasn&rsquo;t sure what to expect, since it was my first conference, but I came out of it feeling rather positive.</p>
 
 <p>A short list of my favorite things from this year&rsquo;s AgileIndy:</p>

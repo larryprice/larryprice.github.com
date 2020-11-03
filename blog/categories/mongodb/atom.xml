@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: mongodb | Larry Price]]></title>
-  <link href="http://larry-price.com/blog/categories/mongodb/atom.xml" rel="self"/>
-  <link href="http://larry-price.com/"/>
-  <updated>2020-10-19T20:41:40-05:00</updated>
-  <id>http://larry-price.com/</id>
+  <link href="https://larry-price.com/blog/categories/mongodb/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2020-11-03T11:30:15-06:00</updated>
+  <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Fetching Random Mongoose Objects the Simple Way]]></title>
-    <link href="http://larry-price.com/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way/"/>
+    <link href="https://larry-price.com/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way/"/>
     <updated>2014-09-15T20:11:13-04:00</updated>
-    <id>http://larry-price.com/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way</id>
+    <id>https://larry-price.com/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way</id>
     <content type="html"><![CDATA[<p>As I venture through the land of <a href="http://nodejs.org/">NodeJS</a>, I&rsquo;ve found the wonder and magic of <a href="http://npmjs.org/">NPM</a>, a package management tool for Javscript similar to <a href="https://www.ruby-lang.org/">ruby</a>&rsquo;s gems. Although there are nearly 100,000 packages on the main npmjs site (94,553 at time-of-writing), it seems there are still niches to be filled.</p>
 
 <p>Recently, while working on a <strong>top secret side-project</strong>, I wanted to grab a random object from a <a href="https://www.mongodb.org/">MongoDB</a> collection. I used the highly-extensible <a href="http://mongoosejs.com/">mongoose</a> to set up my models and just needed to find a package somewhere with the desired functionality. I found such a package called <a href="https://github.com/matomesc/mongoose-random">mongoose-random</a>, but, unfortunately, I was never able to get this plugin to work correctly. The plugin in question also needed to insert new columns on your tables, which I didn&rsquo;t really want. So I decided to create a new package.</p>
@@ -73,9 +73,9 @@ Test.findRandom(filter, fields, options, function(err, results) {
   
   <entry>
     <title type="html"><![CDATA[Moving from the MongoDB Ruby Driver to Mongoid]]></title>
-    <link href="http://larry-price.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/"/>
+    <link href="https://larry-price.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/"/>
     <updated>2013-01-05T20:04:00-06:00</updated>
-    <id>http://larry-price.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid</id>
+    <id>https://larry-price.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid</id>
     <content type="html"><![CDATA[<p>This is Part 2 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="/blog/categories/pokephile">Pokephile category</a>. Part 2 details refactoring code using the MongoDB Ruby driver to use Mongoid. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>.</p>
 
 <h3>What I&rsquo;ve Done</h3>
@@ -261,9 +261,9 @@ end
   
   <entry>
     <title type="html"><![CDATA[Schemaless databases with Ruby and MongoDB]]></title>
-    <link href="http://larry-price.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/"/>
+    <link href="https://larry-price.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/"/>
     <updated>2013-01-05T16:54:00-06:00</updated>
-    <id>http://larry-price.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb</id>
+    <id>https://larry-price.com/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb</id>
     <content type="html"><![CDATA[<p>This is Part 1 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="/blog/categories/pokephile">Pokephile category</a>. Part 1 details getting started with MongoDB and creating a collection using data scraped off the web using <a href="http://nokogiri.org/">Nokogiri</a>. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>.</p>
 
 <h3>A little background</h3>

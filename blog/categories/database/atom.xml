@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: database | Larry Price]]></title>
-  <link href="http://larry-price.com/blog/categories/database/atom.xml" rel="self"/>
-  <link href="http://larry-price.com/"/>
-  <updated>2020-10-19T20:41:40-05:00</updated>
-  <id>http://larry-price.com/</id>
+  <link href="https://larry-price.com/blog/categories/database/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2020-11-03T11:30:15-06:00</updated>
+  <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Fetching Random Mongoose Objects the Simple Way]]></title>
-    <link href="http://larry-price.com/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way/"/>
+    <link href="https://larry-price.com/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way/"/>
     <updated>2014-09-15T20:11:13-04:00</updated>
-    <id>http://larry-price.com/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way</id>
+    <id>https://larry-price.com/blog/2014/09/15/fetching-random-mongoose-objects-the-simple-way</id>
     <content type="html"><![CDATA[<p>As I venture through the land of <a href="http://nodejs.org/">NodeJS</a>, I&rsquo;ve found the wonder and magic of <a href="http://npmjs.org/">NPM</a>, a package management tool for Javscript similar to <a href="https://www.ruby-lang.org/">ruby</a>&rsquo;s gems. Although there are nearly 100,000 packages on the main npmjs site (94,553 at time-of-writing), it seems there are still niches to be filled.</p>
 
 <p>Recently, while working on a <strong>top secret side-project</strong>, I wanted to grab a random object from a <a href="https://www.mongodb.org/">MongoDB</a> collection. I used the highly-extensible <a href="http://mongoosejs.com/">mongoose</a> to set up my models and just needed to find a package somewhere with the desired functionality. I found such a package called <a href="https://github.com/matomesc/mongoose-random">mongoose-random</a>, but, unfortunately, I was never able to get this plugin to work correctly. The plugin in question also needed to insert new columns on your tables, which I didn&rsquo;t really want. So I decided to create a new package.</p>
@@ -73,9 +73,9 @@ Test.findRandom(filter, fields, options, function(err, results) {
   
   <entry>
     <title type="html"><![CDATA[Using sqlite on Heroku]]></title>
-    <link href="http://larry-price.com/blog/2014/03/29/using-sqlite-on-heroku/"/>
+    <link href="https://larry-price.com/blog/2014/03/29/using-sqlite-on-heroku/"/>
     <updated>2014-03-29T11:16:06-04:00</updated>
-    <id>http://larry-price.com/blog/2014/03/29/using-sqlite-on-heroku</id>
+    <id>https://larry-price.com/blog/2014/03/29/using-sqlite-on-heroku</id>
     <content type="html"><![CDATA[<p>Or rather, &ldquo;Not Using sqlite on Heroku.&rdquo;</p>
 
 <p><a href="//heroku.com">Heroku</a> does not support <a href="//sqlite.org">sqlite</a>. That doesn&rsquo;t mean we have to stop using sqlite in development, but it does mean we need to put in some workarounds to support our deployment environment. The rest of this article will use <a href="//ruby-lang.org">ruby</a> and <a href="//sinatrarb.com">Sinatra</a>.</p>
@@ -138,9 +138,9 @@ end
   
   <entry>
     <title type="html"><![CDATA[Pushing an Application to Heroku that Uses Ruby and Mongo]]></title>
-    <link href="http://larry-price.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo/"/>
+    <link href="https://larry-price.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo/"/>
     <updated>2013-01-20T11:55:00-06:00</updated>
-    <id>http://larry-price.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo</id>
+    <id>https://larry-price.com/blog/2013/01/20/pushing-an-application-to-heroku-that-uses-ruby-and-mongo</id>
     <content type="html"><![CDATA[<p><em>This is Part 3 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="/blog/categories/pokephile">Pokephile category</a>. Part 4 of this series details moving from a development environment to a production environment using <a href="http://heroku.com/">Heroku</a>. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>, and the final product can be found <a href="http://pokephile.herokuapp.com">here</a>.</em></p>
 
 <p><a href="http://heroku.com/">Heroku</a> is a hosting service for different types of web applications. The best thing about Heroku is it&rsquo;s free, you get a decent subdomain for your application, and there&rsquo;s no spam email. Go ahead and <a href="http://api.heroku.com/signup">sign up</a> if you don&rsquo;t already have an account.</p>
@@ -295,9 +295,9 @@ $ git push heroku master
   
   <entry>
     <title type="html"><![CDATA[Testing a Sinatra App with Capybara]]></title>
-    <link href="http://larry-price.com/blog/2013/01/19/testing-a-sinatra-app-with-capybara/"/>
+    <link href="https://larry-price.com/blog/2013/01/19/testing-a-sinatra-app-with-capybara/"/>
     <updated>2013-01-19T12:20:00-06:00</updated>
-    <id>http://larry-price.com/blog/2013/01/19/testing-a-sinatra-app-with-capybara</id>
+    <id>https://larry-price.com/blog/2013/01/19/testing-a-sinatra-app-with-capybara</id>
     <content type="html"><![CDATA[<p><em>This is Part 3 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="/blog/categories/pokephile">Pokephile category</a>. Part 3 of this series describes using Capybara to test a Sinatra application. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>, and the final product can be found <a href="http://pokephile.herokuapp.com">here</a>.</em></p>
 
 <p>Now that <a href="/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/">the database is populated</a> with data and I&rsquo;ve switched over to <a href="/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/">a simpler interface with Mongo</a>, I can actually start creating a UI. For simplicity&rsquo;s sake, I like to use Sinatra on small projects. Sinatra makes it easy to create a web application with minimal effort. With an emphasis on testing this <a href="/blog/categories/pokephile">series</a>, I want to be sure to throughly test my UI and any application integration. <a href="http://cukes.info/">Cucumber</a> is a brilliant DSL which allows a programmer to describe in plain English how an application should be behaving. The <a href="https://github.com/jnicklas/capybara">Capybara gem</a> is a Rack app that simulates running your application and performing basic user tasks, such as clicking a button, following a link, or, on a lower level, looking at your HTML source. Install Capybara like so:</p>
@@ -688,9 +688,9 @@ end
   
   <entry>
     <title type="html"><![CDATA[Moving from the MongoDB Ruby Driver to Mongoid]]></title>
-    <link href="http://larry-price.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/"/>
+    <link href="https://larry-price.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/"/>
     <updated>2013-01-05T20:04:00-06:00</updated>
-    <id>http://larry-price.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid</id>
+    <id>https://larry-price.com/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid</id>
     <content type="html"><![CDATA[<p>This is Part 2 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="/blog/categories/pokephile">Pokephile category</a>. Part 2 details refactoring code using the MongoDB Ruby driver to use Mongoid. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>.</p>
 
 <h3>What I&rsquo;ve Done</h3>

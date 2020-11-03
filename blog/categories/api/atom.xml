@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: api | Larry Price]]></title>
-  <link href="http://larry-price.com/blog/categories/api/atom.xml" rel="self"/>
-  <link href="http://larry-price.com/"/>
-  <updated>2020-10-19T20:41:40-05:00</updated>
-  <id>http://larry-price.com/</id>
+  <link href="https://larry-price.com/blog/categories/api/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2020-11-03T11:30:15-06:00</updated>
+  <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[The wisdom of Confucius - now available in an API]]></title>
-    <link href="http://larry-price.com/blog/2014/10/14/the-wisdom-of-confucius-now-available-in-an-api/"/>
+    <link href="https://larry-price.com/blog/2014/10/14/the-wisdom-of-confucius-now-available-in-an-api/"/>
     <updated>2014-10-14T06:03:16-04:00</updated>
-    <id>http://larry-price.com/blog/2014/10/14/the-wisdom-of-confucius-now-available-in-an-api</id>
+    <id>https://larry-price.com/blog/2014/10/14/the-wisdom-of-confucius-now-available-in-an-api</id>
     <content type="html"><![CDATA[<p>I make a lot of silly things while learning new technology. In this case I have tapped into the almighty power of <a href="https://en.wikipedia.org/wiki/Confucius">Confucius</a>, a Chinese philosopher from 2500 years ago credited for writing or editing many Chinese classic texts. Growing up as an American child, I associated Confucius with proverbs, and I associated proverbs with that classic after-Chinese-dinner dessert <a href="https://en.wikipedia.org/wiki/Fortune_cookie">the fortune cookie</a>.</p>
 
 <p>Fortune cookies are a pure delight: a message in a bottle from the restaurant&rsquo;s proprietors for you to enjoy as you kindly vacate the facility.</p>

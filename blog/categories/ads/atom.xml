@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: ads | Larry Price]]></title>
-  <link href="http://larry-price.com/blog/categories/ads/atom.xml" rel="self"/>
-  <link href="http://larry-price.com/"/>
-  <updated>2020-10-19T20:41:40-05:00</updated>
-  <id>http://larry-price.com/</id>
+  <link href="https://larry-price.com/blog/categories/ads/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2020-11-03T11:30:15-06:00</updated>
+  <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Go for Web Development 50% Off Sale]]></title>
-    <link href="http://larry-price.com/blog/2016/01/21/go-for-web-development-50-percent-off-sale/"/>
+    <link href="https://larry-price.com/blog/2016/01/21/go-for-web-development-50-percent-off-sale/"/>
     <updated>2016-01-21T10:51:22-05:00</updated>
-    <id>http://larry-price.com/blog/2016/01/21/go-for-web-development-50-percent-off-sale</id>
+    <id>https://larry-price.com/blog/2016/01/21/go-for-web-development-50-percent-off-sale</id>
     <content type="html"><![CDATA[<p>At the end of 2015, I published a video course on getting started with web development in Go. For the next two weeks, you can get it for 50% off using this link: <a href="http://bit.ly/1PEubnd">http://bit.ly/1PEubnd</a>. With over 2 hours of content for just over $20, it&rsquo;s a great deal. The sale runs from 21 Jan until 4 Feb 2016.</p>
 
 <p><a href="http://bit.ly/1PEubnd"><img src="https://i.imgur.com/tTPQj2b.png" /></a></p>
@@ -30,9 +30,9 @@
   
   <entry>
     <title type="html"><![CDATA[Go for Web Development]]></title>
-    <link href="http://larry-price.com/blog/2015/12/30/go-for-web-development/"/>
+    <link href="https://larry-price.com/blog/2015/12/30/go-for-web-development/"/>
     <updated>2015-12-30T14:54:11-05:00</updated>
-    <id>http://larry-price.com/blog/2015/12/30/go-for-web-development</id>
+    <id>https://larry-price.com/blog/2015/12/30/go-for-web-development</id>
     <content type="html"><![CDATA[<p>I have published a video series on building web applications in Go called <em><a href="https://www.packtpub.com/web-development/go-web-development-video">Go for Web Development</a></em>.</p>
 
 <p>These videos will guide you through the entire process of creating a web application in Go, all the way from spinning up a basic web server to multi-user authentication. In the end, you&rsquo;ll learn how to vendor dependencies and deploy the application to heroku. Throughout the course, you&rsquo;ll learn to utilize many of the most popular go packages including gorilla/mux, negroni, gorp, ace, and bcrypt. You&rsquo;ll learn about making asynchronous requests from the browser back to the web server, and you&rsquo;ll learn to access external REST APIs from your web server. You&rsquo;ll use go&rsquo;s struct tags to parse both XML and JSON, and you&rsquo;ll use struct tags to access database entities with gorp.</p>

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: hacks | Larry Price]]></title>
-  <link href="http://larry-price.com/blog/categories/hacks/atom.xml" rel="self"/>
-  <link href="http://larry-price.com/"/>
-  <updated>2020-10-19T20:41:40-05:00</updated>
-  <id>http://larry-price.com/</id>
+  <link href="https://larry-price.com/blog/categories/hacks/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2020-11-03T11:30:15-06:00</updated>
+  <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[A Hacky Solution to the Unicode data in a Unicode-only collation problem]]></title>
-    <link href="http://larry-price.com/blog/2012/10/19/a-hacky-solution-to-the-unicode-data-in-a-unicode-only-collation-problem/"/>
+    <link href="https://larry-price.com/blog/2012/10/19/a-hacky-solution-to-the-unicode-data-in-a-unicode-only-collation-problem/"/>
     <updated>2012-10-19T17:23:00-05:00</updated>
-    <id>http://larry-price.com/blog/2012/10/19/a-hacky-solution-to-the-unicode-data-in-a-unicode-only-collation-problem</id>
+    <id>https://larry-price.com/blog/2012/10/19/a-hacky-solution-to-the-unicode-data-in-a-unicode-only-collation-problem</id>
     <content type="html"><![CDATA[<h2>The Issue Rises <a id="problem"></a></h2>
 
 <p>Earlier this week a defect was found in my application. A defect that I could have sworn I fixed several weeks ago and written about in a <a href="http://nullablevoid.blogspot.com/2012/10/unicode-data-in-unicode-only-collation.html">previous blog post</a>. Let me start from the beginning:</p>

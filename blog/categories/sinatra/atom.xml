@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: sinatra | Larry Price]]></title>
-  <link href="http://larry-price.com/blog/categories/sinatra/atom.xml" rel="self"/>
-  <link href="http://larry-price.com/"/>
-  <updated>2020-10-19T20:41:40-05:00</updated>
-  <id>http://larry-price.com/</id>
+  <link href="https://larry-price.com/blog/categories/sinatra/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2020-11-03T11:30:15-06:00</updated>
+  <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Testing through a Trello connection with Capybara and Webkit]]></title>
-    <link href="http://larry-price.com/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit/"/>
+    <link href="https://larry-price.com/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit/"/>
     <updated>2014-08-07T07:25:11-04:00</updated>
-    <id>http://larry-price.com/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit</id>
+    <id>https://larry-price.com/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit</id>
     <content type="html"><![CDATA[<p>During the hardening of <a href="https://ollertapp.com">Ollert</a>, a Trello data analysis tool I wrote, I started writing acceptance tests. I quickly ran into an issue where the meat of my application requires opening pop-up window, signing into Trello, and allowing my application access.</p>
 
 <p>I created a test user on Trello with a few varied boards to allow for proper testing. In doing this, I store the user&rsquo;s login information in my .env file. For the most part, I can use the steps provided in <a href="https://gist.github.com/larryprice/546d6c029bb3074bd84c">this common web_steps.rb</a>.</p>
@@ -127,9 +127,9 @@ end
   
   <entry>
     <title type="html"><![CDATA[Javascript testing with Capybara and Cucumber]]></title>
-    <link href="http://larry-price.com/blog/2014/08/05/javascript-testing-with-capybara-and-cucumber/"/>
+    <link href="https://larry-price.com/blog/2014/08/05/javascript-testing-with-capybara-and-cucumber/"/>
     <updated>2014-08-05T06:40:40-04:00</updated>
-    <id>http://larry-price.com/blog/2014/08/05/javascript-testing-with-capybara-and-cucumber</id>
+    <id>https://larry-price.com/blog/2014/08/05/javascript-testing-with-capybara-and-cucumber</id>
     <content type="html"><![CDATA[<p>In the past, I had written off testing the Javascript in my <a href="http://www.sinatrarb.com/">Sinatra</a> apps as being not worth the pain of setting up. That was pretty naïve of me, as setting up web drivers in <a href="https://github.com/jnicklas/capybara">Capybara</a> is actually pretty easy.</p>
 
 <p>For this post, I assume you already have a capybara-cucumber project set up. If you need help setting up your first tests, consider checking out <a href="/blog/categories/capybara/">some of my other blog posts</a> on the subject.</p>
@@ -265,9 +265,9 @@ end
   
   <entry>
     <title type="html"><![CDATA[Testing automated emails with email-spec in Cucumber]]></title>
-    <link href="http://larry-price.com/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber/"/>
+    <link href="https://larry-price.com/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber/"/>
     <updated>2014-07-12T07:36:33-04:00</updated>
-    <id>http://larry-price.com/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber</id>
+    <id>https://larry-price.com/blog/2014/07/12/testing-automated-emails-with-email-spec-in-cucumber</id>
     <content type="html"><![CDATA[<p>Now that <a href="/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/">I send emails using Pony</a>, I want to be able to verify that the emails are being generated correctly. I also don&rsquo;t want to send real emails and have my tests check an inbox somewhere. I found a couple of solutions to do this, including <a href="https://github.com/johnmendonca/pony-test">pony-test</a> and <a href="https://github.com/bmabey/email-spec">email-spec</a>. Although pony-test fits my needs perfectly, the last commit was December 27, 2011 (2.5 years ago at the time of this post), and thus was using an outdated version of <a href="https://github.com/jnicklas/capybara">capybara</a> which I was unwilling to use. Fortunately, pony-spec is mostly just a fork of email-spec with all the non-Pony components ripped out.</p>
 
 <p>I&rsquo;m going to be using Cucumber to test my emails, but email-spec also boasts compatibility with rspec and Turnip. To get started:</p>
@@ -366,9 +366,9 @@ Scenario: Receives email with correct contents
   
   <entry>
     <title type="html"><![CDATA[Sending emails with Pony and Sendgrid]]></title>
-    <link href="http://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/"/>
+    <link href="https://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/"/>
     <updated>2014-07-08T05:53:26-04:00</updated>
-    <id>http://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid</id>
+    <id>https://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid</id>
     <content type="html"><![CDATA[<p>It&rsquo;s incredible how easy it is to send emails through a web application, there&rsquo;s no wonder we get so much spam. Assuming we have a <a href="http://ruby-lang.org">ruby</a> app using <a href="http://sinatrarb.com">Sinatra</a>, <a href="http://adam.herokuapp.com/past/2008/11/2/pony_the_express_way_to_send_email_from_ruby/">Pony</a> is one of the easiest ways to get started with your own spam empire.</p>
 
 <p>Installation is, as always, trivial with ruby. Install the gem with <code>gem install pony</code> or add <code>gem pony</code> to your <code>Gemfile</code> and run <code>bundle install</code>.</p>
@@ -473,9 +473,9 @@ end
   
   <entry>
     <title type="html"><![CDATA[Using sqlite on Heroku]]></title>
-    <link href="http://larry-price.com/blog/2014/03/29/using-sqlite-on-heroku/"/>
+    <link href="https://larry-price.com/blog/2014/03/29/using-sqlite-on-heroku/"/>
     <updated>2014-03-29T11:16:06-04:00</updated>
-    <id>http://larry-price.com/blog/2014/03/29/using-sqlite-on-heroku</id>
+    <id>https://larry-price.com/blog/2014/03/29/using-sqlite-on-heroku</id>
     <content type="html"><![CDATA[<p>Or rather, &ldquo;Not Using sqlite on Heroku.&rdquo;</p>
 
 <p><a href="//heroku.com">Heroku</a> does not support <a href="//sqlite.org">sqlite</a>. That doesn&rsquo;t mean we have to stop using sqlite in development, but it does mean we need to put in some workarounds to support our deployment environment. The rest of this article will use <a href="//ruby-lang.org">ruby</a> and <a href="//sinatrarb.com">Sinatra</a>.</p>

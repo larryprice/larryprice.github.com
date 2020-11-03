@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: non-technical | Larry Price]]></title>
-  <link href="http://larry-price.com/blog/categories/non-technical/atom.xml" rel="self"/>
-  <link href="http://larry-price.com/"/>
-  <updated>2020-10-19T20:41:40-05:00</updated>
-  <id>http://larry-price.com/</id>
+  <link href="https://larry-price.com/blog/categories/non-technical/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2020-11-03T11:30:15-06:00</updated>
+  <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[where's larry?]]></title>
-    <link href="http://larry-price.com/blog/2017/08/26/wheres-larry/"/>
+    <link href="https://larry-price.com/blog/2017/08/26/wheres-larry/"/>
     <updated>2017-08-26T18:30:48-05:00</updated>
-    <id>http://larry-price.com/blog/2017/08/26/wheres-larry</id>
+    <id>https://larry-price.com/blog/2017/08/26/wheres-larry</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been on hiatus for a few months. Aside from the technical writing I usually do on this blog, I haven&rsquo;t pushed much extracurricular code or read any programming books. So what have I been doing?</p>
 
 <p><em>Warning: This is going to come off as a diary entry about my life and is not intended as a free, highly technical post about programming. Come back later for more of that.</em></p>
@@ -76,9 +76,9 @@
   
   <entry>
     <title type="html"><![CDATA[On Gender Bias and Home Improvement]]></title>
-    <link href="http://larry-price.com/blog/2017/04/18/on-gender-bias-and-home-improvement/"/>
+    <link href="https://larry-price.com/blog/2017/04/18/on-gender-bias-and-home-improvement/"/>
     <updated>2017-04-18T10:42:10-04:00</updated>
-    <id>http://larry-price.com/blog/2017/04/18/on-gender-bias-and-home-improvement</id>
+    <id>https://larry-price.com/blog/2017/04/18/on-gender-bias-and-home-improvement</id>
     <content type="html"><![CDATA[<p>Instead of a highly technical guide, today I have a short anecdote of some recent electrical work we did in the master bathroom.</p>
 
 <p>I met my wife when I joined my high school robotics team. I was a hammer: with no singular skill that I wanted to focus on, I was thrown into painting, cutting, drilling, electrical, lifting, sanding, building the website, and even marketing. Funnily enough, I never actually worked on programming the robot. As far as I knew at the time, my wife was doing similar work with more focus on marketing and operating the robot.</p>
@@ -99,9 +99,9 @@
   
   <entry>
     <title type="html"><![CDATA[2016 Retrospective]]></title>
-    <link href="http://larry-price.com/blog/2016/12/27/2016-year-in-review/"/>
+    <link href="https://larry-price.com/blog/2016/12/27/2016-year-in-review/"/>
     <updated>2016-12-27T13:35:56-05:00</updated>
-    <id>http://larry-price.com/blog/2016/12/27/2016-year-in-review</id>
+    <id>https://larry-price.com/blog/2016/12/27/2016-year-in-review</id>
     <content type="html"><![CDATA[<p>This has been a unique year for me, and I wanted to quickly lay out what I&rsquo;ve accomplished and where I think I&rsquo;m going for the coming year. This is now officially a tradition at three posts (see: <a href="/blog/2014/12/31/2014-retrospective/">2014</a> and <a href="/blog/2016/01/03/2015-year-in-review/">2015</a>).</p>
 
 <h3>Revisiting 2016&rsquo;s Goals</h3>
@@ -240,9 +240,9 @@
   
   <entry>
     <title type="html"><![CDATA[Going Remote: 4 Months In, aka Remote Life 4-eva]]></title>
-    <link href="http://larry-price.com/blog/2016/08/04/going-remote-4-months-in/"/>
+    <link href="https://larry-price.com/blog/2016/08/04/going-remote-4-months-in/"/>
     <updated>2016-08-04T20:16:04-04:00</updated>
-    <id>http://larry-price.com/blog/2016/08/04/going-remote-4-months-in</id>
+    <id>https://larry-price.com/blog/2016/08/04/going-remote-4-months-in</id>
     <content type="html"><![CDATA[<p><em>This is the third in a series of blog posts detailing my experience acclimating to a fully remote work experience. You may also enjoy my original posts <a href="/blog/2016/04/11/going-remote-1-week/">detailing my first week</a> and <a href="/blog/2016/05/05/going-remote-1-month-in/">my first month</a>.</em></p>
 
 <p>Has it really been 4 months since I started riding the raging river of remote work? After my first month, I felt pretty good about my daily schedule and work/life balance. Since the last post, I&rsquo;ve met many of my co-workers IRL, learned to find my own work, and figured out how to shake things up when I get in a rut.</p>
@@ -297,9 +297,9 @@
   
   <entry>
     <title type="html"><![CDATA[Ranks, Streaks, and Karma - A Look at Competitive Contributions]]></title>
-    <link href="http://larry-price.com/blog/2016/06/23/ranks-streaks-karma/"/>
+    <link href="https://larry-price.com/blog/2016/06/23/ranks-streaks-karma/"/>
     <updated>2016-06-23T21:15:17-04:00</updated>
-    <id>http://larry-price.com/blog/2016/06/23/ranks-streaks-karma</id>
+    <id>https://larry-price.com/blog/2016/06/23/ranks-streaks-karma</id>
     <content type="html"><![CDATA[<p>If you weren&rsquo;t paying close attention, you may not have noticed that Github has recently <a href="https://github.com/blog/2173-more-contributions-on-your-profile">removed Streaks from profile pages</a> along with a few other changes.</p>
 
 <p>For the uninitiated, Github tracked each user&rsquo;s commit history every day and displayed this information prominently on the user&rsquo;s profile for the past 365 days. When committing multiple days in succession, a &ldquo;streak&rdquo; is started. Your streak resets the next solar day you don&rsquo;t commit to Github.</p>

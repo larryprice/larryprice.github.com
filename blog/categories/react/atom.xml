@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: react | Larry Price]]></title>
-  <link href="http://larry-price.com/blog/categories/react/atom.xml" rel="self"/>
-  <link href="http://larry-price.com/"/>
-  <updated>2020-10-19T20:41:40-05:00</updated>
-  <id>http://larry-price.com/</id>
+  <link href="https://larry-price.com/blog/categories/react/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2020-11-03T11:30:15-06:00</updated>
+  <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[A Chronicle of SEP Startup Weekend 2016]]></title>
-    <link href="http://larry-price.com/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016/"/>
+    <link href="https://larry-price.com/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016/"/>
     <updated>2016-03-03T15:16:29-05:00</updated>
-    <id>http://larry-price.com/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016</id>
+    <id>https://larry-price.com/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016</id>
     <content type="html"><![CDATA[<p>Last weekend was the 2016 SEP Startup Weekend, a bi-annual hackathon where a few of the engineers get together for 48 hours to build things. As far as most people know, we transform massive quantities of beer, coffee, and unhealthy food into cohesive piles of code. Although that about sums it up, I thought it might be nice to chronicle my team&rsquo;s experience of this season&rsquo;s event. Enjoy!</p>
 
 <h3>The Pitch</h3>

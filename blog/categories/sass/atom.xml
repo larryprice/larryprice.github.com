@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: sass | Larry Price]]></title>
-  <link href="http://larry-price.com/blog/categories/sass/atom.xml" rel="self"/>
-  <link href="http://larry-price.com/"/>
-  <updated>2020-10-19T20:41:40-05:00</updated>
-  <id>http://larry-price.com/</id>
+  <link href="https://larry-price.com/blog/categories/sass/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2020-11-03T11:30:15-06:00</updated>
+  <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Compile Sass with Docker]]></title>
-    <link href="http://larry-price.com/blog/2015/05/17/compile-sass-with-docker/"/>
+    <link href="https://larry-price.com/blog/2015/05/17/compile-sass-with-docker/"/>
     <updated>2015-05-17T16:11:18-04:00</updated>
-    <id>http://larry-price.com/blog/2015/05/17/compile-sass-with-docker</id>
+    <id>https://larry-price.com/blog/2015/05/17/compile-sass-with-docker</id>
     <content type="html"><![CDATA[<p><a href="http://sass-lang.com/">SASS</a> is a delightful way to write CSS, but compiling SASS for your web application might not be the most obvious task. There are different installation methods, most of them involving cluttering up your filesystem with external dependencies.  Compiling SASS is easy when you&rsquo;re doing <code>rails</code> or <code>sinatra</code>-work, but I demand to write code in a compiled language. So I created <a href="https://registry.hub.docker.com/u/larryprice/sass/">a docker image</a> to compile SASS code automatically called <code>larryprice/sass</code>.</p>
 
 <p>Running this image is easy. Let&rsquo;s say I have some SASS code:</p>

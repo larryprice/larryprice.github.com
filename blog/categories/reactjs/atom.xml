@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: reactjs | Larry Price]]></title>
-  <link href="http://larry-price.com/blog/categories/reactjs/atom.xml" rel="self"/>
-  <link href="http://larry-price.com/"/>
-  <updated>2020-10-19T20:41:40-05:00</updated>
-  <id>http://larry-price.com/</id>
+  <link href="https://larry-price.com/blog/categories/reactjs/atom.xml" rel="self"/>
+  <link href="https://larry-price.com/"/>
+  <updated>2020-11-03T11:30:15-06:00</updated>
+  <id>https://larry-price.com/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
     <email><![CDATA[larry@larry-price.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Getting Started with React Hooks]]></title>
-    <link href="http://larry-price.com/blog/2019/02/09/getting-started-with-react-hooks/"/>
+    <link href="https://larry-price.com/blog/2019/02/09/getting-started-with-react-hooks/"/>
     <updated>2019-02-09T13:10:46-06:00</updated>
-    <id>http://larry-price.com/blog/2019/02/09/getting-started-with-react-hooks</id>
+    <id>https://larry-price.com/blog/2019/02/09/getting-started-with-react-hooks</id>
     <content type="html"><![CDATA[<p><a href="https://reactjs.org/docs/hooks-intro.html">React Hooks</a> are a new feature allowing developers to use state in functional components officially released in <a href="https://reactjs.org/blog/2019/02/06/react-v16.8.0.html">React 16.8</a>. I am in love with the idea of Hooks, so much so that I&rsquo;m giving an introductory talk on the topic at an <a href="https://www.meetup.com/C-U-JavaScript/events/258294308/">upcoming local JavaScript meetup</a>.</p>
 
 <p>All code from this post can be found in a <a href="https://codepen.io/collection/XMoJzy/">codepen collection</a>.</p>
@@ -191,9 +191,9 @@ const CancelAccountDeletion = ({onClick}) =&gt; {
   
   <entry>
     <title type="html"><![CDATA[How to Use getDerivedStateFromProps in React 16.3+]]></title>
-    <link href="http://larry-price.com/blog/2018/06/27/how-to-use-getderivedstatefromprops-in-react-16-dot-3-plus/"/>
+    <link href="https://larry-price.com/blog/2018/06/27/how-to-use-getderivedstatefromprops-in-react-16-dot-3-plus/"/>
     <updated>2018-06-27T15:12:09-05:00</updated>
-    <id>http://larry-price.com/blog/2018/06/27/how-to-use-getderivedstatefromprops-in-react-16-dot-3-plus</id>
+    <id>https://larry-price.com/blog/2018/06/27/how-to-use-getderivedstatefromprops-in-react-16-dot-3-plus</id>
     <content type="html"><![CDATA[<p>From <a href="https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html">a blog post in late March 2018</a>, it was announced that the React lifecycle methods <code>componentWillReceiveProps</code>, <code>componentWillMount</code>, and <code>componentWillUpdate</code> will be deprecated in a future version of React. This is because of the eventual migration of React to async rendering; these lifecycle methods will become unreliable when async rendering is made default.</p>
 
 <p>In place of these methods, the new <strong>static</strong> method <code>getDerivedStateFromProps</code> was introduced. My team and I struggled at first in wrapping our heads around how to migrate our many uses of <code>componentWillReceiveProps</code> to this new method. It&rsquo;s generally easier than you think, but you need to keep in mind that the new method is <strong>static</strong>, and therefore does not have access to the <code>this</code> context that the old lifecycle methods provided.</p>
@@ -301,9 +301,9 @@ componentDidMount() {
   
   <entry>
     <title type="html"><![CDATA[How To ReactJS]]></title>
-    <link href="http://larry-price.com/blog/2015/06/16/how-i-reactjs/"/>
+    <link href="https://larry-price.com/blog/2015/06/16/how-i-reactjs/"/>
     <updated>2015-06-16T20:03:36-04:00</updated>
-    <id>http://larry-price.com/blog/2015/06/16/how-i-reactjs</id>
+    <id>https://larry-price.com/blog/2015/06/16/how-i-reactjs</id>
     <content type="html"><![CDATA[<p><a href="http://facebook.github.io/react/">ReactJS</a> is a component-based Javascript library for creating user interfaces. I used it extensively on recent side project <a href="https://www.refer-madness.com">Refer Madness</a> (<a href="https://github.com/larryprice/refermadness">source code</a>). It&rsquo;s pretty neat. Let&rsquo;s build some demos!</p>
 
 <p>We&rsquo;ll start small. We can start with the ReactJS sample and figure out what&rsquo;s going on:</p>
