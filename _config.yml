@@ -2,7 +2,7 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: https://larry-price.com
+url: https://larryprice.dev
 title: Larry Price
 subtitle: And The Endless Cup Of Coffee
 author: Larry Price
@@ -19,7 +19,7 @@ date_format: "ordinal"
 subscribe_rss: /atom.xml
 subscribe_email:
 # RSS feeds can list your email address if you like
-email: larry@larry-price.com
+email: larry@larryprice.dev
 
 # ----------------------- #
 #    Jekyll & Plugins     #

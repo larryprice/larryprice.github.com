@@ -6,7 +6,9 @@ comments: true
 categories: web
 ---
 
-As of today, I'm the proud owner of [larry-price.com](//larry-price.com). On the recommendation from a friend, I used [domainmonster.com](//domainmonster.com) for it's cost effectiveness and usable toolset. I wanted to link my Github Pages blog (this blog!) to my new site. In case I ever want to do this again, I've provided myself (and you!) with a step-by-step guide below. Note that Github [has a page that explains how to do this](//help.github.com/articles/setting-up-a-custom-domain-with-pages), but there's some fluff and ordering issues that turned me off from using those instructions as any more than a reference.
+_Update April 2022: I no longer own the domain `larry-price.com` and have removed the links here_
+
+As of today, I'm the proud owner of `larry-price.com`. On the recommendation from a friend, I used [domainmonster.com](//domainmonster.com) for it's cost effectiveness and usable toolset. I wanted to link my Github Pages blog (this blog!) to my new site. In case I ever want to do this again, I've provided myself (and you!) with a step-by-step guide below. Note that Github [has a page that explains how to do this](//help.github.com/articles/setting-up-a-custom-domain-with-pages), but there's some fluff and ordering issues that turned me off from using those instructions as any more than a reference.
 
 ####Step 0: Buy your domain####
 
@@ -14,7 +16,7 @@ All sites where you can purchase domains have the same domains available, but at
 
 ####Step 0.5: Exercise restraint####
 
-At this point in the process, __don't go to your site__.
+At this point in the process, **don't go to your site**.
 
 My guess is you already have. If you don't have the ability to go back in time, don't sweat it, just know that you probably won't be able to verify the fruits of your labor for a few hours.
 
@@ -22,7 +24,7 @@ My guess is you already have. If you don't have the ability to go back in time, 
 
 Find the ip address where your site is currently hosted. For me (replace URL with your own):
 
-``` bash
+```bash
 $ nslookup larryprice.github.io
 Server:   127.0.1.1
 Address:  127.0.1.1#53
@@ -50,8 +52,8 @@ If you're using Github Pages for a user page, we are going to make this change o
 
 All we have to do is put our new domain into a file in the root folder called `CNAME`. Let's do it in one fell swoop of the command line.
 
-``` bash
-$ echo "larry-price.com" > CNAME 
+```bash
+$ echo "larry-price.com" > CNAME
 ```
 
 Push that to Github and wait 0 to 10 minutes for Github to refresh your page.
