@@ -54,7 +54,6 @@ default_asides:
   [
     custom/asides/social_media.html,
     custom/asides/about.html,
-    custom/asides/patreon.html,
     custom/asides/go_for_web_dev.html,
     custom/asides/fosdem2017.html,
     asides/recent_posts.html,

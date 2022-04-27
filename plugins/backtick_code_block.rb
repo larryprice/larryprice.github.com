@@ -33,7 +33,13 @@ module BacktickCodeBlock
           raw += str
           raw += "\n```\n"
         else
-          code = HighlightCode::highlight(str, @lang)
+          begin
+            code = HighlightCode::highlight(str, @lang)
+          rescue Exception => e
+            puts "Failed to highlight, using plaintext instead"
+            code = HighlightCode::tableize_code(str.gsub('<','&lt;').gsub('>','&gt;'))
+            "<figure class='code'>#{@caption}#{code}</figure>"
+          end
           "<figure class='code'>#{@caption}#{code}</figure>"
         end
       end

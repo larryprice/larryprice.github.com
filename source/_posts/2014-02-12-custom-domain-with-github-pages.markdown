@@ -52,9 +52,7 @@ If you're using Github Pages for a user page, we are going to make this change o
 
 All we have to do is put our new domain into a file in the root folder called `CNAME`. Let's do it in one fell swoop of the command line.
 
-```bash
-$ echo "larry-price.com" > CNAME
-```
+`echo "larry-price.com" > CNAME`
 
 Push that to Github and wait 0 to 10 minutes for Github to refresh your page.
 
