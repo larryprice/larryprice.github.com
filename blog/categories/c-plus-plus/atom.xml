@@ -2,22 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: c++ | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/c-plus-plus/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2020-11-03T11:30:15-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="https://larryprice.dev/blog/categories/c-plus-plus/atom.xml" rel="self"/>
+  <link href="https://larryprice.dev/"/>
+  <updated>2022-04-27T15:46:07-06:00</updated>
+  <id>https://larryprice.dev/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
-    <email><![CDATA[larry@larry-price.com]]></email>
+    <email><![CDATA[larry@larryprice.dev]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
   <entry>
     <title type="html"><![CDATA[Effective Modern C++]]></title>
-    <link href="https://larry-price.com/blog/2016/06/29/effective-modern-c-plus-plus/"/>
+    <link href="https://larryprice.dev/blog/2016/06/29/effective-modern-c-plus-plus/"/>
     <updated>2016-06-29T20:35:23-04:00</updated>
-    <id>https://larry-price.com/blog/2016/06/29/effective-modern-c-plus-plus</id>
+    <id>https://larryprice.dev/blog/2016/06/29/effective-modern-c-plus-plus</id>
     <content type="html"><![CDATA[<h3>The Gist</h3>
 
 <p>How can one man give the world so much? Scott Meyers transformed my understanding of C++ with <a href="/blog/2013/07/16/effective-c-plus-plus/"><em>Effective C++</em></a>, a book which not only teaches good C++ practices and principles, but also explains what&rsquo;s going on behind the scenes to make those efforts so effectual. <a href="http://amzn.to/29dU9FO"><em>Effective Modern C++</em></a> is the same book aimed at a different audience. The audience of <em>Effective C++</em> was the developer who could use C++ to build a humble home of straw or wood, but didn&rsquo;t know that C++ was born to create homes of brick and mortar. <em>Effective Modern C++</em> is for the seasoned developer who knows the brick home they built with C++98 can stand tall, but is bewildered by the plethora of modern amenities available in the top-floor penthouse that is C++11.</p>
@@ -92,9 +92,9 @@ my_func(5); // 16
   
   <entry>
     <title type="html"><![CDATA[Hooks in cucumber-cpp]]></title>
-    <link href="https://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp/"/>
-    <updated>2013-11-22T20:40:00-06:00</updated>
-    <id>https://larry-price.com/blog/2013/11/22/hooks-in-cucumber-cpp</id>
+    <link href="https://larryprice.dev/blog/2013/11/22/hooks-in-cucumber-cpp/"/>
+    <updated>2013-11-22T20:40:00-07:00</updated>
+    <id>https://larryprice.dev/blog/2013/11/22/hooks-in-cucumber-cpp</id>
     <content type="html"><![CDATA[<p>A few months ago <a href="/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/">I blogged about tags</a> in <a href="https://github.com/cucumber/cucumber-cpp">cucumber-c++</a>. The scenario I presented involved using tags to call a <code>BEFORE</code> hook before the first scenario and an <code>AFTER</code> hook after the last scenario. The code looked a little bit like this:</p>
 
 <pre><code class="cucumber DoStuff.feature">@first
@@ -148,9 +148,9 @@ AFTER_ALL() { cout &lt;&lt; "This is the last step!" &lt;&lt; endl; }
   
   <entry>
     <title type="html"><![CDATA[Copy Data Using qmake]]></title>
-    <link href="https://larry-price.com/blog/2013/11/14/copy-data-using-qmake/"/>
-    <updated>2013-11-14T21:24:00-06:00</updated>
-    <id>https://larry-price.com/blog/2013/11/14/copy-data-using-qmake</id>
+    <link href="https://larryprice.dev/blog/2013/11/14/copy-data-using-qmake/"/>
+    <updated>2013-11-14T21:24:00-07:00</updated>
+    <id>https://larryprice.dev/blog/2013/11/14/copy-data-using-qmake</id>
     <content type="html"><![CDATA[<p>I&rsquo;ll take things that should be really easy but are in fact impossible for $1000, Mr Trebek.</p>
 
 <p>I have a <a href="https://qt-project.org/wiki/Qt_5.0">Qt</a> desktop app that uses <a href="https://qt-project.org/doc/qt-4.8/qmake-manual.html">qmake</a>. I have tests. I have test data that I need to copy to my build directory. Not only that, but I want to copy a whole directory recursively. In Linux <em>and</em> Windows. You must be thinking to yourself, &lsquo;There&rsquo;s no way that&rsquo;s possible, leave me out of your crazy plans!&rsquo; Well to that I say nay. Nay indeed.</p>
@@ -206,9 +206,9 @@ unix {
   
   <entry>
     <title type="html"><![CDATA[Tags in C++ Cucumber tests]]></title>
-    <link href="https://larry-price.com/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/"/>
-    <updated>2013-04-15T22:10:00-05:00</updated>
-    <id>https://larry-price.com/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests</id>
+    <link href="https://larryprice.dev/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests/"/>
+    <updated>2013-04-15T22:10:00-06:00</updated>
+    <id>https://larryprice.dev/blog/2013/04/15/tags-in-c-plus-plus-cucumber-tests</id>
     <content type="html"><![CDATA[<p>The project I&rsquo;m working on is slowly adding <a href="https://github.com/cucumber/cucumber-cpp">Cucumber</a> acceptance tests to our massive code base in order to replace aging <a href="https://code.google.com/p/robotframework/">Robot tests</a>. One would think that getting developers on our team to use Cucumber would be east, since it uses <a href="https://code.google.com/p/googletest/">googletest</a> and <a href="https://code.google.com/p/googlemock/">googlemock</a> which we use for our unit tests. Unfortunately, very few people on the team have been motivated to write integration tests using the new framework, so I have very few people to go to when I have problems writing my own integration tests.</p>
 
 <p>The area of the code I deal with uses <a href="http://www.mono-project.com/Embedding_Mono">embedded mono</a> to communicate with some C# libraries that we share with other applications. This means we have unmanaged memory which talks with managed memory. This has caused us more headaches than I care to remember. One such problem is that we have a static object that we only want to create and destroy once. So I write my first Cucumber test:</p>

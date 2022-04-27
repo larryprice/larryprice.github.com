@@ -2,22 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: linux | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/linux/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2020-11-03T11:30:15-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="https://larryprice.dev/blog/categories/linux/atom.xml" rel="self"/>
+  <link href="https://larryprice.dev/"/>
+  <updated>2022-04-27T15:46:07-06:00</updated>
+  <id>https://larryprice.dev/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
-    <email><![CDATA[larry@larry-price.com]]></email>
+    <email><![CDATA[larry@larryprice.dev]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
   <entry>
     <title type="html"><![CDATA[A Quick Guide to Using docker-compose (previously fig)]]></title>
-    <link href="https://larry-price.com/blog/2015/02/26/a-quick-guide-to-using-docker-compose-previously-fig/"/>
+    <link href="https://larryprice.dev/blog/2015/02/26/a-quick-guide-to-using-docker-compose-previously-fig/"/>
     <updated>2015-02-26T07:43:59-05:00</updated>
-    <id>https://larry-price.com/blog/2015/02/26/a-quick-guide-to-using-docker-compose-previously-fig</id>
+    <id>https://larryprice.dev/blog/2015/02/26/a-quick-guide-to-using-docker-compose-previously-fig</id>
     <content type="html"><![CDATA[<p>Have you used <a href="https://www.docker.com/">Docker</a> yet? Docker is awesome! Docker is a tool for managing isolated system environments. I have started using Docker for <strong>everything</strong>. This is not <a href="/blog/2015/01/11/an-example-use-case-for-docker">the first time I&rsquo;ve written about this delightful tool</a>.</p>
 
 <p>Though the ideas and implementation behind Docker are really cool, the command line syntax is extremely cumbersome. There used to be this great third-party tool to address this problem called <a href="http://www.fig.sh/">fig</a>. But, as of <a href="https://github.com/docker/compose/releases/tag/1.1.0">yesterday</a>, it looks like Docker is maintaining <code>fig</code> and have renamed it to <code>docker-compose</code>. The impact of this change is minimal on developers - rename <code>fig.yml</code> files to <code>docker-compose.yml</code>, use <code>docker-compose up</code> instead of <code>fig up</code>. Some great features have been added that I&rsquo;ve been sorely missing, including the ability to use environment files and only grabbing the latest tagged images from <a href="https://registry.hub.docker.com/">the hub</a>.</p>
@@ -173,9 +173,9 @@ $ docker run --link database:database -e DB_NAME=advanced-golang-db \
   
   <entry>
     <title type="html"><![CDATA[Managing a Go Environment in Ubuntu]]></title>
-    <link href="https://larry-price.com/blog/2015/01/18/managing-a-go-environment-in-ubuntu/"/>
+    <link href="https://larryprice.dev/blog/2015/01/18/managing-a-go-environment-in-ubuntu/"/>
     <updated>2015-01-18T10:58:04-05:00</updated>
-    <id>https://larry-price.com/blog/2015/01/18/managing-a-go-environment-in-ubuntu</id>
+    <id>https://larryprice.dev/blog/2015/01/18/managing-a-go-environment-in-ubuntu</id>
     <content type="html"><![CDATA[<p>Many moons ago, I wrote about <a href="/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04">setting up a Go environment in Ubuntu</a>. After writing that post, I dropped Go development for nearly a year. Today I run the <a href="http://www.meetup.com/Indy-Golang/events/219612982/">Indy Golang meetup</a>, and soon I&rsquo;ll be starting a new work project where I&rsquo;ll be recommending a Go-based tech stack. I&rsquo;ve learned a thing or two about Go and managing its dependencies since I wrote that initial blog post, and I intend to give a short presentation to my meetup about my recent findings. Before I do, I thought I&rsquo;d write a preliminary blog post detailing the tools I use to keep my Go environment sane.</p>
 
 <h3>Installing Go</h3>
@@ -268,9 +268,9 @@ $ echo $GOPATH
   
   <entry>
     <title type="html"><![CDATA[Convincing rvm to let you use ruby 2.1.0]]></title>
-    <link href="https://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/"/>
+    <link href="https://larryprice.dev/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0/"/>
     <updated>2014-02-22T16:46:00-05:00</updated>
-    <id>https://larry-price.com/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0</id>
+    <id>https://larryprice.dev/blog/2014/02/22/convincing-rvm-to-let-you-use-ruby-2-dot-1-0</id>
     <content type="html"><![CDATA[<p><a href="//ruby-lang.org/en/news/2013/12/25/ruby-2-1-0-is-released/">Ruby 2.1.0 went stable</a> a few months ago, and <a href="//ruby-lang.org/en/news/2014/01/10/ruby-1-9-3-will-end-on-2015/">Ruby 1.9.3 support</a> will end in a just over a year.</p>
 
 <p>You know what that means: Warplanes in the sky falling to the ground, dogs and cats getting along like old pals, and people wandering aimlessly through the streets trying to remember the last time they saw a green build.</p>
@@ -326,9 +326,9 @@ $ which ruby
   
   <entry>
     <title type="html"><![CDATA[Setting up a Go environment in Ubuntu]]></title>
-    <link href="https://larry-price.com/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04/"/>
-    <updated>2013-12-15T18:40:00-06:00</updated>
-    <id>https://larry-price.com/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04</id>
+    <link href="https://larryprice.dev/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04/"/>
+    <updated>2013-12-15T18:40:00-07:00</updated>
+    <id>https://larryprice.dev/blog/2013/12/15/setting-up-a-go-environment-in-ubuntu-12-dot-04</id>
     <content type="html"><![CDATA[<p><strong><em>Update Jan 17, 2015:</em></strong> <strong>It&rsquo;s 2015 and things are different. Check out my <a href="/blog/2015/01/18/managing-a-go-environment-in-ubuntu">updated post on managing Go dependencies</a> for a better solution.</strong></p>
 
 <p>Some very light cajoling led me to do some investigation into <a href="http://golang.org/">Google Go</a> (often called <strong>golang</strong> for ease of internet search). This is a brief recounting of how I got up and running on <a href="http://ubuntu.com">Ubuntu</a> (first 12.04 and then 13.10). Luckily, this has been made espcially easy for us with the introduction of a <a href="http://packages.ubuntu.com/precise/golang">golang package in the Ubuntu package repositories</a>. There are also <a href="http://golang.org/doc/install">official installation instructions</a> if you don&rsquo;t like mine.</p>
@@ -384,9 +384,9 @@ Hello world
   
   <entry>
     <title type="html"><![CDATA[Login shell not sourcing .bashrc: A brief lesson in dot-files]]></title>
-    <link href="https://larry-price.com/blog/2013/12/10/login-shell-not-sourcing-bashrc/"/>
-    <updated>2013-12-10T19:45:00-06:00</updated>
-    <id>https://larry-price.com/blog/2013/12/10/login-shell-not-sourcing-bashrc</id>
+    <link href="https://larryprice.dev/blog/2013/12/10/login-shell-not-sourcing-bashrc/"/>
+    <updated>2013-12-10T19:45:00-07:00</updated>
+    <id>https://larryprice.dev/blog/2013/12/10/login-shell-not-sourcing-bashrc</id>
     <content type="html"><![CDATA[<p>I have a confession: I&rsquo;ve been avoiding using <a href="https://rvm.io/">rvm</a> for the past few weeks for stupid reasons.</p>
 
 <p>When using <code>rvm</code> with <code>gnome-terminal</code>, I have to tell <code>gnome-terminal</code> to run as a login shell so that <code>/etc/profile</code> is sourced. The login shell is then supposed to source <code>$HOME/profile</code>, which is then supposed to source <code>$HOME/.bashrc</code>. Installing <code>rvm</code> results in me editing my <code>.bash_profile</code> to add the following line:</p>

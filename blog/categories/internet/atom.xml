@@ -2,22 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: internet | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/internet/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2020-11-03T11:30:15-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="https://larryprice.dev/blog/categories/internet/atom.xml" rel="self"/>
+  <link href="https://larryprice.dev/"/>
+  <updated>2022-04-27T15:46:07-06:00</updated>
+  <id>https://larryprice.dev/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
-    <email><![CDATA[larry@larry-price.com]]></email>
+    <email><![CDATA[larry@larryprice.dev]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
   <entry>
     <title type="html"><![CDATA[Let me be a billboard for DuckDuckGo for a few minutes]]></title>
-    <link href="https://larry-price.com/blog/2014/02/22/let-me-be-a-billboard-for-duckduckgo-for-a-few-minutes/"/>
+    <link href="https://larryprice.dev/blog/2014/02/22/let-me-be-a-billboard-for-duckduckgo-for-a-few-minutes/"/>
     <updated>2014-02-22T17:47:00-05:00</updated>
-    <id>https://larry-price.com/blog/2014/02/22/let-me-be-a-billboard-for-duckduckgo-for-a-few-minutes</id>
+    <id>https://larryprice.dev/blog/2014/02/22/let-me-be-a-billboard-for-duckduckgo-for-a-few-minutes</id>
     <content type="html"><![CDATA[<p>I would describe my job as 10% cleverness, 10% tenacity, 30% historical knowledge, and 50% searching the internet.</p>
 
 <p>As you can see, a good search engine is extremely important to me. My job depends on it. Opening <a href="//www.chromium.org/Home">Chromium&rsquo;s</a> history, I can see that I have recently searched for microwaves, <a href="//rubygems.org/gems/activesupport">activesupport</a> compatibility in <a href="//www.ruby-lang.org/en/">ruby 2.1.0</a>, deleting branches in git, and glibc backwards compatibility.</p>

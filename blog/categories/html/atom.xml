@@ -2,22 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: html | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/html/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2020-11-03T11:30:15-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="https://larryprice.dev/blog/categories/html/atom.xml" rel="self"/>
+  <link href="https://larryprice.dev/"/>
+  <updated>2022-04-27T15:46:07-06:00</updated>
+  <id>https://larryprice.dev/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
-    <email><![CDATA[larry@larry-price.com]]></email>
+    <email><![CDATA[larry@larryprice.dev]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
   <entry>
     <title type="html"><![CDATA[Sticky footer with Twitter Bootstrap]]></title>
-    <link href="https://larry-price.com/blog/2014/03/24/sticky-footer-with-twitter-bootstrap/"/>
+    <link href="https://larryprice.dev/blog/2014/03/24/sticky-footer-with-twitter-bootstrap/"/>
     <updated>2014-03-24T20:12:50-04:00</updated>
-    <id>https://larry-price.com/blog/2014/03/24/sticky-footer-with-twitter-bootstrap</id>
+    <id>https://larryprice.dev/blog/2014/03/24/sticky-footer-with-twitter-bootstrap</id>
     <content type="html"><![CDATA[<p>Sometimes CSS is a total pain.</p>
 
 <p>We encountered a major CSS problem while working on our incredible startup weekend project <a href="//ollert.herokuapp.com">Ollert</a>. We had created a footer that we wanted below all of our content. We threw together some quick HTML and got a footer below all of the main content, and it looked really good when our main content filled up the entire screen.</p>
@@ -71,9 +71,9 @@
   
   <entry>
     <title type="html"><![CDATA[Connecting to the Trello API]]></title>
-    <link href="https://larry-price.com/blog/2014/03/18/connecting-to-the-trello-api/"/>
+    <link href="https://larryprice.dev/blog/2014/03/18/connecting-to-the-trello-api/"/>
     <updated>2014-03-18T20:00:11-04:00</updated>
-    <id>https://larry-price.com/blog/2014/03/18/connecting-to-the-trello-api</id>
+    <id>https://larryprice.dev/blog/2014/03/18/connecting-to-the-trello-api</id>
     <content type="html"><![CDATA[<p><a href="//trello.com">Trello</a> has a <a href="//trello.com/docs/">pretty sweet API</a>, which we use extensively in our Trello-analysis app <a href="//ollert.herokuapp.com">Ollert</a>. Initially connecting to the Trello API took us a few hours, so I&rsquo;d like to make a record of how we managed to connect.</p>
 
 <p>Making a connection to Trello requires two hashcodes: an application key and a Trello member token. You can generate and view your application key by visiting <a href="//trello.com/1/appKey/generate">https://trello.com/1/appKey/generate</a>.</p>

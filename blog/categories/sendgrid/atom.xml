@@ -2,22 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: sendgrid | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/sendgrid/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2020-11-03T11:30:15-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="https://larryprice.dev/blog/categories/sendgrid/atom.xml" rel="self"/>
+  <link href="https://larryprice.dev/"/>
+  <updated>2022-04-27T15:46:07-06:00</updated>
+  <id>https://larryprice.dev/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
-    <email><![CDATA[larry@larry-price.com]]></email>
+    <email><![CDATA[larry@larryprice.dev]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
   <entry>
     <title type="html"><![CDATA[Sending emails with Pony and Sendgrid]]></title>
-    <link href="https://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/"/>
+    <link href="https://larryprice.dev/blog/2014/07/08/sending-emails-with-pony-and-sendgrid/"/>
     <updated>2014-07-08T05:53:26-04:00</updated>
-    <id>https://larry-price.com/blog/2014/07/08/sending-emails-with-pony-and-sendgrid</id>
+    <id>https://larryprice.dev/blog/2014/07/08/sending-emails-with-pony-and-sendgrid</id>
     <content type="html"><![CDATA[<p>It&rsquo;s incredible how easy it is to send emails through a web application, there&rsquo;s no wonder we get so much spam. Assuming we have a <a href="http://ruby-lang.org">ruby</a> app using <a href="http://sinatrarb.com">Sinatra</a>, <a href="http://adam.herokuapp.com/past/2008/11/2/pony_the_express_way_to_send_email_from_ruby/">Pony</a> is one of the easiest ways to get started with your own spam empire.</p>
 
 <p>Installation is, as always, trivial with ruby. Install the gem with <code>gem install pony</code> or add <code>gem pony</code> to your <code>Gemfile</code> and run <code>bundle install</code>.</p>

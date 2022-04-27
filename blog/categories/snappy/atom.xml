@@ -2,22 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: snappy | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/snappy/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2020-11-03T11:30:15-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="https://larryprice.dev/blog/categories/snappy/atom.xml" rel="self"/>
+  <link href="https://larryprice.dev/"/>
+  <updated>2022-04-27T15:46:07-06:00</updated>
+  <id>https://larryprice.dev/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
-    <email><![CDATA[larry@larry-price.com]]></email>
+    <email><![CDATA[larry@larryprice.dev]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
   <entry>
     <title type="html"><![CDATA[Snappy Libertine]]></title>
-    <link href="https://larry-price.com/blog/2017/02/15/snappy-libertine/"/>
+    <link href="https://larryprice.dev/blog/2017/02/15/snappy-libertine/"/>
     <updated>2017-02-15T18:38:44-05:00</updated>
-    <id>https://larry-price.com/blog/2017/02/15/snappy-libertine</id>
+    <id>https://larryprice.dev/blog/2017/02/15/snappy-libertine</id>
     <content type="html"><![CDATA[<p>Libertine is software suite for runnin X11 apps in non-X11 environments and installing deb-based applications on a system without dpkg. Snappy is a package management system to confine applications from one another. Wouldn&rsquo;t it be cool to run libertine as a snap?</p>
 
 <p>Yes. Yes it would.</p>
@@ -119,9 +119,9 @@ $ libertine-container-manager install-package -i my-container -p xterm
   
   <entry>
     <title type="html"><![CDATA[Confining a Snapped X11 Application]]></title>
-    <link href="https://larry-price.com/blog/2016/12/10/confining-a-snapped-x11-application/"/>
+    <link href="https://larryprice.dev/blog/2016/12/10/confining-a-snapped-x11-application/"/>
     <updated>2016-12-10T17:30:38-05:00</updated>
-    <id>https://larry-price.com/blog/2016/12/10/confining-a-snapped-x11-application</id>
+    <id>https://larryprice.dev/blog/2016/12/10/confining-a-snapped-x11-application</id>
     <content type="html"><![CDATA[<p><em>Looking for the code? Look no further: <a href="https://github.com/larryprice/pingus-snap">https://github.com/larryprice/pingus-snap</a></em></p>
 
 <p>In my <a href="/blog/2016/12/07/creating-a-snap-from-existing-deb-packages/">last post</a>, I demonstrated creating a snap package for an application available in the archive. I left that application unconfined, which is taboo in the long run if we want our system to be secure. In a few steps, we can add the necessary components to confine our <code>pingus</code> snap.</p>
@@ -199,9 +199,9 @@ apps:
   
   <entry>
     <title type="html"><![CDATA[Building Snaps from Archived Packages]]></title>
-    <link href="https://larry-price.com/blog/2016/12/07/creating-a-snap-from-existing-deb-packages/"/>
+    <link href="https://larryprice.dev/blog/2016/12/07/creating-a-snap-from-existing-deb-packages/"/>
     <updated>2016-12-07T22:10:08-05:00</updated>
-    <id>https://larry-price.com/blog/2016/12/07/creating-a-snap-from-existing-deb-packages</id>
+    <id>https://larryprice.dev/blog/2016/12/07/creating-a-snap-from-existing-deb-packages</id>
     <content type="html"><![CDATA[<p>If you haven&rsquo;t heard, <a href="//snapcraft.io">snaps</a> are a new, modern packaging format made by the guys at Ubuntu. Snaps give every app a confined environment to live in, making desktops more secure and dependencies less of a hassle. One common way to create a snap is to simply use existing packages from the Ubuntu archives.</p>
 
 <p>Let&rsquo;s try to create a snap for the game <a href="https://lgdb.org/game/pingus">pingus</a>. <code>pingus</code> is a great little Lemmings clone that we can easily convert to a snap. We&rsquo;ll start by installing the necessary dependencies for snap building (see <a href="//snapcraft.io/create/">the snapcraft website</a> for more):</p>

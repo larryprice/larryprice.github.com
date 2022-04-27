@@ -2,22 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: testing | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/testing/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2020-11-03T11:30:15-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="https://larryprice.dev/blog/categories/testing/atom.xml" rel="self"/>
+  <link href="https://larryprice.dev/"/>
+  <updated>2022-04-27T15:46:07-06:00</updated>
+  <id>https://larryprice.dev/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
-    <email><![CDATA[larry@larry-price.com]]></email>
+    <email><![CDATA[larry@larryprice.dev]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
   <entry>
     <title type="html"><![CDATA[Getting Started with Python Mocking and Patching]]></title>
-    <link href="https://larry-price.com/blog/2016/09/07/getting-started-with-python-mocks-from-a-c-plus-plus-perspective/"/>
+    <link href="https://larryprice.dev/blog/2016/09/07/getting-started-with-python-mocks-from-a-c-plus-plus-perspective/"/>
     <updated>2016-09-07T23:00:09-04:00</updated>
-    <id>https://larry-price.com/blog/2016/09/07/getting-started-with-python-mocks-from-a-c-plus-plus-perspective</id>
+    <id>https://larryprice.dev/blog/2016/09/07/getting-started-with-python-mocks-from-a-c-plus-plus-perspective</id>
     <content type="html"><![CDATA[<p>I currently write a lot of python and C++. Although I religiously unit test my C++ code, I&rsquo;m a bit ashamed to say that I haven&rsquo;t had much experience with python unit testing until recently. You know how it is - python is one of those interpreted languages, you mostly use it to do quick hacks, it doesn&rsquo;t <em>need</em> tests. Until you&rsquo;ve written your entire D-Bus service using python, and every time you make a code change <em>a literal python</em> appears on the screen to crash your computer. So I&rsquo;ve started writing a bunch of tests and found (as expected) a tangled mess of dependencies and system calls.</p>
 
 <p>In many C-like languages, you can fix most of your dependency problems with <a href="https://stackoverflow.com/questions/346372/whats-the-difference-between-faking-mocking-and-stubbing#answer-346440">The Big Three</a>: mocks, fakes, and stubs. A fake is an actual implementation of an interface used for non-production environments, a stub is an implementation of an interface returning a pre-conceived result, and a mock is a wrapper around an interface allowing a programmer to accurately map what actions were performed on the object. In C-like languages, you use <a href="https://en.wikipedia.org/wiki/Dependency_injection">dependency injection</a> to give our classes fakes, mocks, or stubs instead of real objects during testing.</p>
@@ -172,9 +172,9 @@ def test_profit_adds_up_despite_turnover(self, randint):
   
   <entry>
     <title type="html"><![CDATA[To System Test or Not to System Test]]></title>
-    <link href="https://larry-price.com/blog/2014/10/28/to-system-test-or-not-to-system-test/"/>
+    <link href="https://larryprice.dev/blog/2014/10/28/to-system-test-or-not-to-system-test/"/>
     <updated>2014-10-28T17:42:06-04:00</updated>
-    <id>https://larry-price.com/blog/2014/10/28/to-system-test-or-not-to-system-test</id>
+    <id>https://larryprice.dev/blog/2014/10/28/to-system-test-or-not-to-system-test</id>
     <content type="html"><![CDATA[<p>System tests: a boon to product verification, but also time taken away from raw development. System-level testing means bringing up the whole system and running through a set of steps to verify that the system is working properly on all levels.</p>
 
 <p>We have lots of system tests on our project, some that check for the existence of UI elements, and some that verify that a user can go through the entire e-commerce process. Some of the tests require network access, so they take up to 3 or 4 minutes. I had gotten used to writing system tests with <a href="https://www.ruby-lang.org/en/">ruby</a> and <a href="https://github.com/jnicklas/capybara">capybara</a>, which I&rsquo;ve always found straightforward and easy to write. But this current project is in ASP.NET MVC, which seems to have greatly complicated bringing up and automatically manipulating the system. Our current test suite takes over an hour to run and results in at least 10 consistently-failing tests (referred to as &ldquo;flaky&rdquo; for dignity&rsquo;s sake).</p>
@@ -207,9 +207,9 @@ def test_profit_adds_up_despite_turnover(self, randint):
   
   <entry>
     <title type="html"><![CDATA[Javascript testing with Capybara and Cucumber]]></title>
-    <link href="https://larry-price.com/blog/2014/08/05/javascript-testing-with-capybara-and-cucumber/"/>
+    <link href="https://larryprice.dev/blog/2014/08/05/javascript-testing-with-capybara-and-cucumber/"/>
     <updated>2014-08-05T06:40:40-04:00</updated>
-    <id>https://larry-price.com/blog/2014/08/05/javascript-testing-with-capybara-and-cucumber</id>
+    <id>https://larryprice.dev/blog/2014/08/05/javascript-testing-with-capybara-and-cucumber</id>
     <content type="html"><![CDATA[<p>In the past, I had written off testing the Javascript in my <a href="http://www.sinatrarb.com/">Sinatra</a> apps as being not worth the pain of setting up. That was pretty naïve of me, as setting up web drivers in <a href="https://github.com/jnicklas/capybara">Capybara</a> is actually pretty easy.</p>
 
 <p>For this post, I assume you already have a capybara-cucumber project set up. If you need help setting up your first tests, consider checking out <a href="/blog/categories/capybara/">some of my other blog posts</a> on the subject.</p>
@@ -345,9 +345,9 @@ end
   
   <entry>
     <title type="html"><![CDATA[Jasmine - A Whole New World of Javascript Testing]]></title>
-    <link href="https://larry-price.com/blog/2014/06/04/jasmine-a-whole-new-world-of-javascript-testing/"/>
+    <link href="https://larryprice.dev/blog/2014/06/04/jasmine-a-whole-new-world-of-javascript-testing/"/>
     <updated>2014-06-04T06:19:43-04:00</updated>
-    <id>https://larry-price.com/blog/2014/06/04/jasmine-a-whole-new-world-of-javascript-testing</id>
+    <id>https://larryprice.dev/blog/2014/06/04/jasmine-a-whole-new-world-of-javascript-testing</id>
     <content type="html"><![CDATA[<p><a href="https://jasmine.github.io/">Jasmine</a>: a headless Javascript testing library written entirely in Javascript. With similarities to <a href="http://rspec.info">rspec</a>, I&rsquo;ve quickly grown attached to this framework and have been looking for opportunities to discuss it. <a href="https://jasmine.github.io/2.0/introduction.html">Version 2.0</a> was recently released, so I&rsquo;ll be focusing on the standalone 2.0 concepts. To get started, download and uncompress <a href="https://github.com/pivotal/jasmine/tree/master/dist">the standalone distribution</a>.</p>
 
 <p>The uncompressed directory structure will have three subdirectories: <code>spec</code>, <code>src</code>, and <code>lib</code>. <code>lib</code> contains all the Jasmine source code. <code>src</code> contains some sample Javascript class that is tested by test files contained in <code>spec</code>. Outside of the subdirectories is the special file <code>SpecRunner.html</code>. This file is how we will run our tests.</p>
@@ -593,9 +593,9 @@ this.orderSent = function() {
   
   <entry>
     <title type="html"><![CDATA[Better testing in Go with gocheck]]></title>
-    <link href="https://larry-price.com/blog/2014/05/13/better-testing-in-go-with-gocheck/"/>
+    <link href="https://larryprice.dev/blog/2014/05/13/better-testing-in-go-with-gocheck/"/>
     <updated>2014-05-13T21:14:39-04:00</updated>
-    <id>https://larry-price.com/blog/2014/05/13/better-testing-in-go-with-gocheck</id>
+    <id>https://larryprice.dev/blog/2014/05/13/better-testing-in-go-with-gocheck</id>
     <content type="html"><![CDATA[<p>As a quick reminder, <a href="//golang.org/">golang</a> is a really fun programming language to use. It even includes <a href="//golang.org/doc/code.html#Testing">testing out of the box</a>! Unfortunately, this out-of-the-box testing framework isn&rsquo;t all that great. It lacks the syntactic sugar of mature frameworks like <a href="//rspec.info">rspec</a> or <a href="//code.google.com/p/googletest/">gtest</a>.</p>
 
 <p>Of course, there are alternatives. I found an open-source library (licensed with Simplified BSD) called <a href="//labix.org/gocheck">gocheck</a>.</p>

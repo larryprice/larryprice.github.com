@@ -2,22 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: docker | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/docker/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2020-11-03T11:30:15-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="https://larryprice.dev/blog/categories/docker/atom.xml" rel="self"/>
+  <link href="https://larryprice.dev/"/>
+  <updated>2022-04-27T15:46:07-06:00</updated>
+  <id>https://larryprice.dev/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
-    <email><![CDATA[larry@larry-price.com]]></email>
+    <email><![CDATA[larry@larryprice.dev]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
   <entry>
     <title type="html"><![CDATA[Compile JSX with Docker]]></title>
-    <link href="https://larry-price.com/blog/2015/06/08/compile-jsx-with-docker/"/>
+    <link href="https://larryprice.dev/blog/2015/06/08/compile-jsx-with-docker/"/>
     <updated>2015-06-08T12:45:51-04:00</updated>
-    <id>https://larry-price.com/blog/2015/06/08/compile-jsx-with-docker</id>
+    <id>https://larryprice.dev/blog/2015/06/08/compile-jsx-with-docker</id>
     <content type="html"><![CDATA[<p>Users of <a href="https://facebook.github.io/react/index.html">ReactJS</a> may be familiar with <a href="https://facebook.github.io/react/docs/jsx-in-depth.html">JSX</a>, &ldquo;a Javascript syntax extension that looks similar to XML.&rdquo; JSX makes writing React components a little bit easier. I wrote a bunch of JSX components when I built <a href="https://www.refer-madness.com">Refer Madness</a>, and I wanted to find a sane way to compile my JSX files into plain JS files. As I was already using Docker to run my server-side and my <a href="/blog/2015/05/17/compile-sass-with-docker/">compile my SASS</a>, I created <a href="https://registry.hub.docker.com/u/larryprice/jsx/">a Docker image to compile my JSX code</a> whenever file changes were detected.</p>
 
 <p>I have a simple JSX file:</p>
@@ -72,9 +72,9 @@ jsx:
   
   <entry>
     <title type="html"><![CDATA[Compile Sass with Docker]]></title>
-    <link href="https://larry-price.com/blog/2015/05/17/compile-sass-with-docker/"/>
+    <link href="https://larryprice.dev/blog/2015/05/17/compile-sass-with-docker/"/>
     <updated>2015-05-17T16:11:18-04:00</updated>
-    <id>https://larry-price.com/blog/2015/05/17/compile-sass-with-docker</id>
+    <id>https://larryprice.dev/blog/2015/05/17/compile-sass-with-docker</id>
     <content type="html"><![CDATA[<p><a href="http://sass-lang.com/">SASS</a> is a delightful way to write CSS, but compiling SASS for your web application might not be the most obvious task. There are different installation methods, most of them involving cluttering up your filesystem with external dependencies.  Compiling SASS is easy when you&rsquo;re doing <code>rails</code> or <code>sinatra</code>-work, but I demand to write code in a compiled language. So I created <a href="https://registry.hub.docker.com/u/larryprice/sass/">a docker image</a> to compile SASS code automatically called <code>larryprice/sass</code>.</p>
 
 <p>Running this image is easy. Let&rsquo;s say I have some SASS code:</p>
@@ -121,9 +121,9 @@ sass:
   
   <entry>
     <title type="html"><![CDATA[A Quick Guide to Using docker-compose (previously fig)]]></title>
-    <link href="https://larry-price.com/blog/2015/02/26/a-quick-guide-to-using-docker-compose-previously-fig/"/>
+    <link href="https://larryprice.dev/blog/2015/02/26/a-quick-guide-to-using-docker-compose-previously-fig/"/>
     <updated>2015-02-26T07:43:59-05:00</updated>
-    <id>https://larry-price.com/blog/2015/02/26/a-quick-guide-to-using-docker-compose-previously-fig</id>
+    <id>https://larryprice.dev/blog/2015/02/26/a-quick-guide-to-using-docker-compose-previously-fig</id>
     <content type="html"><![CDATA[<p>Have you used <a href="https://www.docker.com/">Docker</a> yet? Docker is awesome! Docker is a tool for managing isolated system environments. I have started using Docker for <strong>everything</strong>. This is not <a href="/blog/2015/01/11/an-example-use-case-for-docker">the first time I&rsquo;ve written about this delightful tool</a>.</p>
 
 <p>Though the ideas and implementation behind Docker are really cool, the command line syntax is extremely cumbersome. There used to be this great third-party tool to address this problem called <a href="http://www.fig.sh/">fig</a>. But, as of <a href="https://github.com/docker/compose/releases/tag/1.1.0">yesterday</a>, it looks like Docker is maintaining <code>fig</code> and have renamed it to <code>docker-compose</code>. The impact of this change is minimal on developers - rename <code>fig.yml</code> files to <code>docker-compose.yml</code>, use <code>docker-compose up</code> instead of <code>fig up</code>. Some great features have been added that I&rsquo;ve been sorely missing, including the ability to use environment files and only grabbing the latest tagged images from <a href="https://registry.hub.docker.com/">the hub</a>.</p>
@@ -279,9 +279,9 @@ $ docker run --link database:database -e DB_NAME=advanced-golang-db \
   
   <entry>
     <title type="html"><![CDATA[An Example Use Case for Docker]]></title>
-    <link href="https://larry-price.com/blog/2015/01/11/an-example-use-case-for-docker/"/>
+    <link href="https://larryprice.dev/blog/2015/01/11/an-example-use-case-for-docker/"/>
     <updated>2015-01-11T19:22:43-05:00</updated>
-    <id>https://larry-price.com/blog/2015/01/11/an-example-use-case-for-docker</id>
+    <id>https://larryprice.dev/blog/2015/01/11/an-example-use-case-for-docker</id>
     <content type="html"><![CDATA[<p>I spent a lot of time last week asking questions about Docker. <a href="#whatdocker">What</a> is Docker? How could Docker help me <a href="#whydocker">day-to-day</a>? How easy is Docker to <a href="#howdocker">use</a>? How does Docker like its eggs cooked? Isn&rsquo;t Docker a brand of sneakers?</p>
 
 <h3><a name="whatdocker"></a>What is Docker?</h3>

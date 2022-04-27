@@ -2,22 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: html5 | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/html5/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2020-11-03T11:30:15-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="https://larryprice.dev/blog/categories/html5/atom.xml" rel="self"/>
+  <link href="https://larryprice.dev/"/>
+  <updated>2022-04-27T15:46:07-06:00</updated>
+  <id>https://larryprice.dev/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
-    <email><![CDATA[larry@larry-price.com]]></email>
+    <email><![CDATA[larry@larryprice.dev]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
   <entry>
     <title type="html"><![CDATA[Muck with History using the HTML5 History API]]></title>
-    <link href="https://larry-price.com/blog/2015/07/19/muck-with-history-using-the-html5-history-api/"/>
+    <link href="https://larryprice.dev/blog/2015/07/19/muck-with-history-using-the-html5-history-api/"/>
     <updated>2015-07-19T11:00:00-04:00</updated>
-    <id>https://larry-price.com/blog/2015/07/19/muck-with-history-using-the-html5-history-api</id>
+    <id>https://larryprice.dev/blog/2015/07/19/muck-with-history-using-the-html5-history-api</id>
     <content type="html"><![CDATA[<p>Congratulations! You just made a single page web application [SPWA] to do All The Things. What happens when you hit the Back button in the browser? Oops.</p>
 
 <p>The Back button is <a href="http://www.internetnews.com/skerner/2010/07/what-is-the-most-clicked-firef.html">the most used navigation button in the modern browser</a>. SPWA often break the functionality of the Back button. We can fix this using the <a href="http://diveintohtml5.info/history.html">HTML 5 History API</a>.</p>

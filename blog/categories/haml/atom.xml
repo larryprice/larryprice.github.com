@@ -2,22 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: haml | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/haml/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2020-11-03T11:30:15-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="https://larryprice.dev/blog/categories/haml/atom.xml" rel="self"/>
+  <link href="https://larryprice.dev/"/>
+  <updated>2022-04-27T15:46:07-06:00</updated>
+  <id>https://larryprice.dev/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
-    <email><![CDATA[larry@larry-price.com]]></email>
+    <email><![CDATA[larry@larryprice.dev]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
   <entry>
     <title type="html"><![CDATA[Testing a Sinatra App with Capybara]]></title>
-    <link href="https://larry-price.com/blog/2013/01/19/testing-a-sinatra-app-with-capybara/"/>
-    <updated>2013-01-19T12:20:00-06:00</updated>
-    <id>https://larry-price.com/blog/2013/01/19/testing-a-sinatra-app-with-capybara</id>
+    <link href="https://larryprice.dev/blog/2013/01/19/testing-a-sinatra-app-with-capybara/"/>
+    <updated>2013-01-19T12:20:00-07:00</updated>
+    <id>https://larryprice.dev/blog/2013/01/19/testing-a-sinatra-app-with-capybara</id>
     <content type="html"><![CDATA[<p><em>This is Part 3 in a multi-part series to detail the creation of a &ldquo;simple&rdquo; project combining <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.mongodb.org/">MongoDB</a>, <a href="http://rspec.info/">RSpec</a>, <a href="http://www.sinatrarb.com/">Sinatra</a>, and <a href="https://github.com/jnicklas/capybara">Capybara</a> in preperation for a larger-scale side project set to begin January 2013. For more in this series, see the <a href="/blog/categories/pokephile">Pokephile category</a>. Part 3 of this series describes using Capybara to test a Sinatra application. The code for this side-project is located <a href="https://github.com/larryprice/Pokephile">on Github</a>, and the final product can be found <a href="http://pokephile.herokuapp.com">here</a>.</em></p>
 
 <p>Now that <a href="/blog/2013/01/05/schemaless-databases-with-ruby-and-mongodb/">the database is populated</a> with data and I&rsquo;ve switched over to <a href="/blog/2013/01/05/moving-from-the-mongodb-ruby-driver-to-mongoid/">a simpler interface with Mongo</a>, I can actually start creating a UI. For simplicity&rsquo;s sake, I like to use Sinatra on small projects. Sinatra makes it easy to create a web application with minimal effort. With an emphasis on testing this <a href="/blog/categories/pokephile">series</a>, I want to be sure to throughly test my UI and any application integration. <a href="http://cukes.info/">Cucumber</a> is a brilliant DSL which allows a programmer to describe in plain English how an application should be behaving. The <a href="https://github.com/jnicklas/capybara">Capybara gem</a> is a Rack app that simulates running your application and performing basic user tasks, such as clicking a button, following a link, or, on a lower level, looking at your HTML source. Install Capybara like so:</p>

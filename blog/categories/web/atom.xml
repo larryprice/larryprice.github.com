@@ -2,22 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: web | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/web/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2020-11-03T11:30:15-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="https://larryprice.dev/blog/categories/web/atom.xml" rel="self"/>
+  <link href="https://larryprice.dev/"/>
+  <updated>2022-04-27T15:46:07-06:00</updated>
+  <id>https://larryprice.dev/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
-    <email><![CDATA[larry@larry-price.com]]></email>
+    <email><![CDATA[larry@larryprice.dev]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
   <entry>
     <title type="html"><![CDATA[Redirecting To Your Main Site With Heroku]]></title>
-    <link href="https://larry-price.com/blog/2018/04/25/redirecting-to-your-main-site-with-heroku/"/>
+    <link href="https://larryprice.dev/blog/2018/04/25/redirecting-to-your-main-site-with-heroku/"/>
     <updated>2018-04-25T20:52:19-05:00</updated>
-    <id>https://larry-price.com/blog/2018/04/25/redirecting-to-your-main-site-with-heroku</id>
+    <id>https://larryprice.dev/blog/2018/04/25/redirecting-to-your-main-site-with-heroku</id>
     <content type="html"><![CDATA[<p>We have a lot of domains that we want to redirect to the same server, but we use a DNS service that does not allow doing a domain forward, and we&rsquo;re not allowed to upgrade. I wanted to do this in the simplest way possible, so I created a workaround using a PHP script and Heroku. The source discussed in detail in this post is available on GitHub: <a href="https://github.com/larryprice/simple-heroku-redirect-app">https://github.com/larryprice/simple-heroku-redirect-app</a>.</p>
 
 <p>The goal here is for users to visit a page and then be immediately redirected to the new site. I&rsquo;ve defined two environment variables to be used in this project: <code>SITENAME</code>, a human-readable name for our website, and <code>SITEURL</code>, the full URL that we actually want the user to end up on. I&rsquo;ve defined a PHP file called <code>index.php</code>:</p>
@@ -73,9 +73,9 @@ $ heroku domains:add www.yourbaddomain.com
   
   <entry>
     <title type="html"><![CDATA[A Chronicle of SEP Startup Weekend 2016]]></title>
-    <link href="https://larry-price.com/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016/"/>
+    <link href="https://larryprice.dev/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016/"/>
     <updated>2016-03-03T15:16:29-05:00</updated>
-    <id>https://larry-price.com/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016</id>
+    <id>https://larryprice.dev/blog/2016/03/03/a-chronicle-of-sep-startup-weekend-2016</id>
     <content type="html"><![CDATA[<p>Last weekend was the 2016 SEP Startup Weekend, a bi-annual hackathon where a few of the engineers get together for 48 hours to build things. As far as most people know, we transform massive quantities of beer, coffee, and unhealthy food into cohesive piles of code. Although that about sums it up, I thought it might be nice to chronicle my team&rsquo;s experience of this season&rsquo;s event. Enjoy!</p>
 
 <h3>The Pitch</h3>
@@ -141,9 +141,9 @@ $ heroku domains:add www.yourbaddomain.com
   
   <entry>
     <title type="html"><![CDATA[Javascript: The Good Parts]]></title>
-    <link href="https://larry-price.com/blog/2015/12/28/javascript-the-good-parts/"/>
+    <link href="https://larryprice.dev/blog/2015/12/28/javascript-the-good-parts/"/>
     <updated>2015-12-28T20:17:33-05:00</updated>
-    <id>https://larry-price.com/blog/2015/12/28/javascript-the-good-parts</id>
+    <id>https://larryprice.dev/blog/2015/12/28/javascript-the-good-parts</id>
     <content type="html"><![CDATA[<h3>The Gist</h3>
 
 <p><a href="http://amzn.to/1OVjj3Z">Javascript: The Good Parts</a> by Douglas Crockford is a short guide to the best parts of the javascript language. Javascript is notorious for being so flexible and feature-rich that many traditional programmers start writing code and completely forget how to program and building a startup based on an idea they got from the <a href="https://twitter.com/boredelonmusk">Bored Elon Musk</a> mock-Twitter account only to wake up a year later cold and alone living in the slums of San Francisco. This book is full of example code with thoughtful explanations to help the average developer write better javascript and leave the web a nicer place.</p>
@@ -198,9 +198,9 @@ MyModule.do();    // output: 0
   
   <entry>
     <title type="html"><![CDATA[Noty for Easy, Breezy, Beautiful Flash Messages]]></title>
-    <link href="https://larry-price.com/blog/2015/09/01/noty-for-easy/"/>
+    <link href="https://larryprice.dev/blog/2015/09/01/noty-for-easy/"/>
     <updated>2015-09-01T18:29:27-04:00</updated>
-    <id>https://larry-price.com/blog/2015/09/01/noty-for-easy</id>
+    <id>https://larryprice.dev/blog/2015/09/01/noty-for-easy</id>
     <content type="html"><![CDATA[<p><a href="http://ned.im/noty/#/about">Noty</a> is a jQuery plugin for showing flash messages. Noty is easy to use and creates great-looking flash notifications with little customization.</p>
 
 <h4>What&rsquo;s a flash message?</h4>
@@ -291,9 +291,9 @@ $.noty.themes.testtheme.style = function () {
   
   <entry>
     <title type="html"><![CDATA[Muck with History using the HTML5 History API]]></title>
-    <link href="https://larry-price.com/blog/2015/07/19/muck-with-history-using-the-html5-history-api/"/>
+    <link href="https://larryprice.dev/blog/2015/07/19/muck-with-history-using-the-html5-history-api/"/>
     <updated>2015-07-19T11:00:00-04:00</updated>
-    <id>https://larry-price.com/blog/2015/07/19/muck-with-history-using-the-html5-history-api</id>
+    <id>https://larryprice.dev/blog/2015/07/19/muck-with-history-using-the-html5-history-api</id>
     <content type="html"><![CDATA[<p>Congratulations! You just made a single page web application [SPWA] to do All The Things. What happens when you hit the Back button in the browser? Oops.</p>
 
 <p>The Back button is <a href="http://www.internetnews.com/skerner/2010/07/what-is-the-most-clicked-firef.html">the most used navigation button in the modern browser</a>. SPWA often break the functionality of the Back button. We can fix this using the <a href="http://diveintohtml5.info/history.html">HTML 5 History API</a>.</p>

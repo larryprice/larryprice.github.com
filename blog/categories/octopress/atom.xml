@@ -2,22 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: octopress | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/octopress/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2020-11-03T11:30:15-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="https://larryprice.dev/blog/categories/octopress/atom.xml" rel="self"/>
+  <link href="https://larryprice.dev/"/>
+  <updated>2022-04-27T15:46:07-06:00</updated>
+  <id>https://larryprice.dev/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
-    <email><![CDATA[larry@larry-price.com]]></email>
+    <email><![CDATA[larry@larryprice.dev]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
   <entry>
     <title type="html"><![CDATA[Deploying an Octopress site to Openshift]]></title>
-    <link href="https://larry-price.com/blog/2014/12/14/migrating-an-octopress-blog-from-github-pages-to-openshift/"/>
+    <link href="https://larryprice.dev/blog/2014/12/14/migrating-an-octopress-blog-from-github-pages-to-openshift/"/>
     <updated>2014-12-14T20:15:00-05:00</updated>
-    <id>https://larry-price.com/blog/2014/12/14/migrating-an-octopress-blog-from-github-pages-to-openshift</id>
+    <id>https://larryprice.dev/blog/2014/12/14/migrating-an-octopress-blog-from-github-pages-to-openshift</id>
     <content type="html"><![CDATA[<p>I&rsquo;ll detail how to take a new or existing GH Pages blog in Octopress and deploy it to OpenShift.</p>
 
 <h3>Why?</h3>

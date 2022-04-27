@@ -2,22 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: trello | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/trello/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2020-11-03T11:30:15-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="https://larryprice.dev/blog/categories/trello/atom.xml" rel="self"/>
+  <link href="https://larryprice.dev/"/>
+  <updated>2022-04-27T15:46:07-06:00</updated>
+  <id>https://larryprice.dev/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
-    <email><![CDATA[larry@larry-price.com]]></email>
+    <email><![CDATA[larry@larryprice.dev]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
   <entry>
     <title type="html"><![CDATA[Ollert - 6 Months Later]]></title>
-    <link href="https://larry-price.com/blog/2014/12/02/ollert-6-months-later/"/>
+    <link href="https://larryprice.dev/blog/2014/12/02/ollert-6-months-later/"/>
     <updated>2014-12-02T18:54:12-05:00</updated>
-    <id>https://larry-price.com/blog/2014/12/02/ollert-6-months-later</id>
+    <id>https://larryprice.dev/blog/2014/12/02/ollert-6-months-later</id>
     <content type="html"><![CDATA[<p><a href="/blog/2014/03/17/sep-startup-weekend-ollert">Nine months ago</a> I brought a team of 6 together to build a data analysis tool called <a href="https://ollertapp.com">Ollert</a>. <a href="/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards">A few months later</a>, I started working with <a href="//sep.com">SEP</a> to find time to make Ollert better. Where do we stand today?</p>
 
 <p>From a traffic perspective, we&rsquo;re doing pretty well. The numbers are increasing steadily over time, as are the number of people who use the application on a near-daily basis. Although we have surpassed our modest initial goals, we would like to build up a larger audience in the coming months.</p>
@@ -46,9 +46,9 @@
   
   <entry>
     <title type="html"><![CDATA[Hotfixing a Bug in Trello's client.js]]></title>
-    <link href="https://larry-price.com/blog/2014/08/22/fixing-some-minor-bugs-in-trellos-client-dot-js/"/>
+    <link href="https://larryprice.dev/blog/2014/08/22/fixing-some-minor-bugs-in-trellos-client-dot-js/"/>
     <updated>2014-08-22T06:08:21-04:00</updated>
-    <id>https://larry-price.com/blog/2014/08/22/fixing-some-minor-bugs-in-trellos-client-dot-js</id>
+    <id>https://larryprice.dev/blog/2014/08/22/fixing-some-minor-bugs-in-trellos-client-dot-js</id>
     <content type="html"><![CDATA[<p>I&rsquo;m a huge fan of <a href="https://trello.com">Trello</a>, and I recently created an app to analyze Trello data called <a href="https://ollertapp.com">Ollert</a>. Ollert makes heavy use of the <a href="http://trello.com/docs">Trello API</a>. I&rsquo;ve written previously about <a href="/blog/2014/03/18/connecting-to-the-trello-api/">using Trello&rsquo;s client.js to connect to the Trello API</a>.</p>
 
 <p>During some ad-hoc testing of opening/closing the Trello authorization popup, I found that clicking &ldquo;Deny&rdquo; on the popup, reopening it, and then clicking &ldquo;Connect&rdquo; resulted in me not being able to connect. I spent some time looking into workarounds and I even contacted Trello support. After studying <a href="https://trello.com/1/client.coffee">client.coffee</a>, I eventually found the problem: the Trello client keeps around an anonymous object called <code>ready</code> that stores some session data. When a user clicks &lsquo;Deny&rsquo;, this <code>ready</code> object remembers. I was able to fix the Deny/Allow issue by pulling down a local copy of client.js and making an interface change to the module:</p>
@@ -93,9 +93,9 @@
   
   <entry>
     <title type="html"><![CDATA[Testing through a Trello connection with Capybara and Webkit]]></title>
-    <link href="https://larry-price.com/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit/"/>
+    <link href="https://larryprice.dev/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit/"/>
     <updated>2014-08-07T07:25:11-04:00</updated>
-    <id>https://larry-price.com/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit</id>
+    <id>https://larryprice.dev/blog/2014/08/07/testing-through-the-trello-api-with-capybara-and-webkit</id>
     <content type="html"><![CDATA[<p>During the hardening of <a href="https://ollertapp.com">Ollert</a>, a Trello data analysis tool I wrote, I started writing acceptance tests. I quickly ran into an issue where the meat of my application requires opening pop-up window, signing into Trello, and allowing my application access.</p>
 
 <p>I created a test user on Trello with a few varied boards to allow for proper testing. In doing this, I store the user&rsquo;s login information in my .env file. For the most part, I can use the steps provided in <a href="https://gist.github.com/larryprice/546d6c029bb3074bd84c">this common web_steps.rb</a>.</p>
@@ -205,9 +205,9 @@ end
   
   <entry>
     <title type="html"><![CDATA[Ollert - Reveal The Data Behind Your Trello Boards]]></title>
-    <link href="https://larry-price.com/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards/"/>
+    <link href="https://larryprice.dev/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards/"/>
     <updated>2014-07-13T17:15:00-04:00</updated>
-    <id>https://larry-price.com/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards</id>
+    <id>https://larryprice.dev/blog/2014/07/13/ollert-reveal-the-data-behind-your-trello-boards</id>
     <content type="html"><![CDATA[<p>Introducing <a href="https://ollertapp.com">Ollert</a>, a tool to show you what your <a href="//trello.com">Trello</a> boards can&rsquo;t tell you on their own.</p>
 
 <p>Trello does a great job of telling you about the here and now of your Trello boards; who&rsquo;s working on what task and what is the current state of a task. But what if I want to know about the state of the whole project? How many work items have we finished in the past sprint, iteration, or duration of the project? He who does not understand the past is destined to repeat his mistakes ad nauseum.</p>
@@ -226,9 +226,9 @@ end
   
   <entry>
     <title type="html"><![CDATA[Deauthorizing Token with the Trello Client]]></title>
-    <link href="https://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client/"/>
+    <link href="https://larryprice.dev/blog/2014/07/07/deauthorizing-token-with-the-trello-client/"/>
     <updated>2014-07-07T05:59:13-04:00</updated>
-    <id>https://larry-price.com/blog/2014/07/07/deauthorizing-token-with-the-trello-client</id>
+    <id>https://larryprice.dev/blog/2014/07/07/deauthorizing-token-with-the-trello-client</id>
     <content type="html"><![CDATA[<p>In my <a href="https://ollertapp.com">application</a>, a user can connect to Trello without logging in. Whenever this &ldquo;anonymous&rdquo; user hits the landing page, I attempt to force the <a href="https://trello.com/docs/gettingstarted/clientjs.html">Trello client</a> to authorize the user again. By doing this, the user can return to the landing page whenever he or she likes to switch usernames. My authorize code looks like this:</p>
 
 <pre><code class="javascript">function AuthenticateTrelloAlways() {

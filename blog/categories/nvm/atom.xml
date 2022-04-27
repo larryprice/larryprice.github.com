@@ -2,22 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: nvm | Larry Price]]></title>
-  <link href="https://larry-price.com/blog/categories/nvm/atom.xml" rel="self"/>
-  <link href="https://larry-price.com/"/>
-  <updated>2020-11-03T11:30:15-06:00</updated>
-  <id>https://larry-price.com/</id>
+  <link href="https://larryprice.dev/blog/categories/nvm/atom.xml" rel="self"/>
+  <link href="https://larryprice.dev/"/>
+  <updated>2022-04-27T15:46:07-06:00</updated>
+  <id>https://larryprice.dev/</id>
   <author>
     <name><![CDATA[Larry Price]]></name>
-    <email><![CDATA[larry@larry-price.com]]></email>
+    <email><![CDATA[larry@larryprice.dev]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
   <entry>
     <title type="html"><![CDATA[Use NVM to manage your NodeJS install]]></title>
-    <link href="https://larry-price.com/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install/"/>
+    <link href="https://larryprice.dev/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install/"/>
     <updated>2014-08-02T20:00:57-04:00</updated>
-    <id>https://larry-price.com/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install</id>
+    <id>https://larryprice.dev/blog/2014/08/02/use-nvm-to-manage-your-nodejs-install</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been trying to get into <a href="http://nodejs.org/">NodeJS</a>, and so my immediate thought is that I want to be able to install different versions for different projects, a la <a href="https://rvm.io">rvm</a> for <a href="https://ruby-lang.org">ruby</a>. Fortunately, this already exists.</p>
 
 <p><a href="https://github.com/creationix/nvm">NVM</a> gives me the equivalent functionality of rvm but for NodeJS, making all my dreams come true. Here&rsquo;s how I installed it on my Linux boxes:</p>
